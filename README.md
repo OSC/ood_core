@@ -15,14 +15,23 @@ At minimum you will need:
 
 From rubygems (not added yet):
 
-```
-  [sudo] gem install pbs
+```bash
+  $ [sudo] gem install pbs
 ```
 
-or from the git repository on github:
+or from the git repository on github, add this to your `Gemfile`:
 
 ```
-  git clone https://github.com/nickjer/pbs-ruby.git
-  cd pbs-ruby
-  rake gem:install
+  # Gemfile
+
+  ...
+
+  gem 'pbs', git: 'https://github.com/nickjer/pbs-ruby.git'
 ```
+
+then run from command line:
+
+```bash
+  $ bundle exec ruby <example.rb>
+```
+
