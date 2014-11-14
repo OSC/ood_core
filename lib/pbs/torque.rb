@@ -1,7 +1,7 @@
 #
 # Copyright (C) 2014 Jeremy Nicklas
 #
-# This file is part of ruby-ffi.
+# This file is part of pbs-ruby.
 #
 # All rights reserved.
 #
