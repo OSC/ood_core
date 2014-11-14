@@ -2,7 +2,7 @@
 
 ## Description
 
-Trimmed down Ruby module that interacts with the C Torque Library through Ruby-FFI.
+Trimmed down Ruby wrapper for the Torque C Library utilizing Ruby-FFI.
 
 ## Requirements
 
