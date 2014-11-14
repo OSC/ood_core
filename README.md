@@ -15,13 +15,13 @@ At minimum you will need:
 
 From rubygems (not added yet):
 
-```bash
+```
   [sudo] gem install pbs
 ```
 
 or from the git repository on github:
 
-```bash
+```
   git clone https://github.com/nickjer/pbs-ruby.git
   cd pbs-ruby
   rake gem:install
