@@ -11,4 +11,6 @@ Gem::Specification.new do |s|
 
   s.files = `git ls-files`.split($/)
   s.license = 'BSD'
+
+  s.add_runtime_dependency 'ffi', '~> 1.9.6'
 end
