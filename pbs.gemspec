@@ -13,4 +13,5 @@ Gem::Specification.new do |s|
   s.license = 'BSD'
 
   s.add_runtime_dependency 'ffi', '~> 1.9', '>= 1.9.6'
+  s.add_development_dependency 'rspec', '~> 3.1', '>= 3.1.0'
 end
