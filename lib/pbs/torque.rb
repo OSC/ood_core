@@ -12,6 +12,8 @@ module PBS
   extend FFI::Library
   ffi_lib 'torque'
 
+  extend self
+
   # int pbs_errno /* error number */
   attach_variable :_pbs_errno, :pbs_errno, :int
 
@@ -45,65 +47,63 @@ module PBS
   # char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
   attach_function :_pbs_submit, :pbs_submit, [ :int, :pointer, :pointer, :pointer, :pointer ], :string
 
-  class << self
-    alias_method :pbs_default, :_pbs_default
-    alias_method :pbs_disconnect, :_pbs_disconnect
-    alias_method :pbs_statfree, :_pbs_statfree
+  alias_method :pbs_default, :_pbs_default
+  alias_method :pbs_disconnect, :_pbs_disconnect
+  alias_method :pbs_statfree, :_pbs_statfree
 
-    def pbs_connect(*args)
-      tmp = _pbs_connect(*args)
+  def pbs_connect(*args)
+    tmp = _pbs_connect(*args)
+    raise PBSError, "#{error}" if error?
+    tmp
+  end
+
+  def pbs_deljob(*args)
+    tmp = _pbs_deljob(*args)
+    raise PBSError, "#{error}" if error?
+    tmp
+  end
+
+  # Request status of jobs with defined parameters
+  # Then converts C-linked list pointers to Ruby arrays
+  %w{pbs_statjob pbs_statnode pbs_statque pbs_statserver}.each do |method|
+    define_method(method) do |*args|
+      jobs_ptr = send(method.prepend("_").to_sym, *args)
       raise PBSError, "#{error}" if error?
-      tmp
-    end
-
-    def pbs_deljob(*args)
-      tmp = _pbs_deljob(*args)
-      raise PBSError, "#{error}" if error?
-      tmp
-    end
-
-    # Request status of jobs with defined parameters
-    # Then converts C-linked list pointers to Ruby arrays
-    %w{pbs_statjob pbs_statnode pbs_statque pbs_statserver}.each do |method|
-      define_method(method) do |*args|
-        jobs_ptr = send(method.prepend("_").to_sym, *args)
-        raise PBSError, "#{error}" if error?
-        jobs = jobs_ptr.read_array_of_type(BatchStatus)
-        jobs.each do |job|
-          job[:attribs] = job[:attribs].read_array_of_type(Attrl)
-        end
-        _pbs_statfree(jobs_ptr) # free memory
-        jobs
+      jobs = jobs_ptr.read_array_of_type(BatchStatus)
+      jobs.each do |job|
+        job[:attribs] = job[:attribs].read_array_of_type(Attrl)
       end
+      _pbs_statfree(jobs_ptr) # free memory
+      jobs
+    end
+  end
+
+  def pbs_submit(connect, attropl_list, script, destination, extends)
+
+    attropl_list = [attropl_list] unless attropl_list.is_a? Array
+
+    prev = FFI::Pointer.new(FFI::Pointer::NULL)
+    attropl_list.each do |attropl_hash|
+      attropl = Attropl.new
+      attropl[:name] = FFI::MemoryPointer.from_string(attropl_hash[:name] || "")
+      attropl[:resource] = FFI::MemoryPointer.from_string(attropl_hash[:resource] || "")
+      attropl[:value] = FFI::MemoryPointer.from_string(attropl_hash[:value] || "")
+      attropl[:op] = :set
+      attropl[:next] = prev
+      prev = attropl
     end
 
-    def pbs_submit(connect, attropl_list, script, destination, extends)
+    tmp = _pbs_submit(connect, prev, script, destination, extends)
+    raise PBSError, "#{error}" if error?
+    tmp
+  end
 
-      attropl_list = [attropl_list] unless attropl_list.is_a? Array
+  def error?
+    !_pbs_errno.zero?
+  end
 
-      prev = FFI::Pointer.new(FFI::Pointer::NULL)
-      attropl_list.each do |attropl_hash|
-        attropl = Attropl.new
-        attropl[:name] = FFI::MemoryPointer.from_string(attropl_hash[:name] || "")
-        attropl[:resource] = FFI::MemoryPointer.from_string(attropl_hash[:resource] || "")
-        attropl[:value] = FFI::MemoryPointer.from_string(attropl_hash[:value] || "")
-        attropl[:op] = :set
-        attropl[:next] = prev
-        prev = attropl
-      end
-
-      tmp = _pbs_submit(connect, prev, script, destination, extends)
-      raise PBSError, "#{error}" if error?
-      tmp
-    end
-
-    def error?
-      !_pbs_errno.zero?
-    end
-
-    def error
-      ERRORS_TXT[_pbs_errno] || "Could not find a text for this error."
-    end
+  def error
+    ERRORS_TXT[_pbs_errno] || "Could not find a text for this error."
   end
 
   BatchOp = enum( :set, :unset, :incr, :decr, :eq, :ne, :ge,
