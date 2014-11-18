@@ -29,6 +29,9 @@ module PBS
   # int pbs_disconnect(int connect)
   attach_function :_pbs_disconnect, :pbs_disconnect, [ :int ], :int
 
+  # int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
+  attach_function :_pbs_holdjob, :pbs_holdjob, [ :int, :pointer, :pointer, :pointer ], :int
+
   # void pbs_statfree(struct batch_status *stat)
   attach_function :_pbs_statfree, :pbs_statfree, [ :pointer ], :void
 
@@ -47,20 +50,18 @@ module PBS
   # char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
   attach_function :_pbs_submit, :pbs_submit, [ :int, :pointer, :pointer, :pointer, :pointer ], :string
 
+  # PBS commands with no special features
   alias_method :pbs_default, :_pbs_default
   alias_method :pbs_disconnect, :_pbs_disconnect
   alias_method :pbs_statfree, :_pbs_statfree
 
-  def pbs_connect(*args)
-    tmp = _pbs_connect(*args)
-    raise PBSError, "#{error}" if error?
-    tmp
-  end
-
-  def pbs_deljob(*args)
-    tmp = _pbs_deljob(*args)
-    raise PBSError, "#{error}" if error?
-    tmp
+  # PBS commands with error tracking
+  %w{pbs_connect pbs_deljob pbs_holdjob}.each do |method|
+    define_method(method) do |*args|
+      tmp = send(method.prepend("_").to_sym, *args)
+      raise PBSError, "#{error}" if error?
+      tmp
+    end
   end
 
   # Request status of jobs with defined parameters
@@ -78,6 +79,7 @@ module PBS
     end
   end
 
+  # PBS submit has to convert a hash array to a C-linked list of structs
   def pbs_submit(connect, attropl_list, script, destination, extends)
     attropl_list = [attropl_list] unless attropl_list.is_a? Array
 
