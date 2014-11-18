@@ -110,6 +110,10 @@ module PBS
     ERRORS_TXT[_pbs_errno] || "Could not find a text for this error."
   end
 
+  def reset_error
+    self._pbs_errno = 0
+  end
+
   BatchOp = enum( :set, :unset, :incr, :decr, :eq, :ne, :ge,
                   :gt, :le, :lt, :dflt, :merge )
 
