@@ -50,4 +50,17 @@ RSpec.describe PBS do
       after { PBS::reset_error }
     end
   end
+
+  describe "::pbs_disconnect" do
+    subject { PBS::pbs_disconnect(conn) }
+
+    context "disconnect from local server" do
+      let(:conn) { PBS::pbs_connect(server) }
+      it "doesn't raise an error" do
+        expect { subject }.to_not raise_error
+      end
+    end
+
+    # The C code doesn't have error checks for disconnecting from fake server
+  end
 end
