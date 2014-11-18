@@ -36,6 +36,14 @@ jobs.each do |job|
   end
 end
 
+# Hold job
+PBS.pbs_holdjob(c, pbsid, 'u', nil)
+puts "Holding job: #{pbsid}"
+
+# Show status of job
+jobs = PBS.pbs_statjob(c, pbsid, nil, nil)
+puts "Status of job: #{jobs[0][:attribs].detect { |f| f[:name] == "job_state" }[:value]}"
+
 # Delete submitted job
 PBS.pbs_deljob(c, pbsid, '')
 puts "Deleted job: #{pbsid}"
