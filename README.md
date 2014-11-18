@@ -35,3 +35,16 @@ then run from command line:
   $ bundle exec ruby <example.rb>
 ```
 
+## Usage
+
+The usage follows very closely to the `pbs_python` usage documented here: https://oss.trac.surfsara.nl/pbs_python/wiki/TorqueUsage
+
+Not all PBS functions are replicated in this project. The administrative functions have been neglected.
+
+Most useful features are described in the `simplejob.rb` provided. To run this simple example, type:
+
+```bash
+  $ ruby -Ilib samples/simplejob.rb
+```
+
+
