@@ -17,6 +17,7 @@ RSpec.describe PBS do
   it { is_expected.to respond_to(:error?) }
   it { is_expected.to respond_to(:reset_error) }
 
+  # Global settings
   let(:server) { PBS::pbs_default() }
   let(:conn) { PBS::pbs_connect(server) }
 
@@ -24,6 +25,7 @@ RSpec.describe PBS do
     PBS::pbs_disconnect(conn)
   end
 
+  # PBS::pbs_default
   describe "::pbs_default" do
     subject { server }
 
@@ -34,6 +36,7 @@ RSpec.describe PBS do
     end
   end
 
+  # PBS::pbs_connect
   describe "::pbs_connect" do
     subject { conn }
 
@@ -55,6 +58,7 @@ RSpec.describe PBS do
     end
   end
 
+  # PBS::pbs_disconnect
   describe "::pbs_disconnect" do
     subject { PBS::pbs_disconnect(conn) }
 
