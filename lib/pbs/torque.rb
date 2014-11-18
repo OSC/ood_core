@@ -58,7 +58,7 @@ module PBS
   # PBS commands with error tracking
   %w{pbs_connect pbs_deljob pbs_holdjob}.each do |method|
     define_method(method) do |*args|
-      tmp = send(method.prepend("_").to_sym, *args)
+      tmp = send("_#{method}".to_sym, *args)
       raise PBSError, "#{error}" if error?
       tmp
     end
@@ -68,7 +68,7 @@ module PBS
   # Then converts C-linked list pointers to Ruby arrays
   %w{pbs_statjob pbs_statnode pbs_statque pbs_statserver}.each do |method|
     define_method(method) do |*args|
-      jobs_ptr = send(method.prepend("_").to_sym, *args)
+      jobs_ptr = send("_#{method}".to_sym, *args)
       raise PBSError, "#{error}" if error?
       jobs = jobs_ptr.read_array_of_type(BatchStatus)
       jobs.each do |job|
