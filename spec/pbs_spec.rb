@@ -17,8 +17,10 @@ RSpec.describe PBS do
   it { is_expected.to respond_to(:error?) }
   it { is_expected.to respond_to(:reset_error) }
 
+  let(:server) { PBS::pbs_default() }
+
   describe "::pbs_default" do
-    subject { PBS::pbs_default() }
+    subject { server }
 
     let(:pbs_server) { `qstat -q | awk 'FNR == 2 {print $2}'`.chomp! }
 
@@ -31,7 +33,6 @@ RSpec.describe PBS do
     subject(:conn) { PBS::pbs_connect(server) }
 
     context "when connecting to local server" do
-      let(:server) { PBS::pbs_default() }
       it "provides connection number" do
         expect(conn).to be > 0
       end
