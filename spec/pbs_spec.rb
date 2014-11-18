@@ -18,6 +18,11 @@ RSpec.describe PBS do
   it { is_expected.to respond_to(:reset_error) }
 
   let(:server) { PBS::pbs_default() }
+  let(:conn) { PBS::pbs_connect(server) }
+
+  after(:each, :disconnect => true) do
+    PBS::pbs_disconnect(conn)
+  end
 
   describe "::pbs_default" do
     subject { server }
@@ -30,22 +35,21 @@ RSpec.describe PBS do
   end
 
   describe "::pbs_connect" do
-    subject(:conn) { PBS::pbs_connect(server) }
+    subject { conn }
 
-    context "when connecting to local server" do
+    context "when connecting to local server", :disconnect => true do
       it "provides connection number" do
-        expect(conn).to be > 0
+        expect(subject).to be > 0
       end
       it "doesn't raise an error" do
-        expect { conn }.to_not raise_error
+        expect { subject }.to_not raise_error
       end
-      after { PBS::pbs_disconnect(conn) }
     end
 
     context "when connecting to bad server" do
       let(:server) { 'bad.server' }
       it "raises a PBS error" do
-        expect { conn }.to raise_error PBS::PBSError, 'access from host not allowed'
+        expect { subject }.to raise_error PBS::PBSError, 'access from host not allowed'
       end
       after { PBS::reset_error }
     end
@@ -61,6 +65,7 @@ RSpec.describe PBS do
       end
     end
 
-    # The C code doesn't have error checks for disconnecting from fake server
+    # The C code doesn't have error checks for disconnecting from bad server
+    # it will just segment fault :(
   end
 end
