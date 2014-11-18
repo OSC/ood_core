@@ -44,6 +44,14 @@ puts "Holding job: #{pbsid}"
 jobs = PBS.pbs_statjob(c, pbsid, nil, nil)
 puts "Status of job: #{jobs[0][:attribs].detect { |f| f[:name] == "job_state" }[:value]}"
 
+# Release job
+PBS.pbs_rlsjob(c, pbsid, 'u', nil)
+puts "Releasing job: #{pbsid}"
+
+# Show status of job
+jobs = PBS.pbs_statjob(c, pbsid, nil, nil)
+puts "Status of job: #{jobs[0][:attribs].detect { |f| f[:name] == "job_state" }[:value]}"
+
 # Delete submitted job
 PBS.pbs_deljob(c, pbsid, '')
 puts "Deleted job: #{pbsid}"

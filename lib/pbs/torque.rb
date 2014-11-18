@@ -32,6 +32,9 @@ module PBS
   # int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
   attach_function :_pbs_holdjob, :pbs_holdjob, [ :int, :pointer, :pointer, :pointer ], :int
 
+  # int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
+  attach_function :_pbs_rlsjob, :pbs_rlsjob, [ :int, :pointer, :pointer, :pointer ], :int
+
   # void pbs_statfree(struct batch_status *stat)
   attach_function :_pbs_statfree, :pbs_statfree, [ :pointer ], :void
 
@@ -56,7 +59,7 @@ module PBS
   alias_method :pbs_statfree, :_pbs_statfree
 
   # PBS commands with error tracking
-  %w{pbs_connect pbs_deljob pbs_holdjob}.each do |method|
+  %w{pbs_connect pbs_deljob pbs_holdjob pbs_rlsjob}.each do |method|
     define_method(method) do |*args|
       tmp = send("_#{method}".to_sym, *args)
       raise PBSError, "#{error}" if error?
