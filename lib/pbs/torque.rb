@@ -79,7 +79,6 @@ module PBS
   end
 
   def pbs_submit(connect, attropl_list, script, destination, extends)
-
     attropl_list = [attropl_list] unless attropl_list.is_a? Array
 
     prev = FFI::Pointer.new(FFI::Pointer::NULL)
