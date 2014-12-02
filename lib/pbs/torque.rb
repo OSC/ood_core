@@ -58,8 +58,16 @@ module PBS
   alias_method :pbs_disconnect, :_pbs_disconnect
   alias_method :pbs_statfree, :_pbs_statfree
 
+  # PBS connect (may not set _pbs_errno, need to check for negative output)
+  def pbs_connect(*args)
+    tmp = _pbs_connect(*args)
+    self._pbs_errno = tmp.abs if tmp < 0
+    raise PBSError, "#{error}" if error?
+    tmp
+  end
+
   # PBS commands with error tracking
-  %w{pbs_connect pbs_deljob pbs_holdjob pbs_rlsjob}.each do |method|
+  %w{pbs_deljob pbs_holdjob pbs_rlsjob}.each do |method|
     define_method(method) do |*args|
       tmp = send("_#{method}".to_sym, *args)
       raise PBSError, "#{error}" if error?

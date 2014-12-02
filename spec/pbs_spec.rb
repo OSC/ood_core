@@ -52,7 +52,7 @@ RSpec.describe PBS do
     context "when connecting to bad server" do
       let(:server) { 'bad.server' }
       it "raises a PBS error" do
-        expect { subject }.to raise_error PBS::PBSError, 'access from host not allowed'
+        expect { subject }.to raise_error PBS::PBSError #possible different errors
       end
       after { PBS::reset_error }
     end
