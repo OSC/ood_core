@@ -29,7 +29,7 @@ RSpec.describe PBS do
   describe "::pbs_default" do
     subject { server }
 
-    let(:pbs_server) { `qstat -q | awk 'FNR == 2 {print $2}'`.chomp! }
+    let(:pbs_server) { ENV['PBS_DEFAULT'] }
 
     context 'when local PBS server is found' do
       it { is_expected.to eq(pbs_server) }
