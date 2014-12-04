@@ -12,6 +12,7 @@ host = Socket.gethostname
 attropl = []
 attropl << {name: PBS::ATTR_N, value: "testing123"}
 attropl << {name: PBS::ATTR_l, resource: "walltime", value: "00:10:00"}
+attropl << {name: PBS::ATTR_l, resource: "nodes", value: "1:ppn=1"}
 attropl << {name: PBS::ATTR_o, value: "#{host}:#{Dir.pwd}/"}
 attropl << {name: PBS::ATTR_e, value: "#{host}:#{Dir.pwd}/"}
 attropl << {name: PBS::ATTR_j, value: "oe"}
