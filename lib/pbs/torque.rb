@@ -9,26 +9,9 @@
 require 'ffi'
 
 module PBS
-
-  # Torque library can be changed dynamically
-  @@torque_lib = 'torque'
-
-  def self.set(lib)
-    @@torque_lib = lib
-    ffi_lib @@torque_lib
-  end
-
-  def self.get
-    @@torque_lib
-  end
-
-  # FFI Library extension using above torque lib
   extend FFI::Library
-  ffi_lib @@torque_lib
+  ffi_lib 'torque'
 
-
-  # Module methods below
-  #################################################
   extend self
 
   # int pbs_errno /* error number */
