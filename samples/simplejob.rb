@@ -3,6 +3,9 @@ require 'pbs'
 require 'tempfile'
 require 'socket'
 
+# Use default torque lib
+PBS.init
+
 # Connect to local server
 server = PBS.pbs_default()
 c = PBS.pbs_connect(server)

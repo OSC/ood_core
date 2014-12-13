@@ -9,54 +9,60 @@
 require 'ffi'
 
 module PBS
+
   extend FFI::Library
-  ffi_lib 'torque'
 
   extend self
 
-  # int pbs_errno /* error number */
-  attach_variable :_pbs_errno, :pbs_errno, :int
+  def init(lib = 'torque')
 
-  # int pbs_connect(char *server)
-  attach_function :_pbs_connect, :pbs_connect, [ :pointer ], :int
+    # Set up FFI to use this library
+    ffi_lib lib
 
-  # char *pbs_default(void);
-  attach_function :_pbs_default, :pbs_default, [], :string
-  
-  # int pbs_deljob(int connect, char *job_id, char *extend)
-  attach_function :_pbs_deljob, :pbs_deljob, [ :int, :pointer, :pointer ], :int
+    # int pbs_errno /* error number */
+    attach_variable :_pbs_errno, :pbs_errno, :int
 
-  # int pbs_disconnect(int connect)
-  attach_function :_pbs_disconnect, :pbs_disconnect, [ :int ], :int
+    # int pbs_connect(char *server)
+    attach_function :_pbs_connect, :pbs_connect, [ :pointer ], :int
 
-  # int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
-  attach_function :_pbs_holdjob, :pbs_holdjob, [ :int, :pointer, :pointer, :pointer ], :int
+    # char *pbs_default(void);
+    attach_function :_pbs_default, :pbs_default, [], :string
 
-  # int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
-  attach_function :_pbs_rlsjob, :pbs_rlsjob, [ :int, :pointer, :pointer, :pointer ], :int
+    # int pbs_deljob(int connect, char *job_id, char *extend)
+    attach_function :_pbs_deljob, :pbs_deljob, [ :int, :pointer, :pointer ], :int
 
-  # void pbs_statfree(struct batch_status *stat)
-  attach_function :_pbs_statfree, :pbs_statfree, [ :pointer ], :void
+    # int pbs_disconnect(int connect)
+    attach_function :_pbs_disconnect, :pbs_disconnect, [ :int ], :int
 
-  # batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend)
-  attach_function :_pbs_statjob, :pbs_statjob, [ :int, :pointer, :pointer, :pointer ], :pointer
+    # int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
+    attach_function :_pbs_holdjob, :pbs_holdjob, [ :int, :pointer, :pointer, :pointer ], :int
 
-  # batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend)
-  attach_function :_pbs_statnode, :pbs_statnode, [ :int, :pointer, :pointer, :pointer ], :pointer
+    # int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
+    attach_function :_pbs_rlsjob, :pbs_rlsjob, [ :int, :pointer, :pointer, :pointer ], :int
 
-  # batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend)
-  attach_function :_pbs_statque, :pbs_statque, [ :int, :pointer, :pointer, :pointer ], :pointer
+    # void pbs_statfree(struct batch_status *stat)
+    attach_function :_pbs_statfree, :pbs_statfree, [ :pointer ], :void
 
-  # batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend)
-  attach_function :_pbs_statserver, :pbs_statserver, [ :int, :pointer, :pointer ], :pointer
+    # batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend)
+    attach_function :_pbs_statjob, :pbs_statjob, [ :int, :pointer, :pointer, :pointer ], :pointer
 
-  # char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
-  attach_function :_pbs_submit, :pbs_submit, [ :int, :pointer, :pointer, :pointer, :pointer ], :string
+    # batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend)
+    attach_function :_pbs_statnode, :pbs_statnode, [ :int, :pointer, :pointer, :pointer ], :pointer
 
-  # PBS commands with no special features
-  alias_method :pbs_default, :_pbs_default
-  alias_method :pbs_disconnect, :_pbs_disconnect
-  alias_method :pbs_statfree, :_pbs_statfree
+    # batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend)
+    attach_function :_pbs_statque, :pbs_statque, [ :int, :pointer, :pointer, :pointer ], :pointer
+
+    # batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend)
+    attach_function :_pbs_statserver, :pbs_statserver, [ :int, :pointer, :pointer ], :pointer
+
+    # char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
+    attach_function :_pbs_submit, :pbs_submit, [ :int, :pointer, :pointer, :pointer, :pointer ], :string
+
+    # PBS commands with no special features
+    alias_method :pbs_default, :_pbs_default
+    alias_method :pbs_disconnect, :_pbs_disconnect
+    alias_method :pbs_statfree, :_pbs_statfree
+  end
 
   # PBS connect (may not set _pbs_errno, need to check for negative output)
   def pbs_connect(*args)
