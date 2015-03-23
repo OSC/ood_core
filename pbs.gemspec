@@ -10,8 +10,8 @@ Gem::Specification.new do |spec|
   spec.email         = ["jnicklas@osc.edu"]
   spec.description   = %q{Ruby Torque (PBS) Library}
   spec.summary       = %q{PBS Ruby}
-  spec.homepage      = "https://code.osu.edu/wiag/pbs"
-  # spec.license       = "MIT"
+  spec.homepage      = "http://www.osc.edu"
+  spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
   spec.executables   = spec.files.grep(%r{^bin/}) { |f| File.basename(f) }
@@ -21,5 +21,4 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ffi", "~> 1.9", ">= 1.9.6"
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec", "~> 3.1", ">= 3.1.0"
 end
