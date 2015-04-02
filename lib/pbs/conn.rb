@@ -4,7 +4,6 @@ module PBS
     attr_reader :server
 
     def initialize(args = {})
-      Torque.init args
       @server = args[:server] || Torque.pbs_default
     end
 
