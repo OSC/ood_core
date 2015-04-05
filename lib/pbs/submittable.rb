@@ -6,10 +6,10 @@ module PBS
     HOSTNAME = Socket.gethostname
 
     DEFAULT_HEADERS = {
-      Torque::ATTR[:N] => "Jobname",
-      Torque::ATTR[:o] => "#{Dir.pwd}/",
-      Torque::ATTR[:e] => "#{Dir.pwd}/",
-      Torque::ATTR[:j] => "oe",
+      ATTR[:N] => "Jobname",
+      ATTR[:o] => "#{Dir.pwd}/",
+      ATTR[:e] => "#{Dir.pwd}/",
+      ATTR[:j] => "oe",
     }
 
     DEFAULT_RESOURCES = {
@@ -34,12 +34,12 @@ module PBS
 
       # Generate attribute hash for this job
       attribs = headers
-      attribs[Torque::ATTR[:l]] = resources
-      attribs[Torque::ATTR[:v]] = envvars.map{|k,v| "#{k}=#{v}"}.join(",")
+      attribs[ATTR[:l]] = resources
+      attribs[ATTR[:v]] = envvars.map{|k,v| "#{k}=#{v}"}.join(",")
 
       # Clean up some of the attributes
-      attribs[Torque::ATTR[:o]].prepend("#{HOSTNAME}:")
-      attribs[Torque::ATTR[:e]].prepend("#{HOSTNAME}:")
+      attribs[ATTR[:o]].prepend("#{HOSTNAME}:")
+      attribs[ATTR[:e]].prepend("#{HOSTNAME}:")
 
       # Create batch script in tmp file, submit, remove tmp file
       script = Tempfile.new('qsub.')

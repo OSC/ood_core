@@ -55,7 +55,7 @@ module PBS
 
         # :user filter
         if where_values.has_key?(:user)
-          pass = false unless /#{where_values[:user]}@/ =~ attribs[Torque::ATTR[:owner]]
+          pass = false unless /#{where_values[:user]}@/ =~ attribs[ATTR[:owner]]
         end
 
         pass

@@ -15,7 +15,7 @@ puts ""
 
 # Check if I have any jobs currently running
 q = PBS::Query.new(conn: c, type: :job)
-filters = [PBS::Torque::ATTR[:state], PBS::Torque::ATTR[:owner]]
+filters = [PBS::ATTR[:state], PBS::ATTR[:owner]]
 puts "# All jobs you currently have in the batch ---"
 puts q.where(user: ENV['USER']).find(filters: filters).to_yaml
 puts ""
@@ -23,7 +23,7 @@ puts ""
 # Setup new job
 j = PBS::Job.new(conn: c)
 
-headers = { PBS::Torque::ATTR[:N] => "SimpleJob" }
+headers = { PBS::ATTR[:N] => "SimpleJob" }
 resources = { nodes: "1:ppn=1", walltime: "00:10:00" }
 envvars = { WORLD: "world" }
 script = "echo \"Hello ${WORLD}!\""
@@ -42,13 +42,13 @@ puts ""
 # Hold job
 puts "# Holding job now ---"
 j.hold
-puts j.status(filter: PBS::Torque::ATTR[:state]).to_yaml
+puts j.status(filter: PBS::ATTR[:state]).to_yaml
 puts ""
 
 # Release job
 puts "# Releasing job now ---"
 j.release
-puts j.status(filter: PBS::Torque::ATTR[:state]).to_yaml
+puts j.status(filter: PBS::ATTR[:state]).to_yaml
 puts ""
 
 # Delete submitted job
