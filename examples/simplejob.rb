@@ -45,6 +45,17 @@ j.hold
 puts j.status(filter: PBS::ATTR[:state]).to_yaml
 puts ""
 
+# Show only jobs on hold
+puts "# All running jobs on hold ---"
+puts q.where(user: ENV['USER']).where(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
+puts ""
+puts "# All running jobs not on hold ---"
+puts q.where(user: ENV['USER']).wherenot(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
+puts ""
+puts "# All running jobs not queued ---"
+puts q.where(user: ENV['USER']).wherenot(PBS::ATTR[:state] => 'Q').find(filters: filters).to_yaml
+puts ""
+
 # Release job
 puts "# Releasing job now ---"
 j.release
