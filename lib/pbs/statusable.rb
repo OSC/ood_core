@@ -4,7 +4,7 @@ module PBS
     def status(args = {})
       args.merge!({id: id})
       q = Query.new(type: :job, conn: conn)
-      q.find(args)
+      q.find(args)[0]
     end
   end
 end
