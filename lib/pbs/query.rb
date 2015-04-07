@@ -2,7 +2,7 @@ module PBS
   class Query
     attr_reader :type
     attr_reader :conn
-    attr_accessor :where_values, :wherenot_values
+    attr_accessor :where_values, :where_not_values
 
     STATTYPE = {job: :pbs_statjob, queue: :pbs_statque,
                 node: :pbs_statnode, server: :pbs_statserver}
@@ -13,15 +13,15 @@ module PBS
       @conn = args[:conn] || Conn.new
       @type = args[:type] || :job
       @where_values = {}
-      @wherenot_values = {}
+      @where_not_values = {}
     end
 
     # Add hash where value to further filter results
-    %w(where wherenot).each do |action|
+    %w(where where_not).each do |action|
       define_method(action) do |where_value|
         relation = self.clone
         relation.where_values = where_values.clone
-        relation.wherenot_values = wherenot_values.clone
+        relation.where_not_values = where_not_values.clone
         relation.send("#{action.to_s + '_values'}".to_sym).merge!(where_value)
         relation
       end
@@ -53,7 +53,7 @@ module PBS
             pass = false unless attribs[k] == v
           end
         end
-        wherenot_values.each do |k,v|
+        where_not_values.each do |k,v|
           if attribs.has_key?(k)
             pass = false if attribs[k] == v
           end
@@ -66,7 +66,7 @@ module PBS
         if where_values.has_key?(:user)
           pass = false unless /#{where_values[:user]}@/ =~ attribs[ATTR[:owner]]
         end
-        if wherenot_values.has_key?(:user)
+        if where_not_values.has_key?(:user)
           pass = false if /#{where_values[:user]}@/ =~ attribs[ATTR[:owner]]
         end
 

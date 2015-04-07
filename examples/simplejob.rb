@@ -50,10 +50,10 @@ puts "# All running jobs on hold ---"
 puts q.where(user: ENV['USER']).where(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
 puts ""
 puts "# All running jobs not on hold ---"
-puts q.where(user: ENV['USER']).wherenot(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
+puts q.where(user: ENV['USER']).where_not(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
 puts ""
 puts "# All running jobs not queued ---"
-puts q.where(user: ENV['USER']).wherenot(PBS::ATTR[:state] => 'Q').find(filters: filters).to_yaml
+puts q.where(user: ENV['USER']).where_not(PBS::ATTR[:state] => 'Q').find(filters: filters).to_yaml
 puts ""
 
 # Release job
