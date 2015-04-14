@@ -1,3 +1,5 @@
+require 'yaml'
+
 module PBS
   class Conn
     attr_reader :conn_id
