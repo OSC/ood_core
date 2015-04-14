@@ -1,13 +1,26 @@
 module PBS
   class Conn
     attr_reader :conn_id
+    attr_reader :lib
     attr_reader :server
 
     def initialize(args = {})
-      @server = args[:server] || Torque.pbs_default
+      @lib = args[:lib]
+      @server = args[:server]
+
+      # Get lib and server from user specified cluster/batch
+      cluster = args[:cluster]
+      batch = args[:batch]
+      batch_config = YAML.load_file("#{CONFIG_PATH}/batch.yml")
+      @lib ||= batch_config[cluster][batch]['lib']
+      @server ||= batch_config[cluster][batch]['server']
     end
 
     def connect
+      # Reset the Torque module to correct library when connecting
+      # typically all commands will connect/do stuff/disconnect
+      Torque.init lib: lib
+
       # Disconnect if already connected
       disconnect if connected?
 
