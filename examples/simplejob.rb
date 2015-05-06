@@ -5,7 +5,7 @@ require 'yaml'
 PBS::Torque.init
 
 # Set up connection to local server
-c = PBS::Conn.new
+c = PBS::Conn.new cluster: 'glenn', batch: 'compute'
 
 # Check info for local server
 q = PBS::Query.new(conn: c, type: :server)
