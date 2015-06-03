@@ -17,7 +17,7 @@ puts ""
 q = PBS::Query.new(conn: c, type: :job)
 filters = [PBS::ATTR[:state], PBS::ATTR[:owner]]
 puts "# All jobs you currently have in the batch ---"
-puts q.where(user: ENV['USER']).find(filters: filters).to_yaml
+puts q.where.user(ENV['USER']).find(filters: filters).to_yaml
 puts ""
 
 # Setup new job
@@ -47,13 +47,13 @@ puts ""
 
 # Show only jobs on hold
 puts "# All running jobs on hold ---"
-puts q.where(user: ENV['USER']).where(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
+puts q.where.user(ENV['USER']).where(PBS::ATTR[:state]) {|v| v == 'H'}.find(filters: filters).to_yaml
 puts ""
 puts "# All running jobs not on hold ---"
-puts q.where(user: ENV['USER']).where_not(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
+puts q.where.user(ENV['USER']).where.not(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
 puts ""
 puts "# All running jobs not queued ---"
-puts q.where(user: ENV['USER']).where_not(PBS::ATTR[:state] => 'Q').find(filters: filters).to_yaml
+puts q.where.user(ENV['USER']).where.is(PBS::ATTR[:state] => 'H').find(filters: filters).to_yaml
 puts ""
 
 # Release job
