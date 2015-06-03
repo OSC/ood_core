@@ -31,9 +31,9 @@ module PBS
 
     # Used to filter where key attrib is equal to value
     #   where.is(PBS::ATTR[:N] => "SimpleJob")
-   def is(hash)
+    def is(hash)
       key, value = hash.first
-      raise PBS::Error, "`where' method not called before" unless where_procs[-1]
+      raise PBS::Error, "`where' method not called before" if where_procs.empty? || where_procs[-1]
       self.where_procs[-1] = Proc.new {|h| h[key] == value}
       self
     end
@@ -42,7 +42,7 @@ module PBS
     #   where.not(PBS::ATTR[:N] => "SimpleJob")
     def not(hash)
       key, value = hash.first
-      raise PBS::Error, "`where' method not called before" unless where_procs[-1]
+      raise PBS::Error, "`where' method not called before" if where_procs.empty? || where_procs[-1]
       self.where_procs[-1] = Proc.new {|h| h[key] != value}
       self
     end
@@ -50,8 +50,8 @@ module PBS
     # Used to filter specific user
     #   where.user("username")
     def user(name)
+      raise PBS::Error, "`where' method not called before" if where_procs.empty? || where_procs[-1]
       self.where_procs[-1] = Proc.new {|h| /^#{name}@/ =~ h[ATTR[:owner]]}
-      raise PBS::Error, "`where' method not called before" unless where_procs[-1]
       self
     end
 
