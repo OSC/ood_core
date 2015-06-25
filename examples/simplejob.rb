@@ -24,7 +24,7 @@ puts ""
 j = PBS::Job.new(conn: c)
 
 headers = { PBS::ATTR[:N] => "SimpleJob" }
-resources = { nodes: "1:ppn=1", walltime: "00:10:00" }
+resources = { walltime: "00:10:00" }
 envvars = { WORLD: "world" }
 script = "echo \"Hello ${WORLD}!\""
 

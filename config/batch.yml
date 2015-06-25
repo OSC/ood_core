@@ -1,19 +1,24 @@
 glenn:
     compute:
-        lib: /usr/local/torque-2.4.10/lib/libtorque.so
-        server: opt-batch.osc.edu
+        :lib: /usr/local/torque-2.4.10/lib/libtorque.so
+        :server: opt-batch.osc.edu
+        :ppn: 8
     oxymoron:
-        lib: /usr/local/torque-4.2.8/lib/libtorque.so
-        server: oak-batch.osc.edu:17001
+        :lib: /usr/local/torque-4.2.8/lib/libtorque.so
+        :server: oak-batch.osc.edu:17001
+        :ppn: 1:glenn
 oakley:
     compute:
-        lib: /usr/local/torque-2.4.10/lib/libtorque.so
-        server: oak-batch.osc.edu
+        :lib: /usr/local/torque-2.4.10/lib/libtorque.so
+        :server: oak-batch.osc.edu
+        :ppn: 12
     oxymoron:
-        lib: /usr/local/torque-4.2.8/lib/libtorque.so
-        server: oak-batch.osc.edu:17001
+        :lib: /usr/local/torque-4.2.8/lib/libtorque.so
+        :server: oak-batch.osc.edu:17001
+        :ppn: 1:oakley
 ruby:
     compute:
-        lib: /usr/local/torque-4.2.8/lib/libtorque.so
-        server: ruby-batch.ten.osc.edu
+        :lib: /usr/local/torque-4.2.8/lib/libtorque.so
+        :server: ruby-batch.ten.osc.edu
+        :ppn: 20
     # Ruby isn't implemented in the Oxymoron batch system

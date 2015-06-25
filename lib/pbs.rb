@@ -1,6 +1,11 @@
+require 'yaml'
+
 module PBS
   # Config path
   CONFIG_PATH = File.dirname(__FILE__) + "/../config"
+
+  # Batch parameters
+  BATCH_CONFIG = YAML.load_file "#{CONFIG_PATH}/batch.yml"
 end
 
 require "pbs/error"
