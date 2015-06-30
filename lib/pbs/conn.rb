@@ -21,6 +21,10 @@ module PBS
       @batch_config[:ppn]
     end
 
+    def batch_module
+      @batch_config[:module]
+    end
+
     def connect
       # Reset the Torque module to correct library when connecting
       # typically all commands will connect/do stuff/disconnect

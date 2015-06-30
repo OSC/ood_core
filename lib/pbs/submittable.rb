@@ -34,6 +34,7 @@ module PBS
       file = args[:file]
       string = args[:string] || File.open(file).read
       queue = args[:queue]
+      qsub = args[:qsub] ? true : false
 
       @headers = args[:headers] || {}
       @resources = args[:resources] || {}
@@ -44,7 +45,11 @@ module PBS
       begin
         script.write string
         script.close
-        _pbs_submit(script.path, queue)
+        if qsub
+          _qsub_submit(script.path, queue)
+        else
+          _pbs_submit(script.path, queue)
+        end
       ensure
         script.unlink # deletes the temp file
       end
@@ -70,6 +75,17 @@ module PBS
       self.id = Torque.pbs_submit(conn.conn_id, attropl, script, queue, nil)
       conn.disconnect
       Torque.check_for_error
+    end
+
+    # Submit using system call `qsub`
+    # Note: Do not need to filter as OSC has personal torque filter
+    def _qsub_submit(script, queue)
+      params = "-q @#{conn.batch_server}"
+      params << headers.map{|k,v| " -#{ATTR.key(k)} '#{v}'"}.join("")
+      params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
+      params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
+      self.id = `#{conn.batch_module} && qsub #{params} #{script}`
+      self.id.chomp!  # newline character at end of pbsid
     end
   end
 end
