@@ -80,7 +80,7 @@ module PBS
     # Submit using system call `qsub`
     # Note: Do not need to filter as OSC has personal torque filter
     def _qsub_submit(script, queue)
-      params = "-q @#{conn.batch_server}"
+      params = "-q #{queue}@#{conn.batch_server}"
       params << headers.map{|k,v| " -#{ATTR.key(k)} '#{v}'"}.join("")
       params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
       params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
