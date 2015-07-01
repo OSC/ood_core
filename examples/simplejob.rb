@@ -31,7 +31,7 @@ script = "echo \"Hello ${WORLD}!\""
 
 # Submit new job
 puts "# Submitting new job ---"
-puts j.submit(string: script, headers: headers, resources: resources, envvars: envvars).id
+puts j.submit(string: script, headers: headers, resources: resources, envvars: envvars, qsub: true).id
 puts ""
 
 # Show details of new job

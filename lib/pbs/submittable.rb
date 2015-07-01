@@ -1,5 +1,6 @@
 require "socket"
 require "tempfile"
+require "open3"
 
 module PBS
   module Submittable
@@ -84,8 +85,16 @@ module PBS
       params << headers.map{|k,v| " -#{ATTR.key(k)} '#{v}'"}.join("")
       params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
       params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
-      self.id = `#{conn.batch_module} && qsub #{params} #{script}`
-      self.id.chomp!  # newline character at end of pbsid
+      cmd = "#{conn.batch_module} && qsub #{params} #{script}"
+      Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
+        exit_status = wait_thr.value
+        if exit_status.success?
+          self.id = stdout.read
+          self.id.chomp!  # newline character at end of pbsid
+        else
+          raise PBS::Error, "#{stderr.read}"
+        end
+      end
     end
   end
 end
