@@ -82,9 +82,16 @@ module PBS
     # Note: Do not need to filter as OSC has personal torque filter
     def _qsub_submit(script, queue)
       params = "-q #{queue}@#{conn.batch_server}"
-      params << headers.map{|k,v| " -#{ATTR.key(k)} '#{v}'"}.join("")
       params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
       params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
+      params << headers.map do |k,v|
+        param = ATTR.key(k)
+        if param && param.length == 1
+          " -#{param} '#{v}'"
+        else
+          " -W '#{k}=#{v}'"
+        end
+      end.join("")
       cmd = "#{conn.batch_module} && qsub #{params} #{script}"
       Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
         exit_status = wait_thr.value
