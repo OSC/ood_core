@@ -9,10 +9,10 @@ module PBS
     # Returns an array representing the job headers
     # 
     #   Includes:
-    #     <tt>N</tt> Job Name
-    #     <tt>o</tt> Output Path
-    #     <tt>e</tt> Error Path
-    #     <tt>j</tt> Merged standard error stream and standard output stream of the job.
+    #     <tt>Job_Name</tt> Job Name
+    #     <tt>Output_Path</tt> Output Path
+    #     <tt>Error_Path</tt> Error Path
+    #     <tt>Join_Path</tt> Merged standard error stream and standard output stream of the job.
     def headers
       {
         ATTR[:N] => "Jobname",

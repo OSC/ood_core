@@ -1,4 +1,4 @@
-# Definition of PBS attribute types# 
+# Returns static array of defined PBS attribute types 
 # 
 #   Includes:
 #     Attribute names used by user commands
