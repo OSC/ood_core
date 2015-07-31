@@ -34,13 +34,14 @@ module PBS
       @batch_config[:server]
     end
 
-    # Returns the processors per node of the connection
+    # Returns the default ppn of the connection
     # 
     # Examples:
-    #   1:glenn
-    #   8
-    #   12
-    #   20
+    #   Glenn/Compute = 8
+    #   Glenn/Oxymoron = 1:glenn
+    #   Oakley/Compute = 12
+    #   Oakley/Oxymoron = 1:oakley
+    #   Ruby/Compute = 20
     def batch_ppn
       @batch_config[:ppn]
     end
