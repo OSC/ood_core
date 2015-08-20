@@ -5,7 +5,7 @@ module PBS
     def initialize(args = {})
       batch   = args[:batch]
       cluster = args[:cluster]
-      @batch_config = batch && cluster ? BATCH_CONFIG[cluster][batch] : {}
+      @batch_config = BATCH_CONFIG.fetch(cluster, {}).fetch(batch, {}).clone
       @batch_config.merge!(args[:config] || {})
     end
 
