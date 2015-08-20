@@ -6,6 +6,15 @@ module PBS
   module Submittable
     HOSTNAME = Socket.gethostname
 
+    # Returns a Hash representing the job headers
+    # 
+    #   Includes:
+    #     <tt>:Job_Name</tt> Job Name
+    #     <tt>:Output_Path</tt> Output Path
+    #     <tt>:Error_Path</tt> Error Path
+    #     <tt>:Join_Path</tt> Merged standard error stream and standard output stream of the job.
+    #     
+    # @return [Hash] the job headers  
     def headers
       {
         ATTR[:N] => "Jobname",
@@ -15,6 +24,14 @@ module PBS
       }.merge @headers
     end
 
+    # Returns a Hash representing the resources used
+    #   
+    #   Includes:
+    #     <tt>nodes</tt> Number of nodes (Default: 1)
+    #                     Number of processors
+    #     <tt>walltime</tt> Wall Time (Default: 00:10:00)
+    #     
+    # @return [Hash] the resources used
     def resources
       {
         nodes: "1:ppn=#{conn.batch_ppn}",
@@ -22,6 +39,12 @@ module PBS
       }.merge @resources
     end
 
+    # Returns a Hash representing the PBS working directory
+    # 
+    #   Includes:
+    #     <tt>PBS_O_WORKDIR</tt> The PBS working directory
+    #     
+    # @return [Hash] the PBS working directory
     def envvars
       {
         PBS_O_WORKDIR: "#{Dir.pwd}",
