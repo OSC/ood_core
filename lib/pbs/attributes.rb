@@ -1,5 +1,5 @@
-# Maintains a constant Hash of defined PBS attribute types 
-# 
+# Maintains a constant Hash of defined PBS attribute types
+#
 #   Includes:
 #     Attribute names used by user commands
 #     Additional job and general attribute names

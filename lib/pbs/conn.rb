@@ -3,7 +3,7 @@ module PBS
     attr_reader :conn_id
 
     # Initialize the connection
-    # 
+    #
     # @param [Hash] args the arguments to consstruct the connection
     # @option args [String] :batch the batch options
     # @option args [String] :cluster the cluster
@@ -16,34 +16,34 @@ module PBS
     end
 
     # Return the name of the torque library used by the connection.
-    # 
+    #
     # @example Torque 2.4.10
     #   /usr/local/torque-2.4.10/lib/libtorque.so
     # @example Torque 4.2.8
     #   /usr/local/torque-4.2.8/lib/libtorque.so
-    #  
+    #
     # @return [String] the name of the torque library used by the connection.
     def batch_lib
       @batch_config[:lib]
     end
 
     # Returns the batch server of the connection
-    # 
+    #
     # @example Glenn
     #   opt-batch.osc.edu
-    # @example Oakley  
+    # @example Oakley
     #   oak-batch.osc.edu:17001
     # @example Ruby
     #   ruby-batch.ten.osc.edu
-    #   
+    #
     # @return [String] the batch server
     def batch_server
       @batch_config[:server]
     end
 
     # Returns the default ppn of the connection
-    # 
-    # @example Glenn/Compute 
+    #
+    # @example Glenn/Compute
     #   8
     # @example Glenn/Oxymoron
     #   1:glenn
@@ -53,32 +53,32 @@ module PBS
     #   1:oakley
     # @example Ruby/Compute
     #   20
-    #   
+    #
     # @return [String, Integer] the default ppn of the connection
     def batch_ppn
       @batch_config[:ppn]
     end
 
     # Returns the module used by the connection
-    # 
+    #
     # @example Torque 2.4.10
     #   '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
     # @example Torque 4.2.8/vis
     #   '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
-    #   
+    #
     # @return [String] the module command used by the connection
     def batch_module
       @batch_config[:module]
     end
 
     # Creates a torque connection
-    # 
+    #
     #   Resets the Torque module to the correct library
     #   Disconnects if there is already a connection
     #   Creates a PBS connection to the batch server
     #   Checks for errors
     #   Returns the connection id
-    #   
+    #
     # @return [Integer] the connection id
     def connect
       # Reset the Torque module to correct library when connecting
