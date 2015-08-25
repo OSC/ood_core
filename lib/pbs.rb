@@ -11,6 +11,7 @@ end
 require "pbs/error"
 require "pbs/attributes"
 require "pbs/torque"
+require "pbs/batch"
 require "pbs/conn"
 require "pbs/query"
 require "pbs/submittable"

@@ -1,29 +1,16 @@
 glenn:
-    compute:
-        :lib: /usr/local/torque-2.4.10/lib/libtorque.so
-        :server: opt-batch.osc.edu
-        :ppn: 8
-        :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
-    oxymoron:
-        :lib: /usr/local/torque-4.2.8/lib/libtorque.so
-        :server: oak-batch.osc.edu:17001
-        :ppn: 1:glenn
-        :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+    :lib: /usr/local/torque-2.4.10/lib/libtorque.so
+    :server: opt-batch.osc.edu
+    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
 oakley:
-    compute:
-        :lib: /usr/local/torque-2.4.10/lib/libtorque.so
-        :server: oak-batch.osc.edu
-        :ppn: 12
-        :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
-    oxymoron:
-        :lib: /usr/local/torque-4.2.8/lib/libtorque.so
-        :server: oak-batch.osc.edu:17001
-        :ppn: 1:oakley
-        :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+    :lib: /usr/local/torque-2.4.10/lib/libtorque.so
+    :server: oak-batch.osc.edu
+    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
 ruby:
-    compute:
-        :lib: /usr/local/torque-4.2.8/lib/libtorque.so
-        :server: ruby-batch.ten.osc.edu
-        :ppn: 20
-        :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
-    # Ruby isn't implemented in the Oxymoron batch system
+    :lib: /usr/local/torque-4.2.8/lib/libtorque.so
+    :server: ruby-batch.ten.osc.edu
+    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+oxymoron:
+    :lib: /usr/local/torque-4.2.8/lib/libtorque.so
+    :server: oak-batch.osc.edu:17001
+    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
