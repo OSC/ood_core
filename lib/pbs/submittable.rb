@@ -34,7 +34,7 @@ module PBS
     # @return [Hash] the resources used
     def resources
       {
-        walltime: "00:10:00",
+        walltime: "01:00:00",
       }.merge @resources
     end
 
