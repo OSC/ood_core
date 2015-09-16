@@ -3,9 +3,9 @@ glenn:
     :server: opt-batch.osc.edu
     :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
 oakley:
-    :lib: /usr/local/torque-2.4.10/lib/libtorque.so
+    :lib: /usr/local/torque-4.2.8/lib/libtorque.so
     :server: oak-batch.osc.edu
-    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
+    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
 ruby:
     :lib: /usr/local/torque-4.2.8/lib/libtorque.so
     :server: ruby-batch.ten.osc.edu
@@ -13,4 +13,8 @@ ruby:
 oxymoron:
     :lib: /usr/local/torque-4.2.8/lib/libtorque.so
     :server: oak-batch.osc.edu:17001
+    :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+quick:
+    :lib: /usr/local/torque-4.2.8/lib/libtorque.so
+    :server: quick-batch.osc.edu
     :module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
