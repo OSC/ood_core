@@ -1,9 +1,6 @@
 require 'pbs'
 require 'yaml'
 
-# Use default torque lib
-PBS::Torque.init
-
 # Set up connection to local server
 b = PBS::Batch.new name: 'glenn'
 c = PBS::Conn.new batch: b
