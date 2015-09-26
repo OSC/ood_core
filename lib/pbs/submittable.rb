@@ -6,61 +6,17 @@ module PBS
   module Submittable
     HOSTNAME = Socket.gethostname
 
-    # Returns a Hash representing the job headers
-    #
-    #   Includes:
-    #     <tt>:Job_Name</tt> Job Name
-    #     <tt>:Output_Path</tt> Output Path
-    #     <tt>:Error_Path</tt> Error Path
-    #     <tt>:Join_Path</tt> Merged standard error stream and standard output stream of the job.
-    #
-    # @return [Hash] the job headers
-    def headers
-      {
-        ATTR[:N] => "Jobname",
-        ATTR[:o] => "#{Dir.pwd}/",
-        ATTR[:e] => "#{Dir.pwd}/",
-      }.merge @headers
-    end
-
-    # Returns a Hash representing the resources used
-    #
-    #   Includes:
-    #     <tt>nodes</tt> Number of nodes (Default: 1)
-    #                     Number of processors
-    #     <tt>walltime</tt> Wall Time (Default: 00:10:00)
-    #
-    # @return [Hash] the resources used
-    def resources
-      {
-        walltime: "01:00:00",
-      }.merge @resources
-    end
-
-    # Returns a Hash representing the PBS working directory
-    #
-    #   Includes:
-    #     <tt>PBS_O_WORKDIR</tt> The PBS working directory
-    #
-    # @return [Hash] the PBS working directory
-    def envvars
-      {
-        PBS_O_WORKDIR: "#{Dir.pwd}",
-      }.merge @envvars
-    end
-
     # Can submit a script as a file or string
     # The PBS headers defined in the file will NOT be parsed
     # all PBS headers must be supplied programmatically
-    def submit(args = {})
-      file = args[:file]
-      string = args[:string] || File.open(file).read
-      queue = args[:queue]
-      qsub = args[:qsub] ? true : false
+    def submit(args)
+      string = args.fetch(:string) { File.open(args[:file]).read }
+      queue  = args.fetch(:queue)
+      qsub   = args.fetch(:qsub, true)
 
-      @headers = args[:headers] || {}
-      @resources = args[:resources] || {}
-      @envvars = args[:envvars] || {}
+      headers   = _get_headers   args.fetch(:headers,   {})
+      resources = _get_resources args.fetch(:resources, {})
+      envvars   = _get_envvars   args.fetch(:envvars,   {})
 
       # Create batch script in tmp file, submit, remove tmp file
       script = Tempfile.new('qsub.')
@@ -68,9 +24,9 @@ module PBS
         script.write string
         script.close
         if qsub
-          _qsub_submit(script.path, queue)
+          _qsub_submit(script.path, queue, headers, resources, envvars)
         else
-          _pbs_submit(script.path, queue)
+          _pbs_submit(script.path, queue, headers, resources, envvars)
         end
       ensure
         script.unlink # deletes the temp file
@@ -81,7 +37,7 @@ module PBS
 
     # Connect to server, submit job with headers,
     # disconnect, and finally check for errors
-    def _pbs_submit(script, queue)
+    def _pbs_submit(script, queue, headers, resources, envvars)
       # Generate attribute hash for this job
       attribs = headers
       attribs[ATTR[:l]] = resources
@@ -101,7 +57,7 @@ module PBS
 
     # Submit using system call `qsub`
     # Note: Do not need to filter as OSC has personal torque filter
-    def _qsub_submit(script, queue)
+    def _qsub_submit(script, queue, headers, resources, envvars)
       params = "-q #{queue}@#{conn.server}"
       params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
       params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
@@ -122,6 +78,30 @@ module PBS
 
         self.id = stdout.read.chomp   # newline char at end of job id
       end
+    end
+
+    # Hash representing the job headers
+    def _get_headers(headers)
+      {
+        ATTR[:N] => "Jobname",
+        ATTR[:o] => "#{Dir.pwd}/",
+        ATTR[:e] => "#{Dir.pwd}/",
+        ATTR[:S] => "/bin/bash",
+      }.merge headers
+    end
+
+    # Hash representing the resources used
+    def _get_resources(resources)
+      {
+        walltime: "01:00:00",
+      }.merge resources
+    end
+
+    # Hash representing the PBS working directory
+    def _get_envvars(envvars)
+      {
+        PBS_O_WORKDIR: "#{Dir.pwd}",
+      }.merge envvars
     end
   end
 end
