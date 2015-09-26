@@ -20,7 +20,6 @@ module PBS
         ATTR[:N] => "Jobname",
         ATTR[:o] => "#{Dir.pwd}/",
         ATTR[:e] => "#{Dir.pwd}/",
-        ATTR[:j] => "oe",
       }.merge @headers
     end
 
