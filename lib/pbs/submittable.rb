@@ -103,7 +103,7 @@ module PBS
     # Submit using system call `qsub`
     # Note: Do not need to filter as OSC has personal torque filter
     def _qsub_submit(script, queue)
-      params = "-q #{queue}@#{conn.batch.server}"
+      params = "-q #{queue}@#{conn.server}"
       params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
       params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
       params << headers.map do |k,v|
@@ -114,15 +114,14 @@ module PBS
           " -W '#{k}=#{v}'"
         end
       end.join("")
-      cmd = "#{conn.batch.module} && qsub #{params} #{script}"
+      cmd = "#{conn.module} && qsub #{params} #{script}"
       Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
         exit_status = wait_thr.value
-        if exit_status.success?
-          self.id = stdout.read
-          self.id.chomp!  # newline character at end of pbsid
-        else
+        unless exit_status.success?
           raise PBS::Error, "#{stderr.read}"
         end
+
+        self.id = stdout.read.chomp   # newline char at end of job id
       end
     end
   end

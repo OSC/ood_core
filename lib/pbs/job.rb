@@ -1,3 +1,8 @@
+require_relative 'submittable'
+require_relative 'statusable'
+require_relative 'holdable'
+require_relative 'deletable'
+
 module PBS
   class Job
     attr_accessor :id

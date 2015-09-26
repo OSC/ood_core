@@ -2,8 +2,7 @@ require 'pbs'
 require 'yaml'
 
 # Set up connection to local server
-b = PBS::Batch.new name: 'glenn'
-c = PBS::Conn.new batch: b
+c = PBS::Conn.batch 'glenn'
 
 # Check info for local server
 q = PBS::Query.new(conn: c, type: :server)

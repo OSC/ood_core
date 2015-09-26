@@ -13,31 +13,22 @@ At minimum you will need:
 
 ## Installation
 
-Add this to your `Gemfile`:
+Add this to your application's Gemfile:
 
-```
-  # Gemfile
-
-  ...
-
+```ruby
   gem 'pbs'
 ```
 
-then run from command line:
+And then execute:
 
 ```bash
-  $ bundle exec ruby <example.rb>
+  $ bundle install --local
 ```
 
 ## Usage
 
-The usage follows very closely to the `pbs_python` usage documented here: https://oss.trac.surfsara.nl/pbs_python/wiki/TorqueUsage
-
-Not all PBS functions are replicated in this project. The administrative functions have been neglected.
-
-Most useful features are described in the `examples/simplejob.rb` provided. To run this simple example, type:
+Most useful features are outlined in the `examples/simplejob.rb` provided. To run this simple example, type:
 
 ```bash
-  $ bundle exec ruby -Ilib examples/simplejob.rb
+  $ ruby -Ilib examples/simplejob.rb
 ```
-
