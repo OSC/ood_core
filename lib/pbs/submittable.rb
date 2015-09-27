@@ -11,7 +11,7 @@ module PBS
     # all PBS headers must be supplied programmatically
     def submit(args)
       string = args.fetch(:string) { File.open(args[:file]).read }
-      queue  = args.fetch(:queue)
+      queue  = args.fetch(:queue, nil)
       qsub   = args.fetch(:qsub, true)
 
       headers   = _get_headers   args.fetch(:headers,   {})
