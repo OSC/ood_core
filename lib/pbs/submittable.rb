@@ -7,16 +7,22 @@ module PBS
     HOSTNAME = Socket.gethostname
 
     # Can submit a script as a file or string
-    # The PBS headers defined in the file will NOT be parsed
-    # all PBS headers must be supplied programmatically
+    # @param args [Hash] The options when submitting a job.
+    # @option args [String] :string The batch script as a string.
+    # @option args [String] :file The batch script file if a string is not supplied.
+    # @option args [Boolean] :qsub (true) Whether the <tt>qsub</tt> command is used from command line.
+    # @option args [Hash] :headers ({}) PBS headers.
+    # @option args [Hash] :resources ({}) PBS resources.
+    # @option args [Hash] :envvars ({}) PBS environment variables.
+    # @raise [Error] if fail to submit batch job.
     def submit(args)
       string = args.fetch(:string) { File.open(args[:file]).read }
       queue  = args.fetch(:queue, nil)
       qsub   = args.fetch(:qsub, true)
 
-      headers   = _get_headers   args.fetch(:headers,   {})
-      resources = _get_resources args.fetch(:resources, {})
-      envvars   = _get_envvars   args.fetch(:envvars,   {})
+      headers   = args.fetch(:headers,   {})
+      resources = args.fetch(:resources, {})
+      envvars   = args.fetch(:envvars,   {})
 
       # Create batch script in tmp file, submit, remove tmp file
       script = Tempfile.new('qsub.')
@@ -39,9 +45,9 @@ module PBS
     # disconnect, and finally check for errors
     def _pbs_submit(script, queue, headers, resources, envvars)
       # Generate attribute hash for this job
-      attribs = headers
-      attribs[ATTR[:l]] = resources
-      attribs[ATTR[:v]] = envvars.map{|k,v| "#{k}=#{v}"}.join(",")
+      attribs = _default_headers.merge(headers)
+      attribs[ATTR[:l]] = _default_resources.merge(resources)
+      attribs[ATTR[:v]] = _default_envvars.merge(envvars).map{|k,v| "#{k}=#{v}"}.join(",")
 
       # Filter some of the attributes
       attribs[ATTR[:o]].prepend("#{HOSTNAME}:")
@@ -81,27 +87,27 @@ module PBS
     end
 
     # Hash representing the job headers
-    def _get_headers(headers)
+    def _default_headers
       {
         ATTR[:N] => "Jobname",
         ATTR[:o] => "#{Dir.pwd}/",
         ATTR[:e] => "#{Dir.pwd}/",
         ATTR[:S] => "/bin/bash",
-      }.merge headers
+      }
     end
 
     # Hash representing the resources used
-    def _get_resources(resources)
+    def _default_resources
       {
         walltime: "01:00:00",
-      }.merge resources
+      }
     end
 
     # Hash representing the PBS working directory
-    def _get_envvars(envvars)
+    def _default_envvars
       {
         PBS_O_WORKDIR: "#{Dir.pwd}",
-      }.merge envvars
+      }
     end
   end
 end
