@@ -69,7 +69,7 @@ module PBS
           " -W '#{k}=#{v}'"
         end
       end.join("")
-      cmd = "#{conn.cmd_prefix} qsub #{params} #{script}"
+      cmd = "#{conn.qsub} #{params} #{script}"
       Open3.popen3(cmd) do |stdin, stdout, stderr, wait_thr|
         exit_status = wait_thr.value
         unless exit_status.success?

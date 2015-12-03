@@ -12,8 +12,8 @@ module PBS
 
     # @example Torque 4.2.8
     #   "PATH=/usr/local/torque-4.2.8/bin:$PATH LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH"
-    # @return [String] The prefix command used for calling command line torque.
-    attr_reader :cmd_prefix
+    # @return [String] The qsub command to be called from the command line.
+    attr_reader :qsub
 
     # @return [Fixnum, nil] The connection id number if connected.
     attr_reader :conn_id
@@ -27,24 +27,24 @@ module PBS
     # @param opts [Hash] The options to create a connection object with.
     # @option opts [String] :lib The torque library used to establish connection.
     # @option opts [String] :server The batch server to connect to.
-    # @option opts [String] :cmd_prefix The prefix for the command line.
+    # @option opts [String] :qsub The qsub command to be called from the command line.
     # @raise [Error] if pre-defined batch server doesn't exist.
     def self.batch(name, opts = {})
       context = PBS.batch_config[name] || raise(PBS::Error, "No pre-defined batch server (#{name})")
-      lib = opts[:lib]        || context['lib']
-      svr = opts[:server]     || context['server']
-      pfx = opts[:cmd_prefix] || context['cmd_prefix']
-      Conn.new(lib: lib, server: svr, cmd_prefix: pfx)
+      lib = opts[:lib]    || context['lib']
+      svr = opts[:server] || context['server']
+      qsb = opts[:qsub]   || context['qsub']
+      Conn.new(lib: lib, server: svr, qsub: qsb)
     end
 
     # @param opts [Hash] The options to create a connection object with.
     # @option opts [String] :lib The torque library used to establish connection.
     # @option opts [String] :server The batch server to connect to.
-    # @option opts [String] :cmd_prefix The prefix for the command line.
+    # @option opts [String] :qsub The qsub command to be called from the command line.
     def initialize(opts)
-      @lib        = opts[:lib]
-      @server     = opts[:server]
-      @cmd_prefix = opts[:cmd_prefix]
+      @lib    = opts[:lib]
+      @server = opts[:server]
+      @qsub   = opts[:qsub]
     end
 
     # Creates a torque connection
