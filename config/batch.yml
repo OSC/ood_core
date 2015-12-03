@@ -1,20 +1,20 @@
 glenn:
     lib: '/usr/local/torque-2.4.10/lib/libtorque.so'
     server: 'opt-batch.osc.edu'
-    module: '. /etc/profile.d/modules-env.sh && module swap torque torque-2.4.10'
+    cmd_prefix: 'PATH=/usr/local/torque-2.4.10/bin:$PATH LD_LIBRARY_PATH=/usr/local/torque-2.4.10/lib:$LD_LIBRARY_PATH'
 oakley:
     lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
     server: 'oak-batch.osc.edu'
-    module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+    cmd_prefix: 'PATH=/usr/local/torque-4.2.8/bin:$PATH LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH'
 ruby:
     lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
     server: 'ruby-batch.ten.osc.edu'
-    module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+    cmd_prefix: 'PATH=/usr/local/torque-4.2.8/bin:$PATH LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH'
 oxymoron:
     lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
     server: 'oak-batch.osc.edu:17001'
-    module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+    cmd_prefix: 'PATH=/usr/local/torque-4.2.8/bin:$PATH LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH'
 quick:
     lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
     server: 'quick-batch.osc.edu'
-    module: '. /etc/profile.d/modules-env.sh && module swap torque torque-4.2.8_vis'
+    cmd_prefix: 'PATH=/usr/local/torque-4.2.8/bin:$PATH LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH'
