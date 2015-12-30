@@ -66,7 +66,7 @@ module PBS
     def _qsub_submit(script, queue, headers, resources, envvars)
       params = "-q #{queue}@#{conn.server}"
       params << resources.map{|k,v| " -l '#{k}=#{v}'"}.join("")
-      params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'"
+      params << " -v '#{envvars.map{|k,v| "#{k}=#{v}"}.join(",")}'" unless envvars.empty?
       params << headers.map do |k,v|
         param = ATTR.key(k)
         if param && param.length == 1
