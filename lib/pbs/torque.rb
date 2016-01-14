@@ -60,7 +60,11 @@ module PBS
     def self.check_for_error
       errno = pbs_errno
       self.pbs_errno = 0  # reset error number
-      raise PBS::Error, "#{pbs_strerror(errno)}" if errno > 0
+      raise_error(errno) if errno > 0
+    end
+
+    def self.raise_error(errno)
+      raise PBS::Error, "#{pbs_strerror(errno)}"
     end
 
     # Data structures defined in pbs_ifl.h

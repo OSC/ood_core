@@ -54,7 +54,8 @@ module PBS
       Torque.init lib: lib          # reset library used in Torque
       disconnect if connected?      # clean up any old connection
       @conn_id = Torque.pbs_connect(server)
-      Torque.check_for_error        # check for connection errors
+      Torque.raise_error(@conn_id.abs) if @conn_id < 0  # raise error if negative conn_id
+      Torque.check_for_error        # check for any other error that slipped by
       conn_id
     end
 
