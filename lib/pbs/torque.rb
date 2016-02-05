@@ -64,7 +64,7 @@ module PBS
     end
 
     def self.raise_error(errno)
-      raise ERROR_CODES[errno] || PBS::Error, "#{pbs_strerror(errno)}"
+      raise (ERROR_CODES[errno] || PBS::Error), "#{pbs_strerror(errno)}"
     end
 
     # Data structures defined in pbs_ifl.h
