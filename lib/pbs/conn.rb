@@ -31,9 +31,9 @@ module PBS
     # @raise [Error] if pre-defined batch server doesn't exist.
     def self.batch(name, opts = {})
       context = PBS.batch_config[name] || raise(PBS::Error, "No pre-defined batch server (#{name})")
-      lib = opts[:lib]    || context['lib']
-      svr = opts[:server] || context['server']
-      qsb = opts[:qsub]   || context['qsub']
+      lib = opts[:lib]    || context.fetch('lib', nil)
+      svr = opts[:server] || context.fetch('server', nil)
+      qsb = opts[:qsub]   || context.fetch('qsub', nil)
       Conn.new(lib: lib, server: svr, qsub: qsb)
     end
 
@@ -42,9 +42,9 @@ module PBS
     # @option opts [String] :server The batch server to connect to.
     # @option opts [String] :qsub The qsub command to be called from the command line.
     def initialize(opts)
-      @lib    = opts[:lib]
+      @lib    = opts[:lib] || "torque"
       @server = opts[:server]
-      @qsub   = opts[:qsub]
+      @qsub   = opts[:qsub] || "qsub"
     end
 
     # Creates a torque connection
