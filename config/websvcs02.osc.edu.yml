@@ -1,0 +1,30 @@
+glenn: &glenn
+    lib: '/usr/local/torque-2.4.10/lib/libtorque.so'
+    server: &glenn_server 'opt-batch.osc.edu'
+    qsub: 'LD_LIBRARY_PATH=/usr/local/torque-2.4.10/lib:$LD_LIBRARY_PATH /usr/local/torque-2.4.10/bin/qsub'
+*glenn_server:
+  <<: *glenn
+oakley: &oakley
+    lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
+    server: &oakley_server 'oak-batch.osc.edu'
+    qsub: 'LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH /usr/local/torque-4.2.8/bin/qsub'
+*oakley_server:
+  <<: *oakley
+ruby: &ruby
+    lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
+    server: &ruby_server 'ruby-batch.ten.osc.edu'
+    qsub: 'LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH /usr/local/torque-4.2.8/bin/qsub'
+*ruby_server:
+  <<: *ruby
+oxymoron: &oxymoron
+    lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
+    server: &oxymoron_server 'oak-batch.osc.edu:17001'
+    qsub: 'LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH /usr/local/torque-4.2.8/bin/qsub'
+*oxymoron_server:
+  <<: *oxymoron
+quick: &quick
+    lib: '/usr/local/torque-4.2.8/lib/libtorque.so'
+    server: &quick_server 'quick-batch.osc.edu'
+    qsub: 'LD_LIBRARY_PATH=/usr/local/torque-4.2.8/lib:$LD_LIBRARY_PATH /usr/local/torque-4.2.8/bin/qsub'
+*quick_server:
+  <<: *quick
