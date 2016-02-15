@@ -18,10 +18,15 @@ module PBS
       File.file?(host_config) ? host_config : default_config
     end
 
-    # Set the path to the batch config yaml file.
-    # @param path [String] The path to the batch config yaml file.
+    # Get the path to the batch config yaml file.
     def self.batch_config_path
       @batch_config_path ||= self.default_batch_config_path
+    end
+
+    # Set the path to the batch config yaml file.
+    # @param path [String] The path to the batch config yaml file.
+    def self.batch_config_path=(path)
+      @batch_config_path = File.expand_path(path)
     end
 
     # Hash generated from reading the batch config yaml file.
