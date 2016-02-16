@@ -1,4 +1,5 @@
 require 'yaml'
+require 'socket'
 
 require_relative 'pbs/error'
 require_relative 'pbs/attributes'
