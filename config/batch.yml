@@ -1,7 +1,7 @@
 glenn: &glenn
-    lib: '/usr/local/torque/default/lib/libtorque.so'
+    lib: '/usr/local/torque/2.5.8/lib/libtorque.so'
     server: &glenn_server 'opt-batch.osc.edu'
-    qsub: 'LD_LIBRARY_PATH=/usr/local/torque/default/lib:$LD_LIBRARY_PATH /usr/local/torque/default/bin/qsub'
+    qsub: 'LD_LIBRARY_PATH=/usr/local/torque/2.5.8/lib:$LD_LIBRARY_PATH /usr/local/torque/2.5.8/bin/qsub'
 *glenn_server:
   <<: *glenn
 oakley: &oakley
