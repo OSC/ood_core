@@ -1,4 +1,5 @@
 require 'yaml'
+require 'socket'
 
 require_relative 'pbs/error'
 require_relative 'pbs/attributes'
@@ -9,14 +10,18 @@ require_relative 'pbs/job'
 require_relative 'pbs/version'
 
 module PBS
-  # Path to batch server configuration file.
-  BATCH_CONFIG = File.expand_path("../../config/batch.yml", __FILE__)
-
     # Path to the batch config yaml file describing the batch servers for
     # local batch schedulers.
     # @return [String] Path to the batch config yaml file.
+    def self.default_batch_config_path
+      default_config = File.expand_path("../../config/batch.yml", __FILE__)
+      host_config = File.expand_path("../../config/#{Socket.gethostname}.yml", __FILE__)
+      File.file?(host_config) ? host_config : default_config
+    end
+
+    # Get the path to the batch config yaml file.
     def self.batch_config_path
-      @batch_config_path ||= BATCH_CONFIG
+      @batch_config_path ||= self.default_batch_config_path
     end
 
     # Set the path to the batch config yaml file.
