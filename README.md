@@ -22,7 +22,7 @@ Add this to your application's Gemfile:
 And then execute:
 
 ```bash
-  $ bundle install --local
+  $ bundle install
 ```
 
 ## Usage
