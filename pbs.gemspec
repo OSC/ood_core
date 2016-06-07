@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Jeremy Nicklas"]
   spec.email         = ["jnicklas@osc.edu"]
-  spec.description   = %q{PBS FFI Ruby gem to use FFI to interface with Adaptive Computing's resource manager Torque}
   spec.summary       = %q{PBS FFI Ruby gem to use FFI to interface with Adaptive Computing's resource manager Torque}
+  spec.description   = %q{PBS FFI Ruby gem to use FFI to interface with Adaptive Computing's resource manager Torque}
   spec.homepage      = "https://github.com/OSC/pbs-ruby"
   spec.license       = "MIT"
 
