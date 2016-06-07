@@ -6,11 +6,12 @@ require 'pbs/version'
 Gem::Specification.new do |spec|
   spec.name          = "pbs"
   spec.version       = PBS::VERSION
+  spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Jeremy Nicklas"]
   spec.email         = ["jnicklas@osc.edu"]
-  spec.description   = %q{Ruby Torque (PBS) Library}
-  spec.summary       = %q{PBS Ruby}
-  spec.homepage      = "http://www.osc.edu"
+  spec.description   = %q{PBS FFI Ruby gem to use FFI to interface with Adaptive Computing's resource manager Torque}
+  spec.summary       = %q{PBS FFI Ruby gem to use FFI to interface with Adaptive Computing's resource manager Torque}
+  spec.homepage      = "https://github.com/OSC/pbs-ruby"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
