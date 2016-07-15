@@ -18,25 +18,6 @@ module PBS
     # @return [Fixnum, nil] The connection id number if connected.
     attr_reader :conn_id
 
-    # Create a new connection object from pre-defined batch server defined in
-    # batch config yaml.
-    # @example Create Oakley connection
-    #   PBS::Conn.batch 'oakley'
-    #
-    # @param name [String] The name of the pre-defined batch server.
-    # @param opts [Hash] The options to create a connection object with.
-    # @option opts [String] :lib The torque library used to establish connection.
-    # @option opts [String] :server The batch server to connect to.
-    # @option opts [String] :qsub The qsub command to be called from the command line.
-    # @raise [Error] if pre-defined batch server doesn't exist.
-    def self.batch(name, opts = {})
-      context = PBS.batch_config[name] || raise(PBS::Error, "No pre-defined batch server (#{name})")
-      lib = opts[:lib]    || context.fetch('lib', nil)
-      svr = opts[:server] || context.fetch('server', nil)
-      qsb = opts[:qsub]   || context.fetch('qsub', nil)
-      Conn.new(lib: lib, server: svr, qsub: qsb)
-    end
-
     # @param opts [Hash] The options to create a connection object with.
     # @option opts [String] :lib The torque library used to establish connection.
     # @option opts [String] :server The batch server to connect to.
