@@ -22,6 +22,33 @@ module PBS
       @prefix  = Pathname.new(prefix) if prefix
     end
 
+    # Convert object to hash
+    # @return [Hash] the hash describing this object
+    def to_h
+      {host: host, prefix: prefix}
+    end
+
+    # The comparison operator
+    # @param other [#to_h] batch server to compare against
+    # @return [Boolean] how batch servers compare
+    def ==(other)
+      to_h == other.to_h
+    end
+
+    # Checks whether two batch server objects are completely identical to each
+    # other
+    # @param other [Batch] batch server to compare against
+    # @return [Boolean] whether same objects
+    def eql?(other)
+      self.class == other.class && self == other
+    end
+
+    # Generates a hash value for this object
+    # @return [Fixnum] hash value of object
+    def hash
+      [self.class, to_h].hash
+    end
+
     # Creates a connection to batch server and calls block in context of this
     # connection
     # @yieldparam cid [Fixnum] connection id from established batch server connection
