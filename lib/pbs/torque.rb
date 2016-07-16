@@ -4,12 +4,16 @@ module PBS
   module Torque
     extend FFI::Library
 
+    def self.lib
+      @lib
+    end
+
     # Define torque methods using a supplied library
-    def self.init(args = {})
-      @@lib = args[:lib] || "torque"
+    def self.lib=(lib)
+      @lib = lib ? lib.to_s : 'torque'
 
       # Set up FFI to use this library
-      ffi_lib @@lib
+      ffi_lib @lib
 
       # int pbs_errno
       attach_variable :pbs_errno, :int
