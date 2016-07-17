@@ -71,8 +71,7 @@ module PBS
     #   my_conn.get_status
     #   #=>
     #   #{
-    #   #  :name => "oak-batch.osc.edu:15001",
-    #   #  :attribs => {
+    #   #  "oak-batch.osc.edu:15001" => {
     #   #    :server_state => "Idle",
     #   #    ...
     #   #  }
@@ -83,7 +82,7 @@ module PBS
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list filters
         batch_status = Torque.pbs_statserver cid, filters, nil
-        batch_status.to_a.first.tap { Torque.pbs_statfree batch_status }
+        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
       end
     end
 
@@ -91,23 +90,17 @@ module PBS
     # @example Status info for OSC Oakley queues
     #   my_conn.get_queues
     #   #=>
-    #   #[
-    #   #  {
-    #   #    :name => "parallel",
-    #   #    :attribs => {
-    #   #      :queue_type => "Execution",
-    #   #      ...
-    #   #    }
+    #   #{
+    #   #  "parallel" => {
+    #   #    :queue_type => "Execution",
+    #   #    ...
     #   #  },
-    #   #  {
-    #   #    :name => "serial",
-    #   #    :attribs => {
-    #   #      :queue_type => "Execution",
-    #   #      ...
-    #   #    }
+    #   #  "serial" => {
+    #   #    :queue_type => "Execution",
+    #   #    ...
     #   #  },
     #   #  ...
-    #   #]
+    #   #}
     # @param id [#to_s] the id of requested information
     # @param filters [Array<Symbol>] list of attribs to filter on
     # @return [Array<Hash>] list of status infos for the various queues
@@ -115,7 +108,7 @@ module PBS
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list(filters)
         batch_status = Torque.pbs_statque cid, id.to_s, filters, nil
-        batch_status.to_a.tap { Torque.pbs_statfree batch_status }
+        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
       end
     end
 
@@ -124,8 +117,7 @@ module PBS
     #   my_conn.get_queue("parallel")
     #   #=>
     #   #{
-    #   #  :name => "parallel",
-    #   #  :attribs => {
+    #   #  "parallel" => {
     #   #    :queue_type => "Execution",
     #   #    ...
     #   #  }
@@ -134,7 +126,7 @@ module PBS
     # @param (see @get_queues)
     # @return [Hash] status info for the queue
     def get_queue(id, **kwargs)
-      get_queues(id: id, **kwargs).first
+      get_queues(id: id, **kwargs)
     end
 
 
@@ -142,23 +134,17 @@ module PBS
     # @example Status info for OSC Oakley nodes
     #   my_conn.get_nodes
     #   #=>
-    #   #[
-    #   #  {
-    #   #    :name => "n0001",
-    #   #    :attribs => {
-    #   #      :np => "12",
-    #   #      ...
-    #   #    }
+    #   #{
+    #   #  "n0001" => {
+    #   #    :np => "12",
+    #   #    ...
     #   #  },
-    #   #  {
-    #   #    :name => "n0002",
-    #   #    :attribs => {
-    #   #      :np => "12",
-    #   #      ...
-    #   #    }
+    #   #  "n0002" => {
+    #   #    :np => "12",
+    #   #    ...
     #   #  },
     #   #  ...
-    #   #]
+    #   #}
     # @param id [#to_s] the id of requested information
     # @param filters [Array<Symbol>] list of attribs to filter on
     # @return [Array<Hash>] list of status infos for the various nodes
@@ -166,7 +152,7 @@ module PBS
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list(filters)
         batch_status = Torque.pbs_statnode cid, id.to_s, filters, nil
-        batch_status.to_a.tap { Torque.pbs_statfree batch_status }
+        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
       end
     end
 
@@ -175,8 +161,7 @@ module PBS
     #   my_conn.get_node('n0001')
     #   #=>
     #   #{
-    #   #  :name => "n0001",
-    #   #  :attribs => {
+    #   #  "n0001" => {
     #   #    :np => "12",
     #   #    ...
     #   #  }
@@ -185,32 +170,26 @@ module PBS
     # @param (see #get_nodes)
     # @return [Hash] status info for the node
     def get_node(id, **kwargs)
-      get_nodes(id: id, **kwargs).first
+      get_nodes(id: id, **kwargs)
     end
 
     # Get a list of hashes of the jobs on the batch server
     # @example Status info for OSC Oakley jobs
     #   my_conn.get_jobs
     #   #=>
-    #   #[
-    #   #  {
-    #   #    :name => "10219837.oak-batch.osc.edu",
-    #   #    :attribs => {
-    #   #      :Job_Owner => "bob@oakley02.osc.edu",
-    #   #      :Job_Name => "CFD_Solver",
-    #   #      ...
-    #   #    }
+    #   #{
+    #   #  "10219837.oak-batch.osc.edu" => {
+    #   #    :Job_Owner => "bob@oakley02.osc.edu",
+    #   #    :Job_Name => "CFD_Solver",
+    #   #    ...
     #   #  },
-    #   #  {
-    #   #    :name => "10219838.oak-batch.osc.edu",
-    #   #    :attribs => {
-    #   #      :Job_Owner => "sally@oakley01.osc.edu",
-    #   #      :Job_Name => "FEA_Solver",
-    #   #      ...
-    #   #    }
+    #   #  "10219838.oak-batch.osc.edu" => {
+    #   #    :Job_Owner => "sally@oakley01.osc.edu",
+    #   #    :Job_Name => "FEA_Solver",
+    #   #    ...
     #   #  },
     #   #  ...
-    #   #]
+    #   #}
     # @param id [#to_s] the id of requested information
     # @param filters [Array<Symbol>] list of attribs to filter on
     # @return [Array<Hash>] list of status infos for the various jobs
@@ -218,7 +197,7 @@ module PBS
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list(filters)
         batch_status = Torque.pbs_statjob cid, id.to_s, filters, nil
-        batch_status.to_a.tap { Torque.pbs_statfree batch_status }
+        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
       end
     end
 
@@ -227,8 +206,7 @@ module PBS
     #   my_conn.get_job('102719837.oak-batch.osc.edu')
     #   #=>
     #   #{
-    #   #  :name => "10219837.oak-batch.osc.edu",
-    #   #  :attribs => {
+    #   #  "10219837.oak-batch.osc.edu" => {
     #   #    :Job_Owner => "bob@oakley02.osc.edu",
     #   #    :Job_Name => "CFD_Solver",
     #   #    ...
@@ -238,7 +216,7 @@ module PBS
     # @param (see #get_jobs)
     # @return [Hash] status info for the job
     def get_job(id, **kwargs)
-      get_jobs(id: id, **kwargs).first
+      get_jobs(id: id, **kwargs)
     end
 
     # Put specified job on hold

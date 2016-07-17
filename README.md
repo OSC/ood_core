@@ -34,8 +34,7 @@ oakley = PBS::Batch.new(host: 'oak-batch.osc.edu', prefix: '/usr/local/torque/de
 oakley.get_status
 #=>
 #{
-#  :name    => "oak-batch.osc.edu:15001",
-#  :attribs => {
+#  "oak-batch.osc.edu:15001" => {
 #    :server_state  => "Idle",
 #    :total_jobs    => "2514",
 #    :default_queue => "batch",
@@ -47,8 +46,7 @@ oakley.get_status
 oakley.get_status(filters: [:server_state, :total_jobs])
 #=>
 #{
-#  :name    => "oak-batch.osc.edu:15001",
-#  :attribs => {
+#  "oak-batch.osc.edu:15001" => {
 #    :server_state  => "Idle",
 #    :total_jobs    => "2514"
 #  }
@@ -62,23 +60,20 @@ this batch server:
 # Get list of nodes from batch server
 b.get_nodes
 #=>
-#[{
-#  :name    => "n0003",
-#  :attribs => {
+#{
+#  "n0003" => {
 #    :state       => "free",
 #    :power_state => "Running",
 #    :np          => "12",
 #    ...
-#  }
-#}, {
-#  :name    => "n0004",
-#  :attribs => {
+#  },
+#  "n0004" => {
 #    :state       => "free",
 #    :power_state => "Running",
 #    :np          => "12",
 #    ...
-#  }
-#}, ...]
+#  }, ...
+#}
 
 # To get info about a single node
 b.get_node("n0003")
@@ -88,23 +83,20 @@ b.get_node("n0003")
 # see http://linux.die.net/man/7/pbs_queue_attributes
 b.get_queues
 #=>
-#[{
-#  :name    => "batch",
-#  :attribs => {
+#{
+#  "batch" => {
 #    :queue_type => "Route",
 #    :total_jobs => "2",
 #    :enabled    => "True",
 #    ...
-#  }
-#}, {
-#  :name    => "serial",
-#  :attribs => {
+#  },
+#  "serial" => {
 #    :queue_type => "Execution",
 #    :total_jobs => "2386",
 #    :enabled    => "True",
 #    ...
-#  }
-#}, ...]
+#  }, ...
+#}
 
 # To get info about a single queue
 b.get_queue("serial")
@@ -114,23 +106,20 @@ b.get_queue("serial")
 # see http://linux.die.net/man/7/pbs_server_attributes
 b.get_jobs
 #=>
-#[{
-#  :name    => "6621251.oak-batch.osc.edu",
-#  :attribs => {
+#{
+#  "6621251.oak-batch.osc.edu" => {
 #    :Job_Name  => "FEA_solver",
 #    :Job_Owner => "bob@oakley01.osc.edu",
 #    :job_state => "Q",
 #    ...
-#  }
-#}, {
-#  :name    => "6621252.oak-batch.osc.edu",
-#  :attribs => {
+#  },
+#  "6621252.oak-batch.osc.edu" => {
 #    :Job_Name  => "CFD_solver",
 #    :Job_Owner => "sally@oakley02.osc.edu",
 #    :job_state => "R",
 #    ...
-#  }
-#}, ...]
+#  }, ...
+#}
 
 # To get info about a single job
 b.get_job("6621251.oak-batch.osc.edu")
