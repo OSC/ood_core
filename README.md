@@ -30,6 +30,7 @@ installation as:
 oakley = PBS::Batch.new(host: 'oak-batch.osc.edu', prefix: '/usr/local/torque/default')
 
 # Get status information for this batch server
+# see http://linux.die.net/man/7/pbs_server_attributes
 oakley.get_status
 #=>
 #{
@@ -84,6 +85,7 @@ b.get_node "n0003"
 #=> { ... }
 
 # Get list of queues from batch server
+# see http://linux.die.net/man/7/pbs_queue_attributes
 b.get_queues
 #=>
 #[{
@@ -109,6 +111,7 @@ b.get_queue "serial"
 #=> { ... }
 
 # Get list of jobs from batch server
+# see http://linux.die.net/man/7/pbs_server_attributes
 b.get_jobs
 #=>
 #[{
