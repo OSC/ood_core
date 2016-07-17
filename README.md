@@ -160,6 +160,16 @@ b.release_job(job_id)
 b.delete_job(job_id)
 ```
 
+To submit a string to the batch server:
+
+```ruby
+# Submit a string to the batch server
+job_id = b.submit_string("sleep 60")
+```
+
+The above command will actually generate a temporary file on the local disk and
+submit that to the batch server before it is cleaned up.
+
 ### Advanced Job Submission
 
 You can programmatically define the PBS directives of your choosing. They will
