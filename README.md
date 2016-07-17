@@ -2,14 +2,8 @@
 
 ## Description
 
-Trimmed down Ruby wrapper for the Torque C Library utilizing Ruby-FFI.
-
-## Requirements
-
-At minimum you will need:
-* Ruby 2.0
-* Ruby-FFI gem
-* Torque >= 4.2.10
+Ruby wrapper for the Torque C Library utilizing Ruby-FFI. This has been
+successfully tested with Torque 4.2.10 and greater. Your mileage may vary.
 
 ## Installation
 
