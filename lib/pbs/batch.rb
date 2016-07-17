@@ -122,7 +122,6 @@ module PBS
     #   #    ...
     #   #  }
     #   #}
-    # @param id [#to_s] the id of the queue
     # @param (see @get_queues)
     # @return [Hash] status info for the queue
     def get_queue(id, **kwargs)
@@ -166,7 +165,6 @@ module PBS
     #   #    ...
     #   #  }
     #   #}
-    # @param id [#to_s] the id of the node
     # @param (see #get_nodes)
     # @return [Hash] status info for the node
     def get_node(id, **kwargs)
@@ -212,7 +210,6 @@ module PBS
     #   #    ...
     #   #  }
     #   #}
-    # @param id [#to_s] the id of the job
     # @param (see #get_jobs)
     # @return [Hash] status info for the job
     def get_job(id, **kwargs)
@@ -263,6 +260,21 @@ module PBS
     end
 
     # Submit a script to the batch server
+    # @example Submit a script with a few PBS directives
+    #   my_conn.submit_script("/path/to/script",
+    #     headers: {
+    #       Job_Name: "myjob",
+    #       Join_Path: "oe"
+    #     },
+    #     resources: {
+    #       nodes: "4:ppn=12",
+    #       walltime: "12:00:00"
+    #     },
+    #     envvars: {
+    #       TOKEN: "asd90f9sd8g90hk34"
+    #     }
+    #   )
+    #   #=> "6621251.oak-batch.osc.edu"
     # @param script [#to_s] path to the script
     # @param queue [#to_s] queue to submit script to
     # @param headers [Hash] pbs headers
