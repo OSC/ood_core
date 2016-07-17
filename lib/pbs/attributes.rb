@@ -1,12 +1,11 @@
-# Maintains a constant Hash of defined PBS attribute types
-#
-#   Includes:
-#     Attribute names used by user commands
-#     Additional job and general attribute names
-#     Additional queue attribute names
-#     Additional server attribute names
-#     Additional node attribute names
 module PBS
+  # Maintains a constant Hash of defined PBS attribute types
+  # Includes:
+  #   Attribute names used by user commands
+  #   Additional job and general attribute names
+  #   Additional queue attribute names
+  #   Additional server attribute names
+  #   Additional node attribute names
   ATTR = {
     # Attribute names used by user commands
     a:                 :Execution_Time,
