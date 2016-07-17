@@ -81,7 +81,7 @@ b.get_nodes
 #}, ...]
 
 # To get info about a single node
-b.get_node "n0003"
+b.get_node("n0003")
 #=> { ... }
 
 # Get list of queues from batch server
@@ -107,7 +107,7 @@ b.get_queues
 #}, ...]
 
 # To get info about a single queue
-b.get_queue "serial"
+b.get_queue("serial")
 #=> { ... }
 
 # Get list of jobs from batch server
@@ -133,6 +133,87 @@ b.get_jobs
 #}, ...]
 
 # To get info about a single job
-b.get_job "6621251.oak-batch.osc.edu"
+b.get_job("6621251.oak-batch.osc.edu")
 #=> { ... }
+```
+
+### Simple Job Submission
+
+To submit a script to the batch server:
+
+```ruby
+# Simple job submission
+job_id = b.submit_script("/path/to/script")
+#=> "7166037.oak-batch.osc.edu"
+
+# Get job information for this job
+b.get_job(job_id)
+#=> { ... }
+
+# Hold this job
+b.hold_job(job_id)
+
+# Release this job
+b.release_job(job_id)
+
+# Delete this job
+b.delete_job(job_id)
+```
+
+### Advanced Job Submission
+
+You can programmatically define the PBS directives of your choosing. They will
+override any set within the batch script.
+
+Define headers:
+
+```ruby
+# Define headers:
+#   -N job_name
+#   -j oe
+#   -o /path/to/output
+headers = {
+  PBS::ATTR[:N] => "job_name",
+  PBS::ATTR[:j] => "oe",
+  PBS::ATTR[:o] => "/path/to/output"
+}
+
+# or you can directly call the key
+headers = {
+  Job_Name: "job_name",
+  Join_Path: "oe",
+  Output_Path: "/path/to/output"
+}
+```
+
+Define resources (directives that begin with `-l`):
+
+```ruby
+# Define resources:
+#   -l nodes=1:ppn=12
+#   -l walltime=05:00:00
+resources = {
+  nodes: "1:ppn=12",
+  walltime: "05:00:00"
+}
+```
+
+Define environment variables (directive that begins with `-e`):
+
+```ruby
+# Define environment variables that will be exposed to batch job
+envvars = {
+  TOKEN: 'a8dsjf873js0k',
+  USE_GUI: 1
+}
+```
+
+Submit job with these directives:
+
+```ruby
+# Advanced job submission
+job_id = b.submit_script("/path/to/script", headers: headers, resources: resources, envvars: envvars)
+
+# Get job info
+b.get_job(job_id)
 ```
