@@ -1,4 +1,4 @@
 module PBS
   # The current version of PBS
-  VERSION = "1.1.4"
+  VERSION = "2.0.0.pre1"
 end
