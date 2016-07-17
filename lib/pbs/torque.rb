@@ -12,6 +12,8 @@ module PBS
     end
 
     # Define torque methods using a supplied library
+    # @param lib [#to_s, nil] path to library file
+    # @return [void]
     def self.lib=(lib)
       @lib = lib ? lib.to_s : 'torque'
 

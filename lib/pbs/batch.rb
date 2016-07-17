@@ -122,7 +122,6 @@ module PBS
     #   #    ...
     #   #  }
     #   #}
-    # @param id [#to_s] the id of the queue
     # @param (see @get_queues)
     # @return [Hash] status info for the queue
     def get_queue(id, **kwargs)
@@ -166,7 +165,6 @@ module PBS
     #   #    ...
     #   #  }
     #   #}
-    # @param id [#to_s] the id of the node
     # @param (see #get_nodes)
     # @return [Hash] status info for the node
     def get_node(id, **kwargs)
@@ -212,7 +210,6 @@ module PBS
     #   #    ...
     #   #  }
     #   #}
-    # @param id [#to_s] the id of the job
     # @param (see #get_jobs)
     # @return [Hash] status info for the job
     def get_job(id, **kwargs)
