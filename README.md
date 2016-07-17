@@ -10,13 +10,13 @@ successfully tested with Torque 4.2.10 and greater. Your mileage may vary.
 Add this to your application's Gemfile:
 
 ```ruby
-  gem 'pbs'
+gem 'pbs'
 ```
 
 And then execute:
 
 ```bash
-  $ bundle install
+$ bundle install
 ```
 
 ## Usage
