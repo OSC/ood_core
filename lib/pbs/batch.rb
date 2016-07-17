@@ -260,6 +260,21 @@ module PBS
     end
 
     # Submit a script to the batch server
+    # @example Submit a script with a few PBS directives
+    #   my_conn.submit_script("/path/to/script",
+    #     headers: {
+    #       Job_Name: "myjob",
+    #       Join_Path: "oe"
+    #     },
+    #     resources: {
+    #       nodes: "4:ppn=12",
+    #       walltime: "12:00:00"
+    #     },
+    #     envvars: {
+    #       TOKEN: "asd90f9sd8g90hk34"
+    #     }
+    #   )
+    #   #=> "6621251.oak-batch.osc.edu"
     # @param script [#to_s] path to the script
     # @param queue [#to_s] queue to submit script to
     # @param headers [Hash] pbs headers
