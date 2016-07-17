@@ -1,9 +1,12 @@
-require "ffi"
+require 'ffi'
 
 module PBS
+  # An interface to the C-library of Torque
   module Torque
     extend FFI::Library
 
+    # The path to the torque library file
+    # @return [String] path to torque library
     def self.lib
       @lib
     end
