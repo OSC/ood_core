@@ -5,131 +5,6 @@ module PBS
   module Torque
     extend FFI::Library
 
-    # @!attribute [rw] pbs_errno
-    #   The internal PBS error number
-    #     int pbs_errno
-    #   @return [Fixnum] pbs error number
-
-    # @!attribute [r] pbs_server
-    #   The PBS server name
-    #     char *pbs_server
-    #   @return [String] pbs server name
-
-    # @!method pbs_strerror(errno)
-    #   Generates PBS error string from given error number
-    #     char *pbs_strerror(int errno)
-    #   @param errno [Fixnum] pbs error number
-    #   @return [String] pbs error string
-
-    # @!method pbs_default
-    #   Default PBS server name
-    #     char *pbs_default(void)
-    #   @see http://linux.die.net/man/3/pbs_default
-    #   @return [String] default pbs server name
-
-    # @!method pbs_connect(server)
-    #   Connect to PBS batch server
-    #     int pbs_connect(char *server)
-    #   @see http://linux.die.net/man/3/pbs_connect
-    #   @param server [String] name of pbs server
-    #   @return [Fixnum] connection identifier
-
-    # @!method pbs_disconnect(connect)
-    #   Disconnect from a PBS batch server
-    #     int pbs_disconnect(int connect)
-    #   @see http://linux.die.net/man/3/pbs_disconnect
-    #   @param connect [Fixnum] connection identifier
-    #   @return [Fixnum] exit status code
-
-    # @!method pbs_deljob(connect, job_id, extend)
-    #   Delete a PBS batch job
-    #     int pbs_deljob(int connect, char *job_id, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_deljob
-    #   @param connect [Fixnum] connection identifier
-    #   @param job_id [String] the job id
-    #   @param extend [String] implementation defined extensions
-    #   @return [Fixnum] exit status code
-
-    # @!method pbs_holdjob(connect, job_id, hold_type, extend)
-    #   Place a hold on a PBS batch job
-    #     int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_holdjob
-    #   @param connect [Fixnum] connection identifier
-    #   @param job_id [String] the job id
-    #   @param hold_type [String] type of hold to be applied
-    #   @param extend [String] implementation defined extensions
-    #   @return [Fixnum] exit status code
-
-    # @!method pbs_rlsjob(connect, job_id, hold_type, extend)
-    #   Release a hold on a PBS batch job
-    #     int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_rlsjob
-    #   @param connect [Fixnum] connection identifier
-    #   @param job_id [String] the job id
-    #   @param hold_type [String] type of hold to be released
-    #   @param extend [String] implementation defined extensions
-    #   @return [Fixnum] exit status code
-
-    # @!method pbs_statfree(stat)
-    #   Free the memory allocated by {BatchStatus} object
-    #     void pbs_statfree(struct batch_status *stat)
-    #   @param stat [BatchStatus] the batch status object
-    #   @return [void]
-
-    # @!method pbs_statjob(connect, id, attrib, extend)
-    #   Obtain status of PBS batch jobs
-    #     batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_statjob
-    #   @param connect [Fixnum] connection identifier
-    #   @param id [String] job or destination identifier
-    #   @param attrib [Attrl] the attribute c-linked list object
-    #   @param extend [String] implementation defined extensions
-    #   @return [BatchStatus] c-linked list of batch status objects
-    #   @note It is up to the user to free the space of the batch status objects
-
-    # @!method pbs_statnode(connect, id, attrib, extend)
-    #   Obtain status of PBS nodes
-    #     batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_statnode
-    #   @param connect [Fixnum] connection identifier
-    #   @param id [String] name of a node or null string
-    #   @param attrib [Attrl] the attribute c-linked list object
-    #   @param extend [String] implementation defined extensions
-    #   @return [BatchStatus] c-linked list of batch status objects
-    #   @note It is up to the user to free the space of the batch status objects
-
-    # @!method pbs_statque(connect, id, attrib, extend)
-    #   Obtain status of PBS batch queues
-    #     batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_statque
-    #   @param connect [Fixnum] connection identifier
-    #   @param id [String] name of a queue or null string
-    #   @param attrib [Attrl] the attribute c-linked list object
-    #   @param extend [String] implementation defined extensions
-    #   @return [BatchStatus] c-linked list of batch status objects
-    #   @note It is up to the user to free the space of the batch status objects
-
-    # @!method pbs_statserver(connect, attrib, extend)
-    #   Obtain status of a PBS batch server
-    #     batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_statserver
-    #   @param connect [Fixnum] connection identifier
-    #   @param attrib [Attrl] the attribute c-linked list object
-    #   @param extend [String] implementation defined extensions
-    #   @return [BatchStatus] c-linked list of batch status objects
-    #   @note It is up to the user to free the space of the batch status objects
-
-    # @!method pbs_submit(connect, attrib, script, destination, extend)
-    #   Submit a PBS batch job
-    #     char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
-    #   @see http://linux.die.net/man/3/pbs_submit
-    #   @param connect [Fixnum] connection identifier
-    #   @param attrib [Attropl] the attribute operation c-linked list object
-    #   @param script [String] the path to the script
-    #   @param destination [String] the queue to send job to
-    #   @param extend [String] implementation defined extensions
-    #   @return [String] the job id
-
     # The path to the torque library file
     # @return [String] path to torque library
     def self.lib
@@ -145,24 +20,147 @@ module PBS
       # Set up FFI to use this library
       ffi_lib @lib
 
+      # @!attribute [rw] pbs_errno
+      #   The internal PBS error number
+      #     int pbs_errno
+      #   @return [Fixnum] pbs error number
       attach_variable :pbs_errno, :int
+
+      # @!attribute [r] pbs_server
+      #   The PBS server name
+      #     char *pbs_server
+      #   @return [String] pbs server name
       attach_variable :pbs_server, :string
+
+      # @!method pbs_strerror(errno)
+      #   Generates PBS error string from given error number
+      #     char *pbs_strerror(int errno)
+      #   @param errno [Fixnum] pbs error number
+      #   @return [String] pbs error string
       attach_function :pbs_strerror, [ :int ], :string
+
+      # @!method pbs_default
+      #   Default PBS server name
+      #     char *pbs_default(void)
+      #   @see http://linux.die.net/man/3/pbs_default
+      #   @return [String] default pbs server name
       attach_function :pbs_default, [], :string
+
+      # @!method pbs_connect(server)
+      #   Connect to PBS batch server
+      #     int pbs_connect(char *server)
+      #   @see http://linux.die.net/man/3/pbs_connect
+      #   @param server [String] name of pbs server
+      #   @return [Fixnum] connection identifier
       attach_function :pbs_connect, [ :string ], :int
+
+      # @!method pbs_disconnect(connect)
+      #   Disconnect from a PBS batch server
+      #     int pbs_disconnect(int connect)
+      #   @see http://linux.die.net/man/3/pbs_disconnect
+      #   @param connect [Fixnum] connection identifier
+      #   @return [Fixnum] exit status code
       attach_function :pbs_disconnect, [ :int ], :int
+
+      # @!method pbs_deljob(connect, job_id, extend)
+      #   Delete a PBS batch job
+      #     int pbs_deljob(int connect, char *job_id, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_deljob
+      #   @param connect [Fixnum] connection identifier
+      #   @param job_id [String] the job id
+      #   @param extend [String] implementation defined extensions
+      #   @return [Fixnum] exit status code
       attach_function :pbs_deljob, [ :int, :string, :string ], :int
+
+      # @!method pbs_holdjob(connect, job_id, hold_type, extend)
+      #   Place a hold on a PBS batch job
+      #     int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_holdjob
+      #   @param connect [Fixnum] connection identifier
+      #   @param job_id [String] the job id
+      #   @param hold_type [String] type of hold to be applied
+      #   @param extend [String] implementation defined extensions
+      #   @return [Fixnum] exit status code
       attach_function :pbs_holdjob, [ :int, :string, :string, :string ], :int
+
+      # @!method pbs_rlsjob(connect, job_id, hold_type, extend)
+      #   Release a hold on a PBS batch job
+      #     int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_rlsjob
+      #   @param connect [Fixnum] connection identifier
+      #   @param job_id [String] the job id
+      #   @param hold_type [String] type of hold to be released
+      #   @param extend [String] implementation defined extensions
+      #   @return [Fixnum] exit status code
       attach_function :pbs_rlsjob, [ :int, :string, :string, :string ], :int
+
+      # @!method pbs_statfree(stat)
+      #   Free the memory allocated by {BatchStatus} object
+      #     void pbs_statfree(struct batch_status *stat)
+      #   @param stat [BatchStatus] the batch status object
+      #   @return [void]
       attach_function :pbs_statfree, [ BatchStatus.ptr ], :void
+
+      # @!method pbs_statjob(connect, id, attrib, extend)
+      #   Obtain status of PBS batch jobs
+      #     batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_statjob
+      #   @param connect [Fixnum] connection identifier
+      #   @param id [String] job or destination identifier
+      #   @param attrib [Attrl] the attribute c-linked list object
+      #   @param extend [String] implementation defined extensions
+      #   @return [BatchStatus] c-linked list of batch status objects
+      #   @note It is up to the user to free the space of the batch status objects
       attach_function :pbs_statjob, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
+
+      # @!method pbs_statnode(connect, id, attrib, extend)
+      #   Obtain status of PBS nodes
+      #     batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_statnode
+      #   @param connect [Fixnum] connection identifier
+      #   @param id [String] name of a node or null string
+      #   @param attrib [Attrl] the attribute c-linked list object
+      #   @param extend [String] implementation defined extensions
+      #   @return [BatchStatus] c-linked list of batch status objects
+      #   @note It is up to the user to free the space of the batch status objects
       attach_function :pbs_statnode, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
+
+      # @!method pbs_statque(connect, id, attrib, extend)
+      #   Obtain status of PBS batch queues
+      #     batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_statque
+      #   @param connect [Fixnum] connection identifier
+      #   @param id [String] name of a queue or null string
+      #   @param attrib [Attrl] the attribute c-linked list object
+      #   @param extend [String] implementation defined extensions
+      #   @return [BatchStatus] c-linked list of batch status objects
+      #   @note It is up to the user to free the space of the batch status objects
       attach_function :pbs_statque, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
+
+      # @!method pbs_statserver(connect, attrib, extend)
+      #   Obtain status of a PBS batch server
+      #     batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_statserver
+      #   @param connect [Fixnum] connection identifier
+      #   @param attrib [Attrl] the attribute c-linked list object
+      #   @param extend [String] implementation defined extensions
+      #   @return [BatchStatus] c-linked list of batch status objects
+      #   @note It is up to the user to free the space of the batch status objects
       attach_function :pbs_statserver, [ :int, Attrl.ptr, :string ], BatchStatus.ptr
 
       # FIXME: The space for the job_identifier string is allocated by
       # pbs_submit() and should be released via a call to free() when no longer
       # needed
+      # @!method pbs_submit(connect, attrib, script, destination, extend)
+      #   Submit a PBS batch job
+      #     char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
+      #   @see http://linux.die.net/man/3/pbs_submit
+      #   @param connect [Fixnum] connection identifier
+      #   @param attrib [Attropl] the attribute operation c-linked list object
+      #   @param script [String] the path to the script
+      #   @param destination [String] the queue to send job to
+      #   @param extend [String] implementation defined extensions
+      #   @return [String] the job id
       attach_function :pbs_submit, [ :int, Attropl.ptr, :string, :string, :string ], :string
     end
 
