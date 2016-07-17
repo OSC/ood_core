@@ -22,7 +22,7 @@ module PBS
       attach_variable :pbs_server, :string
 
       # int pbs_connect(char *server)
-      attach_function :pbs_connect, [ :pointer ], :int
+      attach_function :pbs_connect, [ :string ], :int
 
       # char *pbs_default(void)
       attach_function :pbs_default, [], :string
@@ -31,34 +31,34 @@ module PBS
       attach_function :pbs_strerror, [ :int ], :string
 
       # int pbs_deljob(int connect, char *job_id, char *extend)
-      attach_function :pbs_deljob, [ :int, :pointer, :pointer ], :int
+      attach_function :pbs_deljob, [ :int, :string, :string ], :int
 
       # int pbs_disconnect(int connect)
       attach_function :pbs_disconnect, [ :int ], :int
 
       # int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
-      attach_function :pbs_holdjob, [ :int, :pointer, :pointer, :pointer ], :int
+      attach_function :pbs_holdjob, [ :int, :string, :string, :string ], :int
 
       # int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
-      attach_function :pbs_rlsjob, [ :int, :pointer, :pointer, :pointer ], :int
+      attach_function :pbs_rlsjob, [ :int, :string, :string, :string ], :int
 
       # void pbs_statfree(struct batch_status *stat)
-      attach_function :pbs_statfree, [ :pointer ], :void
+      attach_function :pbs_statfree, [ BatchStatus.ptr ], :void
 
       # batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend)
-      attach_function :pbs_statjob, [ :int, :pointer, :pointer, :pointer ], BatchStatus.ptr
+      attach_function :pbs_statjob, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
 
       # batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend)
-      attach_function :pbs_statnode, [ :int, :pointer, :pointer, :pointer ], BatchStatus.ptr
+      attach_function :pbs_statnode, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
 
       # batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend)
-      attach_function :pbs_statque, [ :int, :pointer, :pointer, :pointer ], BatchStatus.ptr
+      attach_function :pbs_statque, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
 
       # batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend)
-      attach_function :pbs_statserver, [ :int, :pointer, :pointer ], BatchStatus.ptr
+      attach_function :pbs_statserver, [ :int, Attrl.ptr, :string ], BatchStatus.ptr
 
       # char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
-      attach_function :pbs_submit, [ :int, :pointer, :pointer, :pointer, :pointer ], :string
+      attach_function :pbs_submit, [ :int, Attropl.ptr, :string, :string, :string ], :string
     end
 
     def self.check_for_error
@@ -90,9 +90,6 @@ module PBS
         list.each do |key|
           attrl = Attrl.new
           attrl[:name] = FFI::MemoryPointer.from_string(key.to_s)
-          attrl[:resource] = FFI::Pointer::NULL
-          attrl[:value] = FFI::Pointer::NULL
-          attrl[:op] = 0
           attrl[:next] = prev
           prev = attrl
         end
@@ -100,18 +97,13 @@ module PBS
       end
 
       def to_hash
-        hash = Hash.new{ |h,k| h[k] = Hash.new() }
         attrl = self
+        hash = Hash.new{ |h,k| h[k] = Hash.new() }
         until attrl.to_ptr.null?
-          name = attrl[:name].read_string.to_sym
-          value = attrl[:value].read_string
-          resource = nil
-          resource = attrl[:resource].read_string.to_sym unless attrl[:resource].null?
-          if resource.nil?
-            hash[name] = value
-          else
-            hash[name][resource] = value
-          end
+          n = attrl[:name].read_string
+          v = attrl[:value].read_string
+          r = attrl[:resource].null? ? nil : attrl[:resource].read_string
+          r ? hash[n.to_sym][r.to_sym] = v : hash[n.to_sym] = v
           attrl = attrl[:next]
         end
         hash
@@ -135,11 +127,10 @@ module PBS
         prev = Attropl.new(FFI::Pointer::NULL)
         ary.each do |attrib|
           attropl = Attropl.new
-          attropl[:name] = FFI::MemoryPointer.from_string(attrib[0].to_s)
-          attropl[:value] = FFI::MemoryPointer.from_string(attrib[1])
-          attropl[:resource] = FFI::MemoryPointer.from_string(attrib[2].to_s) unless attrib[2].nil?
-          attropl[:op] = 0
-          attropl[:next] = prev
+          attropl[:name]     = FFI::MemoryPointer.from_string attrib[0].to_s
+          attropl[:value]    = FFI::MemoryPointer.from_string attrib[1].to_s
+          attropl[:resource] = FFI::MemoryPointer.from_string attrib[2].to_s if attrib[2]
+          attropl[:next]     = prev
           prev = attropl
         end
         attropl
