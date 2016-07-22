@@ -216,12 +216,12 @@ module PBS
       # @return [Hash] hash describing linked list
       def to_h
         attrl = self
-        hash = Hash.new{ |h,k| h[k] = Hash.new() }
+        hash = {}
         until attrl.to_ptr.null?
           n = attrl[:name].read_string
           v = attrl[:value].read_string
           r = attrl[:resource].null? ? nil : attrl[:resource].read_string
-          r ? hash[n.to_sym][r.to_sym] = v : hash[n.to_sym] = v
+          r ? (hash[n.to_sym] ||= {} and hash[n.to_sym][r.to_sym] = v) : hash[n.to_sym] = v
           attrl = attrl[:next]
         end
         hash
