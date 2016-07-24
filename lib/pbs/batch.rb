@@ -103,7 +103,7 @@ module PBS
     #   #}
     # @param id [#to_s] the id of requested information
     # @param filters [Array<Symbol>] list of attribs to filter on
-    # @return [Array<Hash>] list of status infos for the various queues
+    # @return [Hash] hash of details for the queues
     def get_queues(id: '', filters: [])
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list(filters)
@@ -146,7 +146,7 @@ module PBS
     #   #}
     # @param id [#to_s] the id of requested information
     # @param filters [Array<Symbol>] list of attribs to filter on
-    # @return [Array<Hash>] list of status infos for the various nodes
+    # @return [Hash] hash of details for nodes
     def get_nodes(id: '', filters: [])
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list(filters)
@@ -190,7 +190,7 @@ module PBS
     #   #}
     # @param id [#to_s] the id of requested information
     # @param filters [Array<Symbol>] list of attribs to filter on
-    # @return [Array<Hash>] list of status infos for the various jobs
+    # @return [Hash] hash of details for jobs
     def get_jobs(id: '', filters: [])
       connect do |cid|
         filters = PBS::Torque::Attrl.from_list(filters)
@@ -211,7 +211,7 @@ module PBS
     #   #  }
     #   #}
     # @param (see #get_jobs)
-    # @return [Hash] status info for the job
+    # @return [Hash] hash with details of job
     def get_job(id, **kwargs)
       get_jobs(id: id, **kwargs)
     end
