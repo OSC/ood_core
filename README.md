@@ -197,7 +197,7 @@ resources = {
 }
 ```
 
-Define environment variables (directive that begins with `-e`):
+Define environment variables (directive that begins with `-v`):
 
 ```ruby
 # Define environment variables that will be exposed to batch job
