@@ -9,23 +9,51 @@ module PBS
     # @return [String] the batch server host
     attr_reader :host
 
-    # The path to the Torque client installation
+    # The path to the Torque client installation libraries
     # @example For Torque 5.0.0
-    #   my_conn.prefix.to_s #=> "/usr/local/torque/5.0.0"
-    # @return [Pathname, nil] path to torque installation
-    attr_reader :prefix
+    #   my_conn.lib.to_s #=> "/usr/local/torque/5.0.0/lib"
+    # @return [Pathname] path to torque libraries
+    def lib
+      @lib ||=
+        if @prefix.join('lib').directory?
+          @prefix.join('lib')
+        elsif @prefix.join('lib32').directory?
+          @prefix.join('lib32')
+        elsif @prefix.join('lib64').directory?
+          @prefix.join('lib64')
+        else
+          @prefix
+        end
+    end
+
+    # The path to the Torque client installation binaries
+    # @example For Torque 5.0.0
+    #   my_conn.bin.to_s #=> "/usr/local/torque/5.0.0/bin"
+    # @return [Pathname] path to torque binaries
+    def bin
+      @bin ||=
+        if @prefix.join('bin').directory?
+          @prefix.join('bin')
+        else
+          @prefix
+        end
+    end
 
     # @param host [#to_s] the batch server host
-    # @param prefix [#to_s, nil] path to torque installation
-    def initialize(host:, prefix: nil, **_)
+    # @param prefix [#to_s] path to torque installation
+    # @param lib [#to_s, nil] path to torque installation libraries
+    # @param bin [#to_s, nil] path to torque installation binaries
+    def initialize(host:, prefix: '', lib: nil, bin: nil, **_)
       @host    = host.to_s
-      @prefix  = Pathname.new(prefix) if prefix
+      @prefix  = Pathname.new(prefix)
+      @lib     = Pathname.new(lib) if lib
+      @bin     = Pathname.new(bin) if bin
     end
 
     # Convert object to hash
     # @return [Hash] the hash describing this object
     def to_h
-      {host: host, prefix: prefix}
+      {host: host, lib: lib, bin: bin}
     end
 
     # The comparison operator
@@ -54,7 +82,7 @@ module PBS
     # @yieldparam cid [Fixnum] connection id from established batch server connection
     # @yieldreturn the final value of the block
     def connect(&block)
-      Torque.lib = prefix ? prefix.join('lib', 'libtorque.so') : nil
+      Torque.lib = lib.join('libtorque.so')
       cid = Torque.pbs_connect(host)
       Torque.raise_error(cid.abs) if cid < 0  # raise error if negative connection id
       begin
@@ -326,7 +354,11 @@ module PBS
         end.flatten
         params << script.to_s
 
-        o, e, s = Open3.capture3(prefix.join("bin", "qsub").to_s, *params)
+        env = {
+          "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
+        }
+        cmd = bin.join("qsub").to_s
+        o, e, s = Open3.capture3(env, cmd, *params)
         raise PBS::Error, e unless s.success?
         o.chomp
       end
