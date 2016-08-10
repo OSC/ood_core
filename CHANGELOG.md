@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 2.0.1 (2016-08-10)
+
 Features:
 
   - batch object can be initialized with lib/bin directories
