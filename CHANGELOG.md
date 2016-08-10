@@ -1,5 +1,9 @@
 ## Unreleased
 
+Bugfixes:
+
+  - fixes Ruby version requirement to 2.2.0+
+
 ## 2.0.1 (2016-08-10)
 
 Features:
