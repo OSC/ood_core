@@ -27,7 +27,11 @@ installation as:
 
 ```ruby
 # Create new batch object for OSC's Oakley batch server
-oakley = PBS::Batch.new(host: 'oak-batch.osc.edu', prefix: '/usr/local/torque/default')
+oakley = PBS::Batch.new(
+  host: 'oak-batch.osc.edu',
+  lib: '/usr/local/torque/default/lib',
+  bin: '/usr/local/torque/bin'
+)
 
 # Get status information for this batch server
 # see http://linux.die.net/man/7/pbs_server_attributes

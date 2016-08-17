@@ -13,41 +13,21 @@ module PBS
     # @example For Torque 5.0.0
     #   my_conn.lib.to_s #=> "/usr/local/torque/5.0.0/lib"
     # @return [Pathname] path to torque libraries
-    def lib
-      @lib ||=
-        if @prefix.join('lib').directory?
-          @prefix.join('lib')
-        elsif @prefix.join('lib32').directory?
-          @prefix.join('lib32')
-        elsif @prefix.join('lib64').directory?
-          @prefix.join('lib64')
-        else
-          @prefix
-        end
-    end
+    attr_reader :lib
 
     # The path to the Torque client installation binaries
     # @example For Torque 5.0.0
     #   my_conn.bin.to_s #=> "/usr/local/torque/5.0.0/bin"
     # @return [Pathname] path to torque binaries
-    def bin
-      @bin ||=
-        if @prefix.join('bin').directory?
-          @prefix.join('bin')
-        else
-          @prefix
-        end
-    end
+    attr_reader :bin
 
     # @param host [#to_s] the batch server host
-    # @param prefix [#to_s] path to torque installation
-    # @param lib [#to_s, nil] path to torque installation libraries
-    # @param bin [#to_s, nil] path to torque installation binaries
-    def initialize(host:, prefix: '', lib: nil, bin: nil, **_)
+    # @param lib [#to_s] path to torque installation libraries
+    # @param bin [#to_s] path to torque installation binaries
+    def initialize(host:, lib: "", bin: "", **_)
       @host    = host.to_s
-      @prefix  = Pathname.new(prefix)
-      @lib     = Pathname.new(lib) if lib
-      @bin     = Pathname.new(bin) if bin
+      @lib     = Pathname.new(lib.to_s)
+      @bin     = Pathname.new(bin.to_s)
     end
 
     # Convert object to hash
