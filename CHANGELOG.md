@@ -3,6 +3,7 @@
 Bugfixes:
 
   - fixes Ruby version requirement to 2.2.0+
+  - removes unused prefix directory option
 
 ## 2.0.1 (2016-08-10)
 
