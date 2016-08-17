@@ -232,7 +232,7 @@ module PBS
     # @example Put job '10219837.oak-batch.osc.edu' on hold
     #   my_conn.hold_job('10219837.oak-batch.osc.edu')
     # @param id [#to_s] the id of the job
-    # @param type [Symbol] type of hold to be applied
+    # @param type [#to_s] type of hold to be applied
     # @return [void]
     def hold_job(id, type: :u)
       connect do |cid|
@@ -248,7 +248,7 @@ module PBS
     # @example Release job '10219837.oak-batch.osc.edu' from hold
     #   my_conn.release_job('10219837.oak-batch.osc.edu')
     # @param id [#to_s] the id of the job
-    # @param type [Symbol] type of hold to be removed
+    # @param type [#to_s] type of hold to be removed
     # @return [void]
     def release_job(id, type: :u)
       connect do |cid|
@@ -291,7 +291,7 @@ module PBS
     # @param qsub [Boolean] whether use library or binary for submission
     # @return [String] the id of the job that was created
     def submit_script(script, queue: nil, headers: {}, resources: {}, envvars: {}, qsub: true)
-      send(qsub ? :qsub_submit : :pbs_submit, script, queue, headers, resources, envvars)
+      send(qsub ? :qsub_submit : :pbs_submit, script.to_s, queue.to_s, headers, resources, envvars)
     end
 
     # Submit a script expanded into a string to the batch server
@@ -315,7 +315,7 @@ module PBS
 
         connect do |cid|
           attropl = Torque::Attropl.from_hash attribs
-          Torque.pbs_submit cid, attropl, script.to_s, queue.to_s, nil
+          Torque.pbs_submit cid, attropl, script, queue, nil
         end
       end
 
@@ -332,7 +332,7 @@ module PBS
             ["-W", "#{k}=#{v}"]
           end
         end.flatten
-        params << script.to_s
+        params << script
 
         env = {
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
