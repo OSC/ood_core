@@ -1,5 +1,11 @@
 ## Unreleased
 
+## 2.0.3 (2016-11-04)
+
+Bugfixes:
+
+  - better support `qsub` CLI arguments
+
 ## 2.0.2 (2016-08-17)
 
 Bugfixes:
