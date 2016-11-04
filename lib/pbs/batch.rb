@@ -319,19 +319,62 @@ module PBS
         end
       end
 
+      # Mapping of Torque attribute to `qsub` arguments
+      def qsub_arg(key, value)
+        case key
+        # common attributes
+        when :Execution_Time
+          ['-a', value.to_s]
+        when :Checkpoint
+          ['-c', value.to_s]
+        when :Error_Path
+          ['-e', value.to_s]
+        when :fault_tolerant
+          ['-f']
+        when :Hold_Types
+          ['-h']
+        when :Join_Path
+          ['-j', value.to_s]
+        when :Keep_Files
+          ['-k', value.to_s]
+        when :Mail_Points
+          ['-m', value.to_s]
+        when :Output_Path
+          ['-o', value.to_s]
+        when :Priority
+          ['-p', value.to_s]
+        when :Rerunable
+          ['-r', value.to_s]
+        when :job_array_request
+          ['-t', value.to_s]
+        when :User_List
+          ['-u', value.to_s]
+        when :Account_Name
+          ['-A', value.to_s]
+        when :Mail_Users
+          ['-M', value.to_s]
+        when :Job_Name
+          ['-N', value.to_s]
+        when :Shell_Path_List
+          ['-S', value.to_s]
+        # uncommon attributes
+        when :job_arguments
+          ['-F', value.to_s]
+        when :init_work_dir
+          ['-d', value.to_s] # sets PBS_O_INITDIR
+        # everything else
+        else
+          ['-W', "#{key}=#{value}"]
+        end
+      end
+
       # Submit a script using Torque binary
       # NB: The binary includes many useful filters and is preferred
       def qsub_submit(script, queue, headers, resources, envvars)
         params  = ["-q", "#{queue}@#{host}"]
-        params += resources.map{|k,v| ["-l", "#{k}=#{v}"]}.flatten unless resources.empty?
+        params += headers.map {|k,v| qsub_arg(k,v)}.flatten
+        params += resources.map{|k,v| ["-l", "#{k}=#{v}"]}.flatten
         params += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
-        params += headers.map do |k,v|
-          if param = ATTR.key(k) and param.length == 1
-            ["-#{param}", "#{v}"]
-          else
-            ["-W", "#{k}=#{v}"]
-          end
-        end.flatten
         params << script
 
         env = {
