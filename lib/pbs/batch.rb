@@ -362,6 +362,8 @@ module PBS
           ['-F', value.to_s]
         when :init_work_dir
           ['-d', value.to_s] # sets PBS_O_INITDIR
+        when :reservation_id
+          ['-W', "x=advres:#{value}"] # use resource manager extensions for Moab
         # everything else
         else
           ['-W', "#{key}=#{value}"]
