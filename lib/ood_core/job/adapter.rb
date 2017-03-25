@@ -1,25 +1,23 @@
-require "ood_job"
-
 module OodCore
-  module JobAdapters
+  module Job
     # A class that handles the communication with a resource manager for
     # submitting/statusing/holding/deleting jobs
     # @abstract
-    class AbstractAdapter
+    class Adapter
       # Submit a job with the attributes defined in the job template instance
       # @abstract Subclass is expected to implement {#submit}
       # @raise [NotImplementedError] if subclass did not define {#submit}
       # @example Submit job template to cluster
-      #   solver_id = OodJob::Job.submit(script: solver_script)
+      #   solver_id = job_adapter.submit(script: solver_script)
       #   #=> "1234.server"
       # @example Submit job that depends on previous job
-      #   post_id = OodJob::Job.submit(
+      #   post_id = job_adapter.submit(
       #     script: post_script,
       #     afterok: solver_id
       #   )
       #   #=> "1235.server"
-      # @param script [OodJob::Script] script object that describes the script and
-      #   attributes for the submitted job
+      # @param script [Script] script object that describes the
+      #   script and attributes for the submitted job
       # @param after [#to_s, Array<#to_s>] this job may be scheduled for execution
       #   at any point after dependent jobs have started execution
       # @param afterok [#to_s, Array<#to_s>] this job may be scheduled for
@@ -38,7 +36,7 @@ module OodCore
       # @raise [NotImplementedError] if subclass did not define {#info}
       # @param id [#to_s] the id of the job, otherwise get list of all jobs
       #   running on cluster
-      # @return [OodJob::Info, Array<OodJob::Info>] information describing submitted job
+      # @return [Info, Array<Info>] information describing submitted job
       def info(id: '')
         raise NotImplementedError, "subclass did not define #info"
       end
@@ -48,7 +46,7 @@ module OodCore
       # @abstract Subclass is expected to implement {#status}
       # @raise [NotImplementedError] if subclass did not define {#status}
       # @param id [#to_s] the id of the job
-      # @return [OodJob::Status] status of job
+      # @return [Status] status of job
       def status(id:)
         raise NotImplementedError, "subclass did not define #status"
       end

@@ -1,11 +1,10 @@
 require "ood_support"
 
 module OodCore
-  module AclAdapters
-    # A class that handles whether a resource is allowed to be used through an
-    # ACL
+  module Acl
+    # A class that handles the permissions for a resource through an ACL
     # @abstract
-    class AbstractAdapter
+    class Adapter
       # Whether this ACL allows access for the principle
       # @abstract Subclass is expected to implement {#allow?}
       # @raise [NotImplementedError] if subclass did not define {#allow?}

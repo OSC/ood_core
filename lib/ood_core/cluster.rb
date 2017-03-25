@@ -68,9 +68,9 @@ module OodCore
     end
 
     # Build a job adapter from the job configuration
-    # @return [JobAdapters::AbstractAdapter] the job adapter
+    # @return [Job::Adapter] the job adapter
     def job_adapter
-      JobFactory.build(job_config)
+      Job::Factory.build(job_config)
     end
 
     # Whether the job feature is allowed based on the ACLs
@@ -97,7 +97,7 @@ module OodCore
     end
 
     # Build the ACL adapters from the ACL list configuration
-    # @return [Array<AclAdapters::AbstractAdapter>] the acl adapter list
+    # @return [Array<Acl::Adapter>] the acl adapter list
     def acls
       build_acls acls_config
     end
@@ -137,7 +137,7 @@ module OodCore
     private
       # Build acl adapter objects from array
       def build_acls(ary)
-        ary.map { |a| AclFactory.build a }
+        ary.map { |a| Acl::Factory.build a }
       end
   end
 end
