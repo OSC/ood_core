@@ -16,7 +16,7 @@ module OodCore
     require "ood_core/job/factory"
 
     # A namespace for job adapters
-    # NB: These are dynamically loaded upon request
+    # @note These are dynamically loaded upon request
     module Adapters
     end
   end
@@ -27,7 +27,7 @@ module OodCore
     require "ood_core/acl/factory"
 
     # A namespace for acl adapters
-    # NB: These are dynamically loaded upon request
+    # @note These are dynamically loaded upon request
     module Adapters
     end
   end
