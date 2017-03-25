@@ -1,0 +1,11 @@
+v2:
+  metadata:
+    title: "Owens"
+    url: "https://www.osc.edu/supercomputing/computing/owens"
+  login:
+    host: "owens.osc.edu"
+  job:
+    adapter: torque
+    host: "owens-batch.ten.osc.edu"
+    lib: "/opt/torque/lib64"
+    bin: "/opt/torque/bin"

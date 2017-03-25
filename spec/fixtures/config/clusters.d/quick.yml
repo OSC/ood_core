@@ -1,0 +1,9 @@
+v2:
+  metadata:
+    title: "Quick"
+    private: true
+  job:
+    adapter: torque
+    host: "quick-batch.ten.osc.edu"
+    lib: "/opt/torque/lib64"
+    bin: "/opt/torque/bin"

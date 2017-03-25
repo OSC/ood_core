@@ -1,0 +1,11 @@
+v2:
+  metadata:
+    title: "Oakley"
+    url: "https://www.osc.edu/supercomputing/computing/oakley"
+  login:
+    host: "oakley.osc.edu"
+  job:
+    adapter: torque
+    host: "oak-batch.osc.edu"
+    lib: "/opt/torque/lib64"
+    bin: "/opt/torque/bin"
