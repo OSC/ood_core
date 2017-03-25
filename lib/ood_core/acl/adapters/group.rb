@@ -24,7 +24,7 @@ module OodCore
           raise ArgumentError, "Invalid type specified. Valid types: whitelist, blacklist"
         end
 
-        OodCore::Acl::Adapters::Group.new(acl: acl, allow: allow)
+        Adapters::Group.new(acl: acl, allow: allow)
       end
     end
 
