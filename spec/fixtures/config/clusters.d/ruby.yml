@@ -69,3 +69,34 @@ v2:
       adapter: group
       groups: ["ruby"]
       type: whitelist
+  custom:
+    pbs:
+      host: "ruby-batch.osc.edu"
+      lib: "/opt/torque/lib64"
+      bin: "/opt/torque/bin"
+    moab:
+      host: "ruby-batch.osc.edu"
+      bin: "/opt/moab/bin"
+      homedir: "/var/spool/moab"
+    rsv_query:
+      torque_host: "ruby-batch.osc.edu"
+      torque_lib: "/opt/torque/lib64"
+      torque_bin: "/opt/torque/bin"
+      moab_host: "ruby-batch.osc.edu"
+      moab_bin: "/opt/moab/bin"
+      moab_homedir: "/var/spool/moab"
+      acls:
+        -
+          adapter: group
+          groups: ["sysp", "hpcsoft"]
+          type: blacklist
+    ganglia:
+      host: "cts05.osc.edu"
+      scheme: "https://"
+      segments:
+        - "gweb"
+        - "graph.php"
+      req_query:
+        c: "Ruby"
+      opt_query:
+        h: "%{h}.ten.osc.edu"
