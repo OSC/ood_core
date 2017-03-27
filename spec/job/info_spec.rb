@@ -21,7 +21,9 @@ describe OodCore::Job::Info do
   it { is_expected.to respond_to(:status) }
   it { is_expected.to respond_to(:allocated_nodes) }
   it { is_expected.to respond_to(:submit_host) }
+  it { is_expected.to respond_to(:job_name) }
   it { is_expected.to respond_to(:job_owner) }
+  it { is_expected.to respond_to(:accounting_id) }
   it { is_expected.to respond_to(:procs) }
   it { is_expected.to respond_to(:queue_name) }
   it { is_expected.to respond_to(:wallclock_time) }
@@ -81,10 +83,22 @@ describe OodCore::Job::Info do
     it { is_expected.to eq("my_submit_host") }
   end
 
+  describe "#job_name" do
+    subject { build_info(job_name: double(to_s: "my_job_name")).job_name }
+
+    it { is_expected.to eq("my_job_name") }
+  end
+
   describe "#job_owner" do
     subject { build_info(job_owner: double(to_s: "my_job_owner")).job_owner }
 
     it { is_expected.to eq("my_job_owner") }
+  end
+
+  describe "#accounting_id" do
+    subject { build_info(accounting_id: double(to_s: "my_account_id")).accounting_id }
+
+    it { is_expected.to eq("my_account_id") }
   end
 
   describe "#procs" do
@@ -137,7 +151,9 @@ describe OodCore::Job::Info do
     it { is_expected.to have_key(:status) }
     it { is_expected.to have_key(:allocated_nodes) }
     it { is_expected.to have_key(:submit_host) }
+    it { is_expected.to have_key(:job_name) }
     it { is_expected.to have_key(:job_owner) }
+    it { is_expected.to have_key(:accounting_id) }
     it { is_expected.to have_key(:procs) }
     it { is_expected.to have_key(:queue_name) }
     it { is_expected.to have_key(:wallclock_time) }

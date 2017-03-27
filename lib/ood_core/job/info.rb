@@ -18,9 +18,17 @@ module OodCore
       # @return [String] submit host
       attr_reader :submit_host
 
+      # Name of the job
+      # @return [String] job name
+      attr_reader :job_name
+
       # Owner of job
       # @return [String] job owner
       attr_reader :job_owner
+
+      # The account the job is charged against
+      # @return [String] accounting id
+      attr_reader :accounting_id
 
       # Number of procs allocated for job
       # @return [Fixnum] allocated total number of procs
@@ -55,7 +63,9 @@ module OodCore
       # @param status [#to_sym] job state
       # @param allocated_nodes [Array<#to_h>] allocated nodes
       # @param submit_host [#to_s] submit host
+      # @param job_name [#to_s] job name
       # @param job_owner [#to_s] job owner
+      # @param accounting_id [#to_s] accounting id
       # @param procs [#to_i] allocated total number of procs
       # @param queue_name [#to_s] queue name
       # @param wallclock_time [#to_i] wallclock time
@@ -64,14 +74,16 @@ module OodCore
       # @param dispatch_time [#to_i] dispatch time
       # @param native [Object] native info
       def initialize(id:, status:, allocated_nodes: [], submit_host: '',
-                     job_owner: '', procs: 0, queue_name: '', wallclock_time: 0,
-                     cpu_time: 0, submission_time: 0, dispatch_time: 0,
-                     native: nil, **_)
+                     job_name: '', job_owner: '', accounting_id: '', procs: 0,
+                     queue_name: '', wallclock_time: 0, cpu_time: 0,
+                     submission_time: 0, dispatch_time: 0, native: nil, **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
         @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(n.to_h) }
         @submit_host     = submit_host.to_s
+        @job_name        = job_name.to_s
         @job_owner       = job_owner.to_s
+        @accounting_id   = accounting_id.to_s
         @procs           = procs.to_i
         @queue_name      = queue_name.to_s
         @wallclock_time  = wallclock_time.to_i
@@ -89,7 +101,9 @@ module OodCore
           status:          status,
           allocated_nodes: allocated_nodes,
           submit_host:     submit_host,
+          job_name:        job_name,
           job_owner:       job_owner,
+          accounting_id:   accounting_id,
           procs:           procs,
           queue_name:      queue_name,
           wallclock_time:  wallclock_time,
