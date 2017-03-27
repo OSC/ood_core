@@ -24,8 +24,10 @@ v2:
     host: "quick-batch.ten.osc.edu"
     lib: "/opt/torque/lib64"
     bin: "/opt/torque/bin"
+    version: 6
   custom:
     pbs:
       host: "quick-batch.ten.osc.edu"
       lib: "/opt/torque/lib64"
       bin: "/opt/torque/bin"
+      version: 6

@@ -58,22 +58,27 @@ v2:
     host: "owens-batch.ten.osc.edu"
     lib: "/opt/torque/lib64"
     bin: "/opt/torque/bin"
+    version: 6
   custom:
     pbs:
       host: "owens-batch.ten.osc.edu"
       lib: "/opt/torque/lib64"
       bin: "/opt/torque/bin"
+      version: 6
     moab:
       host: "owens-batch.ten.osc.edu"
       bin: "/opt/moab/bin"
       homedir: "/var/spool/moab"
+      version: 9
     rsv_query:
       torque_host: "owens-batch.ten.osc.edu"
       torque_lib: "/opt/torque/lib64"
       torque_bin: "/opt/torque/bin"
+      torque_version: 6
       moab_host: "owens-batch.ten.osc.edu"
       moab_bin: "/opt/moab/bin"
       moab_homedir: "/var/spool/moab"
+      moab_version: 9
       acls:
         -
           adapter: group
@@ -89,3 +94,4 @@ v2:
         c: "Owens"
       opt_query:
         h: "%{h}.ten.osc.edu"
+      version: 3

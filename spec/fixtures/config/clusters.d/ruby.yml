@@ -64,6 +64,7 @@ v2:
     host: "ruby-batch.osc.edu"
     lib: "/opt/torque/lib64"
     bin: "/opt/torque/bin"
+    version: 6
   acls:
     -
       adapter: group
@@ -74,17 +75,21 @@ v2:
       host: "ruby-batch.osc.edu"
       lib: "/opt/torque/lib64"
       bin: "/opt/torque/bin"
+      version: 6
     moab:
       host: "ruby-batch.osc.edu"
       bin: "/opt/moab/bin"
       homedir: "/var/spool/moab"
+      version: 9
     rsv_query:
       torque_host: "ruby-batch.osc.edu"
       torque_lib: "/opt/torque/lib64"
       torque_bin: "/opt/torque/bin"
+      torque_version: 6
       moab_host: "ruby-batch.osc.edu"
       moab_bin: "/opt/moab/bin"
       moab_homedir: "/var/spool/moab"
+      moab_version: 9
       acls:
         -
           adapter: group
@@ -100,3 +105,4 @@ v2:
         c: "Ruby"
       opt_query:
         h: "%{h}.ten.osc.edu"
+      version: 3
