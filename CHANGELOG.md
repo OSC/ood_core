@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 2.0.4 (2017-03-28)
+
 Bugfixes:
 
   - support reservation id for submitting job with `qsub`
