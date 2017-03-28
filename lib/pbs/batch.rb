@@ -373,13 +373,15 @@ module PBS
       # Submit a script using Torque binary
       # NB: The binary includes many useful filters and is preferred
       def qsub_submit(script, queue, headers, resources, envvars)
-        params  = ["-q", "#{queue}@#{host}"]
+        params  = []
+        params += ["-q", "#{queue}"] unless queue.empty?
         params += headers.map {|k,v| qsub_arg(k,v)}.flatten
         params += resources.map{|k,v| ["-l", "#{k}=#{v}"]}.flatten
         params += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
         params << script
 
         env = {
+          "PBS_DEFAULT"     => "#{host}",
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
         cmd = bin.join("qsub").to_s

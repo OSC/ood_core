@@ -3,6 +3,7 @@
 Bugfixes:
 
   - support reservation id for submitting job with `qsub`
+  - added workaround for users who specify queue in batch script
 
 ## 2.0.3 (2016-11-04)
 
