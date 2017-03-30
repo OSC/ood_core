@@ -31,8 +31,8 @@ module OodCore
         # @option config [#to_s] :lib ('') Path to lsf client libraries
         # @option config [#to_s] :bin ('') Path to lsf client binaries
         def initialize(config)
-          @lib = config.fetch(:lib, "").to_s
-          @bin = config.fetch(:bin, "").to_s
+          @lib = Pathname.new(config.fetch(:lib, "").to_s)
+          @bin = Pathname.new(config.fetch(:bin, "").to_s)
           @host = config.fetch(:host, "").to_s
         end
 
