@@ -54,16 +54,26 @@ module OodCore
           afternotok = Array(afternotok).map(&:to_s)
           afterany   = Array(afterany).map(&:to_s)
 
-          # see example in torque.rb for separating options as:
+          #TODO: see example in torque.rb for separating options as:
           # headers, dependencies, resources, environment vars, native args
-          # submit_string: we have string content, so we have to
-          # 1. cd to workdir (if specified)
-          # 2. write content to tmpdir
-          # 3. submit script
-          # 4. have script verify workdir is current directory
-          #TODO: if a problem raise JobAdapterError
 
-          raise NotImplementedError, "submit not implemented"
+          params = []
+          #TODO:
+          #-clusters ?
+
+          env = {
+            #TODO:
+            #LSB_HOSTS?
+            #LSB_MCPU_HOSTS?
+            #SNDJOBS_TO?
+            #
+          }
+
+          cmd = bin.join("bsub").to_s
+          o, e, s = Open3.capture3(env, cmd, *params, stdin_data: script.content)
+
+          raise JobAdapterError, e unless s.success?
+          o.strip
         end
 
         # Retrieve job info from the resource manager
