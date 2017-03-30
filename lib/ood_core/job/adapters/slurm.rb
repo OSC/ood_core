@@ -104,6 +104,18 @@ module OodCore
             jobs
           end
 
+          def hold_job(id)
+            call("scontrol", "hold", id.to_s)
+          end
+
+          def release_job(id)
+            call("scontrol", "release", id.to_s)
+          end
+
+          def delete_job(id)
+            call("scancel", id.to_s)
+          end
+
           def submit_string(str, args: [], env: {})
             args = args + ["--parsable"]
             call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
@@ -237,7 +249,7 @@ module OodCore
             allocated_nodes = parse_nodes(v[:node_list])
             Info.new(
               id: v[:job_id],
-              status: REASON_MAP.fetch(v[:reason]) { STATE_MAP.fetch(v[:state_compact], :undetermined) },
+              status: get_state(v[:state_compact], v[:reason]),
               allocated_nodes: allocated_nodes,
               submit_host: nil,
               job_name: v[:job_name],
@@ -274,9 +286,7 @@ module OodCore
         # @see Adapter#status
         def status(id:)
           if job = @slurm.get_jobs(id: id.to_s, filters: [:state_compact, :reason]).first
-            Status.new(
-              state: REASON_MAP.fetch(job[:reason]) { STATE_MAP.fetch(job[:state_compact], :undetermined) },
-            )
+            Status.new(state: get_state(job[:state_compact], job[:reason]))
           else
             # set completed status if can't find job id
             Status.new(state: :completed)
@@ -291,11 +301,8 @@ module OodCore
         # @return [void]
         # @see Adapter#hold
         def hold(id:)
-          @pbs.hold_job(id.to_s)
-        rescue PBS::UnkjobidError
-          # assume successful job hold if can't find job id
-          nil
-        rescue PBS::Error => e
+          @slurm.hold_job(id.to_s)
+        rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -305,11 +312,8 @@ module OodCore
         # @return [void]
         # @see Adapter#release
         def release(id:)
-          @pbs.release_job(id.to_s)
-        rescue PBS::UnkjobidError
-          # assume successful job release if can't find job id
-          nil
-        rescue PBS::Error => e
+          @slurm.release_job(id.to_s)
+        rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -319,12 +323,8 @@ module OodCore
         # @return [void]
         # @see Adapter#delete
         def delete(id:)
-          @pbs.delete_job(id.to_s)
-        rescue PBS::UnkjobidError, PBS::BadstateError
-          # assume successful job deletion if can't find job id
-          # assume successful job deletion if job is exiting or completed
-          nil
-        rescue PBS::Error => e
+          @slurm.delete_job(id.to_s)
+        rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -368,6 +368,12 @@ module OodCore
             str += ":ppn=#{node.procs}" if node.procs
             str += ":#{node.properties.join(':')}" if node.properties
             str
+          end
+
+          # Get status symbol
+          def get_state(st, reason)
+            state = STATE_MAP.fetch(st, :undetermined)
+            state == :queued ? REASON_MAP.fetch(reason, state) : state
           end
       end
     end
