@@ -362,14 +362,6 @@ module OodCore
             end
           end
 
-          # Convert a NodeRequest object to a valid Torque string
-          def node_request_to_str(node, cnt)
-            str = cnt.to_s
-            str += ":ppn=#{node.procs}" if node.procs
-            str += ":#{node.properties.join(':')}" if node.properties
-            str
-          end
-
           # Get status symbol
           def get_state(st, reason)
             state = STATE_MAP.fetch(st, :undetermined)
