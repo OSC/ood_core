@@ -12,15 +12,13 @@ module OodCore
       # @option config [#to_s] :bin ('') Path to lsf client binaries
       def self.build_lsf(config)
         c = config.to_h.symbolize_keys
-        raise ArgumentError, "No host specified. Missing argument: host" unless c.key?(:host)
-
         Adapters::Lsf.new(c)
       end
     end
 
     module Adapters
       class Lsf < Adapter
-        attr_reader :lib, :bin, :host
+        attr_reader :lib, :bin
 
         STATE_MAP = {
            #TODO: map LSF states to queued, queued_held, running, etc.
@@ -33,7 +31,6 @@ module OodCore
         def initialize(config)
           @lib = Pathname.new(config.fetch(:lib, "").to_s)
           @bin = Pathname.new(config.fetch(:bin, "").to_s)
-          @host = config.fetch(:host, "").to_s
         end
 
         # Submit a job with the attributes defined in the job template instance
