@@ -90,25 +90,31 @@ module OodCore
           end
 
           def get_jobs(id: "", filters: [])
+            delim = ";"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--array", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.values.join("|")}"]
+            args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
             jobs = []
             lines.drop(2).each do |line|
-              jobs << Hash[options.keys.zip(line.split("|"))]
+              jobs << Hash[options.keys.zip(line.split(delim))]
             end
             jobs
           end
 
+          def submit_string(str, args: [], env: {})
+            args = args + ["--parsable"]
+            call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
+          end
+
           private
-            def call(cmd, *args, env: {})
+            def call(cmd, *args, env: {}, stdin: "")
               cmd = bin.join(cmd.to_s).to_s
               args = ["-M", cluster] + args.map(&:to_s)
               env = env.to_h
-              o, e, s = Open3.capture3(env, cmd, *args)
+              o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
             end
         end
@@ -166,59 +172,56 @@ module OodCore
           afternotok = Array(afternotok).map(&:to_s)
           afterany   = Array(afterany).map(&:to_s)
 
-          # Set headers
-          headers = {}
-          headers.merge!(job_arguments: script.args.join(' ')) unless script.args.nil?
-          headers.merge!(Hold_Types: :u) if script.submit_as_hold
-          headers.merge!(Rerunable: script.rerunnable ? 'y' : 'n') unless script.rerunnable.nil?
-          headers.merge!(init_work_dir: script.workdir) unless script.workdir.nil?
-          headers.merge!(Mail_Users: script.email.join(',')) unless script.email.nil?
-          mail_points  = ''
-          mail_points += 'b' if script.email_on_started
-          mail_points += 'e' if script.email_on_terminated
-          headers.merge!(Mail_Points: mail_points) unless mail_points.empty?
-          headers.merge!(Job_Name: script.job_name) unless script.job_name.nil?
-          # ignore input_path (not defined in Torque)
-          headers.merge!(Output_Path: script.output_path) unless script.output_path.nil?
-          headers.merge!(Error_Path: script.error_path) unless script.error_path.nil?
-          headers.merge!(Join_Path: 'oe') if script.join_files
-          headers.merge!(reservation_id: script.reservation_id) unless script.reservation_id.nil?
-          headers.merge!(Priority: script.priority) unless script.priority.nil?
-          headers.merge!(Execution_Time: script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")) unless script.start_time.nil?
-          headers.merge!(Account_Name: script.accounting_id) unless script.accounting_id.nil?
+          # Set sbatch options
+          args = []
+          # TODO: script.args
+          args += ["-H"] if script.submit_as_hold
+          args += (script.rerunnable? ? ["--requeue"] : ["--norequeue"]) unless script.rerunnable.nil?
+          args += ["-D", script.workdir.to_s] unless script.workdir.nil?
+          args += ["--mail-user", script.email.first] unless script.email.nil?
+          if script.email_on_started && script.email_on_terminated
+            args += ["--mail-type", "ALL"]
+          elsif script.email_on_started
+            args += ["--mail-type", "BEGIN"]
+          elsif script.email_on_terminated
+            args += ["--mail-type", "END"]
+          elsif script.email_on_started == false && script.email_on_terminated == false
+            args += ["--mail-type", "NONE"]
+          end
+          args += ["-J", script.job_name] unless script.job_name.nil?
+          args += ["-i", script.input_path] unless script.input_path.nil?
+          args += ["-o", script.output_path] unless script.output_path.nil?
+          args += ["-e", script.error_path] unless script.error_path.nil?
+          # ignore join_files, by default it joins stdout and stderr unless error_path is specified
+          args += ["--reservation", script.reservation_id] unless script.reservation_id.nil?
+          args += ["--priority", script.priority] unless script.priority.nil?
+          args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
+          args += ["-A", script.accounting_id] unless script.accounting_id.nil?
+          args += ["--mem", "#{script.min_phys_memory}K"] unless script.min_phys_memory.nil?
+          args += ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+          # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies
           depend = []
-          depend << "after:#{after.join(':')}"           unless after.empty?
-          depend << "afterok:#{afterok.join(':')}"       unless afterok.empty?
-          depend << "afternotok:#{afternotok.join(':')}" unless afternotok.empty?
-          depend << "afterany:#{afterany.join(':')}"     unless afterany.empty?
-          headers.merge!(depend: depend.join(','))       unless depend.empty?
-
-          # Set resources
-          resources = {}
-          resources.merge!(mem: "#{script.min_phys_memory}KB") unless script.min_phys_memory.nil?
-          resources.merge!(walltime: seconds_to_duration(script.wall_time)) unless script.wall_time.nil?
-          if script.nodes && !script.nodes.empty?
-            # Reduce an array to unique objects with count
-            #   ["a", "a", "b"] #=> {"a" => 2, "b" => 1}
-            nodes = script.nodes.group_by {|v| v}.each_with_object({}) {|(k, v), h| h[k] = v.size}
-            resources.merge!(nodes: nodes.map {|k, v| k.is_a?(NodeRequest) ? node_request_to_str(k, v) : k }.join('+'))
-          end
+          depend << "after:#{after.join(":")}"           unless after.empty?
+          depend << "afterok:#{afterok.join(":")}"       unless afterok.empty?
+          depend << "afternotok:#{afternotok.join(":")}" unless afternotok.empty?
+          depend << "afterany:#{afterany.join(":")}"     unless afterany.empty?
+          args += ["-d", depend.join(",")]               unless depend.empty?
 
           # Set environment variables
-          envvars = script.job_environment || {}
+          env = script.job_environment || {}
+          args += [
+            "--export",
+            script.job_environment.nil? ? "NONE" : script.job_environment.keys.join(",")
+          ]
 
           # Set native options
-          if script.native
-            headers.merge!   script.native.fetch(:headers, {})
-            resources.merge! script.native.fetch(:resources, {})
-            envvars.merge!   script.native.fetch(:envvars, {})
-          end
+          args += script.native if script.native
 
           # Submit job
-          @pbs.submit_string(script.content, queue: script.queue_name, headers: headers, resources: resources, envvars: envvars)
-        rescue PBS::Error => e
+          @slurm.submit_string(script.content, args: args, env: env)
+        rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -336,7 +339,7 @@ module OodCore
 
           # Convert seconds to duration
           def seconds_to_duration(time)
-            '%02d:%02d:%02d' % [time/3600, time/60%60, time%60]
+            "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
           end
 
           # Convert host list string to individual nodes
@@ -352,8 +355,10 @@ module OodCore
               end.flatten.map do |n|
                 { name: prefix + n, procs: nil }
               end
-            else
+            elsif prefix
               [ { name: prefix, procs: nil } ]
+            else
+              []
             end
           end
 
