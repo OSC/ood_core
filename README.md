@@ -17,11 +17,15 @@ gem 'ood_core'
 
 And then execute:
 
-    $ bundle
+```sh
+bundle
+```
 
 Or install it yourself as:
 
-    $ gem install ood_core
+```sh
+gem install ood_core
+```
 
 ## Usage
 
