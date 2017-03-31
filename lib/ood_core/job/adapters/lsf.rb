@@ -1,4 +1,4 @@
-require "ood_core/refinements/hash_extensions"
+        require "ood_core/refinements/hash_extensions"
 
 module OodCore
   module Job
@@ -19,6 +19,102 @@ module OodCore
     module Adapters
       class Lsf < Adapter
         attr_reader :lib, :bin
+
+        # Object used for simplified communication with a Slurm batch server
+        class Batch
+          # TODO:
+          # attr_reader :cluster
+
+          # The path to the LSF client installation binaries
+          # @example For LSF 8.3
+          #   my_batch.bin.to_s #=> "/opt/lsf/8.3/linux2.6-glibc2.3-x86_64/bin"
+          # @return [Pathname] path to LSF binaries
+          attr_reader :bin
+
+          # The root exception class that all LSF-specific exceptions inherit
+          # from
+          class Error < StandardError; end
+
+          # @param cluster [#to_s] the cluster name
+          # @param bin [#to_s] path to LSF installation binaries
+          def initialize(bin: "")
+            # TODO: @cluster = cluster.to_s
+            @bin     = Pathname.new(bin.to_s)
+          end
+
+          # Get a list of hashes detailing each of the jobs on the batch server
+          # @param id [#to_s] the id of the job to check (if just checking one job)
+          # @param filters [Array<Symbol>] list of attributes to filter on
+          # @raise [Error] if `bjobs` command exited unsuccessfully
+          # @return [Array<Hash>] list of details for jobs
+          def get_jobs(id: "", filters: [])
+            #TODO: does filters make sense here?
+            #TODO: split into get_all_jobs, get_my_jobs, get_job?
+            parse_bjobs_output call("bjobs -u all -a -w -W", id.to_s)
+          end
+
+          # helper method
+          def parse_bjobs_output(response)
+            raise NotImplementedError
+          end
+
+          # Put a specified job on hold
+          # @example Put job "1234" on hold
+          #   my_batch.hold_job("1234")
+          # @param id [#to_s] the id of the job
+          # @raise [Error] if `bstop` command exited unsuccessfully
+          # @return [void]
+          def hold_job(id)
+            call("bstop", id.to_s)
+          end
+
+          # Release a specified job that is on hold
+          # @example Release job "1234" from on hold
+          #   my_batch.release_job("1234")
+          # @param id [#to_s] the id of the job
+          # @raise [Error] if `bresume` command exited unsuccessfully
+          # @return [void]
+          def release_job(id)
+            call("bresume", id.to_s)
+          end
+
+          # Delete a specified job from batch server
+          # @example Delete job "1234"
+          #   my_batch.delete_job("1234")
+          # @param id [#to_s] the id of the job
+          # @raise [Error] if `bkill` command exited unsuccessfully
+          # @return [void]
+          def delete_job(id)
+            call("bkill", id.to_s)
+          end
+
+          # Submit a script expanded as a string to the batch server
+          # @param str [#to_s] script as a string
+          # @param args [Array<#to_s>] arguments passed to `sbatch` command
+          # @param env [Hash{#to_s => #to_s}] environment variables set
+          # @raise [Error] if `bsub` command exited unsuccessfully
+          # @return [String] the id of the job that was created
+          def submit_string(str, args: [], env: {})
+            args = args.map(&:to_s)
+            parse_sbatch_response call("bsub", *args, env: env, stdin: str.to_s)
+          end
+
+          # helper method
+          def parse_bsub_output(response)
+            raise NotImplementedError
+          end
+
+          private
+            # Call a forked Lsf command for a given cluster
+            def call(cmd, *args, env: {}, stdin: "")
+              cmd = bin.join(cmd.to_s).to_s
+              #TODO: args = ["-m", cluster] + args.map(&:to_s)
+              env = env.to_h
+              o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
+              s.success? ? o : raise(Error, e)
+            end
+        end
+
 
         STATE_MAP = {
            #TODO: map LSF states to queued, queued_held, running, etc.
