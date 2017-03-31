@@ -1,4 +1,5 @@
 require 'pathname'
+require 'time'
 require 'ood_core/refinements/array_extensions'
 
 module OodCore
