@@ -74,7 +74,7 @@ module OodCore
           def get_jobs(id: "", filters: [])
             delim = ";"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
-            args  = ["--all", "--array", "--states=all", "--noconvert"]
+            args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
