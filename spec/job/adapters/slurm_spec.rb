@@ -356,8 +356,8 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "when job is running" do
-     let(:job_hash) {
-       {
+      let(:job_hash) {
+        {
           :account=>"hooper",
           :job_id=>job_id,
           :gres=>"(null)",
@@ -444,6 +444,81 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
 
+    context "when dealing with job array" do
+      let(:job_hash) {
+        {
+          :job_id=>"123",
+          :array_job_id=>"123",
+          :array_task_id=>"0-3,8,10",
+          :array_job_task_id=>"123_[0-3,8,10]",
+          :state_compact=>"PD",
+          :reason=>"JobHeldUser,Resources",
+          :start_time=>"N/A",
+          :submit_time=>"2017-03-31T10:09:44"
+        }
+      }
+      let(:child_job_hash) {
+        {
+          :job_id=>"124",
+          :array_job_id=>"123",
+          :array_task_id=>"6",
+          :array_job_task_id=>"123_6",
+          :state_compact=>"R",
+          :reason=>"None",
+          :start_time=>"N/A",
+          :submit_time=>"2017-03-31T10:09:44"
+        }
+      }
+
+      context "and job id is array job id" do
+        let(:job_id)   { "123" }
+        let(:slurm)    { double(get_jobs: [child_job_hash, job_hash]) }
+
+        it "returns correct OodCore::Job::Info object" do
+          is_expected.to eq(OodCore::Job::Info.new(
+            :id=>"123",
+            :status=>:queued,
+            :allocated_nodes=>[],
+            :submit_host=>nil,
+            :job_name=>nil,
+            :job_owner=>nil,
+            :accounting_id=>nil,
+            :procs=>nil,
+            :queue_name=>nil,
+            :wallclock_time=>nil,
+            :cpu_time=>nil,
+            :submission_time=>Time.parse("2017-03-31T10:09:44"),
+            :dispatch_time=>nil,
+            :native=>job_hash
+          ))
+        end
+      end
+
+      context "and job id is formatted array job and task id" do
+        let(:job_id)   { "123_6" }
+        let(:slurm)    { double(get_jobs: [child_job_hash]) }
+
+        it "returns correct OodCore::Job::Info object" do
+          is_expected.to eq(OodCore::Job::Info.new(
+            :id=>"124",
+            :status=>:running,
+            :allocated_nodes=>[],
+            :submit_host=>nil,
+            :job_name=>nil,
+            :job_owner=>nil,
+            :accounting_id=>nil,
+            :procs=>nil,
+            :queue_name=>nil,
+            :wallclock_time=>nil,
+            :cpu_time=>nil,
+            :submission_time=>Time.parse("2017-03-31T10:09:44"),
+            :dispatch_time=>nil,
+            :native=>child_job_hash
+          ))
+        end
+      end
+    end
+
     context "when can't find job" do
       let(:slurm) { double(get_jobs: []) }
 
@@ -469,14 +544,13 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     let(:job_state) { "" }
-    let(:reason)    { "JobHeldUser" }
     let(:job_id)    { "job_id" }
-    let(:slurm)     { double(get_jobs: [state_compact: job_state, reason: reason]) }
+    let(:slurm)     { double(get_jobs: [job_id: job_id, array_job_task_id: job_id, state_compact: job_state]) }
     subject { adapter.status(id: double(to_s: job_id)) }
 
     it "request only job state from OodCore::Job::Adapters::Slurm::Batch" do
       subject
-      expect(slurm).to have_received(:get_jobs).with(id: job_id, filters: [:state_compact, :reason])
+      expect(slurm).to have_received(:get_jobs).with(id: job_id, filters: [:job_id, :array_job_task_id, :state_compact])
     end
 
     context "when job is in BF state" do
@@ -566,29 +640,54 @@ describe OodCore::Job::Adapters::Slurm do
     context "when job is in PD state" do
       let(:job_state) { "PD" }
 
-      context "and reason is JobHeldAdmin" do
-        let(:reason) { "JobHeldAdmin" }
-
-        it { is_expected.to be_queued_held }
-      end
-
-      context "and reason is JobHeldUser" do
-        let(:reason) { "JobHeldUser" }
-
-        it { is_expected.to be_queued_held }
-      end
-
-      context "and reason is unknown" do
-        let(:reason) { "JobIsXXX" }
-
-        it { is_expected.to be_queued }
-      end
+      it { is_expected.to be_queued }
     end
 
     context "when job is in unknown state" do
       let(:job_state) { "X" }
 
       it { is_expected.to be_undetermined }
+    end
+
+    context "when dealing with job array" do
+      let(:job_hash) {
+        {
+          :job_id=>"123",
+          :array_job_id=>"123",
+          :array_task_id=>"0-3,8,10",
+          :array_job_task_id=>"123_[0-3,8,10]",
+          :state_compact=>"PD",
+          :reason=>"JobHeldUser,Resources",
+          :start_time=>"N/A",
+          :submit_time=>"2017-03-31T10:09:44"
+        }
+      }
+      let(:child_job_hash) {
+        {
+          :job_id=>"124",
+          :array_job_id=>"123",
+          :array_task_id=>"6",
+          :array_job_task_id=>"123_6",
+          :state_compact=>"R",
+          :reason=>"None",
+          :start_time=>"N/A",
+          :submit_time=>"2017-03-31T10:09:44"
+        }
+      }
+
+      context "and job id is array job id" do
+        let(:job_id)   { "123" }
+        let(:slurm)    { double(get_jobs: [child_job_hash, job_hash]) }
+
+        it { is_expected.to be_queued }
+      end
+
+      context "and job id is formatted array job and task id" do
+        let(:job_id)   { "123_6" }
+        let(:slurm)    { double(get_jobs: [child_job_hash]) }
+
+        it { is_expected.to be_running }
+      end
     end
 
     context "when can't find job" do

@@ -157,6 +157,7 @@ module OodCore
                 group_id: "%G",
                 over_subscribe: "%h",
                 sockets_per_node: "%H",
+                array_job_task_id: "%i",
                 cores_per_socket: "%I",
                 job_name: "%j",
                 threads_per_core: "%J",
@@ -210,12 +211,6 @@ module OodCore
           'ST' => :running,    # STOPPED
           'S'  => :suspended,  # SUSPENDED
           'TO' => :completed   # TIMEOUT
-        }
-
-        # Further mapping for reason of pending jobs in Slurm
-        REASON_MAP = {
-          'JobHeldAdmin' => :queued_held,
-          'JobHeldUser'  => :queued_held
         }
 
         # @param opts [#to_h] the options defining this adapter
@@ -309,7 +304,7 @@ module OodCore
             allocated_nodes = parse_nodes(v[:node_list])
             Info.new(
               id: v[:job_id],
-              status: get_state(v[:state_compact], v[:reason]),
+              status: get_state(v[:state_compact]),
               allocated_nodes: allocated_nodes,
               submit_host: nil,
               job_name: v[:job_name],
@@ -324,14 +319,16 @@ module OodCore
               native: v
             )
           end
-          if !id.empty? && info_ary.empty?
-            # set completed status if can't find job id
-            Info.new(
-              id: id,
-              status: :completed
-            )
+          if !id.empty?
+            # A job id can return multiple jobs if it corresponds to a job
+            # array id, so we need to find the job that corresponds to the
+            # given job id (if we can't find it, we assume it has completed)
+            info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
+              # Match the unique job id or the formatted job id & task id ("1234_0")
+              info.id == id || info.native[:array_job_task_id] == id
+            end
           else
-            id.empty? ? info_ary : info_ary.first
+            info_ary
           end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -343,8 +340,18 @@ module OodCore
         # @return [Status] status of job
         # @see Adapter#status
         def status(id:)
-          if job = @slurm.get_jobs(id: id.to_s, filters: [:state_compact, :reason]).first
-            Status.new(state: get_state(job[:state_compact], job[:reason]))
+          id = id.to_s
+          jobs = @slurm.get_jobs(
+            id: id,
+            filters: [:job_id, :array_job_task_id, :state_compact]
+          )
+          # A job id can return multiple jobs if it corresponds to a job array
+          # id, so we need to find the job that corresponds to the given job id
+          # (if we can't find it, we assume it has completed)
+          # NB: Match against the unique job id or the formatted job id & task
+          # id "1234_0"
+          if job = jobs.detect { |j| j[:job_id] == id || j[:array_job_task_id] == id }
+            Status.new(state: get_state(job[:state_compact]))
           else
             # set completed status if can't find job id
             Status.new(state: :completed)
@@ -420,10 +427,9 @@ module OodCore
             end
           end
 
-          # Determine state from Slurm state code and reason
-          def get_state(st, reason)
-            state = STATE_MAP.fetch(st, :undetermined)
-            st == "PD" ? REASON_MAP.fetch(reason, state) : state
+          # Determine state from Slurm state code
+          def get_state(st)
+            STATE_MAP.fetch(st, :undetermined)
           end
       end
     end
