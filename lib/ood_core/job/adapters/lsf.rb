@@ -101,7 +101,11 @@ module OodCore
 
           # helper method
           def parse_bsub_output(response)
-            raise NotImplementedError
+            if response =~ /Job <(.*)> /
+              $1
+            else
+              nil
+            end
           end
 
           private
