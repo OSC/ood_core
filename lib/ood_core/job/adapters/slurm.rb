@@ -222,10 +222,10 @@ module OodCore
         end
 
         # Submit a job with the attributes defined in the job template instance
-        # @param script [Script] script object that describes the
-        #   script and attributes for the submitted job
-        # @param after [#to_s, Array<#to_s>] this job may be scheduled for execution
-        #   at any point after dependent jobs have started execution
+        # @param script [Script] script object that describes the script and
+        #   attributes for the submitted job
+        # @param after [#to_s, Array<#to_s>] this job may be scheduled for
+        #   execution at any point after dependent jobs have started execution
         # @param afterok [#to_s, Array<#to_s>] this job may be scheduled for
         #   execution only after dependent jobs have terminated with no errors
         # @param afternotok [#to_s, Array<#to_s>] this job may be scheduled for
@@ -233,7 +233,8 @@ module OodCore
         # @param afterany [#to_s, Array<#to_s>] this job may be scheduled for
         #   execution after dependent jobs have terminated
         # @raise [JobAdapterError] if something goes wrong submitting a job
-        # @return [String] the job id returned after successfully submitting a job
+        # @return [String] the job id returned after successfully submitting a
+        #   job
         # @see Adapter#submit
         def submit(script:, after: [], afterok: [], afternotok: [], afterany: [])
           after      = Array(after).map(&:to_s)
@@ -261,7 +262,8 @@ module OodCore
           args += ["-i", script.input_path] unless script.input_path.nil?
           args += ["-o", script.output_path] unless script.output_path.nil?
           args += ["-e", script.error_path] unless script.error_path.nil?
-          # ignore join_files, by default it joins stdout and stderr unless error_path is specified
+          # ignore join_files, by default it joins stdout and stderr unless
+          # error_path is specified
           args += ["--reservation", script.reservation_id] unless script.reservation_id.nil?
           args += ["-p", script.queue_name] unless script.queue_name.nil?
           args += ["--priority", script.priority] unless script.priority.nil?
@@ -324,7 +326,7 @@ module OodCore
             # array id, so we need to find the job that corresponds to the
             # given job id (if we can't find it, we assume it has completed)
             info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
-              # Match the unique job id or the formatted job id & task id ("1234_0")
+              # Match the unique job id or the formatted job & task id "1234_0"
               info.id == id || info.native[:array_job_task_id] == id
             end
           else
@@ -348,8 +350,8 @@ module OodCore
           # A job id can return multiple jobs if it corresponds to a job array
           # id, so we need to find the job that corresponds to the given job id
           # (if we can't find it, we assume it has completed)
-          # NB: Match against the unique job id or the formatted job id & task
-          # id "1234_0"
+          # NB: Match against the unique job id or the formatted job & task id
+          #   "1234_0"
           if job = jobs.detect { |j| j[:job_id] == id || j[:array_job_task_id] == id }
             Status.new(state: get_state(job[:state_compact]))
           else
