@@ -55,7 +55,20 @@ module OodCore
 
           # helper method
           def parse_bjobs_output(response)
-            [{}]
+            return [{}] if response =~ /No job found/
+
+            lines = response.split("\n")
+            # lines.first.split.count == 15 # titles JOBID, etc.
+            # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME
+            fields = [:id, :user, :status, :queue, :from_host, :exec_host, :name, :submit_time, :project, :cpu_used, :mem, :swap, :pids, :start_time, :finish_time]
+            lines.drop(1).map{ |job|
+              # go through each line that is a job (excluding the header)
+              # split the fields, and make a hash
+              Hash[fields.zip(job.split)].each_with_object({}) { |(k,v),o|
+                # if the value == "-", replace it with nil
+                o[k] = (v == "-" ? nil : v)
+              }
+            }
           end
 
           # Put a specified job on hold
