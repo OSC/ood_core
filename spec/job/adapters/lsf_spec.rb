@@ -26,5 +26,20 @@ describe OodCore::Job::Adapters::Lsf do
   end
 
   # parse_bjobs_output
-  # TODO:
+  describe "Batch#parse_bsub_output" do
+    subject(:batch) { OodCore::Job::Adapters::Lsf::Batch.new() }
+
+    it "should handle no jobs in output" do
+      expect(batch.parse_bjobs_output "No job found\n").to eq [{}]
+    end
+
+    # TODO:
+    # it "should raise exception for unexpected columns" do
+    # end
+
+    #TODO:
+    # it "should correctly parse bjobs output" do
+    #   expect(batch.parse_bjobs_output "Job <542935> is submitted to queue <short>.\n").to eq "542935"
+    # end
+  end
 end

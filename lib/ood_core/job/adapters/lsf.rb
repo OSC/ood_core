@@ -55,7 +55,7 @@ module OodCore
 
           # helper method
           def parse_bjobs_output(response)
-            raise NotImplementedError
+            [{}]
           end
 
           # Put a specified job on hold
