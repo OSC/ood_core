@@ -326,7 +326,7 @@ module OodCore
             # array id, so we need to find the job that corresponds to the
             # given job id (if we can't find it, we assume it has completed)
             info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
-              # Match the unique job id or the formatted job & task id "1234_0"
+              # Match the job id or the formatted job & task id "1234_0"
               info.id == id || info.native[:array_job_task_id] == id
             end
           else
@@ -350,8 +350,8 @@ module OodCore
           # A job id can return multiple jobs if it corresponds to a job array
           # id, so we need to find the job that corresponds to the given job id
           # (if we can't find it, we assume it has completed)
-          # NB: Match against the unique job id or the formatted job & task id
-          #   "1234_0"
+          #
+          # Match against the job id or the formatted job & task id "1234_0"
           if job = jobs.detect { |j| j[:job_id] == id || j[:array_job_task_id] == id }
             Status.new(state: get_state(job[:state_compact]))
           else
