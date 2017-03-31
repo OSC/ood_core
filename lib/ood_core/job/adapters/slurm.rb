@@ -243,7 +243,7 @@ module OodCore
 
           # Set sbatch options
           args = []
-          # TODO: script.args
+          # ignore args, don't know how to do this for slurm
           args += ["-H"] if script.submit_as_hold
           args += (script.rerunnable ? ["--requeue"] : ["--no-requeue"]) unless script.rerunnable.nil?
           args += ["-D", script.workdir.to_s] unless script.workdir.nil?
