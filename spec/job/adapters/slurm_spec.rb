@@ -105,7 +105,7 @@ describe OodCore::Job::Adapters::Slurm do
     context "with :email" do
       before { adapter.submit(script: build_script(email: ["email1", "email2"])) }
 
-      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-user", "email1"], env: {}) }
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-user", "email1,email2"], env: {}) }
     end
 
     context "with :email_on_started" do

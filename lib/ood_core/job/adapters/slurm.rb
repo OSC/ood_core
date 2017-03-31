@@ -247,7 +247,7 @@ module OodCore
           args += ["-H"] if script.submit_as_hold
           args += (script.rerunnable ? ["--requeue"] : ["--no-requeue"]) unless script.rerunnable.nil?
           args += ["-D", script.workdir.to_s] unless script.workdir.nil?
-          args += ["--mail-user", script.email.first] unless script.email.nil?
+          args += ["--mail-user", script.email.join(",")] unless script.email.nil?
           if script.email_on_started && script.email_on_terminated
             args += ["--mail-type", "ALL"]
           elsif script.email_on_started
