@@ -118,6 +118,7 @@ module OodCore
 
           def submit_string(str, args: [], env: {})
             args = args + ["--parsable"]
+            env = {"SBATCH_EXPORT" => "NONE"}.merge(env)
             call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
           end
 
@@ -188,7 +189,7 @@ module OodCore
           args = []
           # TODO: script.args
           args += ["-H"] if script.submit_as_hold
-          args += (script.rerunnable? ? ["--requeue"] : ["--norequeue"]) unless script.rerunnable.nil?
+          args += (script.rerunnable ? ["--requeue"] : ["--no-requeue"]) unless script.rerunnable.nil?
           args += ["-D", script.workdir.to_s] unless script.workdir.nil?
           args += ["--mail-user", script.email.first] unless script.email.nil?
           if script.email_on_started && script.email_on_terminated
@@ -206,6 +207,7 @@ module OodCore
           args += ["-e", script.error_path] unless script.error_path.nil?
           # ignore join_files, by default it joins stdout and stderr unless error_path is specified
           args += ["--reservation", script.reservation_id] unless script.reservation_id.nil?
+          args += ["-p", script.queue_name] unless script.queue_name.nil?
           args += ["--priority", script.priority] unless script.priority.nil?
           args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
           args += ["-A", script.accounting_id] unless script.accounting_id.nil?
@@ -223,10 +225,7 @@ module OodCore
 
           # Set environment variables
           env = script.job_environment || {}
-          args += [
-            "--export",
-            script.job_environment.nil? ? "NONE" : script.job_environment.keys.join(",")
-          ]
+          args += ["--export", script.job_environment.keys.join(",")] unless script.job_environment.nil? || script.job_environment.empty?
 
           # Set native options
           args += script.native if script.native
@@ -264,16 +263,14 @@ module OodCore
               native: v
             )
           end
-          if info_ary.empty?
+          if !id.empty? && info_ary.empty?
             # set completed status if can't find job id
             Info.new(
               id: id,
               status: :completed
             )
-          elsif info_ary.size == 1
-            info_ary.first
           else
-            info_ary
+            id.empty? ? info_ary : info_ary.first
           end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -365,7 +362,7 @@ module OodCore
           # Get status symbol
           def get_state(st, reason)
             state = STATE_MAP.fetch(st, :undetermined)
-            state == :queued ? REASON_MAP.fetch(reason, state) : state
+            st == "PD" ? REASON_MAP.fetch(reason, state) : state
           end
       end
     end
