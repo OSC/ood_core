@@ -25,70 +25,52 @@ module OodCore
       class Slurm < Adapter
         using Refinements::HashExtensions
 
+        # Object used for simplified communication with a Slurm batch server
         class Batch
+          # The cluster of the Slurm batch server
+          # @example CHPC's kingspeak cluster
+          #   my_batch.cluster #=> "kingspeak"
+          # @return [String] the cluster name
           attr_reader :cluster
+
+          # The path to the Slurm client installation binaries
+          # @example For Slurm 10.0.0
+          #   my_batch.bin.to_s #=> "/usr/local/slurm/10.0.0/bin
+          # @return [Pathname] path to slurm binaries
           attr_reader :bin
 
+          # The root exception class that all Slurm-specific exceptions inherit
+          # from
           class Error < StandardError; end
 
+          # @param cluster [#to_s] the cluster name
+          # @param bin [#to_s] path to slurm installation binaries
           def initialize(cluster:, bin: "")
             @cluster = cluster.to_s
             @bin     = Pathname.new(bin.to_s)
           end
 
-          def fields
-            {
-              account: "%a",
-              job_id: "%A",
-              gres: "%b",
-              exec_host: "%B",
-              min_cpus: "%c",
-              cpus: "%C",
-              min_tmp_disk: "%d",
-              nodes: "%D",
-              end_time: "%e",
-              dependency: "%E",
-              features: "%f",
-              array_job_id: "%F",
-              group_name: "%g",
-              group_id: "%G",
-              over_subscribe: "%h",
-              sockets_per_node: "%H",
-              cores_per_socket: "%I",
-              job_name: "%j",
-              threads_per_core: "%J",
-              comment: "%k",
-              array_task_id: "%K",
-              time_limit: "%l",
-              time_left: "%L",
-              min_memory: "%m",
-              time_used: "%M",
-              req_node: "%n",
-              node_list: "%N",
-              command: "%o",
-              contiguous: "%O",
-              qos: "%q",
-              partition: "%P",
-              priority: "%Q",
-              reason: "%r",
-              start_time: "%S",
-              state_compact: "%t",
-              state: "%T",
-              user: "%u",
-              user_id: "%U",
-              reservation: "%v",
-              submit_time: "%V",
-              wckey: "%w",
-              licenses: "%W",
-              excluded_nodes: "%x",
-              core_specialization: "%X",
-              nice: "%y",
-              scheduled_nodes: "%Y",
-              sockets_cores_threads: "%z",
-              work_dir: "%Z"
-            }
-          end
-
+          # Get a list of hashes detailing each of the jobs on the batch server
+          # @example Status info for all jobs
+          #   my_batch.get_jobs
+          #   #=>
+          #   #[
+          #   #  {
+          #   #    :account => "account",
+          #   #    :job_id => "my_job",
+          #   #    ...
+          #   #  },
+          #   #  {
+          #   #    :account => "account",
+          #   #    :job_id => "my_other_job",
+          #   #    ...
+          #   #  },
+          #   #  ...
+          #   #]
+          # @param id [#to_s] the id of the job
+          # @param filters [Array<Symbol>] list of attributes to filter on
+          # @raise [Error] if `squeue` command exited unsuccessfully
+          # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [])
             delim = ";"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
@@ -104,25 +86,50 @@ module OodCore
             jobs
           end
 
+          # Put a specified job on hold
+          # @example Put job "1234" on hold
+          #   my_batch.hold_job("1234")
+          # @param id [#to_s] the id of the job
+          # @raise [Error] if `scontrol` command exited unsuccessfully
+          # @return [void]
           def hold_job(id)
             call("scontrol", "hold", id.to_s)
           end
 
+          # Release a specified job that is on hold
+          # @example Release job "1234" from on hold
+          #   my_batch.release_job("1234")
+          # @param id [#to_s] the id of the job
+          # @raise [Error] if `scontrol` command exited unsuccessfully
+          # @return [void]
           def release_job(id)
             call("scontrol", "release", id.to_s)
           end
 
+          # Delete a specified job from batch server
+          # @example Delete job "1234"
+          #   my_batch.delete_job("1234")
+          # @param id [#to_s] the id of the job
+          # @raise [Error] if `scancel` command exited unsuccessfully
+          # @return [void]
           def delete_job(id)
             call("scancel", id.to_s)
           end
 
+          # Submit a script expanded as a string to the batch server
+          # @param str [#to_s] script as a string
+          # @param args [Array<#to_s>] arguments passed to `sbatch` command
+          # @param env [Hash{#to_s => #to_s}] environment variables set
+          # @raise [Error] if `sbatch` command exited unsuccessfully
+          # @return [String] the id of the job that was created
           def submit_string(str, args: [], env: {})
-            args = args + ["--parsable"]
-            env = {"SBATCH_EXPORT" => "NONE"}.merge(env)
+            args = args.map(&:to_s) + ["--parsable"]
+            env = {"SBATCH_EXPORT" => "NONE"}.merge env.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
             call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
           end
 
           private
+            # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = bin.join(cmd.to_s).to_s
               args = ["-M", cluster] + args.map(&:to_s)
@@ -130,9 +137,63 @@ module OodCore
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
             end
+
+            # Fields requested from a formatted `squeue` call
+            def fields
+              {
+                account: "%a",
+                job_id: "%A",
+                gres: "%b",
+                exec_host: "%B",
+                min_cpus: "%c",
+                cpus: "%C",
+                min_tmp_disk: "%d",
+                nodes: "%D",
+                end_time: "%e",
+                dependency: "%E",
+                features: "%f",
+                array_job_id: "%F",
+                group_name: "%g",
+                group_id: "%G",
+                over_subscribe: "%h",
+                sockets_per_node: "%H",
+                cores_per_socket: "%I",
+                job_name: "%j",
+                threads_per_core: "%J",
+                comment: "%k",
+                array_task_id: "%K",
+                time_limit: "%l",
+                time_left: "%L",
+                min_memory: "%m",
+                time_used: "%M",
+                req_node: "%n",
+                node_list: "%N",
+                command: "%o",
+                contiguous: "%O",
+                qos: "%q",
+                partition: "%P",
+                priority: "%Q",
+                reason: "%r",
+                start_time: "%S",
+                state_compact: "%t",
+                state: "%T",
+                user: "%u",
+                user_id: "%U",
+                reservation: "%v",
+                submit_time: "%V",
+                wckey: "%w",
+                licenses: "%W",
+                excluded_nodes: "%x",
+                core_specialization: "%X",
+                nice: "%y",
+                scheduled_nodes: "%Y",
+                sockets_cores_threads: "%z",
+                work_dir: "%Z"
+              }
+            end
         end
 
-        # Mapping of state characters for Slurm
+        # Mapping of state codes for Slurm
         STATE_MAP = {
           'BF' => :completed,  # BOOT_FAIL
           'CA' => :completed,  # CANCELLED
@@ -359,7 +420,7 @@ module OodCore
             end
           end
 
-          # Get status symbol
+          # Determine state from Slurm state code and reason
           def get_state(st, reason)
             state = STATE_MAP.fetch(st, :undetermined)
             st == "PD" ? REASON_MAP.fetch(reason, state) : state
