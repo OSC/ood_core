@@ -4,6 +4,7 @@ require "ood_core/job/adapters/lsf/batch"
 describe OodCore::Job::Adapters::Lsf::Batch do
   subject(:batch) { described_class.new() }
 
+  #TODO: consider using contexts http://betterspecs.org/#contexts
   describe "#parse_bsub_output" do
     subject(:batch) { OodCore::Job::Adapters::Lsf::Batch.new() }
 
