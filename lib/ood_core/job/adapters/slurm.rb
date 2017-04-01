@@ -79,11 +79,9 @@ module OodCore
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
-            jobs = []
             lines.drop(2).each do |line|
-              jobs << Hash[options.keys.zip(line.split(delim))]
+              Hash[options.keys.zip(line.split(delim))]
             end
-            jobs
           end
 
           # Put a specified job on hold
