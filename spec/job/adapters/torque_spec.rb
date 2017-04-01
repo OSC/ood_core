@@ -192,12 +192,11 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Priority: 123}, resources: {}, envvars: {}) }
     end
 
-#FIXME: this test's expected value assumes Eastern timezone
-#    context "with :start_time" do
-#      before { adapter.submit(script: build_script(start_time: 1478631234)) }
-#
-#      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Execution_Time: "201611081353.54"}, resources: {}, envvars: {}) }
-#    end
+    context "with :start_time" do
+      before { adapter.submit(script: build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
+
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Execution_Time: "201611081353.54"}, resources: {}, envvars: {}) }
+    end
 
     context "with :accounting_id" do
       before { adapter.submit(script: build_script(accounting_id: "my_account")) }

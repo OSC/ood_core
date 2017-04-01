@@ -152,7 +152,7 @@ module OodCore
               native: v
             )
           end
-          info_ary.size == 1 ? info_ary.first : info_ary
+          id.empty? ? info_ary : info_ary.first
         rescue PBS::UnkjobidError
           # set completed status if can't find job id
           Info.new(

@@ -1,3 +1,5 @@
+require 'time'
+
 module OodCore
   module Job
     # An object that describes a submitted job

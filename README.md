@@ -1,5 +1,9 @@
 # OodCore
 
+[![Build Status](https://travis-ci.org/OSC/ood_core.svg?branch=master)](https://travis-ci.org/OSC/ood_core)
+![GitHub Release](https://img.shields.io/github/release/osc/ood_core.svg)
+![GitHub License](https://img.shields.io/github/license/osc/ood_core.svg)
+
 Welcome to your new gem! In this directory, you'll find the files you need to
 be able to package up your Ruby library into a gem. Put your Ruby code in the
 file `lib/ood_core`. To experiment with that code, run `bin/console` for an
@@ -17,11 +21,15 @@ gem 'ood_core'
 
 And then execute:
 
-    $ bundle
+```sh
+bundle
+```
 
 Or install it yourself as:
 
-    $ gem install ood_core
+```sh
+gem install ood_core
+```
 
 ## Usage
 
