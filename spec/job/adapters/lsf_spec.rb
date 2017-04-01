@@ -36,9 +36,14 @@ describe OodCore::Job::Adapters::Lsf do
       expect(batch.parse_bjobs_output "No job found\n").to eq [{}]
     end
 
-    # TODO:
-    # it "should raise exception for unexpected columns" do
-    # end
+    it "should raise exception for unexpected columns" do
+      # I added ANOTHER_COLUMN to the end of this
+      output = <<-OUTPUT
+JOBID   USER    STAT  QUEUE
+542935  efranz  RUN   short
+      OUTPUT
+      expect { batch.parse_bjobs_output output }.to raise_error(OodCore::Job::Adapters::Lsf::Batch::Error)
+    end
 
     it "should parse output for one job" do
       output = <<-OUTPUT

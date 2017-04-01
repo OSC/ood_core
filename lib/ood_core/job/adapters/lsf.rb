@@ -58,6 +58,14 @@ module OodCore
             return [{}] if response =~ /No job found/
 
             lines = response.split("\n")
+            expected_fields = %w(JOBID   USER    STAT  QUEUE      FROM_HOST
+                                 EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME
+                                 CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME)
+            if lines.first.split != expected_fields
+              raise Error, "output in different format than expected: #{lines.first.split.inspect} instead of #{expected_fields}"
+            end
+
+
             # lines.first.split.count == 15 # titles JOBID, etc.
             # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME
             fields = [:id, :user, :status, :queue, :from_host, :exec_host, :name, :submit_time, :project, :cpu_used, :mem, :swap, :pids, :start_time, :finish_time]
