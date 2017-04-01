@@ -58,36 +58,19 @@ module OodCore
             return [{}] if response =~ /No job found/
 
             lines = response.split("\n")
-            expected_fields = %w(JOBID   USER    STAT  QUEUE      FROM_HOST
-                                 EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME
-                                 CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME)
-            if lines.first.split != expected_fields
-              raise Error, "output in different format than expected: #{lines.first.split.inspect} instead of #{expected_fields}"
-            end
-
-
-            # lines.first.split.count == 15 # titles JOBID, etc.
-            # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME
-            fields = [:id, :user, :status, :queue, :from_host, :exec_host, :name, :submit_time, :project, :cpu_used, :mem, :swap, :pids, :start_time, :finish_time]
+            validate_bjobs_output_columns(lines.first.split)
 
             lines.drop(1).map{ |job|
-              # normally split would result in 15 items...
-              values = job.strip.split
+              values = split_bjobs_output_line(job)
 
-              # unless you pipe a script to bsub without a jobname
-              if(values.count > 15)
-                # FIXME: ugly hack assumes every other field except job name will never have spaces
-                values = values[0..5] + [values[6..-9].join(" ")] + values[-8..-1]
-              end
-
-              # go through each line that is a job (excluding the header)
-              # split the fields, and make a hash
+              # make a hash of { field: "value", etc. }
               Hash[fields.zip(values)].each_with_object({}) { |(k,v),o|
                 # if the value == "-", replace it with nil
                 o[k] = (v == "-" ? nil : v)
               }
             }
           end
+
 
           # Put a specified job on hold
           # @example Put job "1234" on hold
@@ -147,6 +130,36 @@ module OodCore
               env = env.to_h
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
+            end
+
+            # split a line of output from bjobs into field values
+            def split_bjobs_output_line(line)
+              # normally split would result in 15 items...
+              values = line.strip.split
+
+              # unless you pipe a script to bsub without a jobname
+              if(values.count > 15)
+                # FIXME: ugly hack assumes every other field except job name will never have spaces
+                values = values[0..5] + [values[6..-9].join(" ")] + values[-8..-1]
+              end
+
+              values
+            end
+
+            # verify the output from bjobs is parsable by this object
+            def validate_bjobs_output_columns(columns)
+              expected = %w(JOBID USER STAT QUEUE FROM_HOST EXEC_HOST JOB_NAME
+                            SUBMIT_TIME PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME)
+              if columns != expected
+                raise Error, "bjobs output in different format than expected: " \
+                  "#{columns.inspect} instead of #{expected.inspect}"
+              end
+            end
+
+            # status fields available from bjobs
+            def fields
+              %i(id user status queue from_host exec_host name submit_time
+                 project cpu_used mem swap pids start_time finish_time)
             end
         end
 
