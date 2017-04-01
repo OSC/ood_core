@@ -134,12 +134,11 @@ module OodCore
 
             # split a line of output from bjobs into field values
             def split_bjobs_output_line(line)
-              # normally split would result in 15 items...
               values = line.strip.split
 
-              # unless you pipe a script to bsub without a jobname
               if(values.count > 15)
-                # FIXME: ugly hack assumes every other field except job name will never have spaces
+                # FIXME: hack assumes 15 fields & only job name may have spaces
+                # collapse >15 fields into 15, assumes 7th field is JOB_NAME
                 values = values[0..5] + [values[6..-9].join(" ")] + values[-8..-1]
               end
 
