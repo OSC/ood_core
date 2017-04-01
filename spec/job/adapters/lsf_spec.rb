@@ -20,13 +20,13 @@ describe OodCore::Job::Adapters::Lsf do
     subject(:batch) { OodCore::Job::Adapters::Lsf::Batch.new() }
 
     # parse bsubmit output
-    it "should correctly parse bjobs output" do
+    it "should correctly parse bsub output" do
       expect(batch.parse_bsub_output "Job <542935> is submitted to queue <short>.\n").to eq "542935"
     end
   end
 
   # parse_bjobs_output
-  describe "Batch#parse_bsub_output" do
+  describe "Batch#parse_bjobs_output" do
     subject(:batch) { OodCore::Job::Adapters::Lsf::Batch.new() }
     let(:job_hash) {
     }
@@ -106,8 +106,28 @@ JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME 
        }])
     end
 
-    #TODO: no jobname and piped can have jobname eq to content of script
-    # it "should parse output for job with no jobname" do
-    # end
+    it "should parse output for piped script with no jobname" do
+      output = <<-OUTPUT
+JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME
+542945  efranz  DONE  short      foobar02.osc.edu compute013  #!/bin/bash;#;#BSUB -q short # queue;#BSUB -e myjob.%J.err;#BSUB -o myjob.%J.out; echo "Hello world, I am in $PWD";sleep 30;echo "Goodbye, world!" 03/31-19:24:57 default    000:00:00.03 2      32     9389 03/31-19:24:59 03/31-19:25:29
+OUTPUT
+      expect(batch.parse_bjobs_output(output)).to eq([{
+        id: "542945",
+        user: "efranz",
+        status: "DONE",
+        queue: "short",
+        from_host: "foobar02.osc.edu",
+        exec_host: "compute013",
+        name: "#!/bin/bash;#;#BSUB -q short # queue;#BSUB -e myjob.%J.err;#BSUB -o myjob.%J.out; echo \"Hello world, I am in $PWD\";sleep 30;echo \"Goodbye, world!\"",
+        submit_time: "03/31-19:24:57",
+        project: "default",
+        cpu_used: "000:00:00.03",
+        mem:"2",
+        swap:"32",
+        pids:"9389",
+        start_time: "03/31-19:24:59",
+        finish_time: "03/31-19:25:29"
+       }])
+    end
   end
 end

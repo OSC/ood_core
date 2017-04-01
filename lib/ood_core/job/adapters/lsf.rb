@@ -61,10 +61,20 @@ module OodCore
             # lines.first.split.count == 15 # titles JOBID, etc.
             # JOBID   USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME
             fields = [:id, :user, :status, :queue, :from_host, :exec_host, :name, :submit_time, :project, :cpu_used, :mem, :swap, :pids, :start_time, :finish_time]
+
             lines.drop(1).map{ |job|
+              # normally split would result in 15 items...
+              values = job.strip.split
+
+              # unless you pipe a script to bsub without a jobname
+              if(values.count > 15)
+                # FIXME: ugly hack assumes every other field except job name will never have spaces
+                values = values[0..5] + [values[6..-9].join(" ")] + values[-8..-1]
+              end
+
               # go through each line that is a job (excluding the header)
               # split the fields, and make a hash
-              Hash[fields.zip(job.split)].each_with_object({}) { |(k,v),o|
+              Hash[fields.zip(values)].each_with_object({}) { |(k,v),o|
                 # if the value == "-", replace it with nil
                 o[k] = (v == "-" ? nil : v)
               }
