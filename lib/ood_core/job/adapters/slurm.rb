@@ -79,7 +79,7 @@ module OodCore
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
-            lines.drop(2).each do |line|
+            lines.drop(2).map do |line|
               Hash[options.keys.zip(line.split(delim))]
             end
           end
