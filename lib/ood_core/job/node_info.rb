@@ -7,14 +7,14 @@ module OodCore
       attr_reader :name
 
       # The number of procs reserved on the given machine
-      # @return [Fixnum] number of procs
+      # @return [Fixnum, nil] number of procs
       attr_reader :procs
 
       # @param name [#to_s] node name
-      # @param procs [#to_i] number of procs
-      def initialize(name:, procs:, **_)
+      # @param procs [#to_i, nil] number of procs
+      def initialize(name:, procs: nil, **_)
         @name  = name.to_s
-        @procs = procs.to_i
+        @procs = procs && procs.to_i
       end
 
       # Convert object to hash
