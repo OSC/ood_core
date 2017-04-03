@@ -56,12 +56,9 @@ module OodCore
           afternotok = Array(afternotok).map(&:to_s)
           afterany   = Array(afterany).map(&:to_s)
 
-          #TODO: see example in torque.rb for separating options as:
-          # headers, dependencies, resources, environment vars, native args
+          args = []
 
-          params = []
-          #TODO:
-          #-clusters ?
+          # TODO: dependencies
 
           env = {
             #TODO:
@@ -71,11 +68,10 @@ module OodCore
             #
           }
 
-          cmd = bin.join("bsub").to_s
-          o, e, s = Open3.capture3(env, cmd, *params, stdin_data: script.content)
+          # Submit job
+          @batch.submit_string(script.content, args: args, env: env)
 
-          raise JobAdapterError, e unless s.success?
-          o.strip
+          #TODO: rescue Batch::Error
         end
 
         # Retrieve job info from the resource manager
