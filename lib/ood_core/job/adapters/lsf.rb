@@ -57,6 +57,7 @@ module OodCore
           afterany   = Array(afterany).map(&:to_s)
 
           args = []
+          args += ["-P", script.accounting_id] unless script.accounting_id.nil?
 
           # TODO: dependencies
 

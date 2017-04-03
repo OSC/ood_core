@@ -31,5 +31,11 @@ describe OodCore::Job::Adapters::Lsf do
 
       it { expect(batch).to have_received(:submit_string).with(content, args: [], env: {}) }
     end
+
+    context "with :accounting_id" do
+      before { adapter.submit(script: build_script(accounting_id: "my_account")) }
+
+      it { expect(batch).to have_received(:submit_string).with(content, args: ["-P", "my_account"], env: {}) }
+    end
   end
 end
