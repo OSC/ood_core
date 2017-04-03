@@ -2,7 +2,8 @@ require "spec_helper"
 require "ood_core/job/adapters/lsf"
 
 describe OodCore::Job::Adapters::Lsf do
-  subject(:adapter) { described_class.new({}) }
+  let(:batch) { double() }
+  subject(:adapter) { described_class.new(batch: batch) }
 
   it { is_expected.to respond_to(:submit).with(0).arguments.and_keywords(:script, :after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info).with(0).arguments.and_keywords(:id) }

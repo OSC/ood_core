@@ -12,13 +12,14 @@ module OodCore
       # @option config [#to_s] :bin ('') Path to lsf client binaries
       def self.build_lsf(config)
         c = config.to_h.symbolize_keys
-        Adapters::Lsf.new(c)
+        batch = Adapters::Lsf::Batch.new(bin: c.fetch(:bin, ""))
+        Adapters::Lsf.new(batch: batch)
       end
     end
 
     module Adapters
       class Lsf < Adapter
-        attr_reader :lib, :bin
+        attr_reader :batch
 
         require "ood_core/job/adapters/lsf/batch"
 
@@ -30,9 +31,8 @@ module OodCore
         # @option config [#to_s] :host The batch server host
         # @option config [#to_s] :lib ('') Path to lsf client libraries
         # @option config [#to_s] :bin ('') Path to lsf client binaries
-        def initialize(config)
-          @lib = Pathname.new(config.fetch(:lib, "").to_s)
-          @bin = Pathname.new(config.fetch(:bin, "").to_s)
+        def initialize(batch:)
+          @batch = batch
         end
 
         # Submit a job with the attributes defined in the job template instance
