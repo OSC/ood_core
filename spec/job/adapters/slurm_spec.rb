@@ -598,7 +598,7 @@ describe OodCore::Job::Adapters::Slurm do
     context "when job is in PR state" do
       let(:job_state) { "PR" }
 
-      it { is_expected.to be_completed }
+      it { is_expected.to be_suspended }
     end
 
     context "when job is in RV state" do

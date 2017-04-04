@@ -202,7 +202,7 @@ module OodCore
           'F'  => :completed,  # FAILED
           'NF' => :completed,  # NODE_FAIL
           'PD' => :queued,     # PENDING
-          'PR' => :completed,  # PREEMPTED
+          'PR' => :suspended,  # PREEMPTED
           'RV' => :completed,  # REVOKED
           'R'  => :running,    # RUNNING
           'SE' => :completed,  # SPECIAL_EXIT
