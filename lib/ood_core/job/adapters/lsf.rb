@@ -24,7 +24,18 @@ module OodCore
         require "ood_core/job/adapters/lsf/batch"
 
         STATE_MAP = {
-          'RUN' => :running
+          'RUN' => :running,
+          'PEND' => :queued,
+          'DONE' => :completed,
+          'EXIT' => :completed,
+
+          'PSUSP' => :queued_held, # supsended before job started, resumable via bresume
+          'USUSP' => :suspended, # suspended after job started, resumable via bresume
+          'SSUSP' => :suspended,
+
+          'WAIT' => :queued, # FIXME: not sure what else to do here
+          'ZOMBI' => :undetermined,
+          'UNKWN' => :undetermined
         }
 
         # @param opts [#to_h] the options defining this adapter
