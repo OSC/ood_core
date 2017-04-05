@@ -71,11 +71,11 @@ describe OodCore::Job::Adapters::Lsf do
   # when can find job and status is EXIT or DONE, status complete
   describe "#status and #info" do
     # TODO: do we create a complex mock?
-    let(:batch) { double(get_jobs: [running_job_hash]) }
+    let(:batch) { double(get_jobs: [job_hash]) }
 
     #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
     #as LSF::Batch support more attributes
-    let(:running_job_hash) {
+    let(:job_hash) {
       {
         id: "542935",
         user: "efranz",
@@ -98,6 +98,42 @@ describe OodCore::Job::Adapters::Lsf do
     describe "#status" do
       it "returns running status" do
         expect(adapter.status(id: "542935")).to eq(OodCore::Job::Status.new(state: :running))
+      end
+    end
+
+    describe "#info" do
+      it "returns running status with info attrs mapped" do
+        expect(adapter.info(id: "542935")).to eq(OodCore::Job::Info.new(
+            :id=>"542935",
+            :status=>OodCore::Job::Status.new(state: :running),
+
+            # TODO: add tests and implement getting the NodeInfo objects
+            # from the possible exec_host strings
+            :allocated_nodes=>[],
+
+            :submit_host=> job_hash[:from_host],
+            :job_name=>job_hash[:name],
+            :job_owner=>job_hash[:user],
+            :accounting_id=>job_hash[:project],
+
+            # TODO: possibly on exec_host in wideformat i.e. 15*compute076
+            :procs=>nil,
+
+            :queue_name=>job_hash[:queue],
+
+            # TODO: not sure yet exactly what how to determine
+            :wallclock_time=>nil,
+
+            # TODO: job_hash[:cpu_used] converted to proper format
+            :cpu_time=>nil,
+
+            # TODO: job_hash[:submit_time] i.e. "03/31-14:46:42", but without year...
+            # could use Time.now.year and then some calculation (if month is < now, its next year)
+            # :submission_time=>Time.parse("2017-03-31T10:09:44"),
+            :submission_time=>nil,
+            :dispatch_time=>nil,
+            :native=>job_hash
+        ))
       end
     end
   end

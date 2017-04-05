@@ -98,6 +98,31 @@ module OodCore
         def info(id: '')
           id = id.to_s
 
+          info_ary = batch.get_jobs(id: id).map { |v|
+            Info.new(
+              id: v[:id],
+              status: get_state(v[:status]),
+              allocated_nodes: [],
+              submit_host: v[:from_host],
+              job_name: v[:name],
+              job_owner: v[:user],
+              accounting_id: v[:project],
+              procs: nil,
+              queue_name: v[:queue],
+              wallclock_time: nil,
+              cpu_time: nil,
+              submission_time: nil,
+              dispatch_time: nil,
+              native: v
+            )
+          }
+
+          if id.empty?
+            info_ary
+          else
+            # TODO: handle job arrays
+            info_ary.first
+          end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
