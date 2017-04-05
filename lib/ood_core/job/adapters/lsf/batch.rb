@@ -99,7 +99,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   # @return [String] the id of the job that was created
   def submit_string(str, args: [], env: {})
     args = args.map(&:to_s)
-    parse_sbatch_response call("bsub", *args, env: env, stdin: str.to_s)
+    parse_bsub_output call("bsub", *args, env: env, stdin: str.to_s)
   end
 
   # helper method
