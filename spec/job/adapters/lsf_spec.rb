@@ -48,5 +48,11 @@ describe OodCore::Job::Adapters::Lsf do
 
       it { expect(batch).to have_received(:submit_string).with(content, args: ["-cwd", "/path/to/workdir"], env: {}) }
     end
+
+    context "with :job_name" do
+      before { adapter.submit(script: build_script(job_name: "my_job")) }
+
+      it { expect(batch).to have_received(:submit_string).with(content, args: ["-J", "my_job"], env: {}) }
+    end
   end
 end

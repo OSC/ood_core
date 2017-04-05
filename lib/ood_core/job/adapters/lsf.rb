@@ -59,6 +59,7 @@ module OodCore
           args = []
           args += ["-P", script.accounting_id] unless script.accounting_id.nil?
           args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
+          args += ["-J", script.job_name] unless script.job_name.nil?
 
           # TODO: dependencies
 
