@@ -24,7 +24,7 @@ module OodCore
         require "ood_core/job/adapters/lsf/batch"
 
         STATE_MAP = {
-           #TODO: map LSF states to queued, queued_held, running, etc.
+          'RUN' => :running
         }
 
         # @param opts [#to_h] the options defining this adapter
@@ -87,7 +87,8 @@ module OodCore
         def info(id: '')
           id = id.to_s
 
-          raise NotImplementedError, "subclass did not define #info"
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job status from resource manager
@@ -98,8 +99,13 @@ module OodCore
         # @return [Status] status of job
         def status(id:)
           id = id.to_s
-
-          raise NotImplementedError, "subclass did not define #status"
+          if job = batch.get_jobs(id: id).detect { |j| j[:id] }
+            Status.new(state: get_state(job[:status]))
+          else
+            Status.new(state: :completed)
+          end
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Put the submitted job on hold
@@ -134,6 +140,12 @@ module OodCore
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
+
+        private
+          # Determine state from LSF state code
+          def get_state(st)
+            STATE_MAP.fetch(st, :undetermined)
+          end
       end
     end
   end

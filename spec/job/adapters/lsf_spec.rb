@@ -63,4 +63,42 @@ describe OodCore::Job::Adapters::Lsf do
       end
     end
   end
+
+  # TODO: tests to add:
+  # queued job
+  # running job
+  # when can't find job, status complete
+  # when can find job and status is EXIT or DONE, status complete
+  describe "#status and #info" do
+    # TODO: do we create a complex mock?
+    let(:batch) { double(get_jobs: [running_job_hash]) }
+
+    #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
+    #as LSF::Batch support more attributes
+    let(:running_job_hash) {
+      {
+        id: "542935",
+        user: "efranz",
+        status: "RUN",
+        queue: "short",
+        from_host: "foobar02.osc.edu",
+        exec_host: "compute013",
+        name: "foo",
+        submit_time: "03/31-14:46:42",
+        project: "default",
+        cpu_used: "000:00:00.00",
+        mem:"2",
+        swap:"32",
+        pids:"25156",
+        start_time: "03/31-14:46:44",
+        finish_time: nil
+      }
+    }
+
+    describe "#status" do
+      it "returns running status" do
+        expect(adapter.status(id: "542935")).to eq(OodCore::Job::Status.new(state: :running))
+      end
+    end
+  end
 end
