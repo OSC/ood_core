@@ -37,5 +37,16 @@ describe OodCore::Job::Adapters::Lsf do
 
       it { expect(batch).to have_received(:submit_string).with(content, args: ["-P", "my_account"], env: {}) }
     end
+
+    context "with :workdir" do
+      before { adapter.submit(script: build_script(workdir: "/path/to/workdir")) }
+
+      #TODO: LSF 9+ support handle case where workdir is set to a string with dynamic parameters
+      #i.e. "/home/efranz/scratch/%J_%I" then make sure we don't need something like
+      #expect...with(content, args: ["-cwd", '"/home/efranz/scratch/%J_%I"'])
+      #notice the parenthesis being part of the command
+
+      it { expect(batch).to have_received(:submit_string).with(content, args: ["-cwd", "/path/to/workdir"], env: {}) }
+    end
   end
 end
