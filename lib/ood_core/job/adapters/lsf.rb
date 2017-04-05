@@ -7,8 +7,6 @@ module OodCore
 
       # Build the Lsf adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
-      # @option config [#to_s] :host The batch server host
-      # @option config [#to_s] :lib ('') Path to lsf client libraries
       # @option config [#to_s] :bin ('') Path to lsf client binaries
       def self.build_lsf(config)
         c = config.to_h.symbolize_keys
@@ -39,18 +37,16 @@ module OodCore
         }
 
         # @param opts [#to_h] the options defining this adapter
-        # @option config [#to_s] :host The batch server host
-        # @option config [#to_s] :lib ('') Path to lsf client libraries
-        # @option config [#to_s] :bin ('') Path to lsf client binaries
+        # @option opts [Batch] :batch The Lsf batch object
         def initialize(batch:)
           @batch = batch
         end
 
         # Submit a job with the attributes defined in the job template instance
-        # @param script [Script] script object that describes the
-        #   script and attributes for the submitted job
-        # @param after [#to_s, Array<#to_s>] this job may be scheduled for execution
-        #   at any point after dependent jobs have started execution
+        # @param script [Script] script object that describes the script and
+        #   attributes for the submitted job
+        # @param after [#to_s, Array<#to_s>] this job may be scheduled for
+        #   execution at any point after dependent jobs have started execution
         # @param afterok [#to_s, Array<#to_s>] this job may be scheduled for
         #   execution only after dependent jobs have terminated with no errors
         # @param afternotok [#to_s, Array<#to_s>] this job may be scheduled for
@@ -58,7 +54,8 @@ module OodCore
         # @param afterany [#to_s, Array<#to_s>] this job may be scheduled for
         #   execution after dependent jobs have terminated
         # @raise [JobAdapterError] if something goes wrong submitting a job
-        # @return [String] the job id returned after successfully submitting a job
+        # @return [String] the job id returned after successfully submitting a
+        #   job
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           # ensure dependencies are array of ids
@@ -89,7 +86,6 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
-
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job
         # @raise [JobAdapterError] if something goes wrong getting job info
@@ -108,10 +104,10 @@ module OodCore
         end
 
         # Retrieve job status from resource manager
-        # @abstract Subclass is expected to implement {#status}
-        # @raise [NotImplementedError] if subclass did not define {#status}
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong getting job status
         # @return [Status] status of job
+        # @see Adapter#status
         def status(id)
           # TODO: Optimize slightly over retrieving complete job information from server
           id = id.to_s
@@ -125,10 +121,10 @@ module OodCore
         end
 
         # Put the submitted job on hold
-        # @abstract Subclass is expected to implement {#hold}
-        # @raise [NotImplementedError] if subclass did not define {#hold}
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong holding a job
         # @return [void]
+        # @see Adapter#hold
         def hold(id)
           batch.hold_job(id.to_s)
         rescue Batch::Error => e
@@ -136,10 +132,10 @@ module OodCore
         end
 
         # Release the job that is on hold
-        # @abstract Subclass is expected to implement {#release}
-        # @raise [NotImplementedError] if subclass did not define {#release}
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong releasing a job
         # @return [void]
+        # @see Adapter#release
         def release(id)
           batch.release_job(id.to_s)
         rescue Batch::Error => e
@@ -147,10 +143,10 @@ module OodCore
         end
 
         # Delete the submitted job
-        # @abstract Subclass is expected to implement {#delete}
-        # @raise [NotImplementedError] if subclass did not define {#delete}
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong deleting a job
         # @return [void]
+        # @see Adapter#delete
         def delete(id)
           batch.delete_job(id.to_s)
         rescue Batch::Error => e
@@ -164,10 +160,7 @@ module OodCore
           end
 
           # Retrieve job info from the resource manager
-          # @abstract Subclass is expected to implement {#info}
-          # @raise [NotImplementedError] if subclass did not define {#info}
           # @param id [#to_s] the id of the job, otherwise get list of all jobs
-          #   running on cluster
           # @return [Info, Array<Info>] information describing submitted job
           def info_shared(id: '')
             # TODO: refactor away
