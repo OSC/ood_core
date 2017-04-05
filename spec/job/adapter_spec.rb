@@ -1,15 +1,16 @@
 require "spec_helper"
 
 describe OodCore::Job::Adapter do
-  it { is_expected.to respond_to(:submit).with(0).arguments.and_keywords(:script, :after, :afterok, :afternotok, :afterany) }
-  it { is_expected.to respond_to(:info).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:status).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:hold).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:release).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:delete).with(0).arguments.and_keywords(:id) }
+  it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
+  it { is_expected.to respond_to(:info_all).with(0).arguments }
+  it { is_expected.to respond_to(:info).with(1).argument }
+  it { is_expected.to respond_to(:status).with(1).argument }
+  it { is_expected.to respond_to(:hold).with(1).argument }
+  it { is_expected.to respond_to(:release).with(1).argument }
+  it { is_expected.to respond_to(:delete).with(1).argument }
 
   describe "#submit" do
-    context "when :script not defined" do
+    context "when script not defined" do
       it "raises ArgumentError" do
         expect { subject.submit }.to raise_error(ArgumentError)
       end
@@ -17,14 +18,26 @@ describe OodCore::Job::Adapter do
 
     context "when valid arguments" do
       it "raises NotImplementedError" do
-        expect { subject.submit script: "script" }.to raise_error(NotImplementedError)
+        expect { subject.submit "script" }.to raise_error(NotImplementedError)
       end
     end
   end
 
-  describe "#info" do
+  describe "#info_all" do
     it "raises NotImplementedError" do
-      expect { subject.info }.to raise_error(NotImplementedError)
+      expect { subject.info_all }.to raise_error(NotImplementedError)
+    end
+  end
+
+  describe "#info" do
+    context "when id not defined" do
+      it "raises ArgumentError" do
+        expect { subject.info }.to raise_error(ArgumentError)
+      end
+    end
+
+    it "raises NotImplementedError" do
+      expect { subject.info "id" }.to raise_error(NotImplementedError)
     end
   end
 
@@ -37,7 +50,7 @@ describe OodCore::Job::Adapter do
 
     context "when valid arguments" do
       it "raises NotImplementedError" do
-        expect { subject.status id: "id" }.to raise_error(NotImplementedError)
+        expect { subject.status "id" }.to raise_error(NotImplementedError)
       end
     end
   end
@@ -51,7 +64,7 @@ describe OodCore::Job::Adapter do
 
     context "when valid arguments" do
       it "raises NotImplementedError" do
-        expect { subject.hold id: "id" }.to raise_error(NotImplementedError)
+        expect { subject.hold "id" }.to raise_error(NotImplementedError)
       end
     end
   end
@@ -65,7 +78,7 @@ describe OodCore::Job::Adapter do
 
     context "when valid arguments" do
       it "raises NotImplementedError" do
-        expect { subject.release id: "id" }.to raise_error(NotImplementedError)
+        expect { subject.release "id" }.to raise_error(NotImplementedError)
       end
     end
   end
@@ -79,7 +92,7 @@ describe OodCore::Job::Adapter do
 
     context "when valid arguments" do
       it "raises NotImplementedError" do
-        expect { subject.delete id: "id" }.to raise_error(NotImplementedError)
+        expect { subject.delete "id" }.to raise_error(NotImplementedError)
       end
     end
   end
