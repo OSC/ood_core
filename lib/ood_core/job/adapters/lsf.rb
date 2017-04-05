@@ -74,7 +74,8 @@ module OodCore
           # Submit job
           @batch.submit_string(script.content, args: args, env: env)
 
-          #TODO: rescue Batch::Error
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job info from the resource manager

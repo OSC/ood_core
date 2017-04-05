@@ -54,5 +54,13 @@ describe OodCore::Job::Adapters::Lsf do
 
       it { expect(batch).to have_received(:submit_string).with(content, args: ["-J", "my_job"], env: {}) }
     end
+
+    context "when OodCore::Job::Adapters::Lsf::Batch::Error is raised" do
+      before { expect(batch).to receive(:submit_string).and_raise(OodCore::Job::Adapters::Lsf::Batch::Error) }
+
+      it "raises OodCore::JobAdapterError" do
+        expect { adapter.submit(script: build_script()) }.to raise_error(OodCore::JobAdapterError)
+      end
+    end
   end
 end
