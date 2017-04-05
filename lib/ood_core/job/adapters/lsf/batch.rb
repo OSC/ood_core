@@ -29,15 +29,17 @@ class OodCore::Job::Adapters::Lsf::Batch
   # @raise [Error] if `bjobs` command exited unsuccessfully
   # @return [Array<Hash>] list of details for jobs
   def get_jobs(id: "", filters: [])
+    id = id.to_s
     #TODO: does filters make sense here? regardless this is a speed enhancement
     # selected_fields = filters.empty? ? fields : (filters & fields)
     #TODO: split into get_all_jobs, get_my_jobs, get_job?
+    args = %w( -u all -a -w -W )
 
-    # or get_jobs with a list of ids
-    # because it will be faster to avoid parsing everything
-    # or for a list of ids, to get just the results of those ids
-    # maybe: get_jobs(ids = []) and then *(ids.map(&:to_s))
-    parse_bjobs_output call("bjobs -u all -a -w -W", id.to_s)
+    #TODO: get_jobs with a list of ids...
+    # get_jobs(ids = []) *(ids.map(&:to_s))
+    args << id unless id.empty?
+
+    parse_bjobs_output call("bjobs", *args)
   end
 
   # helper method
