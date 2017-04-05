@@ -60,7 +60,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong submitting a job
         # @return [String] the job id returned after successfully submitting a job
         # @see Adapter#submit
-        def submit(script:, after: [], afterok: [], afternotok: [], afterany: [])
+        def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           # ensure dependencies are array of ids
           after      = Array(after).map(&:to_s)
           afterok    = Array(afterok).map(&:to_s)
@@ -89,51 +89,31 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+
         # Retrieve job info from the resource manager
-        # @abstract Subclass is expected to implement {#info}
-        # @raise [NotImplementedError] if subclass did not define {#info}
-        # @param id [#to_s] the id of the job, otherwise get list of all jobs
-        #   running on cluster
-        # @return [Info, Array<Info>] information describing submitted job
-        def info(id: '')
-          id = id.to_s
+        # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Info] information describing submitted job
+        # @see Adapter#info
+        def info(id)
+          info_shared(id: id)
+        end
 
-          info_ary = batch.get_jobs(id: id).map { |v|
-            Info.new(
-              id: v[:id],
-              status: get_state(v[:status]),
-              allocated_nodes: [],
-              submit_host: v[:from_host],
-              job_name: v[:name],
-              job_owner: v[:user],
-              accounting_id: v[:project],
-              procs: nil,
-              queue_name: v[:queue],
-              wallclock_time: nil,
-              cpu_time: nil,
-              submission_time: nil,
-              dispatch_time: nil,
-              native: v
-            )
-          }
-
-          if id.empty?
-            info_ary
-          else
-            # TODO: handle job arrays
-            info_ary.first
-          end
-        rescue Batch::Error => e
-          raise JobAdapterError, e.message
+        # Retrieve info for all jobs from the resource manager
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Array<Info>] information describing submitted jobs
+        # @see Adapter#info_all
+        def info_all
+          info_shared
         end
 
         # Retrieve job status from resource manager
-        # @note Optimized slightly over retrieving complete job information from server
         # @abstract Subclass is expected to implement {#status}
         # @raise [NotImplementedError] if subclass did not define {#status}
         # @param id [#to_s] the id of the job
         # @return [Status] status of job
-        def status(id:)
+        def status(id)
+          # TODO: Optimize slightly over retrieving complete job information from server
           id = id.to_s
           if job = batch.get_jobs(id: id).detect { |j| j[:id] }
             Status.new(state: get_state(job[:status]))
@@ -149,7 +129,7 @@ module OodCore
         # @raise [NotImplementedError] if subclass did not define {#hold}
         # @param id [#to_s] the id of the job
         # @return [void]
-        def hold(id:)
+        def hold(id)
           batch.hold_job(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -160,7 +140,7 @@ module OodCore
         # @raise [NotImplementedError] if subclass did not define {#release}
         # @param id [#to_s] the id of the job
         # @return [void]
-        def release(id:)
+        def release(id)
           batch.release_job(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -171,7 +151,7 @@ module OodCore
         # @raise [NotImplementedError] if subclass did not define {#delete}
         # @param id [#to_s] the id of the job
         # @return [void]
-        def delete(id:)
+        def delete(id)
           batch.delete_job(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -181,6 +161,45 @@ module OodCore
           # Determine state from LSF state code
           def get_state(st)
             STATE_MAP.fetch(st, :undetermined)
+          end
+
+          # Retrieve job info from the resource manager
+          # @abstract Subclass is expected to implement {#info}
+          # @raise [NotImplementedError] if subclass did not define {#info}
+          # @param id [#to_s] the id of the job, otherwise get list of all jobs
+          #   running on cluster
+          # @return [Info, Array<Info>] information describing submitted job
+          def info_shared(id: '')
+            # TODO: refactor away
+            id = id.to_s
+
+            info_ary = batch.get_jobs(id: id).map { |v|
+              Info.new(
+                id: v[:id],
+                status: get_state(v[:status]),
+                allocated_nodes: [],
+                submit_host: v[:from_host],
+                job_name: v[:name],
+                job_owner: v[:user],
+                accounting_id: v[:project],
+                procs: nil,
+                queue_name: v[:queue],
+                wallclock_time: nil,
+                cpu_time: nil,
+                submission_time: nil,
+                dispatch_time: nil,
+                native: v
+              )
+            }
+
+            if id.empty?
+              info_ary
+            else
+              # TODO: handle job arrays
+              info_ary.first
+            end
+          rescue Batch::Error => e
+            raise JobAdapterError, e.message
           end
       end
     end
