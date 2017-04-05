@@ -79,11 +79,9 @@ module OodCore
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
-            jobs = []
-            lines.drop(2).each do |line|
-              jobs << Hash[options.keys.zip(line.split(delim))]
+            lines.drop(2).map do |line|
+              Hash[options.keys.zip(line.split(delim))]
             end
-            jobs
           end
 
           # Put a specified job on hold
@@ -204,7 +202,7 @@ module OodCore
           'F'  => :completed,  # FAILED
           'NF' => :completed,  # NODE_FAIL
           'PD' => :queued,     # PENDING
-          'PR' => :completed,  # PREEMPTED
+          'PR' => :suspended,  # PREEMPTED
           'RV' => :completed,  # REVOKED
           'R'  => :running,    # RUNNING
           'SE' => :completed,  # SPECIAL_EXIT
@@ -236,7 +234,7 @@ module OodCore
         # @return [String] the job id returned after successfully submitting a
         #   job
         # @see Adapter#submit
-        def submit(script:, after: [], afterok: [], afternotok: [], afterany: [])
+        def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           after      = Array(after).map(&:to_s)
           afterok    = Array(afterok).map(&:to_s)
           afternotok = Array(afternotok).map(&:to_s)
@@ -294,43 +292,35 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
-        # Retrieve job info from the resource manager
-        # @param id [#to_s] the id of the job, otherwise get list of all jobs
-        #   running on cluster
+        # Retrieve info for all jobs from the resource manager
         # @raise [JobAdapterError] if something goes wrong getting job info
-        # @return [Info, Array<Info>] information describing submitted job
+        # @return [Array<Info>] information describing submitted jobs
+        # @see Adapter#info_all
+        def info_all
+          @slurm.get_jobs.map do |v|
+            parse_job_info(v)
+          end
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
+        end
+
+        # Retrieve job info from the resource manager
+        # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Info] information describing submitted job
         # @see Adapter#info
-        def info(id: "")
+        def info(id)
           id = id.to_s
           info_ary = @slurm.get_jobs(id: id).map do |v|
-            allocated_nodes = parse_nodes(v[:node_list])
-            Info.new(
-              id: v[:job_id],
-              status: get_state(v[:state_compact]),
-              allocated_nodes: allocated_nodes,
-              submit_host: nil,
-              job_name: v[:job_name],
-              job_owner: v[:user],
-              accounting_id: v[:account],
-              procs: v[:cpus],
-              queue_name: v[:partition],
-              wallclock_time: duration_in_seconds(v[:time_used]),
-              cpu_time: nil,
-              submission_time: Time.parse(v[:submit_time]),
-              dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
-              native: v
-            )
+            parse_job_info(v)
           end
-          if !id.empty?
-            # A job id can return multiple jobs if it corresponds to a job
-            # array id, so we need to find the job that corresponds to the
-            # given job id (if we can't find it, we assume it has completed)
-            info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
-              # Match the job id or the formatted job & task id "1234_0"
-              info.id == id || info.native[:array_job_task_id] == id
-            end
-          else
-            info_ary
+
+          # A job id can return multiple jobs if it corresponds to a job
+          # array id, so we need to find the job that corresponds to the
+          # given job id (if we can't find it, we assume it has completed)
+          info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
+            # Match the job id or the formatted job & task id "1234_0"
+            info.id == id || info.native[:array_job_task_id] == id
           end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -341,7 +331,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job status
         # @return [Status] status of job
         # @see Adapter#status
-        def status(id:)
+        def status(id)
           id = id.to_s
           jobs = @slurm.get_jobs(
             id: id,
@@ -367,7 +357,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong holding a job
         # @return [void]
         # @see Adapter#hold
-        def hold(id:)
+        def hold(id)
           @slurm.hold_job(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -378,7 +368,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong releasing a job
         # @return [void]
         # @see Adapter#release
-        def release(id:)
+        def release(id)
           @slurm.release_job(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -389,7 +379,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong deleting a job
         # @return [void]
         # @see Adapter#delete
-        def delete(id:)
+        def delete(id)
           @slurm.delete_job(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -432,6 +422,27 @@ module OodCore
           # Determine state from Slurm state code
           def get_state(st)
             STATE_MAP.fetch(st, :undetermined)
+          end
+
+          # Parse hash describing Slurm job status
+          def parse_job_info(v)
+            allocated_nodes = parse_nodes(v[:node_list])
+            Info.new(
+              id: v[:job_id],
+              status: get_state(v[:state_compact]),
+              allocated_nodes: allocated_nodes,
+              submit_host: nil,
+              job_name: v[:job_name],
+              job_owner: v[:user],
+              accounting_id: v[:account],
+              procs: v[:cpus],
+              queue_name: v[:partition],
+              wallclock_time: duration_in_seconds(v[:time_used]),
+              cpu_time: nil,
+              submission_time: Time.parse(v[:submit_time]),
+              dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
+              native: v
+            )
           end
       end
     end

@@ -45,7 +45,11 @@ module OodCore
         # Whether this ACL allows the active user access based on their groups
         # @return [Boolean] whether principle is allowed
         def allow?
-          !( OodSupport::User.new.groups.map(&:to_s).any? { |g| @acl.allow?(principle: g) } ^ @allow )
+          if @allow
+            OodSupport::User.new.groups.map(&:to_s).any? { |g| @acl.allow?(principle: g) }
+          else
+            OodSupport::User.new.groups.map(&:to_s).none? { |g| @acl.allow?(principle: g) }
+          end
         end
       end
     end

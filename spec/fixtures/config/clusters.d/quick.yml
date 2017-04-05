@@ -18,16 +18,17 @@ v1:
 v2:
   metadata:
     title: "Quick"
-    private: true
+    url: ""
+    hidden: true
   job:
-    adapter: torque
+    adapter: "torque"
     host: "quick-batch.ten.osc.edu"
     lib: "/opt/torque/lib64"
     bin: "/opt/torque/bin"
-    version: 6
+    version: "6.0.2"
   custom:
     pbs:
       host: "quick-batch.ten.osc.edu"
       lib: "/opt/torque/lib64"
       bin: "/opt/torque/bin"
-      version: 6
+      version: "6.0.2"

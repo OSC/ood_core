@@ -8,12 +8,13 @@ describe OodCore::Job::Adapters::Slurm do
   # Subject
   subject(:adapter) { described_class.new(slurm: slurm) }
 
-  it { is_expected.to respond_to(:submit).with(0).arguments.and_keywords(:script, :after, :afterok, :afternotok, :afterany) }
-  it { is_expected.to respond_to(:info).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:status).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:hold).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:release).with(0).arguments.and_keywords(:id) }
-  it { is_expected.to respond_to(:delete).with(0).arguments.and_keywords(:id) }
+  it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
+  it { is_expected.to respond_to(:info_all).with(0).arguments }
+  it { is_expected.to respond_to(:info).with(1).argument }
+  it { is_expected.to respond_to(:status).with(1).argument }
+  it { is_expected.to respond_to(:hold).with(1).argument }
+  it { is_expected.to respond_to(:release).with(1).argument }
+  it { is_expected.to respond_to(:delete).with(1).argument }
 
   describe ".new" do
     context "when :slurm not defined" do
@@ -37,13 +38,13 @@ describe OodCore::Job::Adapters::Slurm do
     let(:slurm) { double(submit_string: "job.123") }
     let(:content) { "my batch script" }
 
-    context "when :script not defined" do
+    context "when script not defined" do
       it "raises ArgumentError" do
         expect { adapter.submit }.to raise_error(ArgumentError)
       end
     end
 
-    subject { adapter.submit(script: build_script) }
+    subject { adapter.submit(build_script) }
 
     it "returns job id" do
       is_expected.to eq("job.123")
@@ -51,26 +52,26 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "with :queue_name" do
-      before { adapter.submit(script: build_script(queue_name: "queue")) }
+      before { adapter.submit(build_script(queue_name: "queue")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-p", "queue"], env: {}) }
     end
 
     context "with :args" do
-      before { adapter.submit(script: build_script(args: ["arg1", "arg2"])) }
+      before { adapter.submit(build_script(args: ["arg1", "arg2"])) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
     end
 
     context "with :submit_as_hold" do
       context "as true" do
-        before { adapter.submit(script: build_script(submit_as_hold: true)) }
+        before { adapter.submit(build_script(submit_as_hold: true)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["-H"], env: {}) }
       end
 
       context "as false" do
-        before { adapter.submit(script: build_script(submit_as_hold: false)) }
+        before { adapter.submit(build_script(submit_as_hold: false)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
@@ -78,45 +79,45 @@ describe OodCore::Job::Adapters::Slurm do
 
     context "with :rerunnable" do
       context "as true" do
-        before { adapter.submit(script: build_script(rerunnable: true)) }
+        before { adapter.submit(build_script(rerunnable: true)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["--requeue"], env: {}) }
       end
 
       context "as false" do
-        before { adapter.submit(script: build_script(rerunnable: false)) }
+        before { adapter.submit(build_script(rerunnable: false)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["--no-requeue"], env: {}) }
       end
     end
 
     context "with :job_environment" do
-      before { adapter.submit(script: build_script(job_environment: {"key" => "value"})) }
+      before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--export", "key"], env: {"key" => "value"}) }
     end
 
     context "with :workdir" do
-      before { adapter.submit(script: build_script(workdir: "/path/to/workdir")) }
+      before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-D", "/path/to/workdir"], env: {}) }
     end
 
     context "with :email" do
-      before { adapter.submit(script: build_script(email: ["email1", "email2"])) }
+      before { adapter.submit(build_script(email: ["email1", "email2"])) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-user", "email1,email2"], env: {}) }
     end
 
     context "with :email_on_started" do
       context "as true" do
-        before { adapter.submit(script: build_script(email_on_started: true)) }
+        before { adapter.submit(build_script(email_on_started: true)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-type", "BEGIN"], env: {}) }
       end
 
       context "as false" do
-        before { adapter.submit(script: build_script(email_on_started: false)) }
+        before { adapter.submit(build_script(email_on_started: false)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
@@ -124,133 +125,133 @@ describe OodCore::Job::Adapters::Slurm do
 
     context "with :email_on_terminated" do
       context "as true" do
-        before { adapter.submit(script: build_script(email_on_terminated: true)) }
+        before { adapter.submit(build_script(email_on_terminated: true)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-type", "END"], env: {}) }
       end
 
       context "as false" do
-        before { adapter.submit(script: build_script(email_on_terminated: false)) }
+        before { adapter.submit(build_script(email_on_terminated: false)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
     end
 
     context "with :email_on_started and :email_on_terminated" do
-      before { adapter.submit(script: build_script(email_on_started: true, email_on_terminated: true)) }
+      before { adapter.submit(build_script(email_on_started: true, email_on_terminated: true)) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-type", "ALL"], env: {}) }
     end
 
     context "with :job_name" do
-      before { adapter.submit(script: build_script(job_name: "my_job")) }
+      before { adapter.submit(build_script(job_name: "my_job")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-J", "my_job"], env: {}) }
     end
 
     context "with :input_path" do
-      before { adapter.submit(script: build_script(input_path: "/path/to/input")) }
+      before { adapter.submit(build_script(input_path: "/path/to/input")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-i", Pathname.new("/path/to/input")], env: {}) }
     end
 
     context "with :output_path" do
-      before { adapter.submit(script: build_script(output_path: "/path/to/output")) }
+      before { adapter.submit(build_script(output_path: "/path/to/output")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-o", Pathname.new("/path/to/output")], env: {}) }
     end
 
     context "with :error_path" do
-      before { adapter.submit(script: build_script(error_path: "/path/to/error")) }
+      before { adapter.submit(build_script(error_path: "/path/to/error")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-e", Pathname.new("/path/to/error")], env: {}) }
     end
 
     context "with :join_files" do
       context "as true" do
-        before { adapter.submit(script: build_script(join_files: true)) }
+        before { adapter.submit(build_script(join_files: true)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
 
       context "as false" do
-        before { adapter.submit(script: build_script(join_files: false)) }
+        before { adapter.submit(build_script(join_files: false)) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
     end
 
     context "with :reservation_id" do
-      before { adapter.submit(script: build_script(reservation_id: "my_rsv")) }
+      before { adapter.submit(build_script(reservation_id: "my_rsv")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--reservation", "my_rsv"], env: {}) }
     end
 
     context "with :priority" do
-      before { adapter.submit(script: build_script(priority: 123)) }
+      before { adapter.submit(build_script(priority: 123)) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--priority", 123], env: {}) }
     end
 
     context "with :start_time" do
-      before { adapter.submit(script: build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
+      before { adapter.submit(build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--begin", "2016-11-08T13:53:54"], env: {}) }
     end
 
     context "with :accounting_id" do
-      before { adapter.submit(script: build_script(accounting_id: "my_account")) }
+      before { adapter.submit(build_script(accounting_id: "my_account")) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-A", "my_account"], env: {}) }
     end
 
     context "with :min_phys_memory" do
-      before { adapter.submit(script: build_script(min_phys_memory: 1234)) }
+      before { adapter.submit(build_script(min_phys_memory: 1234)) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mem", "1234K"], env: {}) }
     end
 
     context "with :wall_time" do
-      before { adapter.submit(script: build_script(wall_time: 94534)) }
+      before { adapter.submit(build_script(wall_time: 94534)) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-t", "26:15:34"], env: {}) }
     end
 
     context "with :nodes" do
       context "as single node name" do
-        before { adapter.submit(script: build_script(nodes: "node")) }
+        before { adapter.submit(build_script(nodes: "node")) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
 
       context "as single node request object" do
-        before { adapter.submit(script: build_script(nodes: {procs: 12, properties: ["prop1", "prop2"]})) }
+        before { adapter.submit(build_script(nodes: {procs: 12, properties: ["prop1", "prop2"]})) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
 
       context "as a list of nodes" do
-        before { adapter.submit(script: build_script(nodes: ["node1"] + [{procs: 12}]*4 + ["node2", {procs: 45, properties: "prop"}])) }
+        before { adapter.submit(build_script(nodes: ["node1"] + [{procs: 12}]*4 + ["node2", {procs: 45, properties: "prop"}])) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
       end
     end
 
     context "with :native" do
-      before { adapter.submit(script: build_script(native: ["A", "B", "C"])) }
+      before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["A", "B", "C"], env: {}) }
     end
 
     %i(after afterok afternotok afterany).each do |after|
       context "and :#{after} is defined as a single job id" do
-        before { adapter.submit(script: build_script, after => "job_id") }
+        before { adapter.submit(build_script, after => "job_id") }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["-d", "#{after}:job_id"], env: {}) }
       end
 
       context "and :#{after} is defined as multiple job ids" do
-        before { adapter.submit(script: build_script, after => ["job1", "job2"]) }
+        before { adapter.submit(build_script, after => ["job1", "job2"]) }
 
         it { expect(slurm).to have_received(:submit_string).with(content, args: ["-d", "#{after}:job1:job2"], env: {}) }
       end
@@ -265,21 +266,35 @@ describe OodCore::Job::Adapters::Slurm do
     end
   end
 
-  describe "#info" do
-    context "when :id is not defined" do
-      let(:slurm) { double(get_jobs: {}) }
-      subject { adapter.info }
+  describe "#info_all" do
+    let(:slurm) { double(get_jobs: {}) }
+    subject { adapter.info_all }
 
-      it "returns an array of all the jobs" do
-        is_expected.to eq([])
-        expect(slurm).to have_received(:get_jobs).with(id: "")
+    it "returns an array of all the jobs" do
+      is_expected.to eq([])
+      expect(slurm).to have_received(:get_jobs).with(no_args)
+    end
+
+    context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
+      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+
+      it "raises OodCore::JobAdapterError" do
+        expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+    end
+  end
+
+  describe "#info" do
+    context "when id is not defined" do
+      it "raises ArgumentError" do
+        expect { adapter.info }.to raise_error(ArgumentError)
       end
     end
 
     let(:job_id)   { "job_id" }
     let(:job_hash) { {} }
     let(:slurm)    { double(get_jobs: [job_hash]) }
-    subject { adapter.info(id: double(to_s: job_id)) }
+    subject { adapter.info(double(to_s: job_id)) }
 
     context "when job is not running" do
       let(:job_hash) {
@@ -340,14 +355,14 @@ describe OodCore::Job::Adapters::Slurm do
           :id=>job_id,
           :status=>:queued,
           :allocated_nodes=>[],
-          :submit_host=>"",
+          :submit_host=>nil,
           :job_name=>"jobname.err",
           :job_owner=>"u0549046",
           :accounting_id=>"mah-kp",
           :procs=>24,
           :queue_name=>"mah-kp",
           :wallclock_time=>0,
-          :cpu_time=>0,
+          :cpu_time=>nil,
           :submission_time=>Time.parse("2017-03-30T13:28:01"),
           :dispatch_time=>Time.parse("2017-04-01T22:13:03"),
           :native=>job_hash
@@ -414,29 +429,29 @@ describe OodCore::Job::Adapters::Slurm do
           :id=>job_id,
           :status=>:running,
           :allocated_nodes=>[
-            {:name=>"kp002", :procs=>0},
-            {:name=>"kp006", :procs=>0},
-            {:name=>"kp026", :procs=>0},
-            {:name=>"kp027", :procs=>0},
-            {:name=>"kp028", :procs=>0},
-            {:name=>"kp029", :procs=>0},
-            {:name=>"kp158", :procs=>0},
-            {:name=>"kp159", :procs=>0},
-            {:name=>"kp162", :procs=>0},
-            {:name=>"kp163", :procs=>0},
-            {:name=>"kp164", :procs=>0},
-            {:name=>"kp197", :procs=>0},
-            {:name=>"kp198", :procs=>0},
-            {:name=>"kp199", :procs=>0}
+            {:name=>"kp002", :procs=>nil},
+            {:name=>"kp006", :procs=>nil},
+            {:name=>"kp026", :procs=>nil},
+            {:name=>"kp027", :procs=>nil},
+            {:name=>"kp028", :procs=>nil},
+            {:name=>"kp029", :procs=>nil},
+            {:name=>"kp158", :procs=>nil},
+            {:name=>"kp159", :procs=>nil},
+            {:name=>"kp162", :procs=>nil},
+            {:name=>"kp163", :procs=>nil},
+            {:name=>"kp164", :procs=>nil},
+            {:name=>"kp197", :procs=>nil},
+            {:name=>"kp198", :procs=>nil},
+            {:name=>"kp199", :procs=>nil}
           ],
-          :submit_host=>"",
+          :submit_host=>nil,
           :job_name=>"big_CB7CB_330Knptall_modTD",
           :job_owner=>"u0135669",
           :accounting_id=>"hooper",
           :procs=>256,
           :queue_name=>"kingspeak",
           :wallclock_time=>80135,
-          :cpu_time=>0,
+          :cpu_time=>nil,
           :submission_time=>Time.parse("2017-03-29T13:51:05"),
           :dispatch_time=>Time.parse("2017-03-30T10:21:54"),
           :native=>job_hash
@@ -485,7 +500,7 @@ describe OodCore::Job::Adapters::Slurm do
             :accounting_id=>nil,
             :procs=>nil,
             :queue_name=>nil,
-            :wallclock_time=>nil,
+            :wallclock_time=>0,
             :cpu_time=>nil,
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
             :dispatch_time=>nil,
@@ -509,7 +524,7 @@ describe OodCore::Job::Adapters::Slurm do
             :accounting_id=>nil,
             :procs=>nil,
             :queue_name=>nil,
-            :wallclock_time=>nil,
+            :wallclock_time=>0,
             :cpu_time=>nil,
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
             :dispatch_time=>nil,
@@ -537,7 +552,7 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#status" do
-    context "when :id is not defined" do
+    context "when id is not defined" do
       it "raises ArgumentError" do
         expect { adapter.status }.to raise_error(ArgumentError)
       end
@@ -546,7 +561,7 @@ describe OodCore::Job::Adapters::Slurm do
     let(:job_state) { "" }
     let(:job_id)    { "job_id" }
     let(:slurm)     { double(get_jobs: [job_id: job_id, array_job_task_id: job_id, state_compact: job_state]) }
-    subject { adapter.status(id: double(to_s: job_id)) }
+    subject { adapter.status(double(to_s: job_id)) }
 
     it "request only job state from OodCore::Job::Adapters::Slurm::Batch" do
       subject
@@ -598,7 +613,7 @@ describe OodCore::Job::Adapters::Slurm do
     context "when job is in PR state" do
       let(:job_state) { "PR" }
 
-      it { is_expected.to be_completed }
+      it { is_expected.to be_suspended }
     end
 
     context "when job is in RV state" do
@@ -706,7 +721,7 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#hold" do
-    context "when :id is not defined" do
+    context "when id is not defined" do
       it "raises ArgumentError" do
         expect { adapter.hold }.to raise_error(ArgumentError)
       end
@@ -714,7 +729,7 @@ describe OodCore::Job::Adapters::Slurm do
 
     let(:job_id) { "job_id" }
     let(:slurm)  { double(hold_job: nil) }
-    subject { adapter.hold(id: double(to_s: job_id)) }
+    subject { adapter.hold(double(to_s: job_id)) }
 
     it "holds job using OodCore::Job::Adapters::Slurm::Batch" do
       subject
@@ -731,7 +746,7 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#release" do
-    context "when :id is not defined" do
+    context "when id is not defined" do
       it "raises ArgumentError" do
         expect { adapter.release }.to raise_error(ArgumentError)
       end
@@ -739,7 +754,7 @@ describe OodCore::Job::Adapters::Slurm do
 
     let(:job_id) { "job_id" }
     let(:slurm)  { double(release_job: nil) }
-    subject { adapter.release(id: double(to_s: job_id)) }
+    subject { adapter.release(double(to_s: job_id)) }
 
     it "releases job using OodCore::Job::Adapters::Slurm::Batch" do
       subject
@@ -756,7 +771,7 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#delete" do
-    context "when :id is not defined" do
+    context "when id is not defined" do
       it "raises ArgumentError" do
         expect { adapter.delete }.to raise_error(ArgumentError)
       end
@@ -764,7 +779,7 @@ describe OodCore::Job::Adapters::Slurm do
 
     let(:job_id) { "job_id" }
     let(:slurm)  { double(delete_job: nil) }
-    subject { adapter.delete(id: double(to_s: job_id)) }
+    subject { adapter.delete(double(to_s: job_id)) }
 
     it "deletes job using OodCore::Job::Adapters::Slurm::Batch" do
       subject

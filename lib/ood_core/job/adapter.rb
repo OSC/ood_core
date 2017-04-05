@@ -8,11 +8,11 @@ module OodCore
       # @abstract Subclass is expected to implement {#submit}
       # @raise [NotImplementedError] if subclass did not define {#submit}
       # @example Submit job template to cluster
-      #   solver_id = job_adapter.submit(script: solver_script)
+      #   solver_id = job_adapter.submit(solver_script)
       #   #=> "1234.server"
       # @example Submit job that depends on previous job
       #   post_id = job_adapter.submit(
-      #     script: post_script,
+      #     post_script,
       #     afterok: solver_id
       #   )
       #   #=> "1235.server"
@@ -27,17 +27,24 @@ module OodCore
       # @param afterany [#to_s, Array<#to_s>] this job may be scheduled for
       #   execution after dependent jobs have terminated
       # @return [String] the job id returned after successfully submitting a job
-      def submit(script:, after: [], afterok: [], afternotok: [], afterany: [])
+      def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
         raise NotImplementedError, "subclass did not define #submit"
+      end
+
+      # Retrieve info for all jobs from the resource manager
+      # @abstract Subclass is expected to implement {#info_all}
+      # @raise [NotImplementedError] if subclass did not define {#info_all}
+      # @return [Array<Info>] information describing submitted jobs
+      def info_all
+        raise NotImplementedError, "subclass did not define #info_all"
       end
 
       # Retrieve job info from the resource manager
       # @abstract Subclass is expected to implement {#info}
       # @raise [NotImplementedError] if subclass did not define {#info}
-      # @param id [#to_s] the id of the job, otherwise get list of all jobs
-      #   running on cluster
-      # @return [Info, Array<Info>] information describing submitted job
-      def info(id: '')
+      # @param id [#to_s] the id of the job
+      # @return [Info] information describing submitted job
+      def info(id)
         raise NotImplementedError, "subclass did not define #info"
       end
 
@@ -47,7 +54,7 @@ module OodCore
       # @raise [NotImplementedError] if subclass did not define {#status}
       # @param id [#to_s] the id of the job
       # @return [Status] status of job
-      def status(id:)
+      def status(id)
         raise NotImplementedError, "subclass did not define #status"
       end
 
@@ -56,7 +63,7 @@ module OodCore
       # @raise [NotImplementedError] if subclass did not define {#hold}
       # @param id [#to_s] the id of the job
       # @return [void]
-      def hold(id:)
+      def hold(id)
         raise NotImplementedError, "subclass did not define #hold"
       end
 
@@ -65,7 +72,7 @@ module OodCore
       # @raise [NotImplementedError] if subclass did not define {#release}
       # @param id [#to_s] the id of the job
       # @return [void]
-      def release(id:)
+      def release(id)
         raise NotImplementedError, "subclass did not define #release"
       end
 
@@ -74,7 +81,7 @@ module OodCore
       # @raise [NotImplementedError] if subclass did not define {#delete}
       # @param id [#to_s] the id of the job
       # @return [void]
-      def delete(id:)
+      def delete(id)
         raise NotImplementedError, "subclass did not define #delete"
       end
     end

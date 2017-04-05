@@ -57,44 +57,46 @@ v2:
   metadata:
     title: "Ruby"
     url: "https://www.osc.edu/supercomputing/computing/ruby"
+    hidden: false
+  acls:
+    - adapter: "group"
+      groups:
+        - "ruby"
+      type: "whitelist"
   login:
     host: "ruby.osc.edu"
   job:
-    adapter: torque
+    adapter: "torque"
     host: "ruby-batch.osc.edu"
     lib: "/opt/torque/lib64"
     bin: "/opt/torque/bin"
-    version: 6
-  acls:
-    -
-      adapter: group
-      groups: ["ruby"]
-      type: whitelist
+    version: "6.0.1"
   custom:
     pbs:
       host: "ruby-batch.osc.edu"
       lib: "/opt/torque/lib64"
       bin: "/opt/torque/bin"
-      version: 6
+      version: "6.0.1"
     moab:
       host: "ruby-batch.osc.edu"
       bin: "/opt/moab/bin"
+      version: "9.0.1"
       homedir: "/var/spool/moab"
-      version: 9
     rsv_query:
       torque_host: "ruby-batch.osc.edu"
       torque_lib: "/opt/torque/lib64"
       torque_bin: "/opt/torque/bin"
-      torque_version: 6
+      torque_version: "6.0.1"
       moab_host: "ruby-batch.osc.edu"
       moab_bin: "/opt/moab/bin"
+      moab_version: "9.0.1"
       moab_homedir: "/var/spool/moab"
-      moab_version: 9
       acls:
-        -
-          adapter: group
-          groups: ["sysp", "hpcsoft"]
-          type: blacklist
+        - adapter: "group"
+          groups:
+            - "sysp"
+            - "hpcsoft"
+          type: "blacklist"
     ganglia:
       host: "cts05.osc.edu"
       scheme: "https://"
@@ -105,4 +107,4 @@ v2:
         c: "Ruby"
       opt_query:
         h: "%{h}.ten.osc.edu"
-      version: 3
+      version: "3"

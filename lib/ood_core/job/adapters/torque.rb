@@ -62,7 +62,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong submitting a job
         # @return [String] the job id returned after successfully submitting a job
         # @see Adapter#submit
-        def submit(script:, after: [], afterok: [], afternotok: [], afterany: [])
+        def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           after      = Array(after).map(&:to_s)
           afterok    = Array(afterok).map(&:to_s)
           afternotok = Array(afternotok).map(&:to_s)
@@ -124,35 +124,26 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
-        # Retrieve job info from the resource manager
-        # @param id [#to_s] the id of the job, otherwise get list of all jobs
-        #   running on cluster
+        # Retrieve info for all jobs from the resource manager
         # @raise [JobAdapterError] if something goes wrong getting job info
-        # @return [Info, Array<Info>] information describing submitted job
-        # @see Adapter#info
-        def info(id: '')
-          id = id.to_s
-          info_ary = @pbs.get_jobs(id: id).map do |k, v|
-            /^(?<job_owner>[\w-]+)@/ =~ v[:Job_Owner]
-            allocated_nodes = parse_nodes(v[:exec_host] || "")
-            Info.new(
-              id: k,
-              status: STATE_MAP.fetch(v[:job_state], :undetermined),
-              allocated_nodes: allocated_nodes,
-              submit_host: v[:submit_host],
-              job_name: v[:Job_Name],
-              job_owner: job_owner,
-              accounting_id: v[:Account_Name],
-              procs: allocated_nodes.inject(0) { |sum, x| sum + x[:procs] },
-              queue_name: v[:queue],
-              wallclock_time: duration_in_seconds(v.fetch(:resources_used, {})[:walltime]),
-              cpu_time: duration_in_seconds(v.fetch(:resources_used, {})[:cput]),
-              submission_time: v[:ctime],
-              dispatch_time: v[:start_time],
-              native: v
-            )
+        # @return [Array<Info>] information describing submitted jobs
+        # @see Adapter#info_all
+        def info_all
+          @pbs.get_jobs.map do |k, v|
+            parse_job_info(k, v)
           end
-          id.empty? ? info_ary : info_ary.first
+        rescue PBS::Error => e
+          raise JobAdapterError, e.message
+        end
+
+        # Retrieve job info from the resource manager
+        # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Info] information describing submitted job
+        # @see Adapter#info
+        def info(id)
+          id = id.to_s
+          parse_job_info(*@pbs.get_job(id).flatten)
         rescue PBS::UnkjobidError
           # set completed status if can't find job id
           Info.new(
@@ -168,7 +159,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job status
         # @return [Status] status of job
         # @see Adapter#status
-        def status(id:)
+        def status(id)
           id = id.to_s
           char = @pbs.get_job(id, filters: [:job_state])[id][:job_state]
           Status.new(state: STATE_MAP.fetch(char, :undetermined))
@@ -184,7 +175,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong holding a job
         # @return [void]
         # @see Adapter#hold
-        def hold(id:)
+        def hold(id)
           @pbs.hold_job(id.to_s)
         rescue PBS::UnkjobidError
           # assume successful job hold if can't find job id
@@ -198,7 +189,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong releasing a job
         # @return [void]
         # @see Adapter#release
-        def release(id:)
+        def release(id)
           @pbs.release_job(id.to_s)
         rescue PBS::UnkjobidError
           # assume successful job release if can't find job id
@@ -212,7 +203,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong deleting a job
         # @return [void]
         # @see Adapter#delete
-        def delete(id:)
+        def delete(id)
           @pbs.delete_job(id.to_s)
         rescue PBS::UnkjobidError, PBS::BadstateError
           # assume successful job deletion if can't find job id
@@ -252,6 +243,28 @@ module OodCore
             str += ":ppn=#{node.procs}" if node.procs
             str += ":#{node.properties.join(':')}" if node.properties
             str
+          end
+
+          # Parse hash describing PBS job status
+          def parse_job_info(k, v)
+            /^(?<job_owner>[\w-]+)@/ =~ v[:Job_Owner]
+            allocated_nodes = parse_nodes(v[:exec_host] || "")
+            Info.new(
+              id: k,
+              status: STATE_MAP.fetch(v[:job_state], :undetermined),
+              allocated_nodes: allocated_nodes,
+              submit_host: v[:submit_host],
+              job_name: v[:Job_Name],
+              job_owner: job_owner,
+              accounting_id: v[:Account_Name],
+              procs: allocated_nodes.inject(0) { |sum, x| sum + x[:procs] },
+              queue_name: v[:queue],
+              wallclock_time: duration_in_seconds(v.fetch(:resources_used, {})[:walltime]),
+              cpu_time: duration_in_seconds(v.fetch(:resources_used, {})[:cput]),
+              submission_time: v[:ctime],
+              dispatch_time: v[:start_time],
+              native: v
+            )
           end
       end
     end

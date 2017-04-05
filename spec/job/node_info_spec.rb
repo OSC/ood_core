@@ -29,14 +29,6 @@ describe OodCore::Job::NodeInfo do
         expect { subject }.to raise_error(ArgumentError)
       end
     end
-
-    context "when :status not defined" do
-      subject { described_class.new(name: name) }
-
-      it "raises ArgumentError" do
-        expect { subject }.to raise_error(ArgumentError)
-      end
-    end
   end
 
   describe "#name" do
