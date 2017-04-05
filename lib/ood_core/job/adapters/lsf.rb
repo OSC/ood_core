@@ -72,7 +72,7 @@ module OodCore
           }
 
           # Submit job
-          @batch.submit_string(script.content, args: args, env: env)
+          batch.submit_string(script.content, args: args, env: env)
 
         rescue Batch::Error => e
           raise JobAdapterError, e.message
