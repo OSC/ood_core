@@ -108,9 +108,9 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [void]
         def hold(id:)
-          id = id.to_s
-
-          raise NotImplementedError, "subclass did not define #hold"
+          batch.hold_job(id.to_s)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Release the job that is on hold
@@ -119,9 +119,9 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [void]
         def release(id:)
-          id = id.to_s
-
-          raise NotImplementedError, "subclass did not define #release"
+          batch.release_job(id.to_s)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Delete the submitted job
@@ -130,9 +130,9 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [void]
         def delete(id:)
-          id = id.to_s
-
-          raise NotImplementedError, "subclass did not define #delete"
+          batch.delete_job(id.to_s)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
       end
     end
