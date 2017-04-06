@@ -125,15 +125,10 @@ OUTPUT
     end
   end
 
-#FIXME: this test was an attempt to capture the error where
-# bjobs -u all -a -w -W "" would result in an invalid job id error
-# because "" is not a valid job id
-#
-# however, the expectations don't match, even when making call
-# a public instead of private method
-#  describe "#get_jobs" do
-#    it "gets all jobs when id not specified" do
-#      expect(batch).to receive(:call).with("bjobs","-u","all","-a","-w","-W")
-#    end
-#  end
+  describe "#get_jobs" do
+    it "calls bjobs with default args when id not specified" do
+      expect(batch).to receive(:call).with("bjobs", *batch.bjobs_default_args)
+      batch.get_jobs
+    end
+  end
 end

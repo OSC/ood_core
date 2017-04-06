@@ -33,13 +33,17 @@ class OodCore::Job::Adapters::Lsf::Batch
     #TODO: does filters make sense here? regardless this is a speed enhancement
     # selected_fields = filters.empty? ? fields : (filters & fields)
     #TODO: split into get_all_jobs, get_my_jobs, get_job?
-    args = %w( -u all -a -w -W )
+    args = bjobs_default_args
 
     #TODO: get_jobs with a list of ids...
     # get_jobs(ids = []) *(ids.map(&:to_s))
     args << id unless id.empty?
 
     parse_bjobs_output call("bjobs", *args)
+  end
+
+  def bjobs_default_args
+    %w( -u all -a -w -W )
   end
 
   # helper method
