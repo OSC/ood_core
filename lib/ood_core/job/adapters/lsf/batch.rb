@@ -44,7 +44,7 @@ class OodCore::Job::Adapters::Lsf::Batch
 
   # helper method
   def parse_bjobs_output(response)
-    return [{}] if response =~ /No job found/
+    return [{}] if response =~ /No job found/ || response.nil?
 
     lines = response.split("\n")
     validate_bjobs_output_columns(lines.first.split)
