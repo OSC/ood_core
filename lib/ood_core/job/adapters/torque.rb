@@ -40,8 +40,10 @@ module OodCore
           'C' => :completed
         }
 
+        # @api private
         # @param opts [#to_h] the options defining this adapter
         # @option opts [PBS::Batch] :pbs The PBS batch object
+        # @see Factory.build_torque
         def initialize(opts = {})
           o = opts.to_h.symbolize_keys
 
