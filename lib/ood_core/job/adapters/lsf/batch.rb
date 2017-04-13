@@ -128,7 +128,7 @@ class OodCore::Job::Adapters::Lsf::Batch
     def call(cmd, *args, env: {}, stdin: "")
       cmd = bindir.join(cmd.to_s).to_s
       #TODO: args = ["-m", cluster] + args.map(&:to_s)
-      env = env.to_h
+      env = default_env.merge(env.to_h)
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
       s.success? ? o : raise(Error, e)
     end
