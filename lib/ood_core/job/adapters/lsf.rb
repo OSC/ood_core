@@ -94,7 +94,20 @@ module OodCore
         # @return [Info] information describing submitted job
         # @see Adapter#info
         def info(id)
-          info_shared(id: id)
+          id = id.to_s
+
+          info_ary = batch.get_jobs(id: id).map { |v|
+            info_for_batch_hash(v)
+          }
+
+          if id.empty?
+            info_ary
+          else
+            # TODO: handle job arrays
+            info_ary.first
+          end
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve info for all jobs from the resource manager
@@ -102,7 +115,20 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all
-          info_shared
+          id = id.to_s
+
+          info_ary = batch.get_jobs(id: id).map { |v|
+            info_for_batch_hash(v)
+          }
+
+          if id.empty?
+            info_ary
+          else
+            # TODO: handle job arrays
+            info_ary.first
+          end
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job status from resource manager
@@ -178,27 +204,6 @@ module OodCore
               dispatch_time: nil,
               native: v
             )
-          end
-
-          # Retrieve job info from the resource manager
-          # @param id [#to_s] the id of the job, otherwise get list of all jobs
-          # @return [Info, Array<Info>] information describing submitted job
-          def info_shared(id: '')
-            # TODO: refactor away
-            id = id.to_s
-
-            info_ary = batch.get_jobs(id: id).map { |v|
-              info_for_batch_hash(v)
-            }
-
-            if id.empty?
-              info_ary
-            else
-              # TODO: handle job arrays
-              info_ary.first
-            end
-          rescue Batch::Error => e
-            raise JobAdapterError, e.message
           end
       end
     end
