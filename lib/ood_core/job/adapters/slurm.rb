@@ -26,6 +26,7 @@ module OodCore
         using Refinements::HashExtensions
 
         # Object used for simplified communication with a Slurm batch server
+        # @api private
         class Batch
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
@@ -211,8 +212,10 @@ module OodCore
           'TO' => :completed   # TIMEOUT
         }
 
+        # @api private
         # @param opts [#to_h] the options defining this adapter
         # @option opts [Batch] :slurm The Slurm batch object
+        # @see Factory.build_slurm
         def initialize(opts = {})
           o = opts.to_h.symbolize_keys
 

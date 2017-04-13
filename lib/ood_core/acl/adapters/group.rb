@@ -33,9 +33,11 @@ module OodCore
       class Group < Adapter
         using Refinements::HashExtensions
 
+        # @api private
         # @param opts [#to_h] the options defining this adapter
         # @option opts [OodSupport::ACL] :acl The ACL permission
         # @option opts [Boolean] :allow (true) Whether this ACL allows access
+        # @see Factory.build_group
         def initialize(opts)
           o = opts.to_h.symbolize_keys
           @acl = o.fetch(:acl) { raise ArgumentError, "No acl specified. Missing argument: acl" }
