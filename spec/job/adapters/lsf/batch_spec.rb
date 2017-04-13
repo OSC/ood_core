@@ -6,8 +6,6 @@ describe OodCore::Job::Adapters::Lsf::Batch do
 
   #TODO: consider using contexts http://betterspecs.org/#contexts
   describe "#parse_bsub_output" do
-    subject(:batch) { OodCore::Job::Adapters::Lsf::Batch.new() }
-
     # parse bsubmit output
     it "should correctly parse bsub output" do
       expect(batch.parse_bsub_output "Job <542935> is submitted to queue <short>.\n").to eq "542935"
@@ -15,8 +13,6 @@ describe OodCore::Job::Adapters::Lsf::Batch do
   end
 
   describe "#parse_bjobs_output" do
-    subject(:batch) { OodCore::Job::Adapters::Lsf::Batch.new() }
-
     it "handles nil" do
       expect(batch.parse_bjobs_output nil).to eq [{}]
     end
