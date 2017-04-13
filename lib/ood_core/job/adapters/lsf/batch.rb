@@ -37,7 +37,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   def get_jobs
     #TODO: split into get_all_jobs, get_my_jobs
     args = bjobs_default_args
-    parse_bjobs_output call("bjobs", *args)
+    parse_bjobs_output(call("bjobs", *args))
   end
 
   # Get hash detailing the specified job
@@ -47,7 +47,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   def get_job(id:)
     args = bjobs_default_args
     args << id.to_s
-    parse_bjobs_output call("bjobs", *args).first
+    parse_bjobs_output(call("bjobs", *args)).first
   end
 
   def bjobs_default_args
