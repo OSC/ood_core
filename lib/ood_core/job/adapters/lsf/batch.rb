@@ -3,9 +3,9 @@
 # @note Used by Lsf adapter and not meant to be used directly.
 # @private
 class OodCore::Job::Adapters::Lsf::Batch
-  # TODO:
-  # attr_reader :cluster
   attr_reader :bindir, :libdir, :envdir, :serverdir
+
+  # @todo: attr_reader :cluster
 
   # The root exception class that all LSF-specific exceptions inherit
   # from
