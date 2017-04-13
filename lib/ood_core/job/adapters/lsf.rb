@@ -19,6 +19,7 @@ module OodCore
 
     module Adapters
       class Lsf < Adapter
+        # @api private
         attr_reader :batch
 
         require "ood_core/job/adapters/lsf/batch"
@@ -40,6 +41,9 @@ module OodCore
 
         # @param opts [#to_h] the options defining this adapter
         # @option opts [Batch] :batch The Lsf batch object
+        #
+        # @api private
+        # @see Factory.build_lsf
         def initialize(batch:)
           @batch = batch
         end

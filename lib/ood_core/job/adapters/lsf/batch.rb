@@ -1,7 +1,6 @@
 # Object used for simplified communication with a LSF batch server
 #
-# @note Used by Lsf adapter and not meant to be used directly.
-# @private
+# @api private
 class OodCore::Job::Adapters::Lsf::Batch
   attr_reader :bindir, :libdir, :envdir, :serverdir
 
