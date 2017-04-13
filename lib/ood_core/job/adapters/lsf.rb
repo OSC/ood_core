@@ -95,7 +95,8 @@ module OodCore
         # @see Adapter#info
         def info(id)
           # TODO: handle job arrays
-          batch.get_jobs(id: id).map { |v| info_for_batch_hash(v) }.first
+          job = batch.get_job(id: id)
+          job ? info_for_batch_hash(job) : nil
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
