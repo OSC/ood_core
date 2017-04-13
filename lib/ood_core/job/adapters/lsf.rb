@@ -94,18 +94,8 @@ module OodCore
         # @return [Info] information describing submitted job
         # @see Adapter#info
         def info(id)
-          id = id.to_s
-
-          info_ary = batch.get_jobs(id: id).map { |v|
-            info_for_batch_hash(v)
-          }
-
-          if id.empty?
-            info_ary
-          else
-            # TODO: handle job arrays
-            info_ary.first
-          end
+          # TODO: handle job arrays
+          batch.get_jobs(id: id).map { |v| info_for_batch_hash(v) }.first
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
@@ -115,18 +105,7 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all
-          id = id.to_s
-
-          info_ary = batch.get_jobs(id: id).map { |v|
-            info_for_batch_hash(v)
-          }
-
-          if id.empty?
-            info_ary
-          else
-            # TODO: handle job arrays
-            info_ary.first
-          end
+          batch.get_jobs.map { |v| info_for_batch_hash(v) }
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
