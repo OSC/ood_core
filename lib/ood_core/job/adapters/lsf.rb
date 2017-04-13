@@ -116,13 +116,9 @@ module OodCore
         # @return [Status] status of job
         # @see Adapter#status
         def status(id)
-          # TODO: Optimize slightly over retrieving complete job information from server
-          id = id.to_s
-          if job = batch.get_jobs(id: id).detect { |j| j[:id] }
-            Status.new(state: get_state(job[:status]))
-          else
-            Status.new(state: :completed)
-          end
+          job = batch.get_job(id: id)
+          state = job ? get_state(job[:status]) : :completed
+          Status.new(state: state)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end

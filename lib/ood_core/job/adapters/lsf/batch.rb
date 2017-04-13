@@ -50,6 +50,16 @@ class OodCore::Job::Adapters::Lsf::Batch
     parse_bjobs_output call("bjobs", *args)
   end
 
+  # Get hash detailing the specified job
+  # @param id [#to_s] the id of the job to check
+  # @raise [Error] if `bjobs` command exited unsuccessfully
+  # @return [Hash] details of specified job
+  def get_job(id:)
+    args = bjobs_default_args
+    args << id.to_s
+    parse_bjobs_output call("bjobs", *args).first
+  end
+
   def bjobs_default_args
     %w( -u all -a -w -W )
   end

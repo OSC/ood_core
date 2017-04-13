@@ -74,7 +74,7 @@ describe OodCore::Job::Adapters::Lsf do
   # when can find job and status is EXIT or DONE, status complete
   describe "#status and #info" do
     # TODO: do we create a complex mock?
-    let(:batch) { double(get_jobs: [job_hash]) }
+    let(:batch) { double(get_jobs: [job_hash], get_job: job_hash) }
 
     #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
     #as LSF::Batch support more attributes
