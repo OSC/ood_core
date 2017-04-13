@@ -161,6 +161,25 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
+          def info_for_batch_hash(v)
+            Info.new(
+              id: v[:id],
+              status: get_state(v[:status]),
+              allocated_nodes: [],
+              submit_host: v[:from_host],
+              job_name: v[:name],
+              job_owner: v[:user],
+              accounting_id: v[:project],
+              procs: nil,
+              queue_name: v[:queue],
+              wallclock_time: nil,
+              cpu_time: nil,
+              submission_time: nil,
+              dispatch_time: nil,
+              native: v
+            )
+          end
+
           # Retrieve job info from the resource manager
           # @param id [#to_s] the id of the job, otherwise get list of all jobs
           # @return [Info, Array<Info>] information describing submitted job
@@ -169,22 +188,7 @@ module OodCore
             id = id.to_s
 
             info_ary = batch.get_jobs(id: id).map { |v|
-              Info.new(
-                id: v[:id],
-                status: get_state(v[:status]),
-                allocated_nodes: [],
-                submit_host: v[:from_host],
-                job_name: v[:name],
-                job_owner: v[:user],
-                accounting_id: v[:project],
-                procs: nil,
-                queue_name: v[:queue],
-                wallclock_time: nil,
-                cpu_time: nil,
-                submission_time: nil,
-                dispatch_time: nil,
-                native: v
-              )
+              info_for_batch_hash(v)
             }
 
             if id.empty?
