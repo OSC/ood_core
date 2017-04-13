@@ -7,10 +7,12 @@ module OodCore
 
       # Build the Lsf adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
-      # @option config [#to_s] :bin ('') Path to lsf client binaries
+      # @option config [#to_s] :bindir ('') Path to lsf client bin dir
+      # @option config [#to_s] :libdir ('') Path to lsf client lib dir
+      # @option config [#to_s] :envdir ('') Path to lsf client conf dir
+      # @option config [#to_s] :serverdir ('') Path to lsf client etc dir
       def self.build_lsf(config)
-        c = config.to_h.symbolize_keys
-        batch = Adapters::Lsf::Batch.new(bin: c.fetch(:bin, ""))
+        batch = Adapters::Lsf::Batch.new(config.to_h.symbolize_keys)
         Adapters::Lsf.new(batch: batch)
       end
     end

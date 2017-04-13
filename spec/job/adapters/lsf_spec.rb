@@ -150,4 +150,24 @@ describe OodCore::Job::Adapters::Lsf do
       end
     end
   end
+
+  describe ".build_lsf" do
+    it "builds an adapter for config" do
+      adapter = OodCore::Job::Factory.build_lsf(
+        bindir: "/opt/lsf/8.3/bin",
+        libdir: "/opt/lsf/8.3/lib",
+        envdir: "/opt/lsf/conf",
+        serverdir: "/opt/lsf/8.3/etc"
+      )
+
+      expect(adapter.batch.default_env).to eq(
+        {
+          "LSF_BINDIR" => "/opt/lsf/8.3/bin",
+          "LSF_LIBDIR" => "/opt/lsf/8.3/lib",
+          "LSF_ENVDIR" =>"/opt/lsf/conf",
+          "LSF_SERVERDIR" =>"/opt/lsf/8.3/etc"
+        }
+      )
+    end
+  end
 end

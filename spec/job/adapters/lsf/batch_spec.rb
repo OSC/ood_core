@@ -131,4 +131,43 @@ OUTPUT
       batch.get_jobs
     end
   end
+
+  describe "#default_env" do
+    subject(:batch) { described_class.new(config).default_env }
+
+    context "when {}" do
+      let(:config) { {}  }
+      it { is_expected.to eq({}) }
+    end
+
+    context "when bindir set" do
+      let(:config) { { bindir: "/opt/lsf/8.3/bin" } }
+      it { is_expected.to eq({"LSF_BINDIR" => "/opt/lsf/8.3/bin"}) }
+    end
+
+    context "when envdir set" do
+      let(:config) { { envdir: "/opt/lsf/conf" } }
+      it { is_expected.to eq({"LSF_ENVDIR" => "/opt/lsf/conf"}) }
+    end
+
+    context "when bindir, libdir, envdir, and serverdir set" do
+      let(:config) {
+        {
+          bindir: "/opt/lsf/8.3/bin",
+          libdir: "/opt/lsf/8.3/lib",
+          envdir: "/opt/lsf/conf",
+          serverdir: "/opt/lsf/8.3/etc"
+        }
+      }
+
+      it { is_expected.to eq(
+        {
+          "LSF_BINDIR" => "/opt/lsf/8.3/bin",
+          "LSF_LIBDIR" => "/opt/lsf/8.3/lib",
+          "LSF_ENVDIR" =>"/opt/lsf/conf",
+          "LSF_SERVERDIR" =>"/opt/lsf/8.3/etc"
+        }
+      )}
+    end
+  end
 end

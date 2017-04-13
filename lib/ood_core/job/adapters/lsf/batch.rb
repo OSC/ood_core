@@ -5,12 +5,7 @@
 class OodCore::Job::Adapters::Lsf::Batch
   # TODO:
   # attr_reader :cluster
-
-  # The path to the LSF client installation binaries
-  # @example For LSF 8.3
-  #   my_batch.bin.to_s #=> "/opt/lsf/8.3/linux2.6-glibc2.3-x86_64/bin"
-  # @return [Pathname] path to LSF binaries
-  attr_reader :bin
+  attr_reader :bindir, :libdir, :envdir, :serverdir
 
   # The root exception class that all LSF-specific exceptions inherit
   # from
@@ -18,9 +13,22 @@ class OodCore::Job::Adapters::Lsf::Batch
 
   # @param cluster [#to_s] the cluster name
   # @param bin [#to_s] path to LSF installation binaries
-  def initialize(bin: "")
+  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "")
     # TODO: @cluster = cluster.to_s
-    @bin     = Pathname.new(bin.to_s)
+    @bindir = Pathname.new(bindir.to_s)
+
+    @envdir = Pathname.new(envdir.to_s)
+    @libdir = Pathname.new(libdir.to_s)
+    @serverdir = Pathname.new(serverdir.to_s)
+  end
+
+  def default_env
+    {
+      "LSF_BINDIR" => bindir.to_s,
+      "LSF_LIBDIR" => libdir.to_s,
+      "LSF_ENVDIR" => envdir.to_s,
+      "LSF_SERVERDIR" => serverdir.to_s
+    }.reject {|k,v| v.nil? || v.empty? }
   end
 
   # Get a list of hashes detailing each of the jobs on the batch server
@@ -118,7 +126,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   private
     # Call a forked Lsf command for a given cluster
     def call(cmd, *args, env: {}, stdin: "")
-      cmd = bin.join(cmd.to_s).to_s
+      cmd = bindir.join(cmd.to_s).to_s
       #TODO: args = ["-m", cluster] + args.map(&:to_s)
       env = env.to_h
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
