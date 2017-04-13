@@ -32,21 +32,11 @@ class OodCore::Job::Adapters::Lsf::Batch
   end
 
   # Get a list of hashes detailing each of the jobs on the batch server
-  # @param id [#to_s] the id of the job to check (if just checking one job)
-  # @param filters [Array<Symbol>] list of attributes to filter on
   # @raise [Error] if `bjobs` command exited unsuccessfully
   # @return [Array<Hash>] list of details for jobs
-  def get_jobs(id: "", filters: [])
-    id = id.to_s
-    #TODO: does filters make sense here? regardless this is a speed enhancement
-    # selected_fields = filters.empty? ? fields : (filters & fields)
-    #TODO: split into get_all_jobs, get_my_jobs, get_job?
+  def get_jobs
+    #TODO: split into get_all_jobs, get_my_jobs
     args = bjobs_default_args
-
-    #TODO: get_jobs with a list of ids...
-    # get_jobs(ids = []) *(ids.map(&:to_s))
-    args << id unless id.empty?
-
     parse_bjobs_output call("bjobs", *args)
   end
 
