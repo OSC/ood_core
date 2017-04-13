@@ -13,7 +13,7 @@ class OodCore::Job::Adapters::Lsf::Batch
 
   # @param cluster [#to_s] the cluster name
   # @param bin [#to_s] path to LSF installation binaries
-  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "")
+  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", **_)
     # TODO: @cluster = cluster.to_s
     @bindir = Pathname.new(bindir.to_s)
 

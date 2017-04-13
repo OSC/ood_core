@@ -154,6 +154,7 @@ describe OodCore::Job::Adapters::Lsf do
   describe ".build_lsf" do
     it "builds an adapter for config" do
       adapter = OodCore::Job::Factory.build_lsf(
+        adapter: "lsf",
         bindir: "/opt/lsf/8.3/bin",
         libdir: "/opt/lsf/8.3/lib",
         envdir: "/opt/lsf/conf",
