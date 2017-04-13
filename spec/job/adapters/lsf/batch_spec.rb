@@ -14,11 +14,11 @@ describe OodCore::Job::Adapters::Lsf::Batch do
 
   describe "#parse_bjobs_output" do
     it "handles nil" do
-      expect(batch.parse_bjobs_output nil).to eq [{}]
+      expect(batch.parse_bjobs_output nil).to eq []
     end
 
     it "handles no jobs in output" do
-      expect(batch.parse_bjobs_output "No job found\n").to eq [{}]
+      expect(batch.parse_bjobs_output "No job found\n").to eq []
     end
 
     it "raises exception for unexpected columns" do
