@@ -73,7 +73,7 @@ module OodCore
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [])
-            delim = ";"     # don't use "|" because FEATURES uses this
+            delim = "\x1F"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
