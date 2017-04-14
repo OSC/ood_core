@@ -327,7 +327,15 @@ module OodCore
             info.id == id || info.native[:array_job_task_id] == id
           end
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # set completed status if can't find job id
+          if /Invalid job id specified/ =~ e.message
+            Info.new(
+              id: id,
+              status: :completed
+            )
+          else
+            raise JobAdapterError, e.message
+          end
         end
 
         # Retrieve job status from resource manager
@@ -353,7 +361,12 @@ module OodCore
             Status.new(state: :completed)
           end
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # set completed status if can't find job id
+          if /Invalid job id specified/ =~ e.message
+            Status.new(state: :completed)
+          else
+            raise JobAdapterError, e.message
+          end
         end
 
         # Put the submitted job on hold
@@ -364,7 +377,8 @@ module OodCore
         def hold(id)
           @slurm.hold_job(id.to_s)
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # assume successful job hold if can't find job id
+          raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
         # Release the job that is on hold
@@ -375,7 +389,8 @@ module OodCore
         def release(id)
           @slurm.release_job(id.to_s)
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # assume successful job release if can't find job id
+          raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
         # Delete the submitted job
@@ -386,7 +401,8 @@ module OodCore
         def delete(id)
           @slurm.delete_job(id.to_s)
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # assume successful job deletion if can't find job id
+          raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
         private
