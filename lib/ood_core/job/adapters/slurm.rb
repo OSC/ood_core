@@ -8,11 +8,11 @@ module OodCore
 
       # Build the Slurm adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
-      # @option config [#to_s] :host The cluster to communicate with
+      # @option config [#to_s] :cluster ('') The cluster to communicate with
       # @option config [#to_s] :bin ('') Path to slurm client binaries
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
-        cluster = c.fetch(:cluster) { raise ArgumentError, "No cluster specified. Missing argument: cluster" }.to_s
+        cluster = c.fetch(:cluster, "").to_s
         bin  = c.fetch(:bin, "").to_s
         slurm = Adapters::Slurm::Batch.new(cluster: cluster, bin: bin)
         Adapters::Slurm.new(slurm: slurm)
@@ -46,7 +46,7 @@ module OodCore
 
           # @param cluster [#to_s] the cluster name
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster:, bin: "")
+          def initialize(cluster: "", bin: "")
             @cluster = cluster.to_s
             @bin     = Pathname.new(bin.to_s)
           end
@@ -80,7 +80,7 @@ module OodCore
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
-            lines.drop(2).map do |line|
+            lines.drop(cluster.empty? ? 1 : 2).map do |line|
               Hash[options.keys.zip(line.split(delim))]
             end
           end
@@ -131,7 +131,8 @@ module OodCore
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = bin.join(cmd.to_s).to_s
-              args = ["-M", cluster] + args.map(&:to_s)
+              args  = args.map(&:to_s)
+              args += ["-M", cluster] unless cluster.empty?
               env = env.to_h
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
