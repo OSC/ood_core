@@ -8,11 +8,11 @@ module OodCore
 
       # Build the Slurm adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
-      # @option config [#to_s] :host The cluster to communicate with
+      # @option config [#to_s] :cluster ('') The cluster to communicate with
       # @option config [#to_s] :bin ('') Path to slurm client binaries
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
-        cluster = c.fetch(:cluster) { raise ArgumentError, "No cluster specified. Missing argument: cluster" }.to_s
+        cluster = c.fetch(:cluster, "").to_s
         bin  = c.fetch(:bin, "").to_s
         slurm = Adapters::Slurm::Batch.new(cluster: cluster, bin: bin)
         Adapters::Slurm.new(slurm: slurm)
@@ -46,7 +46,7 @@ module OodCore
 
           # @param cluster [#to_s] the cluster name
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster:, bin: "")
+          def initialize(cluster: "", bin: "")
             @cluster = cluster.to_s
             @bin     = Pathname.new(bin.to_s)
           end
@@ -73,14 +73,14 @@ module OodCore
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [])
-            delim = ";"     # don't use "|" because FEATURES uses this
+            delim = "\x1F"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
-            lines.drop(2).map do |line|
+            lines.drop(cluster.empty? ? 1 : 2).map do |line|
               Hash[options.keys.zip(line.split(delim))]
             end
           end
@@ -131,7 +131,8 @@ module OodCore
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = bin.join(cmd.to_s).to_s
-              args = ["-M", cluster] + args.map(&:to_s)
+              args  = args.map(&:to_s)
+              args += ["-M", cluster] unless cluster.empty?
               env = env.to_h
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
@@ -326,7 +327,15 @@ module OodCore
             info.id == id || info.native[:array_job_task_id] == id
           end
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # set completed status if can't find job id
+          if /Invalid job id specified/ =~ e.message
+            Info.new(
+              id: id,
+              status: :completed
+            )
+          else
+            raise JobAdapterError, e.message
+          end
         end
 
         # Retrieve job status from resource manager
@@ -352,7 +361,12 @@ module OodCore
             Status.new(state: :completed)
           end
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # set completed status if can't find job id
+          if /Invalid job id specified/ =~ e.message
+            Status.new(state: :completed)
+          else
+            raise JobAdapterError, e.message
+          end
         end
 
         # Put the submitted job on hold
@@ -363,7 +377,8 @@ module OodCore
         def hold(id)
           @slurm.hold_job(id.to_s)
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # assume successful job hold if can't find job id
+          raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
         # Release the job that is on hold
@@ -374,7 +389,8 @@ module OodCore
         def release(id)
           @slurm.release_job(id.to_s)
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # assume successful job release if can't find job id
+          raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
         # Delete the submitted job
@@ -385,7 +401,8 @@ module OodCore
         def delete(id)
           @slurm.delete_job(id.to_s)
         rescue Batch::Error => e
-          raise JobAdapterError, e.message
+          # assume successful job deletion if can't find job id
+          raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
         private

@@ -543,10 +543,19 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+      let(:msg) { "random error" }
+      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error, msg) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+
+      context "due to invalid job id" do
+        let(:msg) { "slurm_load_jobs error: Invalid job id specified\n" }
+
+        it "returns completed OodCore::Job::Info object" do
+          is_expected.to eq(OodCore::Job::Info.new(id: job_id, status: :completed))
+        end
       end
     end
   end
@@ -712,10 +721,17 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+      let(:msg) { "random error" }
+      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error, msg) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+
+      context "due to invalid job id" do
+        let(:msg) { "slurm_load_jobs error: Invalid job id specified\n" }
+
+        it { is_expected.to be_completed }
       end
     end
   end
@@ -737,10 +753,17 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:hold_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+      let(:msg) { "random error" }
+      before { expect(slurm).to receive(:hold_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error, msg) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+
+      context "due to invalid job id" do
+        let(:msg) { "slurm_hold_job error: Invalid job id specified\n" }
+
+        it { is_expected.to be_nil }
       end
     end
   end
@@ -762,10 +785,17 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:release_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+      let(:msg) { "random error" }
+      before { expect(slurm).to receive(:release_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error, msg) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+
+      context "due to invalid job id" do
+        let(:msg) { "slurm_release_job error: Invalid job id specified\n" }
+
+        it { is_expected.to be_nil }
       end
     end
   end
@@ -787,10 +817,17 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:delete_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+      let(:msg) { "random error" }
+      before { expect(slurm).to receive(:delete_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error, msg) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+
+      context "due to invalid job id" do
+        let(:msg) { "slurm_delete_job error: Invalid job id specified\n" }
+
+        it { is_expected.to be_nil }
       end
     end
   end
