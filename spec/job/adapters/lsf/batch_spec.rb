@@ -1,5 +1,6 @@
 require "ood_core/job/adapters/lsf"
 require "ood_core/job/adapters/lsf/batch"
+require "timecop"
 
 describe OodCore::Job::Adapters::Lsf::Batch do
   subject(:batch) { described_class.new() }
@@ -167,11 +168,23 @@ OUTPUT
     end
   end
 
-  describe '#parse_time' do
+  describe '#parse_past_time' do
     it "converts time using current year" do
+      # FIXME: from 01 - 02/21 these will fail as being detected from "last year" use timecop to fix
+      # by firstchanging month to after now and then adding timecop
       year = Time.now.year
-      expect(batch.parse_time("03/31-14:46:42")).to eq(Time.local(year, 3, 31, 14, 46, 42))
-      expect(batch.parse_time("02/31-12:46:42")).to eq(Time.local(year, 2, 31, 12, 46, 42))
+      expect(batch.parse_past_time("03/31-14:46:42")).to eq(Time.local(year, 3, 31, 14, 46, 42))
+      expect(batch.parse_past_time("02/31-12:46:42")).to eq(Time.local(year, 2, 31, 12, 46, 42))
+    end
+
+    it "handles times from previous year" do
+      now = Time.local(2017, 01, 10)
+      Timecop.freeze(now)
+      expect(Time.now).to eq(now)
+
+      expect(batch.parse_past_time("12/27-12:22:22")).to eq(Time.local(2016, 12, 27, 12, 22, 22))
+
+      Timecop.return
     end
   end
 end
