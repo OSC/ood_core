@@ -170,11 +170,13 @@ OUTPUT
 
   describe '#parse_past_time' do
     it "converts time using current year" do
-      # FIXME: from 01 - 02/21 these will fail as being detected from "last year" use timecop to fix
-      # by firstchanging month to after now and then adding timecop
+      Timecop.freeze(Time.local(2017, 07, 01))
+
       year = Time.now.year
-      expect(batch.parse_past_time("03/31-14:46:42")).to eq(Time.local(year, 3, 31, 14, 46, 42))
-      expect(batch.parse_past_time("02/31-12:46:42")).to eq(Time.local(year, 2, 31, 12, 46, 42))
+      expect(batch.parse_past_time("06/31-14:46:42")).to eq(Time.local(year, 6, 31, 14, 46, 42))
+      expect(batch.parse_past_time("05/31-12:46:42")).to eq(Time.local(year, 5, 31, 12, 46, 42))
+
+      Timecop.return
     end
 
     it "handles times from previous year" do
