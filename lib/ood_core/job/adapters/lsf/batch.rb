@@ -4,16 +4,12 @@
 class OodCore::Job::Adapters::Lsf::Batch
   attr_reader :bindir, :libdir, :envdir, :serverdir
 
-  # @todo: attr_reader :cluster
-
   # The root exception class that all LSF-specific exceptions inherit
   # from
   class Error < StandardError; end
 
-  # @param cluster [#to_s] the cluster name
   # @param bin [#to_s] path to LSF installation binaries
   def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", **_)
-    # TODO: @cluster = cluster.to_s
     @bindir = Pathname.new(bindir.to_s)
 
     @envdir = Pathname.new(envdir.to_s)
