@@ -124,6 +124,12 @@ class OodCore::Job::Adapters::Lsf::Batch
     end
   end
 
+  # convert string in format "03/31-14:46:42" to Time object
+  def parse_time(t)
+    year = Time.now.year
+    Time.parse("#{year}/#{t}")
+  end
+
   private
     # Call a forked Lsf command for a given cluster
     def call(cmd, *args, env: {}, stdin: "")

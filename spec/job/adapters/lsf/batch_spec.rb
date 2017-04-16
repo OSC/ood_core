@@ -166,4 +166,12 @@ OUTPUT
       )}
     end
   end
+
+  describe '#parse_time' do
+    it "converts time using current year" do
+      year = Time.now.year
+      expect(batch.parse_time("03/31-14:46:42")).to eq(Time.local(year, 3, 31, 14, 46, 42))
+      expect(batch.parse_time("02/31-12:46:42")).to eq(Time.local(year, 2, 31, 12, 46, 42))
+    end
+  end
 end
