@@ -73,6 +73,9 @@ describe OodCore::Job::Adapters::Lsf do
   # when can't find job, status complete
   # when can find job and status is EXIT or DONE, status complete
   describe "#status and #info" do
+    let(:year) { 2017 }
+    before { allow(Time).to receive(:now)  { Time.local(year, 04, 01) } }
+
     # TODO: do we create a complex mock?
     let(:batch) { double(get_jobs: [job_hash], get_job: job_hash) }
 
@@ -122,12 +125,8 @@ describe OodCore::Job::Adapters::Lsf do
 
             # TODO: job_hash[:cpu_used] converted to proper format
             :cpu_time=>nil,
-
-            # TODO: job_hash[:submit_time] i.e. "03/31-14:46:42", but without year...
-            # could use Time.now.year and then some calculation (if month is < now, its next year)
-            # :submission_time=>Time.parse("2017-03-31T10:09:44"),
-            :submission_time=>nil,
-            :dispatch_time=>nil,
+            :submission_time=>Time.local(year, 3, 31, 14, 46, 42),
+            :dispatch_time=>Time.local(year, 3, 31, 14, 46, 44),
             :native=>job_hash
         )
     }

@@ -20,9 +20,10 @@ module OodCore
     module Adapters
       class Lsf < Adapter
         # @api private
-        attr_reader :batch
+        attr_reader :batch, :helper
 
         require "ood_core/job/adapters/lsf/batch"
+        require "ood_core/job/adapters/lsf/helper"
 
         STATE_MAP = {
           'RUN' => :running,
@@ -46,6 +47,7 @@ module OodCore
         # @see Factory.build_lsf
         def initialize(batch:)
           @batch = batch
+          @helper = Lsf::Helper.new
         end
 
         # Submit a job with the attributes defined in the job template instance
@@ -180,8 +182,8 @@ module OodCore
               queue_name: v[:queue],
               wallclock_time: nil,
               cpu_time: nil,
-              submission_time: nil,
-              dispatch_time: nil,
+              submission_time: helper.parse_past_time(v[:submit_time], ignore_errors: true),
+              dispatch_time: helper.parse_past_time(v[:start_time], ignore_errors: true),
               native: v
             )
           end
