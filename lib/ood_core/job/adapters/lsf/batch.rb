@@ -128,6 +128,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   # assumes time being parsed is a time that ocurred in the past
   # not to be used for parsing times in the future (like estimated FINISH_TIME)
   def parse_past_time(t)
+    return nil if t.nil? || t.empty? || t == "-"
     year = Time.now.year
     time = Time.parse("#{year}/#{t}")
 

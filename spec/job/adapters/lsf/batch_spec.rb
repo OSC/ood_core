@@ -188,5 +188,17 @@ OUTPUT
 
       Timecop.return
     end
+
+    context "with nil" do
+      it { expect(batch.parse_past_time(nil)).to eq(nil) }
+    end
+
+    context "with '-'" do
+      it { expect(batch.parse_past_time("-")).to eq(nil) }
+    end
+
+    context "with ''" do
+      it { expect(batch.parse_past_time("")).to eq(nil) }
+    end
   end
 end
