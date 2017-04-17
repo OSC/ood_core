@@ -104,7 +104,7 @@ describe OodCore::Job::Adapters::Lsf do
             :status=>OodCore::Job::Status.new(state: :running),
 
             # TODO: add tests and implement getting the NodeInfo objects
-            # from the possible exec_host strings
+            # from the possible exec_host string list i.e. 15*compute076
             :allocated_nodes=>[],
 
             :submit_host=> job_hash[:from_host],
@@ -112,7 +112,7 @@ describe OodCore::Job::Adapters::Lsf do
             :job_owner=>job_hash[:user],
             :accounting_id=>job_hash[:project],
 
-            # TODO: possibly on exec_host in wideformat i.e. 15*compute076
+            # TODO: add up all slots of slots*nodes
             :procs=>nil,
 
             :queue_name=>job_hash[:queue],
