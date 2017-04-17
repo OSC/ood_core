@@ -200,5 +200,15 @@ OUTPUT
     context "with ''" do
       it { expect(batch.parse_past_time("")).to eq(nil) }
     end
+
+    context "with unparsable string raise ArgumentError" do
+      it "raises ArgumentError" do
+        expect { batch.parse_past_time("something not parsable") }.to raise_error(ArgumentError)
+      end
+
+      it "returns nil if ignore_errors:true" do
+        expect(batch.parse_past_time("something not parsable", ignore_errors: true)).to eq(nil)
+      end
+    end
   end
 end
