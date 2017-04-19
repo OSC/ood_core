@@ -8,7 +8,6 @@ module OodCore
   # A namespace for job access
   module Job
     require "ood_core/job/node_info"
-    require "ood_core/job/node_request"
     require "ood_core/job/script"
     require "ood_core/job/info"
     require "ood_core/job/status"

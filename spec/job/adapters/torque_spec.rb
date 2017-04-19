@@ -217,26 +217,6 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {walltime: "26:15:34"}, envvars: {}) }
     end
 
-    context "with :nodes" do
-      context "as single node name" do
-        before { adapter.submit(build_script(nodes: "node")) }
-
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {nodes: "node"}, envvars: {}) }
-      end
-
-      context "as single node request object" do
-        before { adapter.submit(build_script(nodes: {procs: 12, properties: ["prop1", "prop2"]})) }
-
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {nodes: "1:ppn=12:prop1:prop2"}, envvars: {}) }
-      end
-
-      context "as a list of nodes" do
-        before { adapter.submit(build_script(nodes: ["node1"] + [{procs: 12}]*4 + ["node2", {procs: 45, properties: "prop"}])) }
-
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {nodes: "node1+4:ppn=12+node2+1:ppn=45:prop"}, envvars: {}) }
-      end
-    end
-
     context "with :native" do
       context "with :headers" do
         before { adapter.submit(build_script(native: {headers: {check: "this"}})) }

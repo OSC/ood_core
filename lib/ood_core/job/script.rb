@@ -100,24 +100,6 @@ module OodCore
       # @return [String, nil] accounting id
       attr_reader :accounting_id
 
-      # Node or list of nodes detailing the specifications the job should run on
-      # @example Job to run on a list of defined nodes
-      #   my_script.nodes
-      #   #=> ["n0001", "n0002", "n0003"]
-      # @example Job to run on 2 nodes with 12 procs per node
-      #   my_script.nodes
-      #   #=> [
-      #   #     #<OodCore::Job::NodeRequest procs=12, properties={}>,
-      #   #     #<OodCore::Job::NodeRequest procs=12, properties={}>
-      #   #   ]
-      # @example Create job script that will run on 100 nodes with 20 procs per node
-      #   OodCore::Job::Script.new(
-      #     script: Pathname.new('/path/to/script'),
-      #     nodes: [OodCore::Job::NodeRequest.new(procs: 20)] * 100
-      #   )
-      # @return [Array<String, NodeRequest>, nil] list of nodes
-      attr_reader :nodes
-
       # Object detailing any native specifications that are implementation specific
       # @note Should not be used at all costs.
       # @return [Object, nil] native specifications
@@ -144,7 +126,6 @@ module OodCore
       # @param start_time [#to_i, nil] eligible start time
       # @param wall_time [#to_i, nil] max real time
       # @param accounting_id [#to_s, nil] accounting id
-      # @param nodes [#to_h, #to_s, Array<#to_h, #to_s>, nil] list of nodes
       # @param native [Object, nil] native specifications
       def initialize(content:, args: nil, submit_as_hold: nil, rerunnable: nil,
                      job_environment: nil, workdir: nil, email: nil,
@@ -152,7 +133,7 @@ module OodCore
                      input_path: nil, output_path: nil, error_path: nil,
                      join_files: nil, reservation_id: nil, queue_name: nil,
                      priority: nil, min_phys_memory: nil, start_time: nil,
-                     wall_time: nil, accounting_id: nil, nodes: nil, native: nil,
+                     wall_time: nil, accounting_id: nil, native: nil,
                      **_)
         @content = content.to_s
 
@@ -177,7 +158,6 @@ module OodCore
         @start_time       = start_time      && Time.at(start_time.to_i)
         @wall_time        = wall_time       && wall_time.to_i
         @accounting_id    = accounting_id   && accounting_id.to_s
-        @nodes            = nodes           && Array.wrap(nodes).map { |n| n.respond_to?(:to_h) ? NodeRequest.new(n.to_h) : n.to_s }
         @native           = native
       end
 
@@ -206,7 +186,6 @@ module OodCore
           start_time:          start_time,
           wall_time:           wall_time,
           accounting_id:       accounting_id,
-          nodes:               nodes,
           native:              native
         }
       end
