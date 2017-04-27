@@ -1,8 +1,10 @@
 ## Unreleased
 
+## 0.0.2 (2017-04-27)
+
 Features:
 
-  - not supporting the `OodCore::Job::NodeRequest` object so it is removed
+  - removed the `OodCore::Job::NodeRequest` object
 
 ## 0.0.1 (2017-04-17)
 
