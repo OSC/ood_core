@@ -36,7 +36,6 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:start_time) }
   it { is_expected.to respond_to(:wall_time) }
   it { is_expected.to respond_to(:accounting_id) }
-  it { is_expected.to respond_to(:nodes) }
   it { is_expected.to respond_to(:native) }
   it { is_expected.to respond_to(:to_h) }
 
@@ -184,27 +183,6 @@ describe OodCore::Job::Script do
     it { is_expected.to eq("my_account") }
   end
 
-  describe "#nodes" do
-    context "when it is a single object that responds to #to_s" do
-      subject { build_script(nodes: double(to_s: "node")).nodes }
-
-      it { is_expected.to eq(["node"]) }
-    end
-
-    context "when it is a single object that responds to #to_h" do
-      subject { build_script(nodes: double(to_h: {procs: 1, properties: ["prop"]})).nodes }
-
-      it { is_expected.to eq([OodCore::Job::NodeRequest.new(procs: 1, properties: ["prop"])]) }
-    end
-
-    context "when it is an array of objects" do
-      let(:args) { super().merge nodes: ['node1', {procs: 1, properties: ['prop1']}] }
-      subject { build_script(nodes: [double(to_s: "node"), double(to_h: {procs: 1, properties: ["prop"]})]).nodes }
-
-      it { is_expected.to eq(["node", OodCore::Job::NodeRequest.new(procs: 1, properties: ["prop"])]) }
-    end
-  end
-
   describe "#native" do
     subject { build_script(native: "native").native }
 
@@ -236,7 +214,6 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:start_time) }
     it { is_expected.to have_key(:wall_time) }
     it { is_expected.to have_key(:accounting_id) }
-    it { is_expected.to have_key(:nodes) }
     it { is_expected.to have_key(:native) }
   end
 

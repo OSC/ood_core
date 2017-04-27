@@ -103,12 +103,6 @@ module OodCore
           resources = {}
           resources.merge!(mem: "#{script.min_phys_memory}KB") unless script.min_phys_memory.nil?
           resources.merge!(walltime: seconds_to_duration(script.wall_time)) unless script.wall_time.nil?
-          if script.nodes && !script.nodes.empty?
-            # Reduce an array to unique objects with count
-            #   ["a", "a", "b"] #=> {"a" => 2, "b" => 1}
-            nodes = script.nodes.group_by {|v| v}.each_with_object({}) {|(k, v), h| h[k] = v.size}
-            resources.merge!(nodes: nodes.map {|k, v| k.is_a?(NodeRequest) ? node_request_to_str(k, v) : k }.join('+'))
-          end
 
           # Set environment variables
           envvars = script.job_environment || {}
@@ -237,14 +231,6 @@ module OodCore
               end
               {name: name, procs: procs}
             end
-          end
-
-          # Convert a NodeRequest object to a valid Torque string
-          def node_request_to_str(node, cnt)
-            str = cnt.to_s
-            str += ":ppn=#{node.procs}" if node.procs
-            str += ":#{node.properties.join(':')}" if node.properties
-            str
           end
 
           # Parse hash describing PBS job status
