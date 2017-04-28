@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 0.0.3 (2017-04-28)
+
 Features:
 
   - provide support for slurm conf file
