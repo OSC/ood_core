@@ -82,8 +82,9 @@ module OodCore
       # @return [Fixnum, nil] scheduling priority
       attr_reader :priority
 
-      # The minmimum amount of physical memory in kilobyte that should be available
-      # for the job
+      # The minimum amount of physical memory in kilobyte for all nodes or per
+      # node (dependent upon the resource manager) that should be available for
+      # the job
       # @return [Fixnum, nil] minimum physical memory
       attr_reader :min_phys_memory
 
