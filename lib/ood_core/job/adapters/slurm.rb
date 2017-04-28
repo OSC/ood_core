@@ -8,13 +8,15 @@ module OodCore
 
       # Build the Slurm adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
-      # @option config [#to_s] :cluster ('') The cluster to communicate with
-      # @option config [#to_s] :bin ('') Path to slurm client binaries
+      # @option config [Object] :cluster (nil) The cluster to communicate with
+      # @option config [Object] :conf (nil) Path to the slurm conf
+      # @option config [Object] :bin (nil) Path to slurm client binaries
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
-        cluster = c.fetch(:cluster, "").to_s
-        bin  = c.fetch(:bin, "").to_s
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, bin: bin)
+        cluster = c.fetch(:cluster, nil)
+        conf    = c.fetch(:conf, nil)
+        bin     = c.fetch(:bin, nil)
+        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin)
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -31,8 +33,14 @@ module OodCore
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
           #   my_batch.cluster #=> "kingspeak"
-          # @return [String] the cluster name
+          # @return [String, nil] the cluster name
           attr_reader :cluster
+
+          # The path to the Slurm configuration file
+          # @example For Slurm 10.0.0
+          #   my_batch.conf.to_s #=> "/usr/local/slurm/10.0.0/etc/slurm.conf
+          # @return [Pathname, nil] path to slurm conf
+          attr_reader :conf
 
           # The path to the Slurm client installation binaries
           # @example For Slurm 10.0.0
@@ -44,10 +52,12 @@ module OodCore
           # from
           class Error < StandardError; end
 
-          # @param cluster [#to_s] the cluster name
+          # @param cluster [#to_s, nil] the cluster name
+          # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster: "", bin: "")
-            @cluster = cluster.to_s
+          def initialize(cluster: nil, bin: nil, conf: nil)
+            @cluster = cluster && cluster.to_s
+            @conf    = conf    && Pathname.new(conf.to_s)
             @bin     = Pathname.new(bin.to_s)
           end
 
@@ -80,7 +90,7 @@ module OodCore
             args += ["-j", id.to_s] unless id.to_s.empty?
             lines = call("squeue", *args).split("\n").map(&:strip)
 
-            lines.drop(cluster.empty? ? 1 : 2).map do |line|
+            lines.drop(cluster ? 2 : 1).map do |line|
               Hash[options.keys.zip(line.split(delim))]
             end
           end
@@ -132,8 +142,9 @@ module OodCore
             def call(cmd, *args, env: {}, stdin: "")
               cmd = bin.join(cmd.to_s).to_s
               args  = args.map(&:to_s)
-              args += ["-M", cluster] unless cluster.empty?
+              args += ["-M", cluster] if cluster
               env = env.to_h
+              env["SLURM_CONF"] = conf.to_s if conf
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
             end

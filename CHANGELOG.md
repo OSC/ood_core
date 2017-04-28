@@ -1,5 +1,9 @@
 ## Unreleased
 
+Features:
+
+  - provide support for slurm conf file
+
 Bugfixes:
 
   - correct code documentation for `Script#min_phys_memory`
