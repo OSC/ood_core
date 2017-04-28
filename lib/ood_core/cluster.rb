@@ -64,7 +64,7 @@ module OodCore
     # Whether the login feature is allowed
     # @return [Boolean] is login allowed
     def login_allow?
-      allow? && !login.empty?
+      allow? && !login_config.empty?
     end
 
     # Build a job adapter from the job configuration

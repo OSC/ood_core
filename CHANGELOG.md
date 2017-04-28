@@ -1,5 +1,9 @@
 ## Unreleased
 
+Bugfixes:
+
+  - fix for login feature being allowed on all clusters even if not defined
+
 ## 0.0.2 (2017-04-27)
 
 Features:
