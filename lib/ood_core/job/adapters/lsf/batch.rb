@@ -49,11 +49,11 @@ class OodCore::Job::Adapters::Lsf::Batch
     %w( -u all -a -w -W )
   end
 
-    # status fields available from bjobs
-    def fields
-      %i(id user status queue from_host exec_host name submit_time
-          project cpu_used mem swap pids start_time finish_time)
-    end
+  # status fields available from bjobs
+  def fields
+    %i(id user status queue from_host exec_host name submit_time
+        project cpu_used mem swap pids start_time finish_time)
+  end
 
   # helper method
   def parse_bjobs_output(response)

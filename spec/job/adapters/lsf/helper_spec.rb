@@ -5,7 +5,7 @@ require "timecop"
 describe OodCore::Job::Adapters::Lsf::Helper do
   subject(:helper) { described_class.new() }
 
-  describe '#parse_past_time' do
+  describe "#parse_past_time" do
     it "converts time using current year" do
       Timecop.freeze(Time.local(2017, 07, 01))
 
@@ -46,6 +46,41 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       it "returns nil if ignore_errors:true" do
         expect(helper.parse_past_time("something not parsable", ignore_errors: true)).to eq(nil)
       end
+    end
+  end
+
+  # FIXME: should move to batch or batch_helper
+  describe "#parse_exec_host" do
+    it "converts one host" do
+      expect(helper.parse_exec_host("compute012")).to eq([{host: "compute012", slots: 1}])
+    end
+
+    it "converts multiple hosts with one slot" do
+      expect(helper.parse_exec_host("compute033:compute024:compute067")).to eq([
+        {host: "compute033", slots: 1},
+        {host: "compute024", slots: 1},
+        {host: "compute067", slots: 1}
+      ])
+    end
+
+    it "converts multiple hosts with multiple slots" do
+      expect(helper.parse_exec_host("16*compute033:16*compute024:16*compute067")).to eq([
+        {host: "compute033", slots: 16},
+        {host: "compute024", slots: 16},
+        {host: "compute067", slots: 16}
+      ])
+    end
+
+    it "converts multiple hosts with varying slots" do
+      expect(helper.parse_exec_host("compute033:12*compute024:16*compute067")).to eq([
+        {host: "compute033", slots: 1},
+        {host: "compute024", slots: 12},
+        {host: "compute067", slots: 16}
+      ])
+    end
+
+    it "handles nil" do
+      expect(helper.parse_exec_host(nil)).to eq([])
     end
   end
 end
