@@ -170,15 +170,19 @@ module OodCore
           end
 
           def info_for_batch_hash(v)
+            nodes = helper.parse_exec_host(v[:exec_host]).map do |host|
+              NodeInfo.new(name: host[:host], procs: host[:slots])
+            end
+
             Info.new(
               id: v[:id],
               status: get_state(v[:status]),
-              allocated_nodes: [],
+              allocated_nodes: nodes,
               submit_host: v[:from_host],
               job_name: v[:name],
               job_owner: v[:user],
               accounting_id: v[:project],
-              procs: nil,
+              procs: nodes.any? ? nodes.map(&:procs).reduce(&:+) : 0,
               queue_name: v[:queue],
               wallclock_time: nil,
               cpu_time: nil,
