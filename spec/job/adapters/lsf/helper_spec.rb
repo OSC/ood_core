@@ -83,4 +83,18 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(helper.parse_exec_host(nil)).to eq([])
     end
   end
+
+  describe "#estimate_runtime" do
+    it "for running job" do
+      expect(helper.estimate_runtime(current_time: Time.at(100), start_time: Time.at(10), finish_time: nil)).to eq(90)
+    end
+
+    it "for completed job" do
+      expect(helper.estimate_runtime(current_time: Time.at(200), start_time: Time.at(10), finish_time: Time.at(100))).to eq(90)
+    end
+
+    it "for job not yet started" do
+      expect(helper.estimate_runtime(current_time: Time.at(100), start_time: nil, finish_time: nil)).to eq(nil)
+    end
+  end
 end

@@ -38,4 +38,13 @@ class OodCore::Job::Adapters::Lsf::Helper
   def exec_host_regex
     @exec_host_regex ||= Regexp.new(/((\d+)\*)?([^:]+)/)
   end
+
+  # given current time, dispatch time, and finish time values, estimate the
+  # runtime for a job; this estimate will be accurate if the job never enters a
+  # suspended state during its execution
+  def estimate_runtime(current_time:, start_time:, finish_time:)
+    return nil if start_time.nil?
+
+    (finish_time || current_time) - start_time
+  end
 end

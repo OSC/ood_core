@@ -78,6 +78,7 @@ describe OodCore::Job::Adapters::Lsf do
 
     # TODO: do we create a complex mock?
     let(:batch) { double(get_jobs: [job_hash], get_job: job_hash) }
+    let(:start_time) { Time.local(year, 3, 31, 14, 46, 44) }
 
     #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
     #as LSF::Batch support more attributes
@@ -119,13 +120,12 @@ describe OodCore::Job::Adapters::Lsf do
 
             :queue_name=>job_hash[:queue],
 
-            # TODO: not sure yet exactly what how to determine
-            :wallclock_time=>nil,
-
+            # estimated run time
+            :wallclock_time=>Time.now - start_time,
             # TODO: job_hash[:cpu_used] converted to proper format
             :cpu_time=>nil,
             :submission_time=>Time.local(year, 3, 31, 14, 46, 42),
-            :dispatch_time=>Time.local(year, 3, 31, 14, 46, 44),
+            :dispatch_time=>start_time,
             :native=>job_hash
         )
     }
