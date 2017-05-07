@@ -72,24 +72,9 @@ module OodCore
           afternotok = Array(afternotok).map(&:to_s)
           afterany   = Array(afterany).map(&:to_s)
 
-          args = []
-          args += ["-P", script.accounting_id] unless script.accounting_id.nil?
-          args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
-          args += ["-J", script.job_name] unless script.job_name.nil?
+          kwargs = helper.batch_submit_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
-          # TODO: dependencies
-
-          env = {
-            #TODO:
-            #LSB_HOSTS?
-            #LSB_MCPU_HOSTS?
-            #SNDJOBS_TO?
-            #
-          }
-
-          # Submit job
-          batch.submit_string(script.content, args: args, env: env)
-
+          batch.submit_string(script.content, **kwargs)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end

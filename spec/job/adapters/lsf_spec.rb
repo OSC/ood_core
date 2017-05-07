@@ -1,3 +1,4 @@
+
 require "spec_helper"
 require "ood_core/job/adapters/lsf"
 
@@ -31,31 +32,7 @@ describe OodCore::Job::Adapters::Lsf do
 
     context "with script" do
       before { adapter.submit(build_script()) }
-
       it { expect(batch).to have_received(:submit_string).with(content, args: [], env: {}) }
-    end
-
-    context "with :accounting_id" do
-      before { adapter.submit(build_script(accounting_id: "my_account")) }
-
-      it { expect(batch).to have_received(:submit_string).with(content, args: ["-P", "my_account"], env: {}) }
-    end
-
-    context "with :workdir" do
-      before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
-
-      #TODO: LSF 9+ support handle case where workdir is set to a string with dynamic parameters
-      #i.e. "/home/efranz/scratch/%J_%I" then make sure we don't need something like
-      #expect...with(content, args: ["-cwd", '"/home/efranz/scratch/%J_%I"'])
-      #notice the parenthesis being part of the command
-
-      it { expect(batch).to have_received(:submit_string).with(content, args: ["-cwd", "/path/to/workdir"], env: {}) }
-    end
-
-    context "with :job_name" do
-      before { adapter.submit(build_script(job_name: "my_job")) }
-
-      it { expect(batch).to have_received(:submit_string).with(content, args: ["-J", "my_job"], env: {}) }
     end
 
     context "when OodCore::Job::Adapters::Lsf::Batch::Error is raised" do

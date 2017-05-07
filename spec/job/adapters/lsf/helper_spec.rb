@@ -117,4 +117,23 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(helper.parse_cpu_used(nil)).to eq(nil)
     end
   end
+
+  describe "#batch_submit_args" do
+    # get batch_submit_args for the given script attributes
+    def args_for(attrs = {})
+      helper.batch_submit_args(OodCore::Job::Script.new({ content: "my job" }.merge(attrs)))
+    end
+
+    it "with :accounting_id" do
+      expect(args_for(accounting_id: "PZ123")).to eq({args: ["-P", "PZ123"], env: {}})
+    end
+
+    it "with :job_name" do
+      expect(args_for(job_name: "my_job")).to eq({args: ["-J", "my_job"], env: {}})
+    end
+
+    it "with :workdir" do
+      expect(args_for(workdir: "/path/to/workdir")).to eq({args: ["-cwd", "/path/to/workdir"], env: {}})
+    end
+  end
 end

@@ -70,4 +70,13 @@ class OodCore::Job::Adapters::Lsf::Helper
       $1.to_i*3600 + $2.to_i*60 + $3.to_i
     end
   end
+
+  def batch_submit_args(script, after: [], afterok: [], afternotok: [], afterany: [])
+    args = []
+    args += ["-P", script.accounting_id] unless script.accounting_id.nil?
+    args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
+    args += ["-J", script.job_name] unless script.job_name.nil?
+
+    {args: args, env: {}}
+  end
 end
