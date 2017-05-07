@@ -47,4 +47,27 @@ class OodCore::Job::Adapters::Lsf::Helper
 
     (finish_time || current_time) - start_time
   end
+
+  # Convert CPU_USED string to seconds
+  #
+  # example strings of cpu_used in LSF 8.3:
+  #
+  # 060:24:00.00
+  # 046:19:37.00
+  # 1118:59:09.00
+  # 000:00:00.00
+  # 000:48:18.39
+  # 003:11:36.67
+  # 003:24:40.95
+  # 50769:48:00.-48
+  # 50835:48:48.-48
+  #
+  # my guess is: hours:minutes:seconds.????
+  #
+  # @return [Fixnum, nil] cpu used as seconds
+  def parse_cpu_used(cpu_used)
+    if cpu_used =~ /^(\d+):(\d+):(\d+)\..*$/
+      $1.to_i*3600 + $2.to_i*60 + $3.to_i
+    end
+  end
 end

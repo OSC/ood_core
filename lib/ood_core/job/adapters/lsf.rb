@@ -189,7 +189,8 @@ module OodCore
               procs: nodes.any? ? nodes.map(&:procs).reduce(&:+) : 0,
               queue_name: v[:queue],
               wallclock_time: helper.estimate_runtime(current_time: Time.now, start_time: dispatch_time, finish_time: finish_time),
-              cpu_time: nil,
+              cpu_time: helper.parse_cpu_used(v[:cpu_used]),
+              # cpu_time: nil,
               submission_time: helper.parse_past_time(v[:submit_time], ignore_errors: true),
               dispatch_time: dispatch_time,
               native: v

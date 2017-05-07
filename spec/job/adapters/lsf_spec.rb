@@ -123,7 +123,7 @@ describe OodCore::Job::Adapters::Lsf do
             # estimated run time
             :wallclock_time=>Time.now - start_time,
             # TODO: job_hash[:cpu_used] converted to proper format
-            :cpu_time=>nil,
+            :cpu_time=>0,
             :submission_time=>Time.local(year, 3, 31, 14, 46, 42),
             :dispatch_time=>start_time,
             :native=>job_hash

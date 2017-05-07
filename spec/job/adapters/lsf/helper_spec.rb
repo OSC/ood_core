@@ -97,4 +97,24 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(helper.estimate_runtime(current_time: Time.at(100), start_time: nil, finish_time: nil)).to eq(nil)
     end
   end
+
+  describe "#parse_cpu_used" do
+    it "handles normal cases" do
+      expect(helper.parse_cpu_used("000:00:00.00")).to eq(0)
+      expect(helper.parse_cpu_used("060:24:00.00")).to eq(217440)
+      expect(helper.parse_cpu_used("1118:59:09.00")).to eq(4028349)
+    end
+
+    it "ignores negative dot seconds" do
+      expect(helper.parse_cpu_used("000:00:01.-48")).to eq(1)
+      expect(helper.parse_cpu_used("000:01:01.-48")).to eq(61)
+    end
+
+    it "handles bad cases" do
+      expect(helper.parse_cpu_used("31 seconds")).to eq(nil)
+      expect(helper.parse_cpu_used("000:00:00")).to eq(nil)
+      expect(helper.parse_cpu_used("25")).to eq(nil)
+      expect(helper.parse_cpu_used(nil)).to eq(nil)
+    end
+  end
 end
