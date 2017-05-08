@@ -143,5 +143,10 @@ describe OodCore::Job::Adapters::Lsf::Helper do
     it "with :native" do
       expect(args_for(native: ["A", "B"])).to eq({args: ["A", "B"], env: {}})
     end
+
+    it "with :start_time" do
+      expect(args_for(start_time: Time.new(2016, 11, 8, 13, 53, 54))).to eq({args: ["-b", "2016:11:08:13:53"], env: {}})
+      expect(args_for(start_time: Time.new(2016, 1, 1, 1, 1, 1))).to eq({args: ["-b", "2016:01:01:01:01"], env: {}})
+    end
   end
 end

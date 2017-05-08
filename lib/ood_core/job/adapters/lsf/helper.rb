@@ -90,8 +90,7 @@ class OodCore::Job::Adapters::Lsf::Helper
 
 
     #TODO:
-    # args += ["-b", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
-    # args += ["-M", "#{script.min_phys_memory}K"] unless script.min_phys_memory.nil?
+    args += ["-b", script.start_time.localtime.strftime("%Y:%m:%d:%H:%M")] unless script.start_time.nil?
     # args += ["-W", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
 
 
