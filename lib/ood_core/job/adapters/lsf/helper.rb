@@ -73,10 +73,32 @@ class OodCore::Job::Adapters::Lsf::Helper
 
   def batch_submit_args(script, after: [], afterok: [], afternotok: [], afterany: [])
     args = []
+
     args += ["-P", script.accounting_id] unless script.accounting_id.nil?
     args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
     args += ["-J", script.job_name] unless script.job_name.nil?
     args += ["-q", script.queue_name] unless script.queue_name.nil?
+    args += ["-U", script.reservation_id] unless script.reservation_id.nil?
+    args += ["-sp", script.priority] unless script.priority.nil?
+    args += ["-H"] if script.submit_as_hold
+    args += (script.rerunnable ? ["-r"] : ["-rn"]) unless script.rerunnable.nil?
+
+    # input and output files
+    args += ["-i", script.input_path] unless script.input_path.nil?
+    args += ["-o", script.output_path] unless script.output_path.nil?
+    args += ["-e", script.error_path] unless script.error_path.nil?
+
+
+    #TODO:
+    # args += ["-b", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
+    # args += ["-M", "#{script.min_phys_memory}K"] unless script.min_phys_memory.nil?
+    # args += ["-W", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+
+
+    # email
+    args += ["-B", script.email_on_started] unless script.email_on_started.nil?
+    args += ["-N", script.email_on_terminated] unless script.email_on_terminated.nil?
+
     args += script.native unless script.native.nil?
 
     {args: args, env: {}}
