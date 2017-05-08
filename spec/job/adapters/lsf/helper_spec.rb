@@ -135,5 +135,13 @@ describe OodCore::Job::Adapters::Lsf::Helper do
     it "with :workdir" do
       expect(args_for(workdir: "/path/to/workdir")).to eq({args: ["-cwd", "/path/to/workdir"], env: {}})
     end
+
+    it "with :queue_name" do
+      expect(args_for(queue_name: "short")).to eq({args: ["-q", "short"], env: {}})
+    end
+
+    it "with :native" do
+      expect(args_for(native: ["A", "B"])).to eq({args: ["A", "B"], env: {}})
+    end
   end
 end

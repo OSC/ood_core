@@ -76,6 +76,8 @@ class OodCore::Job::Adapters::Lsf::Helper
     args += ["-P", script.accounting_id] unless script.accounting_id.nil?
     args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
     args += ["-J", script.job_name] unless script.job_name.nil?
+    args += ["-q", script.queue_name] unless script.queue_name.nil?
+    args += script.native unless script.native.nil?
 
     {args: args, env: {}}
   end
