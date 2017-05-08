@@ -96,6 +96,9 @@ class OodCore::Job::Adapters::Lsf::Helper
 
     args += script.native unless script.native.nil?
 
-    {args: args, env: {}}
+    # environment
+    env = script.job_environment || {}
+
+    {args: args, env: env}
   end
 end
