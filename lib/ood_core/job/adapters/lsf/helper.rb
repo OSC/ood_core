@@ -82,17 +82,13 @@ class OodCore::Job::Adapters::Lsf::Helper
     args += ["-sp", script.priority] unless script.priority.nil?
     args += ["-H"] if script.submit_as_hold
     args += (script.rerunnable ? ["-r"] : ["-rn"]) unless script.rerunnable.nil?
+    args += ["-b", script.start_time.localtime.strftime("%Y:%m:%d:%H:%M")] unless script.start_time.nil?
+    args += ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
 
     # input and output files
     args += ["-i", script.input_path] unless script.input_path.nil?
     args += ["-o", script.output_path] unless script.output_path.nil?
     args += ["-e", script.error_path] unless script.error_path.nil?
-
-
-    #TODO:
-    args += ["-b", script.start_time.localtime.strftime("%Y:%m:%d:%H:%M")] unless script.start_time.nil?
-    # args += ["-W", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
-
 
     # email
     args += ["-B", script.email_on_started] unless script.email_on_started.nil?

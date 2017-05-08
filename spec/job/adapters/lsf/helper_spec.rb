@@ -148,5 +148,11 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(args_for(start_time: Time.new(2016, 11, 8, 13, 53, 54))).to eq({args: ["-b", "2016:11:08:13:53"], env: {}})
       expect(args_for(start_time: Time.new(2016, 1, 1, 1, 1, 1))).to eq({args: ["-b", "2016:01:01:01:01"], env: {}})
     end
+
+    it "with :wall_time" do
+      expect(args_for(wall_time: 3600)).to eq({args: ["-W", 60], env: {}})
+      expect(args_for(wall_time: 10000)).to eq({args: ["-W", 166], env: {}})
+      expect(args_for(wall_time: 10)).to eq({args: ["-W", 0], env: {}})
+    end
   end
 end
