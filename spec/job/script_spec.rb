@@ -28,7 +28,6 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:input_path) }
   it { is_expected.to respond_to(:output_path) }
   it { is_expected.to respond_to(:error_path) }
-  it { is_expected.to respond_to(:join_files) }
   it { is_expected.to respond_to(:reservation_id) }
   it { is_expected.to respond_to(:queue_name) }
   it { is_expected.to respond_to(:priority) }
@@ -134,12 +133,6 @@ describe OodCore::Job::Script do
     it { is_expected.to eq(Pathname.new("/path/to/error")) }
   end
 
-  describe "#join_files" do
-    subject { build_script(join_files: false).join_files }
-
-    it { is_expected.to eq(false) }
-  end
-
   describe "#reservation_id" do
     subject { build_script(reservation_id: double(to_s: "my_rsv")).reservation_id }
 
@@ -199,7 +192,6 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:input_path) }
     it { is_expected.to have_key(:output_path) }
     it { is_expected.to have_key(:error_path) }
-    it { is_expected.to have_key(:join_files) }
     it { is_expected.to have_key(:reservation_id) }
     it { is_expected.to have_key(:queue_name) }
     it { is_expected.to have_key(:priority) }

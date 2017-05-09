@@ -85,7 +85,9 @@ module OodCore
           # ignore input_path (not defined in Torque)
           headers.merge!(Output_Path: script.output_path) unless script.output_path.nil?
           headers.merge!(Error_Path: script.error_path) unless script.error_path.nil?
-          headers.merge!(Join_Path: 'oe') if script.join_files
+          # If error_path is not specified we join stdout & stderr (as this
+          # mimics what the other resource managers do)
+          headers.merge!(Join_Path: 'oe') if script.error_path.nil?
           headers.merge!(reservation_id: script.reservation_id) unless script.reservation_id.nil?
           headers.merge!(Priority: script.priority) unless script.priority.nil?
           headers.merge!(Execution_Time: script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")) unless script.start_time.nil?

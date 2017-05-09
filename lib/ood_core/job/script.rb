@@ -66,10 +66,6 @@ module OodCore
       # @return [Pathname, nil] file path specifying error stream
       attr_reader :error_path
 
-      # Whether the error stream should be intermixed with the output stream
-      # @return [Boolean, nil] whether error stream intermixed with output stream
-      attr_reader :join_files
-
       # Identifier of existing reservation to be associated with the job
       # @return [String, nil] reservation id
       attr_reader :reservation_id
@@ -113,7 +109,6 @@ module OodCore
       # @param input_path [#to_s, nil] file path specifying input stream
       # @param output_path [#to_s, nil] file path specifying output stream
       # @param error_path [#to_s, nil] file path specifying error stream
-      # @param join_files [Boolean, nil] whether error stream intermixed with output stream
       # @param reservation_id [#to_s, nil] reservation id
       # @param queue_name [#to_s, nil] queue name
       # @param priority [#to_i, nil] scheduling priority
@@ -125,16 +120,15 @@ module OodCore
                      job_environment: nil, workdir: nil, email: nil,
                      email_on_started: nil, email_on_terminated: nil,
                      job_name: nil, input_path: nil, output_path: nil,
-                     error_path: nil, join_files: nil, reservation_id: nil,
-                     queue_name: nil, priority: nil, start_time: nil,
-                     wall_time: nil, accounting_id: nil, native: nil, **_)
+                     error_path: nil, reservation_id: nil, queue_name: nil
+                     priority: nil, start_time: nil, wall_time: nil,
+                     accounting_id: nil, native: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
         @rerunnable          = rerunnable
         @email_on_started    = email_on_started
         @email_on_terminated = email_on_terminated
-        @join_files          = join_files
 
         @args             = args            && args.map(&:to_s)
         @job_environment  = job_environment && job_environment.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
@@ -170,7 +164,6 @@ module OodCore
           input_path:          input_path,
           output_path:         output_path,
           error_path:          error_path,
-          join_files:          join_files,
           reservation_id:      reservation_id,
           queue_name:          queue_name,
           priority:            priority,

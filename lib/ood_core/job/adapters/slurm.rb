@@ -275,8 +275,6 @@ module OodCore
           args += ["-i", script.input_path] unless script.input_path.nil?
           args += ["-o", script.output_path] unless script.output_path.nil?
           args += ["-e", script.error_path] unless script.error_path.nil?
-          # ignore join_files, by default it joins stdout and stderr unless
-          # error_path is specified
           args += ["--reservation", script.reservation_id] unless script.reservation_id.nil?
           args += ["-p", script.queue_name] unless script.queue_name.nil?
           args += ["--priority", script.priority] unless script.priority.nil?
