@@ -78,12 +78,6 @@ module OodCore
       # @return [Fixnum, nil] scheduling priority
       attr_reader :priority
 
-      # The minimum amount of physical memory in kilobyte for all nodes or per
-      # node (dependent upon the resource manager) that should be available for
-      # the job
-      # @return [Fixnum, nil] minimum physical memory
-      attr_reader :min_phys_memory
-
       # The earliest time when the job may be eligible to run
       # @return [Time, nil] eligible start time
       attr_reader :start_time
@@ -118,7 +112,6 @@ module OodCore
       # @param reservation_id [#to_s, nil] reservation id
       # @param queue_name [#to_s, nil] queue name
       # @param priority [#to_i, nil] scheduling priority
-      # @param min_phys_memory [#to_i, nil] minimum physical memory
       # @param start_time [#to_i, nil] eligible start time
       # @param wall_time [#to_i, nil] max real time
       # @param accounting_id [#to_s, nil] accounting id
@@ -127,9 +120,9 @@ module OodCore
                      job_environment: nil, workdir: nil, email: nil,
                      email_on_started: nil, email_on_terminated: nil,
                      job_name: nil, input_path: nil, output_path: nil,
-                     error_path: nil, reservation_id: nil, queue_name: nil,
-                     priority: nil, min_phys_memory: nil, start_time: nil,
-                     wall_time: nil, accounting_id: nil, native: nil, **_)
+                     error_path: nil, reservation_id: nil, queue_name: nil
+                     priority: nil, start_time: nil, wall_time: nil,
+                     accounting_id: nil, native: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -148,7 +141,6 @@ module OodCore
         @reservation_id   = reservation_id  && reservation_id.to_s
         @queue_name       = queue_name      && queue_name.to_s
         @priority         = priority        && priority.to_i
-        @min_phys_memory  = min_phys_memory && min_phys_memory.to_i
         @start_time       = start_time      && Time.at(start_time.to_i)
         @wall_time        = wall_time       && wall_time.to_i
         @accounting_id    = accounting_id   && accounting_id.to_s
@@ -175,7 +167,6 @@ module OodCore
           reservation_id:      reservation_id,
           queue_name:          queue_name,
           priority:            priority,
-          min_phys_memory:     min_phys_memory,
           start_time:          start_time,
           wall_time:           wall_time,
           accounting_id:       accounting_id,

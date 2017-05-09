@@ -280,7 +280,6 @@ module OodCore
           args += ["--priority", script.priority] unless script.priority.nil?
           args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
           args += ["-A", script.accounting_id] unless script.accounting_id.nil?
-          args += ["--mem", "#{script.min_phys_memory}K"] unless script.min_phys_memory.nil?
           args += ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           # ignore nodes, don't know how to do this for slurm
 

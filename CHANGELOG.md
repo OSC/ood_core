@@ -2,6 +2,8 @@
 
 Features:
 
+  - removed `OodCore::Job::Script#min_phys_memory` due to lack of commonality
+    across resource managers
   - removed `OodCore::Job::Script#join_files` due to lack of support in
     resource managers
   - by default all PBS jobs output stdout & stderr to output path unless an

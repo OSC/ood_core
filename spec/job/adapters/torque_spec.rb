@@ -191,12 +191,6 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Account_Name: "my_account"}, resources: {}, envvars: {}) }
     end
 
-    context "with :min_phys_memory" do
-      before { adapter.submit(build_script(min_phys_memory: 1234)) }
-
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {mem: "1234KB"}, envvars: {}) }
-    end
-
     context "with :wall_time" do
       before { adapter.submit(build_script(wall_time: 94534)) }
 

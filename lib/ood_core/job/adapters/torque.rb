@@ -103,7 +103,6 @@ module OodCore
 
           # Set resources
           resources = {}
-          resources.merge!(mem: "#{script.min_phys_memory}KB") unless script.min_phys_memory.nil?
           resources.merge!(walltime: seconds_to_duration(script.wall_time)) unless script.wall_time.nil?
 
           # Set environment variables
