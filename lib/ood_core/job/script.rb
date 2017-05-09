@@ -120,7 +120,7 @@ module OodCore
                      job_environment: nil, workdir: nil, email: nil,
                      email_on_started: nil, email_on_terminated: nil,
                      job_name: nil, input_path: nil, output_path: nil,
-                     error_path: nil, reservation_id: nil, queue_name: nil
+                     error_path: nil, reservation_id: nil, queue_name: nil,
                      priority: nil, start_time: nil, wall_time: nil,
                      accounting_id: nil, native: nil, **_)
         @content = content.to_s
