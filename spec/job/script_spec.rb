@@ -32,7 +32,6 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:reservation_id) }
   it { is_expected.to respond_to(:queue_name) }
   it { is_expected.to respond_to(:priority) }
-  it { is_expected.to respond_to(:min_phys_memory) }
   it { is_expected.to respond_to(:start_time) }
   it { is_expected.to respond_to(:wall_time) }
   it { is_expected.to respond_to(:accounting_id) }
@@ -159,12 +158,6 @@ describe OodCore::Job::Script do
     it { is_expected.to eq(123) }
   end
 
-  describe "#min_phys_memory" do
-    subject { build_script(min_phys_memory: double(to_i: 123)).min_phys_memory }
-
-    it { is_expected.to eq(123) }
-  end
-
   describe "#start_time" do
     subject { build_script(start_time: double(to_i: 123)).start_time }
 
@@ -210,7 +203,6 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:reservation_id) }
     it { is_expected.to have_key(:queue_name) }
     it { is_expected.to have_key(:priority) }
-    it { is_expected.to have_key(:min_phys_memory) }
     it { is_expected.to have_key(:start_time) }
     it { is_expected.to have_key(:wall_time) }
     it { is_expected.to have_key(:accounting_id) }

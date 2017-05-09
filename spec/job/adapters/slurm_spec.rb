@@ -205,12 +205,6 @@ describe OodCore::Job::Adapters::Slurm do
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-A", "my_account"], env: {}) }
     end
 
-    context "with :min_phys_memory" do
-      before { adapter.submit(build_script(min_phys_memory: 1234)) }
-
-      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mem", "1234K"], env: {}) }
-    end
-
     context "with :wall_time" do
       before { adapter.submit(build_script(wall_time: 94534)) }
 
