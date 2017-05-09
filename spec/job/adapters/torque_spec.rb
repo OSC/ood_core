@@ -48,32 +48,32 @@ describe OodCore::Job::Adapters::Torque do
 
     it "returns job id" do
       is_expected.to eq("job.123")
-      expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {})
+      expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {})
     end
 
     context "with :queue_name" do
       before { adapter.submit(build_script(queue_name: "queue")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: "queue", headers: {}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: "queue", headers: {Join_Path: "oe"}, resources: {}, envvars: {}) }
     end
 
     context "with :args" do
       before { adapter.submit(build_script(args: ["arg1", "arg2"])) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {job_arguments: "arg1 arg2"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", job_arguments: "arg1 arg2"}, resources: {}, envvars: {}) }
     end
 
     context "with :submit_as_hold" do
       context "as true" do
         before { adapter.submit(build_script(submit_as_hold: true)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Hold_Types: :u}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Hold_Types: :u}, resources: {}, envvars: {}) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(submit_as_hold: false)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {}) }
       end
     end
 
@@ -81,45 +81,45 @@ describe OodCore::Job::Adapters::Torque do
       context "as true" do
         before { adapter.submit(build_script(rerunnable: true)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Rerunable: "y"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Rerunable: "y"}, resources: {}, envvars: {}) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(rerunnable: false)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Rerunable: "n"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Rerunable: "n"}, resources: {}, envvars: {}) }
       end
     end
 
     context "with :job_environment" do
       before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {"key" => "value"}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {"key" => "value"}) }
     end
 
     context "with :workdir" do
       before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {init_work_dir: Pathname.new("/path/to/workdir")}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", init_work_dir: Pathname.new("/path/to/workdir")}, resources: {}, envvars: {}) }
     end
 
     context "with :email" do
       before { adapter.submit(build_script(email: ["email1", "email2"])) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Mail_Users: "email1,email2"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Mail_Users: "email1,email2"}, resources: {}, envvars: {}) }
     end
 
     context "with :email_on_started" do
       context "as true" do
         before { adapter.submit(build_script(email_on_started: true)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Mail_Points: "b"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Mail_Points: "b"}, resources: {}, envvars: {}) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(email_on_started: false)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {}) }
       end
     end
 
@@ -127,38 +127,38 @@ describe OodCore::Job::Adapters::Torque do
       context "as true" do
         before { adapter.submit(build_script(email_on_terminated: true)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Mail_Points: "e"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Mail_Points: "e"}, resources: {}, envvars: {}) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(email_on_terminated: false)) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {}) }
       end
     end
 
     context "with :email_on_started and :email_on_terminated" do
       before { adapter.submit(build_script(email_on_started: true, email_on_terminated: true)) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Mail_Points: "be"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Mail_Points: "be"}, resources: {}, envvars: {}) }
     end
 
     context "with :job_name" do
       before { adapter.submit(build_script(job_name: "my_job")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Job_Name: "my_job"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Job_Name: "my_job"}, resources: {}, envvars: {}) }
     end
 
     context "with :input_path" do
       before { adapter.submit(build_script(input_path: "/path/to/input")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {}) }
     end
 
     context "with :output_path" do
       before { adapter.submit(build_script(output_path: "/path/to/output")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Output_Path: Pathname.new("/path/to/output")}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Output_Path: Pathname.new("/path/to/output")}, resources: {}, envvars: {}) }
     end
 
     context "with :error_path" do
@@ -167,73 +167,59 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Error_Path: Pathname.new("/path/to/error")}, resources: {}, envvars: {}) }
     end
 
-    context "with :join_files" do
-      context "as true" do
-        before { adapter.submit(build_script(join_files: true)) }
-
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {}) }
-      end
-
-      context "as false" do
-        before { adapter.submit(build_script(join_files: false)) }
-
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {}) }
-      end
-    end
-
     context "with :reservation_id" do
       before { adapter.submit(build_script(reservation_id: "my_rsv")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {reservation_id: "my_rsv"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", reservation_id: "my_rsv"}, resources: {}, envvars: {}) }
     end
 
     context "with :priority" do
       before { adapter.submit(build_script(priority: 123)) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Priority: 123}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Priority: 123}, resources: {}, envvars: {}) }
     end
 
     context "with :start_time" do
       before { adapter.submit(build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Execution_Time: "201611081353.54"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Execution_Time: "201611081353.54"}, resources: {}, envvars: {}) }
     end
 
     context "with :accounting_id" do
       before { adapter.submit(build_script(accounting_id: "my_account")) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Account_Name: "my_account"}, resources: {}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Account_Name: "my_account"}, resources: {}, envvars: {}) }
     end
 
     context "with :min_phys_memory" do
       before { adapter.submit(build_script(min_phys_memory: 1234)) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {mem: "1234KB"}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {mem: "1234KB"}, envvars: {}) }
     end
 
     context "with :wall_time" do
       before { adapter.submit(build_script(wall_time: 94534)) }
 
-      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {walltime: "26:15:34"}, envvars: {}) }
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {walltime: "26:15:34"}, envvars: {}) }
     end
 
     context "with :native" do
       context "with :headers" do
         before { adapter.submit(build_script(native: {headers: {check: "this"}})) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {check: "this"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", check: "this"}, resources: {}, envvars: {}) }
       end
 
       context "with :resources" do
         before { adapter.submit(build_script(native: {resources: {check: "this"}})) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {check: "this"}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {check: "this"}, envvars: {}) }
       end
 
       context "with :envvars" do
         before { adapter.submit(build_script(native: {envvars: {check: "this"}})) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {}, resources: {}, envvars: {check: "this"}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {check: "this"}) }
       end
     end
 
@@ -241,13 +227,13 @@ describe OodCore::Job::Adapters::Torque do
       context "and :#{after} is defined as a single job id" do
         before { adapter.submit(build_script, after => "job_id") }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {depend: "#{after}:job_id"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", depend: "#{after}:job_id"}, resources: {}, envvars: {}) }
       end
 
       context "and :#{after} is defined as multiple job ids" do
         before { adapter.submit(build_script, after => ["job1", "job2"]) }
 
-        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {depend: "#{after}:job1:job2"}, resources: {}, envvars: {}) }
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", depend: "#{after}:job1:job2"}, resources: {}, envvars: {}) }
       end
     end
 
