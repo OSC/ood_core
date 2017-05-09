@@ -167,20 +167,6 @@ describe OodCore::Job::Adapters::Slurm do
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-e", Pathname.new("/path/to/error")], env: {}) }
     end
 
-    context "with :join_files" do
-      context "as true" do
-        before { adapter.submit(build_script(join_files: true)) }
-
-        it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-      end
-
-      context "as false" do
-        before { adapter.submit(build_script(join_files: false)) }
-
-        it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-      end
-    end
-
     context "with :reservation_id" do
       before { adapter.submit(build_script(reservation_id: "my_rsv")) }
 
