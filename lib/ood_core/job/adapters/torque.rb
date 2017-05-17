@@ -249,6 +249,7 @@ module OodCore
               procs: allocated_nodes.inject(0) { |sum, x| sum + x[:procs] },
               queue_name: v[:queue],
               wallclock_time: duration_in_seconds(v.fetch(:resources_used, {})[:walltime]),
+              wallclock_limit: duration_in_seconds(v.fetch(:Resource_List, {})[:walltime]),
               cpu_time: duration_in_seconds(v.fetch(:resources_used, {})[:cput]),
               submission_time: v[:ctime],
               dispatch_time: v[:start_time],

@@ -466,6 +466,7 @@ module OodCore
               procs: v[:cpus],
               queue_name: v[:partition],
               wallclock_time: duration_in_seconds(v[:time_used]),
+              wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
               submission_time: Time.parse(v[:submit_time]),
               dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
