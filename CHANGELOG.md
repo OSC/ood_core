@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 0.0.4 (2017-05-17)
+
 Features:
 
   - removed `OodCore::Job::Script#min_phys_memory` due to lack of commonality
