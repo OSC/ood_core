@@ -93,6 +93,7 @@ class OodCore::Job::Adapters::Lsf::Helper
     # email
     args += ["-B"] if script.email_on_started
     args += ["-N"] if script.email_on_terminated
+    args += ["-u", script.email.join(",")] unless script.email.nil? || script.email.empty?
 
     args += script.native unless script.native.nil?
 

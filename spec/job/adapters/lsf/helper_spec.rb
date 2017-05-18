@@ -162,5 +162,11 @@ describe OodCore::Job::Adapters::Lsf::Helper do
     it "with :email_on_terminated" do
       expect(args_for(email_on_terminated: true)).to eq({args: ["-N"], env: {}})
     end
+
+    it "with :email" do
+      expect(args_for(email: "efranz@osc.edu")).to eq({args: ["-u", "efranz@osc.edu"], env: {}})
+      expect(args_for(email: ["efranz@osc.edu", "efranz2@osc.edu"])).to eq({args: ["-u", "efranz@osc.edu,efranz2@osc.edu"], env: {}})
+      expect(args_for(email: [])).to eq({args: [], env: {}})
+    end
   end
 end
