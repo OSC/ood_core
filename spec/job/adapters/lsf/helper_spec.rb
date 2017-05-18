@@ -154,5 +154,13 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(args_for(wall_time: 10000)).to eq({args: ["-W", 166], env: {}})
       expect(args_for(wall_time: 10)).to eq({args: ["-W", 0], env: {}})
     end
+
+    it "with :email_on_started" do
+      expect(args_for(email_on_started: true)).to eq({args: ["-B"], env: {}})
+    end
+
+    it "with :email_on_terminated" do
+      expect(args_for(email_on_terminated: true)).to eq({args: ["-N"], env: {}})
+    end
   end
 end
