@@ -342,6 +342,7 @@ describe OodCore::Job::Adapters::Slurm do
           :procs=>24,
           :queue_name=>"mah-kp",
           :wallclock_time=>0,
+          :wallclock_limit=>259200,
           :cpu_time=>nil,
           :submission_time=>Time.parse("2017-03-30T13:28:01"),
           :dispatch_time=>Time.parse("2017-04-01T22:13:03"),
@@ -431,6 +432,7 @@ describe OodCore::Job::Adapters::Slurm do
           :procs=>256,
           :queue_name=>"kingspeak",
           :wallclock_time=>80135,
+          :wallclock_limit=>259200,
           :cpu_time=>nil,
           :submission_time=>Time.parse("2017-03-29T13:51:05"),
           :dispatch_time=>Time.parse("2017-03-30T10:21:54"),
@@ -449,7 +451,8 @@ describe OodCore::Job::Adapters::Slurm do
           :state_compact=>"PD",
           :reason=>"JobHeldUser,Resources",
           :start_time=>"N/A",
-          :submit_time=>"2017-03-31T10:09:44"
+          :submit_time=>"2017-03-31T10:09:44",
+          :time_limit=>"30:00"
         }
       }
       let(:child_job_hash) {
@@ -461,7 +464,8 @@ describe OodCore::Job::Adapters::Slurm do
           :state_compact=>"R",
           :reason=>"None",
           :start_time=>"N/A",
-          :submit_time=>"2017-03-31T10:09:44"
+          :submit_time=>"2017-03-31T10:09:44",
+          :time_limit=>"10:00:00"
         }
       }
 
@@ -481,6 +485,7 @@ describe OodCore::Job::Adapters::Slurm do
             :procs=>nil,
             :queue_name=>nil,
             :wallclock_time=>0,
+            :wallclock_limit=>1800,
             :cpu_time=>nil,
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
             :dispatch_time=>nil,
@@ -505,6 +510,7 @@ describe OodCore::Job::Adapters::Slurm do
             :procs=>nil,
             :queue_name=>nil,
             :wallclock_time=>0,
+            :wallclock_limit=>36000,
             :cpu_time=>nil,
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
             :dispatch_time=>nil,

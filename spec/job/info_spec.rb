@@ -27,6 +27,7 @@ describe OodCore::Job::Info do
   it { is_expected.to respond_to(:procs) }
   it { is_expected.to respond_to(:queue_name) }
   it { is_expected.to respond_to(:wallclock_time) }
+  it { is_expected.to respond_to(:wallclock_limit) }
   it { is_expected.to respond_to(:cpu_time) }
   it { is_expected.to respond_to(:submission_time) }
   it { is_expected.to respond_to(:dispatch_time) }
@@ -119,6 +120,12 @@ describe OodCore::Job::Info do
     it { is_expected.to eq(12345) }
   end
 
+  describe "#wallclock_limit" do
+    subject { build_info(wallclock_limit: double(to_i: 12345)).wallclock_limit }
+
+    it { is_expected.to eq(12345) }
+  end
+
   describe "#cpu_time" do
     subject { build_info(cpu_time: double(to_i: 12345)).cpu_time }
 
@@ -157,6 +164,7 @@ describe OodCore::Job::Info do
     it { is_expected.to have_key(:procs) }
     it { is_expected.to have_key(:queue_name) }
     it { is_expected.to have_key(:wallclock_time) }
+    it { is_expected.to have_key(:wallclock_limit) }
     it { is_expected.to have_key(:cpu_time) }
     it { is_expected.to have_key(:submission_time) }
     it { is_expected.to have_key(:dispatch_time) }

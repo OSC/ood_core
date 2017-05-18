@@ -1,5 +1,9 @@
 ## Unreleased
 
+Features:
+
+  - added wallclock time limit to `OodCore::Job::Info` object
+
 ## 0.0.4 (2017-05-17)
 
 Features:

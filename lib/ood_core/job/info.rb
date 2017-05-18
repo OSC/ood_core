@@ -44,6 +44,10 @@ module OodCore
       # @return [Fixnum, nil] wallclock time
       attr_reader :wallclock_time
 
+      # The total wall clock time limit in seconds
+      # @return [Fixnum, nil] wallclock time limit
+      attr_reader :wallclock_limit
+
       # The accumulated CPU time in seconds
       # @return [Fixnum, nil] cpu time
       attr_reader :cpu_time
@@ -71,6 +75,7 @@ module OodCore
       # @param procs [#to_i, nil] allocated total number of procs
       # @param queue_name [#to_s, nil] queue name
       # @param wallclock_time [#to_i, nil] wallclock time
+      # @param wallclock_limit [#to_i, nil] wallclock time limit
       # @param cpu_time [#to_i, nil] cpu time
       # @param submission_time [#to_i, nil] submission time
       # @param dispatch_time [#to_i, nil] dispatch time
@@ -78,8 +83,8 @@ module OodCore
       def initialize(id:, status:, allocated_nodes: [], submit_host: nil,
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
-                     cpu_time: nil, submission_time: nil, dispatch_time: nil,
-                     native: nil, **_)
+                     wallclock_limit: nil, cpu_time: nil, submission_time: nil,
+                     dispatch_time: nil, native: nil, **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
         @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(n.to_h) }
@@ -90,6 +95,7 @@ module OodCore
         @procs           = procs           && procs.to_i
         @queue_name      = queue_name      && queue_name.to_s
         @wallclock_time  = wallclock_time  && wallclock_time.to_i
+        @wallclock_limit = wallclock_limit && wallclock_limit.to_i
         @cpu_time        = cpu_time        && cpu_time.to_i
         @submission_time = submission_time && Time.at(submission_time.to_i)
         @dispatch_time   = dispatch_time   && Time.at(dispatch_time.to_i)
@@ -110,6 +116,7 @@ module OodCore
           procs:           procs,
           queue_name:      queue_name,
           wallclock_time:  wallclock_time,
+          wallclock_limit: wallclock_limit,
           cpu_time:        cpu_time,
           submission_time: submission_time,
           dispatch_time:   dispatch_time,
