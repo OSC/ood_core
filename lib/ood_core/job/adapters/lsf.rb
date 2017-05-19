@@ -72,24 +72,9 @@ module OodCore
           afternotok = Array(afternotok).map(&:to_s)
           afterany   = Array(afterany).map(&:to_s)
 
-          args = []
-          args += ["-P", script.accounting_id] unless script.accounting_id.nil?
-          args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
-          args += ["-J", script.job_name] unless script.job_name.nil?
+          kwargs = helper.batch_submit_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
-          # TODO: dependencies
-
-          env = {
-            #TODO:
-            #LSB_HOSTS?
-            #LSB_MCPU_HOSTS?
-            #SNDJOBS_TO?
-            #
-          }
-
-          # Submit job
-          batch.submit_string(script.content, args: args, env: env)
-
+          batch.submit_string(script.content, **kwargs)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
@@ -170,20 +155,29 @@ module OodCore
           end
 
           def info_for_batch_hash(v)
+            nodes = helper.parse_exec_host(v[:exec_host]).map do |host|
+              NodeInfo.new(name: host[:host], procs: host[:slots])
+            end
+
+            # FIXME: estimated_runtime should be set by batch object instead of
+            dispatch_time = helper.parse_past_time(v[:start_time], ignore_errors: true)
+            finish_time = helper.parse_past_time(v[:finish_time], ignore_errors: true)
+
             Info.new(
               id: v[:id],
               status: get_state(v[:status]),
-              allocated_nodes: [],
+              allocated_nodes: nodes,
               submit_host: v[:from_host],
               job_name: v[:name],
               job_owner: v[:user],
               accounting_id: v[:project],
-              procs: nil,
+              procs: nodes.any? ? nodes.map(&:procs).reduce(&:+) : 0,
               queue_name: v[:queue],
-              wallclock_time: nil,
-              cpu_time: nil,
+              wallclock_time: helper.estimate_runtime(current_time: Time.now, start_time: dispatch_time, finish_time: finish_time),
+              cpu_time: helper.parse_cpu_used(v[:cpu_used]),
+              # cpu_time: nil,
               submission_time: helper.parse_past_time(v[:submit_time], ignore_errors: true),
-              dispatch_time: helper.parse_past_time(v[:start_time], ignore_errors: true),
+              dispatch_time: dispatch_time,
               native: v
             )
           end
