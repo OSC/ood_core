@@ -33,8 +33,12 @@ module OodCore
     # @option cluster [#to_h] :metadata ({}) The cluster's metadata
     # @option cluster [#to_h] :login ({}) The cluster's SSH host
     # @option cluster [#to_h] :job ({}) The job adapter for this cluster
-    # @option cluster [#to_h] :custom ({}) Any custom resources for this cluster
-    # @option cluster [Array<#to_h>] :acls ([]) List of ACLs to validate against
+    # @option cluster [#to_h] :custom ({}) Any custom resources for this
+    #   cluster
+    # @option cluster [Array<#to_h>] :acls ([]) List of ACLs to validate
+    #   against
+    # @option cluster [#to_h] :batch_connect ({}) Configuration for batch
+    #   connect templates
     def initialize(cluster)
       c = cluster.to_h.symbolize_keys
 
@@ -47,6 +51,7 @@ module OodCore
       @job_config      = c.fetch(:job, {})     .to_h.symbolize_keys
       @custom_config   = c.fetch(:custom, {})  .to_h.symbolize_keys
       @acls_config     = c.fetch(:acls, [])    .map(&:to_h)
+      @batch_connect_config = c.fetch(:batch_connect, {}).to_h.symbolize_keys
     end
 
     # Metadata that provides extra information about this cluster
@@ -79,6 +84,25 @@ module OodCore
       allow? &&
         !job_config.empty? &&
         build_acls(job_config.fetch(:acls, []).map(&:to_h)).all?(&:allow?)
+    end
+
+    # The batch connect template configuration used for this cluster
+    # @param template [#to_sym, nil] the template type
+    # @return [Hash] the batch connect configuration
+    def batch_connect_config(template = nil)
+      if template
+        @batch_connect_config.fetch(template.to_sym, {}).to_h.symbolize_keys.merge(template: template.to_sym)
+      else
+        @batch_connect_config
+      end
+    end
+
+    # Build a batch connect template from the respective configuration
+    # @param context [#to_h] the context used for rendering the template
+    # @return [BatchConnect::Template] the batch connect template
+    def batch_connect_template(context = {})
+      context = context.to_h.symbolize_keys
+      BatchConnect::Factory.build batch_connect_config(context[:template] || :basic).merge(context)
     end
 
     # The configuration for any custom features or resources for this cluster
@@ -125,12 +149,13 @@ module OodCore
     # @return [Hash] the hash describing this object
     def to_h
       {
-        id:        id,
-        metadata:  metadata_config,
-        login:     login_config,
-        job:       job_config,
-        custom:    custom_config,
-        acls:      acls_config
+        id: id,
+        metadata: metadata_config,
+        login: login_config,
+        job: job_config,
+        custom: custom_config,
+        acls: acls_config,
+        batch_connect:  batch_connect_config
       }
     end
 
