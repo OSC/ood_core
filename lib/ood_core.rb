@@ -30,4 +30,10 @@ module OodCore
     module Adapters
     end
   end
+
+  # A namespace for batch connect code
+  module BatchConnect
+    require "ood_core/batch_connect/template"
+    require "ood_core/batch_connect/factory"
+  end
 end

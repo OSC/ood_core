@@ -16,4 +16,10 @@ module OodCore
 
   # Raised when a job state is set to an invalid option
   class UnknownStateAttribute < Error; end
+
+  # Raised when template not specified in configuration
+  class TemplateNotSpecified < Error; end
+
+  # Raised when cannot find template specified in configuration
+  class TemplateNotFound < Error; end
 end
