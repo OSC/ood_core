@@ -73,8 +73,6 @@ module OodCore
             vnc_env = context.fetch(:vnc_env, "").to_s
 
             <<-EOT.gsub(/^ {14}/, "")
-              #{super}
-
               # Load VNC environment
               #{vnc_env}
 
@@ -121,6 +119,8 @@ module OodCore
               port=$((5900+display))
 
               echo "Successfully started VNC server on ${host}:${port}..."
+
+              #{super}
             EOT
           end
 
@@ -135,6 +135,8 @@ module OodCore
             websockify_cmd = context.fetch(:websockify_cmd, "${WEBSOCKIFY_CMD:-/opt/websockify/run}").to_s
 
             <<-EOT.gsub(/^ {14}/, "")
+              #{super}
+
               # Launch websockify websocket server
               echo "Starting websocket server..."
               websocket=$(find_port)
@@ -150,8 +152,6 @@ module OodCore
                   create_yml
                 fi
               done < <(tail -f --pid=${SCRIPT_PID} "#{vnc_log}") &
-
-              #{super}
             EOT
           end
 
