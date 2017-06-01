@@ -26,6 +26,9 @@ module OodCore
       #   looking for available port
       # @option context [#to_i] :passwd_size (32) Length of randomly generated
       #   password
+      # @option context [#to_s] :script_wrapper ("%s") Bash code that wraps
+      #   around the body of the template script (use `%s` to interpolate the
+      #   body)
       # @option context [#to_s] :before_script ("...") Bash code run before the
       #   main script is forked off
       # @option context [#to_s] :before_file ("before.sh") Path to script that
@@ -54,43 +57,7 @@ module OodCore
         <<-EOT.gsub(/^ {10}/, '')
           #!/bin/bash
 
-          cd #{work_dir}
-
-          # Generate a connection yaml file with given parameters
-          function create_yml () {
-            echo "Generating connection YAML file..."
-            (
-              umask 077
-              echo -e "#{conn_params.map { |p| "#{p}: $#{p}" }.join('\n')}" > "#{conn_file}"
-            )
-          }
-
-          # Cleanliness is next to Godliness
-          function clean_up () {
-            echo "Cleaning up..."
-            #{clean_script.gsub(/\n(?=[^\s])/, "\n  ")}
-            pkill -P $$
-            exit ${1:-0}
-          }
-
-          #{bash_helpers}
-
-          #{before_script}
-
-          echo "Script starting..."
-          #{run_script} &
-          SCRIPT_PID=$!
-
-          #{after_script}
-
-          # Create the connection yaml file
-          create_yml
-
-          # Wait for script process to finish
-          wait ${SCRIPT_PID} || clean_up 1
-
-          # Exit cleanly
-          clean_up
+          #{script_wrapper}
         EOT
       end
 
@@ -148,6 +115,12 @@ module OodCore
           end.to_s
         end
 
+        # Bash code that wraps around the body of the template script (use `%s`
+        # to interpolate the body)
+        def script_wrapper
+          context.fetch(:script_wrapper, "%s").to_s % base_script
+        end
+
         # Source in a developer defined script before running the main script
         def before_script
           context.fetch(:before_script) do
@@ -185,6 +158,49 @@ module OodCore
 
             "[[ -e \"#{clean_file}\" ]] && source \"#{clean_file}\""
           end.to_s
+        end
+
+        # The base script template
+        def base_script
+          <<-EOT.gsub(/^ {12}/, '')
+            cd #{work_dir}
+
+            # Generate a connection yaml file with given parameters
+            function create_yml () {
+              echo "Generating connection YAML file..."
+              (
+                umask 077
+                echo -e "#{conn_params.map { |p| "#{p}: $#{p}" }.join('\n')}" > "#{conn_file}"
+              )
+            }
+
+            # Cleanliness is next to Godliness
+            function clean_up () {
+              echo "Cleaning up..."
+              #{clean_script.gsub(/\n(?=[^\s])/, "\n  ")}
+              pkill -P $$
+              exit ${1:-0}
+            }
+
+            #{bash_helpers}
+
+            #{before_script}
+
+            echo "Script starting..."
+            #{run_script} &
+            SCRIPT_PID=$!
+
+            #{after_script}
+
+            # Create the connection yaml file
+            create_yml
+
+            # Wait for script process to finish
+            wait ${SCRIPT_PID} || clean_up 1
+
+            # Exit cleanly
+            clean_up
+          EOT
         end
     end
   end
