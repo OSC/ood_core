@@ -6,6 +6,7 @@ module OodCore
     # external connections to the running job
     class Template
       using Refinements::HashExtensions
+      using Refinements::ArrayExtensions
 
       # The context used to render this template
       # @return [Hash] context hash
