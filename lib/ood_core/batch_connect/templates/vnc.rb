@@ -21,9 +21,6 @@ module OodCore
         #   connection parameters added to the connection file (`:host`,
         #   `:port`, `:password`, `:spassword`, `:display` and `:websocket`
         #   will always exist)
-        # @option context [#to_s] :vnc_env ("") script to setup environment
-        #   necessary to load turbovnc and novnc (assumes you don't modify
-        #   `:before_script`)
         # @option context [#to_s] :websockify_cmd
         #   ("${WEBSOCKIFY_CMD:-/opt/websockify/run}") the path to the
         #   websockify script (assumes you don't modify `:after_script`)
@@ -70,12 +67,7 @@ module OodCore
           # Before running the main script, start up a VNC server and record
           # the connection information
           def before_script
-            vnc_env = context.fetch(:vnc_env, "").to_s
-
             <<-EOT.gsub(/^ {14}/, "")
-              # Load VNC environment
-              #{vnc_env}
-
               # Setup one-time use passwords and initialize the VNC password
               function change_passwd () {
                 echo "Setting VNC password..."
