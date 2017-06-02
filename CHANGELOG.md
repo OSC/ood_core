@@ -4,7 +4,7 @@ Features:
 
   - added wallclock time limit to `OodCore::Job::Info` object
   - added further support for the LSF adapter
-  - added a new Batch Connect template feature that build batch scripts to
+  - added a new Batch Connect template feature that builds batch scripts to
     launch web servers
 
 ## 0.0.4 (2017-05-17)
