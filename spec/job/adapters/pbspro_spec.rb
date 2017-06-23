@@ -26,225 +26,205 @@ describe OodCore::Job::Adapters::PBSPro do
     end
   end
 
-  #describe "#submit" do
-  #  def build_script(opts = {})
-  #    OodCore::Job::Script.new(
-  #      {
-  #        content: content
-  #      }.merge opts
-  #    )
-  #  end
+  describe "#submit" do
+    def build_script(opts = {})
+      OodCore::Job::Script.new(
+        {
+          content: content
+        }.merge opts
+      )
+    end
 
-  #  let(:slurm) { double(submit_string: "job.123") }
-  #  let(:content) { "my batch script" }
+    let(:pbspro)  { double(submit_string: "job.123") }
+    let(:content) { "my batch script" }
 
-  #  context "when script not defined" do
-  #    it "raises ArgumentError" do
-  #      expect { adapter.submit }.to raise_error(ArgumentError)
-  #    end
-  #  end
+    context "when script not defined" do
+      it "raises ArgumentError" do
+        expect { adapter.submit }.to raise_error(ArgumentError)
+      end
+    end
 
-  #  subject { adapter.submit(build_script) }
+    subject { adapter.submit(build_script) }
 
-  #  it "returns job id" do
-  #    is_expected.to eq("job.123")
-  #    expect(slurm).to have_received(:submit_string).with(content, args: [], env: {})
-  #  end
+    it "returns job id" do
+      is_expected.to eq("job.123")
+      expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: nil)
+    end
 
-  #  context "with :queue_name" do
-  #    before { adapter.submit(build_script(queue_name: "queue")) }
+    context "with :queue_name" do
+      before { adapter.submit(build_script(queue_name: "queue")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-p", "queue"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-q", "queue", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :args" do
-  #    before { adapter.submit(build_script(args: ["arg1", "arg2"])) }
+    context "with :args" do
+      before { adapter.submit(build_script(args: ["arg1", "arg2"])) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :submit_as_hold" do
-  #    context "as true" do
-  #      before { adapter.submit(build_script(submit_as_hold: true)) }
+    context "with :submit_as_hold" do
+      context "as true" do
+        before { adapter.submit(build_script(submit_as_hold: true)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["-H"], env: {}) }
-  #    end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-h", "-j", "oe"], chdir: nil) }
+      end
 
-  #    context "as false" do
-  #      before { adapter.submit(build_script(submit_as_hold: false)) }
+      context "as false" do
+        before { adapter.submit(build_script(submit_as_hold: false)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #    end
-  #  end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: nil) }
+      end
+    end
 
-  #  context "with :rerunnable" do
-  #    context "as true" do
-  #      before { adapter.submit(build_script(rerunnable: true)) }
+    context "with :rerunnable" do
+      context "as true" do
+        before { adapter.submit(build_script(rerunnable: true)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--requeue"], env: {}) }
-  #    end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-r", "y", "-j", "oe"], chdir: nil) }
+      end
 
-  #    context "as false" do
-  #      before { adapter.submit(build_script(rerunnable: false)) }
+      context "as false" do
+        before { adapter.submit(build_script(rerunnable: false)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--no-requeue"], env: {}) }
-  #    end
-  #  end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-r", "n", "-j", "oe"], chdir: nil) }
+      end
+    end
 
-  #  context "with :job_environment" do
-  #    before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
+    context "with :job_environment" do
+      before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["--export", "key"], env: {"key" => "value"}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-v", "key=value", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :workdir" do
-  #    before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
+    context "with :workdir" do
+      before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-D", "/path/to/workdir"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: Pathname.new("/path/to/workdir")) }
+    end
 
-  #  context "with :email" do
-  #    before { adapter.submit(build_script(email: ["email1", "email2"])) }
+    context "with :email" do
+      before { adapter.submit(build_script(email: ["email1", "email2"])) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-user", "email1,email2"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-M", "email1,email2", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :email_on_started" do
-  #    context "as true" do
-  #      before { adapter.submit(build_script(email_on_started: true)) }
+    context "with :email_on_started" do
+      context "as true" do
+        before { adapter.submit(build_script(email_on_started: true)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-type", "BEGIN"], env: {}) }
-  #    end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-m", "b", "-j", "oe"], chdir: nil) }
+      end
 
-  #    context "as false" do
-  #      before { adapter.submit(build_script(email_on_started: false)) }
+      context "as false" do
+        before { adapter.submit(build_script(email_on_started: false)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #    end
-  #  end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: nil) }
+      end
+    end
 
-  #  context "with :email_on_terminated" do
-  #    context "as true" do
-  #      before { adapter.submit(build_script(email_on_terminated: true)) }
+    context "with :email_on_terminated" do
+      context "as true" do
+        before { adapter.submit(build_script(email_on_terminated: true)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-type", "END"], env: {}) }
-  #    end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-m", "e", "-j", "oe"], chdir: nil) }
+      end
 
-  #    context "as false" do
-  #      before { adapter.submit(build_script(email_on_terminated: false)) }
+      context "as false" do
+        before { adapter.submit(build_script(email_on_terminated: false)) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #    end
-  #  end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: nil) }
+      end
+    end
 
-  #  context "with :email_on_started and :email_on_terminated" do
-  #    before { adapter.submit(build_script(email_on_started: true, email_on_terminated: true)) }
+    context "with :email_on_started and :email_on_terminated" do
+      before { adapter.submit(build_script(email_on_started: true, email_on_terminated: true)) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["--mail-type", "ALL"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-m", "be", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :job_name" do
-  #    before { adapter.submit(build_script(job_name: "my_job")) }
+    context "with :job_name" do
+      before { adapter.submit(build_script(job_name: "my_job")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-J", "my_job"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-N", "my_job", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :input_path" do
-  #    before { adapter.submit(build_script(input_path: "/path/to/input")) }
+    context "with :input_path" do
+      before { adapter.submit(build_script(input_path: "/path/to/input")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-i", Pathname.new("/path/to/input")], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :output_path" do
-  #    before { adapter.submit(build_script(output_path: "/path/to/output")) }
+    context "with :output_path" do
+      before { adapter.submit(build_script(output_path: "/path/to/output")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-o", Pathname.new("/path/to/output")], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-o", Pathname.new("/path/to/output"), "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :error_path" do
-  #    before { adapter.submit(build_script(error_path: "/path/to/error")) }
+    context "with :error_path" do
+      before { adapter.submit(build_script(error_path: "/path/to/error")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-e", Pathname.new("/path/to/error")], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-e", Pathname.new("/path/to/error")], chdir: nil) }
+    end
 
-  #  context "with :reservation_id" do
-  #    before { adapter.submit(build_script(reservation_id: "my_rsv")) }
+    context "with :reservation_id" do
+      before { adapter.submit(build_script(reservation_id: "my_rsv")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["--reservation", "my_rsv"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-q", "my_rsv", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :priority" do
-  #    before { adapter.submit(build_script(priority: 123)) }
+    context "with :priority" do
+      before { adapter.submit(build_script(priority: 123)) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["--priority", 123], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-p", 123, "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :start_time" do
-  #    before { adapter.submit(build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
+    context "with :start_time" do
+      before { adapter.submit(build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["--begin", "2016-11-08T13:53:54"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-a", "201611081353.54", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :accounting_id" do
-  #    before { adapter.submit(build_script(accounting_id: "my_account")) }
+    context "with :accounting_id" do
+      before { adapter.submit(build_script(accounting_id: "my_account")) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-A", "my_account"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-A", "my_account", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :wall_time" do
-  #    before { adapter.submit(build_script(wall_time: 94534)) }
+    context "with :wall_time" do
+      before { adapter.submit(build_script(wall_time: 94534)) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["-t", "26:15:34"], env: {}) }
-  #  end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-l", "walltime=26:15:34", "-j", "oe"], chdir: nil) }
+    end
 
-  #  context "with :nodes" do
-  #    context "as single node name" do
-  #      before { adapter.submit(build_script(nodes: "node")) }
+    context "with :native" do
+      before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #    end
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-j", "oe", "A", "B", "C"], chdir: nil) }
+    end
 
-  #    context "as single node request object" do
-  #      before { adapter.submit(build_script(nodes: {procs: 12, properties: ["prop1", "prop2"]})) }
+    %i(after afterok afternotok afterany).each do |after|
+      context "and :#{after} is defined as a single job id" do
+        before { adapter.submit(build_script, after => "job_id") }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #    end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-W", "depend=#{after}:job_id", "-j", "oe"], chdir: nil) }
+      end
 
-  #    context "as a list of nodes" do
-  #      before { adapter.submit(build_script(nodes: ["node1"] + [{procs: 12}]*4 + ["node2", {procs: 45, properties: "prop"}])) }
+      context "and :#{after} is defined as multiple job ids" do
+        before { adapter.submit(build_script, after => ["job1", "job2"]) }
 
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-  #    end
-  #  end
+        it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-W", "depend=#{after}:job1:job2", "-j", "oe"], chdir: nil) }
+      end
+    end
 
-  #  context "with :native" do
-  #    before { adapter.submit(build_script(native: ["A", "B", "C"])) }
+    context "when OodCore::Job::Adapters::PBSPro::Batch::Error is raised" do
+      before { expect(pbspro).to receive(:submit_string).and_raise(OodCore::Job::Adapters::PBSPro::Batch::Error) }
 
-  #    it { expect(slurm).to have_received(:submit_string).with(content, args: ["A", "B", "C"], env: {}) }
-  #  end
-
-  #  %i(after afterok afternotok afterany).each do |after|
-  #    context "and :#{after} is defined as a single job id" do
-  #      before { adapter.submit(build_script, after => "job_id") }
-
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["-d", "#{after}:job_id"], env: {}) }
-  #    end
-
-  #    context "and :#{after} is defined as multiple job ids" do
-  #      before { adapter.submit(build_script, after => ["job1", "job2"]) }
-
-  #      it { expect(slurm).to have_received(:submit_string).with(content, args: ["-d", "#{after}:job1:job2"], env: {}) }
-  #    end
-  #  end
-
-  #  context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-  #    before { expect(slurm).to receive(:submit_string).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
-
-  #    it "raises OodCore::JobAdapterError" do
-  #      expect { subject }.to raise_error(OodCore::JobAdapterError)
-  #    end
-  #  end
-  #end
+      it "raises OodCore::JobAdapterError" do
+        expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+    end
+  end
 
   describe "#info_all" do
     let(:pbspro) { double(get_jobs: {}) }

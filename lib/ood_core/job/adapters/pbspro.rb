@@ -123,21 +123,23 @@ module OodCore
           # Submit a script expanded as a string to the batch server
           # @param str [#to_s] script as a string
           # @param args [Array<#to_s>] arguments passed to `qsub` command
+          # @param chdir [#to_s] working directory where `qsub` is called
           # @raise [Error] if `qsub` command exited unsuccessfully
           # @return [String] the id of the job that was created
-          def submit_string(str, args: [])
-            call("qsub", *args, stdin: str.to_s).strip
+          def submit_string(str, args: [], chdir: nil)
+            call("qsub", *args, stdin: str.to_s, chdir: chdir.to_s).strip
           end
 
           private
             # Call a forked PBS Pro command for a given batch server
-            def call(cmd, *args, env: {}, stdin: "")
+            def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
               cmd = bin.join(cmd).to_s if bin
               args = args.map(&:to_s)
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
-              env["PBS_SERVER"] = host.to_s if host
-              o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
+              env["PBS_DEFAULT"] = host.to_s if host
+              chdir ||= "."
+              o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)
             end
         end
@@ -191,31 +193,28 @@ module OodCore
 
           # Set qsub options
           args = []
-          # ignore args, don't know how to do this for slurm
-          args += ["-H"] if script.submit_as_hold
-          args += (script.rerunnable ? ["--requeue"] : ["--no-requeue"]) unless script.rerunnable.nil?
-          args += ["-D", script.workdir.to_s] unless script.workdir.nil?
-          args += ["--mail-user", script.email.join(",")] unless script.email.nil?
+          # ignore args, can't use these if submitting from STDIN
+          args += ["-h"] if script.submit_as_hold
+          args += ["-r", script.rerunnable ? "y" : "n"] unless script.rerunnable.nil?
+          args += ["-M", script.email.join(",")] unless script.email.nil?
           if script.email_on_started && script.email_on_terminated
-            args += ["--mail-type", "ALL"]
+            args += ["-m", "be"]
           elsif script.email_on_started
-            args += ["--mail-type", "BEGIN"]
+            args += ["-m", "b"]
           elsif script.email_on_terminated
-            args += ["--mail-type", "END"]
-          elsif script.email_on_started == false && script.email_on_terminated == false
-            args += ["--mail-type", "NONE"]
+            args += ["-m", "e"]
           end
-          args += ["-J", script.job_name] unless script.job_name.nil?
-          args += ["-i", script.input_path] unless script.input_path.nil?
+          args += ["-N", script.job_name] unless script.job_name.nil?
+          # ignore input_path (not defined in PBS Pro)
           args += ["-o", script.output_path] unless script.output_path.nil?
           args += ["-e", script.error_path] unless script.error_path.nil?
-          args += ["--reservation", script.reservation_id] unless script.reservation_id.nil?
-          args += ["-p", script.queue_name] unless script.queue_name.nil?
-          args += ["--priority", script.priority] unless script.priority.nil?
-          args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
+          # Reservations are actually just queues in PBS Pro
+          args += ["-q", script.reservation_id] if !script.reservation_id.nil? && script.queue_name.nil?
+          args += ["-q", script.queue_name] unless script.queue_name.nil?
+          args += ["-p", script.priority] unless script.priority.nil?
+          args += ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
           args += ["-A", script.accounting_id] unless script.accounting_id.nil?
-          args += ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
-          # ignore nodes, don't know how to do this for slurm
+          args += ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
 
           # Set dependencies
           depend = []
@@ -223,17 +222,21 @@ module OodCore
           depend << "afterok:#{afterok.join(":")}"       unless afterok.empty?
           depend << "afternotok:#{afternotok.join(":")}" unless afternotok.empty?
           depend << "afterany:#{afterany.join(":")}"     unless afterany.empty?
-          args += ["-d", depend.join(",")]               unless depend.empty?
+          args += ["-W", "depend=#{depend.join(",")}"]   unless depend.empty?
 
           # Set environment variables
-          env = script.job_environment || {}
-          args += ["--export", script.job_environment.keys.join(",")] unless script.job_environment.nil? || script.job_environment.empty?
+          envvars = script.job_environment.to_h
+          args += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
+
+          # If error_path is not specified we join stdout & stderr (as this
+          # mimics what the other resource managers do)
+          args += ["-j", "oe"] if script.error_path.nil?
 
           # Set native options
           args += script.native if script.native
 
           # Submit job
-          @slurm.submit_string(script.content, args: args, env: env)
+          @pbspro.submit_string(script.content, args: args, chdir: script.workdir)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
