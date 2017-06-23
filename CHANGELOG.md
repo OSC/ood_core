@@ -7,6 +7,10 @@ Features:
   - added a new Batch Connect template feature that builds batch scripts to
     launch web servers
 
+Bugfixes:
+
+  - fix parsing bjobs output for LSF 9.1, which has extra SLOTS column
+
 ## 0.0.4 (2017-05-17)
 
 Features:

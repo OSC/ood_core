@@ -60,10 +60,13 @@ class OodCore::Job::Adapters::Lsf::Batch
     return [] if response =~ /No job found/ || response.nil?
 
     lines = response.split("\n")
-    validate_bjobs_output_columns(lines.first.split)
+    columns = lines.shift.split
 
-    lines.drop(1).map{ |job|
-      values = split_bjobs_output_line(job)
+    validate_bjobs_output_columns(columns)
+    jobname_column_idx = columns.find_index("JOB_NAME")
+
+    lines.map{ |job|
+      values = split_bjobs_output_line(job, num_columns: columns.count, jobname_column_idx: jobname_column_idx)
 
       # make a hash of { field: "value", etc. }
       Hash[fields.zip(values)].each_with_object({}) { |(k,v),o|
@@ -135,13 +138,21 @@ class OodCore::Job::Adapters::Lsf::Batch
     end
 
     # split a line of output from bjobs into field values
-    def split_bjobs_output_line(line)
+    def split_bjobs_output_line(line, num_columns:, jobname_column_idx:)
       values = line.strip.split
 
-      if(values.count > 15)
-        # FIXME: hack assumes 15 fields & only job name may have spaces
-        # collapse >15 fields into 15, assumes 7th field is JOB_NAME
-        values = values[0..5] + [values[6..-9].join(" ")] + values[-8..-1]
+      if(values.count > num_columns)
+        # if the line has more fields than the number of columns, that means one
+        # field value has spaces, so it was erroneously split into
+        # multiple fields; we assume that is the jobname field, and we will
+        # collapse the fields into a single field
+        #
+        # FIXME: assumes jobname_column_idx is not first or last item
+        j = jobname_column_idx
+
+        # e.g. if 15 fields and jobname is 7th field
+        # values = values[0..5] + [values[6..-9].join(" ")] + values[-8..-1]
+        values = values[0..(j-1)] + [values[j..(j-num_columns)].join(" ")] + values[(j+1-num_columns)..-1]
       end
 
       values
@@ -151,9 +162,11 @@ class OodCore::Job::Adapters::Lsf::Batch
     def validate_bjobs_output_columns(columns)
       expected = %w(JOBID USER STAT QUEUE FROM_HOST EXEC_HOST JOB_NAME
                     SUBMIT_TIME PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME)
-      if columns != expected
+      # (expected & columns) will return the columns that are the same
+      # so if there are extra columns we can just ignore those (like SLOTS in LSF 9.1)
+      if columns && ((expected & columns) != expected)
         raise Error, "bjobs output in different format than expected: " \
-          "#{columns.inspect} instead of #{expected.inspect}"
+          "#{columns.inspect} did not include all columns: #{expected.inspect}"
       end
     end
 
