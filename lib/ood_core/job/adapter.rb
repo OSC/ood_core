@@ -39,6 +39,13 @@ module OodCore
         raise NotImplementedError, "subclass did not define #info_all"
       end
 
+      # Retrieve info for all jobs for a given owner from the resource manager
+      # @param owner [#to_s] the owner of the jobs
+      # @return [Array<Info>] information describing submitted jobs
+      def info_where_owner(owner)
+        info_all.select { |info| info.job_owner == owner.to_s }
+      end
+
       # Retrieve job info from the resource manager
       # @abstract Subclass is expected to implement {#info}
       # @raise [NotImplementedError] if subclass did not define {#info}

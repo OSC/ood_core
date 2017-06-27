@@ -7,6 +7,7 @@ Features:
   - added a new Batch Connect template feature that builds batch scripts to
     launch web servers
   - removed deprecated tests for the Slurm adapter
+  - added method to filter list of batch jobs for a given owner
 
 Bugfixes:
 
