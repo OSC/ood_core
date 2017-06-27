@@ -6,6 +6,7 @@ Features:
   - added further support for the LSF adapter
   - added a new Batch Connect template feature that builds batch scripts to
     launch web servers
+  - added support for the PBS Professional resource manager
 
 ## 0.0.4 (2017-05-17)
 
