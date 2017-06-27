@@ -9,12 +9,12 @@ module OodCore
       # Build the PBS Pro adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :host (nil) The batch server host
-      # @option config [Object] :bin (nil) Path to PBS Pro client binaries
+      # @option config [Object] :exec (nil) Path to PBS Pro executables
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
         host = c.fetch(:host, nil)
-        bin  = c.fetch(:bin, nil)
-        pbspro = Adapters::PBSPro::Batch.new(host: host, bin: bin)
+        exec = c.fetch(:exec, nil)
+        pbspro = Adapters::PBSPro::Batch.new(host: host, exec: exec)
         Adapters::PBSPro.new(pbspro: pbspro)
       end
     end
@@ -34,21 +34,21 @@ module OodCore
           # @return [String, nil] the batch server host
           attr_reader :host
 
-          # The path to the PBS Pro client installation binaries
+          # The path containing the PBS executables
           # @example
-          #   my_batch.bin.to_s #=> "/usr/local/pbspro/10.0.0/bin
-          # @return [Pathname, nil] path to pbspro binaries
-          attr_reader :bin
+          #   my_batch.exec.to_s #=> "/usr/local/pbspro/10.0.0
+          # @return [Pathname, nil] path to pbs executables
+          attr_reader :exec
 
           # The root exception class that all PBS Pro-specific exceptions
           # inherit from
           class Error < StandardError; end
 
           # @param host [#to_s, nil] the batch server host
-          # @param bin [#to_s, nil] path to pbspro installation binaries
-          def initialize(host: nil, bin: nil)
+          # @param exec [#to_s, nil] path to pbs executables
+          def initialize(host: nil, exec: nil)
             @host = host && host.to_s
-            @bin  = bin  && Pathname.new(bin.to_s)
+            @exec = exec && Pathname.new(exec.to_s)
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -123,21 +123,22 @@ module OodCore
           # Submit a script expanded as a string to the batch server
           # @param str [#to_s] script as a string
           # @param args [Array<#to_s>] arguments passed to `qsub` command
-          # @param chdir [#to_s] working directory where `qsub` is called
+          # @param chdir [#to_s, nil] working directory where `qsub` is called
           # @raise [Error] if `qsub` command exited unsuccessfully
           # @return [String] the id of the job that was created
           def submit_string(str, args: [], chdir: nil)
-            call("qsub", *args, stdin: str.to_s, chdir: chdir.to_s).strip
+            call("qsub", *args, stdin: str.to_s, chdir: chdir).strip
           end
 
           private
             # Call a forked PBS Pro command for a given batch server
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
-              cmd = bin.join(cmd).to_s if bin
+              cmd = exec.join("bin", cmd).to_s if exec
               args = args.map(&:to_s)
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
               env["PBS_DEFAULT"] = host.to_s if host
+              env["PBS_EXEC"]    = exec.to_s if exec
               chdir ||= "."
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)
@@ -265,7 +266,7 @@ module OodCore
           end.first || Info.new(id: id, status: :completed)
         rescue Batch::Error => e
           # set completed status if can't find job id
-          if /Unknown Job Id/ =~ e.message
+          if /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
             Info.new(
               id: id,
               status: :completed
@@ -293,7 +294,7 @@ module OodCore
           @pbspro.hold_job(id.to_s)
         rescue Batch::Error => e
           # assume successful job hold if can't find job id
-          raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message
+          raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
         end
 
         # Release the job that is on hold
@@ -305,7 +306,7 @@ module OodCore
           @pbspro.release_job(id.to_s)
         rescue Batch::Error => e
           # assume successful job release if can't find job id
-          raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message
+          raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
         end
 
         # Delete the submitted job
@@ -317,7 +318,7 @@ module OodCore
           @pbspro.delete_job(id.to_s)
         rescue Batch::Error => e
           # assume successful job deletion if can't find job id
-          raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message
+          raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
         end
 
         private
