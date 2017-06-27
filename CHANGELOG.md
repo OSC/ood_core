@@ -6,6 +6,7 @@ Features:
   - added further support for the LSF adapter
   - added a new Batch Connect template feature that builds batch scripts to
     launch web servers
+  - removed deprecated tests for the Slurm adapter
 
 Bugfixes:
 

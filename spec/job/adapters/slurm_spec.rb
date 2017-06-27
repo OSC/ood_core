@@ -197,26 +197,6 @@ describe OodCore::Job::Adapters::Slurm do
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-t", "26:15:34"], env: {}) }
     end
 
-    context "with :nodes" do
-      context "as single node name" do
-        before { adapter.submit(build_script(nodes: "node")) }
-
-        it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-      end
-
-      context "as single node request object" do
-        before { adapter.submit(build_script(nodes: {procs: 12, properties: ["prop1", "prop2"]})) }
-
-        it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-      end
-
-      context "as a list of nodes" do
-        before { adapter.submit(build_script(nodes: ["node1"] + [{procs: 12}]*4 + ["node2", {procs: 45, properties: "prop"}])) }
-
-        it { expect(slurm).to have_received(:submit_string).with(content, args: [], env: {}) }
-      end
-    end
-
     context "with :native" do
       before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 
