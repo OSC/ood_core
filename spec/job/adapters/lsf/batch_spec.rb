@@ -122,6 +122,34 @@ OUTPUT
     end
   end
 
+    it "parses output for one job in LSF 9.1" do
+      output = <<-OUTPUT
+JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TIME  PROJ_NAME CPU_USED MEM SWAP PIDS START_TIME FINISH_TIME SLOTS
+5861085 efranz  RUN   sn_xlong   login5      sx6036-1402 u256-1     06/15-16:48:55 082848040736 165:53:45.00 114    0      17435,17555,17559,17719 06/15-16:48:56 -  1
+      OUTPUT
+      expect(batch.parse_bjobs_output(output)).to eq([{
+        id: "5861085",
+        user: "efranz",
+        status: "RUN",
+        queue: "sn_xlong",
+        from_host: "login5",
+        exec_host: "sx6036-1402",
+        name: "u256-1",
+        submit_time: "06/15-16:48:55",
+        project: "082848040736",
+        cpu_used: "165:53:45.00",
+        mem:"114",
+        swap:"0",
+        pids:"17435,17555,17559,17719",
+        start_time: "06/15-16:48:56",
+        finish_time: nil,
+
+        # FIXME: we omit slots right now to make it easier to deal with both
+        # plus we can calculate the total number of slots in the LSF details pane
+        # slots: "1"
+       }])
+    end
+
   describe "#get_jobs" do
     it "calls bjobs with default args when id not specified" do
       expect(batch).to receive(:call).with("bjobs", *batch.bjobs_default_args)

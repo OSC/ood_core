@@ -7,6 +7,12 @@ Features:
   - added a new Batch Connect template feature that builds batch scripts to
     launch web servers
   - added support for the PBS Professional resource manager
+  - removed deprecated tests for the Slurm adapter
+  - added method to filter list of batch jobs for a given owner
+
+Bugfixes:
+
+  - fix parsing bjobs output for LSF 9.1, which has extra SLOTS column
 
 ## 0.0.4 (2017-05-17)
 
