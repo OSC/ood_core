@@ -9,6 +9,7 @@ Features:
   - added support for the PBS Professional resource manager
   - removed deprecated tests for the Slurm adapter
   - added method to filter list of batch jobs for a given owner
+  - Slurm adapter provides node info if available for non-running jobs
 
 Bugfixes:
 
