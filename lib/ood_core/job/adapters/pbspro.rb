@@ -354,6 +354,11 @@ module OodCore
           def parse_job_info(v)
             /^(?<job_owner>[\w-]+)@(?<submit_host>.+)$/ =~ v[:Job_Owner]
             allocated_nodes = parse_nodes(v[:exec_host] || "")
+            procs = allocated_nodes.inject(0) { |sum, x| sum + x[:procs] }
+            if allocated_nodes.empty? # fill in with requested resources
+              allocated_nodes = [ { name: nil } ] * v.fetch(:Resource_List, {})[:nodect].to_i
+              procs = v.fetch(:Resource_List, {})[:ncpus].to_i
+            end
             Info.new(
               id: v[:job_id],
               status: get_state(v[:job_state]),
@@ -362,7 +367,7 @@ module OodCore
               job_name: v[:Job_Name],
               job_owner: job_owner,
               accounting_id: v[:Account_Name],
-              procs: allocated_nodes.inject(0) { |sum, x| sum + x[:procs] },
+              procs: procs,
               queue_name: v[:queue],
               wallclock_time: duration_in_seconds(v.fetch(:resources_used, {})[:walltime]),
               wallclock_limit: duration_in_seconds(v.fetch(:Resource_List, {})[:walltime]),

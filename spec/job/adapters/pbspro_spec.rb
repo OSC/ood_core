@@ -302,12 +302,14 @@ describe OodCore::Job::Adapters::PBSPro do
         is_expected.to eq(OodCore::Job::Info.new(
           :id=>job_id,
           :status=>:queued,
-          :allocated_nodes=>[],
+          :allocated_nodes=>[
+            {:name=>""},
+          ],
           :submit_host=>"login3.cm.cluster",
           :job_name=>"be_5",
           :job_owner=>"trzask",
           :accounting_id=>nil,
-          :procs=>0,
+          :procs=>14,
           :queue_name=>"oc_windfall",
           :wallclock_time=>nil,
           :wallclock_limit=>864000,
