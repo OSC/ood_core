@@ -90,6 +90,15 @@ module OodCore
             jobs.reject { |j| /\[\]/ =~ j[:job_id] } # drop main job array jobs
           end
 
+          # Select batch jobs from the batch server
+          # @param args [Array<#to_s>] arguments passed to `qselect` command
+          # @raise [Error] if `qselect` command exited unsuccessfully
+          # @return [Array<String>] list of job ids that match selection
+          #   criteria
+          def select_jobs(args: [])
+            call("qselect", *args).split("\n").map(&:strip)
+          end
+
           # Put a specified job on hold
           # @example Put job "1234" on hold
           #   my_batch.hold_job("1234")
@@ -253,6 +262,27 @@ module OodCore
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
+
+      # Retrieve info for all jobs for a given owner from the resource manager
+      # @param owner [#to_s] the owner of the jobs
+      # @raise [JobAdapterError] if something goes wrong getting job info
+      # @return [Array<Info>] information describing submitted jobs
+      def info_where_owner(owner)
+        @pbspro.select_jobs(args: ["-u", owner.to_s]).map do |id|
+          begin
+            @pbspro.get_jobs(id: id).map do |v|
+              parse_job_info(v)
+            end
+          rescue Batch::Error => e
+            # return no jobs if can't find job id
+            if /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
+              []
+            else
+              raise JobAdapterError, e.message
+            end
+          end
+        end.flatten
+      end
 
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job

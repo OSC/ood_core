@@ -10,6 +10,7 @@ describe OodCore::Job::Adapters::PBSPro do
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info_all).with(0).arguments }
+  it { is_expected.to respond_to(:info_where_owner).with(1).argument }
   it { is_expected.to respond_to(:info).with(1).argument }
   it { is_expected.to respond_to(:status).with(1).argument }
   it { is_expected.to respond_to(:hold).with(1).argument }
@@ -240,6 +241,90 @@ describe OodCore::Job::Adapters::PBSPro do
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+    end
+  end
+
+  describe "#info_where_owner" do
+    let(:job_owner) { "job_owner" }
+    let(:pbspro) { double(select_jobs: job_ids) }
+    subject { adapter.info_where_owner(job_owner) }
+
+    context "owner has no jobs" do
+      let(:job_ids) { [] }
+
+      it { is_expected.to eq([]) }
+    end
+
+    context "when owner has multiple jobs" do
+      let(:job_ids) { [ "job_id_1", "job_id_2" ] }
+      let(:job_hash_1) {
+        {
+          :job_id=>"job_id_1",
+          :Job_Owner=>"#{job_owner}@server",
+          :job_state=>"Q",
+        }
+      }
+      let(:job_hash_2) {
+        {
+          :job_id=>"job_id_2",
+          :Job_Owner=>"#{job_owner}@server",
+          :job_state=>"Q",
+        }
+      }
+
+      before do
+        allow(pbspro).to receive(:get_jobs).with(id: "job_id_1").and_return([job_hash_1])
+        allow(pbspro).to receive(:get_jobs).with(id: "job_id_2").and_return([job_hash_2])
+      end
+
+      it "returns list of OodCore::Job::Info objects" do
+        is_expected.to eq([
+          OodCore::Job::Info.new(
+            :id=>"job_id_1",
+            :job_owner=>job_owner,
+            :submit_host=>"server",
+            :status=>:queued,
+            :procs=>0,
+            :native=>job_hash_1
+          ),
+          OodCore::Job::Info.new(
+            :id=>"job_id_2",
+            :job_owner=>job_owner,
+            :submit_host=>"server",
+            :status=>:queued,
+            :procs=>0,
+            :native=>job_hash_2
+          )
+        ])
+      end
+
+      context "and when OodCore::Job::Adapters::PBSPro::Batch::Error is raised" do
+        let(:msg) { "random error" }
+        before do
+          allow(pbspro).to receive(:get_jobs).with(id: "job_id_1").and_raise(OodCore::Job::Adapters::PBSPro::Batch::Error, msg)
+        end
+
+        it "raises OodCore::JobAdapterError" do
+          expect { subject }.to raise_error(OodCore::JobAdapterError)
+        end
+
+        context "due to invalid job id" do
+          let(:msg) { "qstat: Unknown Job Id job_id\n" }
+
+          it "returns list of non-completed OodCore::Job::Info objects" do
+            is_expected.to eq([
+              OodCore::Job::Info.new(
+                :id=>"job_id_2",
+                :job_owner=>job_owner,
+                :submit_host=>"server",
+                :status=>:queued,
+                :procs=>0,
+                :native=>job_hash_2
+              )
+            ])
+          end
+        end
       end
     end
   end
