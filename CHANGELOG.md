@@ -3,6 +3,7 @@
 Features:
 
   - added helpful scripts to setup and launch console
+  - provide support to get status of selected jobs on batch server
 
 ## 2.0.4 (2017-03-28)
 

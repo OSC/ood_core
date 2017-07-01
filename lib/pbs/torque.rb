@@ -119,6 +119,16 @@ module PBS
     #   @return [BatchStatus] c-linked list of batch status objects
     #   @note It is up to the user to free the space of the batch status objects
 
+    # @!method self.pbs_selstat(connect, attrib, extend)
+    #   Obtain status of selected PBS batch jobs
+    #     batch_status * pbs_selstat(int connect, struct attropl *sel_list, char *extend)
+    #   @see http://linux.die.net/man/3/pbs_selstat
+    #   @param connect [Fixnum] connection identifier
+    #   @param attrib [Attropl] the attribute operation c-linked list object
+    #   @param extend [String] implementation defined extensions
+    #   @return [BatchStatus] c-linked list of batch status objects
+    #   @note It is up to the user to free the space of the batch status objects
+
     # @!method self.pbs_submit(connect, attrib, script, destination, extend)
     #   Submit a PBS batch job
     #     char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
@@ -159,6 +169,7 @@ module PBS
       attach_function :pbs_statnode, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
       attach_function :pbs_statque, [ :int, :string, Attrl.ptr, :string ], BatchStatus.ptr
       attach_function :pbs_statserver, [ :int, Attrl.ptr, :string ], BatchStatus.ptr
+      attach_function :pbs_selstat, [ :int, Attropl.ptr, :string ], BatchStatus.ptr
 
       # FIXME: The space for the job_identifier string is allocated by
       # pbs_submit() and should be released via a call to free() when no longer
@@ -236,21 +247,19 @@ module PBS
              :value,    :pointer,         # string for value of attribute
              :op,       BatchOp           # operation to perform for this attribute
 
-      # Convert to C-linked list of structs from hash
-      # @param hash [Hash] hash representation of this c-linked list
+      # Convert to C-linked list of structs from list of hashes
+      # @param list [Array<#to_h>] list of hashes describing attribute
       # @return [Attropl] generated attribute operation c-linked list object
-      def self.from_hash(hash)
-        # Convert hash into array
-        # Format: {name: value, name: {resource: value, resource: value}}
-        # {a: 1, b: {c: 2, d: 3}} => [[:a,1],[:b,2,:c],[:b,3,:d]]
-        ary = hash.map{|k,v| [*v].map{|v2| [k,*[*v2].reverse]}}.flatten(1)
+      def self.from_list(list)
+        list = list.map(&:to_h)
         attropl = nil
         prev = Attropl.new(FFI::Pointer::NULL)
-        ary.each do |attrib|
+        list.each do |attrib|
           attropl = Attropl.new
-          attropl[:name]     = FFI::MemoryPointer.from_string attrib[0].to_s
-          attropl[:value]    = FFI::MemoryPointer.from_string attrib[1].to_s
-          attropl[:resource] = FFI::MemoryPointer.from_string attrib[2].to_s if attrib[2]
+          attropl[:name]     = FFI::MemoryPointer.from_string attrib[:name].to_s
+          attropl[:value]    = FFI::MemoryPointer.from_string attrib[:value].to_s
+          attropl[:resource] = FFI::MemoryPointer.from_string attrib[:resource].to_s
+          attropl[:op]       = (attrib[:op] || :eq).to_sym
           attropl[:next]     = prev
           prev = attropl
         end

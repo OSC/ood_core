@@ -179,6 +179,35 @@ module PBS
       get_nodes(id: id, **kwargs)
     end
 
+    # Get a list of hashes of the selected jobs on the batch server
+    # @example Status info for jobs owned by Bob
+    #   my_conn.select_jobs(attribs: [{name: "User_List", value: "bob", op: :eq}])
+    #   #=>
+    #   #{
+    #   #  "10219837.oak-batch.osc.edu" => {
+    #   #    :Job_Owner => "bob@oakley02.osc.edu",
+    #   #    :Job_Name => "CFD_Solver",
+    #   #    ...
+    #   #  },
+    #   #  "10219839.oak-batch.osc.edu" => {
+    #   #    :Job_Owner => "bob@oakley02.osc.edu",
+    #   #    :Job_Name => "CFD_Solver2",
+    #   #    ...
+    #   #  },
+    #   #  ...
+    #   #}
+    # @param attribs [Array<#to_h>] list of hashes describing attributes to
+    #   select on
+    # @return [Hash] hash of details of selected jobs
+    #
+    def select_jobs(attribs: [])
+      connect do |cid|
+        attribs = PBS::Torque::Attropl.from_list(attribs.map(&:to_h))
+        batch_status = Torque.pbs_selstat cid, attribs, nil
+        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
+      end
+    end
+
     # Get a list of hashes of the jobs on the batch server
     # @example Status info for OSC Oakley jobs
     #   my_conn.get_jobs
@@ -309,12 +338,22 @@ module PBS
     private
       # Submit a script using Torque library
       def pbs_submit(script, queue, headers, resources, envvars)
-        attribs = headers.dup
-        attribs[ATTR[:l]] = resources.dup unless resources.empty?
-        attribs[ATTR[:v]] = envvars.map{|k,v| "#{k}=#{v}"}.join(",") unless envvars.empty?
+        attribs = []
+        headers.each do |name, value|
+          attribs << { name: name, value: value }
+        end
+        resources.each do |rsc, value|
+          attribs << { name: :Resource_List, resource: rsc, value: value }
+        end
+        unless envvars.empty?
+          attribs << {
+            name: :Variable_List,
+            value: envvars.map {|k,v| "#{k}=#{v}"}.join(",")
+          }
+        end
 
         connect do |cid|
-          attropl = Torque::Attropl.from_hash attribs
+          attropl = Torque::Attropl.from_list attribs
           Torque.pbs_submit cid, attropl, script, queue, nil
         end
       end
