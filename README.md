@@ -34,7 +34,7 @@ oakley = PBS::Batch.new(
 )
 
 # Get status information for this batch server
-# see http://linux.die.net/man/7/pbs_server_attributes
+# see https://linux.die.net/man/7/pbs_server_attributes
 oakley.get_status
 #=>
 #{
@@ -84,7 +84,7 @@ b.get_node("n0003")
 #=> { ... }
 
 # Get list of queues from batch server
-# see http://linux.die.net/man/7/pbs_queue_attributes
+# see https://linux.die.net/man/7/pbs_queue_attributes
 b.get_queues
 #=>
 #{
@@ -107,7 +107,7 @@ b.get_queue("serial")
 #=> { ... }
 
 # Get list of jobs from batch server
-# see http://linux.die.net/man/7/pbs_server_attributes
+# see https://linux.die.net/man/7/pbs_job_attributes
 b.get_jobs
 #=>
 #{
@@ -128,6 +128,25 @@ b.get_jobs
 # To get info about a single job
 b.get_job("6621251.oak-batch.osc.edu")
 #=> { ... }
+
+# Get selected list of jobs from batch server
+# see https://linux.die.net/man/3/pbs_selstat
+b.select_jobs(attribs: [{name: "User_List", value: "bob", op: :eq}])
+#=>
+#{
+#  "6621261.oak-batch.osc.edu" => {
+#    :Job_Name  => "FEA_solver_1",
+#    :Job_Owner => "bob@oakley01.osc.edu",
+#    :job_state => "R",
+#    ...
+#  },
+#  "6621262.oak-batch.osc.edu" => {
+#    :Job_Name  => "FEA_solver_2",
+#    :Job_Owner => "bob@oakley01.osc.edu",
+#    :job_state => "Q",
+#    ...
+#  }, ...
+#}
 ```
 
 ### Simple Job Submission
