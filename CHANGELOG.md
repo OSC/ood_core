@@ -1,5 +1,7 @@
 ## Unreleased
 
+## 2.1.0 (2017-06-02)
+
 Features:
 
   - added helpful scripts to setup and launch console
