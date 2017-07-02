@@ -10,6 +10,7 @@ describe OodCore::Job::Adapters::Torque do
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info_all).with(0).arguments }
+  it { is_expected.to respond_to(:info_where_owner).with(1).argument }
   it { is_expected.to respond_to(:info).with(1).argument }
   it { is_expected.to respond_to(:status).with(1).argument }
   it { is_expected.to respond_to(:hold).with(1).argument }
@@ -251,6 +252,24 @@ describe OodCore::Job::Adapters::Torque do
 
     context "when PBS::Error is raised" do
       before { expect(pbs).to receive(:get_jobs).and_raise(PBS::Error) }
+
+      it "raises OodCore::JobAdapterError" do
+        expect { subject }.to raise_error(OodCore::JobAdapterError)
+      end
+    end
+  end
+
+  describe "#info_where_owner" do
+    let(:pbs) { double(select_jobs: {}) }
+    subject { adapter.info_where_owner("job_owner") }
+
+    it "returns an array of all the jobs" do
+      is_expected.to eq([])
+      expect(pbs).to have_received(:select_jobs).with(attribs: [{name: "User_List", value: "job_owner", op: :eq}])
+    end
+
+    context "when PBS::Error is raised" do
+      before { expect(pbs).to receive(:select_jobs).and_raise(PBS::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)

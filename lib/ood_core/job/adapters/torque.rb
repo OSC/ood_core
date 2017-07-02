@@ -1,6 +1,6 @@
 require "ood_core/refinements/hash_extensions"
 
-gem "pbs", "~> 2.0"
+gem "pbs", "~> 2.1"
 require "pbs"
 
 module OodCore
@@ -127,6 +127,22 @@ module OodCore
         # @see Adapter#info_all
         def info_all
           @pbs.get_jobs.map do |k, v|
+            parse_job_info(k, v)
+          end
+        rescue PBS::Error => e
+          raise JobAdapterError, e.message
+        end
+
+        # Retrieve info for all jobs for a given owner from the resource manager
+        # @param owner [#to_s] the owner of the jobs
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Array<Info>] information describing submitted jobs
+        def info_where_owner(owner)
+          @pbs.select_jobs(
+            attribs: [
+              { name: "User_List", value: owner.to_s, op: :eq }
+            ]
+          ).map do |k, v|
             parse_job_info(k, v)
           end
         rescue PBS::Error => e
