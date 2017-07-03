@@ -455,6 +455,13 @@ module OodCore
           # Parse hash describing Slurm job status
           def parse_job_info(v)
             allocated_nodes = parse_nodes(v[:node_list])
+            if allocated_nodes.empty?
+              if v[:scheduled_nodes] && v[:scheduled_nodes] != "(null)"
+                allocated_nodes = parse_nodes(v[:scheduled_nodes])
+              else
+                allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
+              end
+            end
             Info.new(
               id: v[:job_id],
               status: get_state(v[:state_compact]),
