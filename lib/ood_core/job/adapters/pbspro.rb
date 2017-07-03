@@ -23,6 +23,7 @@ module OodCore
       # An adapter object that describes the communication with a PBS Pro
       # resource manager for job management.
       class PBSPro < Adapter
+        using Refinements::ArrayExtensions
         using Refinements::HashExtensions
 
         # Object used for simplified communication with a PBS Pro batch server
@@ -263,12 +264,14 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
-      # Retrieve info for all jobs for a given owner from the resource manager
-      # @param owner [#to_s] the owner of the jobs
+      # Retrieve info for all jobs for a given owner or owners from the
+      # resource manager
+      # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
       # @raise [JobAdapterError] if something goes wrong getting job info
       # @return [Array<Info>] information describing submitted jobs
       def info_where_owner(owner)
-        @pbspro.select_jobs(args: ["-u", owner.to_s]).map do |id|
+        owner = Array.wrap(owner).map(&:to_s)
+        @pbspro.select_jobs(args: ["-u", owner.join(",")]).map do |id|
           begin
             @pbspro.get_jobs(id: id).map do |v|
               parse_job_info(v)

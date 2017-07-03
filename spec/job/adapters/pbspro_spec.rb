@@ -256,6 +256,16 @@ describe OodCore::Job::Adapters::PBSPro do
       it { is_expected.to eq([]) }
     end
 
+    context "when given list of owners" do
+      let(:job_ids) { [] }
+      let(:job_owner) { ["job_owner_1", "job_owner_2"] }
+
+      it "uses comma delimited owner list" do
+        expect(pbspro).to receive(:select_jobs).with(args: ["-u", job_owner.join(",")])
+        is_expected.to eq([])
+      end
+    end
+
     context "when owner has multiple jobs" do
       let(:job_ids) { [ "job_id_1", "job_id_2" ] }
       let(:job_hash_1) {
