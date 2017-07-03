@@ -53,6 +53,12 @@ describe OodCore::Job::Adapter do
 
       it { is_expected.to eq([bob_job, bob_job]) }
     end
+
+    context "when more than one owner specified" do
+      let(:owner) { ["bob", "sam"] }
+
+      it { is_expected.to eq([bob_job, sam_job, bob_job]) }
+    end
   end
 
   describe "#info" do
