@@ -261,11 +261,21 @@ describe OodCore::Job::Adapters::Torque do
 
   describe "#info_where_owner" do
     let(:pbs) { double(select_jobs: {}) }
-    subject { adapter.info_where_owner("job_owner") }
+    let(:owner) { "job_owner" }
+    subject { adapter.info_where_owner(owner) }
 
     it "returns an array of all the jobs" do
       is_expected.to eq([])
-      expect(pbs).to have_received(:select_jobs).with(attribs: [{name: "User_List", value: "job_owner", op: :eq}])
+      expect(pbs).to have_received(:select_jobs).with(attribs: [{name: "User_List", value: owner, op: :eq}])
+    end
+
+    context "when given list of owners" do
+      let(:owner) { ["job_owner_1", "job_owner_2"] }
+
+      it "uses comma delimited owner list" do
+        is_expected.to eq([])
+        expect(pbs).to have_received(:select_jobs).with(attribs: [{name: "User_List", value: owner.join(","), op: :eq}])
+      end
     end
 
     context "when PBS::Error is raised" do
