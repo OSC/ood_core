@@ -284,6 +284,7 @@ describe OodCore::Job::Adapters::PBSPro do
       }
 
       before do
+        allow(described_class).to receive(:factor) { 2.00 }
         allow(pbspro).to receive(:get_jobs).with(id: "job_id_1").and_return([job_hash_1])
         allow(pbspro).to receive(:get_jobs).with(id: "job_id_2").and_return([job_hash_2])
       end
@@ -322,8 +323,12 @@ describe OodCore::Job::Adapters::PBSPro do
         context "due to invalid job id" do
           let(:msg) { "qstat: Unknown Job Id job_id\n" }
 
-          it "returns list of non-completed OodCore::Job::Info objects" do
+          it "returns list of OodCore::Job::Info objects with a completed job" do
             is_expected.to eq([
+              OodCore::Job::Info.new(
+                :id=>"job_id_1",
+                :status=>:completed
+              ),
               OodCore::Job::Info.new(
                 :id=>"job_id_2",
                 :job_owner=>job_owner,

@@ -171,6 +171,17 @@ module OodCore
           # ignore B as it signifies a job array
         }
 
+        class << self
+          # Factor used to decide when we filter owner from all job info's or
+          # we get job info's for all jobs owned by owner
+          # @return [Fixnum] deciding factor
+          def factor
+            @factor || 0.10
+          end
+
+          attr_writer :factor
+        end
+
         # @api private
         # @param opts [#to_h] the options defining this adapter
         # @option opts [Batch] :pbspro The PBS Pro batch object
@@ -271,20 +282,17 @@ module OodCore
       # @return [Array<Info>] information describing submitted jobs
       def info_where_owner(owner)
         owner = Array.wrap(owner).map(&:to_s)
-        @pbspro.select_jobs(args: ["-u", owner.join(",")]).map do |id|
-          begin
-            @pbspro.get_jobs(id: id).map do |v|
-              parse_job_info(v)
-            end
-          rescue Batch::Error => e
-            # return no jobs if can't find job id
-            if /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
-              []
-            else
-              raise JobAdapterError, e.message
-            end
-          end
-        end.flatten
+
+        usr_jobs = @pbspro.select_jobs(args: ["-u", owner.join(",")])
+        all_jobs = @pbspro.select_jobs(args: ["-T"])
+
+        # `qstat` all jobs if user has too many jobs, otherwise `qstat` each
+        # individual job (default factor is 10%)
+        if usr_jobs.size > (self.class.factor * all_jobs.size)
+          super
+        else
+          usr_jobs.map { |id| info(id) }
+        end
       end
 
         # Retrieve job info from the resource manager
