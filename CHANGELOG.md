@@ -10,6 +10,7 @@ Features:
   - removed deprecated tests for the Slurm adapter
   - added method to filter list of batch jobs for a given owner
   - Torque adapter provides nodes/procs info if available for non-running jobs
+  - Slurm adapter provides node info if available for non-running jobs
 
 Bugfixes:
 
