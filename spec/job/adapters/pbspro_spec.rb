@@ -4,9 +4,10 @@ require "ood_core/job/adapters/pbspro"
 describe OodCore::Job::Adapters::PBSPro do
   # Required arguments
   let(:pbspro) { double() }
+  let(:qstat_factor) { nil }
 
   # Subject
-  subject(:adapter) { described_class.new(pbspro: pbspro) }
+  subject(:adapter) { described_class.new(pbspro: pbspro, qstat_factor: qstat_factor) }
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info_all).with(0).arguments }
@@ -267,6 +268,7 @@ describe OodCore::Job::Adapters::PBSPro do
     end
 
     context "when owner has multiple jobs" do
+      let(:qstat_factor) { 1.00 }
       let(:job_ids) { [ "job_id_1", "job_id_2" ] }
       let(:job_hash_1) {
         {
@@ -284,7 +286,6 @@ describe OodCore::Job::Adapters::PBSPro do
       }
 
       before do
-        allow(described_class).to receive(:factor) { 2.00 }
         allow(pbspro).to receive(:get_jobs).with(id: "job_id_1").and_return([job_hash_1])
         allow(pbspro).to receive(:get_jobs).with(id: "job_id_2").and_return([job_hash_2])
       end

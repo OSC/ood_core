@@ -10,12 +10,15 @@ module OodCore
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :host (nil) The batch server host
       # @option config [Object] :exec (nil) Path to PBS Pro executables
+      # @option config [Object] :qstat_factor (nil) Deciding factor on how to
+      #   call qstat for a user
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
         host = c.fetch(:host, nil)
         exec = c.fetch(:exec, nil)
+        qstat_factor = c.fetch(:qstat_factor, nil)
         pbspro = Adapters::PBSPro::Batch.new(host: host, exec: exec)
-        Adapters::PBSPro.new(pbspro: pbspro)
+        Adapters::PBSPro.new(pbspro: pbspro, qstat_factor: qstat_factor)
       end
     end
 
@@ -171,25 +174,22 @@ module OodCore
           # ignore B as it signifies a job array
         }
 
-        class << self
-          # Factor used to decide when we filter owner from all job info's or
-          # we get job info's for all jobs owned by owner
-          # @return [Fixnum] deciding factor
-          def factor
-            @factor || 0.10
-          end
-
-          attr_writer :factor
-        end
+        # What percentage of jobs a user owns out of all jobs, used to decide
+        # whether we filter the owner's jobs from a `qstat` of all jobs or call
+        # `qstat` on each of the owner's individual jobs
+        # @return [Float] ratio of owner's jobs to all jobs
+        attr_reader :qstat_factor
 
         # @api private
         # @param opts [#to_h] the options defining this adapter
         # @option opts [Batch] :pbspro The PBS Pro batch object
+        # @option opts [#to_f] :qstat_factor (0.10) The qstat deciding factor
         # @see Factory.build_pbspro
         def initialize(opts = {})
           o = opts.to_h.compact.symbolize_keys
 
           @pbspro = o.fetch(:pbspro) { raise ArgumentError, "No pbspro object specified. Missing argument: pbspro" }
+          @qstat_factor = o.fetch(:qstat_factor, 0.10).to_f
         end
 
         # Submit a job with the attributes defined in the job template instance
@@ -288,7 +288,7 @@ module OodCore
 
         # `qstat` all jobs if user has too many jobs, otherwise `qstat` each
         # individual job (default factor is 10%)
-        if usr_jobs.size > (self.class.factor * all_jobs.size)
+        if usr_jobs.size > (qstat_factor * all_jobs.size)
           super
         else
           usr_jobs.map { |id| info(id) }
