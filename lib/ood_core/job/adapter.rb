@@ -4,6 +4,8 @@ module OodCore
     # submitting/statusing/holding/deleting jobs
     # @abstract
     class Adapter
+      using Refinements::ArrayExtensions
+
       # Submit a job with the attributes defined in the job template instance
       # @abstract Subclass is expected to implement {#submit}
       # @raise [NotImplementedError] if subclass did not define {#submit}
@@ -39,11 +41,13 @@ module OodCore
         raise NotImplementedError, "subclass did not define #info_all"
       end
 
-      # Retrieve info for all jobs for a given owner from the resource manager
-      # @param owner [#to_s] the owner of the jobs
+      # Retrieve info for all jobs for a given owner or owners from the
+      # resource manager
+      # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
       # @return [Array<Info>] information describing submitted jobs
       def info_where_owner(owner)
-        info_all.select { |info| info.job_owner == owner.to_s }
+        owner = Array.wrap(owner).map(&:to_s)
+        info_all.select { |info| owner.include? info.job_owner }
       end
 
       # Retrieve job info from the resource manager
