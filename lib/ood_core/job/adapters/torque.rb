@@ -257,6 +257,16 @@ module OodCore
           def parse_job_info(k, v)
             /^(?<job_owner>[\w-]+)@/ =~ v[:Job_Owner]
             allocated_nodes = parse_nodes(v[:exec_host] || "")
+            procs = allocated_nodes.inject(0) { |sum, x| sum + x[:procs] }
+            if allocated_nodes.empty?
+              allocated_nodes = [ { name: nil } ] * v.fetch(:Resource_List, {})[:nodect].to_i
+              # Only cover the simplest of cases where there is a single
+              # `ppn=##` and ignore otherwise
+              ppn_list = v.fetch(:Resource_List, {})[:nodes].to_s.scan(/ppn=(\d+)/)
+              if ppn_list.size == 1
+                procs = allocated_nodes.size * ppn_list.first.first.to_i
+              end
+            end
             Info.new(
               id: k,
               status: STATE_MAP.fetch(v[:job_state], :undetermined),
@@ -265,7 +275,7 @@ module OodCore
               job_name: v[:Job_Name],
               job_owner: job_owner,
               accounting_id: v[:Account_Name],
-              procs: allocated_nodes.inject(0) { |sum, x| sum + x[:procs] },
+              procs: procs,
               queue_name: v[:queue],
               wallclock_time: duration_in_seconds(v.fetch(:resources_used, {})[:walltime]),
               wallclock_limit: duration_in_seconds(v.fetch(:Resource_List, {})[:walltime]),

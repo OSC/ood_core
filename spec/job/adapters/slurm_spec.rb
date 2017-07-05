@@ -245,16 +245,22 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#info" do
-    context "when id is not defined" do
-      it "raises ArgumentError" do
-        expect { adapter.info }.to raise_error(ArgumentError)
-      end
+    def job_info(opts = {})
+      OodCore::Job::Info.new(
+        job_info_hash.merge opts
+      )
     end
 
     let(:job_id)   { "job_id" }
     let(:job_hash) { {} }
     let(:slurm)    { double(get_jobs: [job_hash]) }
     subject { adapter.info(double(to_s: job_id)) }
+
+    context "when id is not defined" do
+      it "raises ArgumentError" do
+        expect { adapter.info }.to raise_error(ArgumentError)
+      end
+    end
 
     context "when job is not running" do
       let(:job_hash) {
@@ -304,17 +310,19 @@ describe OodCore::Job::Adapters::Slurm do
           :excluded_nodes=>"",
           :core_specialization=>"N/A",
           :nice=>"0",
-          :scheduled_nodes=>"(null)",
+          :scheduled_nodes=>scheduled_nodes,
           :sockets_cores_threads=>"*:*:*",
           :work_dir=>"/uufs/chpc.utah.edu/common/home/u0549046/king3/run/happel20"
         }
       }
 
-      it "returns correct OodCore::Job::Info object" do
-        is_expected.to eq(OodCore::Job::Info.new(
+      let(:job_info_hash) {
+        {
           :id=>job_id,
           :status=>:queued,
-          :allocated_nodes=>[],
+          :allocated_nodes=>[
+            {:name=>nil}
+          ],
           :submit_host=>nil,
           :job_name=>"jobname.err",
           :job_owner=>"u0549046",
@@ -327,7 +335,30 @@ describe OodCore::Job::Adapters::Slurm do
           :submission_time=>Time.parse("2017-03-30T13:28:01"),
           :dispatch_time=>Time.parse("2017-04-01T22:13:03"),
           :native=>job_hash
-        ))
+        }
+      }
+
+      context "and no scheduled nodes provided" do
+        let(:scheduled_nodes) { "(null)" }
+
+        it "returns correct OodCore::Job::Info object" do
+          is_expected.to eq(job_info)
+        end
+      end
+
+      context "and there are scheduled nodes provided" do
+        let(:scheduled_nodes) { "kp[002,009-011]" }
+
+        it "returns correct OodCore::Job::Info object" do
+          is_expected.to eq(job_info(
+            allocated_nodes: [
+              {name: "kp002"},
+              {name: "kp009"},
+              {name: "kp010"},
+              {name: "kp011"}
+            ]
+          ))
+        end
       end
     end
 
@@ -385,8 +416,8 @@ describe OodCore::Job::Adapters::Slurm do
         }
       }
 
-      it "returns correct OodCore::Job::Info object" do
-        is_expected.to eql(OodCore::Job::Info.new(
+      let(:job_info_hash) {
+        {
           :id=>job_id,
           :status=>:running,
           :allocated_nodes=>[
@@ -417,7 +448,11 @@ describe OodCore::Job::Adapters::Slurm do
           :submission_time=>Time.parse("2017-03-29T13:51:05"),
           :dispatch_time=>Time.parse("2017-03-30T10:21:54"),
           :native=>job_hash
-        ))
+        }
+      }
+
+      it "returns correct OodCore::Job::Info object" do
+        is_expected.to eql(job_info)
       end
     end
 
@@ -453,8 +488,8 @@ describe OodCore::Job::Adapters::Slurm do
         let(:job_id)   { "123" }
         let(:slurm)    { double(get_jobs: [child_job_hash, job_hash]) }
 
-        it "returns correct OodCore::Job::Info object" do
-          is_expected.to eq(OodCore::Job::Info.new(
+        let(:job_info_hash) {
+          {
             :id=>"123",
             :status=>:queued,
             :allocated_nodes=>[],
@@ -470,7 +505,11 @@ describe OodCore::Job::Adapters::Slurm do
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
             :dispatch_time=>nil,
             :native=>job_hash
-          ))
+          }
+        }
+
+        it "returns correct OodCore::Job::Info object" do
+          is_expected.to eq(job_info)
         end
       end
 
@@ -478,8 +517,8 @@ describe OodCore::Job::Adapters::Slurm do
         let(:job_id)   { "123_6" }
         let(:slurm)    { double(get_jobs: [child_job_hash]) }
 
-        it "returns correct OodCore::Job::Info object" do
-          is_expected.to eq(OodCore::Job::Info.new(
+        let(:job_info_hash) {
+          {
             :id=>"124",
             :status=>:running,
             :allocated_nodes=>[],
@@ -495,7 +534,11 @@ describe OodCore::Job::Adapters::Slurm do
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
             :dispatch_time=>nil,
             :native=>child_job_hash
-          ))
+          }
+        }
+
+        it "returns correct OodCore::Job::Info object" do
+          is_expected.to eq(job_info)
         end
       end
     end

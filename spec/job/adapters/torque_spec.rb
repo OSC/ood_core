@@ -288,16 +288,22 @@ describe OodCore::Job::Adapters::Torque do
   end
 
   describe "#info" do
-    context "when id is not defined" do
-      it "raises ArgumentError" do
-        expect { adapter.info }.to raise_error(ArgumentError)
-      end
+    def job_info(opts = {})
+      OodCore::Job::Info.new(
+        job_info_hash.merge opts
+      )
     end
 
     let(:job_id)   { "job_id" }
     let(:job_hash) { {} }
     let(:pbs)      { double(get_job: {job_id => job_hash}) }
     subject { adapter.info(double(to_s: job_id)) }
+
+    context "when id is not defined" do
+      it "raises ArgumentError" do
+        expect { adapter.info }.to raise_error(ArgumentError)
+      end
+    end
 
     context "when job is not running" do
       let(:job_hash) {
@@ -320,7 +326,7 @@ describe OodCore::Job::Adapters::Torque do
           :Priority=>"0",
           :qtime=>"1478625456",
           :Rerunable=>"True",
-          :Resource_List=>{:gattr=>"PDS0218", :nodect=>"2", :nodes=>"2:ppn=12", :walltime=>"30:00:00"},
+          :Resource_List=>{:gattr=>"PDS0218", :nodect=>"2", :nodes=>nodes, :walltime=>"30:00:00"},
           :Shell_Path_List=>"/bin/bash",
           :euser=>"cwr0448",
           :egroup=>"PDS0218",
@@ -333,16 +339,19 @@ describe OodCore::Job::Adapters::Torque do
         }
       }
 
-      it "returns correct OodCore::Job::Info object" do
-        is_expected.to eq(OodCore::Job::Info.new(
+      let(:job_info_hash) {
+        {
           :id=>job_id,
           :status=>:queued,
-          :allocated_nodes=>[],
+          :allocated_nodes=>[
+            {:name=>nil},
+            {:name=>nil},
+          ],
           :submit_host=>"oakley02.osc.edu",
           :job_name=>"gromacs_job",
           :job_owner=>"cwr0448",
           :accounting_id=>"PAA0016",
-          :procs=>0,
+          :procs=>24,
           :queue_name=>"parallel",
           :wallclock_time=>0,
           :wallclock_limit=>108000,
@@ -350,7 +359,39 @@ describe OodCore::Job::Adapters::Torque do
           :submission_time=>"1478625456",
           :dispatch_time=>nil,
           :native=>job_hash
-        ))
+        }
+      }
+
+      context "and 2 nodes requested with simple structure" do
+        let(:nodes) { "2:ppn=12" }
+
+        it "returns correct OodCore::Job::Info object with 24 procs" do
+          is_expected.to eq(job_info)
+        end
+      end
+
+      context "and 2 nodes requested with complicated structure" do
+        let(:nodes) { "1:ppn=28+1:ppn=14" }
+
+        it "returns correct OodCore::Job::Info object with 0 procs" do
+          is_expected.to eq(job_info(procs: 0))
+        end
+      end
+
+      context "and 2 nodes requested missing ppn information" do
+        let(:nodes) { "2" }
+
+        it "returns correct OodCore::Job::Info object with 0 procs" do
+          is_expected.to eq(job_info(procs: 0))
+        end
+      end
+
+      context "and 2 nodes requested with extra information" do
+        let(:nodes) { "2:gpus=1:ppn=12:vis" }
+
+        it "returns correct OodCore::Job::Info object with 24 procs" do
+          is_expected.to eq(job_info)
+        end
       end
     end
 
@@ -396,8 +437,8 @@ describe OodCore::Job::Adapters::Torque do
         }
       }
 
-      it "returns correct OodCore::Job::Info object" do
-        is_expected.to eql(OodCore::Job::Info.new(
+      let(:job_info_hash) {
+        {
           :id=>job_id,
           :status=>:running,
           :allocated_nodes=>[
@@ -422,7 +463,11 @@ describe OodCore::Job::Adapters::Torque do
           :submission_time=>"1474895720",
           :dispatch_time=>"1478612793",
           :native=>job_hash
-        ))
+        }
+      }
+
+      it "returns correct OodCore::Job::Info object" do
+        is_expected.to eql(job_info)
       end
     end
 
