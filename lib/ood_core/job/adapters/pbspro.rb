@@ -10,12 +10,15 @@ module OodCore
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :host (nil) The batch server host
       # @option config [Object] :exec (nil) Path to PBS Pro executables
+      # @option config [Object] :qstat_factor (nil) Deciding factor on how to
+      #   call qstat for a user
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
         host = c.fetch(:host, nil)
         exec = c.fetch(:exec, nil)
+        qstat_factor = c.fetch(:qstat_factor, nil)
         pbspro = Adapters::PBSPro::Batch.new(host: host, exec: exec)
-        Adapters::PBSPro.new(pbspro: pbspro)
+        Adapters::PBSPro.new(pbspro: pbspro, qstat_factor: qstat_factor)
       end
     end
 
@@ -23,6 +26,7 @@ module OodCore
       # An adapter object that describes the communication with a PBS Pro
       # resource manager for job management.
       class PBSPro < Adapter
+        using Refinements::ArrayExtensions
         using Refinements::HashExtensions
 
         # Object used for simplified communication with a PBS Pro batch server
@@ -88,6 +92,15 @@ module OodCore
               end
             end
             jobs.reject { |j| /\[\]/ =~ j[:job_id] } # drop main job array jobs
+          end
+
+          # Select batch jobs from the batch server
+          # @param args [Array<#to_s>] arguments passed to `qselect` command
+          # @raise [Error] if `qselect` command exited unsuccessfully
+          # @return [Array<String>] list of job ids that match selection
+          #   criteria
+          def select_jobs(args: [])
+            call("qselect", *args).split("\n").map(&:strip)
           end
 
           # Put a specified job on hold
@@ -161,14 +174,22 @@ module OodCore
           # ignore B as it signifies a job array
         }
 
+        # What percentage of jobs a user owns out of all jobs, used to decide
+        # whether we filter the owner's jobs from a `qstat` of all jobs or call
+        # `qstat` on each of the owner's individual jobs
+        # @return [Float] ratio of owner's jobs to all jobs
+        attr_reader :qstat_factor
+
         # @api private
         # @param opts [#to_h] the options defining this adapter
         # @option opts [Batch] :pbspro The PBS Pro batch object
+        # @option opts [#to_f] :qstat_factor (0.10) The qstat deciding factor
         # @see Factory.build_pbspro
         def initialize(opts = {})
           o = opts.to_h.compact.symbolize_keys
 
           @pbspro = o.fetch(:pbspro) { raise ArgumentError, "No pbspro object specified. Missing argument: pbspro" }
+          @qstat_factor = o.fetch(:qstat_factor, 0.10).to_f
         end
 
         # Submit a job with the attributes defined in the job template instance
@@ -253,6 +274,26 @@ module OodCore
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
+
+      # Retrieve info for all jobs for a given owner or owners from the
+      # resource manager
+      # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
+      # @raise [JobAdapterError] if something goes wrong getting job info
+      # @return [Array<Info>] information describing submitted jobs
+      def info_where_owner(owner)
+        owner = Array.wrap(owner).map(&:to_s)
+
+        usr_jobs = @pbspro.select_jobs(args: ["-u", owner.join(",")])
+        all_jobs = @pbspro.select_jobs(args: ["-T"])
+
+        # `qstat` all jobs if user has too many jobs, otherwise `qstat` each
+        # individual job (default factor is 10%)
+        if usr_jobs.size > (qstat_factor * all_jobs.size)
+          super
+        else
+          usr_jobs.map { |id| info(id) }
+        end
+      end
 
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job
