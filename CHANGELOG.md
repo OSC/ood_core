@@ -1,49 +1,73 @@
-## Unreleased
+# Changelog
 
-Features:
+All notable changes to this project will be documented in this file.
 
-  - added wallclock time limit to `OodCore::Job::Info` object
-  - added further support for the LSF adapter
-  - added a new Batch Connect template feature that builds batch scripts to
-    launch web servers
-  - added support for the PBS Professional resource manager
-  - removed deprecated tests for the Slurm adapter
-  - added method to filter list of batch jobs for a given owner or owners
-  - Torque adapter provides nodes/procs info if available for non-running jobs
-  - Slurm adapter provides node info if available for non-running jobs
+The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
+and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-Bugfixes:
+## [Unreleased]
 
-  - fix parsing bjobs output for LSF 9.1, which has extra SLOTS column
+### Added
 
-## 0.0.4 (2017-05-17)
+- Add wallclock time limit to `OodCore::Job::Info` object.
+- Add further support for the LSF adapter.
+- Add a new Batch Connect template feature that builds batch scripts to launch
+  web servers.
+- Add support for the PBS Professional resource manager.
+- Add method to filter list of batch jobs for a given owner or owners.
 
-Features:
+### Changed
 
-  - removed `OodCore::Job::Script#min_phys_memory` due to lack of commonality
-    across resource managers
-  - removed `OodCore::Job::Script#join_files` due to lack of support in
-    resource managers
-  - by default all PBS jobs output stdout & stderr to output path unless an
-    error path is specified (mimics behavior of Slurm and LSF)
+- Torque adapter provides nodes/procs info if available for non-running jobs.
+- Slurm adapter provides node info if available for non-running jobs.
+- Changed the `CHANGELOG.md` formatting.
 
-## 0.0.3 (2017-04-28)
+### Removed
 
-Features:
+- Remove deprecated tests for the Slurm adapter.
 
-  - provide support for slurm conf file
+### Fixed
 
-Bugfixes:
+- Fix parsing bjobs output for LSF 9.1, which has extra SLOTS column.
 
-  - correct code documentation for `Script#min_phys_memory`
-  - fix for login feature being allowed on all clusters even if not defined
+## [0.0.4] - 2017-05-17
 
-## 0.0.2 (2017-04-27)
+### Changed
 
-Features:
+- By default all PBS jobs output stdout & stderr to output path unless an error
+  path is specified (mimics behavior of Slurm and LSF)
 
-  - removed the `OodCore::Job::NodeRequest` object
+### Removed
 
-## 0.0.1 (2017-04-17)
+- Remove `OodCore::Job::Script#min_phys_memory` due to lack of commonality
+  across resource managers.
+- Remove `OodCore::Job::Script#join_files` due to lack of support in resource
+  managers.
 
-Initial release!
+## [0.0.3] - 2017-04-28
+
+### Added
+
+- Provide support for Slurm conf file.
+
+### Fixed
+
+- Correct code documentation for `Script#min_phys_memory`.
+- Add fix for login feature being allowed on all clusters even if not defined.
+
+## [0.0.2] - 2017-04-27
+
+### Removed
+
+- Remove the `OodCore::Job::NodeRequest` object.
+
+## 0.0.1 - 2017-04-17
+
+### Added
+
+- Initial release!
+
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.0.4...HEAD
+[0.0.4]: https://github.com/OSC/ood_core/compare/v0.0.3...v0.0.4
+[0.0.3]: https://github.com/OSC/ood_core/compare/v0.0.2...v0.0.3
+[0.0.2]: https://github.com/OSC/ood_core/compare/v0.0.1...v0.0.2
