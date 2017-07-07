@@ -40,8 +40,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   # @raise [Error] if `bjobs` command exited unsuccessfully
   # @return [Hash] details of specified job
   def get_job(id:)
-    args = bjobs_default_args
-    args << id.to_s
+    args = %W( -a -w -W #{id.to_s} )
     parse_bjobs_output(call("bjobs", *args)).first
   end
 
