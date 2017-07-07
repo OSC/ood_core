@@ -18,6 +18,10 @@ describe OodCore::Job::Adapters::Lsf::Batch do
       expect(batch.parse_bjobs_output nil).to eq []
     end
 
+    it "handles empty string" do
+      expect(batch.parse_bjobs_output "").to eq []
+    end
+
     it "handles no jobs in output" do
       expect(batch.parse_bjobs_output "No job found\n").to eq []
     end
