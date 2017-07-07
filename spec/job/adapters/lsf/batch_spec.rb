@@ -24,6 +24,7 @@ describe OodCore::Job::Adapters::Lsf::Batch do
 
     it "handles no jobs in output" do
       expect(batch.parse_bjobs_output "No job found\n").to eq []
+      expect(batch.parse_bjobs_output "No unfinished job found\n").to eq []
     end
 
     it "raises exception for unexpected columns" do
