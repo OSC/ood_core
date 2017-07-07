@@ -155,13 +155,6 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
        }])
     end
 
-  describe "#get_jobs" do
-    it "calls bjobs with default args when id not specified" do
-      expect(batch).to receive(:call).with("bjobs", *batch.bjobs_default_args)
-      batch.get_jobs
-    end
-  end
-
   describe "#default_env" do
     subject(:batch) { described_class.new(config).default_env }
 
