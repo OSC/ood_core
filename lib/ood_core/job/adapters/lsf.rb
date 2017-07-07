@@ -102,6 +102,16 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        # Retrieve info for all of the owner's jobs from the resource manager
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Array<Info>] information describing submitted jobs
+        # @see Adapter#info_where_owner
+        def info_where_owner(owner)
+          batch.get_jobs_for_user(owner).map { |v| info_for_batch_hash(v) }
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
+        end
+
         # Retrieve job status from resource manager
         # @param id [#to_s] the id of the job
         # @raise [JobAdapterError] if something goes wrong getting job status

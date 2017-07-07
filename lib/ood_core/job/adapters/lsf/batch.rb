@@ -30,8 +30,11 @@ class OodCore::Job::Adapters::Lsf::Batch
   # @raise [Error] if `bjobs` command exited unsuccessfully
   # @return [Array<Hash>] list of details for jobs
   def get_jobs
-    #TODO: split into get_all_jobs, get_my_jobs
-    args = bjobs_default_args
+    get_jobs_for_user("all")
+  end
+
+  def get_jobs_for_user(user)
+    args = %W( -u #{user} -a -w -W )
     parse_bjobs_output(call("bjobs", *args))
   end
 
@@ -42,10 +45,6 @@ class OodCore::Job::Adapters::Lsf::Batch
   def get_job(id:)
     args = %W( -a -w -W #{id.to_s} )
     parse_bjobs_output(call("bjobs", *args)).first
-  end
-
-  def bjobs_default_args
-    %w( -u all -a -w -W )
   end
 
   # status fields available from bjobs
