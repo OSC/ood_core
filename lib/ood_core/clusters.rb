@@ -6,7 +6,7 @@ module OodCore
     include Enumerable
 
     # The format version of the configuration file
-    CONFIG_VERSION = ['v2', 'v1']
+    CONFIG_VERSION = %w( v2 )
 
     class << self
       # Parse a configuration file or a set of configuration files in a
@@ -44,49 +44,6 @@ module OodCore
       end
 
       private
-        # Parse a list of clusters from a 'v1' config
-        # NB: Makes minimum assumptions about config
-        def parse_v1(id:, cluster:)
-          c = {
-            id: id,
-            metadata: {},
-            login: {},
-            job: {},
-            acls: [],
-            custom: {}
-          }
-
-          c[:metadata][:title]   = cluster["title"] if cluster.key?("title")
-          c[:metadata][:url]     = cluster["url"]   if cluster.key?("url")
-          c[:metadata][:private] = true             if cluster["cluster"]["data"]["hpc_cluster"] == false
-
-          if l = cluster["cluster"]["data"]["servers"]["login"]
-            c[:login][:host] = l["data"]["host"]
-          end
-
-          if rm = cluster["cluster"]["data"]["servers"]["resource_mgr"]
-            c[:job][:adapter] = "torque"
-            c[:job][:host]    = rm["data"]["host"]
-            c[:job][:lib]     = rm["data"]["lib"]
-            c[:job][:bin]     = rm["data"]["bin"]
-            c[:job][:acls]    = []
-          end
-
-          if v = cluster["validators"]
-            if vc = v["cluster"]
-              c[:acls] = vc.map do |h|
-                {
-                  adapter: "group",
-                  groups: h["data"]["groups"],
-                  type: h["data"]["allow"] ? "whitelist" : "blacklist"
-                }
-              end
-            end
-          end
-
-          c
-        end
-
         # Parse a list of clusters from a 'v2' config
         def parse_v2(id:, cluster:)
           cluster.merge(id: id)

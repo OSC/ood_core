@@ -13,6 +13,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   manipulated through the `set_host` initialization parameter.
   [#42](https://github.com/OSC/ood_core/issues/42)
 
+### Removed
+
+- Removed support for `v1` cluster configuration formatting.
+  [#38](https://github.com/OSC/ood_core/issues/38)
+
 ## [0.0.5] - 2017-07-05
 
 ### Added
