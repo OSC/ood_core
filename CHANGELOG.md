@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+### Changed
+
+- Setting the host in a batch_connect batch script can now be directly
+  manipulated through the `set_host` initialization parameter.
+  [#42](https://github.com/OSC/ood_core/issues/42)
+
 ## [0.0.5] - 2017-07-05
 
 ### Added

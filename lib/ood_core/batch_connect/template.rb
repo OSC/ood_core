@@ -29,6 +29,9 @@ module OodCore
       # @option context [#to_s] :script_wrapper ("%s") Bash code that wraps
       #   around the body of the template script (use `%s` to interpolate the
       #   body)
+      # @option context [#to_s] :set_host ("host=$(hostname)") Bash code used
+      #   to set the `host` environment variable used for connection
+      #   information
       # @option context [#to_s] :before_script ("...") Bash code run before the
       #   main script is forked off
       # @option context [#to_s] :before_file ("before.sh") Path to script that
@@ -76,6 +79,11 @@ module OodCore
         def conn_params
           conn_params = Array.wrap(context.fetch(:conn_params, [])).map(&:to_sym)
           (conn_params + [:host, :port, :password]).uniq
+        end
+
+        # Bash script used to define the `host` environment variable
+        def set_host
+          context.fetch(:set_host, "host=$(hostname)").to_s
         end
 
         # Helper methods used in the bash scripts
@@ -126,7 +134,7 @@ module OodCore
           context.fetch(:before_script) do
             before_file = context.fetch(:before_file, "before.sh").to_s
 
-            "host=$(hostname)\n[[ -e \"#{before_file}\" ]] && source \"#{before_file}\""
+            "[[ -e \"#{before_file}\" ]] && source \"#{before_file}\""
           end.to_s
         end
 
@@ -183,6 +191,9 @@ module OodCore
             }
 
             #{bash_helpers}
+
+            # Set host of current machine
+            #{set_host}
 
             #{before_script}
 
