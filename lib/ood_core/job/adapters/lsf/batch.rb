@@ -55,9 +55,11 @@ class OodCore::Job::Adapters::Lsf::Batch
 
   # helper method
   def parse_bjobs_output(response)
-    return [] if response =~ /No .*job found/ || response.nil? || response.strip.empty?
+    return [] if response.nil? || response.strip.empty?
 
     lines = response.split("\n")
+    raise Error, "bjobs output in different format than expected: #{lines.inspect}" unless lines.count > 1
+
     columns = lines.shift.split
 
     validate_bjobs_output_columns(columns)

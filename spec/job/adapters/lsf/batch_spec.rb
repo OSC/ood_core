@@ -22,10 +22,12 @@ describe OodCore::Job::Adapters::Lsf::Batch do
       expect(batch.parse_bjobs_output "").to eq []
     end
 
-    it "handles no jobs in output" do
-      expect(batch.parse_bjobs_output "No job found\n").to eq []
-      expect(batch.parse_bjobs_output "No unfinished job found\n").to eq []
-    end
+    # this test is not valid because "No job found\n" etc. appear in
+    # stderr not stdout
+    # it "handles no jobs in output" do
+    #   expect(batch.parse_bjobs_output "No job found\n").to eq []
+    #   expect(batch.parse_bjobs_output "No unfinished job found\n").to eq []
+    # end
 
     it "raises exception for unexpected columns" do
       # I added ANOTHER_COLUMN to the end of this
