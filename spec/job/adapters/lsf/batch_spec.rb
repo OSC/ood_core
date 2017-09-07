@@ -18,9 +18,16 @@ describe OodCore::Job::Adapters::Lsf::Batch do
       expect(batch.parse_bjobs_output nil).to eq []
     end
 
-    it "handles no jobs in output" do
-      expect(batch.parse_bjobs_output "No job found\n").to eq []
+    it "handles empty string" do
+      expect(batch.parse_bjobs_output "").to eq []
     end
+
+    # this test is not valid because "No job found\n" etc. appear in
+    # stderr not stdout
+    # it "handles no jobs in output" do
+    #   expect(batch.parse_bjobs_output "No job found\n").to eq []
+    #   expect(batch.parse_bjobs_output "No unfinished job found\n").to eq []
+    # end
 
     it "raises exception for unexpected columns" do
       # I added ANOTHER_COLUMN to the end of this
@@ -149,13 +156,6 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         # slots: "1"
        }])
     end
-
-  describe "#get_jobs" do
-    it "calls bjobs with default args when id not specified" do
-      expect(batch).to receive(:call).with("bjobs", *batch.bjobs_default_args)
-      batch.get_jobs
-    end
-  end
 
   describe "#default_env" do
     subject(:batch) { described_class.new(config).default_env }

@@ -124,6 +124,29 @@ describe OodCore::Job::Adapters::Lsf do
         expect(adapter.info_all).to eq([expected_info])
       end
     end
+
+    describe "#info_where_owner" do
+      it "handles 0 owners" do
+        expect(adapter.info_where_owner([])).to eq([])
+        expect(adapter.info_where_owner(nil)).to eq([])
+      end
+
+      it "optimizes 1 owner" do
+        expect(batch).to receive(:get_jobs_for_user).with("efranz").and_return([])
+        adapter.info_where_owner("efranz")
+      end
+
+      it "optimizes 1 owner in array" do
+        expect(batch).to receive(:get_jobs_for_user).with("efranz").and_return([])
+        adapter.info_where_owner(["efranz"])
+      end
+
+      # we don't optimize multiple owners because LSF's bjobs doesn't accept -u with multiple users
+      it "doesn't optimize multiple owners" do
+        expect(batch).to receive(:get_jobs_for_user).exactly(0).times
+        expect(adapter.info_where_owner(["efranz", "jnicklas"])).to eq([expected_info])
+      end
+    end
   end
 
   describe ".build_lsf" do

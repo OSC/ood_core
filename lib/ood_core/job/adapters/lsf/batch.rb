@@ -30,8 +30,11 @@ class OodCore::Job::Adapters::Lsf::Batch
   # @raise [Error] if `bjobs` command exited unsuccessfully
   # @return [Array<Hash>] list of details for jobs
   def get_jobs
-    #TODO: split into get_all_jobs, get_my_jobs
-    args = bjobs_default_args
+    get_jobs_for_user("all")
+  end
+
+  def get_jobs_for_user(user)
+    args = %W( -u #{user} -a -w -W )
     parse_bjobs_output(call("bjobs", *args))
   end
 
@@ -40,13 +43,8 @@ class OodCore::Job::Adapters::Lsf::Batch
   # @raise [Error] if `bjobs` command exited unsuccessfully
   # @return [Hash] details of specified job
   def get_job(id:)
-    args = bjobs_default_args
-    args << id.to_s
+    args = %W( -a -w -W #{id.to_s} )
     parse_bjobs_output(call("bjobs", *args)).first
-  end
-
-  def bjobs_default_args
-    %w( -u all -a -w -W )
   end
 
   # status fields available from bjobs
@@ -57,9 +55,11 @@ class OodCore::Job::Adapters::Lsf::Batch
 
   # helper method
   def parse_bjobs_output(response)
-    return [] if response =~ /No job found/ || response.nil?
+    return [] if response.nil? || response.strip.empty?
 
     lines = response.split("\n")
+    raise Error, "bjobs output in different format than expected: #{lines.inspect}" unless lines.count > 1
+
     columns = lines.shift.split
 
     validate_bjobs_output_columns(columns)
