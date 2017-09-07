@@ -19,6 +19,8 @@ module OodCore
 
     module Adapters
       class Lsf < Adapter
+        using Refinements::ArrayExtensions
+
         # @api private
         attr_reader :batch, :helper
 
@@ -107,7 +109,14 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_where_owner
         def info_where_owner(owner)
-          batch.get_jobs_for_user(owner).map { |v| info_for_batch_hash(v) }
+          owners = Array.wrap(owner).map(&:to_s)
+          if owners.count > 1
+            super
+          elsif owners.count == 0
+            []
+          else
+	    batch.get_jobs_for_user(owners.first).map { |v| info_for_batch_hash(v) }
+	  end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
