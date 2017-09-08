@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.1.1] - 2017-09-08
+
+### Fixed
+
+- fix crash when calling `Adapters::Lsf#info(id:)` with "invalid" id
+- optimize `Adapters::Lsf#info_where_owner` by using `bjobs -u $USER` when a single user is specified
+
 ## [0.1.0] - 2017-07-17
 
 ### Changed
@@ -77,7 +84,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/OSC/ood_core/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/OSC/ood_core/compare/v0.0.5...v0.1.0
 [0.0.5]: https://github.com/OSC/ood_core/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/OSC/ood_core/compare/v0.0.3...v0.0.4
