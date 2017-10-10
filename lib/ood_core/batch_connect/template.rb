@@ -94,31 +94,56 @@ module OodCore
             passwd_size = context.fetch(:passwd_size, 32).to_i
 
             <<-EOT.gsub(/^ {14}/, '')
-              # Generate random integer in range [$1..$2]
-              function random () {
-                shuf -i ${1}-${2} -n 1
-              }
+              # Source in all the helper functions
+              source_helpers () {
+                # Generate random integer in range [$1..$2]
+                random_number () {
+                  shuf -i ${1}-${2} -n 1
+                }
+                export -f random_number
 
-              # Check if port $1 is in use
-              function used_port () {
-                local PORT=${1}
-                nc -z localhost ${PORT} &>/dev/null
-              }
+                # Check if port $1 is in use
+                port_used () {
+                  local port="${1#*:}"
+                  local host=$(expr "${1}" : '\\(.*\\):' || echo "localhost")
+                  nc -w 2 "${host}" "${port}" < /dev/null &> /dev/null
+                }
+                export -f port_used
 
-              # Find available port in range [$1..$2]
-              # Default: [#{min_port}..#{max_port}]
-              function find_port () {
-                local PORT=$(random ${1:-#{min_port}} ${2:-#{max_port}})
-                while $(used_port ${PORT}); do
-                  PORT=$(random ${1:-#{min_port}} ${2:-#{max_port}})
-                done
-                echo ${PORT}
-              }
+                # Find available port in range [$2..$3] for host $1
+                # Default: [#{min_port}..#{max_port}]
+                find_port () {
+                  local host="${1:-localhost}"
+                  local port=$(random_number "${2:-#{min_port}}" "${3:-#{max_port}}")
+                  while port_used "${host}:${port}"; do
+                    port=$(random_number "${2:-#{min_port}}" "${3:-#{max_port}}")
+                  done
+                  echo "${port}"
+                }
+                export -f find_port
 
-              # Generate random alphanumeric password with $1 (default: #{passwd_size}) characters
-              function create_passwd () {
-                tr -cd '[:alnum:]' < /dev/urandom 2>/dev/null | head -c${1:-#{passwd_size}}
+                # Wait $2 seconds until port $1 is in use
+                # Default: wait 30 seconds
+                wait_until_port_used () {
+                  local port="${1}"
+                  local time="${2:-30}"
+                  for ((i=1; i<=time*2; i++)); do
+                    if port_used "${port}"; then
+                      return 0
+                    fi
+                    sleep 0.5
+                  done
+                  return 1
+                }
+                export -f wait_until_port_used
+
+                # Generate random alphanumeric password with $1 (default: #{passwd_size}) characters
+                create_passwd () {
+                  tr -cd '[:alnum:]' < /dev/urandom 2> /dev/null | head -c${1:-#{passwd_size}}
+                }
+                export -f create_passwd
               }
+              export -f source_helpers
             EOT
           end.to_s
         end
@@ -173,8 +198,12 @@ module OodCore
           <<-EOT.gsub(/^ {12}/, '')
             cd #{work_dir}
 
+            # Export useful connection variables
+            export host
+            export port
+
             # Generate a connection yaml file with given parameters
-            function create_yml () {
+            create_yml () {
               echo "Generating connection YAML file..."
               (
                 umask 077
@@ -183,7 +212,7 @@ module OodCore
             }
 
             # Cleanliness is next to Godliness
-            function clean_up () {
+            clean_up () {
               echo "Cleaning up..."
               #{clean_script.gsub(/\n(?=[^\s])/, "\n  ")}
               pkill -P $$
@@ -191,6 +220,7 @@ module OodCore
             }
 
             #{bash_helpers}
+            source_helpers
 
             # Set host of current machine
             #{set_host}
