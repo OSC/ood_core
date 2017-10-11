@@ -430,21 +430,23 @@ module OodCore
           # Convert host list string to individual nodes
           # "em082"
           # "em[014,055-056,161]"
-          # "n0163/2,7,10-11+n0205/0-11+n0156/0-11"
+          # "c457-[011-012]"
+          # "c438-[062,104]"
+          # "c427-032,c429-002"
           def parse_nodes(node_list)
-            /^(?<prefix>[^\[]+)(\[(?<range>[^\]]+)\])?$/ =~ node_list
-
-            if range
-              range.split(",").map do |x|
-                x =~ /^(\d+)-(\d+)$/ ? ($1..$2).to_a : x
-              end.flatten.map do |n|
-                { name: prefix + n, procs: nil }
+            node_list.to_s.scan(/([^,\[]+)(?:\[([^\]]+)\])?/).map do |prefix, range|
+              if range
+                range.split(",").map do |x|
+                  x =~ /^(\d+)-(\d+)$/ ? ($1..$2).to_a : x
+                end.flatten.map do |n|
+                  { name: prefix + n, procs: nil }
+                end
+              elsif prefix
+                [ { name: prefix, procs: nil } ]
+              else
+                []
               end
-            elsif prefix
-              [ { name: prefix, procs: nil } ]
-            else
-              []
-            end
+            end.flatten
           end
 
           # Determine state from Slurm state code

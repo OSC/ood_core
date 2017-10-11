@@ -22,6 +22,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   for CentOS 7. [#55](https://github.com/OSC/ood_core/issues/55)
 - Fixed not correctly detecting open ports for specific ip address in Batch
   Connect helper functions. [#56](https://github.com/OSC/ood_core/issues/56)
+- Fixed a bug when parsing nodes in the Slurm adapter.
+  [#54](https://github.com/OSC/ood_core/issues/54)
 
 ## [0.1.1] - 2017-09-08
 ### Fixed

@@ -391,7 +391,7 @@ describe OodCore::Job::Adapters::Slurm do
           :min_memory=>"64000M",
           :time_used=>"22:15:35",
           :req_node=>"",
-          :node_list=>"kp[002,006,026-029,158-159,162-164,197-199]",
+          :node_list=>"kp[002,006,026-029,158-159,162-164,197-199],ky123,kz[006,009-011]",
           :command=>"/uufs/chpc.utah.edu/common/home/u0135669/Dima_CB7CB/big_CB7CB_330K_nptall_modTD/sluK_king",
           :contiguous=>"0",
           :qos=>"kingspeak",
@@ -434,7 +434,12 @@ describe OodCore::Job::Adapters::Slurm do
             {:name=>"kp164", :procs=>nil},
             {:name=>"kp197", :procs=>nil},
             {:name=>"kp198", :procs=>nil},
-            {:name=>"kp199", :procs=>nil}
+            {:name=>"kp199", :procs=>nil},
+            {:name=>"ky123", :procs=>nil},
+            {:name=>"kz006", :procs=>nil},
+            {:name=>"kz009", :procs=>nil},
+            {:name=>"kz010", :procs=>nil},
+            {:name=>"kz011", :procs=>nil}
           ],
           :submit_host=>nil,
           :job_name=>"big_CB7CB_330Knptall_modTD",
