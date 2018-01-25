@@ -105,7 +105,7 @@ module OodCore
                 # Check if port $1 is in use
                 port_used () {
                   local port="${1#*:}"
-                  local host=$(expr "${1}" : '\\(.*\\):' || echo "localhost")
+                  local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
                   nc -w 2 "${host}" "${port}" < /dev/null &> /dev/null
                 }
                 export -f port_used
