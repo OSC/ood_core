@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Fixed list of allocated nodes for LSF adapter when single node is expanded
+  for each core. [#71](https://github.com/OSC/ood_core/issues/71)
 
 ## [0.2.0] - 2017-10-11
 ### Added

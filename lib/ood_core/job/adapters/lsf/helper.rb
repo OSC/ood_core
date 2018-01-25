@@ -27,11 +27,15 @@ class OodCore::Job::Adapters::Lsf::Helper
   # convert exec_host string format from bjobs to a hash
   # i.e. "c012" => [{host: "c012", slots: 1}]
   # i.e. "4*c012:8*c013" => [{host: "c012", slots: 4}, {host: "c013", slots: 8}]
+  # i.e. "c012:c012" => [{host: "c012", slots: 2}]
   def parse_exec_host(exec_host_str)
     return [] if exec_host_str.nil? || exec_host_str.empty?
 
     exec_host_str.scan(exec_host_regex).map do |match|
       {host: match[2], slots: match[1] ? match[1].to_i : 1}
+    end.group_by { |nodes| nodes[:host] }.map do |host, nodes|
+      slots = nodes.reduce(0) { |count, node| count + node[:slots] }
+      {host: host, slots: slots}
     end
   end
 
