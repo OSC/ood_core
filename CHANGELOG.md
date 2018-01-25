@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Clean up children processes in forked Batch Connect main script before
+  cleaning up batch script. [#69](https://github.com/OSC/ood_core/issues/69)
 
 ## [0.2.0] - 2017-10-11
 ### Added
