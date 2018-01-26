@@ -33,7 +33,7 @@ class OodCore::Job::Adapters::Lsf::Helper
 
     exec_host_str.scan(exec_host_regex).map do |match|
       {host: match[2], slots: match[1] ? match[1].to_i : 1}
-    end.group_by { |nodes| nodes[:host] }.map do |host, nodes|
+    end.group_by { |node| node[:host] }.map do |host, nodes|
       slots = nodes.reduce(0) { |count, node| count + node[:slots] }
       {host: host, slots: slots}
     end
