@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Fix bug when detecting open ports using the bash helpers in the Batch Connect
+  template. [#70](https://github.com/OSC/ood_core/issues/70)
 
 ## [0.2.0] - 2017-10-11
 ### Added
