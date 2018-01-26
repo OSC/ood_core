@@ -89,7 +89,14 @@ module OodCore
         def info(id)
           # TODO: handle job arrays
           job = batch.get_job(id: id)
-          job ? info_for_batch_hash(job) : nil
+          if job
+            info_for_batch_hash(job)
+          else
+            Info.new(
+              id: id,
+              status: :completed
+            )
+          end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end

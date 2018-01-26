@@ -117,6 +117,14 @@ describe OodCore::Job::Adapters::Lsf do
       it "returns running status with info attrs mapped" do
         expect(adapter.info("542935")).to eq(expected_info)
       end
+
+      context "when can't find job" do
+        let(:batch) { double(get_job: nil) }
+
+        it "returns completed OodCore::Job::Info object" do
+          expect(adapter.info("542935")).to eq(OodCore::Job::Info.new(id: "542935", status: :completed))
+        end
+      end
     end
 
     describe "#info_all" do
