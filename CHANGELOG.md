@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Updated the date in the `LICENSE.txt` file.
+
 ### Fixed
 - Fixed bug where LSF adapter would sometimes return `nil` when getting job
   info. [#75](https://github.com/OSC/ood_core/issues/75)
