@@ -79,6 +79,20 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       ])
     end
 
+    it "converts expanded single host with multiple slots" do
+      expect(helper.parse_exec_host("compute01:compute01:compute01")).to eq([
+        {host: "compute01", slots: 3}
+      ])
+    end
+
+    it "converts a complicated host list" do
+      expect(helper.parse_exec_host("compute01:4*compute02:2*compute01:compute03")).to eq([
+        {host: "compute01", slots: 3},
+        {host: "compute02", slots: 4},
+        {host: "compute03", slots: 1}
+      ])
+    end
+
     it "handles nil" do
       expect(helper.parse_exec_host(nil)).to eq([])
     end
