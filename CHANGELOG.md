@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 ### Fixed
+- Fixed bug where LSF adapter would sometimes return `nil` when getting job
+  info. [#75](https://github.com/OSC/ood_core/issues/75)
 - Fixed list of allocated nodes for LSF adapter when single node is expanded
   for each core. [#71](https://github.com/OSC/ood_core/issues/71)
 - Clean up children processes in forked Batch Connect main script before
