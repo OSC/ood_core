@@ -215,6 +215,7 @@ module OodCore
             clean_up () {
               echo "Cleaning up..."
               #{clean_script.gsub(/\n(?=[^\s])/, "\n  ")}
+              [[ ${SCRIPT_PID} ]] && pkill -P ${SCRIPT_PID} || :
               pkill -P $$
               exit ${1:-0}
             }
