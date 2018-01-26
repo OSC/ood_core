@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Fixed
 - Fixed list of allocated nodes for LSF adapter when single node is expanded
   for each core. [#71](https://github.com/OSC/ood_core/issues/71)
+- Clean up children processes in forked Batch Connect main script before
+  cleaning up batch script. [#69](https://github.com/OSC/ood_core/issues/69)
+- Fix bug when detecting open ports using the bash helpers in the Batch Connect
+  template. [#70](https://github.com/OSC/ood_core/issues/70)
 
 ## [0.2.0] - 2017-10-11
 ### Added
