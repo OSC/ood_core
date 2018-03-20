@@ -195,4 +195,31 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
       )}
     end
   end
+
+  describe "multinode" do
+    subject(:batch) { described_class.new(config).cluster_args }
+    context "when cluster not set" do
+      let(:config) {
+        {
+          bindir: "/opt/lsf/8.3/bin",
+          libdir: "/opt/lsf/8.3/lib",
+          envdir: "/opt/lsf/conf",
+          serverdir: "/opt/lsf/8.3/etc"
+        }
+      }
+      it { is_expected.to eq([]) }
+    end
+    context "when cluster not set" do
+      let(:config) {
+        {
+          bindir: "/opt/lsf/8.3/bin",
+          libdir: "/opt/lsf/8.3/lib",
+          envdir: "/opt/lsf/conf",
+          serverdir: "/opt/lsf/8.3/etc",
+          cluster: "curie"
+        }
+      }
+      it { is_expected.to eq(["-m", "curie"]) }
+    end
+  end
 end
