@@ -25,6 +25,7 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:email_on_started) }
   it { is_expected.to respond_to(:email_on_terminated) }
   it { is_expected.to respond_to(:job_name) }
+  it { is_expected.to respond_to(:shell_path) }
   it { is_expected.to respond_to(:input_path) }
   it { is_expected.to respond_to(:output_path) }
   it { is_expected.to respond_to(:error_path) }
@@ -115,6 +116,12 @@ describe OodCore::Job::Script do
     it { is_expected.to eq("my_job") }
   end
 
+  describe "#shell_path" do
+    subject { build_script(shell_path: double(to_s: "/path/to/shell")).shell_path }
+
+    it { is_expected.to eq(Pathname.new("/path/to/shell")) }
+  end
+
   describe "#input_path" do
     subject { build_script(input_path: double(to_s: "/path/to/input")).input_path }
 
@@ -189,6 +196,7 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:email_on_started) }
     it { is_expected.to have_key(:email_on_terminated) }
     it { is_expected.to have_key(:job_name) }
+    it { is_expected.to have_key(:shell_path) }
     it { is_expected.to have_key(:input_path) }
     it { is_expected.to have_key(:output_path) }
     it { is_expected.to have_key(:error_path) }

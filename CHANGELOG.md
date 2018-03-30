@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Basic multi-cluster support for LSF by specifying name of cluster for -m
   argument. [#24](https://github.com/OSC/ood_core/issues/24)
+- Added `OodCore::Job::Script#shell_path` as an option to all adapters.
+  [#82](https://github.com/OSC/ood_core/issues/82)
 
 ## [0.2.1] - 2018-01-26
 ### Changed

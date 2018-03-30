@@ -146,6 +146,10 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(args_for(job_name: "my_job")).to eq({args: ["-J", "my_job"], env: {}})
     end
 
+    it "with :shell_path" do
+      expect(args_for(shell_path: "/path/to/shell")).to eq({args: ["-L", "/path/to/shell"], env: {}})
+    end
+
     it "with :workdir" do
       expect(args_for(workdir: "/path/to/workdir")).to eq({args: ["-cwd", "/path/to/workdir"], env: {}})
     end

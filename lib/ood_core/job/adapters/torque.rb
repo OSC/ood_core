@@ -83,6 +83,7 @@ module OodCore
           mail_points += 'e' if script.email_on_terminated
           headers.merge!(Mail_Points: mail_points) unless mail_points.empty?
           headers.merge!(Job_Name: script.job_name) unless script.job_name.nil?
+          headers.merge!(Shell_Path_List: script.shell_path) unless script.shell_path.nil?
           # ignore input_path (not defined in Torque)
           headers.merge!(Output_Path: script.output_path) unless script.output_path.nil?
           headers.merge!(Error_Path: script.error_path) unless script.error_path.nil?
