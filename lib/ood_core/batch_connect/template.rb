@@ -26,6 +26,10 @@ module OodCore
       #   looking for available port
       # @option context [#to_i] :passwd_size (32) Length of randomly generated
       #   password
+      # @option context [#to_s] :header ("") Shell code prepended at the top of
+      #   the script body
+      # @option context [#to_s] :footer ("") Shell code appended at the bottom
+      #   of the script body
       # @option context [#to_s] :script_wrapper ("%s") Bash code that wraps
       #   around the body of the template script (use `%s` to interpolate the
       #   body)
@@ -58,9 +62,9 @@ module OodCore
       # @return [String] rendered template
       def to_s
         <<-EOT.gsub(/^ {10}/, '')
-          #!/bin/bash
-
+          #{header}
           #{script_wrapper}
+          #{footer}
         EOT
       end
 
@@ -146,6 +150,16 @@ module OodCore
               export -f source_helpers
             EOT
           end.to_s
+        end
+
+        # Shell code that is prepended at the top of the script body
+        def header
+          context.fetch(:header, "").to_s
+        end
+
+        # Shell code that is appended at the bottom of the script body
+        def footer
+          context.fetch(:footer, "").to_s
         end
 
         # Bash code that wraps around the body of the template script (use `%s`
