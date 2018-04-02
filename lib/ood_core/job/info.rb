@@ -33,7 +33,7 @@ module OodCore
       attr_reader :accounting_id
 
       # Number of procs allocated for job
-      # @return [Fixnum, nil] allocated total number of procs
+      # @return [Integer, nil] allocated total number of procs
       attr_reader :procs
 
       # Name of the queue in which the job was queued or started
@@ -41,15 +41,15 @@ module OodCore
       attr_reader :queue_name
 
       # The accumulated wall clock time in seconds
-      # @return [Fixnum, nil] wallclock time
+      # @return [Integer, nil] wallclock time
       attr_reader :wallclock_time
 
       # The total wall clock time limit in seconds
-      # @return [Fixnum, nil] wallclock time limit
+      # @return [Integer, nil] wallclock time limit
       attr_reader :wallclock_limit
 
       # The accumulated CPU time in seconds
-      # @return [Fixnum, nil] cpu time
+      # @return [Integer, nil] cpu time
       attr_reader :cpu_time
 
       # The time at which the job was submitted
@@ -139,7 +139,7 @@ module OodCore
       end
 
       # Generate a hash value for this object
-      # @return [Fixnum] hash value of object
+      # @return [Integer] hash value of object
       def hash
         [self.class, to_h].hash
       end

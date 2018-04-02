@@ -10,6 +10,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Basic multi-cluster support for LSF by specifying name of cluster for -m
   argument. [#24](https://github.com/OSC/ood_core/issues/24)
 
+### Fixed
+- Replaced `Fixnum` code comments with `Integer`.
+  [#67](https://github.com/OSC/ood_core/issues/67)
+
 ## [0.2.1] - 2018-01-26
 ### Changed
 - Updated the date in the `LICENSE.txt` file.

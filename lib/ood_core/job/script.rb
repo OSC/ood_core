@@ -75,7 +75,7 @@ module OodCore
       attr_reader :queue_name
 
       # The scheduling priority for the job
-      # @return [Fixnum, nil] scheduling priority
+      # @return [Integer, nil] scheduling priority
       attr_reader :priority
 
       # The earliest time when the job may be eligible to run
@@ -84,7 +84,7 @@ module OodCore
 
       # The maximum amount of real time during which the job can be running in
       # seconds
-      # @return [Fixnum, nil] max real time
+      # @return [Integer, nil] max real time
       attr_reader :wall_time
 
       # The attribute used for job accounting purposes
@@ -189,7 +189,7 @@ module OodCore
       end
 
       # Generate a hash value for this object
-      # @return [Fixnum] hash value of object
+      # @return [Integer] hash value of object
       def hash
         [self.class, to_h].hash
       end

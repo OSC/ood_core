@@ -68,7 +68,7 @@ class OodCore::Job::Adapters::Lsf::Helper
   #
   # my guess is: hours:minutes:seconds.????
   #
-  # @return [Fixnum, nil] cpu used as seconds
+  # @return [Integer, nil] cpu used as seconds
   def parse_cpu_used(cpu_used)
     if cpu_used =~ /^(\d+):(\d+):(\d+)\..*$/
       $1.to_i*3600 + $2.to_i*60 + $3.to_i

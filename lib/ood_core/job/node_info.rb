@@ -7,7 +7,7 @@ module OodCore
       attr_reader :name
 
       # The number of procs reserved on the given machine
-      # @return [Fixnum, nil] number of procs
+      # @return [Integer, nil] number of procs
       attr_reader :procs
 
       # @param name [#to_s] node name
@@ -38,7 +38,7 @@ module OodCore
       end
 
       # Generate a hash value for this object
-      # @return [Fixnum] hash value of object
+      # @return [Integer] hash value of object
       def hash
         [self.class, to_h].hash
       end
