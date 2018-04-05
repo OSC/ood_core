@@ -9,7 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Basic multi-cluster support for LSF by specifying name of cluster for -m
   argument. [#24](https://github.com/OSC/ood_core/issues/24)
-- Add `header` and `footer` options to a Batch Connect template.
+- Added `OodCore::Job::Script#shell_path` as an option to all adapters.
+  [#82](https://github.com/OSC/ood_core/issues/82)
+- Added `header` and `footer` options to a Batch Connect template.
   [#64](https://github.com/OSC/ood_core/issues/64)
 
 ### Fixed

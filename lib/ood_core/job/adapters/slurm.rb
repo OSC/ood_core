@@ -298,8 +298,15 @@ module OodCore
           # Set native options
           args += script.native if script.native
 
+          # Set content
+          content = if script.shell_path.nil?
+                      script.content
+                    else
+                      "#!#{script.shell_path}\n#{script.content}"
+                    end
+
           # Submit job
-          @slurm.submit_string(script.content, args: args, env: env)
+          @slurm.submit_string(content, args: args, env: env)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end

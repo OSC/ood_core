@@ -149,6 +149,12 @@ describe OodCore::Job::Adapters::Slurm do
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-J", "my_job"], env: {}) }
     end
 
+    context "with :shell_path" do
+      before { adapter.submit(build_script(shell_path: "/path/to/shell")) }
+
+      it { expect(slurm).to have_received(:submit_string).with("#!/path/to/shell\n#{content}", args: [], env: {}) }
+    end
+
     context "with :input_path" do
       before { adapter.submit(build_script(input_path: "/path/to/input")) }
 

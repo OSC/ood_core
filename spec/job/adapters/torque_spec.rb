@@ -150,6 +150,12 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Job_Name: "my_job"}, resources: {}, envvars: {}) }
     end
 
+    context "with :shell_path" do
+      before { adapter.submit(build_script(shell_path: "/path/to/shell")) }
+
+      it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe", Shell_Path_List: Pathname.new("/path/to/shell")}, resources: {}, envvars: {}) }
+    end
+
     context "with :input_path" do
       before { adapter.submit(build_script(input_path: "/path/to/input")) }
 
