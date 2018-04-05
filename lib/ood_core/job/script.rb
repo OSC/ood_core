@@ -54,6 +54,10 @@ module OodCore
       # @return [String, nil] name of job
       attr_reader :job_name
 
+      # Path to file specifying the login shell of the job
+      # @return [Pathname, nil] file path specifying login shell
+      attr_reader :shell_path
+
       # Path to file specifying the input stream of the job
       # @return [Pathname, nil] file path specifying input stream
       attr_reader :input_path
@@ -106,6 +110,8 @@ module OodCore
       # @param email_on_started [Boolean, nil] whether email when job starts
       # @param email_on_terminated [Boolean, nil] whether email when job ends
       # @param job_name [#to_s, nil] name of job
+      # @param shell_path [#to_s, nil] file path specifying login shell
+      # @param error_path [#to_s, nil] file path specifying error stream
       # @param input_path [#to_s, nil] file path specifying input stream
       # @param output_path [#to_s, nil] file path specifying output stream
       # @param error_path [#to_s, nil] file path specifying error stream
@@ -119,10 +125,10 @@ module OodCore
       def initialize(content:, args: nil, submit_as_hold: nil, rerunnable: nil,
                      job_environment: nil, workdir: nil, email: nil,
                      email_on_started: nil, email_on_terminated: nil,
-                     job_name: nil, input_path: nil, output_path: nil,
-                     error_path: nil, reservation_id: nil, queue_name: nil,
-                     priority: nil, start_time: nil, wall_time: nil,
-                     accounting_id: nil, native: nil, **_)
+                     job_name: nil, shell_path: nil, input_path: nil,
+                     output_path: nil, error_path: nil, reservation_id: nil,
+                     queue_name: nil, priority: nil, start_time: nil,
+                     wall_time: nil, accounting_id: nil, native: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -135,6 +141,7 @@ module OodCore
         @workdir          = workdir         && Pathname.new(workdir.to_s)
         @email            = email           && Array.wrap(email).map(&:to_s)
         @job_name         = job_name        && job_name.to_s
+        @shell_path       = shell_path      && Pathname.new(shell_path.to_s)
         @input_path       = input_path      && Pathname.new(input_path.to_s)
         @output_path      = output_path     && Pathname.new(output_path.to_s)
         @error_path       = error_path      && Pathname.new(error_path.to_s)
@@ -161,6 +168,7 @@ module OodCore
           email_on_started:    email_on_started,
           email_on_terminated: email_on_terminated,
           job_name:            job_name,
+          shell_path:          shell_path,
           input_path:          input_path,
           output_path:         output_path,
           error_path:          error_path,

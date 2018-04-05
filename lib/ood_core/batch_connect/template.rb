@@ -58,7 +58,9 @@ module OodCore
       # @return [String] rendered template
       def to_s
         <<-EOT.gsub(/^ {10}/, '')
-          #!/bin/bash
+          #
+          # Generated with ood_core v#{VERSION}
+          #
 
           #{script_wrapper}
         EOT

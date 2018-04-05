@@ -227,6 +227,7 @@ module OodCore
             args += ["-m", "e"]
           end
           args += ["-N", script.job_name] unless script.job_name.nil?
+          args += ["-S", script.shell_path] unless script.shell_path.nil?
           # ignore input_path (not defined in PBS Pro)
           args += ["-o", script.output_path] unless script.output_path.nil?
           args += ["-e", script.error_path] unless script.error_path.nil?

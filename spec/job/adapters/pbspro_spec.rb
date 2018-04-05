@@ -151,6 +151,12 @@ describe OodCore::Job::Adapters::PBSPro do
       it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-N", "my_job", "-j", "oe"], chdir: nil) }
     end
 
+    context "with :shell_path" do
+      before { adapter.submit(build_script(shell_path: "/path/to/shell")) }
+
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-S", Pathname.new("/path/to/shell"), "-j", "oe"], chdir: nil) }
+    end
+
     context "with :input_path" do
       before { adapter.submit(build_script(input_path: "/path/to/input")) }
 
