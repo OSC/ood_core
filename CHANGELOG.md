@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
   argument. [#24](https://github.com/OSC/ood_core/issues/24)
 - Added `OodCore::Job::Script#shell_path` as an option to all adapters.
   [#82](https://github.com/OSC/ood_core/issues/82)
+- Added `header` and `footer` options to a Batch Connect template.
+  [#64](https://github.com/OSC/ood_core/issues/64)
 
 ### Fixed
 - Replaced `Fixnum` code comments with `Integer`.
