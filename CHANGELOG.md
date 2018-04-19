@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Changed
 - Changed the `CHANGELOG.md` formatting.
+- Updated date in `LICENSE.txt`.
 
 ## [2.1.0] - 2017-06-02
 ### Added
