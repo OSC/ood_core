@@ -15,6 +15,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Changed the `CHANGELOG.md` formatting.
 - Updated date in `LICENSE.txt`.
 
+### Deprecated
+- Deprecating the old submit methods `Batch#submit_string` and
+  `Batch#submit_script`.
+
 ## [2.1.0] - 2017-06-02
 ### Added
 - Added helpful scripts to setup and launch console.

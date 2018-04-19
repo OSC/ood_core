@@ -319,6 +319,7 @@ module PBS
     # @param envvars [Hash] pbs environment variables
     # @param qsub [Boolean] whether use library or binary for submission
     # @return [String] the id of the job that was created
+    # @deprecated Use {#submit} instead.
     def submit_script(script, queue: nil, headers: {}, resources: {}, envvars: {}, qsub: true)
       send(qsub ? :qsub_submit : :pbs_submit, script.to_s, queue.to_s, headers, resources, envvars)
     end
@@ -327,6 +328,7 @@ module PBS
     # @param string [#to_s] script as a string
     # @param (see #submit_script)
     # @return [String] the id of the job that was created
+    # @deprecated Use {#submit} instead.
     def submit_string(string, **kwargs)
       Tempfile.open('qsub.') do |f|
         f.write string.to_s
