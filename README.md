@@ -1,5 +1,6 @@
 # PBS Ruby
 
+[![Build Status](https://travis-ci.org/OSC/pbs-ruby.svg?branch=master)](https://travis-ci.org/OSC/pbs-ruby)
 ![GitHub Release](https://img.shields.io/github/release/osc/pbs-ruby.svg)
 [![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
