@@ -1,5 +1,8 @@
 # PBS Ruby
 
+![GitHub Release](https://img.shields.io/github/release/osc/pbs-ruby.svg)
+[![GitHub License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
+
 ## Description
 
 Ruby wrapper for the Torque C Library utilizing Ruby-FFI. This has been
@@ -239,3 +242,26 @@ job_id = b.submit_script("/path/to/script", headers: headers, resources: resourc
 # Get job info
 b.get_job(job_id)
 ```
+
+## Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then, run
+`bundle exec rspec spec` to run the tests. You can also run `bin/console` for
+an interactive prompt that will allow you to experiment.
+
+To install this gem onto your local machine, run `bundle exec rake install`. To
+release a new version, update and commit the version number in `version.rb`,
+and then run `bundle exec rake release`, which will create a git tag for the
+version, push git commits and tags, and push the `.gem` file to
+[rubygems.org](https://rubygems.org).
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at
+https://github.com/OSC/pbs-ruby.
+
+## License
+
+The gem is available as open source under the terms of the [MIT License].
+
+[MIT License]: https://opensource.org/licenses/MIT

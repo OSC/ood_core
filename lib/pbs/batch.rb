@@ -335,6 +335,17 @@ module PBS
       end
     end
 
+    # Submit a script expanded as a string to the batch server
+    # @param content [#to_s] script as a string
+    # @param args [Array<#to_s>] arguments passed to `qsub` command
+    # @param env [Hash{#to_s => #to_s}] environment variables set
+    # @param chdir [#to_s, nil] working directory where `qsub` is called from
+    # @raise [Error] if `qsub` command exited unsuccessfully
+    # @return [String] the id of the job that was created
+    def submit(content, args: [], env: {}, chdir: nil)
+      call(:qsub, *args, env: env, stdin: content, chdir: chdir).strip
+    end
+
     private
       # Submit a script using Torque library
       def pbs_submit(script, queue, headers, resources, envvars)
@@ -427,6 +438,20 @@ module PBS
         o, e, s = Open3.capture3(env, cmd, *params)
         raise PBS::Error, e unless s.success?
         o.chomp
+      end
+
+      # Call a forked PBS command for a given host
+      def call(cmd, *args, env: {}, stdin: "", chdir: nil)
+        cmd  = bin.join(cmd.to_s).to_s
+        args = args.map(&:to_s)
+        env  = env.to_h.each_with_object({}) {|(k,v), h| h[k.to_s] = v.to_s}.merge({
+          "PBS_DEFAULT"     => host,
+          "LD_LIBRARY_PATH" => %{#{lib}:#{ENV["LD_LIBRARY_PATH"]}}
+        })
+        stdin = stdin.to_s
+        chdir = chdir && chdir.to_s
+        o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin, chdir: chdir)
+        s.success? ? o : raise(PBS::Error, e)
       end
   end
 end
