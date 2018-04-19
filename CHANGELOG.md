@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added a `Batch#submit` method to submit directly with a `qsub` call.
   [#29](https://github.com/OSC/pbs-ruby/issues/29)
+- Add Travis CI support.
 
 ### Changed
 - Changed the `CHANGELOG.md` formatting.
