@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Updated Torque adapter to take into account the new `Script#native` format
+  allowing for arrays. [#65](https://github.com/OSC/ood_core/issues/65)
 
 ## [0.3.0] - 2018-04-05
 ### Added

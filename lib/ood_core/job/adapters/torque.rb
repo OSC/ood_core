@@ -71,54 +71,94 @@ module OodCore
           afternotok = Array(afternotok).map(&:to_s)
           afterany   = Array(afterany).map(&:to_s)
 
-          # Set headers
-          headers = {}
-          headers.merge!(job_arguments: script.args.join(' ')) unless script.args.nil?
-          headers.merge!(Hold_Types: :u) if script.submit_as_hold
-          headers.merge!(Rerunable: script.rerunnable ? 'y' : 'n') unless script.rerunnable.nil?
-          headers.merge!(init_work_dir: script.workdir) unless script.workdir.nil?
-          headers.merge!(Mail_Users: script.email.join(',')) unless script.email.nil?
-          mail_points  = ''
-          mail_points += 'b' if script.email_on_started
-          mail_points += 'e' if script.email_on_terminated
-          headers.merge!(Mail_Points: mail_points) unless mail_points.empty?
-          headers.merge!(Job_Name: script.job_name) unless script.job_name.nil?
-          headers.merge!(Shell_Path_List: script.shell_path) unless script.shell_path.nil?
-          # ignore input_path (not defined in Torque)
-          headers.merge!(Output_Path: script.output_path) unless script.output_path.nil?
-          headers.merge!(Error_Path: script.error_path) unless script.error_path.nil?
-          # If error_path is not specified we join stdout & stderr (as this
-          # mimics what the other resource managers do)
-          headers.merge!(Join_Path: 'oe') if script.error_path.nil?
-          headers.merge!(reservation_id: script.reservation_id) unless script.reservation_id.nil?
-          headers.merge!(Priority: script.priority) unless script.priority.nil?
-          headers.merge!(Execution_Time: script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")) unless script.start_time.nil?
-          headers.merge!(Account_Name: script.accounting_id) unless script.accounting_id.nil?
-
           # Set dependencies
           depend = []
           depend << "after:#{after.join(':')}"           unless after.empty?
           depend << "afterok:#{afterok.join(':')}"       unless afterok.empty?
           depend << "afternotok:#{afternotok.join(':')}" unless afternotok.empty?
           depend << "afterany:#{afterany.join(':')}"     unless afterany.empty?
-          headers.merge!(depend: depend.join(','))       unless depend.empty?
 
-          # Set resources
-          resources = {}
-          resources.merge!(walltime: seconds_to_duration(script.wall_time)) unless script.wall_time.nil?
+          # Set mailing options
+          mail_points  = ""
+          mail_points += "b" if script.email_on_started
+          mail_points += "e" if script.email_on_terminated
 
-          # Set environment variables
-          envvars = script.job_environment || {}
+          # FIXME: Remove the Hash option once all Interactive Apps are
+          # converted to Array format
+          if script.native.is_a?(Hash)
+            # Set headers
+            headers = {}
+            headers.merge!(job_arguments: script.args.join(' ')) unless script.args.nil?
+            headers.merge!(Hold_Types: :u) if script.submit_as_hold
+            headers.merge!(Rerunable: script.rerunnable ? 'y' : 'n') unless script.rerunnable.nil?
+            headers.merge!(init_work_dir: script.workdir) unless script.workdir.nil?
+            headers.merge!(Mail_Users: script.email.join(',')) unless script.email.nil?
+            headers.merge!(Mail_Points: mail_points) unless mail_points.empty?
+            headers.merge!(Job_Name: script.job_name) unless script.job_name.nil?
+            headers.merge!(Shell_Path_List: script.shell_path) unless script.shell_path.nil?
+            # ignore input_path (not defined in Torque)
+            headers.merge!(Output_Path: script.output_path) unless script.output_path.nil?
+            headers.merge!(Error_Path: script.error_path) unless script.error_path.nil?
+            # If error_path is not specified we join stdout & stderr (as this
+            # mimics what the other resource managers do)
+            headers.merge!(Join_Path: 'oe') if script.error_path.nil?
+            headers.merge!(reservation_id: script.reservation_id) unless script.reservation_id.nil?
+            headers.merge!(Priority: script.priority) unless script.priority.nil?
+            headers.merge!(Execution_Time: script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")) unless script.start_time.nil?
+            headers.merge!(Account_Name: script.accounting_id) unless script.accounting_id.nil?
+            headers.merge!(depend: depend.join(','))       unless depend.empty?
 
-          # Set native options
-          if script.native
-            headers.merge!   script.native.fetch(:headers, {})
-            resources.merge! script.native.fetch(:resources, {})
-            envvars.merge!   script.native.fetch(:envvars, {})
+            # Set resources
+            resources = {}
+            resources.merge!(walltime: seconds_to_duration(script.wall_time)) unless script.wall_time.nil?
+
+            # Set environment variables
+            envvars = script.job_environment || {}
+
+            # Set native options
+            if script.native
+              headers.merge!   script.native.fetch(:headers, {})
+              resources.merge! script.native.fetch(:resources, {})
+              envvars.merge!   script.native.fetch(:envvars, {})
+            end
+
+            # Submit job
+            @pbs.submit_string(script.content, queue: script.queue_name, headers: headers, resources: resources, envvars: envvars)
+          else
+            # Set qsub arguments
+            args = []
+            args += ["-F", script.args.join(" ")] unless script.args.nil?
+            args += ["-h"] if script.submit_as_hold
+            args += ["-r", script.rerunnable ? "y" : "n"] unless script.rerunnable.nil?
+            args += ["-M", script.email.join(",")] unless script.email.nil?
+            args += ["-m", mail_points] unless mail_points.empty?
+            args += ["-N", script.job_name] unless script.job_name.nil?
+            args += ["-S", script.shell_path] unless script.shell_path.nil?
+            # ignore input_path (not defined in Torque)
+            args += ["-o", script.output_path] unless script.output_path.nil?
+            args += ["-e", script.error_path] unless script.error_path.nil?
+            args += ["-W", "x=advres:#{script.reservation_id}"] unless script.reservation_id.nil?
+            args += ["-q", script.queue_name] unless script.queue_name.nil?
+            args += ["-p", script.priority] unless script.priority.nil?
+            args += ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
+            args += ["-A", script.accounting_id] unless script.accounting_id.nil?
+            args += ["-W", "depend=#{depend.join(",")}"] unless depend.empty?
+            args += ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
+
+            # Set environment variables
+            env = script.job_environment.to_h
+            args += ["-v", env.keys.join(",")] unless env.empty?
+
+            # If error_path is not specified we join stdout & stderr (as this
+            # mimics what the other resource managers do)
+            args += ["-j", "oe"] if script.error_path.nil?
+
+            # Set native options
+            args += script.native if script.native
+
+            # Submit job
+            @pbs.submit(script.content, args: args, env: env, chdir: script.workdir)
           end
-
-          # Submit job
-          @pbs.submit_string(script.content, queue: script.queue_name, headers: headers, resources: resources, envvars: envvars)
         rescue PBS::Error => e
           raise JobAdapterError, e.message
         end
