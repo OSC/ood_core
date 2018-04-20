@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.2.0] - 2018-04-20
 ### Added
 - Added a `Batch#submit` method to submit directly with a `qsub` call.
   [#29](https://github.com/OSC/pbs-ruby/issues/29)
@@ -48,7 +50,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release of 2.0.0!
 
-[Unreleased]: https://github.com/OSC/pbs-ruby/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/OSC/pbs-ruby/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/OSC/pbs-ruby/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/OSC/pbs-ruby/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/OSC/pbs-ruby/compare/v2.0.3...v2.0.4
 [2.0.3]: https://github.com/OSC/pbs-ruby/compare/v2.0.2...v2.0.3
