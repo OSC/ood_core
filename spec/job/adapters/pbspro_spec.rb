@@ -561,7 +561,7 @@ describe OodCore::Job::Adapters::PBSPro do
     context "when job is in W state" do
       let(:job_state) { "W" }
 
-      it { is_expected.to be_queued }
+      it { is_expected.to be_queued_held }
     end
 
     context "when job is in H state" do

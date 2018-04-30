@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added missing "Waiting" state to the Torque adapter as `:queued_held`.
+
+### Changed
+- Changed the "Waiting" state in the PBSPro adapter to `:queued_held`.
 
 ## [0.4.0] - 2018-04-20
 ### Changed

@@ -161,7 +161,7 @@ module OodCore
         # Mapping of state codes for PBSPro
         STATE_MAP = {
           'Q' => :queued,
-          'W' => :queued,         # job is waiting for its submitter-assigned start time to be reached
+          'W' => :queued_held,    # job is waiting for its submitter-assigned start time to be reached
           'H' => :queued_held,
           'T' => :queued_held,    # job is being moved to a new location
           'M' => :completed,      # job was moved to another server

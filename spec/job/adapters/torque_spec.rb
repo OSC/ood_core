@@ -730,6 +730,12 @@ describe OodCore::Job::Adapters::Torque do
       it { is_expected.to be_queued_held }
     end
 
+    context "when job is in W state" do
+      let(:job_state) { "W" }
+
+      it { is_expected.to be_queued_held }
+    end
+
     context "when job is in S state" do
       let(:job_state) { "S" }
 

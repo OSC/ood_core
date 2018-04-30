@@ -34,7 +34,8 @@ module OodCore
         STATE_MAP = {
           'Q' => :queued,
           'H' => :queued_held,
-          'T' => :queued_held,    # transiting, most like a held job
+          'T' => :queued_held,    # transiting (being moved to new location)
+          'W' => :queued_held,    # waiting (waiting for its execution time)
           'R' => :running,
           'S' => :suspended,
           'E' => :running,        # exiting, but still running
