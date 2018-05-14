@@ -97,7 +97,7 @@ module OodCore
 
                 # Check that Xvnc process is running, if not assume it died and
                 # wait some random period of time before restarting
-                kill -0 ${VNC_PID} 2>/dev/null || sleep 0.$(random 1 9)s
+                kill -0 ${VNC_PID} 2>/dev/null || sleep 0.$(random_number 1 9)s
 
                 # If running, then all is well and break out of loop
                 kill -0 ${VNC_PID} 2>/dev/null && break
