@@ -8,7 +8,7 @@ module OodCore
       using Refinements::HashExtensions
       using Refinements::ArrayExtensions
 
-      DEFAULT_PASSWD_SIZE = 32
+      DEFAULT_PASSWD_SIZE = 8
 
       # The context used to render this template
       # @return [Hash] context hash
@@ -149,7 +149,7 @@ module OodCore
 
                 # Generate random alphanumeric password with $1 (default: #{passwd_size}) characters
                 create_passwd () {
-                  tr -cd '[:alnum:]' < /dev/urandom 2> /dev/null | head -c${1:-#{passwd_size}}
+                  tr -cd 'a-zA-Z0-9' < /dev/urandom 2> /dev/null | head -c${1:-#{passwd_size}}
                 }
                 export -f create_passwd
               }
