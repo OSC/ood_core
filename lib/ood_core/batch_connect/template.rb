@@ -8,6 +8,8 @@ module OodCore
       using Refinements::HashExtensions
       using Refinements::ArrayExtensions
 
+      DEFAULT_PASSWD_SIZE = 32
+
       # The context used to render this template
       # @return [Hash] context hash
       attr_reader :context
@@ -68,6 +70,10 @@ module OodCore
         EOT
       end
 
+      def passwd_size
+        context.fetch(:passwd_size, DEFAULT_PASSWD_SIZE).to_i
+      end
+
       private
         # Working directory that batch script runs in
         def work_dir
@@ -95,7 +101,7 @@ module OodCore
           context.fetch(:bash_helpers) do
             min_port    = context.fetch(:min_port, 2000).to_i
             max_port    = context.fetch(:max_port, 65535).to_i
-            passwd_size = context.fetch(:passwd_size, 32).to_i
+            # passwd_size = context.fetch(:passwd_size, 32).to_i
 
             <<-EOT.gsub(/^ {14}/, '')
               # Source in all the helper functions
