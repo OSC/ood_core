@@ -8,8 +8,6 @@ module OodCore
       using Refinements::HashExtensions
       using Refinements::ArrayExtensions
 
-      DEFAULT_PASSWD_SIZE = 8
-
       # The context used to render this template
       # @return [Hash] context hash
       attr_reader :context
@@ -26,7 +24,7 @@ module OodCore
       #   for available port
       # @option context [#to_i] :max_port (65535) Maximum port used when
       #   looking for available port
-      # @option context [#to_i] :passwd_size (32) Length of randomly generated
+      # @option context [#to_i] :password_size (32) Length of randomly generated
       #   password
       # @option context [#to_s] :header ("") Shell code prepended at the top of
       #   the script body
@@ -70,9 +68,18 @@ module OodCore
         EOT
       end
 
-      def passwd_size
-        context.fetch(:passwd_size, DEFAULT_PASSWD_SIZE).to_i
-      end
+      protected
+        def password_size
+          context.fetch(:password_size, 8).to_i
+        end
+
+        def min_port
+          context.fetch(:min_port, 2000).to_i
+        end
+
+        def max_port
+          context.fetch(:max_port, 65535).to_i
+        end
 
       private
         # Working directory that batch script runs in
@@ -99,9 +106,7 @@ module OodCore
         # Helper methods used in the bash scripts
         def bash_helpers
           context.fetch(:bash_helpers) do
-            min_port    = context.fetch(:min_port, 2000).to_i
-            max_port    = context.fetch(:max_port, 65535).to_i
-            # passwd_size = context.fetch(:passwd_size, 32).to_i
+          
 
             <<-EOT.gsub(/^ {14}/, '')
               # Source in all the helper functions
@@ -147,9 +152,9 @@ module OodCore
                 }
                 export -f wait_until_port_used
 
-                # Generate random alphanumeric password with $1 (default: #{passwd_size}) characters
+                # Generate random alphanumeric password with $1 (default: #{password_size}) characters
                 create_passwd () {
-                  tr -cd 'a-zA-Z0-9' < /dev/urandom 2> /dev/null | head -c${1:-#{passwd_size}}
+                  tr -cd 'a-zA-Z0-9' < /dev/urandom 2> /dev/null | head -c${1:-#{password_size}}
                 }
                 export -f create_passwd
               }

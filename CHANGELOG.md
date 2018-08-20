@@ -9,11 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added ability to override the default password length
 
-### Changed
-- Changed the default password length for VNC sessions to be 8
-
 ### Fixed
-- Fixed a bug in password creation where certain locales resulted in invalid passwords
+- Fixed a bug in password creation where certain locales resulted in invalid passwords [#91](https://github.com/OSC/ood_core/issues/91)
 
 ## [0.5.1] - 2018-05-14
 ### Fixed
