@@ -71,8 +71,8 @@ module OodCore
               # Setup one-time use passwords and initialize the VNC password
               function change_passwd () {
                 echo "Setting VNC password..."
-                password=$(create_passwd 8)
-                spassword=${spassword:-$(create_passwd 8)}
+                password=$(create_passwd "#{password_size}")
+                spassword=${spassword:-$(create_passwd "#{password_size}")}
                 (
                   umask 077
                   echo -ne "${password}\\n${spassword}" | vncpasswd -f > "#{vnc_passwd}"
