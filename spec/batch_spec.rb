@@ -36,7 +36,7 @@ describe PBS::Batch do
         },
         "BIN/qsub",
         stdin_data: "CONTENT",
-        chdir: nil
+        chdir: '.'
       ) do
         [ "STDOUT", "STDERR", double(success?: true) ]
       end
@@ -64,7 +64,7 @@ describe PBS::Batch do
           },
           "BIN/qsub",
           stdin_data: "CONTENT",
-          chdir: nil
+          chdir: '.'
         ) do
           [ "STDOUT", "STDERR", double(success?: true) ]
         end
@@ -86,7 +86,7 @@ describe PBS::Batch do
           "a",
           "b",
           stdin_data: "CONTENT",
-          chdir: nil
+          chdir: '.'
         ) do
           [ "STDOUT", "STDERR", double(success?: true) ]
         end
@@ -124,7 +124,7 @@ describe PBS::Batch do
           },
           "BIN/qsub",
           stdin_data: "CONTENT",
-          chdir: nil
+          chdir: '.'
         ) do
           [ "STDOUT", "STDERR", double(success?: false) ]
         end
