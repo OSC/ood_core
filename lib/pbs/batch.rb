@@ -451,8 +451,8 @@ module PBS
           "LD_LIBRARY_PATH" => %{#{lib}:#{ENV["LD_LIBRARY_PATH"]}}
         })
         stdin = stdin.to_s
-        chdir = chdir && chdir.to_s
-        o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin, chdir: chdir)
+        chdir ||= "."
+        o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin, chdir: chdir.to_s)
         s.success? ? o : raise(PBS::Error, e)
       end
   end

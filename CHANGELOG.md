@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [2.2.1] - 2018-09-14
+### Fixed
+- Fixes a crash that can occur if a script does not have a working directory set
+
 ## [2.2.0] - 2018-04-20
 ### Added
 - Added a `Batch#submit` method to submit directly with a `qsub` call.
@@ -50,7 +54,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release of 2.0.0!
 
-[Unreleased]: https://github.com/OSC/pbs-ruby/compare/v2.2.0...HEAD
+[Unreleased]: https://github.com/OSC/pbs-ruby/compare/v2.2.1...HEAD
+[2.2.1]: https://github.com/OSC/pbs-ruby/compare/v2.2.0...v2.2.1
 [2.2.0]: https://github.com/OSC/pbs-ruby/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/OSC/pbs-ruby/compare/v2.0.4...v2.1.0
 [2.0.4]: https://github.com/OSC/pbs-ruby/compare/v2.0.3...v2.0.4
