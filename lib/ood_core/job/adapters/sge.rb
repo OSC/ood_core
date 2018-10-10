@@ -1,3 +1,4 @@
+require "ood_core/refinements/array_extensions"
 require "ood_core/refinements/hash_extensions"
 require "rexml/document"
 
@@ -26,6 +27,7 @@ module OodCore
     module Adapters
       class Sge < Adapter
         using Refinements::HashExtensions
+        using Refinements::ArrayExtensions
 
         require "ood_core/job/adapters/sge/batch"
 
@@ -99,8 +101,8 @@ module OodCore
         # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
         # @return [Array<Info>] information describing submitted jobs
         def info_where_owner(owner)
-          owner = Array.wrap(owner).map(&:to_s)
-          info_all.select { |info| owner.include? info.job_owner }
+          owner = Array.wrap(owner).map(&:to_s).join(',')
+          @batch.get_all(owner: owner)
         end
 
         # Retrieve job info from the resource manager

@@ -12,9 +12,11 @@ class OodCore::Job::Adapters::Sge::Batch
     @bin     = Pathname.new(config.fetch(:bin, nil))
   end
 
-  def get_all
+  def get_all(owner: nil)
     listener = QstatXmlFrListener.new
-    parser = REXML::Parsers::StreamParser.new(call('qstat', '-F', '-r', '-xml'), listener)
+    argv = ['qstat', '-F', '-r', '-xml']
+    argv += ['-u', owner] unless owner.nil?
+    parser = REXML::Parsers::StreamParser.new(call(*argv), listener)
     parser.parse
 
     listener.parsed_jobs.map{|job_hash| hash_to_job_info(job_hash)}
