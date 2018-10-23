@@ -111,7 +111,10 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [Info] information describing submitted job
         def info(id)
-          raise NotImplementedError, "subclass did not define #info"
+          job_info = @batch.get_info_historical_job(id)
+          return job_info unless job_info.nil?
+
+          @batch.get_info_enqueued_job(id)
         end
 
         # Retrieve job status from resource manager
