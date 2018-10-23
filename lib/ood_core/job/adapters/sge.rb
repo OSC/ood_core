@@ -107,7 +107,6 @@ module OodCore
 
         # Retrieve job info from the resource manager
         # @abstract Subclass is expected to implement {#info}
-        # @raise [NotImplementedError] if subclass did not define {#info}
         # @param id [#to_s] the id of the job
         # @return [Info] information describing submitted job
         def info(id)
@@ -118,31 +117,24 @@ module OodCore
         end
 
         # Retrieve job status from resource manager
-        # @note Optimized slightly over retrieving complete job information from server
-        # @abstract Subclass is expected to implement {#status}
-        # @raise [NotImplementedError] if subclass did not define {#status}
         # @param id [#to_s] the id of the job
         # @return [Status] status of job
         def status(id)
-          raise NotImplementedError, "subclass did not define #status"
+          info(id).status
         end
 
         # Put the submitted job on hold
-        # @abstract Subclass is expected to implement {#hold}
-        # @raise [NotImplementedError] if subclass did not define {#hold}
         # @param id [#to_s] the id of the job
         # @return [void]
         def hold(id)
-          raise NotImplementedError, "subclass did not define #hold"
+          @batch.hold(id)
         end
 
         # Release the job that is on hold
-        # @abstract Subclass is expected to implement {#release}
-        # @raise [NotImplementedError] if subclass did not define {#release}
         # @param id [#to_s] the id of the job
         # @return [void]
         def release(id)
-          raise NotImplementedError, "subclass did not define #release"
+          @batch.release(id)
         end
 
         # Delete the submitted job
@@ -151,7 +143,7 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [void]
         def delete(id)
-          raise NotImplementedError, "subclass did not define #delete"
+          @batch.del(id)
         end
       end
     end

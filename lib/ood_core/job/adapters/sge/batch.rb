@@ -58,6 +58,18 @@ class OodCore::Job::Adapters::Sge::Batch
       OodCore::Job::Info.new(**post_process_job_hash(job_hash))
     end
 
+    def hold(job_id)
+      call('qhold', job_id)
+    end
+
+    def release(job_id)
+      call('qrls', job_id)
+    end
+
+    def del(job_id)
+      call('qdel', job_id)
+    end
+
   private
 
     # Call a forked SGE command for a given batch server
@@ -126,7 +138,7 @@ class OodCore::Job::Adapters::Sge::Batch
       job_hash[:id] = job_hash[:jobnumber]
       job_hash[:status] = :completed
       job_hash[:account] = job_hash[:project]
-      job_hash[:queue_name] = job_hash[:hard_queue_list]
+      job_hash[:queue_name] = job_hash[:qname]
       job_hash[:user] = job_hash[:owner]
       job_hash[:wallclock_time] = job_hash[:ru_wallclock].to_i
       
