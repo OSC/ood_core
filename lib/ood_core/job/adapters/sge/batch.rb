@@ -1,12 +1,11 @@
-require "ood_core/refinements/hash_extensions"
-
 # Object used for simplified communication with a SGE batch server
 #
 # @api private
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
   require "ood_core/job/adapters/sge/qstat_xml_f_r_listener"
-  require 'rexml/document'
+  require "ood_core/refinements/hash_extensions"
+  require "tempfile"
   require 'time'
 
   class Error < StandardError; end
@@ -31,46 +30,63 @@ class OodCore::Job::Adapters::Sge::Batch
   # but SGE's qstat does not give a way to get the status of an enqueued job 
   # with qstat -j $jobid
   def get_info_enqueued_job(job_id)
-      job_info = get_all.find{|job_info| job_info.id == job_id}
-      raise Error.new("Unable to locate job with id #{job_id}") unless job_info
-        
-      job_info
-    end
-
-    def get_info_historical_job(job_id)
-      argv = ['qacct', '-j', job_id]
+    job_info = get_all.find{|job_info| job_info.id == job_id}
+    raise Error.new("Unable to locate job with id #{job_id}") unless job_info
       
-      begin
-        result = call(*argv).strip
-      rescue
-        return nil
-      end
+    job_info
+  end
 
-      job_hash = result.split("\n").map do |str|
-        key_value = /^(?<key>[a-z_]+) +(?<value>.+)/.match(str)
-        next unless key_value
-        key = key_value[:key].strip.gsub(' ', '_').to_sym
-        value = key_value[:value].strip
-
-        [key, value]
-      end.compact.to_h
-
-      OodCore::Job::Info.new(**post_process_job_hash(job_hash))
+  def get_info_historical_job(job_id)
+    argv = ['qacct', '-j', job_id]
+    
+    begin
+      result = call(*argv).strip
+    rescue
+      return nil
     end
 
-    def hold(job_id)
-      call('qhold', job_id)
-    end
+    job_hash = result.split("\n").map do |str|
+      key_value = /^(?<key>[a-z_]+) +(?<value>.+)/.match(str)
+      next unless key_value
+      key = key_value[:key].strip.gsub(' ', '_').to_sym
+      value = key_value[:value].strip
 
-    def release(job_id)
-      call('qrls', job_id)
-    end
+      [key, value]
+    end.compact.to_h
 
-    def del(job_id)
-      call('qdel', job_id)
+    OodCore::Job::Info.new(**post_process_job_hash(job_hash))
+  end
+
+  def hold(job_id)
+    call('qhold', job_id)
+  end
+
+  def release(job_id)
+    call('qrls', job_id)
+  end
+
+  def del(job_id)
+    call('qdel', job_id)
+  end
+
+  def submit(content, args)
+    Tempfile.new('sge_script') do |tempfile|
+      tempfile.write(content)
+      tempfile.size()  # guarantees the file is flushed
+
+      cmd = ['qsub'] + args + [tempfile.path.to_s]
+
+      parse_job_id_from_qsub(call(*cmd))
     end
+  end
 
   private
+
+    # Extract the job id from qsub's output
+    # e.g. Your job 1043 ("job_16") has been submitted
+    def parse_job_id_from_qsub(qsub_output)
+      /Your job (?<job_id>[0-9]+)/.match(qsub_output)[:job_id]
+    end
 
     # Call a forked SGE command for a given batch server
     def call(cmd, *args, env: {}, stdin: "", chdir: nil)
@@ -110,8 +126,8 @@ class OodCore::Job::Adapters::Sge::Batch
       'dr' => :completed, # all running and suspended states with deletion
       'ds' => :completed, # all running and suspended states with deletion
       'dt' => :completed, # all running and suspended states with deletion
-      'hRwq' => :queued, # pending,system hold,re-queue
-      'hqw' => :queued, # pending,system hold
+      'hRwq' => :queued_held, # pending,system hold,re-queue
+      'hqw' => :queued_held, # pending,system hold
       'qw' => :queued, # pending
       'r' => :running, # running
       's' => :suspended, # suspended

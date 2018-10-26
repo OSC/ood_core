@@ -84,7 +84,41 @@ module OodCore
         #   execution after dependent jobs have terminated
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
-          raise NotImplementedError, "subclass did not define #submit"
+          # SGE supports jod dependencies on job completion
+          # ignoring after, afterok, afternotok
+          afterany   = Array(afterany).map(&:to_s)
+          args = []
+          args += ['-h'] unless script.submit_as_hold.nil?
+          args += ['-r', 'yes'] unless script.rerunnable.nil?
+          script.job_environment.each_pair {|k, v| args += ['-v', "#{k.to_s}=#{v.to_s}"]}
+          args += ['-wd', script.workdir] unless script.workdir.nil?
+          args += ['-M', script.email.first] unless (script.email.nil? || script.email_on_terminated.nil?)
+          args += ['-m', 'ea'] unless (script.email.nil? || script.email_on_terminated.nil?)
+
+          # TODO handle afterany dependencies
+
+          # ignoring email_on_started
+          args += ['-N', script.job_name]
+          # These aren't supportable in SGE 6.4
+          # @param shell_path [#to_s, nil] file path specifying login shell
+          # @param error_path [#to_s, nil] file path specifying error stream
+          # @param input_path [#to_s, nil] file path specifying input stream
+          args += ['-e', script.error_path] unless script.error_path.nil?
+          args += ['-o', script.output_path] unless script.output_path.nil?
+          args += ['-ar', script.reservation_id] unless script.reservation_id.nil?
+          args += ['-q', script.queue_name] unless script.queue_name.nil?
+          args += ['-p', script.priority] unless script.priority.nil?
+          args += ['-a', script.start_time.strftime('%C%y%m%d%H%M.%S')] unless script.start_time.nil?
+          args += ['-l', "h_rt=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+          args += ['-P', script.accounting_id] unless script.accounting_id.nil?
+          # @param native [Object, nil] native specifications
+
+          @batch.submit(script.content, args)
+        end
+
+        # Convert seconds to duration
+        def seconds_to_duration(time)
+            "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
         end
 
         # Retrieve info for all jobs from the resource manager
