@@ -1,8 +1,6 @@
 require "ood_core/refinements/array_extensions"
 require "ood_core/refinements/hash_extensions"
 
-# TODO edit comments calling out slurm stuff
-
 module OodCore
   module Job
     class Factory
@@ -14,11 +12,6 @@ module OodCore
       # @option config [Object] :conf (nil) Path to the SGE conf
       # @option config [Object] :bin (nil) Path to SGE client binaries
       def self.build_sge(config)
-        # c = config.to_h.symbolize_keys
-        # cluster = c.fetch(:cluster, nil)
-        # conf    = c.fetch(:conf, nil)
-        # bin     = c.fetch(:bin, nil)
-        # Adapters::Sge.new(cluster: cluster, conf: conf, bin: bin)
         batch = Adapters::Sge::Batch.new(config.to_h.symbolize_keys)
         Adapters::Sge.new(batch: batch)
       end
@@ -33,30 +26,28 @@ module OodCore
         require "ood_core/job/adapters/sge/helper"
 
         # The cluster of the Sun Grid Engine batch server
-        # @example CHPC's kingspeak cluster
-        #   my_batch.cluster #=> "kingspeak"
+        # @example UCLA's hoffman2 cluster
+        #   my_batch.cluster #=> "hoffman2"
         # @return [String, nil] the cluster name
         attr_reader :cluster
 
         # The path to the Sun Grid Engine configuration file
-        # @example For Sun Grid Engine 10.0.0
-        #   my_batch.conf.to_s #=> "/etc/gridengine/configuration
+        # @example For Sun Grid Engine 8.0.1
+        #   my_batch.conf.to_s #=> "/u/systems/UGE8.0.1vm/h2.conf
         # @return [Pathname, nil] path to gridengine conf
         attr_reader :conf
 
         # The path to the Sun Grid Engine client installation binaries
-        # @example For Sun Grid Engine 10.0.0
-        #   my_batch.bin.to_s #=> "/usr/local/slurm/10.0.0/bin
-        # @return [Pathname] path to slurm binaries
+        # @example For Sun Grid Engine 8.0.1
+        #   my_batch.bin.to_s #=> "/u/systems/UGE8.0.1vm/bin/lx-amd64/
+        # @return [Pathname] path to SGE binaries
         attr_reader :bin
 
         # The root exception class that all Sun Grid Engine-specific exceptions inherit
         # from
         class Error < StandardError; end
 
-        # @param cluster [#to_s, nil] the cluster name
-        # @param conf [#to_s, nil] path to the slurm conf
-        # @param bin [#to_s] path to slurm installation binaries
+        # @param batch [Adapters::Sge::Batch]
         def initialize(batch:)
           @batch = batch
           @helper = Sge::Helper.new

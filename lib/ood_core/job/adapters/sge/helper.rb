@@ -1,6 +1,8 @@
 class OodCore::Job::Adapters::Sge::Helper
   require 'ood_core/job/adapters/sge'
 
+  using OodCore::Refinements::ArrayExtensions
+
   # Convert seconds to duration
   # @param time [#to_i]
   # @return [String] an SGE qsub compatible wallclock limit
@@ -57,7 +59,7 @@ class OodCore::Job::Adapters::Sge::Helper
   # @param output [#to_s]
   # @return [Hash<Symbol, String>]
   def parse_qacct_output(output)
-    result.split("\n").map do |str|
+    output.split("\n").map do |str|
       key_value = /^(?<key>[a-z_]+) +(?<value>.+)/.match(str)
       next unless key_value
       key = key_value[:key].strip.gsub(' ', '_').to_sym

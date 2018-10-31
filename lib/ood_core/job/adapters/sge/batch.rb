@@ -59,13 +59,13 @@ class OodCore::Job::Adapters::Sge::Batch
     
     begin
       result = call(*argv).strip
-    rescue
+    rescue Error
       return nil
     end
 
     job_hash = @helper.parse_qacct_output(result)
 
-    OodCore::Job::Info.new(**post_process_job_hash(job_hash))
+    OodCore::Job::Info.new(**post_process_qacct_job_hash(job_hash))
   end
 
   # Call qhold
@@ -164,9 +164,9 @@ class OodCore::Job::Adapters::Sge::Batch
     job_hash[:id] = job_hash[:jobnumber]
     job_hash[:status] = :completed
     job_hash[:job_name] = job_hash[:jobname]
-    job_hash[:account] = job_hash[:project]
+    job_hash[:accounting_id] = job_hash[:project] unless job_hash[:project] == 'NONE'
     job_hash[:queue_name] = job_hash[:qname]
-    job_hash[:user] = job_hash[:owner]
+    job_hash[:job_owner] = job_hash[:owner]
     job_hash[:wallclock_time] = job_hash[:ru_wallclock].to_i
     job_hash[:submission_time] = Time.parse(job_hash[:qsub_time])
     job_hash[:dispatch_time] = Time.parse(job_hash[:start_time])
