@@ -161,7 +161,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong deleting a job
         # @return [void]
         def delete(id)
-          @batch.del(id.to_s)
+          @batch.delete(id.to_s)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
