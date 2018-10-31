@@ -1,3 +1,4 @@
+require 'rexml/document'
 require 'rexml/streamlistener'
 require 'date'
 
@@ -14,7 +15,7 @@ require 'date'
 # :wallclock_limit
 
 
-# :wallclock_time. # HOW LONG HAS IT BEEN RUNNING?
+# :wallclock_time  # HOW LONG HAS IT BEEN RUNNING?
 
 class QstatXmlFrListener
   # [Array<Hash>]
@@ -123,7 +124,7 @@ class QstatXmlFrListener
 
     case @current_request
     when 'h_rt'  # hard run time limit
-      @current_job[:wallclock_limit] = @current_text
+      @current_job[:wallclock_limit] = @current_text.to_i
     end
   end
 
