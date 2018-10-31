@@ -1,7 +1,7 @@
 require "ood_core/refinements/array_extensions"
 require "ood_core/refinements/hash_extensions"
-require "rexml/document"
 
+# TODO edit comments calling out slurm stuff
 
 module OodCore
   module Job
@@ -30,6 +30,7 @@ module OodCore
         using Refinements::ArrayExtensions
 
         require "ood_core/job/adapters/sge/batch"
+        require "ood_core/job/adapters/sge/helper"
 
         # The cluster of the Sun Grid Engine batch server
         # @example CHPC's kingspeak cluster
@@ -58,11 +59,10 @@ module OodCore
         # @param bin [#to_s] path to slurm installation binaries
         def initialize(batch:)
           @batch = batch
+          @helper = Sge::Helper.new
         end
 
         # Submit a job with the attributes defined in the job template instance
-        # @abstract Subclass is expected to implement {#submit}
-        # @raise [NotImplementedError] if subclass did not define {#submit}
         # @example Submit job template to cluster
         #   solver_id = job_adapter.submit(solver_script)
         #   #=> "1234.server"
@@ -82,102 +82,88 @@ module OodCore
         #   execution only after dependent jobs have terminated with errors
         # @param afterany [#to_s, Array<#to_s>] this job may be scheduled for
         #   execution after dependent jobs have terminated
+        # @raise [JobAdapterError] if something goes wrong submitting a job
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           # SGE supports jod dependencies on job completion
-          # ignoring after, afterok, afternotok
-          afterany   = Array(afterany).map(&:to_s)
-          args = []
-          args += ['-h'] unless script.submit_as_hold.nil?
-          args += ['-r', 'yes'] unless script.rerunnable.nil?
-          script.job_environment.each_pair {|k, v| args += ['-v', "#{k.to_s}=#{v.to_s}"]}
-          args += ['-wd', script.workdir] unless script.workdir.nil?
-          args += ['-M', script.email.first] unless (script.email.nil? || script.email_on_terminated.nil?)
-          args += ['-m', 'ea'] unless (script.email.nil? || script.email_on_terminated.nil?)
-
-          # TODO handle afterany dependencies
-
-          # ignoring email_on_started
-          args += ['-N', script.job_name]
-          # These aren't supportable in SGE 6.4
-          # @param shell_path [#to_s, nil] file path specifying login shell
-          # @param error_path [#to_s, nil] file path specifying error stream
-          # @param input_path [#to_s, nil] file path specifying input stream
-          args += ['-e', script.error_path] unless script.error_path.nil?
-          args += ['-o', script.output_path] unless script.output_path.nil?
-          args += ['-ar', script.reservation_id] unless script.reservation_id.nil?
-          args += ['-q', script.queue_name] unless script.queue_name.nil?
-          args += ['-p', script.priority] unless script.priority.nil?
-          args += ['-a', script.start_time.strftime('%C%y%m%d%H%M.%S')] unless script.start_time.nil?
-          args += ['-l', "h_rt=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
-          args += ['-P', script.accounting_id] unless script.accounting_id.nil?
-          # @param native [Object, nil] native specifications
+          args = @helper.batch_submit_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
           @batch.submit(script.content, args)
-        end
-
-        # Convert seconds to duration
-        def seconds_to_duration(time)
-            "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve info for all jobs from the resource manager
-        # @abstract Subclass is expected to implement {#info_all}
-        # @raise [NotImplementedError] if subclass did not define {#info_all}
         # @return [Array<Info>] information describing submitted jobs
         def info_all
-          # raise NotImplementedError, "subclass did not define #info_all"
           @batch.get_all
+        rescue Batch::Error => e
+            raise JobAdapterError, e.message
         end
 
         # Retrieve info for all jobs for a given owner or owners from the
         # resource manager
         # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
+        # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         def info_where_owner(owner)
           owner = Array.wrap(owner).map(&:to_s).join(',')
           @batch.get_all(owner: owner)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job info from the resource manager
-        # @abstract Subclass is expected to implement {#info}
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Info] information describing submitted job
         def info(id)
-          job_info = @batch.get_info_historical_job(id)
+          job_info = @batch.get_info_historical_job(id.to_s)
           return job_info unless job_info.nil?
 
           @batch.get_info_enqueued_job(id)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job status from resource manager
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong getting the status of a job
         # @return [Status] status of job
         def status(id)
           info(id).status
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Put the submitted job on hold
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong holding a job
         # @return [void]
         def hold(id)
-          @batch.hold(id)
+          @batch.hold(id.to_s)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Release the job that is on hold
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong releasing a job
         # @return [void]
         def release(id)
-          @batch.release(id)
+          @batch.release(id.to_s)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Delete the submitted job
-        # @abstract Subclass is expected to implement {#delete}
-        # @raise [NotImplementedError] if subclass did not define {#delete}
         # @param id [#to_s] the id of the job
+        # @raise [JobAdapterError] if something goes wrong deleting a job
         # @return [void]
         def delete(id)
-          @batch.del(id)
+          @batch.del(id.to_s)
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
       end
     end
