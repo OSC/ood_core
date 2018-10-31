@@ -1,12 +1,16 @@
-require 'ood_core/job/adapters/sge'
-
-
 class OodCore::Job::Adapters::Sge::Helper
+  require 'ood_core/job/adapters/sge'
+
   # Convert seconds to duration
+  # @param time [#to_i]
+  # @return [String] an SGE qsub compatible wallclock limit
   def seconds_to_duration(time)
-      "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
+    time = time.to_i
+    "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
   end
 
+  # Convert script and job dependencies to qsub argument vector
+  # @return args [Array<String>]
   def batch_submit_args(script, after: [], afterok: [], afternotok: [], afterany: [])
     raise_error_on_unsupported_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
@@ -40,6 +44,8 @@ class OodCore::Job::Adapters::Sge::Helper
     args
   end
 
+  # Raise exceptions when adapter is asked to perform an action that SGE does not support
+  # @raise [Error] when an incompatible action is requested
   def raise_error_on_unsupported_args(script, after:, afterok:, afternotok:, afterany:)
     # SGE job dependencies only supports one kind of event: completion
     raise OodCore::Job::Adapters::Sge::Error.new('SGE does not support job dependencies on after start') if after && ! after.empty?
@@ -47,6 +53,9 @@ class OodCore::Job::Adapters::Sge::Helper
     raise OodCore::Job::Adapters::Sge::Error.new('SGE does not support job dependencies on after any') if afterany && ! afterany.empty?
   end
 
+  # Convert qacct output into key, value pairs
+  # @param output [#to_s]
+  # @return [Hash<Symbol, String>]
   def parse_qacct_output(output)
     result.split("\n").map do |str|
       key_value = /^(?<key>[a-z_]+) +(?<value>.+)/.match(str)
@@ -60,6 +69,8 @@ class OodCore::Job::Adapters::Sge::Helper
 
   # Extract the job id from qsub's output
   # e.g. Your job 1043 ("job_16") has been submitted
+  # @param qsub_output [#to_s]
+  # @return job_id [String]
   def parse_job_id_from_qsub(qsub_output)
     /Your job (?<job_id>[0-9]+)/.match(qsub_output)[:job_id]
   end
