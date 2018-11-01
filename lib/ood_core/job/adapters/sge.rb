@@ -11,6 +11,9 @@ module OodCore
       # @option config [Object] :cluster (nil) The cluster to communicate with
       # @option config [Object] :conf (nil) Path to the SGE conf
       # @option config [Object] :bin (nil) Path to SGE client binaries
+      # @option config [Object] :sge_root (nil) Path to SGE root, note that
+      #   this may be nil, but must be set to use the DRMAA API, and there is a
+      #   severe performance penalty calling Sge#info without using DRMAA.
       def self.build_sge(config)
         batch = Adapters::Sge::Batch.new(config.to_h.symbolize_keys)
         Adapters::Sge.new(batch: batch)

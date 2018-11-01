@@ -64,15 +64,16 @@ class OodCore::Job::Adapters::Sge::Batch
   end
 
   # Get OodCore::Job::Info for a job_id that may still be in the queue
-  # It is not ideal to load everything just to get the output of a single job,
-  # but SGE's qstat does not give a way to get the status of an enqueued job
-  # with qstat -j $jobid
-  #
+  # 
+  # If @sge_root is nil or libdrmaa is not loaded then we cannot use DRMAA. Using
+  # DRMAA frees us from having to load every job using qstat just to get the 
+  # status of a single job, and should always be chosen if it is possible.
+  # 
   # @param job_id [#to_s]
   # @return [OodCore::Job::Info]
   def get_info_enqueued_job(job_id)
     job_info = OodCore::Job::Info.new(id: job_id, status: :completed)
-    if @sge_root.nil?
+    if ! can_use_drmaa?
       found_job = get_all.find{|job_info| job_info.id == job_id.to_s}
       job_info = found_job unless found_job.nil?
     else
@@ -82,11 +83,15 @@ class OodCore::Job::Adapters::Sge::Batch
           job_hash,
           get_status_from_drmma(job_id)
         ) if job_hash.key?(:job_number)
-      rescue Error
+      rescue Error  # Job not found
       end
     end
 
     job_info
+  end
+
+  def can_use_drmaa?
+    @sge_root && Object.const_defined?('DRMAA')
   end
 
   # Call qhold
