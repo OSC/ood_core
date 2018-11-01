@@ -121,28 +121,6 @@ describe OodCore::Job::Adapters::Sge::Batch do
       end
     end
   end
-
-  describe "#get_info_historical_job" do
-    context "when the specific job is in the accounting database" do
-      before {
-        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/qacct.txt') }
-      }
-
-      it "returns the correct job info" do
-        expect(batch.get_info_historical_job('1072')).to eq(job_from_qacct)
-      end
-    end
-
-    context "when the specific job is absent from the accounting database" do
-      before {
-        allow(batch).to receive(:call).and_raise(OodCore::Job::Adapters::Sge::Batch::Error)
-      }
-
-      it "returns nil to signal nothing was found" do
-        expect(batch.get_info_historical_job('10372')).to eq(nil)
-      end
-    end
-  end
 end
 
 

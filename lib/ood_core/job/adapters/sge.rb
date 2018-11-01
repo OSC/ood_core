@@ -109,9 +109,6 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Info] information describing submitted job
         def info(id)
-          job_info = @batch.get_info_historical_job(id.to_s)
-          return job_info unless job_info.nil?
-
           @batch.get_info_enqueued_job(id)
         rescue Batch::Error => e
           raise JobAdapterError, e.message

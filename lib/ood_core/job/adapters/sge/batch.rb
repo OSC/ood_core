@@ -45,27 +45,8 @@ class OodCore::Job::Adapters::Sge::Batch
   # @param job_id [#to_s]
   # @return [OodCore::Job::Info]
   def get_info_enqueued_job(job_id)
-    job_info = get_all.find{|job_info| job_info.id == job_id.to_s}
-    job_info = OodCore::Job::Info.new(id: job_id, status: :completed) if job_info.nil?
-      
-    job_info
-  end
-
-  # Get OodCore::Job::Info for a job that may be in the accounting file
-  # @param job_id [#to_s]
-  # @return [OodCore::Job::Info, nil]
-  def get_info_historical_job(job_id)
-    argv = ['qacct', '-j', job_id.to_s]
-    
-    begin
-      result = call(*argv).strip
-    rescue Error
-      return nil
-    end
-
-    job_hash = @helper.parse_qacct_output(result)
-
-    OodCore::Job::Info.new(**post_process_qacct_job_hash(job_hash))
+    job_info = get_all.find{|job_info| job_info.id == job_id.to_s}      
+    job_info.nil? ? OodCore::Job::Info.new(id: job_id, status: :completed) : job_info
   end
 
   # Call qhold
