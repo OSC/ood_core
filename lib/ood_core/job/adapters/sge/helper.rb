@@ -55,12 +55,12 @@ class OodCore::Job::Adapters::Sge::Helper
     raise OodCore::Job::Adapters::Sge::Error.new('SGE does not support job dependencies on after any') if afterany && ! afterany.empty?
   end
 
-  # Convert qacct output into key, value pairs
+  # Convert qstat output into key, value pairs
   # @param output [#to_s]
   # @return [Hash<Symbol, String>]
-  def parse_qacct_output(output)
+  def parse_qstat_output(output)
     output.split("\n").map do |str|
-      key_value = /^(?<key>[a-z_]+) +(?<value>.+)/.match(str)
+      key_value = /^(?<key>[a-z_ ]+): +(?<value>.+)/.match(str)
       next unless key_value
       key = key_value[:key].strip.gsub(' ', '_').to_sym
       value = key_value[:value].strip
