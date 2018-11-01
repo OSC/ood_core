@@ -6,18 +6,35 @@ class OodCore::Job::Adapters::Sge::Batch
   require "ood_core/job/adapters/sge/qstat_xml_f_r_listener"
   require "ood_core/job/adapters/sge/helper"
   require "ood_core/refinements/hash_extensions"
-  require "ood_core/job/adapters/drmaa"
   require "tempfile"
   require 'time'
-  require 'singleton'
+
+  begin
+    require "ood_core/job/adapters/drmaa"
+    require 'singleton'
+
+    DRMMA_TO_OOD_STATE_MAP = {
+      DRMAA::STATE_UNDETERMINED          => :undetermined,
+      DRMAA::STATE_QUEUED_ACTIVE         => :queued,
+      DRMAA::STATE_SYSTEM_ON_HOLD        => :queued_held,
+      DRMAA::STATE_USER_ON_HOLD          => :queued_held,
+      DRMAA::STATE_USER_SYSTEM_ON_HOLD   => :queued_held,
+      DRMAA::STATE_RUNNING               => :running,
+      DRMAA::STATE_SYSTEM_SUSPENDED      => :suspended,
+      DRMAA::STATE_USER_SUSPENDED        => :suspended,
+      DRMAA::STATE_USER_SYSTEM_SUSPENDED => :suspended,
+      DRMAA::STATE_DONE                  => :completed,
+      DRMAA::STATE_FAILED                => :completed
+    }
+
+    # The one and only connection with DRMAA
+    # Attempting to instantiate a DRMAA::Session more than once causes it to crash
+    class SessionSingleton < DRMAA::Session
+      include Singleton
+    end
+  rescue LoadError; end
 
   class Error < StandardError; end
-
-  # The one and only connection with DRMAA
-  # Attempting to instantiate a DRMAA::Session more than once causes it to crash
-  class SessionSingleton < DRMAA::Session
-    include Singleton
-  end
 
   # @param opts [#to_h] the options defining this adapter
   # @option opts [Batch] :batch The Sge batch object
@@ -29,7 +46,6 @@ class OodCore::Job::Adapters::Sge::Batch
     @conf             = Pathname.new(config.fetch(:conf, nil))
     @begin            = Pathname.new(config.fetch(:bin, nil))
     @sge_root         = config.key?(:sge_root) && config[:sge_root] ? Pathname.new(config[:sge_root]) : nil
-    @ld_library_path  = config.key?(:sge_root) && config[:sge_root] ? Pathname.new(config[:sge_root]) : nil
 
     @helper = OodCore::Job::Adapters::Sge::Helper.new
   end
@@ -153,20 +169,6 @@ class OodCore::Job::Adapters::Sge::Batch
     STATE_MAP.fetch(sge_state_code, :undetermined)
   end
 
-  DRMMA_TO_OOD_STATE_MAP = {
-    DRMAA::STATE_UNDETERMINED          => :undetermined,
-    DRMAA::STATE_QUEUED_ACTIVE         => :queued,
-    DRMAA::STATE_SYSTEM_ON_HOLD        => :queued_held,
-    DRMAA::STATE_USER_ON_HOLD          => :queued_held,
-    DRMAA::STATE_USER_SYSTEM_ON_HOLD   => :queued_held,
-    DRMAA::STATE_RUNNING               => :running,
-    DRMAA::STATE_SYSTEM_SUSPENDED      => :suspended,
-    DRMAA::STATE_USER_SUSPENDED        => :suspended,
-    DRMAA::STATE_USER_SYSTEM_SUSPENDED => :suspended,
-    DRMAA::STATE_DONE                  => :completed,
-    DRMAA::STATE_FAILED                => :completed
-  }
-
   def translate_drmaa_state(drmaa_state_code)
     DRMMA_TO_OOD_STATE_MAP.fetch(drmaa_state_code, :undetermined)
   end
@@ -201,11 +203,6 @@ class OodCore::Job::Adapters::Sge::Batch
   # Get the job status using DRMAA
   def get_status_from_drmma(job_id)
     ENV['SGE_ROOT'] = @sge_root.to_s
-    original_ld_library_path = ENV['LD_LIBRARY_PATH']
-    ENV['LD_LIBRARY_PATH'] = @ld_library_path.to_s unless @ld_library_path.nil?
-    translated_state = translate_drmaa_state(SessionSingleton.instance.job_ps(job_id.to_s))
-    ENV['LD_LIBRARY_PATH'] = original_ld_library_path
-
-    translated_state
+    translate_drmaa_state(SessionSingleton.instance.job_ps(job_id.to_s))
   end
 end
