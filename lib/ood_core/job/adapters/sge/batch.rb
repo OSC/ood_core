@@ -74,19 +74,14 @@ class OodCore::Job::Adapters::Sge::Batch
   def get_info_enqueued_job(job_id)
     job_info = OodCore::Job::Info.new(id: job_id, status: :completed)
     begin
-      if ! can_use_drmaa?
-        listener = QstatXmlJRListener.new
-        argv = ['qstat', '-r', '-xml', '-j', job_id.to_s]
-        REXML::Parsers::StreamParser.new(call(*argv), listener).parse
+      listener = QstatXmlJRListener.new
+      argv = ['qstat', '-r', '-xml', '-j', job_id.to_s]
+      REXML::Parsers::StreamParser.new(call(*argv), listener).parse
 
-        job_info = listener.parsed_job
-      else
-          job_hash = @helper.parse_qstat_output(call('qstat', '-r', '-j', job_id.to_s))
-          job_info = post_process_qstat_j_job_hash(
-            job_hash,
-            get_status_from_drmma(job_id)
-          ) if job_hash.key?(:job_number)
-      end
+      job_hash = listener.parsed_job
+      job_hash[:status] = get_status_from_drmma(job_id) if can_use_drmaa?
+        
+      job_info = OodCore::Job::Info.new(**job_hash)
     rescue Error, REXML::ParseException  # Job not found
     end
 
@@ -190,22 +185,6 @@ class OodCore::Job::Adapters::Sge::Batch
     job_hash[:status] = translate_sge_state(job_hash[:status])
 
      job_hash
-  end
-
-  # Transform key, value pairs from qstat output to what Info expects
-  def post_process_qstat_j_job_hash(job_hash, status)
-    # job_hash[:procs] = job_hash[:slots].to_i
-    job_hash[:id] = job_hash[:job_number]
-    job_hash[:status] = status
-    job_hash[:job_name] = job_hash[:job_name]
-    job_hash[:accounting_id] = job_hash[:project] if job_hash.key?(:project)
-    job_hash[:queue_name] = job_hash[:hard_queue_list]
-    job_hash[:job_owner] = job_hash[:owner]
-    # job_hash[:wallclock_time] = job_hash[:ru_wallclock].to_i
-    job_hash[:submission_time] = Time.parse(job_hash[:submission_time])
-    # job_hash[:dispatch_time] = Time.parse(job_hash[:start_time])
-
-    job_hash
   end
 
   # Get the job status using DRMAA

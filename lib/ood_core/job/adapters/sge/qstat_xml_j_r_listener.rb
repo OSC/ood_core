@@ -29,12 +29,8 @@ class QstatXmlJRListener
       :procs => 1,  # un-knowable from SGE qstat output
     }
     @current_text = nil
-
     @current_request = nil
   end
-
-  # def tag_start(name, attributes)
-  # end
 
   def tag_end(name)
     case name
