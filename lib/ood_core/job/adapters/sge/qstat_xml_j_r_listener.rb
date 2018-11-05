@@ -38,22 +38,22 @@ class QstatXmlJRListener
       end_JB_ja_tasks
     when 'JB_job_number'
       end_JB_job_number
-    when 'JB_name'
-      end_JB_name
+    when 'JB_job_name'
+      end_JB_job_name
     when 'JB_owner'
       end_JB_owner
     when 'JB_project'
       end_JB_project
     when 'JB_submission_time'
       end_JB_submission_time
-    when 'JAT_start_time'
-      end_JAT_start_time
     when 'hard_request'
       end_hard_request
     when 'JAT_start_time'
       end_JAT_start_time
     when 'CE_name'
       end_CE_name
+    when 'CE_stringval'
+      end_CE_stringval
     when 'QR_name'
       end_QR_name
     end
@@ -62,17 +62,6 @@ class QstatXmlJRListener
   # Always store text nodes temporarily
   def text(text)
     @current_text = text
-  end
-
-  # Handle hard_request tags
-  #
-  # Multiple hard_request tags may be present and will be differentiated using their name attribute
-  def start_hard_request(attributes)
-    if attributes.key?('name')
-      @current_request = attributes['name']
-    else
-      @current_request = nil
-    end
   end
 
   # Attributes we need
@@ -88,7 +77,7 @@ class QstatXmlJRListener
     @parsed_job[:accounting_id] = @current_text
   end
 
-  def end_JB_name
+  def end_JB_job_name
     @parsed_job[:job_name] = @current_text
   end
 
@@ -96,17 +85,14 @@ class QstatXmlJRListener
     @parsed_job[:submission_time] = @current_text.to_i
   end
 
-  def end_JAT_start_time
-    @parsed_job[:dispatch_time] = @current_text.to_i
-  end
-
   def end_JB_ja_tasks
     @parsed_job[:status] = :running
   end
 
   def end_JAT_start_time
-    @current_request[:status] = :running
-    @current_request[:wallclock_time] = Time.now.to_i - @current_text.to_i
+    @parsed_job[:status] = :running
+    @parsed_job[:dispatch_time] = @current_text.to_i
+    @parsed_job[:wallclock_time] = Time.now.to_i - @parsed_job[:dispatch_time]
   end
 
   def end_CE_name

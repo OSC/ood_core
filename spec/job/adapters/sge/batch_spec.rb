@@ -77,6 +77,26 @@ describe OodCore::Job::Adapters::Sge::Batch do
     )
   }
 
+  let(:job_from_qstat_jr) {
+    OodCore::Job::Info.new(
+      :accounting_id => 'xjzhou_prj',
+      :allocated_nodes => [],
+      :cpu_time => nil,
+      :dispatch_time => Time.at(1541444223),
+      :id => "4147342",
+      :job_name => "cfSNV_0merged_split_pileup_241.FLASH.recal_10.pbs",
+      :job_owner => "shuoli",
+      :native => nil,
+      :procs => 1,
+      :queue_name => nil,
+      :status => :running,
+      :submission_time => Time.at(1541444183),
+      :submit_host => nil,
+      :wallclock_limit => 86400,
+      :wallclock_time => Time.now.to_i - 1541444223
+    )
+  }
+
   describe "#get_all" do
     context "when no owner is set" do
       before {
@@ -103,17 +123,17 @@ describe OodCore::Job::Adapters::Sge::Batch do
   describe "#get_info_enqueued_job" do
     context "when the specific job is in the queue" do
       before {
-        allow(batch).to receive(:get_all) { jobs_from_qstat }
+        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/qstat_jr.xml') }
       }
 
       it "expects to receive the correct job info" do
-        expect(batch.get_info_enqueued_job('88') ).to eq(jobs_from_qstat.first)
+        expect(batch.get_info_enqueued_job('88') ).to eq(job_from_qstat_jr)
       end
     end
 
     context "when the specific job is absent from the queue" do
       before {
-        allow(batch).to receive(:get_all) { jobs_from_qstat }
+        allow(batch).to receive(:call).and_raise(OodCore::Job::Adapters::Sge::Batch::Error)
       }
 
       it "expects to receive a job with status completed" do
