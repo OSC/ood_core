@@ -80,7 +80,7 @@ describe OodCore::Job::Adapters::Sge::Batch do
   describe "#get_all" do
     context "when no owner is set" do
       before {
-        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/qstat.xml') }
+        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/qstat_r.xml') }
       }
 
       it "returns the correct job info" do
