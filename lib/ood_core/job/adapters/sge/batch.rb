@@ -3,7 +3,8 @@
 # @api private
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
-  require "ood_core/job/adapters/sge/qstat_xml_f_r_listener"
+  require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
+  require "ood_core/job/adapters/sge/qstat_xml_r_listener"
   require "ood_core/job/adapters/sge/helper"
   require "ood_core/refinements/hash_extensions"
   require "tempfile"
@@ -54,11 +55,10 @@ class OodCore::Job::Adapters::Sge::Batch
   # @param owner [#to_s] the owner or owner list
   # @return [Array<OodCore::Job::Info>]
   def get_all(owner: nil)
-    listener = QstatXmlFrListener.new
+    listener = QstatXmlRListener.new
     argv = ['qstat', '-r', '-xml']
     argv += ['-u', owner] unless owner.nil?
-    parser = REXML::Parsers::StreamParser.new(call(*argv), listener)
-    parser.parse
+    REXML::Parsers::StreamParser.new(call(*argv), listener).parse
 
     listener.parsed_jobs.map{|job_hash| OodCore::Job::Info.new(**post_process_qstat_job_hash(job_hash))}
   end
@@ -73,18 +73,21 @@ class OodCore::Job::Adapters::Sge::Batch
   # @return [OodCore::Job::Info]
   def get_info_enqueued_job(job_id)
     job_info = OodCore::Job::Info.new(id: job_id, status: :completed)
-    if ! can_use_drmaa?
-      found_job = get_all.find{|job_info| job_info.id == job_id.to_s}
-      job_info = found_job unless found_job.nil?
-    else
-      begin
-        job_hash = @helper.parse_qstat_output(call('qstat', '-r', '-j', job_id.to_s))
-        job_info = post_process_qstat_j_job_hash(
-          job_hash,
-          get_status_from_drmma(job_id)
-        ) if job_hash.key?(:job_number)
-      rescue Error  # Job not found
+    begin
+      if ! can_use_drmaa?
+        listener = QstatXmlJRListener.new
+        argv = ['qstat', '-r', '-xml', '-j', job_id.to_s]
+        REXML::Parsers::StreamParser.new(call(*argv), listener).parse
+
+        job_info = listener.parsed_job
+      else
+          job_hash = @helper.parse_qstat_output(call('qstat', '-r', '-j', job_id.to_s))
+          job_info = post_process_qstat_j_job_hash(
+            job_hash,
+            get_status_from_drmma(job_id)
+          ) if job_hash.key?(:job_number)
       end
+    rescue Error, REXML::ParseException  # Job not found
     end
 
     job_info

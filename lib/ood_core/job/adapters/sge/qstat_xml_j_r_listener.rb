@@ -17,31 +17,29 @@ require 'date'
 
 # :wallclock_time  # HOW LONG HAS IT BEEN RUNNING?
 
-class QstatXmlFrListener
-  # [Array<Hash>]
-  attr_reader :parsed_jobs
+class QstatXmlJRListener
+  # [Hash]
+  attr_reader :parsed_job
 
   include REXML::StreamListener
 
   def initialize
-    @parsed_jobs = []
-    @current_job = {}
+    @parsed_job = {
+      :status => :queued,
+      :procs => 1,  # un-knowable from SGE qstat output
+    }
     @current_text = nil
 
     @current_request = nil
   end
 
-  def tag_start(name, attributes)
-    case name
-    when 'hard_request'
-      start_hard_request(attributes)
-    end
-  end
+  # def tag_start(name, attributes)
+  # end
 
   def tag_end(name)
     case name
-    when 'job_list'
-      end_job_list
+    when 'JB_ja_tasks'
+      end_JB_ja_tasks
     when 'JB_job_number'
       end_JB_job_number
     when 'JB_name'
@@ -50,18 +48,18 @@ class QstatXmlFrListener
       end_JB_owner
     when 'JB_project'
       end_JB_project
-    when 'state'
-      end_state
-    when 'slots'
-      end_slots
     when 'JB_submission_time'
       end_JB_submission_time
-    when 'hard_req_queue'
-      end_hard_req_queue
     when 'JAT_start_time'
       end_JAT_start_time
     when 'hard_request'
       end_hard_request
+    when 'JAT_start_time'
+      end_JAT_start_time
+    when 'CE_name'
+      end_CE_name
+    when 'QR_name'
+      end_QR_name
     end
   end
 
@@ -83,55 +81,53 @@ class QstatXmlFrListener
 
   # Attributes we need
   def end_JB_job_number
-    @current_job[:id] = @current_text
+    @parsed_job[:id] = @current_text
   end
 
   def end_JB_owner
-    @current_job[:job_owner] = @current_text
+    @parsed_job[:job_owner] = @current_text
   end
 
   def end_JB_project
-    @current_job[:accounting_id] = @current_text
+    @parsed_job[:accounting_id] = @current_text
   end
 
   def end_JB_name
-    @current_job[:job_name] = @current_text
-  end
-
-  # Note that this is the native SGE type
-  def end_state
-    @current_job[:status] = @current_text
-  end
-
-  def end_slots
-    @current_job[:procs] = @current_text.to_i
-  end
-
-  def end_hard_req_queue
-    @current_job[:queue_name] = @current_text
+    @parsed_job[:job_name] = @current_text
   end
 
   def end_JB_submission_time
-    @current_job[:submission_time] = DateTime.parse(@current_text).to_time.to_i
+    @parsed_job[:submission_time] = @current_text.to_i
   end
 
   def end_JAT_start_time
-    @current_job[:dispatch_time] = DateTime.parse(@current_text).to_time.to_i
+    @parsed_job[:dispatch_time] = @current_text.to_i
   end
 
-  def end_hard_request
+  def end_JB_ja_tasks
+    @parsed_job[:status] = :running
+  end
+
+  def end_JAT_start_time
+    @current_request[:status] = :running
+    @current_request[:wallclock_time] = Time.now.to_i - @current_text.to_i
+  end
+
+  def end_CE_name
+    @current_request = @current_text
+  end
+
+  def end_CE_stringval
     return nil if @current_request.nil?
 
     case @current_request
     when 'h_rt'  # hard run time limit
-      @current_job[:wallclock_limit] = @current_text.to_i
+      @parsed_job[:wallclock_limit] = @current_text.to_i
     end
   end
 
-  # Store a completed job and reset current_job for the next pass
-  def end_job_list
-    @parsed_jobs << @current_job
-    @current_job = {}
+  def end_QR_name
+    @parsed_job[:queue_name] = @current_text
   end
 end
 
