@@ -22,14 +22,16 @@ module OodCore
         #
         #   # Job is completed and not running on an execution host
         #   :completed
+        #   
+        #   @note that this list's order is meaningful and should not be sorted lexigraphically
         def states
           %i(
             undetermined
-            queued
+            completed
             queued_held
+            queued
             running
             suspended
-            completed
           )
         end
       end
@@ -122,6 +124,17 @@ module OodCore
       # @return [Boolean]
       def respond_to_missing?(method_name, include_private = false)
         /^(?<other_state>.+)\?$/ =~ method_name && self.class.states.include?(other_state.to_sym) || super
+      end
+
+      def precedence
+        self.class.states.index(@state)
+      end
+
+      # The comparison operator for sorting values.
+      #
+      # @return [Integer] Comparison value based on precedence
+      def <=>(other)
+        precedence <=> other.precedence
       end
     end
   end

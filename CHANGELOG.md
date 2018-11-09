@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Added ability to override the default password length
+- Add notion of an aggregate status to OodCore::Job::Info to support job array parents
+- Changed order of OodCore::Job:Status.states to support precedence / sorting
 
 ### Fixed
 - Fixed a bug in password creation where certain locales resulted in invalid passwords [#91](https://github.com/OSC/ood_core/issues/91)

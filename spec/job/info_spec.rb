@@ -33,6 +33,7 @@ describe OodCore::Job::Info do
   it { is_expected.to respond_to(:dispatch_time) }
   it { is_expected.to respond_to(:native) }
   it { is_expected.to respond_to(:to_h) }
+  it { is_expected.to respond_to(:child_task_statuses) }
 
   describe ".new" do
     context "when :id not defined" do
@@ -178,6 +179,32 @@ describe OodCore::Job::Info do
 
     it "doesn't equal object with different attributes" do
       is_expected.not_to eq(build_info(procs: 10))
+    end
+  end
+
+  describe "#child_task_statuses" do
+    context "when built with an empty child_task_statuses" do
+      subject {build_info(child_task_statuses: [])}
+
+      it { is_expected.to eq(build_info)}
+    end
+
+    context "elements of :child_task_statuses are converted to OodCore::Job::TaskStatus" do
+      subject { build_info(child_task_statuses: [{:id => id, :status => :running}]).child_task_statuses.first }
+
+      it { is_expected.to be_a(OodCore::Job::TaskStatus) }
+    end
+
+    context "when multiple :child_task_statuses exist and one is running" do
+      subject { build_info(
+          child_task_statuses: [
+            {:id => 1, :status => :running},
+            {:id => 2, :status => :queued}
+          ]
+        ).status
+      }
+
+      it { is_expected.to eq(OodCore::Job::Status.new(state: :running)) }
     end
   end
 end

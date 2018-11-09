@@ -65,6 +65,11 @@ module OodCore
       # @return [Object] native info
       attr_reader :native
 
+      # List of job array child task statuses
+      # @note only relevant for job arrays
+      # @return [Array<TaskStatus>] child_task_statuses
+      attr_reader :child_task_statuses
+
       # @param id [#to_s] job id
       # @param status [#to_sym] job state
       # @param allocated_nodes [Array<#to_h>] allocated nodes
@@ -79,12 +84,14 @@ module OodCore
       # @param cpu_time [#to_i, nil] cpu time
       # @param submission_time [#to_i, nil] submission time
       # @param dispatch_time [#to_i, nil] dispatch time
+      # @param child_task_statuses [Array<Hash<#to_s, #to_sym>>] child_task_statuses
       # @param native [Object] native info
       def initialize(id:, status:, allocated_nodes: [], submit_host: nil,
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
-                     dispatch_time: nil, native: nil, **_)
+                     dispatch_time: nil, native: nil, child_task_statuses: [],
+                     **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
         @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(n.to_h) }
@@ -99,6 +106,10 @@ module OodCore
         @cpu_time        = cpu_time        && cpu_time.to_i
         @submission_time = submission_time && Time.at(submission_time.to_i)
         @dispatch_time   = dispatch_time   && Time.at(dispatch_time.to_i)
+        @child_task_statuses = child_task_statuses.map {|task_status| TaskStatus.new(**task_status)}
+
+        @status = job_array_aggregate_status unless @child_task_statuses.empty?
+
         @native          = native
       end
 
@@ -142,6 +153,16 @@ module OodCore
       # @return [Integer] hash value of object
       def hash
         [self.class, to_h].hash
+      end
+
+      private
+
+      # Generate an aggregate status from child tasks
+      # @return [OodCore::Job::Status]
+      def job_array_aggregate_status
+        @child_task_statuses
+         .map {|task_status| task_status.status}
+         .max
       end
     end
   end
