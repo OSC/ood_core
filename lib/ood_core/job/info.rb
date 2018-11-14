@@ -161,7 +161,7 @@ module OodCore
       # @return [OodCore::Job::Status]
       def job_array_aggregate_status
         @child_task_statuses
-         .map {|task_status| task_status.status}
+         .map { |task_status| task_status.status}
          .max
       end
     end

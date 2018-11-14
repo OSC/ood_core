@@ -334,13 +334,24 @@ module OodCore
             parse_job_info(v)
           end
 
-          # A job id can return multiple jobs if it corresponds to a job
-          # array id, so we need to find the job that corresponds to the
-          # given job id (if we can't find it, we assume it has completed)
-          info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
-            # Match the job id or the formatted job & task id "1234_0"
-            info.id == id || info.native[:array_job_task_id] == id
+          # If no job was found we assume that it has completed
+          return Info.new(id: id, status: :completed) unless ! info_ary.empty?
+
+          # If only one job was returned we return it
+          return info_ary.first unless info_ary.length > 1
+          
+          # Multiple jobs being returned indicate that this is a job array
+          parent_task_hash = {:child_task_statuses => []}
+
+          info_ary.map do |task_info|
+            if task_info.id == id || task_info.native[:array_job_task_id] == id
+              parent_task_hash.merge!(task_info.to_h)
+            end
+
+            parent_task_hash[:child_task_statuses] << {:id => task_info.id, :status => task_info.status}
           end
+
+          Info.new(**parent_task_hash)
         rescue Batch::Error => e
           # set completed status if can't find job id
           if /Invalid job id specified/ =~ e.message
