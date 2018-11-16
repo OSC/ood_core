@@ -502,7 +502,7 @@ describe OodCore::Job::Adapters::Slurm do
         let(:job_info_hash) {
           {
             :id=>"123",
-            :status=>:queued,
+            :status=>:running,
             :allocated_nodes=>[],
             :submit_host=>nil,
             :job_name=>nil,
@@ -514,6 +514,10 @@ describe OodCore::Job::Adapters::Slurm do
             :wallclock_limit=>1800,
             :cpu_time=>nil,
             :submission_time=>Time.parse("2017-03-31T10:09:44"),
+            :child_task_statues=>[
+              OodCore::Job::TaskStatus.new(id: 124, status: :running),
+              OodCore::Job::TaskStatus.new(id: 123, status: :queued)
+            ],
             :dispatch_time=>nil,
             :native=>job_hash
           }
