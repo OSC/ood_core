@@ -131,7 +131,8 @@ module OodCore
           cpu_time:        cpu_time,
           submission_time: submission_time,
           dispatch_time:   dispatch_time,
-          native:          native
+          native:          native,
+          child_task_statuses: child_task_statuses
         }
       end
 
