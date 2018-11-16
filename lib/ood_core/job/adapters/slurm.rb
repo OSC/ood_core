@@ -59,6 +59,7 @@ module OodCore
             @cluster = cluster && cluster.to_s
             @conf    = conf    && Pathname.new(conf.to_s)
             @bin     = Pathname.new(bin.to_s)
+            @version = detect_version
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -151,7 +152,7 @@ module OodCore
 
             # Fields requested from a formatted `squeue` call
             def fields
-              {
+              squeue_fields = {
                 account: "%a",
                 job_id: "%A",
                 gres: "%b",
@@ -202,6 +203,15 @@ module OodCore
                 sockets_cores_threads: "%z",
                 work_dir: "%Z"
               }
+
+              squeue_fields.delete(:gres) if @version >= 18
+
+              squeue_fields
+            end
+
+            # Detect Slurm major version
+            def detect_version
+              `#{@bin.join('sbatch')} --version`.to_s.match(/slurm (?<version>[1-9][0-9])/)[:version].to_i
             end
         end
 
