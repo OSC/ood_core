@@ -344,11 +344,11 @@ module OodCore
           parent_task_hash = {:child_task_statuses => []}
 
           info_ary.map do |task_info|
-            if task_info.id == id || task_info.native[:array_job_task_id] == id
-              parent_task_hash.merge!(task_info.to_h)
-            end
-
             parent_task_hash[:child_task_statuses] << {:id => task_info.id, :status => task_info.status}
+
+            if task_info.id == id || task_info.native[:array_job_task_id] == id
+              parent_task_hash.merge!(task_info.to_h.select{|k, v| k != :child_task_statuses})
+            end
           end
 
           Info.new(**parent_task_hash)
