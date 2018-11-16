@@ -201,7 +201,12 @@ module OodCore
         # @see Adapter#info
         def info(id)
           id = id.to_s
-          parse_job_info(*@pbs.get_job(id).flatten)
+
+          result = @pbs.get_job(id)
+
+          return parse_job_info(*result.flatten) if result.keys.length == 1
+
+          parse_job_array(id, result)
         rescue PBS::UnkjobidError
           # set completed status if can't find job id
           Info.new(
@@ -295,8 +300,26 @@ module OodCore
             end
           end
 
+          def parse_job_array(parent_id, result)
+            child_task_statuses = []
+            results = result.to_a
+
+            # Master tasks don't actually run on a host
+            parent_task = results.first.last
+            parent_task.delete(:exec_host)
+
+            results.map do |key, value|
+              child_task_statuses << {
+                :id => key,
+                :status => STATE_MAP.fetch(value[:job_state], :undetermined)
+              }
+            end
+
+            parse_job_info(parent_id, parent_task, child_task_statuses: child_task_statuses)
+          end
+
           # Parse hash describing PBS job status
-          def parse_job_info(k, v)
+          def parse_job_info(k, v, child_task_statuses: [])
             /^(?<job_owner>[\w-]+)@/ =~ v[:Job_Owner]
             allocated_nodes = parse_nodes(v[:exec_host] || "")
             procs = allocated_nodes.inject(0) { |sum, x| sum + x[:procs] }
@@ -324,7 +347,8 @@ module OodCore
               cpu_time: duration_in_seconds(v.fetch(:resources_used, {})[:cput]),
               submission_time: v[:ctime],
               dispatch_time: v[:start_time],
-              native: v
+              native: v,
+              child_task_statuses: child_task_statuses
             )
           end
       end
