@@ -13,6 +13,7 @@ describe 'a live system', :if => (! ENV['LIVE_CLUSTER_CONFIG'].nil?) do
     HERESCRIPT
     @script = OodCore::Job::Script.new(
       # generate a random job name
+      # e.g. TEST_SYQECQXW
       job_name: 'TEST_' + (0...8).map { (65 + rand(26)).chr }.join,
       content: @script_content,
       # don't clutter the file system with output from tests
@@ -21,7 +22,7 @@ describe 'a live system', :if => (! ENV['LIVE_CLUSTER_CONFIG'].nil?) do
       submit_as_hold: true
     )
 
-    # Confirm that live tests will be run, and announce the job name for manual cleanup in case the test fails
+    # Confirm that live tests will be run, and let the use know the name in case manual cleanup is necessary
     puts "\nRunning tests on live system with job_name #{@script.job_name}\n"
   end
 
@@ -39,7 +40,7 @@ describe 'a live system', :if => (! ENV['LIVE_CLUSTER_CONFIG'].nil?) do
 
     # We can get status
     current_status = @adapter.status(id)
-    expect(current_status).not_to be_empty
+    expect(OodCore::Job::Status.states).to include(current_status)
 
     # Status is what we expect
     expect([:queued, :queued_held]).to include(current_status.state)
