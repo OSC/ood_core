@@ -13,22 +13,26 @@ class TestLiveSystemSlurmAdapter < Minitest::Test
     @script_content = File.read('live_system_tests/bin/sleeper_job.sh')
   end
 
-  def test_that_it_can_submit
-    @adapter.submit(get_job_script)
-  end
-
-  def test_that_it_can_get_info_on_a_submitted_job
+  def test_that_it_is_working
+    # We can submit
     id = @adapter.submit(get_job_script)
     
-    assert_equal(
-      @adapter.info(id).job_name,
-      get_job_script.job_name
-    )
-  end
+    # We can get info and that info is not default constructed
+    assert_equal( @adapter.info(id).job_name, get_job_script.job_name )
 
-  def test_that_ids_returned_by_submit_are_valid_for_delete
-    id = @adapter.submit(get_job_script)
-    
+    # We can get status
+    current_status = @adapter.status(id)
+
+    # Status is what we expect
+    assert( current_status.queued? || current_status.queued_held? )
+
+    # We can release a held job
+    @adapter.release(id)
+
+    # The status is no longer held
+    assert( ! @adapter.status(id).queued_held? )
+
+    # We can delete a job
     @adapter.delete(id)
   end
 
@@ -41,6 +45,7 @@ class TestLiveSystemSlurmAdapter < Minitest::Test
       # don't clutter the file system with output from tests
       output_path: '/dev/null',
       error_path: '/dev/null',
+      submit_as_hold: true
     )
   end
 end
