@@ -2,15 +2,17 @@ require 'spec_helper'
 
 describe 'a live system', :if => (! ENV['LIVE_CLUSTER_CONFIG'].nil?) do
   before(:all) do
-    @adapter = adapter = OodCore::Job::Factory.build(
+    @adapter = OodCore::Job::Factory.build(
       YAML.load_file(ENV['LIVE_CLUSTER_CONFIG'])
     )
+
     @script_content = <<~HERESCRIPT
       #!/bin/bash
       #JOB_HEADERS_HERE
       sleep 100
       exit 0
     HERESCRIPT
+
     @script = OodCore::Job::Script.new(
       # generate a random job name
       # e.g. TEST_SYQECQXW
@@ -27,31 +29,36 @@ describe 'a live system', :if => (! ENV['LIVE_CLUSTER_CONFIG'].nil?) do
   end
 
   after(:all) do
+    # Mark the boundry between live test outcomes and those of non-live system tests
     puts "\nLive system tests complete. Continuing with other tests:\n"
   end
 
-  it('can perform submit, hold, release, info, status and delete') do
-    # We can submit
-    id = @adapter.submit(@script)
-    expect(id).not_to be_empty
+  it('can submit') do
+    $id = @adapter.submit(@script)
+    expect($id).not_to be_empty
+  end
 
+  it('can get info') do
     # We can get info and that info is not default constructed
-    expect(@adapter.info(id).job_name).to eq( @script.job_name )
+    expect(@adapter.info($id).job_name).to eq( @script.job_name )
+  end
 
-    # We can get status
-    current_status = @adapter.status(id)
+  it('can get status') do
+    current_status = @adapter.status($id)
     expect(OodCore::Job::Status.states).to include(current_status)
 
     # Status is what we expect
     expect([:queued, :queued_held]).to include(current_status.state)
+  end
 
-    # We can release a held job
-    @adapter.release(id)
+  it('can release a held job') do
+    @adapter.release($id)
 
     # The status is no longer held
-    expect(@adapter.status(id).state).not_to eq(:queued_held)
+    expect(@adapter.status($id).state).not_to eq(:queued_held)
+  end
 
-    # We can delete a job
-    @adapter.delete(id)
+  it('can delete a job') do
+    @adapter.delete($id)
   end
 end
