@@ -11,12 +11,14 @@ module OodCore
       # @option config [Object] :cluster (nil) The cluster to communicate with
       # @option config [Object] :conf (nil) Path to the slurm conf
       # @option config [Object] :bin (nil) Path to slurm client binaries
+      # @option config [Object] :major_version (17) Slurm's major version
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
         cluster = c.fetch(:cluster, nil)
         conf    = c.fetch(:conf, nil)
         bin     = c.fetch(:bin, nil)
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin)
+        major_version = c.fetch(:major_version, 17)
+        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, major_version: major_version)
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -55,11 +57,12 @@ module OodCore
           # @param cluster [#to_s, nil] the cluster name
           # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster: nil, bin: nil, conf: nil)
+          # @param config [#to_i] :major_version (17) Slurm's major version
+          def initialize(cluster: nil, bin: nil, conf: nil, major_version: nil)
             @cluster = cluster && cluster.to_s
             @conf    = conf    && Pathname.new(conf.to_s)
             @bin     = Pathname.new(bin.to_s)
-            @version = detect_version
+            @major_version = major_version
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -152,7 +155,7 @@ module OodCore
 
             # Fields requested from a formatted `squeue` call
             def fields
-              squeue_fields = {
+              {
                 account: "%a",
                 job_id: "%A",
                 gres: "%b",
@@ -202,16 +205,7 @@ module OodCore
                 scheduled_nodes: "%Y",
                 sockets_cores_threads: "%z",
                 work_dir: "%Z"
-              }
-
-              squeue_fields.delete(:gres) if @version >= 18
-
-              squeue_fields
-            end
-
-            # Detect Slurm major version
-            def detect_version
-              `#{@bin.join('sbatch')} --version`.to_s.match(/slurm (?<version>[1-9][0-9])/)[:version].to_i
+              }.tap { |fields_prototype| fields_prototype.delete(:gres) if @major_version >= 18 }
             end
         end
 
