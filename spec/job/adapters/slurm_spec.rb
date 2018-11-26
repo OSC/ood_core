@@ -513,7 +513,7 @@ describe OodCore::Job::Adapters::Slurm do
             wallclock_limit: 1800,
             cpu_time: nil,
             submission_time: Time.parse("2017-03-31T10:09:44"),
-            child_task_statuses: [
+            tasks: [
               {:id => 124, :status => :running},
               {:id => 123, :status => :queued}
             ],

@@ -1,6 +1,6 @@
 module OodCore
   module Job
-    class TaskStatus
+    class Task
       attr_reader :id
       attr_reader :status
 

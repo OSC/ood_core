@@ -489,14 +489,14 @@ module OodCore
             # If only one job was returned we return it
             return info_ary.first unless info_ary.length > 1
             
-            parent_task_hash = {:child_task_statuses => []}
+            parent_task_hash = {:tasks => []}
 
             info_ary.map do |task_info|
-              parent_task_hash[:child_task_statuses] << {:id => task_info.id, :status => task_info.status}
+              parent_task_hash[:tasks] << {:id => task_info.id, :status => task_info.status}
 
               if task_info.id == id || task_info.native[:array_job_task_id] == id
                 # Merge hashes without clobbering the child tasks
-                parent_task_hash.merge!(task_info.to_h.select{|k, v| k != :child_task_statuses})
+                parent_task_hash.merge!(task_info.to_h.select{|k, v| k != :tasks})
               end
             end
 

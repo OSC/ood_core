@@ -714,7 +714,7 @@ describe OodCore::Job::Adapters::Torque do
           wallclock_limit: 0,
           procs: 0,
           cpu_time: 0,
-          child_task_statuses: [
+          tasks: [
             {:id => 'job_id[1]', :status => :running},
             {:id => 'job_id[2]', :status => :queued},
             {:id => 'job_id[3]', :status => :queued_held}

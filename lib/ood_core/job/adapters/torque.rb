@@ -301,7 +301,7 @@ module OodCore
           end
 
           def parse_job_array(parent_id, result)
-            child_task_statuses = []
+            tasks = []
             results = result.to_a
 
             # Master tasks don't actually run on a host
@@ -309,17 +309,17 @@ module OodCore
             parent_task.delete(:exec_host)
 
             results.map do |key, value|
-              child_task_statuses << {
+              tasks << {
                 :id => key,
                 :status => STATE_MAP.fetch(value[:job_state], :undetermined)
               }
             end
 
-            parse_job_info(parent_id, parent_task, child_task_statuses: child_task_statuses)
+            parse_job_info(parent_id, parent_task, tasks: tasks)
           end
 
           # Parse hash describing PBS job status
-          def parse_job_info(k, v, child_task_statuses: [])
+          def parse_job_info(k, v, tasks: [])
             /^(?<job_owner>[\w-]+)@/ =~ v[:Job_Owner]
             allocated_nodes = parse_nodes(v[:exec_host] || "")
             procs = allocated_nodes.inject(0) { |sum, x| sum + x[:procs] }
@@ -348,7 +348,7 @@ module OodCore
               submission_time: v[:ctime],
               dispatch_time: v[:start_time],
               native: v,
-              child_task_statuses: child_task_statuses
+              tasks: tasks
             )
           end
       end

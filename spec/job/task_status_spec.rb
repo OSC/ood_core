@@ -1,6 +1,6 @@
 require "spec_helper"
 
-describe OodCore::Job::TaskStatus do
+describe OodCore::Job::Task do
   def build_info(opts = {})
     described_class.new(
       {
