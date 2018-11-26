@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= 2.2.0"
 
   spec.add_runtime_dependency "ood_support", "~> 0.0.2"
-  spec.add_development_dependency "pbs", "~> 2.1", ">= 2.2.0"
+  spec.add_runtime_dependency "ffi", "~> 1.9", ">= 1.9.6"
   spec.add_development_dependency "bundler", "~> 1.7"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
