@@ -11,15 +11,25 @@ module OodCore
       # @option config [Object] :cluster (nil) The cluster to communicate with
       # @option config [Object] :conf (nil) Path to the slurm conf
       # @option config [Object] :bin (nil) Path to slurm client binaries
-      # @option config [Object] :major_version (17) Slurm's major version
+      # @option config [Object] :version (17) Slurm's version
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
         cluster = c.fetch(:cluster, nil)
         conf    = c.fetch(:conf, nil)
         bin     = c.fetch(:bin, nil)
-        major_version = c.fetch(:major_version, 17)
+        major_version = parse_major_version(c.fetch(:version, nil))
+
+        raise 'OodCore::Job::Adapters::Slurm supports Slurm version 17 and greater' if major_version == 0
+        
         slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, major_version: major_version)
         Adapters::Slurm.new(slurm: slurm)
+      end
+
+      def parse_major_version(version)
+        # Backward compatible behavior for current installations
+        return 17 if version.nil?
+
+        version.to_i
       end
     end
 
