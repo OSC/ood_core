@@ -335,23 +335,7 @@ module OodCore
           end
 
           # If no job was found we assume that it has completed
-          return Info.new(id: id, status: :completed) unless ! info_ary.empty?
-
-          # If only one job was returned we return it
-          return info_ary.first unless info_ary.length > 1
-          
-          # Multiple jobs being returned indicate that this is a job array
-          parent_task_hash = {:child_task_statuses => []}
-
-          info_ary.map do |task_info|
-            parent_task_hash[:child_task_statuses] << {:id => task_info.id, :status => task_info.status}
-
-            if task_info.id == id || task_info.native[:array_job_task_id] == id
-              parent_task_hash.merge!(task_info.to_h.select{|k, v| k != :child_task_statuses})
-            end
-          end
-
-          Info.new(**parent_task_hash)
+          info_ary.empty? ? Info.new(id: id, status: :completed) : handle_job_array(info_ary, id)
         rescue Batch::Error => e
           # set completed status if can't find job id
           if /Invalid job id specified/ =~ e.message
@@ -499,6 +483,24 @@ module OodCore
               dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
               native: v
             )
+          end
+
+          def handle_job_array(info_ary, id)
+            # If only one job was returned we return it
+            return info_ary.first unless info_ary.length > 1
+            
+            parent_task_hash = {:child_task_statuses => []}
+
+            info_ary.map do |task_info|
+              parent_task_hash[:child_task_statuses] << {:id => task_info.id, :status => task_info.status}
+
+              if task_info.id == id || task_info.native[:array_job_task_id] == id
+                # Merge hashes without clobbering the child tasks
+                parent_task_hash.merge!(task_info.to_h.select{|k, v| k != :child_task_statuses})
+              end
+            end
+
+            Info.new(**parent_task_hash)
           end
       end
     end
