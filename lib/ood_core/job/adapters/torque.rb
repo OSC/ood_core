@@ -162,7 +162,7 @@ module OodCore
             # Submit job
             @pbs.submit(script.content, args: args, env: env, chdir: script.workdir)
           end
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -174,7 +174,7 @@ module OodCore
           @pbs.get_jobs.map do |k, v|
             parse_job_info(k, v)
           end
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -192,7 +192,7 @@ module OodCore
           ).map do |k, v|
             parse_job_info(k, v)
           end
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -210,7 +210,7 @@ module OodCore
             id: id,
             status: :completed
           )
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -226,7 +226,7 @@ module OodCore
         rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Status.new(state: :completed)
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -240,7 +240,7 @@ module OodCore
         rescue Torque::FFI::UnkjobidError
           # assume successful job hold if can't find job id
           nil
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -254,7 +254,7 @@ module OodCore
         rescue Torque::FFI::UnkjobidError
           # assume successful job release if can't find job id
           nil
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -269,7 +269,7 @@ module OodCore
           # assume successful job deletion if can't find job id
           # assume successful job deletion if job is exiting or completed
           nil
-        rescue Torque::FFI::Error => e
+        rescue Torque::FFI::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
