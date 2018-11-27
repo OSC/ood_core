@@ -1,9 +1,8 @@
 require 'ffi'
 
-module PBS
+module OodCore::Job::Adapters::Torque::FFI
   # An interface to the C-library of Torque
-  module Torque
-    extend FFI::Library
+    extend ::FFI::Library
 
     # @!attribute [rw] self.pbs_errno
     #   The internal PBS error number
@@ -201,7 +200,7 @@ module PBS
     BatchOp = enum(:set, :unset, :incr, :decr, :eq, :ne, :ge, :gt, :le, :lt, :dflt, :merge, :incr_old)
 
     # Struct for Attribute C-linked list
-    class Attrl < FFI::Struct
+    class Attrl < ::FFI::Struct
       layout :next,     Attrl.ptr,        # pointer to next Attrl object
              :name,     :pointer,         # string for name of attribute
              :resource, :pointer,         # string for resource if this attribute is a resource
@@ -213,10 +212,10 @@ module PBS
       # @return [Attrl] generated attribute c-linked list object
       def self.from_list(list)
         attrl = nil
-        prev = Attrl.new(FFI::Pointer::NULL)
+        prev = Attrl.new(::FFI::Pointer::NULL)
         list.each do |key|
           attrl = Attrl.new
-          attrl[:name] = FFI::MemoryPointer.from_string(key.to_s)
+          attrl[:name] = ::FFI::MemoryPointer.from_string(key.to_s)
           attrl[:next] = prev
           prev = attrl
         end
@@ -240,7 +239,7 @@ module PBS
     end
 
     # Struct for Attribute Operation C-linked list
-    class Attropl < FFI::Struct
+    class Attropl < ::FFI::Struct
       layout :next,     Attropl.ptr,      # pointer to next Attropl object
              :name,     :pointer,         # string for name of attribute
              :resource, :pointer,         # string for resource if this attribute is a resource
@@ -253,12 +252,12 @@ module PBS
       def self.from_list(list)
         list = list.map(&:to_h)
         attropl = nil
-        prev = Attropl.new(FFI::Pointer::NULL)
+        prev = Attropl.new(::FFI::Pointer::NULL)
         list.each do |attrib|
           attropl = Attropl.new
-          attropl[:name]     = FFI::MemoryPointer.from_string attrib[:name].to_s
-          attropl[:value]    = FFI::MemoryPointer.from_string attrib[:value].to_s
-          attropl[:resource] = FFI::MemoryPointer.from_string attrib[:resource].to_s
+          attropl[:name]     = ::FFI::MemoryPointer.from_string attrib[:name].to_s
+          attropl[:value]    = ::FFI::MemoryPointer.from_string attrib[:value].to_s
+          attropl[:resource] = ::FFI::MemoryPointer.from_string attrib[:resource].to_s
           attropl[:op]       = (attrib[:op] || :eq).to_sym
           attropl[:next]     = prev
           prev = attropl
@@ -268,7 +267,7 @@ module PBS
     end
 
     # Struct for PBS batch server status responses
-    class BatchStatus < FFI::ManagedStruct
+    class BatchStatus < ::FFI::ManagedStruct
       layout :next,     BatchStatus.ptr,  # pointer to next BatchStatus object
              :name,     :string,          # string for name of this status
              :attribs,  Attrl.ptr,        # pointer to beginning of C-linked list of an Attrl object
@@ -294,139 +293,138 @@ module PBS
 
     # Defined error codes, valid as of Torque >=4.2.10
     ERROR_CODES = {
-      15001 => PBS::UnkjobidError,
-      15002 => PBS::NoattrError,
-      15003 => PBS::AttrroError,
-      15004 => PBS::IvalreqError,
-      15005 => PBS::UnkreqError,
-      15006 => PBS::ToomanyError,
-      15007 => PBS::PermError,
-      15008 => PBS::IffNotFoundError,
-      15009 => PBS::MungeNotFoundError,
-      15010 => PBS::BadhostError,
-      15011 => PBS::JobexistError,
-      15012 => PBS::SystemError,
-      15013 => PBS::InternalError,
-      15014 => PBS::RegrouteError,
-      15015 => PBS::UnksigError,
-      15016 => PBS::BadatvalError,
-      15017 => PBS::ModatrrunError,
-      15018 => PBS::BadstateError,
-      15020 => PBS::UnkqueError,
-      15021 => PBS::BadcredError,
-      15022 => PBS::ExpiredError,
-      15023 => PBS::QunoenbError,
-      15024 => PBS::QacessError,
-      15025 => PBS::BaduserError,
-      15026 => PBS::HopcountError,
-      15027 => PBS::QueexistError,
-      15028 => PBS::AttrtypeError,
-      15029 => PBS::QuebusyError,
-      15030 => PBS::QuenbigError,
-      15031 => PBS::NosupError,
-      15032 => PBS::QuenoenError,
-      15033 => PBS::ProtocolError,
-      15034 => PBS::BadatlstError,
-      15035 => PBS::NoconnectsError,
-      15036 => PBS::NoserverError,
-      15037 => PBS::UnkrescError,
-      15038 => PBS::ExcqrescError,
-      15039 => PBS::QuenodfltError,
-      15040 => PBS::NorerunError,
-      15041 => PBS::RouterejError,
-      15042 => PBS::RouteexpdError,
-      15043 => PBS::MomrejectError,
-      15044 => PBS::BadscriptError,
-      15045 => PBS::StageinError,
-      15046 => PBS::RescunavError,
-      15047 => PBS::BadgrpError,
-      15048 => PBS::MaxquedError,
-      15049 => PBS::CkpbsyError,
-      15050 => PBS::ExlimitError,
-      15051 => PBS::BadacctError,
-      15052 => PBS::AlrdyexitError,
-      15053 => PBS::NocopyfileError,
-      15054 => PBS::CleanedoutError,
-      15055 => PBS::NosyncmstrError,
-      15056 => PBS::BaddependError,
-      15057 => PBS::DuplistError,
-      15058 => PBS::DisprotoError,
-      15059 => PBS::ExecthereError,
-      15060 => PBS::SisrejectError,
-      15061 => PBS::SiscommError,
-      15062 => PBS::SvrdownError,
-      15063 => PBS::CkpshortError,
-      15064 => PBS::UnknodeError,
-      15065 => PBS::UnknodeatrError,
-      15066 => PBS::NonodesError,
-      15067 => PBS::NodenbigError,
-      15068 => PBS::NodeexistError,
-      15069 => PBS::BadndatvalError,
-      15070 => PBS::MutualexError,
-      15071 => PBS::GmoderrError,
-      15072 => PBS::NorelymomError,
-      15073 => PBS::NotsnodeError,
-      15074 => PBS::JobtypeError,
-      15075 => PBS::BadaclhostError,
-      15076 => PBS::MaxuserquedError,
-      15077 => PBS::BaddisallowtypeError,
-      15078 => PBS::NointeractiveError,
-      15079 => PBS::NobatchError,
-      15080 => PBS::NorerunableError,
-      15081 => PBS::NononrerunableError,
-      15082 => PBS::UnkarrayidError,
-      15083 => PBS::BadArrayReqError,
-      15084 => PBS::BadArrayDataError,
-      15085 => PBS::TimeoutError,
-      15086 => PBS::JobnotfoundError,
-      15087 => PBS::NofaulttolerantError,
-      15088 => PBS::NofaultintolerantError,
-      15089 => PBS::NojobarraysError,
-      15090 => PBS::RelayedToMomError,
-      15091 => PBS::MemMallocError,
-      15092 => PBS::MutexError,
-      15093 => PBS::ThreadattrError,
-      15094 => PBS::ThreadError,
-      15095 => PBS::SelectError,
-      15096 => PBS::SocketFaultError,
-      15097 => PBS::SocketWriteError,
-      15098 => PBS::SocketReadError,
-      15099 => PBS::SocketCloseError,
-      15100 => PBS::SocketListenError,
-      15101 => PBS::AuthInvalidError,
-      15102 => PBS::NotImplementedError,
-      15103 => PBS::QuenotavailableError,
-      15104 => PBS::TmpdiffownerError,
-      15105 => PBS::TmpnotdirError,
-      15106 => PBS::TmpnonameError,
-      15107 => PBS::CantopensocketError,
-      15108 => PBS::CantcontactsistersError,
-      15109 => PBS::CantcreatetmpdirError,
-      15110 => PBS::BadmomstateError,
-      15111 => PBS::SocketInformationError,
-      15112 => PBS::SocketDataError,
-      15113 => PBS::ClientInvalidError,
-      15114 => PBS::PrematureEofError,
-      15115 => PBS::CanNotSaveFileError,
-      15116 => PBS::CanNotOpenFileError,
-      15117 => PBS::CanNotWriteFileError,
-      15118 => PBS::JobFileCorruptError,
-      15119 => PBS::JobRerunError,
-      15120 => PBS::ConnectError,
-      15121 => PBS::JobworkdelayError,
-      15122 => PBS::BadParameterError,
-      15123 => PBS::ContinueError,
-      15124 => PBS::JobsubstateError,
-      15125 => PBS::CanNotMoveFileError,
-      15126 => PBS::JobRecycledError,
-      15127 => PBS::JobAlreadyInQueueError,
-      15128 => PBS::InvalidMutexError,
-      15129 => PBS::MutexAlreadyLockedError,
-      15130 => PBS::MutexAlreadyUnlockedError,
-      15131 => PBS::InvalidSyntaxError,
-      15132 => PBS::NodeDownError,
-      15133 => PBS::ServerNotFoundError,
-      15134 => PBS::ServerBusyError,
+      15001 =>   UnkjobidError,
+      15002 =>   NoattrError,
+      15003 =>   AttrroError,
+      15004 =>   IvalreqError,
+      15005 =>   UnkreqError,
+      15006 =>   ToomanyError,
+      15007 =>   PermError,
+      15008 =>   IffNotFoundError,
+      15009 =>   MungeNotFoundError,
+      15010 =>   BadhostError,
+      15011 =>   JobexistError,
+      15012 =>   SystemError,
+      15013 =>   InternalError,
+      15014 =>   RegrouteError,
+      15015 =>   UnksigError,
+      15016 =>   BadatvalError,
+      15017 =>   ModatrrunError,
+      15018 =>   BadstateError,
+      15020 =>   UnkqueError,
+      15021 =>   BadcredError,
+      15022 =>   ExpiredError,
+      15023 =>   QunoenbError,
+      15024 =>   QacessError,
+      15025 =>   BaduserError,
+      15026 =>   HopcountError,
+      15027 =>   QueexistError,
+      15028 =>   AttrtypeError,
+      15029 =>   QuebusyError,
+      15030 =>   QuenbigError,
+      15031 =>   NosupError,
+      15032 =>   QuenoenError,
+      15033 =>   ProtocolError,
+      15034 =>   BadatlstError,
+      15035 =>   NoconnectsError,
+      15036 =>   NoserverError,
+      15037 =>   UnkrescError,
+      15038 =>   ExcqrescError,
+      15039 =>   QuenodfltError,
+      15040 =>   NorerunError,
+      15041 =>   RouterejError,
+      15042 =>   RouteexpdError,
+      15043 =>   MomrejectError,
+      15044 =>   BadscriptError,
+      15045 =>   StageinError,
+      15046 =>   RescunavError,
+      15047 =>   BadgrpError,
+      15048 =>   MaxquedError,
+      15049 =>   CkpbsyError,
+      15050 =>   ExlimitError,
+      15051 =>   BadacctError,
+      15052 =>   AlrdyexitError,
+      15053 =>   NocopyfileError,
+      15054 =>   CleanedoutError,
+      15055 =>   NosyncmstrError,
+      15056 =>   BaddependError,
+      15057 =>   DuplistError,
+      15058 =>   DisprotoError,
+      15059 =>   ExecthereError,
+      15060 =>   SisrejectError,
+      15061 =>   SiscommError,
+      15062 =>   SvrdownError,
+      15063 =>   CkpshortError,
+      15064 =>   UnknodeError,
+      15065 =>   UnknodeatrError,
+      15066 =>   NonodesError,
+      15067 =>   NodenbigError,
+      15068 =>   NodeexistError,
+      15069 =>   BadndatvalError,
+      15070 =>   MutualexError,
+      15071 =>   GmoderrError,
+      15072 =>   NorelymomError,
+      15073 =>   NotsnodeError,
+      15074 =>   JobtypeError,
+      15075 =>   BadaclhostError,
+      15076 =>   MaxuserquedError,
+      15077 =>   BaddisallowtypeError,
+      15078 =>   NointeractiveError,
+      15079 =>   NobatchError,
+      15080 =>   NorerunableError,
+      15081 =>   NononrerunableError,
+      15082 =>   UnkarrayidError,
+      15083 =>   BadArrayReqError,
+      15084 =>   BadArrayDataError,
+      15085 =>   TimeoutError,
+      15086 =>   JobnotfoundError,
+      15087 =>   NofaulttolerantError,
+      15088 =>   NofaultintolerantError,
+      15089 =>   NojobarraysError,
+      15090 =>   RelayedToMomError,
+      15091 =>   MemMallocError,
+      15092 =>   MutexError,
+      15093 =>   ThreadattrError,
+      15094 =>   ThreadError,
+      15095 =>   SelectError,
+      15096 =>   SocketFaultError,
+      15097 =>   SocketWriteError,
+      15098 =>   SocketReadError,
+      15099 =>   SocketCloseError,
+      15100 =>   SocketListenError,
+      15101 =>   AuthInvalidError,
+      15102 =>   NotImplementedError,
+      15103 =>   QuenotavailableError,
+      15104 =>   TmpdiffownerError,
+      15105 =>   TmpnotdirError,
+      15106 =>   TmpnonameError,
+      15107 =>   CantopensocketError,
+      15108 =>   CantcontactsistersError,
+      15109 =>   CantcreatetmpdirError,
+      15110 =>   BadmomstateError,
+      15111 =>   SocketInformationError,
+      15112 =>   SocketDataError,
+      15113 =>   ClientInvalidError,
+      15114 =>   PrematureEofError,
+      15115 =>   CanNotSaveFileError,
+      15116 =>   CanNotOpenFileError,
+      15117 =>   CanNotWriteFileError,
+      15118 =>   JobFileCorruptError,
+      15119 =>   JobRerunError,
+      15120 =>   ConnectError,
+      15121 =>   JobworkdelayError,
+      15122 =>   BadParameterError,
+      15123 =>   ContinueError,
+      15124 =>   JobsubstateError,
+      15125 =>   CanNotMoveFileError,
+      15126 =>   JobRecycledError,
+      15127 =>   JobAlreadyInQueueError,
+      15128 =>   InvalidMutexError,
+      15129 =>   MutexAlreadyLockedError,
+      15130 =>   MutexAlreadyUnlockedError,
+      15131 =>   InvalidSyntaxError,
+      15132 =>   NodeDownError,
+      15133 =>   ServerNotFoundError,
+      15134 =>   ServerBusyError,
     }
-  end
 end

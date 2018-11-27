@@ -1,8 +1,8 @@
 require 'open3'
 
-module PBS
   # Object used for simplified communication with a batch server
-  class Batch
+module OodCore::Job::Adapters::Torque::FFI
+    class Batch
     # The host of the Torque batch server
     # @example OSC's Oakley batch server
     #   my_conn.host #=> "oak-batch.osc.edu"
@@ -11,19 +11,23 @@ module PBS
 
     # The path to the Torque client installation libraries
     # @example For Torque 5.0.0
-    #   my_conn.lib.to_s #=> "/usr/local/torque/5.0.0/lib"
-    # @return [Pathname] path to torque libraries
+    #   my_conn.lib.to_s #=> "/usr/local/Torque/5.0.0/lib"
+    # @return [Pathname] path to Torque libraries
     attr_reader :lib
 
     # The path to the Torque client installation binaries
     # @example For Torque 5.0.0
-    #   my_conn.bin.to_s #=> "/usr/local/torque/5.0.0/bin"
-    # @return [Pathname] path to torque binaries
+    #   my_conn.bin.to_s #=> "/usr/local/Torque/5.0.0/bin"
+    # @return [Pathname] path to Torque binaries
     attr_reader :bin
 
+    # The root exception class that all Torque-specific exceptions inherit
+    # from
+    class Error < StandardError; end
+
     # @param host [#to_s] the batch server host
-    # @param lib [#to_s] path to torque installation libraries
-    # @param bin [#to_s] path to torque installation binaries
+    # @param lib [#to_s] path to FFI installation libraries
+    # @param bin [#to_s] path to FFI installation binaries
     def initialize(host:, lib: "", bin: "", **_)
       @host    = host.to_s
       @lib     = Pathname.new(lib.to_s)
@@ -62,15 +66,15 @@ module PBS
     # @yieldparam cid [Fixnum] connection id from established batch server connection
     # @yieldreturn the final value of the block
     def connect(&block)
-      Torque.lib = lib.join('libtorque.so')
-      cid = Torque.pbs_connect(host)
-      Torque.raise_error(cid.abs) if cid < 0  # raise error if negative connection id
+      OodCore::Job::Adapters::Torque::FFI.lib = lib.join('libtorque.so')
+      cid = OodCore::Job::Adapters::Torque::FFI.pbs_connect(host)
+      OodCore::Job::Adapters::Torque::FFI.raise_error(cid.abs) if cid < 0  # raise error if negative connection id
       begin
         value = yield cid
       ensure
-        Torque.pbs_disconnect(cid)            # always close connection
+        OodCore::Job::Adapters::Torque::FFI.pbs_disconnect(cid)            # always close connection
       end
-      Torque.check_for_error                  # check for errors at end
+      OodCore::Job::Adapters::Torque::FFI.check_for_error                  # check for errors at end
       value
     end
 
@@ -88,9 +92,9 @@ module PBS
     # @return [Hash] status info for batch server
     def get_status(filters: [])
       connect do |cid|
-        filters = PBS::Torque::Attrl.from_list filters
-        batch_status = Torque.pbs_statserver cid, filters, nil
-        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
+        filters = Attrl.from_list filters
+        batch_status = OodCore::Job::Adapters::Torque::FFI.pbs_statserver cid, filters, nil
+        batch_status.to_h.tap { OodCore::Job::Adapters::Torque::FFI.pbs_statfree batch_status }
       end
     end
 
@@ -114,9 +118,9 @@ module PBS
     # @return [Hash] hash of details for the queues
     def get_queues(id: '', filters: [])
       connect do |cid|
-        filters = PBS::Torque::Attrl.from_list(filters)
-        batch_status = Torque.pbs_statque cid, id.to_s, filters, nil
-        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
+        filters = Attrl.from_list(filters)
+        batch_status = OodCore::Job::Adapters::Torque::FFI.pbs_statque cid, id.to_s, filters, nil
+        batch_status.to_h.tap { OodCore::Job::Adapters::Torque::FFI.pbs_statfree batch_status }
       end
     end
 
@@ -157,9 +161,9 @@ module PBS
     # @return [Hash] hash of details for nodes
     def get_nodes(id: '', filters: [])
       connect do |cid|
-        filters = PBS::Torque::Attrl.from_list(filters)
-        batch_status = Torque.pbs_statnode cid, id.to_s, filters, nil
-        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
+        filters = Attrl.from_list(filters)
+        batch_status = OodCore::Job::Adapters::Torque::FFI.pbs_statnode cid, id.to_s, filters, nil
+        batch_status.to_h.tap { OodCore::Job::Adapters::Torque::FFI.pbs_statfree batch_status }
       end
     end
 
@@ -202,9 +206,9 @@ module PBS
     #
     def select_jobs(attribs: [])
       connect do |cid|
-        attribs = PBS::Torque::Attropl.from_list(attribs.map(&:to_h))
-        batch_status = Torque.pbs_selstat cid, attribs, nil
-        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
+        attribs = Attropl.from_list(attribs.map(&:to_h))
+        batch_status = OodCore::Job::Adapters::Torque::FFI.pbs_selstat cid, attribs, nil
+        batch_status.to_h.tap { OodCore::Job::Adapters::Torque::FFI.pbs_statfree batch_status }
       end
     end
 
@@ -230,9 +234,9 @@ module PBS
     # @return [Hash] hash of details for jobs
     def get_jobs(id: '', filters: [])
       connect do |cid|
-        filters = PBS::Torque::Attrl.from_list(filters)
-        batch_status = Torque.pbs_statjob cid, id.to_s, filters, nil
-        batch_status.to_h.tap { Torque.pbs_statfree batch_status }
+        filters = Attrl.from_list(filters)
+        batch_status = OodCore::Job::Adapters::Torque::FFI.pbs_statjob cid, id.to_s, filters, nil
+        batch_status.to_h.tap { OodCore::Job::Adapters::Torque::FFI.pbs_statfree batch_status }
       end
     end
 
@@ -265,7 +269,7 @@ module PBS
     # @return [void]
     def hold_job(id, type: :u)
       connect do |cid|
-        Torque.pbs_holdjob cid, id.to_s, type.to_s, nil
+        OodCore::Job::Adapters::Torque::FFI.pbs_holdjob cid, id.to_s, type.to_s, nil
       end
     end
 
@@ -281,7 +285,7 @@ module PBS
     # @return [void]
     def release_job(id, type: :u)
       connect do |cid|
-        Torque.pbs_rlsjob cid, id.to_s, type.to_s, nil
+        OodCore::Job::Adapters::Torque::FFI.pbs_rlsjob cid, id.to_s, type.to_s, nil
       end
     end
 
@@ -292,7 +296,7 @@ module PBS
     # @return [void]
     def delete_job(id)
       connect do |cid|
-        Torque.pbs_deljob cid, id.to_s, nil
+        OodCore::Job::Adapters::Torque::FFI.pbs_deljob cid, id.to_s, nil
       end
     end
 
@@ -349,7 +353,7 @@ module PBS
     end
 
     private
-      # Submit a script using Torque library
+      # Submit a script using FFI library
       def pbs_submit(script, queue, headers, resources, envvars)
         attribs = []
         headers.each do |name, value|
@@ -366,12 +370,12 @@ module PBS
         end
 
         connect do |cid|
-          attropl = Torque::Attropl.from_list attribs
-          Torque.pbs_submit cid, attropl, script, queue, nil
+          attropl = Attropl.from_list attribs
+          OodCore::Job::Adapters::Torque::FFI.pbs_submit cid, attropl, script, queue, nil
         end
       end
 
-      # Mapping of Torque attribute to `qsub` arguments
+      # Mapping of FFI attribute to `qsub` arguments
       def qsub_arg(key, value)
         case key
         # common attributes
@@ -422,7 +426,7 @@ module PBS
         end
       end
 
-      # Submit a script using Torque binary
+      # Submit a script using FFI binary
       # NB: The binary includes many useful filters and is preferred
       def qsub_submit(script, queue, headers, resources, envvars)
         params  = []
@@ -438,7 +442,7 @@ module PBS
         }
         cmd = bin.join("qsub").to_s
         o, e, s = Open3.capture3(env, cmd, *params)
-        raise PBS::Error, e unless s.success?
+        raise Error, e unless s.success?
         o.chomp
       end
 
@@ -453,7 +457,7 @@ module PBS
         stdin = stdin.to_s
         chdir ||= "."
         o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin, chdir: chdir.to_s)
-        s.success? ? o : raise(PBS::Error, e)
+        s.success? ? o : raise(Error, e)
       end
   end
 end
