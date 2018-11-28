@@ -709,7 +709,7 @@ describe OodCore::Job::Adapters::Torque do
         OodCore::Job::Info.new(
           id: 'job_id[]',
           status: :running,
-          native: {:job_state=>"R"},
+          native: {:job_state=>"R", :exec_host=>""},
           wallclock_time: 0,
           wallclock_limit: 0,
           procs: 0,
