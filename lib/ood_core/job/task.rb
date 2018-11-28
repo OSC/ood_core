@@ -11,8 +11,8 @@ module OodCore
 
       def to_h
         {
-          :id => @id,
-          :status => @status
+          :id => id,
+          :status => status
         }
       end
 
