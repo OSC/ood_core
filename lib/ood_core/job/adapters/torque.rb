@@ -301,21 +301,26 @@ module OodCore
           end
 
           def parse_job_array(parent_id, result)
-            tasks = []
             results = result.to_a
 
-            # Master tasks don't actually run on a host
-            parent_task = results.first.last
-            parent_task.delete(:exec_host)
+            parse_job_info(
+              parent_id,
+              results.first.last.tap { |info_hash| info_hash[:exec_host] = aggregate_exec_host(results) },
+              tasks: generate_task_list(results)
+            )
+          end
 
-            results.map do |key, value|
-              tasks << {
-                :id => key,
-                :status => STATE_MAP.fetch(value[:job_state], :undetermined)
+          def aggregate_exec_host(results)
+            results.map { |k,v| v[:exec_host] }.compact.sort.uniq.join("+")
+          end
+
+          def generate_task_list(results)
+            results.map do |k, v|
+              {
+                :id => k,
+                :status => STATE_MAP.fetch(v[:job_state], :undetermined)
               }
             end
-
-            parse_job_info(parent_id, parent_task, tasks: tasks)
           end
 
           # Parse hash describing PBS job status
