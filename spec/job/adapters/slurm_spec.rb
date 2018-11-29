@@ -851,4 +851,12 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe "OodCore::Job::Adapters::Slurm::Batch" do
+    subject(:batch) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+    it "has its fields in the correct order to work with Slurm 18" do
+      expect(batch.send(:fields).values.last).to eq("%b")
+    end
+  end
 end

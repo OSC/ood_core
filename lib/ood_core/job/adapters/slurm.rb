@@ -150,11 +150,11 @@ module OodCore
             end
 
             # Fields requested from a formatted `squeue` call
+            # Note that the order of these fields is important
             def fields
               {
                 account: "%a",
                 job_id: "%A",
-                gres: "%b",
                 exec_host: "%B",
                 min_cpus: "%c",
                 cpus: "%C",
@@ -200,7 +200,8 @@ module OodCore
                 nice: "%y",
                 scheduled_nodes: "%Y",
                 sockets_cores_threads: "%z",
-                work_dir: "%Z"
+                work_dir: "%Z",
+                gres: "%b",  # must come at the end to fix a bug with Slurm 18
               }
             end
         end
