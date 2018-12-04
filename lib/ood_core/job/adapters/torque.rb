@@ -29,7 +29,7 @@ module OodCore
 
         require "ood_core/job/adapters/torque/error"
         require "ood_core/job/adapters/torque/attributes"
-        require "ood_core/job/adapters/torque/torque_ffi"
+        require "ood_core/job/adapters/torque/ffi"
         require "ood_core/job/adapters/torque/batch"
 
         # Mapping of state characters for PBS
