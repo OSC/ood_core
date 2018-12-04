@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Added ability to override the default password length
+- Merge the pbs-ruby gem removing that as a dependency, but adding FFI
 
 ### Fixed
 - Fixed a bug in password creation where certain locales resulted in invalid passwords [#91](https://github.com/OSC/ood_core/issues/91)
