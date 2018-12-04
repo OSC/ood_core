@@ -1,4 +1,4 @@
-module OodCore::Job::Adapters::Torque::FFI
+class OodCore::Job::Adapters::Torque
   # Maintains a constant Hash of defined PBS attribute types
   # Includes:
   #   Attribute names used by user commands

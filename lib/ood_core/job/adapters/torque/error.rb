@@ -1,4 +1,4 @@
-module OodCore::Job::Adapters::Torque::FFI
+class OodCore::Job::Adapters::Torque
   # The root exception class that all PBS-specific exceptions inherit from
   class Error < StandardError; end
 

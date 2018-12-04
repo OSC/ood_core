@@ -15,7 +15,7 @@ module OodCore
         host = c.fetch(:host) { raise ArgumentError, "No host specified. Missing argument: host" }.to_s
         lib  = c.fetch(:lib, "").to_s
         bin  = c.fetch(:bin, "").to_s
-        pbs  = Adapters::Torque::FFI::Batch.new(host: host, lib: lib, bin: bin)
+        pbs  = Adapters::Torque::Batch.new(host: host, lib: lib, bin: bin)
         Adapters::Torque.new(pbs: pbs)
       end
     end
@@ -46,7 +46,7 @@ module OodCore
 
         # @api private
         # @param opts [#to_h] the options defining this adapter
-        # @option opts [Torque::FFI::Batch] :pbs The PBS batch object
+        # @option opts [Torque::Batch] :pbs The PBS batch object
         # @see Factory.build_torque
         def initialize(opts = {})
           o = opts.to_h.symbolize_keys
@@ -162,7 +162,7 @@ module OodCore
             # Submit job
             @pbs.submit(script.content, args: args, env: env, chdir: script.workdir)
           end
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -174,7 +174,7 @@ module OodCore
           @pbs.get_jobs.map do |k, v|
             parse_job_info(k, v)
           end
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -192,7 +192,7 @@ module OodCore
           ).map do |k, v|
             parse_job_info(k, v)
           end
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -204,13 +204,13 @@ module OodCore
         def info(id)
           id = id.to_s
           parse_job_info(*@pbs.get_job(id).flatten)
-        rescue Torque::FFI::UnkjobidError
+        rescue Torque::UnkjobidError
           # set completed status if can't find job id
           Info.new(
             id: id,
             status: :completed
           )
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -223,10 +223,10 @@ module OodCore
           id = id.to_s
           char = @pbs.get_job(id, filters: [:job_state])[id][:job_state]
           Status.new(state: STATE_MAP.fetch(char, :undetermined))
-        rescue Torque::FFI::UnkjobidError
+        rescue Torque::UnkjobidError
           # set completed status if can't find job id
           Status.new(state: :completed)
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -237,10 +237,10 @@ module OodCore
         # @see Adapter#hold
         def hold(id)
           @pbs.hold_job(id.to_s)
-        rescue Torque::FFI::UnkjobidError
+        rescue Torque::UnkjobidError
           # assume successful job hold if can't find job id
           nil
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -251,10 +251,10 @@ module OodCore
         # @see Adapter#release
         def release(id)
           @pbs.release_job(id.to_s)
-        rescue Torque::FFI::UnkjobidError
+        rescue Torque::UnkjobidError
           # assume successful job release if can't find job id
           nil
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -265,11 +265,11 @@ module OodCore
         # @see Adapter#delete
         def delete(id)
           @pbs.delete_job(id.to_s)
-        rescue Torque::FFI::UnkjobidError, Torque::FFI::BadstateError
+        rescue Torque::UnkjobidError, Torque::BadstateError
           # assume successful job deletion if can't find job id
           # assume successful job deletion if job is exiting or completed
           nil
-        rescue Torque::FFI::Batch::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
