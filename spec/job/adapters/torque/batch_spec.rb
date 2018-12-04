@@ -1,10 +1,10 @@
 require "spec_helper"
 require "ood_core/job/adapters/torque"
-# require "ood_core/job/adapters/torque/batch"
+require "ood_core/job/adapters/torque/batch"
 
-include OodCore::Job::Adapters::Torque::FFI
+include OodCore::Job::Adapters
 
-describe OodCore::Job::Adapters::Torque::FFI::Batch do
+describe OodCore::Job::Adapters::Torque::Batch do
   subject(:batch) { described_class.new(host: host, lib: lib, bin: bin) }
   let(:host) { double(to_s: "HOST") }
   let(:bin)  { double(to_s: "BIN")  }
@@ -135,7 +135,7 @@ describe OodCore::Job::Adapters::Torque::FFI::Batch do
           [ "STDOUT", "STDERR", double(success?: false) ]
         end
 
-        expect { subject }.to raise_error(Batch::Error, "STDERR")
+        expect { subject }.to raise_error(Torque::Batch::Error, "STDERR")
       end
     end
   end

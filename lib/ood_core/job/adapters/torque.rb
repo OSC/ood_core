@@ -204,7 +204,7 @@ module OodCore
         def info(id)
           id = id.to_s
           parse_job_info(*@pbs.get_job(id).flatten)
-        rescue Torque::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Info.new(
             id: id,
@@ -223,7 +223,7 @@ module OodCore
           id = id.to_s
           char = @pbs.get_job(id, filters: [:job_state])[id][:job_state]
           Status.new(state: STATE_MAP.fetch(char, :undetermined))
-        rescue Torque::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Status.new(state: :completed)
         rescue Torque::Batch::Error => e
@@ -237,7 +237,7 @@ module OodCore
         # @see Adapter#hold
         def hold(id)
           @pbs.hold_job(id.to_s)
-        rescue Torque::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # assume successful job hold if can't find job id
           nil
         rescue Torque::Batch::Error => e
@@ -251,7 +251,7 @@ module OodCore
         # @see Adapter#release
         def release(id)
           @pbs.release_job(id.to_s)
-        rescue Torque::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # assume successful job release if can't find job id
           nil
         rescue Torque::Batch::Error => e
@@ -265,7 +265,7 @@ module OodCore
         # @see Adapter#delete
         def delete(id)
           @pbs.delete_job(id.to_s)
-        rescue Torque::UnkjobidError, Torque::BadstateError
+        rescue Torque::FFI::UnkjobidError, Torque::FFI::BadstateError
           # assume successful job deletion if can't find job id
           # assume successful job deletion if job is exiting or completed
           nil
