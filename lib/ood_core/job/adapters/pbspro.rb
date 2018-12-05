@@ -13,6 +13,7 @@ module OodCore
       # @option config [Object] :exec (nil) Path to PBS Pro executables
       # @option config [Object] :qstat_factor (nil) Deciding factor on how to
       #   call qstat for a user
+      # @option config [#to_h] :custom_bin ({}) Optional overrides to PBS Pro client executables
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
         host = c.fetch(:host, nil)

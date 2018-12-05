@@ -12,6 +12,7 @@ module OodCore
       # @option config [Object] :cluster (nil) The cluster to communicate with
       # @option config [Object] :conf (nil) Path to the slurm conf
       # @option config [Object] :bin (nil) Path to slurm client binaries
+      # @option config [#to_h] :custom_bin ({}) Optional overrides to Slurm client executables
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
         cluster = c.fetch(:cluster, nil)

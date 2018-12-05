@@ -448,6 +448,7 @@ class OodCore::Job::Adapters::Torque
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
         cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bindir, custom_bin)
+        p cmd
         o, e, s = Open3.capture3(env, cmd, *params)
         raise Error, e unless s.success?
         o.chomp
@@ -456,6 +457,7 @@ class OodCore::Job::Adapters::Torque
       # Call a forked PBS command for a given host
       def call(cmd, *args, env: {}, stdin: "", chdir: nil)
         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, custom_bin)
+        p cmd
         args = args.map(&:to_s)
         env  = env.to_h.each_with_object({}) {|(k,v), h| h[k.to_s] = v.to_s}.merge({
           "PBS_DEFAULT"     => host,
