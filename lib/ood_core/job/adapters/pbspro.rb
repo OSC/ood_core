@@ -1,5 +1,6 @@
 require "time"
 require "ood_core/refinements/hash_extensions"
+require "ood_core/job/adapters/helper"
 
 module OodCore
   module Job
@@ -17,7 +18,8 @@ module OodCore
         host = c.fetch(:host, nil)
         exec = c.fetch(:exec, nil)
         qstat_factor = c.fetch(:qstat_factor, nil)
-        pbspro = Adapters::PBSPro::Batch.new(host: host, exec: exec)
+        custom_bin = c.fetch(:custom_bin, {})
+        pbspro = Adapters::PBSPro::Batch.new(host: host, exec: exec, custom_bin: custom_bin)
         Adapters::PBSPro.new(pbspro: pbspro, qstat_factor: qstat_factor)
       end
     end
@@ -44,15 +46,22 @@ module OodCore
           # @return [Pathname, nil] path to pbs executables
           attr_reader :exec
 
+          # Optional overrides for PBS Pro client executables
+          # @example
+          #  {'qsub' => '/usr/local/bin/qsub'}
+          # @return Hash<String, String>
+          attr_reader :custom_bin
+
           # The root exception class that all PBS Pro-specific exceptions
           # inherit from
           class Error < StandardError; end
 
           # @param host [#to_s, nil] the batch server host
           # @param exec [#to_s, nil] path to pbs executables
-          def initialize(host: nil, exec: nil)
+          def initialize(host: nil, exec: nil, custom_bin: {})
             @host = host && host.to_s
             @exec = exec && Pathname.new(exec.to_s)
+            @custom_bin = custom_bin
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -147,7 +156,8 @@ module OodCore
             # Call a forked PBS Pro command for a given batch server
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
-              cmd = exec.join("bin", cmd).to_s if exec
+              bindir = (!!exec) ? exec.join("bin").to_s : ''
+              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, custom_bin)
               args = args.map(&:to_s)
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
               env["PBS_DEFAULT"] = host.to_s if host

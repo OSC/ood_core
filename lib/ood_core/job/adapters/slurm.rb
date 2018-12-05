@@ -1,5 +1,6 @@
 require "time"
 require "ood_core/refinements/hash_extensions"
+require "ood_core/job/adapters/helper"
 
 module OodCore
   module Job
@@ -16,7 +17,8 @@ module OodCore
         cluster = c.fetch(:cluster, nil)
         conf    = c.fetch(:conf, nil)
         bin     = c.fetch(:bin, nil)
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin)
+        custom_bin = c.fetch(:custom_bin, {})
+        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, custom_bin: custom_bin)
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -48,6 +50,12 @@ module OodCore
           # @return [Pathname] path to slurm binaries
           attr_reader :bin
 
+          # Optional overrides for Slurm client executables
+          # @example
+          #  {'qsub' => '/usr/local/bin/sbatch'}
+          # @return Hash<String, String>
+          attr_reader :custom_bin
+
           # The root exception class that all Slurm-specific exceptions inherit
           # from
           class Error < StandardError; end
@@ -55,10 +63,11 @@ module OodCore
           # @param cluster [#to_s, nil] the cluster name
           # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster: nil, bin: nil, conf: nil)
+          def initialize(cluster: nil, bin: nil, conf: nil, custom_bin: {})
             @cluster = cluster && cluster.to_s
             @conf    = conf    && Pathname.new(conf.to_s)
             @bin     = Pathname.new(bin.to_s)
+            @custom_bin = custom_bin
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -140,7 +149,7 @@ module OodCore
           private
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
-              cmd = bin.join(cmd.to_s).to_s
+              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, custom_bin)
               args  = args.map(&:to_s)
               args += ["-M", cluster] if cluster
               env = env.to_h

@@ -1,4 +1,5 @@
 require "ood_core/refinements/hash_extensions"
+require "ood_core/job/adapters/helper"
 
 module OodCore
   module Job
