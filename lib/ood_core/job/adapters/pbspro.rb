@@ -13,14 +13,14 @@ module OodCore
       # @option config [Object] :exec (nil) Path to PBS Pro executables
       # @option config [Object] :qstat_factor (nil) Deciding factor on how to
       #   call qstat for a user
-      # @option config [#to_h] :custom_bin ({}) Optional overrides to PBS Pro client executables
+      # @option config [#to_h] :bin_overrides ({}) Optional overrides to PBS Pro client executables
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
         host = c.fetch(:host, nil)
-        exec = c.fetch(:exec, nil)
+        pbs_exec = c.fetch(:exec, nil)
         qstat_factor = c.fetch(:qstat_factor, nil)
-        custom_bin = c.fetch(:custom_bin, {})
-        pbspro = Adapters::PBSPro::Batch.new(host: host, exec: exec, custom_bin: custom_bin)
+        bin_overrides = c.fetch(:bin_overrides, {})
+        pbspro = Adapters::PBSPro::Batch.new(host: host, pbs_exec: pbs_exec, bin_overrides: bin_overrides)
         Adapters::PBSPro.new(pbspro: pbspro, qstat_factor: qstat_factor)
       end
     end
@@ -43,15 +43,15 @@ module OodCore
 
           # The path containing the PBS executables
           # @example
-          #   my_batch.exec.to_s #=> "/usr/local/pbspro/10.0.0
+          #   my_batch.pbs_exec.to_s #=> "/usr/local/pbspro/10.0.0
           # @return [Pathname, nil] path to pbs executables
-          attr_reader :exec
+          attr_reader :pbs_exec
 
           # Optional overrides for PBS Pro client executables
           # @example
           #  {'qsub' => '/usr/local/bin/qsub'}
           # @return Hash<String, String>
-          attr_reader :custom_bin
+          attr_reader :bin_overrides
 
           # The root exception class that all PBS Pro-specific exceptions
           # inherit from
@@ -59,10 +59,10 @@ module OodCore
 
           # @param host [#to_s, nil] the batch server host
           # @param exec [#to_s, nil] path to pbs executables
-          def initialize(host: nil, exec: nil, custom_bin: {})
+          def initialize(host: nil, pbs_exec: nil, bin_overrides: {})
             @host = host && host.to_s
-            @exec = exec && Pathname.new(exec.to_s)
-            @custom_bin = custom_bin
+            @pbs_exec = pbs_exec && Pathname.new(pbs_exec.to_s)
+            @bin_overrides = bin_overrides
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -157,12 +157,12 @@ module OodCore
             # Call a forked PBS Pro command for a given batch server
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
-              bindir = (!!exec) ? exec.join("bin").to_s : ''
-              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, custom_bin)
+              bindir = (!!pbs_exec) ? pbs_exec.join("bin").to_s : ''
+              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
               args = args.map(&:to_s)
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
               env["PBS_DEFAULT"] = host.to_s if host
-              env["PBS_EXEC"]    = exec.to_s if exec
+              env["PBS_EXEC"]    = pbs_exec.to_s if pbs_exec
               chdir ||= "."
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)

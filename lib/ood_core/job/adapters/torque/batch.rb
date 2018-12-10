@@ -25,7 +25,7 @@ class OodCore::Job::Adapters::Torque
     # @example
     #  {'qsub' => '/usr/local/bin/qsub'}
     # @return Hash<String, String>
-    attr_reader :custom_bin
+    attr_reader :bin_overrides
 
     # The root exception class that all Torque-specific exceptions inherit
     # from
@@ -34,11 +34,11 @@ class OodCore::Job::Adapters::Torque
     # @param host [#to_s] the batch server host
     # @param lib [#to_s] path to FFI installation libraries
     # @param bin [#to_s] path to FFI installation binaries
-    def initialize(host:, lib: "", bin: "", custom_bin: {}, **_)
+    def initialize(host:, lib: "", bin: "", bin_overrides: {}, **_)
       @host    = host.to_s
       @lib     = Pathname.new(lib.to_s)
       @bin     = Pathname.new(bin.to_s)
-      @custom_bin = custom_bin
+      @bin_overrides = bin_overrides
     end
 
     # Convert object to hash
@@ -447,8 +447,7 @@ class OodCore::Job::Adapters::Torque
           "PBS_DEFAULT"     => "#{host}",
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
-        cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bindir, custom_bin)
-        p cmd
+        cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bin, bin_overrides)
         o, e, s = Open3.capture3(env, cmd, *params)
         raise Error, e unless s.success?
         o.chomp
@@ -456,8 +455,7 @@ class OodCore::Job::Adapters::Torque
 
       # Call a forked PBS command for a given host
       def call(cmd, *args, env: {}, stdin: "", chdir: nil)
-        cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, custom_bin)
-        p cmd
+        cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
         args = args.map(&:to_s)
         env  = env.to_h.each_with_object({}) {|(k,v), h| h[k.to_s] = v.to_s}.merge({
           "PBS_DEFAULT"     => host,

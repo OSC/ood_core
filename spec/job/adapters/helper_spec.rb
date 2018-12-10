@@ -10,19 +10,19 @@ describe OodCore::Job::Adapters::Helper do
     let(:cmd) { "sbatch" }
     let(:bin) { Pathname.new("/opt/slurm/bin") }
 
-    context "custom_bin: does not contain an override for cmd" do
-      let(:custom_bin) { {} }
+    context "bin_overrides: does not contain an override for cmd" do
+      let(:bin_overrides) { {} }
       
       it "returns the default path" do
-        expect(helper.bin_path(cmd, bin, custom_bin)).to eq(bin.join(cmd).to_s)
+        expect(helper.bin_path(cmd, bin, bin_overrides)).to eq(bin.join(cmd).to_s)
       end     
     end
 
-    context "custom_bin: contains an override for cmd" do
-      let(:custom_bin) { {cmd => "/usr/local/slurm/bin/sbatch"} }
+    context "bin_overrides: contains an override for cmd" do
+      let(:bin_overrides) { {cmd => "/usr/local/slurm/bin/sbatch"} }
 
       it "returns the overridden path" do
-        expect(helper.bin_path(cmd, bin, custom_bin)).to eq(custom_bin[cmd])
+        expect(helper.bin_path(cmd, bin, bin_overrides)).to eq(bin_overrides[cmd])
       end
     end
   end
