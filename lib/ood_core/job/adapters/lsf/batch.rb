@@ -2,20 +2,21 @@
 #
 # @api private
 class OodCore::Job::Adapters::Lsf::Batch
-  attr_reader :bindir, :libdir, :envdir, :serverdir, :cluster
+  attr_reader :bindir, :libdir, :envdir, :serverdir, :cluster, :bin_overrides
 
   # The root exception class that all LSF-specific exceptions inherit
   # from
   class Error < StandardError; end
 
   # @param bin [#to_s] path to LSF installation binaries
-  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", **_)
+  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, **_)
     @bindir = Pathname.new(bindir.to_s)
 
     @envdir = Pathname.new(envdir.to_s)
     @libdir = Pathname.new(libdir.to_s)
     @serverdir = Pathname.new(serverdir.to_s)
     @cluster = cluster.to_s
+    @bin_overrides = bin_overrides
   end
 
   def default_env
@@ -139,7 +140,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   private
     # Call a forked Lsf command for a given cluster
     def call(cmd, *args, env: {}, stdin: "")
-      cmd = bindir.join(cmd.to_s).to_s
+      cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
       args = cluster_args + args
       env = default_env.merge(env.to_h)
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)

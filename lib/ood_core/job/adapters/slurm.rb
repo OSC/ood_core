@@ -1,5 +1,6 @@
 require "time"
 require "ood_core/refinements/hash_extensions"
+require "ood_core/job/adapters/helper"
 
 module OodCore
   module Job
@@ -11,12 +12,14 @@ module OodCore
       # @option config [Object] :cluster (nil) The cluster to communicate with
       # @option config [Object] :conf (nil) Path to the slurm conf
       # @option config [Object] :bin (nil) Path to slurm client binaries
+      # @option config [#to_h] :bin_overrides ({}) Optional overrides to Slurm client executables
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
         cluster = c.fetch(:cluster, nil)
         conf    = c.fetch(:conf, nil)
         bin     = c.fetch(:bin, nil)
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin)
+        bin_overrides = c.fetch(:bin_overrides, {})
+        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides)
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -48,6 +51,12 @@ module OodCore
           # @return [Pathname] path to slurm binaries
           attr_reader :bin
 
+          # Optional overrides for Slurm client executables
+          # @example
+          #  {'sbatch' => '/usr/local/bin/sbatch'}
+          # @return Hash<String, String>
+          attr_reader :bin_overrides
+
           # The root exception class that all Slurm-specific exceptions inherit
           # from
           class Error < StandardError; end
@@ -55,10 +64,11 @@ module OodCore
           # @param cluster [#to_s, nil] the cluster name
           # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster: nil, bin: nil, conf: nil)
+          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {})
             @cluster = cluster && cluster.to_s
             @conf    = conf    && Pathname.new(conf.to_s)
             @bin     = Pathname.new(bin.to_s)
+            @bin_overrides = bin_overrides
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -140,7 +150,7 @@ module OodCore
           private
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
-              cmd = bin.join(cmd.to_s).to_s
+              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
               args  = args.map(&:to_s)
               args += ["-M", cluster] if cluster
               env = env.to_h

@@ -139,4 +139,38 @@ describe OodCore::Job::Adapters::Torque::Batch do
       end
     end
   end
+
+  describe "customizing bin paths" do
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling with no config" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "owens.osc.edu", lib: "/lib", bin: nil, bin_overrides: {})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit script.content
+        expect(Open3).to have_received(:capture3).with(anything, "qsub", any_args)
+      end
+    end
+
+    context "when calling with normal config" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "owens.osc.edu", lib: "/lib", bin: "/bin", bin_overrides: {})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit script.content
+        expect(Open3).to have_received(:capture3).with(anything, "/bin/qsub", any_args)
+      end
+    end
+
+    context "when calling with overrides" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "owens.osc.edu", lib: "/lib", bin: nil, bin_overrides: {"qsub" => "not_qsub"})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit script.content
+        expect(Open3).to have_received(:capture3).with(anything, "not_qsub", any_args)
+      end
+    end
+  end
 end

@@ -222,4 +222,38 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
       it { is_expected.to eq(["-m", "curie"]) }
     end
   end
+
+  describe "customizing bin paths" do
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling with no config" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Lsf::Batch.new
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit_string(str: script.content)
+        expect(Open3).to have_received(:capture3).with(anything, "bsub", any_args)
+      end
+    end
+
+    context "when calling with normal config" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Lsf::Batch.new(bindir: "/bin", bin_overrides: {})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit_string(str: script.content)
+        expect(Open3).to have_received(:capture3).with(anything, "/bin/bsub", any_args)
+      end
+    end
+
+    context "when calling with overrides" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Lsf::Batch.new(bin_overrides: {"bsub" => "not_bsub"})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit_string(str: script.content)
+        expect(Open3).to have_received(:capture3).with(anything, "not_bsub", any_args)
+      end
+    end
+  end
 end
