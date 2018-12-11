@@ -737,27 +737,35 @@ describe OodCore::Job::Adapters::PBSPro do
   end
 
   describe "customizing bin paths" do
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
     context "when calling with no config" do
       it "uses qsub" do
         batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: nil, bin_overrides: {})
-        expect(Open3).to receive(:capture3).with(anything, "qsub", any_args).and_return(["job.123", "", double("success?" => true)])
-        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit OodCore::Job::Script.new(content: "echo 'hi'")
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "qsub", any_args)
       end
     end
 
     context "when calling with normal config" do
       it "uses qsub" do
         batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: "/opt/pbspro", bin_overrides: {})
-        expect(Open3).to receive(:capture3).with(anything, "/opt/pbspro/bin/qsub", any_args).and_return(["job.123", "", double("success?" => true)])
-        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit OodCore::Job::Script.new(content: "echo 'hi'")
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "/opt/pbspro/bin/qsub", any_args)
       end
     end
 
     context "when calling with overrides" do
       it "uses qsub" do
         batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: "/opt/pbspro", bin_overrides: {"qsub" => "/custom/qsubber"})
-        expect(Open3).to receive(:capture3).with(anything, "/custom/qsubber", any_args).and_return(["job.123", "", double("success?" => true)])
-        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit OodCore::Job::Script.new(content: "echo 'hi'")
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "/custom/qsubber", any_args)
       end
     end
   end
