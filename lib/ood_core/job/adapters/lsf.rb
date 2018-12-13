@@ -125,8 +125,8 @@ module OodCore
           elsif owners.count == 0
             []
           else
-	    batch.get_jobs_for_user(owners.first).map { |v| info_for_batch_hash(v) }
-	  end
+            batch.get_jobs_for_user(owners.first).map { |v| info_for_batch_hash(v) }
+          end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
