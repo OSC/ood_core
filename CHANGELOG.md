@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Added ability to override the default password length
 - Merge the pbs-ruby gem removing that as a dependency, but adding FFI
+- Added support for overriding resource manager client executables using `bin_overrides` in the cluster configs
+- Add support for the Grid Engine resource manager (tested on GE 6.2u5 and UGE 8.0.1)
 
 ### Fixed
 - Fixed a bug in password creation where certain locales resulted in invalid passwords [#91](https://github.com/OSC/ood_core/issues/91)
