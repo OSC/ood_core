@@ -60,6 +60,6 @@ class OodCore::Job::Adapters::Sge::Helper
   # @param qsub_output [#to_s]
   # @return job_id [String]
   def parse_job_id_from_qsub(qsub_output)
-    /Your job (?<job_id>[0-9]+)/.match(qsub_output)[:job_id]
+    /Your job(?:-array)? (?<job_id>[0-9]+)/.match(qsub_output)[:job_id]
   end
 end

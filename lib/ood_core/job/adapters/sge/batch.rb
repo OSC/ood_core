@@ -3,37 +3,13 @@
 # @api private
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
+
+  attr_reader :bin, :conf, :cluster, :sge_root, :helper
+  
   require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
   require "ood_core/job/adapters/sge/qstat_xml_r_listener"
   require "ood_core/job/adapters/sge/helper"
-  require "ood_core/refinements/hash_extensions"
-  require "tempfile"
   require 'time'
-
-  begin
-    require "ood_core/job/adapters/drmaa"
-    require 'singleton'
-
-    DRMMA_TO_OOD_STATE_MAP = {
-      DRMAA::STATE_UNDETERMINED          => :undetermined,
-      DRMAA::STATE_QUEUED_ACTIVE         => :queued,
-      DRMAA::STATE_SYSTEM_ON_HOLD        => :queued_held,
-      DRMAA::STATE_USER_ON_HOLD          => :queued_held,
-      DRMAA::STATE_USER_SYSTEM_ON_HOLD   => :queued_held,
-      DRMAA::STATE_RUNNING               => :running,
-      DRMAA::STATE_SYSTEM_SUSPENDED      => :suspended,
-      DRMAA::STATE_USER_SUSPENDED        => :suspended,
-      DRMAA::STATE_USER_SYSTEM_SUSPENDED => :suspended,
-      DRMAA::STATE_DONE                  => :completed,
-      DRMAA::STATE_FAILED                => :completed
-    }
-
-    # The one and only connection with DRMAA
-    # Attempting to instantiate a DRMAA::Session more than once causes it to crash
-    class SessionSingleton < DRMAA::Session
-      include Singleton
-    end
-  rescue LoadError; end
 
   class Error < StandardError; end
 
@@ -45,10 +21,17 @@ class OodCore::Job::Adapters::Sge::Batch
   def initialize(config)
     @cluster          = config.fetch(:cluster, nil)
     @conf             = Pathname.new(config.fetch(:conf, nil))
-    @begin            = Pathname.new(config.fetch(:bin, nil))
+    @bin              = Pathname.new(config.fetch(:bin, nil))
     @sge_root         = config.key?(:sge_root) && config[:sge_root] ? Pathname.new(config[:sge_root]) : nil
 
+    load_drmaa if sge_root
+
     @helper = OodCore::Job::Adapters::Sge::Helper.new
+  end
+
+  def load_drmaa
+    require "ood_core/job/adapters/drmaa"
+    require "ood_core/refinements/drmaa_extensions"
   end
 
   # Get OodCore::Job::Info for every enqueued job, optionally filtering on owner
@@ -88,7 +71,7 @@ class OodCore::Job::Adapters::Sge::Batch
   end
 
   def can_use_drmaa?
-    @sge_root && Object.const_defined?('DRMAA')
+    sge_root && Object.const_defined?('DRMAA')
   end
 
   # Call qhold
@@ -122,8 +105,7 @@ class OodCore::Job::Adapters::Sge::Batch
 
   # Call a forked SGE command for a given batch server
   def call(cmd, *args, env: {}, stdin: "", chdir: nil)
-    cmd = cmd.to_s
-    cmd = @bin.join(cmd).to_s if @bin
+    cmd = bin.join(cmd).to_s
     args = args.map(&:to_s)
     env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
     chdir ||= "."
@@ -172,7 +154,7 @@ class OodCore::Job::Adapters::Sge::Batch
   end
 
   def translate_drmaa_state(drmaa_state_code)
-    DRMMA_TO_OOD_STATE_MAP.fetch(drmaa_state_code, :undetermined)
+    DRMAA::DRMMA_TO_OOD_STATE_MAP.fetch(drmaa_state_code, :undetermined)
   end
 
   def post_process_qstat_job_hash(job_hash)
@@ -188,7 +170,7 @@ class OodCore::Job::Adapters::Sge::Batch
 
   # Get the job status using DRMAA
   def get_status_from_drmma(job_id)
-    ENV['SGE_ROOT'] = @sge_root.to_s
-    translate_drmaa_state(SessionSingleton.instance.job_ps(job_id.to_s))
+    ENV['SGE_ROOT'] = sge_root.to_s
+    translate_drmaa_state(DRMAA::SessionSingleton.instance.job_ps(job_id.to_s))
   end
 end

@@ -14,9 +14,6 @@ require 'date'
 # :status
 # :wallclock_limit
 
-
-# :wallclock_time  # HOW LONG HAS IT BEEN RUNNING?
-
 class QstatXmlRListener
   # [Array<Hash>]
   attr_reader :parsed_jobs

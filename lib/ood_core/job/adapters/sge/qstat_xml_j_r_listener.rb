@@ -4,7 +4,7 @@ require 'date'
 
 # An XML stream listener to build an array of OodCore::Job::Info from qstat output
 #
-# Handles parsing `qstat -xml -r` which provides:
+# Handles parsing `qstat -xml -r -j` which provides:
 # :accounting_id
 # :id
 # :job_name
