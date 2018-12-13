@@ -117,11 +117,21 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
     context "when the specific job is absent from the queue" do
       before {
-        allow(batch).to receive(:call).and_raise(OodCore::Job::Adapters::Sge::Batch::Error)
+        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/qstat_jr_missing.xml') }
       }
 
       it "expects to receive a job with status completed" do
         expect(batch.get_info_enqueued_job('1234') ).to eq(OodCore::Job::Info.new(id: '1234', status: :completed))
+      end
+    end
+
+    context "when the subprocess call returns non-zero" do
+      before {
+        allow(batch).to receive(:call).and_raise(StandardError)
+      }
+
+      it "does not catch errors that it should not" do
+        expect{batch.get_info_enqueued_job('1234')}.to raise_error(StandardError)
       end
     end
   end
