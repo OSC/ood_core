@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined do
-  before(:context) { @list = [] }
   before(:all) do
     @adapter = OodCore::Job::Factory.build(
       YAML.load_file(ENV['LIVE_CLUSTER_CONFIG'])
@@ -35,19 +34,16 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
   end
 
   it('can submit') do
-    @list << 1
     $id = @adapter.submit(@script)
     expect($id).not_to be_empty
   end
 
   it('can get info') do
-    @list << 2
     # We can get info and that info is not default constructed
     expect(@adapter.info($id).job_name).to eq( @script.job_name )
   end
 
   it('can get status') do
-    @list << 3
     current_status = @adapter.status($id)
     expect(OodCore::Job::Status.states).to include(current_status)
 
@@ -56,7 +52,6 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
   end
 
   it('can release a held job') do
-    @list << 4
     @adapter.release($id)
 
     # The status is no longer held
@@ -64,7 +59,6 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
   end
 
   it('can delete a job') do
-    @list << 5
     @adapter.delete($id)
   end
 end
