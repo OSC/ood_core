@@ -12,6 +12,7 @@ module OodCore
       # @option config [Object] :conf (nil) Path to the SGE conf
       # @option config [Object] :bin (nil) Path to SGE client binaries
       # @option config [Object] :sge_root (nil) Path to SGE root, note that
+      # @option config [#to_h] :bin_overrides ({}) Optional overrides to SGE client executables
       #   this may be nil, but must be set to use the DRMAA API, and there is a
       #   severe performance penalty calling Sge#info without using DRMAA.
       def self.build_sge(config)

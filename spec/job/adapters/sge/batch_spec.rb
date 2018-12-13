@@ -135,7 +135,28 @@ describe OodCore::Job::Adapters::Sge::Batch do
       end
     end
   end
+
+  describe "customizing bin paths" do
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling with normal config" do
+      it "uses the correct command" do
+        batch = described_class.new(conf: "/etc/default/gridengine", bin: "/usr/bin", bin_overrides: {})
+        allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Sge.new(batch: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "/usr/bin/qsub", any_args)
+      end
+    end
+
+    context "when calling with overrides" do
+      it "uses the correct command" do
+        batch = described_class.new(conf: "/etc/default/gridengine", bin: "/usr/bin", bin_overrides: {"qsub" => "/usr/local/bin/not_qsub"})
+        allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Sge.new(batch: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "/usr/local/bin/not_qsub", any_args)
+      end
+    end
+  end
 end
-
-
-

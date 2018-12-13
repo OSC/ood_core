@@ -4,11 +4,12 @@
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
 
-  attr_reader :bin, :conf, :cluster, :sge_root, :helper
+  attr_reader :bin, :bin_overrides, :conf, :cluster, :sge_root, :helper
   
   require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
   require "ood_core/job/adapters/sge/qstat_xml_r_listener"
   require "ood_core/job/adapters/sge/helper"
+  require "ood_core/job/adapters/helper"
   require 'time'
 
   class Error < StandardError; end
@@ -23,6 +24,7 @@ class OodCore::Job::Adapters::Sge::Batch
     @conf             = Pathname.new(config.fetch(:conf, nil))
     @bin              = Pathname.new(config.fetch(:bin, nil))
     @sge_root         = config.key?(:sge_root) && config[:sge_root] ? Pathname.new(config[:sge_root]) : nil
+    @bin_overrides    = config.fetch(:bin_overrides, {})
 
     load_drmaa if sge_root
 
@@ -75,6 +77,8 @@ class OodCore::Job::Adapters::Sge::Batch
       unless results =~ /unknown_jobs/
         raise e, "REXML::ParseException error and command '#{argv.join(' ')}' produced results that didn't contain string 'unknown_jobs'. ParseException: #{e.message}"
       end
+    rescue DRMAA::DRMAAInvalidArgumentError => e
+      raise Error, e.message
     end
 
     job_info
@@ -115,8 +119,9 @@ class OodCore::Job::Adapters::Sge::Batch
 
   # Call a forked SGE command for a given batch server
   def call(cmd, *args, env: {}, stdin: "", chdir: nil)
-    cmd = bin.join(cmd).to_s
+    cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
     args = args.map(&:to_s)
+
     env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
     chdir ||= "."
     o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s, chdir: chdir.to_s)
