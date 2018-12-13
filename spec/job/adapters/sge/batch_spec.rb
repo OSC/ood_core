@@ -19,7 +19,8 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :queue_name => 'general.q',
       :dispatch_time => DateTime.parse('2018-10-10T14:37:16').to_time.to_i,
       :wallclock_limit => 360,
-      :wallclock_time => Time.now.to_i - DateTime.parse('2018-10-10T14:37:16').to_time.to_i
+      :wallclock_time => Time.now.to_i - DateTime.parse('2018-10-10T14:37:16').to_time.to_i,
+      :native => {}
     ),
     OodCore::Job::Info.new( # Queued job, w/ project
       :id => '1045',
@@ -31,7 +32,8 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :queue_name => 'general.q',
       :submission_time => DateTime.parse('2018-10-09T18:47:05').to_time.to_i,
       :wallclock_limit => 360,
-      :wallclock_time => 0
+      :wallclock_time => 0,
+      :native => {}
     ),
     OodCore::Job::Info.new( # Queued job w/o project
       :id => '1046',
@@ -42,7 +44,8 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :queue_name => 'general.q',
       :submission_time => DateTime.parse('2018-10-09T18:47:05').to_time.to_i,
       :wallclock_limit => 360,
-      :wallclock_time => 0
+      :wallclock_time => 0,
+      :native => {}
     ),
     OodCore::Job::Info.new( # Held job w/o project
       :id => '44',
@@ -53,29 +56,10 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :queue_name => 'general.q',
       :submission_time => DateTime.parse('2018-10-09T18:35:12').to_time.to_i,
       :wallclock_limit => 360,
-      :wallclock_time => 0
+      :wallclock_time => 0,
+      :native => {}
     )
   ]}
-
-  let(:job_from_qacct) {
-    OodCore::Job::Info.new(
-      :accounting_id => nil,
-      :allocated_nodes => [],
-      :cpu_time => nil,
-      :dispatch_time => Time.parse('2018-10-25 13:16:29 +0000'),
-      :id => "1072",
-      :job_name => "job_7",
-      :job_owner => "vagrant",
-      :native => nil,
-      :procs => 1,
-      :queue_name => "general.q",
-      :status => :completed,
-      :submission_time => Time.parse('2018-10-24 20:22:31 +0000'),
-      :submit_host => nil,
-      :wallclock_limit => nil,
-      :wallclock_time => 361
-    )
-  }
 
   let(:job_from_qstat_jr) {
     OodCore::Job::Info.new(
@@ -86,7 +70,7 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :id => "4147342",
       :job_name => "cfSNV_0merged_split_pileup_241.FLASH.recal_10.pbs",
       :job_owner => "shuoli",
-      :native => nil,
+      :native => {},
       :procs => 1,
       :queue_name => nil,
       :status => :running,

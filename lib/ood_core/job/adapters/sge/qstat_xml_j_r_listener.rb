@@ -27,6 +27,7 @@ class QstatXmlJRListener
     @parsed_job = {
       :status => :queued,
       :procs => 1,  # un-knowable from SGE qstat output
+      :native => {}  # TODO: improve native attribute reporting
     }
     @current_text = nil
     @current_request = nil
