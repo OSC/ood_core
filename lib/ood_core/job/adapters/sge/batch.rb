@@ -72,8 +72,8 @@ class OodCore::Job::Adapters::Sge::Batch
       job_info = OodCore::Job::Info.new(**job_hash)
     rescue REXML::ParseException => e
       # If the error is something other than a job not being found by qstat re-raise the error
-      if ! results.split("\n")[1].start_with?('<unknown_jobs')
-        raise e
+      unless results =~ /unknown_jobs/
+        raise e, "REXML::ParseException error and command '#{argv.join(' ')}' produced results that didn't contain string 'unknown_jobs'. ParseException: #{e.message}"
       end
     end
 
@@ -175,7 +175,7 @@ class OodCore::Job::Adapters::Sge::Batch
 
     job_hash[:status] = translate_sge_state(job_hash[:status])
 
-     job_hash
+    job_hash
   end
 
   # Get the job status using DRMAA
