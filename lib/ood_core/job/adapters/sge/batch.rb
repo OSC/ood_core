@@ -1,3 +1,14 @@
+# Patch to allow runtime setting of the libdrmaa path
+module FFI_DRMAA
+  def self.libdrmaa_path
+    @libdrmaa_path || 'libdrmaa.so'
+  end
+  
+  def self.libdrmaa_path=(path)
+    @libdrmaa_path = path
+  end
+end
+
 # Object used for simplified communication with a SGE batch server
 #
 # @api private
@@ -26,12 +37,13 @@ class OodCore::Job::Adapters::Sge::Batch
     @sge_root         = config.key?(:sge_root) && config[:sge_root] ? Pathname.new(config[:sge_root]) : nil
     @bin_overrides    = config.fetch(:bin_overrides, {})
 
-    load_drmaa if sge_root
+    load_drmaa(config[:libdrmaa_path]) if sge_root
 
     @helper = OodCore::Job::Adapters::Sge::Helper.new
   end
 
-  def load_drmaa
+  def load_drmaa(libdrmaa_path)
+    FFI_DRMAA.libdrmaa_path = libdrmaa_path if libdrmaa_path
     require "ood_core/job/adapters/drmaa"
     require "ood_core/refinements/drmaa_extensions"
   end

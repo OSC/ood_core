@@ -43,7 +43,7 @@ require 'pp'
 module FFI_DRMAA
     extend FFI::Library
 
-    ffi_lib 'libdrmaa.so'
+    ffi_lib defined?(self.libdrmaa_path) ? self.libdrmaa_path : 'libdrmaa.so'
 
     #TODO / Missing: 
     #
@@ -280,7 +280,7 @@ module DRMAA
             major = FFI::MemoryPointer.new(:int, 1)
             minor = FFI::MemoryPointer.new(:int, 1)
             r = FFI_DRMAA.drmaa_version major,minor, err, ErrSize
-            r1 = [major.read_int,minor.read_int, err, ErrSize]	
+            r1 = [major.read_int,minor.read_int, err, ErrSize]  
             DRMAA.throw(r, r1[2])
             @version = r1[0] + (Float(r1[1])/100)
         end
@@ -558,7 +558,7 @@ module DRMAA
         end
 
         # int drmaa_get_attribute(drmaa_job_template_t *, const char *, char *, 
-        #  							size_t , char *, size_t)
+        #                           size_t , char *, size_t)
         def DRMAA.get_attribute(jt, name)
             err = " " * ErrSize
             value = " " * ErrSize
@@ -576,7 +576,7 @@ module DRMAA
             err=" " * ErrSize
             attr = FFI::MemoryPointer.new :pointer
             r = FFI_DRMAA.drmaa_get_vector_attribute jt.get_pointer(0), name, attr, err, ErrSize
-            r1 = [jt.get_pointer(0), name, attr, err, ErrSize]	
+            r1 = [jt.get_pointer(0), name, attr, err, ErrSize]  
             DRMAA.throw(r, r1[3])
 
             # Original author had a method called "drmaa_get_vector_attribute" that did the same thing as this
@@ -918,7 +918,7 @@ module DRMAA
                 return get("drmaa_error_path") 
             end
 
-            # specifies which files need to be transfered	
+            # specifies which files need to be transfered   
             def transfer=(transfer)
                 set("drmaa_transfer_files", transfer) 
             end
@@ -974,7 +974,7 @@ module DRMAA
                 end
             end
             def join?() 
-                if	get("drmaa_join_files") == "y" 
+                if  get("drmaa_join_files") == "y" 
                     return true
                 else
                     return false
