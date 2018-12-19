@@ -6,8 +6,8 @@ require 'ood_core/version'
 Gem::Specification.new do |spec|
   spec.name          = "ood_core"
   spec.version       = OodCore::VERSION
-  spec.authors       = ["Jeremy Nicklas"]
-  spec.email         = ["jnicklas@osc.edu"]
+  spec.authors       = ["Jeremy Nicklas", "Morgan Rodgers"]
+  spec.email         = ["jnicklas@osc.edu", "mrodgers@osc.edu"]
 
   spec.summary       = %q{Open OnDemand core library}
   spec.description   = %q{Open OnDemand core library that provides support for an HPC Center to globally define HPC services that web applications can then take advantage of.}
