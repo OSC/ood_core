@@ -1,7 +1,5 @@
 require "ood_core/refinements/hash_extensions"
-
-gem "pbs", "~> 2.1"
-require "pbs"
+require "ood_core/job/adapters/helper"
 
 module OodCore
   module Job
@@ -13,12 +11,14 @@ module OodCore
       # @option config [#to_s] :host The batch server host
       # @option config [#to_s] :lib ('') Path to torque client libraries
       # @option config [#to_s] :bin ('') Path to torque client binaries
+      # @option config [#to_h] :custom_bin ({}) Optional overrides to Torque client executables
       def self.build_torque(config)
         c = config.to_h.symbolize_keys
         host = c.fetch(:host) { raise ArgumentError, "No host specified. Missing argument: host" }.to_s
         lib  = c.fetch(:lib, "").to_s
         bin  = c.fetch(:bin, "").to_s
-        pbs  = PBS::Batch.new(host: host, lib: lib, bin: bin)
+        custom_bin = c.fetch(:custom_bin, {})
+        pbs  = Adapters::Torque::Batch.new(host: host, lib: lib, bin: bin, custom_bin: custom_bin)
         Adapters::Torque.new(pbs: pbs)
       end
     end
@@ -29,6 +29,11 @@ module OodCore
       class Torque < Adapter
         using Refinements::ArrayExtensions
         using Refinements::HashExtensions
+
+        require "ood_core/job/adapters/torque/error"
+        require "ood_core/job/adapters/torque/attributes"
+        require "ood_core/job/adapters/torque/ffi"
+        require "ood_core/job/adapters/torque/batch"
 
         # Mapping of state characters for PBS
         STATE_MAP = {
@@ -44,7 +49,7 @@ module OodCore
 
         # @api private
         # @param opts [#to_h] the options defining this adapter
-        # @option opts [PBS::Batch] :pbs The PBS batch object
+        # @option opts [Torque::Batch] :pbs The PBS batch object
         # @see Factory.build_torque
         def initialize(opts = {})
           o = opts.to_h.symbolize_keys
@@ -160,7 +165,7 @@ module OodCore
             # Submit job
             @pbs.submit(script.content, args: args, env: env, chdir: script.workdir)
           end
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -172,7 +177,7 @@ module OodCore
           @pbs.get_jobs.map do |k, v|
             parse_job_info(k, v)
           end
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -190,7 +195,7 @@ module OodCore
           ).map do |k, v|
             parse_job_info(k, v)
           end
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -202,13 +207,13 @@ module OodCore
         def info(id)
           id = id.to_s
           parse_job_info(*@pbs.get_job(id).flatten)
-        rescue PBS::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Info.new(
             id: id,
             status: :completed
           )
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -221,10 +226,10 @@ module OodCore
           id = id.to_s
           char = @pbs.get_job(id, filters: [:job_state])[id][:job_state]
           Status.new(state: STATE_MAP.fetch(char, :undetermined))
-        rescue PBS::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Status.new(state: :completed)
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -235,10 +240,10 @@ module OodCore
         # @see Adapter#hold
         def hold(id)
           @pbs.hold_job(id.to_s)
-        rescue PBS::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # assume successful job hold if can't find job id
           nil
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -249,10 +254,10 @@ module OodCore
         # @see Adapter#release
         def release(id)
           @pbs.release_job(id.to_s)
-        rescue PBS::UnkjobidError
+        rescue Torque::FFI::UnkjobidError
           # assume successful job release if can't find job id
           nil
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 
@@ -263,11 +268,11 @@ module OodCore
         # @see Adapter#delete
         def delete(id)
           @pbs.delete_job(id.to_s)
-        rescue PBS::UnkjobidError, PBS::BadstateError
+        rescue Torque::FFI::UnkjobidError, Torque::FFI::BadstateError
           # assume successful job deletion if can't find job id
           # assume successful job deletion if job is exiting or completed
           nil
-        rescue PBS::Error => e
+        rescue Torque::Batch::Error => e
           raise JobAdapterError, e.message
         end
 

@@ -6,9 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+- Addition of an optional live system test of a configurable job adapter
+
+## [0.6.0] - 2018-12-19
 ### Added
 - Added ability to override the default password length
-- Addition of an optional live system test of a configurable job adapter
+- Merge the pbs-ruby gem removing that as a dependency, but adding FFI
+- Added support for overriding resource manager client executables using `bin_overrides` in the cluster configs
+- Add support for the Grid Engine resource manager (tested on GE 6.2u5 and UGE 8.0.1)
 
 ### Fixed
 - Fixed a bug in password creation where certain locales resulted in invalid passwords [#91](https://github.com/OSC/ood_core/issues/91)
@@ -136,7 +141,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/OSC/ood_core/compare/v0.5.1...v0.6.0
 [0.5.1]: https://github.com/OSC/ood_core/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/OSC/ood_core/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/OSC/ood_core/compare/v0.3.0...v0.4.0

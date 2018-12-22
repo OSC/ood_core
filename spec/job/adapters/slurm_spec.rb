@@ -851,4 +851,46 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe "OodCore::Job::Adapters::Slurm::Batch" do
+    subject(:batch) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+    it "has its fields in the correct order to work with Slurm 18" do
+      expect(batch.send(:fields).values.last).to eq("%b")
+    end
+  end
+
+  describe "customizing bin paths" do
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling with no config" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "sbatch", any_args)
+      end
+    end
+
+    context "when calling with normal config" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: "/bin", bin_overrides: {})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "/bin/sbatch", any_args)
+      end
+    end
+
+    context "when calling with overrides" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {"sbatch" => "not_sbatch"})
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "not_sbatch", any_args)
+      end
+    end
+  end
 end
