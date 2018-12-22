@@ -3,7 +3,7 @@ require 'spec_helper'
 describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined do
   before(:all) do
     @adapter = OodCore::Job::Factory.build(
-      YAML.load_file(ENV['LIVE_CLUSTER_CONFIG']).dig('v2', 'job')
+      YAML.load_file(ENV['LIVE_CLUSTER_CONFIG'])['v2']['job']
     )
 
     @script_content = <<~HERESCRIPT
