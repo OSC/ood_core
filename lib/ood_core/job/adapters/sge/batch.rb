@@ -15,13 +15,14 @@ end
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
 
-  attr_reader :bin, :bin_overrides, :conf, :cluster, :sge_root, :helper
+  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper
   
   require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
   require "ood_core/job/adapters/sge/qstat_xml_r_listener"
   require "ood_core/job/adapters/sge/helper"
   require "ood_core/job/adapters/helper"
   require 'time'
+
 
   class Error < StandardError; end
 
@@ -34,10 +35,18 @@ class OodCore::Job::Adapters::Sge::Batch
     @cluster          = config.fetch(:cluster, nil)
     @conf             = Pathname.new(config.fetch(:conf, nil))
     @bin              = Pathname.new(config.fetch(:bin, nil))
-    @sge_root         = config.key?(:sge_root) && config[:sge_root] ? Pathname.new(config[:sge_root]) : nil
+    @sge_root         = Pathname.new(config[:sge_root] || ENV['SGE_ROOT'] || "/var/lib/gridengine")
     @bin_overrides    = config.fetch(:bin_overrides, {})
 
-    load_drmaa(config[:libdrmaa_path]) if sge_root
+    # FIXME: hack as this affects env of the process!
+    ENV['SGE_ROOT'] = @sge_root.to_s
+
+    if config[:libdrmaa_path]
+      load_drmaa(config[:libdrmaa_path])
+      @can_use_drmaa    = true
+    else
+      @can_use_drmaa    = false
+    end
 
     @helper = OodCore::Job::Adapters::Sge::Helper.new
   end
@@ -62,7 +71,7 @@ class OodCore::Job::Adapters::Sge::Batch
 
   # Get OodCore::Job::Info for a job_id that may still be in the queue
   # 
-  # If @sge_root is nil or libdrmaa is not loaded then we cannot use DRMAA. Using
+  # If libdrmaa is not loaded then we cannot use DRMAA. Using
   # DRMAA provides better job status and should always be chosen if it is possible.
   # 
   # When qstat is called in XML mode for a job id that is not in the queue invalid XML
@@ -102,7 +111,7 @@ class OodCore::Job::Adapters::Sge::Batch
   end
 
   def can_use_drmaa?
-    sge_root && Object.const_defined?('DRMAA')
+    @can_use_drmaa
   end
 
   # Call qhold
@@ -202,7 +211,6 @@ class OodCore::Job::Adapters::Sge::Batch
 
   # Get the job status using DRMAA
   def get_status_from_drmma(job_id)
-    ENV['SGE_ROOT'] = sge_root.to_s
     translate_drmaa_state(DRMAA::SessionSingleton.instance.job_ps(job_id.to_s))
   end
 end
