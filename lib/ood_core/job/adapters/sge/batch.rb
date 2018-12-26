@@ -74,23 +74,28 @@ class OodCore::Job::Adapters::Sge::Batch
   def get_info_enqueued_job(job_id)
     job_info = OodCore::Job::Info.new(id: job_id.to_s, status: :completed)
     argv = ['qstat', '-r', '-xml', '-j', job_id.to_s]
-    
+
     begin
       results = call(*argv)
       listener = QstatXmlJRListener.new
       REXML::Parsers::StreamParser.new(results, listener).parse
 
       job_hash = listener.parsed_job
-      job_hash[:status] = get_status_from_drmma(job_id) if can_use_drmaa?
-        
+
+      if can_use_drmaa?
+        begin
+          job_hash[:status] = get_status_from_drmma(job_id)
+        rescue DRMAA::DRMAAInvalidArgumentError => e
+          raise Error, e.message
+        end
+      end
+
       job_info = OodCore::Job::Info.new(**job_hash)
     rescue REXML::ParseException => e
       # If the error is something other than a job not being found by qstat re-raise the error
       unless results =~ /unknown_jobs/
         raise e, "REXML::ParseException error and command '#{argv.join(' ')}' produced results that didn't contain string 'unknown_jobs'. ParseException: #{e.message}"
       end
-    rescue DRMAA::DRMAAInvalidArgumentError => e
-      raise Error, e.message
     end
 
     job_info

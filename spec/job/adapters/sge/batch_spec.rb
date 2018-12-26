@@ -127,11 +127,11 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
     context "when the subprocess call returns non-zero" do
       before {
-        allow(batch).to receive(:call).and_raise(StandardError)
+        allow(batch).to receive(:call).and_raise(OodCore::Job::Adapters::Sge::Batch::Error)
       }
 
       it "does not catch errors that it should not" do
-        expect{batch.get_info_enqueued_job('1234')}.to raise_error(StandardError)
+        expect{batch.get_info_enqueued_job('1234')}.to raise_error(OodCore::Job::Adapters::Sge::Batch::Error)
       end
     end
   end
