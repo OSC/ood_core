@@ -99,7 +99,7 @@ class OodCore::Job::Adapters::Torque
     # @return [Hash] status info for batch server
     def get_status(filters: [])
       connect do |cid|
-        filters = Attrl.from_list filters
+        filters = FFI::Attrl.from_list filters
         batch_status = FFI.pbs_statserver cid, filters, nil
         batch_status.to_h.tap { FFI.pbs_statfree batch_status }
       end
@@ -125,7 +125,7 @@ class OodCore::Job::Adapters::Torque
     # @return [Hash] hash of details for the queues
     def get_queues(id: '', filters: [])
       connect do |cid|
-        filters = Attrl.from_list(filters)
+        filters = FFI::Attrl.from_list(filters)
         batch_status = FFI.pbs_statque cid, id.to_s, filters, nil
         batch_status.to_h.tap { FFI.pbs_statfree batch_status }
       end
@@ -168,7 +168,7 @@ class OodCore::Job::Adapters::Torque
     # @return [Hash] hash of details for nodes
     def get_nodes(id: '', filters: [])
       connect do |cid|
-        filters = Attrl.from_list(filters)
+        filters = FFI::Attrl.from_list(filters)
         batch_status = FFI.pbs_statnode cid, id.to_s, filters, nil
         batch_status.to_h.tap { FFI.pbs_statfree batch_status }
       end
@@ -213,7 +213,7 @@ class OodCore::Job::Adapters::Torque
     #
     def select_jobs(attribs: [])
       connect do |cid|
-        attribs = Attropl.from_list(attribs.map(&:to_h))
+        attribs = FFI::Attropl.from_list(attribs.map(&:to_h))
         batch_status = FFI.pbs_selstat cid, attribs, nil
         batch_status.to_h.tap { FFI.pbs_statfree batch_status }
       end
@@ -377,7 +377,7 @@ class OodCore::Job::Adapters::Torque
         end
 
         connect do |cid|
-          attropl = Attropl.from_list attribs
+          attropl = FFI::Attropl.from_list attribs
           FFI.pbs_submit cid, attropl, script, queue, nil
         end
       end

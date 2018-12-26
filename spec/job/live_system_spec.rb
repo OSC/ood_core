@@ -51,6 +51,11 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     expect([:queued, :queued_held]).to include(current_status.state)
   end
 
+  it("can find status of job in list of all user's jobs") do
+    jobs = @adapter.info_where_owner(OodSupport::User.new.name)
+    expect(jobs.map(&:id)).to include($id)
+  end
+
   it('can release a held job') do
     @adapter.release($id)
 
