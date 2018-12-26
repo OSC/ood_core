@@ -1,8 +1,8 @@
 require 'open3'
 
 class OodCore::Job::Adapters::Torque
-    # Object used for simplified communication with a batch server
-    class Batch
+  # Object used for simplified communication with a batch server
+  class Batch
     # The host of the Torque batch server
     # @example OSC's Oakley batch server
     #   my_conn.host #=> "oak-batch.osc.edu"

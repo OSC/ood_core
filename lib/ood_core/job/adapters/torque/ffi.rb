@@ -1,7 +1,8 @@
 require 'ffi'
 
+# An interface to the C-library of Torque
 class OodCore::Job::Adapters::Torque::FFI
-  # An interface to the C-library of Torque
+
   extend ::FFI::Library
 
   # @!attribute [rw] self.pbs_errno
