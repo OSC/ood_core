@@ -110,11 +110,9 @@ module OodCore
       # @param block an optional block for the call
       # @raise [NoMethodError] if method name doesn't pass checks
       # @return [Boolean] whether it is in this state
-      def method_missing(method_name, *arguments, &block)
-        if /^(?<other_state>.+)\?$/ =~ method_name && self.class.states.include?(other_state.to_sym)
-          self == other_state
-        else
-          super
+      states.each do |state|
+        define_method("#{state}?") do
+          self == state
         end
       end
 

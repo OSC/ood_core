@@ -1,4 +1,5 @@
 require "ood_core/refinements/hash_extensions"
+require "ood_core/job/adapters/helper"
 
 module OodCore
   module Job
@@ -12,6 +13,7 @@ module OodCore
       # @option config [#to_s] :envdir ('') Path to lsf client conf dir
       # @option config [#to_s] :serverdir ('') Path to lsf client etc dir
       # @option config [#to_s] :cluster ('') name of cluster, if in multi-cluster mode
+      # @option config [#to_h] :bin_overrides ({}) Optional overrides to LSF client executables
       def self.build_lsf(config)
         batch = Adapters::Lsf::Batch.new(config.to_h.symbolize_keys)
         Adapters::Lsf.new(batch: batch)
@@ -123,8 +125,8 @@ module OodCore
           elsif owners.count == 0
             []
           else
-	    batch.get_jobs_for_user(owners.first).map { |v| info_for_batch_hash(v) }
-	  end
+            batch.get_jobs_for_user(owners.first).map { |v| info_for_batch_hash(v) }
+          end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end

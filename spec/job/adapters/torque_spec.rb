@@ -224,8 +224,8 @@ describe OodCore::Job::Adapters::Torque do
       end
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:submit).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:submit).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
@@ -457,8 +457,8 @@ describe OodCore::Job::Adapters::Torque do
       expect(pbs).to have_received(:get_jobs).with(no_args)
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:get_jobs).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:get_jobs).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
@@ -485,8 +485,8 @@ describe OodCore::Job::Adapters::Torque do
       end
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:select_jobs).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:select_jobs).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
@@ -678,16 +678,16 @@ describe OodCore::Job::Adapters::Torque do
       end
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:get_job).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:get_job).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
       end
     end
 
-    context "when PBS::UnkjobidError is raised" do
-      before { expect(pbs).to receive(:get_job).and_raise(PBS::UnkjobidError) }
+    context "when Torque::FFI::UnkjobidError is raised" do
+      before { expect(pbs).to receive(:get_job).and_raise(Torque::FFI::UnkjobidError) }
 
       it "returns completed OodCore::Job::Info object" do
         is_expected.to eq(OodCore::Job::Info.new(id: job_id, status: :completed))
@@ -799,16 +799,16 @@ describe OodCore::Job::Adapters::Torque do
       it { is_expected.to be_undetermined }
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:get_job).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:get_job).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
       end
     end
 
-    context "when PBS::UnkjobidError is raised" do
-      before { expect(pbs).to receive(:get_job).and_raise(PBS::UnkjobidError) }
+    context "when Torque::FFI::UnkjobidError is raised" do
+      before { expect(pbs).to receive(:get_job).and_raise(Torque::FFI::UnkjobidError) }
 
       it { is_expected.to be_completed }
     end
@@ -830,16 +830,16 @@ describe OodCore::Job::Adapters::Torque do
       expect(pbs).to have_received(:hold_job).with(job_id)
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:hold_job).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:hold_job).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
       end
     end
 
-    context "when PBS::UnkjobidError is raised" do
-      before { expect(pbs).to receive(:hold_job).and_raise(PBS::UnkjobidError) }
+    context "when Torque::FFI::UnkjobidError is raised" do
+      before { expect(pbs).to receive(:hold_job).and_raise(Torque::FFI::UnkjobidError) }
 
       it { is_expected.to eq(nil) }
     end
@@ -861,16 +861,16 @@ describe OodCore::Job::Adapters::Torque do
       expect(pbs).to have_received(:release_job).with(job_id)
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:release_job).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:release_job).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
       end
     end
 
-    context "when PBS::UnkjobidError is raised" do
-      before { expect(pbs).to receive(:release_job).and_raise(PBS::UnkjobidError) }
+    context "when Torque::FFI::UnkjobidError is raised" do
+      before { expect(pbs).to receive(:release_job).and_raise(Torque::FFI::UnkjobidError) }
 
       it { is_expected.to eq(nil) }
     end
@@ -892,22 +892,22 @@ describe OodCore::Job::Adapters::Torque do
       expect(pbs).to have_received(:delete_job).with(job_id)
     end
 
-    context "when PBS::Error is raised" do
-      before { expect(pbs).to receive(:delete_job).and_raise(PBS::Error) }
+    context "when Torque::Batch::Error is raised" do
+      before { expect(pbs).to receive(:delete_job).and_raise(Torque::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
       end
     end
 
-    context "when PBS::UnkjobidError is raised" do
-      before { expect(pbs).to receive(:delete_job).and_raise(PBS::UnkjobidError) }
+    context "when Torque::FFI::UnkjobidError is raised" do
+      before { expect(pbs).to receive(:delete_job).and_raise(Torque::FFI::UnkjobidError) }
 
       it { is_expected.to eq(nil) }
     end
 
-    context "when PBS::BadstateError is raised" do
-      before { expect(pbs).to receive(:delete_job).and_raise(PBS::BadstateError) }
+    context "when Torque::FFI::BadstateError is raised" do
+      before { expect(pbs).to receive(:delete_job).and_raise(Torque::FFI::BadstateError) }
 
       it { is_expected.to eq(nil) }
     end
