@@ -66,17 +66,21 @@ class OodCore::Job::Adapters::Sge::Batch
     argv += ['-u', owner] unless owner.nil?
     REXML::Parsers::StreamParser.new(call(*argv), listener).parse
 
-    listener.parsed_jobs.map{|job_hash| OodCore::Job::Info.new(**post_process_qstat_job_hash(job_hash))}
+    listener.parsed_jobs.map{
+      |job_hash| OodCore::Job::Info.new(
+        **post_process_qstat_job_hash(job_hash)
+      )
+    }
   end
 
   # Get OodCore::Job::Info for a job_id that may still be in the queue
   # 
-  # If libdrmaa is not loaded then we cannot use DRMAA. Using
-  # DRMAA provides better job status and should always be chosen if it is possible.
+  # If libdrmaa is not loaded then we cannot use DRMAA. Using DRMAA provides
+  # better job status and should always be chosen if it is possible.
   # 
-  # When qstat is called in XML mode for a job id that is not in the queue invalid XML
-  # is returned. The second line of the invalid XML contains the string '<unknown_jobs'
-  # which will be used to recognize this case.
+  # When qstat is called in XML mode for a job id that is not in the queue
+  # invalid XML is returned. The second line of the invalid XML contains the
+  # string '<unknown_jobs' which will be used to recognize this case.
   # 
   # @param job_id [#to_s]
   # @return [OodCore::Job::Info]
@@ -105,6 +109,7 @@ class OodCore::Job::Adapters::Sge::Batch
       unless results =~ /unknown_jobs/
         raise e, "REXML::ParseException error and command '#{argv.join(' ')}' produced results that didn't contain string 'unknown_jobs'. ParseException: #{e.message}"
       end
+    rescue DRMAA::DRMAAInvalidJobError  # raised when job is not found
     end
 
     job_info
