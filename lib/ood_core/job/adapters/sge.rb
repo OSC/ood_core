@@ -93,7 +93,7 @@ module OodCore
         def info_all
           @batch.get_all
         rescue Batch::Error => e
-            raise JobAdapterError, e.message
+          raise JobAdapterError, e.message
         end
 
         # Retrieve info for all jobs for a given owner or owners from the
