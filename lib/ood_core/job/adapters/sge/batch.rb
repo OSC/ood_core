@@ -109,7 +109,9 @@ class OodCore::Job::Adapters::Sge::Batch
       unless results =~ /unknown_jobs/
         raise e, "REXML::ParseException error and command '#{argv.join(' ')}' produced results that didn't contain string 'unknown_jobs'. ParseException: #{e.message}"
       end
-    rescue DRMAA::DRMAAInvalidJobError  # raised when job is not found
+    rescue StandardError => e
+      # Note that DRMAA is not guaranteed to be defined, hence the tests
+      raise e unless ( can_use_drmaa? && e.is_a?(DRMAA::DRMAAInvalidJobError))  # raised when job is not found
     end
 
     job_info
