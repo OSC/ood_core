@@ -77,7 +77,7 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :submission_time => Time.at(1541444183),
       :submit_host => nil,
       :wallclock_limit => 86400,
-      :wallclock_time => Time.now.to_i - 1541444223
+      :wallclock_time => Time.now.to_i - 1541444223,
     )
   }
 
