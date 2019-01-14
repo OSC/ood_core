@@ -45,7 +45,14 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :submission_time => DateTime.parse('2018-10-09T18:47:05').to_time.to_i,
       :wallclock_limit => 360,
       :wallclock_time => 0,
-      :native => {}
+      :native => {},
+      :tasks => [
+        { :id => '1', :status => :queued },
+        { :id => '3', :status => :queued },
+        { :id => '5', :status => :queued },
+        { :id => '7', :status => :queued },
+        { :id => '9', :status => :queued }
+      ]
     ),
     OodCore::Job::Info.new( # Held job w/o project
       :id => '44',

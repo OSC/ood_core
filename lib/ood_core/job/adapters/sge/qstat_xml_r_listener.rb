@@ -61,6 +61,8 @@ class QstatXmlRListener
       end_JAT_start_time
     when 'hard_request'
       end_hard_request
+    when 'tasks'
+      add_child_tasks
     end
   end
 
@@ -132,6 +134,12 @@ class QstatXmlRListener
     @parsed_jobs << @current_job
     @current_job = {
       :native => {}
+    }
+  end
+
+  def add_child_tasks
+    @current_job[:tasks] = OodCore::Job::ArrayIds.new(@current_text).ids.sort.map{
+      |task_id| { :id => task_id, :status => :queued }
     }
   end
 end
