@@ -145,18 +145,6 @@ class QstatXmlJRListener
     @job_array_spec[key] = @current_text if @processing_job_array_spec
   end
 
-  # def set_job_array_start
-  #   @job_array_spec[:start] = @current_text if @processing_job_array_spec
-  # end
-
-  # def set_job_array_stop
-  #   @job_array_spec[:stop] = @current_text if @processing_job_array_spec
-  # end
-
-  # def set_job_array_step
-  #   @job_array_spec[:step] = @current_text if @processing_job_array_spec
-  # end
-
   def spec_string
     '%{start}-%{stop}:%{step}' % @job_array_spec
   end
