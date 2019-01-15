@@ -95,13 +95,7 @@ class OodCore::Job::Adapters::Sge::Batch
 
       job_hash = listener.parsed_job
 
-      if can_use_drmaa?
-        begin
-          job_hash[:status] = get_status_from_drmma(job_id)
-        rescue DRMAA::DRMAAInvalidArgumentError => e
-          raise Error, e.message
-        end
-      end
+      update_job_hash_status!(job_hash)
 
       job_info = OodCore::Job::Info.new(**job_hash)
     rescue REXML::ParseException => e
@@ -115,6 +109,22 @@ class OodCore::Job::Adapters::Sge::Batch
     end
 
     job_info
+  end
+
+  def update_job_hash_status!(job_hash)
+    if get_status_from_drmaa?(job_hash)
+      begin
+        job_hash[:status] = get_status_from_drmma(job_hash[:id])
+      rescue DRMAA::DRMAAInvalidArgumentError => e
+        raise Error, e.message
+      end
+    end
+  end
+
+  def get_status_from_drmaa?(job_hash)
+    # DRMAA does not recognize the parent task in job arrays
+    # e.g. 123 is invalid if it is an array job, while 123.4 is valid
+    can_use_drmaa? && job_hash[:tasks].empty?
   end
 
   def can_use_drmaa?
@@ -212,6 +222,7 @@ class OodCore::Job::Adapters::Sge::Batch
     end
 
     job_hash[:status] = translate_sge_state(job_hash[:status])
+    update_job_hash_status!(job_hash)
 
     job_hash
   end

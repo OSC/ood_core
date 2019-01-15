@@ -91,7 +91,7 @@ module OodCore
         # Retrieve info for all jobs from the resource manager
         # @return [Array<Info>] information describing submitted jobs
         def info_all
-          @batch.get_all
+          @batch.get_all(owner: '*')
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end

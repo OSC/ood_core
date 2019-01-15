@@ -23,6 +23,7 @@ class QstatXmlRListener
   def initialize
     @parsed_jobs = []
     @current_job = {
+      :tasks => [],
       :native => {}  # TODO: improve native reporting
     }
     @current_text = nil
@@ -133,6 +134,7 @@ class QstatXmlRListener
   def end_job_list
     @parsed_jobs << @current_job
     @current_job = {
+      :tasks => [],
       :native => {}
     }
   end
