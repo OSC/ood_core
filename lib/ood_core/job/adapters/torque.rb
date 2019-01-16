@@ -228,8 +228,13 @@ module OodCore
         # @see Adapter#status
         def status(id)
           id = id.to_s
-          char = @pbs.get_job(id, filters: [:job_state])[id][:job_state]
-          Status.new(state: STATE_MAP.fetch(char, :undetermined))
+          @pbs.get_job(id, filters: [:job_state]).values.map {
+            |job_status| OodCore::Job::Status.new(
+              state: STATE_MAP.fetch(
+                job_status[:job_state], :undetermined
+              )
+            )
+          }.max
         rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Status.new(state: :completed)
