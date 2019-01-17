@@ -113,6 +113,7 @@ module OodCore
             headers.merge!(Execution_Time: script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")) unless script.start_time.nil?
             headers.merge!(Account_Name: script.accounting_id) unless script.accounting_id.nil?
             headers.merge!(depend: depend.join(','))       unless depend.empty?
+            headers.merge!(job_array_request: script.job_array_request) unless script.job_array_request.nil?
 
             # Set resources
             resources = {}
@@ -150,7 +151,7 @@ module OodCore
             args += ["-A", script.accounting_id] unless script.accounting_id.nil?
             args += ["-W", "depend=#{depend.join(",")}"] unless depend.empty?
             args += ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
-
+            args += ['-t', script.job_array_request] unless script.job_array_request.nil?
             # Set environment variables
             env = script.job_environment.to_h
             args += ["-v", env.keys.join(",")] unless env.empty?

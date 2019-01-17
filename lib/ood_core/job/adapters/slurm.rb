@@ -292,6 +292,7 @@ module OodCore
           args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
           args += ["-A", script.accounting_id] unless script.accounting_id.nil?
           args += ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+          args += ['-a', script.job_array_request] unless script.job_array_request.nil?
           # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies
