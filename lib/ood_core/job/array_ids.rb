@@ -24,7 +24,13 @@ module OodCore
       end
 
       def get_components(spec_string)
-        spec_string.split(',')
+        discard_percent_modifier(spec_string).split(',')
+      end
+
+      # A few adapters use percent to define an arrays maximum number of
+      # simultaneous tasks. The percent is expected to come at the end.
+      def discard_percent_modifier(spec_string)
+        spec_string.split('%').first
       end
 
       def process_component(component)

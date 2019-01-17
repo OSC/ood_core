@@ -31,4 +31,10 @@ describe OodCore::Job::ArrayIds do
       expect( described_class.new('1-2,4-5,7-9').ids ).to eql([1, 2, 4, 5, 7, 8, 9])
     end
   end
+
+  context "when the spec contains a percent modifier" do
+    it "returns the correct IDs" do
+      expect( described_class.new('1-4%2').ids ).to eql([1, 2, 3, 4])
+    end
+  end
 end
