@@ -95,6 +95,10 @@ module OodCore
       # @return [String, nil] accounting id
       attr_reader :accounting_id
 
+      # The job array request, commonly in the format '$START-$STOP'
+      # @return [String, nil] job array request
+      attr_reader :job_array_request
+
       # Object detailing any native specifications that are implementation specific
       # @note Should not be used at all costs.
       # @return [Object, nil] native specifications
@@ -128,7 +132,7 @@ module OodCore
                      job_name: nil, shell_path: nil, input_path: nil,
                      output_path: nil, error_path: nil, reservation_id: nil,
                      queue_name: nil, priority: nil, start_time: nil,
-                     wall_time: nil, accounting_id: nil, native: nil, **_)
+                     wall_time: nil, accounting_id: nil, job_array_request: nil, native: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -136,22 +140,23 @@ module OodCore
         @email_on_started    = email_on_started
         @email_on_terminated = email_on_terminated
 
-        @args             = args            && args.map(&:to_s)
-        @job_environment  = job_environment && job_environment.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
-        @workdir          = workdir         && Pathname.new(workdir.to_s)
-        @email            = email           && Array.wrap(email).map(&:to_s)
-        @job_name         = job_name        && job_name.to_s
-        @shell_path       = shell_path      && Pathname.new(shell_path.to_s)
-        @input_path       = input_path      && Pathname.new(input_path.to_s)
-        @output_path      = output_path     && Pathname.new(output_path.to_s)
-        @error_path       = error_path      && Pathname.new(error_path.to_s)
-        @reservation_id   = reservation_id  && reservation_id.to_s
-        @queue_name       = queue_name      && queue_name.to_s
-        @priority         = priority        && priority.to_i
-        @start_time       = start_time      && Time.at(start_time.to_i)
-        @wall_time        = wall_time       && wall_time.to_i
-        @accounting_id    = accounting_id   && accounting_id.to_s
-        @native           = native
+        @args               = args              && args.map(&:to_s)
+        @job_environment    = job_environment   && job_environment.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
+        @workdir            = workdir           && Pathname.new(workdir.to_s)
+        @email              = email             && Array.wrap(email).map(&:to_s)
+        @job_name           = job_name          && job_name.to_s
+        @shell_path         = shell_path        && Pathname.new(shell_path.to_s)
+        @input_path         = input_path        && Pathname.new(input_path.to_s)
+        @output_path        = output_path       && Pathname.new(output_path.to_s)
+        @error_path         = error_path        && Pathname.new(error_path.to_s)
+        @reservation_id     = reservation_id    && reservation_id.to_s
+        @queue_name         = queue_name        && queue_name.to_s
+        @priority           = priority          && priority.to_i
+        @start_time         = start_time        && Time.at(start_time.to_i)
+        @wall_time          = wall_time         && wall_time.to_i
+        @accounting_id      = accounting_id     && accounting_id.to_s
+        @job_array_request  = job_array_request && job_array_request.to_s
+        @native             = native
       end
 
       # Convert object to hash
@@ -178,6 +183,7 @@ module OodCore
           start_time:          start_time,
           wall_time:           wall_time,
           accounting_id:       accounting_id,
+          job_array_request:   job_array_request,
           native:              native
         }
       end
