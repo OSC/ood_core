@@ -209,9 +209,11 @@ module OodCore
           id = id.to_s
           result = @pbs.get_job(id)
 
-          return parse_job_info(*result.flatten) if result.keys.length == 1
-
-          parse_job_array(id, result)
+          if result.keys.length == 1
+            parse_job_info(*result.flatten)
+          else
+            parse_job_array(id, result)
+          end
         rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Info.new(

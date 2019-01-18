@@ -37,4 +37,12 @@ describe OodCore::Job::ArrayIds do
       expect( described_class.new('1-4%2').ids ).to eql([1, 2, 3, 4])
     end
   end
+
+  context "when the spec contains a mix" do
+    it "returns the correct IDs" do
+      expect( 
+        described_class.new('1,3-6:3,7,9-11,13,15-17,20-30:2').ids
+      ).to eql([1, 3, 6, 7, 9, 10, 11, 13, 15, 16, 17, 20, 22, 24, 26, 28, 30])
+    end
+  end
 end
