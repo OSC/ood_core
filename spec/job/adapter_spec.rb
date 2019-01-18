@@ -61,6 +61,32 @@ describe OodCore::Job::Adapter do
     end
   end
 
+  describe "#info_where_owner_each" do
+    let(:bob_job) { double("bob", job_owner: "bob") }
+    let(:sam_job) { double("sam", job_owner: "sam") }
+    before { allow(adapter).to receive(:info_all) { [bob_job, sam_job, bob_job] } }
+
+    it "returns only jobs owned by specified user" do
+      expect(adapter.info_where_owner_each("bob").count).to eq(2)
+      expect(adapter.info_where_owner_each("sam").count).to eq(1)
+    end
+
+    it "returns same jobs as info_where_owner" do
+      expect(adapter.info_where_owner_each("bob").to_a).to eq(adapter.info_where_owner("bob"))
+      expect(adapter.info_where_owner_each("sam").to_a).to eq(adapter.info_where_owner("sam"))
+    end
+  end
+
+  describe "#info_all_each" do
+    let(:bob_job) { double("bob", job_owner: "bob") }
+    let(:sam_job) { double("sam", job_owner: "sam") }
+    before { allow(adapter).to receive(:info_all) { [bob_job, sam_job, bob_job] } }
+
+    it "returns same jobs as info_all" do
+      expect(adapter.info_all_each.to_a).to eq(adapter.info_all)
+    end
+  end
+
   describe "#info" do
     context "when id not defined" do
       it "raises ArgumentError" do

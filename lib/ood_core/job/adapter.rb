@@ -50,6 +50,28 @@ module OodCore
         info_all.select { |info| owner.include? info.job_owner }
       end
 
+      # Iterate over each job Info object
+      # @yield [Info] of each job to block
+      # @return [Enumerator] if no block given
+      def info_all_each
+        return to_enum(:info_all_each) unless block_given?
+
+        info_all.each do |job|
+          yield job
+        end
+      end
+
+      # Iterate over each job Info object
+      # @yield [Info] of each job to block
+      # @return [Enumerator] if no block given
+      def info_where_owner_each(owner)
+        return to_enum(:info_where_owner_each, owner) unless block_given?
+
+        info_where_owner(owner).each do |job|
+          yield job
+        end
+      end
+
       # Retrieve job info from the resource manager
       # @abstract Subclass is expected to implement {#info}
       # @raise [NotImplementedError] if subclass did not define {#info}
