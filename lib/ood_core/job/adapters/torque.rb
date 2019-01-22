@@ -173,7 +173,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
-        def info_all
+        def info_all(attrs: nil)
           @pbs.get_jobs.map do |k, v|
             parse_job_info(k, v)
           end

@@ -36,8 +36,13 @@ module OodCore
       # Retrieve info for all jobs from the resource manager
       # @abstract Subclass is expected to implement {#info_all}
       # @raise [NotImplementedError] if subclass did not define {#info_all}
+      # @param attrs [Array<symbol>] specify only attrs you want; defaults to []
+      #   if not an empty array, the Info object that is returned to you is not
+      #   guarenteed to have a value for any attribute besides the ones
+      #   specified; for certain adapters this may speed up the response since
+      #   adapters can get by without populating the entire Info object
       # @return [Array<Info>] information describing submitted jobs
-      def info_all
+      def info_all(attrs: nil)
         raise NotImplementedError, "subclass did not define #info_all"
       end
 
@@ -47,16 +52,23 @@ module OodCore
       # @return [Array<Info>] information describing submitted jobs
       def info_where_owner(owner)
         owner = Array.wrap(owner).map(&:to_s)
+        # FIXME: call info_all(attrs: nil)
         info_all.select { |info| owner.include? info.job_owner }
       end
 
       # Iterate over each job Info object
+      # @param attrs [Array<symbol>] specify only attrs you want; defaults to nil
+      #   if an array, the Info object that is returned to you is not
+      #   guarenteed to have a value for any attribute besides the ones
+      #   specified, except for id and status, which are required
+      #   Adapters adapters that make use of this can speed up the response time
+      #   by requesting, processing and returning only the information required
       # @yield [Info] of each job to block
       # @return [Enumerator] if no block given
-      def info_all_each
-        return to_enum(:info_all_each) unless block_given?
+      def info_all_each(attrs: nil)
+        return to_enum(:info_all_each, attrs: attrs) unless block_given?
 
-        info_all.each do |job|
+        info_all(attrs: attrs).each do |job|
           yield job
         end
       end

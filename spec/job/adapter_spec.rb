@@ -85,6 +85,12 @@ describe OodCore::Job::Adapter do
     it "returns same jobs as info_all" do
       expect(adapter.info_all_each.to_a).to eq(adapter.info_all)
     end
+
+    it "calls info_all with same arguments" do
+      expect(adapter).to receive(:info_all).with(:attrs => [])
+
+      adapter.info_all_each(attrs: []).to_a
+    end
   end
 
   describe "#info" do
