@@ -5,8 +5,8 @@ describe OodCore::Job::Adapter do
   subject(:adapter) { described_class.new }
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
-  it { is_expected.to respond_to(:info_all).with(0).arguments }
-  it { is_expected.to respond_to(:info_where_owner).with(1).argument }
+  it { is_expected.to respond_to(:info_all).with(0).arguments.and_keywords(:attrs) }
+  it { is_expected.to respond_to(:info_where_owner).with(1).argument.and_keywords(:attrs) }
   it { is_expected.to respond_to(:info).with(1).argument }
   it { is_expected.to respond_to(:status).with(1).argument }
   it { is_expected.to respond_to(:hold).with(1).argument }
@@ -61,6 +61,24 @@ describe OodCore::Job::Adapter do
     end
   end
 
+  describe "#info_where_owner(owner, attrs:)" do
+    let(:bob_job) { double("bob", job_owner: "bob") }
+
+    context "when attrs set to []" do
+      it "calls info_all with job_owner as required attr" do
+        expect(adapter).to receive(:info_all).with(:attrs => [:job_owner]) { [bob_job, bob_job] }
+        adapter.info_where_owner_each("bob", attrs: []).to_a
+      end
+    end
+
+    context "when attrs not set" do
+      it "calls info_all with attrs: nil" do
+        expect(adapter).to receive(:info_all).with(:attrs => nil) { [bob_job, bob_job] }
+        adapter.info_where_owner_each("bob").to_a
+      end
+    end
+  end
+
   describe "#info_where_owner_each" do
     let(:bob_job) { double("bob", job_owner: "bob") }
     let(:sam_job) { double("sam", job_owner: "sam") }
@@ -74,6 +92,11 @@ describe OodCore::Job::Adapter do
     it "returns same jobs as info_where_owner" do
       expect(adapter.info_where_owner_each("bob").to_a).to eq(adapter.info_where_owner("bob"))
       expect(adapter.info_where_owner_each("sam").to_a).to eq(adapter.info_where_owner("sam"))
+    end
+
+    it "calls info_where_owner with same arguments" do
+      expect(adapter).to receive(:info_where_owner).with("bob", :attrs => []) { [bob_job, bob_job] }
+      adapter.info_where_owner_each("bob", attrs: []).to_a
     end
   end
 
