@@ -36,11 +36,10 @@ module OodCore
       # Retrieve info for all jobs from the resource manager
       # @abstract Subclass is expected to implement {#info_all}
       # @raise [NotImplementedError] if subclass did not define {#info_all}
-      # @param attrs [Array<symbol>] array specifies only attrs you want, in
-      #   addition to Info's required attrs id and status; and empty array
-      #   would be requesting only id and status. If set, the Info object that
-      #   is returned to you is not guarenteed to have a value for any attr 
-      #   besides the ones specified.
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
       #
       #   For certain adapters this may speed up the response since
       #   adapters can get by without populating the entire Info object
@@ -52,11 +51,10 @@ module OodCore
       # Retrieve info for all jobs for a given owner or owners from the
       # resource manager
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-      # @param attrs [Array<symbol>] array specifies only attrs you want, in
-      #   addition to Info's required attrs id and status and job_owner; an empty array
-      #   would be requesting only id, status, and job_owner. If set, the Info object that
-      #   is returned to you is not guarenteed to have a value for any attr 
-      #   besides the ones specified.
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
       #
       #   For certain adapters this may speed up the response since
       #   adapters can get by without populating the entire Info object
@@ -71,12 +69,13 @@ module OodCore
       end
 
       # Iterate over each job Info object
-      # @param attrs [Array<symbol>] specify only attrs you want; defaults to nil
-      #   if an array, the Info object that is returned to you is not
-      #   guarenteed to have a value for any attribute besides the ones
-      #   specified, except for id and status, which are required
-      #   Adapters adapters that make use of this can speed up the response time
-      #   by requesting, processing and returning only the information required
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
+      #
+      #   For certain adapters this may speed up the response since
+      #   adapters can get by without populating the entire Info object
       # @yield [Info] of each job to block
       # @return [Enumerator] if no block given
       def info_all_each(attrs: nil)
@@ -89,13 +88,13 @@ module OodCore
 
       # Iterate over each job Info object
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-      # @param attrs [Array<symbol>] specify only attrs you want; defaults to nil
-      #   if an array, the Info object that is returned to you is not
-      #   guarenteed to have a value for any attribute besides the ones
-      #   specified and job_owner, since job_owner is required for filtering by
-      #   job_owner
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
+      #
       #   For certain adapters this may speed up the response since
-      #   adapters can get by without populating the entire Info object.
+      #   adapters can get by without populating the entire Info object
       # @yield [Info] of each job to block
       # @return [Enumerator] if no block given
       def info_where_owner_each(owner, attrs: nil)
