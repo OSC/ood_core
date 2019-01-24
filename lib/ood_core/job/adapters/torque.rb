@@ -173,7 +173,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
-        def info_all
+        def info_all(attrs: nil)
           @pbs.get_jobs.map do |k, v|
             parse_job_info(k, v)
           end
@@ -186,7 +186,7 @@ module OodCore
         # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
-        def info_where_owner(owner)
+        def info_where_owner(owner, attrs: nil)
           owner = Array.wrap(owner).map(&:to_s)
           @pbs.select_jobs(
             attribs: [

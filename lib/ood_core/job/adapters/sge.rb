@@ -90,7 +90,7 @@ module OodCore
 
         # Retrieve info for all jobs from the resource manager
         # @return [Array<Info>] information describing submitted jobs
-        def info_all
+        def info_all(attrs: nil)
           @batch.get_all
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -101,7 +101,7 @@ module OodCore
         # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
-        def info_where_owner(owner)
+        def info_where_owner(owner, attrs: nil)
           owner = Array.wrap(owner).map(&:to_s).join(',')
           @batch.get_all(owner: owner)
         rescue Batch::Error => e

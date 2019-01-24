@@ -36,18 +36,73 @@ module OodCore
       # Retrieve info for all jobs from the resource manager
       # @abstract Subclass is expected to implement {#info_all}
       # @raise [NotImplementedError] if subclass did not define {#info_all}
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
+      #
+      #   For certain adapters this may speed up the response since
+      #   adapters can get by without populating the entire Info object
       # @return [Array<Info>] information describing submitted jobs
-      def info_all
+      def info_all(attrs: nil)
         raise NotImplementedError, "subclass did not define #info_all"
       end
 
       # Retrieve info for all jobs for a given owner or owners from the
       # resource manager
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
+      #
+      #   For certain adapters this may speed up the response since
+      #   adapters can get by without populating the entire Info object
       # @return [Array<Info>] information describing submitted jobs
-      def info_where_owner(owner)
+      def info_where_owner(owner, attrs: nil)
         owner = Array.wrap(owner).map(&:to_s)
-        info_all.select { |info| owner.include? info.job_owner }
+
+        # must at least have job_owner to filter by job_owner
+        attrs = Array.wrap(attrs) | [:job_owner] unless attrs.nil?
+
+        info_all(attrs: attrs).select { |info| owner.include? info.job_owner }
+      end
+
+      # Iterate over each job Info object
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
+      #
+      #   For certain adapters this may speed up the response since
+      #   adapters can get by without populating the entire Info object
+      # @yield [Info] of each job to block
+      # @return [Enumerator] if no block given
+      def info_all_each(attrs: nil)
+        return to_enum(:info_all_each, attrs: attrs) unless block_given?
+
+        info_all(attrs: attrs).each do |job|
+          yield job
+        end
+      end
+
+      # Iterate over each job Info object
+      # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      #   This array specifies only attrs you want, in addition to id and status.
+      #   If an array, the Info object that is returned to you is not guarenteed
+      #   to have a value for any attr besides the ones specified and id and status.
+      #
+      #   For certain adapters this may speed up the response since
+      #   adapters can get by without populating the entire Info object
+      # @yield [Info] of each job to block
+      # @return [Enumerator] if no block given
+      def info_where_owner_each(owner, attrs: nil)
+        return to_enum(:info_where_owner_each, owner, attrs: attrs) unless block_given?
+
+        info_where_owner(owner, attrs: attrs).each do |job|
+          yield job
+        end
       end
 
       # Retrieve job info from the resource manager
