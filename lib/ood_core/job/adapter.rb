@@ -89,8 +89,8 @@ module OodCore
 
       # Iterate over each job Info object
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-      # @param attrs [Array<symbol>] specify only attrs you want; defaults to []
-      #   if not an empty array, the Info object that is returned to you is not
+      # @param attrs [Array<symbol>] specify only attrs you want; defaults to nil
+      #   if an array, the Info object that is returned to you is not
       #   guarenteed to have a value for any attribute besides the ones
       #   specified and job_owner, since job_owner is required for filtering by
       #   job_owner
