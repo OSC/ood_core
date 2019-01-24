@@ -36,10 +36,13 @@ module OodCore
       # Retrieve info for all jobs from the resource manager
       # @abstract Subclass is expected to implement {#info_all}
       # @raise [NotImplementedError] if subclass did not define {#info_all}
-      # @param attrs [Array<symbol>] specify only attrs you want; defaults to []
-      #   if not an empty array, the Info object that is returned to you is not
-      #   guarenteed to have a value for any attribute besides the ones
-      #   specified; for certain adapters this may speed up the response since
+      # @param attrs [Array<symbol>] array specifies only attrs you want, in
+      #   addition to Info's required attrs id and status; and empty array
+      #   would be requesting only id and status. If set, the Info object that
+      #   is returned to you is not guarenteed to have a value for any attr 
+      #   besides the ones specified.
+      #
+      #   For certain adapters this may speed up the response since
       #   adapters can get by without populating the entire Info object
       # @return [Array<Info>] information describing submitted jobs
       def info_all(attrs: nil)
@@ -49,13 +52,14 @@ module OodCore
       # Retrieve info for all jobs for a given owner or owners from the
       # resource manager
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-      # @param attrs [Array<symbol>] specify only attrs you want; defaults to []
-      #   if not an empty array, the Info object that is returned to you is not
-      #   guarenteed to have a value for any attribute besides the ones
-      #   specified and job_owner, since job_owner is required for filtering by
-      #   job_owner
+      # @param attrs [Array<symbol>] array specifies only attrs you want, in
+      #   addition to Info's required attrs id and status and job_owner; an empty array
+      #   would be requesting only id, status, and job_owner. If set, the Info object that
+      #   is returned to you is not guarenteed to have a value for any attr 
+      #   besides the ones specified.
+      #
       #   For certain adapters this may speed up the response since
-      #   adapters can get by without populating the entire Info object.
+      #   adapters can get by without populating the entire Info object
       # @return [Array<Info>] information describing submitted jobs
       def info_where_owner(owner, attrs: nil)
         owner = Array.wrap(owner).map(&:to_s)
