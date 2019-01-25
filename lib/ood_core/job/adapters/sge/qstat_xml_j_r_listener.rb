@@ -34,7 +34,11 @@ class QstatXmlJRListener
     @current_request = nil
 
     @processing_job_array_spec = false
-    @job_array_spec = {}
+    @job_array_spec = {
+      start: nil,
+      stop: nil,
+      step: 1,  # Step can have a default of 1
+    }
     @running_tasks = []
   end
 
@@ -147,7 +151,12 @@ class QstatXmlJRListener
   end
 
   def spec_string
-    '%{start}-%{stop}:%{step}' % @job_array_spec
+    # If any of the job_array_spec values are nil then return a default spec_string
+    if @job_array_spec.values.any? { |value| value.nil? } 
+      '1-1:1'
+    else
+      '%{start}-%{stop}:%{step}' % @job_array_spec
+    end
   end
 
   def build_tasks
