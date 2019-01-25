@@ -693,6 +693,39 @@ describe OodCore::Job::Adapters::Torque do
         is_expected.to eq(OodCore::Job::Info.new(id: job_id, status: :completed))
       end
     end
+
+    context "when child tasks are returned" do
+      let(:pbs) {
+        double(
+          get_job: {
+            'job_id[1]' => {:job_state => 'R'},
+            'job_id[2]' => {:job_state => 'Q'},
+            'job_id[3]' => {:job_state => 'H'},
+          }
+        )
+      }
+
+      let(:aggregate_job_info) {
+        OodCore::Job::Info.new(
+          id: 'job_id[]',
+          status: :running,
+          native: {:job_state=>"R", :exec_host=>""},
+          wallclock_time: 0,
+          wallclock_limit: 0,
+          procs: 0,
+          cpu_time: 0,
+          tasks: [
+            {:id => 'job_id[1]', :status => :running},
+            {:id => 'job_id[2]', :status => :queued},
+            {:id => 'job_id[3]', :status => :queued_held}
+          ]
+        )
+      }
+
+      it "creates the proper aggregate job info" do
+        expect( adapter.info('job_id[]') ).to eq(aggregate_job_info)
+      end
+    end
   end
 
   describe "#status" do

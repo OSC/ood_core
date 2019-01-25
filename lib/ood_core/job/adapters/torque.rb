@@ -113,6 +113,7 @@ module OodCore
             headers.merge!(Execution_Time: script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")) unless script.start_time.nil?
             headers.merge!(Account_Name: script.accounting_id) unless script.accounting_id.nil?
             headers.merge!(depend: depend.join(','))       unless depend.empty?
+            headers.merge!(job_array_request: script.job_array_request) unless script.job_array_request.nil?
 
             # Set resources
             resources = {}
@@ -150,7 +151,7 @@ module OodCore
             args += ["-A", script.accounting_id] unless script.accounting_id.nil?
             args += ["-W", "depend=#{depend.join(",")}"] unless depend.empty?
             args += ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
-
+            args += ['-t', script.job_array_request] unless script.job_array_request.nil?
             # Set environment variables
             env = script.job_environment.to_h
             args += ["-v", env.keys.join(",")] unless env.empty?
@@ -206,7 +207,13 @@ module OodCore
         # @see Adapter#info
         def info(id)
           id = id.to_s
-          parse_job_info(*@pbs.get_job(id).flatten)
+          result = @pbs.get_job(id)
+
+          if result.keys.length == 1
+            parse_job_info(*result.flatten)
+          else
+            parse_job_array(id, result)
+          end
         rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Info.new(
@@ -224,8 +231,13 @@ module OodCore
         # @see Adapter#status
         def status(id)
           id = id.to_s
-          char = @pbs.get_job(id, filters: [:job_state])[id][:job_state]
-          Status.new(state: STATE_MAP.fetch(char, :undetermined))
+          @pbs.get_job(id, filters: [:job_state]).values.map {
+            |job_status| OodCore::Job::Status.new(
+              state: STATE_MAP.fetch(
+                job_status[:job_state], :undetermined
+              )
+            )
+          }.max
         rescue Torque::FFI::UnkjobidError
           # set completed status if can't find job id
           Status.new(state: :completed)
@@ -300,8 +312,31 @@ module OodCore
             end
           end
 
+          def parse_job_array(parent_id, result)
+            results = result.to_a
+
+            parse_job_info(
+              parent_id,
+              results.first.last.tap { |info_hash| info_hash[:exec_host] = aggregate_exec_host(results) },
+              tasks: generate_task_list(results)
+            )
+          end
+
+          def aggregate_exec_host(results)
+            results.map { |k,v| v[:exec_host] }.compact.sort.uniq.join("+")
+          end
+
+          def generate_task_list(results)
+            results.map do |k, v|
+              {
+                :id => k,
+                :status => STATE_MAP.fetch(v[:job_state], :undetermined)
+              }
+            end
+          end
+
           # Parse hash describing PBS job status
-          def parse_job_info(k, v)
+          def parse_job_info(k, v, tasks: [])
             /^(?<job_owner>[\w-]+)@/ =~ v[:Job_Owner]
             allocated_nodes = parse_nodes(v[:exec_host] || "")
             procs = allocated_nodes.inject(0) { |sum, x| sum + x[:procs] }
@@ -329,7 +364,8 @@ module OodCore
               cpu_time: duration_in_seconds(v.fetch(:resources_used, {})[:cput]),
               submission_time: v[:ctime],
               dispatch_time: v[:start_time],
-              native: v
+              native: v,
+              tasks: tasks
             )
           end
       end

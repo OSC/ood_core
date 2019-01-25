@@ -1,6 +1,8 @@
 require 'rexml/document'
 require 'rexml/streamlistener'
 require 'date'
+require 'ood_core'
+require 'ood_core/job/array_ids'
 
 # An XML stream listener to build an array of OodCore::Job::Info from qstat output
 #
@@ -13,9 +15,7 @@ require 'date'
 # :queue_name
 # :status
 # :wallclock_limit
-
-
-# :wallclock_time  # HOW LONG HAS IT BEEN RUNNING?
+# :wallclock_time
 
 class QstatXmlJRListener
   # [Hash]
@@ -25,12 +25,28 @@ class QstatXmlJRListener
 
   def initialize
     @parsed_job = {
+      :tasks => [],
       :status => :queued,
       :procs => 1,  # un-knowable from SGE qstat output
       :native => {}  # TODO: improve native attribute reporting
     }
     @current_text = nil
     @current_request = nil
+
+    @processing_job_array_spec = false
+    @job_array_spec = {
+      start: nil,
+      stop: nil,
+      step: 1,  # Step can have a default of 1
+    }
+    @running_tasks = []
+  end
+
+  def tag_start(name, attrs)
+    case name
+    when 'task_id_range'
+      toggle_processing_array_spec
+    end
   end
 
   def tag_end(name)
@@ -57,6 +73,18 @@ class QstatXmlJRListener
       end_CE_stringval
     when 'QR_name'
       end_QR_name
+    when 'JAT_task_number'
+      end_JAT_task_number
+    when 'djob_info'
+      finalize_parsed_job
+    when 'RN_min'
+      set_job_array_piece(:start)
+    when 'RN_max'
+      set_job_array_piece(:stop)
+    when 'RN_step'
+      set_job_array_piece(:step)
+    when 'task_id_range'
+      toggle_processing_array_spec
     end
   end
 
@@ -111,6 +139,52 @@ class QstatXmlJRListener
 
   def end_QR_name
     @parsed_job[:queue_name] = @current_text
+  end
+
+  # Used to record a running Job Array task
+  def end_JAT_task_number
+    @running_tasks << @current_text
+  end
+
+  def set_job_array_piece(key)
+    @job_array_spec[key] = @current_text if @processing_job_array_spec
+  end
+
+  def spec_string
+    # If any of the job_array_spec values are nil then return a default spec_string
+    if @job_array_spec.values.any? { |value| value.nil? } 
+      '1-1:1'
+    else
+      '%{start}-%{stop}:%{step}' % @job_array_spec
+    end
+  end
+
+  def build_tasks
+    all_task_ids = OodCore::Job::ArrayIds.new(spec_string).ids
+    highest_id_running = @running_tasks.sort.last.to_i
+    
+    @running_tasks.sort.map{
+      |task_id| { :id => task_id, :status => :running }
+    } + all_task_ids.select{
+      |task_id| task_id > highest_id_running
+    }.map{
+      |task_id| { :id => task_id, :status => :queued }
+    }
+  end
+
+  # Used to finalize the parsed job
+  def finalize_parsed_job
+    @parsed_job[:tasks] = build_tasks if need_to_build_job_array?
+  end
+
+  # The XML output will always contain nodes for task_id_range, even when the
+  # job is not an array job.
+  def need_to_build_job_array?
+    spec_string != '1-1:1'
+  end
+
+  def toggle_processing_array_spec
+    @processing_job_array_spec = ! @processing_job_array_spec
   end
 end
 

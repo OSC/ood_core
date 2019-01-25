@@ -13,6 +13,7 @@ module OodCore
     require "ood_core/job/status"
     require "ood_core/job/adapter"
     require "ood_core/job/factory"
+    require "ood_core/job/task"
 
     # A namespace for job adapters
     # @note These are dynamically loaded upon request

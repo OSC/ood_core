@@ -292,6 +292,7 @@ module OodCore
           args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
           args += ["-A", script.accounting_id] unless script.accounting_id.nil?
           args += ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+          args += ['-a', script.job_array_request] unless script.job_array_request.nil?
           # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies
@@ -345,13 +346,8 @@ module OodCore
             parse_job_info(v)
           end
 
-          # A job id can return multiple jobs if it corresponds to a job
-          # array id, so we need to find the job that corresponds to the
-          # given job id (if we can't find it, we assume it has completed)
-          info_ary.detect( -> { Info.new(id: id, status: :completed) } ) do |info|
-            # Match the job id or the formatted job & task id "1234_0"
-            info.id == id || info.native[:array_job_task_id] == id
-          end
+          # If no job was found we assume that it has completed
+          info_ary.empty? ? Info.new(id: id, status: :completed) : handle_job_array(info_ary, id)
         rescue Batch::Error => e
           # set completed status if can't find job id
           if /Invalid job id specified/ =~ e.message
@@ -499,6 +495,24 @@ module OodCore
               dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
               native: v
             )
+          end
+
+          def handle_job_array(info_ary, id)
+            # If only one job was returned we return it
+            return info_ary.first unless info_ary.length > 1
+            
+            parent_task_hash = {:tasks => []}
+
+            info_ary.map do |task_info|
+              parent_task_hash[:tasks] << {:id => task_info.id, :status => task_info.status}
+
+              if task_info.id == id || task_info.native[:array_job_task_id] == id
+                # Merge hashes without clobbering the child tasks
+                parent_task_hash.merge!(task_info.to_h.select{|k, v| k != :tasks})
+              end
+            end
+
+            Info.new(**parent_task_hash)
           end
       end
     end

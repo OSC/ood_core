@@ -495,32 +495,35 @@ describe OodCore::Job::Adapters::Slurm do
         }
       }
 
-      context "and job id is array job id" do
-        let(:job_id)   { "123" }
+      context "and when child tasks are returned" do
         let(:slurm)    { double(get_jobs: [child_job_hash, job_hash]) }
 
-        let(:job_info_hash) {
-          {
-            :id=>"123",
-            :status=>:queued,
-            :allocated_nodes=>[],
-            :submit_host=>nil,
-            :job_name=>nil,
-            :job_owner=>nil,
-            :accounting_id=>nil,
-            :procs=>nil,
-            :queue_name=>nil,
-            :wallclock_time=>0,
-            :wallclock_limit=>1800,
-            :cpu_time=>nil,
-            :submission_time=>Time.parse("2017-03-31T10:09:44"),
-            :dispatch_time=>nil,
-            :native=>job_hash
-          }
+        let(:aggregate_job_info) {
+          OodCore::Job::Info.new(
+            id: "123",
+            status: :running,
+            allocated_nodes: [],
+            submit_host: nil,
+            job_name: nil,
+            job_owner: nil,
+            accounting_id: nil,
+            procs: nil,
+            queue_name: nil,
+            wallclock_time: 0,
+            wallclock_limit: 1800,
+            cpu_time: nil,
+            submission_time: Time.parse("2017-03-31T10:09:44"),
+            tasks: [
+              {:id => 124, :status => :running},
+              {:id => 123, :status => :queued}
+            ],
+            dispatch_time: nil,
+            native: job_hash
+          )
         }
 
-        it "returns correct OodCore::Job::Info object" do
-          is_expected.to eq(job_info)
+        it "creates the proper aggregate job info" do
+          expect( adapter.info('123') ).to eq(aggregate_job_info)
         end
       end
 

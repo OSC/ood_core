@@ -35,6 +35,7 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:start_time) }
   it { is_expected.to respond_to(:wall_time) }
   it { is_expected.to respond_to(:accounting_id) }
+  it { is_expected.to respond_to(:job_array_request) }
   it { is_expected.to respond_to(:native) }
   it { is_expected.to respond_to(:to_h) }
 
@@ -206,6 +207,7 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:start_time) }
     it { is_expected.to have_key(:wall_time) }
     it { is_expected.to have_key(:accounting_id) }
+    it { is_expected.to have_key(:job_array_request) }
     it { is_expected.to have_key(:native) }
   end
 

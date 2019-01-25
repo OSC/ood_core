@@ -41,6 +41,7 @@ class OodCore::Job::Adapters::Sge::Helper
     args += ['-a', script.start_time.strftime('%C%y%m%d%H%M.%S')] unless script.start_time.nil?
     args += ['-l', "h_rt=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
     args += ['-P', script.accounting_id] unless script.accounting_id.nil?
+    args += ['-t', script.job_array_request] unless script.job_array_request.nil?
     args += Array.wrap(script.native) if script.native
 
     args

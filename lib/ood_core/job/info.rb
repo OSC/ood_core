@@ -65,6 +65,11 @@ module OodCore
       # @return [Object] native info
       attr_reader :native
 
+      # List of job array child task statuses
+      # @note only relevant for job arrays
+      # @return [Array<Task>] tasks
+      attr_reader :tasks
+
       # @param id [#to_s] job id
       # @param status [#to_sym] job state
       # @param allocated_nodes [Array<#to_h>] allocated nodes
@@ -79,12 +84,14 @@ module OodCore
       # @param cpu_time [#to_i, nil] cpu time
       # @param submission_time [#to_i, nil] submission time
       # @param dispatch_time [#to_i, nil] dispatch time
+      # @param tasks [Array<Hash>] tasks e.g. { id: '12345.owens-batch', status: :running }
       # @param native [Object] native info
       def initialize(id:, status:, allocated_nodes: [], submit_host: nil,
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
-                     dispatch_time: nil, native: nil, **_)
+                     dispatch_time: nil, native: nil, tasks: [],
+                     **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
         @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(n.to_h) }
@@ -99,6 +106,10 @@ module OodCore
         @cpu_time        = cpu_time        && cpu_time.to_i
         @submission_time = submission_time && Time.at(submission_time.to_i)
         @dispatch_time   = dispatch_time   && Time.at(dispatch_time.to_i)
+        @tasks = tasks.map {|task_status| Task.new(**task_status)}
+
+        @status = job_array_aggregate_status unless @tasks.empty?
+
         @native          = native
       end
 
@@ -120,7 +131,8 @@ module OodCore
           cpu_time:        cpu_time,
           submission_time: submission_time,
           dispatch_time:   dispatch_time,
-          native:          native
+          native:          native,
+          tasks: tasks
         }
       end
 
@@ -142,6 +154,14 @@ module OodCore
       # @return [Integer] hash value of object
       def hash
         [self.class, to_h].hash
+      end
+
+      private
+
+      # Generate an aggregate status from child tasks
+      # @return [OodCore::Job::Status]
+      def job_array_aggregate_status
+        @tasks.map { |task_status| task_status.status }.max
       end
     end
   end

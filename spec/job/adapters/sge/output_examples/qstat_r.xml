@@ -95,6 +95,7 @@ tat.xsd?revision=1.11">
       <JB_submission_time>2018-10-09T18:47:05</JB_submission_time>
       <slots>1</slots>
       <full_job_name>job_RR</full_job_name>
+      <tasks>1-10:2</tasks>
       <hard_request name="h_rt" resource_contribution="0.000000">360</hard_request>
       <hard_req_queue>general.q</hard_req_queue>
     </job_list>
