@@ -116,14 +116,6 @@ module OodCore
         end
       end
 
-      # Determines whether this method corresponds to a status check for a valid
-      # state
-      # @param method_name the method name called
-      # @return [Boolean]
-      def respond_to_missing?(method_name, include_private = false)
-        /^(?<other_state>.+)\?$/ =~ method_name && self.class.states.include?(other_state.to_sym) || super
-      end
-
       def precedence
         self.class.states.index(@state)
       end
