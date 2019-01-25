@@ -108,7 +108,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
-        def info_all
+        def info_all(attrs: nil)
           batch.get_jobs.map { |v| info_for_batch_hash(v) }
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -118,7 +118,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_where_owner
-        def info_where_owner(owner)
+        def info_where_owner(owner, attrs: nil)
           owners = Array.wrap(owner).map(&:to_s)
           if owners.count > 1
             super
