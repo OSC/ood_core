@@ -84,7 +84,7 @@ module OodCore
       # @param cpu_time [#to_i, nil] cpu time
       # @param submission_time [#to_i, nil] submission time
       # @param dispatch_time [#to_i, nil] dispatch time
-      # @param tasks [Array<Hash<#to_s, #to_sym>>] tasks
+      # @param tasks [Array<Hash>] tasks e.g. { id: '12345.owens-batch', status: :running }
       # @param native [Object] native info
       def initialize(id:, status:, allocated_nodes: [], submit_host: nil,
                      job_name: nil, job_owner: nil, accounting_id: nil,
