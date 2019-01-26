@@ -15,6 +15,11 @@ describe OodCore::Job::Adapters::Sge do
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
 
+  it "claims to support job arrays" do
+    expect(subject.supports_job_arrays?).to be_truthy
+  end
+
+
 describe "#submit" do
     def build_script(opts = {})
       OodCore::Job::Script.new(

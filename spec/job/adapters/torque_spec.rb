@@ -17,6 +17,10 @@ describe OodCore::Job::Adapters::Torque do
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
 
+  it "claims to support job arrays" do
+    expect(subject.supports_job_arrays?).to be_truthy
+  end
+
   describe ".new" do
     context "when :pbs not defined" do
       subject { described_class.new }
