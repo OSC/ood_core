@@ -105,6 +105,66 @@ module OodCore
             end
           end
 
+          def each_job(filters: [])
+            # FIXME: if filters set, we should handle it below with different
+            # args to get a subset of the data
+
+            # shared setup of squeue command args and env duplicate from get_jobs
+            delim = "\x1F"     # don't use "|" because FEATURES uses this
+            options = filters.empty? ? fields : fields.slice(*filters)
+            args  = ["--all", "--states=all", "--noconvert"]
+            args += ["-o", "#{options.values.join(delim)}"]
+            args += ["-j", id.to_s] unless id.to_s.empty?
+            env = env.to_h
+            env["SLURM_CONF"] = conf.to_s if conf
+
+            cmd = OodCore::Job::Adapters::Helper.bin_path("squeue", bin, bin_overrides)
+            args  = args.map(&:to_s)
+            args += ["-M", cluster] if cluster
+            env = env.to_h
+            env["SLURM_CONF"] = conf.to_s if conf
+            # end shared setup
+
+
+            # similar to the implementation of capture3, but this time instead
+            # of reading the entirety of stdout into a single string, we process
+            # each line individually
+            stdout_processing_error = ''
+            cmd_error, cmd_status = Open3.popen3(env, cmd, *args) do |stdin, stdout, stderr, wait_thr|
+              out_reader = Thread.new {
+                stdout.each_line do |line|
+                  # need to skip first two lines; after reading a line,
+                  # lineno is incremented, so we check on 1 & 2 instead of 0 & 1
+                  next if stdout.lineno == 1 || (stdout.lineno == 2 && cluster)
+
+                  begin
+                    # parse line
+                    yield(Hash[options.keys.zip(line.split(delim))])
+                  rescue => e
+                    stdout_processing_error << e.message
+                  end
+
+                  # FIXME: to test this, we should make a custom binary squeue
+                  # that outputs valid data for a given config, and verify results
+                end
+              }
+              err_reader = Thread.new { stderr.read }
+
+              # don't exit method until finished reading stdout
+              out_reader.join
+
+              # return the stderr as a string and the exit status
+              [err_reader.value, wait_thr.value]
+            end
+
+            unless cmd_status.success? && stdout_processing_error == ''
+              # either command failed and we have stderr, or command succeeded
+              # but we had problems parsing stdout; either way, we raise an
+              # error
+              raise(Error, cmd_error == '' ? stdout_processing_error : cmd_error)
+            end
+          end
+
           # Put a specified job on hold
           # @example Put job "1234" on hold
           #   my_batch.hold_job("1234")
