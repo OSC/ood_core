@@ -307,6 +307,10 @@ module OodCore
         end
       end
 
+        def supports_job_arrays?
+          false
+        end
+
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job
         # @raise [JobAdapterError] if something goes wrong getting job info

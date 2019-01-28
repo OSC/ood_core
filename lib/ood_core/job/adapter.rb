@@ -105,6 +105,13 @@ module OodCore
         end
       end
 
+      # Whether the adapter supports job arrays
+      # @return [Boolean] - assumes true; but can be overridden by adapters that
+      #   explicitly do not
+      def supports_job_arrays?
+        true
+      end
+
       # Retrieve job info from the resource manager
       # @abstract Subclass is expected to implement {#info}
       # @raise [NotImplementedError] if subclass did not define {#info}
