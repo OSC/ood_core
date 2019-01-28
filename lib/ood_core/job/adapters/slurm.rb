@@ -98,9 +98,6 @@ module OodCore
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
-
-            # FIXME: inline call, then call squeue_cmd instead of this
-            # after adding test with test data that the squeue custom binary outputs
             lines = call("squeue", *args).split("\n").map(&:strip)
 
             lines.drop(cluster ? 2 : 1).map do |line|
@@ -108,9 +105,11 @@ module OodCore
             end
           end
 
-          # @return [Array<Hash, String, Array>] - returns [env, cmd, args]
-          #    env is hash, cmd is string, args is array
-          def squeue_cmd(filters: [])
+          def each_job(filters: [])
+            # FIXME: if filters set, we should handle it below with different
+            # args to get a subset of the data
+
+            # shared setup of squeue command args and env duplicate from get_jobs
             delim = "\x1F"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--states=all", "--noconvert"]
@@ -124,12 +123,8 @@ module OodCore
             args += ["-M", cluster] if cluster
             env = env.to_h
             env["SLURM_CONF"] = conf.to_s if conf
+            # end shared setup
 
-            [env, cmd, args]
-          end
-
-          def each_job(filters: [])
-            env, cmd, args = squeue_cmd(filters: filters)
 
             # similar to the implementation of capture3, but this time instead
             # of reading the entirety of stdout into a single string, we process
