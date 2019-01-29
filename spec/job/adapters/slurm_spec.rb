@@ -237,8 +237,19 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#info_all" do
-    let(:slurm) { double(get_jobs: {}) }
-    subject { adapter.info_all }
+    subject { adapter.info_all(attrs: %i(job_id state_compact state user account partition)) }
+    let(:slurm) {
+      OodCore::Job::Adapters::Slurm::Batch.new(
+        bin: nil,
+        bin_overrides: { "squeue" => "spec/fixtures/files/squeue_example.rb" }
+      )
+    }
+
+    it "correctly parses jobs output" do
+      expect(subject.count).to eq(5)
+      expect(subject.sort_by(&:id).map(&:id)).to eq(%w(4320600 4827982 4828002 4828611 4828847))
+      # expect(subject.sort_by(&:id).map(&:status)).to eq(%w(Status.completed))
+    end
 
     # FIXME:
     # it "returns an array of all the jobs" do
@@ -247,7 +258,7 @@ describe OodCore::Job::Adapters::Slurm do
     # end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
+      before { expect(slurm).to receive(:each_job).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
 
       it "raises OodCore::JobAdapterError" do
         expect { subject }.to raise_error(OodCore::JobAdapterError)
@@ -257,9 +268,9 @@ describe OodCore::Job::Adapters::Slurm do
 
   describe "::Batch#each_job enumerator" do
     subject {
-      Slurm::Batch.new(
+      OodCore::Job::Adapters::Slurm::Batch.new(
         bin: nil,
-        bin_overrides: { "squeue" => "/Users/efranz/dev/ood_core/spec/fixtures/files/squeue_example.rb" }
+        bin_overrides: { "squeue" => "spec/fixtures/files/squeue_example.rb" }
       ).each_job(filters: %i(job_id state_compact state user account partition))
     }
 
@@ -274,7 +285,7 @@ describe OodCore::Job::Adapters::Slurm do
     it "calls popen with correct arguments" do
       expect(Open3).to receive(:popen3).with(
         {},
-        "/Users/efranz/dev/ood_core/spec/fixtures/files/squeue_example.rb",
+        "spec/fixtures/files/squeue_example.rb",
         "--all", "--states=all", "--noconvert", "-o", "%A\u001F%t\u001F%T\u001F%u\u001F%a\u001F%P"
       ).and_return([nil, double(:success? => true)])
 

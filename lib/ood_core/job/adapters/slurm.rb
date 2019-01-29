@@ -1,5 +1,6 @@
 require "time"
 require "ood_core/refinements/hash_extensions"
+require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
 
 module OodCore
@@ -33,6 +34,7 @@ module OodCore
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
+          using Refinements::ArrayExtensions
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
           #   my_batch.cluster #=> "kingspeak"
@@ -94,7 +96,7 @@ module OodCore
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [])
             delim = "\x1F"     # don't use "|" because FEATURES uses this
-            options = filters.empty? ? fields : fields.slice(*filters)
+            options = Array.wrap(filters).empty? ? fields : fields.slice(*Array.wrap(filters))
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
@@ -110,7 +112,7 @@ module OodCore
 
             # shared setup of squeue command args and env duplicate from get_jobs
             delim = "\x1F"     # don't use "|" because FEATURES uses this
-            options = filters.empty? ? fields : fields.slice(*filters)
+            options = Array.wrap(filters).empty? ? fields : fields.slice(*Array.wrap(filters))
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
@@ -387,8 +389,14 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all(attrs: nil)
-          @slurm.get_jobs.map do |v|
-            parse_job_info(v)
+          info_all_each(attrs: attrs).to_a
+        end
+
+        def info_all_each(attrs: nil)
+          return to_enum(:info_all_each, attrs: attrs) unless block_given?
+
+          @slurm.each_job(filters: attrs) do |job|
+            yield parse_job_info(job)
           end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -507,6 +515,8 @@ module OodCore
           # "c438-[062,104]"
           # "c427-032,c429-002"
           def parse_nodes(node_list)
+            return [] unless node_list
+
             node_list.to_s.scan(/([^,\[]+)(?:\[([^\]]+)\])?/).map do |prefix, range|
               if range
                 range.split(",").map do |x|
@@ -529,17 +539,23 @@ module OodCore
 
           # Parse hash describing Slurm job status
           def parse_job_info(v)
-            allocated_nodes = parse_nodes(v[:node_list])
-            if allocated_nodes.empty?
-              if v[:scheduled_nodes] && v[:scheduled_nodes] != "(null)"
-                allocated_nodes = parse_nodes(v[:scheduled_nodes])
-              else
-                allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
+            allocated_nodes = []
+
+            if v[:node_list] || v[:scheduled_nodes] || v[:nodes]
+              allocated_nodes = parse_nodes(v[:node_list])
+
+              if allocated_nodes.empty?
+                if v[:scheduled_nodes] && v[:scheduled_nodes] != "(null)"
+                  allocated_nodes = parse_nodes(v[:scheduled_nodes])
+                else
+                  allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
+                end
               end
             end
+
             Info.new(
-              id: v[:job_id],
-              status: get_state(v[:state_compact]),
+              id: v[:job_id], #FIXME: MUST ALWAYS ASK FOR job_id
+              status: get_state(v[:state_compact]), #FIXME: MUST ALWAYS ASK FOR state_compact
               allocated_nodes: allocated_nodes,
               submit_host: nil,
               job_name: v[:job_name],
@@ -550,8 +566,8 @@ module OodCore
               wallclock_time: duration_in_seconds(v[:time_used]),
               wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
-              submission_time: Time.parse(v[:submit_time]),
-              dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
+              submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
+              dispatch_time: ["N/A", nil].include?(v[:start_time]) ? nil : Time.parse(v[:start_time]),
               native: v
             )
           end
