@@ -255,6 +255,33 @@ describe OodCore::Job::Adapters::Slurm do
     end
   end
 
+  describe "::Batch#each_job enumerator" do
+    subject {
+      Slurm::Batch.new(
+        bin: nil,
+        bin_overrides: { "squeue" => "/Users/efranz/dev/ood_core/spec/fixtures/files/squeue_example.rb" }
+      ).each_job(filters: %i(job_id state_compact state user account partition))
+    }
+
+    let(:jobs) { subject.to_a }
+
+    it "correctly parses jobs output" do
+      expect(jobs.count).to eq(5)
+      expect(jobs.map {|j| j[:job_id] }.sort).to eq(%w(4320600 4827982 4828002 4828611 4828847))
+      expect(jobs.map {|j| j[:state_compact] }.sort).to eq(%w(CD PD R R TO))
+    end
+
+    it "calls popen with correct arguments" do
+      expect(Open3).to receive(:popen3).with(
+        {},
+        "/Users/efranz/dev/ood_core/spec/fixtures/files/squeue_example.rb",
+        "--all", "--states=all", "--noconvert", "-o", "%A\u001F%t\u001F%T\u001F%u\u001F%a\u001F%P"
+      ).and_return([nil, double(:success? => true)])
+
+      subject.to_a
+    end
+  end
+
   describe "#info" do
     def job_info(opts = {})
       OodCore::Job::Info.new(

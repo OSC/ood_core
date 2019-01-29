@@ -105,9 +105,8 @@ module OodCore
             end
           end
 
-          def each_job(filters: [])
-            # FIXME: if filters set, we should handle it below with different
-            # args to get a subset of the data
+          def each_job(id:"", filters: [])
+            return to_enum(:each_job, id: id, filters: filters) unless block_given?
 
             # shared setup of squeue command args and env duplicate from get_jobs
             delim = "\x1F"     # don't use "|" because FEATURES uses this
@@ -133,19 +132,19 @@ module OodCore
             cmd_error, cmd_status = Open3.popen3(env, cmd, *args) do |stdin, stdout, stderr, wait_thr|
               out_reader = Thread.new {
                 stdout.each_line do |line|
-                  # need to skip first two lines; after reading a line,
-                  # lineno is incremented, so we check on 1 & 2 instead of 0 & 1
+                  # FIXME: hack - assumes if cluster is specified in arguments, that header is made of 2 lines
+                  # i.e. https://slurm.schedmd.com/multi_cluster.html:
+                  #
+                  #     CLUSTER: dawn
+                  #     JOBID PARTITION   NAME   USER  ST   TIME NODES BP_LIST(REASON)
+                  #
                   next if stdout.lineno == 1 || (stdout.lineno == 2 && cluster)
 
                   begin
-                    # parse line
                     yield(Hash[options.keys.zip(line.split(delim))])
                   rescue => e
                     stdout_processing_error << e.message
                   end
-
-                  # FIXME: to test this, we should make a custom binary squeue
-                  # that outputs valid data for a given config, and verify results
                 end
               }
               err_reader = Thread.new { stderr.read }
