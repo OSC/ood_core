@@ -101,7 +101,8 @@ module OodCore
                 k2 ? ( hsh[k1] ||= {} and hsh[k1][k2] = value ) : ( hsh[k1] = value )
               end
             end
-            jobs.reject { |j| /\[\]/ =~ j[:job_id] } # drop main job array jobs
+
+            jobs
           end
 
           # Select batch jobs from the batch server
@@ -181,8 +182,8 @@ module OodCore
           'U' => :suspended,      # cycle-harvesting job is suspended due to keyboard activity
           'E' => :running,        # job is exiting after having run
           'F' => :completed,      # job is finished
-          'X' => :completed       # subjob has completed execution or has been deleted
-          # ignore B as it signifies a job array
+          'X' => :completed,      # subjob has completed execution or has been deleted
+          'B' => :running         # job array has at least one child running
         }
 
         # What percentage of jobs a user owns out of all jobs, used to decide
@@ -266,6 +267,8 @@ module OodCore
           # mimics what the other resource managers do)
           args += ["-j", "oe"] if script.error_path.nil?
 
+          args += ["-J", script.job_array_request] unless script.job_array_request.nil?
+
           # Set native options
           args += script.native if script.native
 
@@ -318,9 +321,18 @@ module OodCore
         # @see Adapter#info
         def info(id)
           id = id.to_s
-          @pbspro.get_jobs(id: id).map do |v|
+
+          job_infos = @pbspro.get_jobs(id: id).map do |v|
             parse_job_info(v)
-          end.first || Info.new(id: id, status: :completed)
+          end
+
+          Info.new(id: id, status: :completed) unless job_infos
+
+          if job_infos.length == 1
+            job_infos.first
+          else
+            process_job_array(job_infos)
+          end
         rescue Batch::Error => e
           # set completed status if can't find job id
           if /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
@@ -433,6 +445,20 @@ module OodCore
               dispatch_time: v[:stime] ? Time.parse(v[:stime]) : nil,
               native: v
             )
+          end
+
+          # Combine the array parent with the states of its children
+          def process_job_array(jobs)
+            parent = jobs.select { |j| /\[\]/ =~ j.id }.first.to_h
+            # create task hashes from children
+            parent[:tasks] = jobs.reject { |j| /\[\]/ =~ j.id }.map do |j|
+              {
+                :id => j.id,
+                :status => j.status.to_sym
+              }
+            end
+
+            Info.new(**parent)
           end
       end
     end
