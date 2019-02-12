@@ -322,9 +322,9 @@ module OodCore
             parse_job_info(v)
           end
 
-          Info.new(id: id, status: :completed) unless job_infos
-
-          if job_infos.length == 1
+          if job_infos.empty?
+            Info.new(id: id, status: :completed)
+          elsif job_infos.length == 1
             job_infos.first
           else
             process_job_array(job_infos)

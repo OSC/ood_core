@@ -18,8 +18,8 @@ describe OodCore::Job::Adapters::PBSPro do
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
 
-  it "claims to NOT support job arrays" do
-    expect(subject.supports_job_arrays?).to be_falsey
+  it "claims to support job arrays" do
+    expect(subject.supports_job_arrays?).to be_truthy
   end
 
   describe ".new" do
