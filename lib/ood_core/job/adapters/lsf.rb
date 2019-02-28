@@ -194,7 +194,7 @@ module OodCore
             finish_time = helper.parse_past_time(v[:finish_time], ignore_errors: true)
 
             # Detect job array index from name
-            array_index = /[^\[]+(\[[0-9]+\])/.match(v[:name])
+            array_index = /^[^\[]*(\[[0-9]+\])$/.match(v[:name])
 
             Info.new(
               id: (array_index) ? "#{v[:id]}#{array_index[1]}" : v[:id],
