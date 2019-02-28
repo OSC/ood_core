@@ -90,15 +90,18 @@ module OodCore
         # @return [Info] information describing submitted job
         # @see Adapter#info
         def info(id)
-          # TODO: handle job arrays
-          job = batch.get_job(id: id)
-          if job
-            info_for_batch_hash(job)
-          else
+          info_ary = batch.get_job(id: id).map{|v| info_for_batch_hash(v)}
+
+          case info_ary.size
+          when 0
             Info.new(
               id: id,
               status: :completed
             )
+          when 1
+            info_ary.first
+          else  # many
+            handle_job_array(info_ary, id)
           end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
@@ -131,19 +134,13 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
-        def supports_job_arrays?
-          false
-        end
-
         # Retrieve job status from resource manager
         # @param id [#to_s] the id of the job
         # @raise [JobAdapterError] if something goes wrong getting job status
         # @return [Status] status of job
         # @see Adapter#status
         def status(id)
-          job = batch.get_job(id: id)
-          state = job ? get_state(job[:status]) : :completed
-          Status.new(state: state)
+          info(id).status
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
@@ -196,8 +193,11 @@ module OodCore
             dispatch_time = helper.parse_past_time(v[:start_time], ignore_errors: true)
             finish_time = helper.parse_past_time(v[:finish_time], ignore_errors: true)
 
+            # Detect job array index from name
+            array_index = /[^\[]+(\[[0-9]+\])/.match(v[:name])
+
             Info.new(
-              id: v[:id],
+              id: (array_index) ? "#{v[:id]}#{array_index[1]}" : v[:id],
               status: get_state(v[:status]),
               allocated_nodes: nodes,
               submit_host: v[:from_host],
@@ -213,6 +213,37 @@ module OodCore
               dispatch_time: dispatch_time,
               native: v
             )
+          end
+
+          def handle_job_array(info_ary, id)
+            parent_task_hash = build_proxy_parent(info_ary.first, id)
+
+            info_ary.map do |task_info|
+              parent_task_hash[:tasks] << {:id => task_info.id, :status => task_info.status}
+            end
+
+            parent_task_hash[:status] = parent_task_hash[:tasks].map{|task| task[:status]}.max
+
+            Info.new(**parent_task_hash)
+          end
+
+          # Proxy the first element as the parent hash delete non-shared attributes
+          def build_proxy_parent(info, id)
+            info.to_h.merge({
+              :tasks => [],
+              :id => id
+            }).delete_if{
+              |key, _| [
+                :allocated_nodes, :dispatch_time,
+                :cpu_time, :wallclock_time, :status
+              ].include?(key)
+            }.tap{
+              # Remove the child array index from the :job_name
+
+              # Note that a true representation of the parent should have the
+              # full array spec in the name. Worth attempting to reconstruct?
+              |h| h[:job_name] = h[:job_name].gsub(/\[[^\]]+\]/, '')
+            }
           end
       end
     end

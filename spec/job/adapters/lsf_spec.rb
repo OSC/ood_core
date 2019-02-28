@@ -15,8 +15,8 @@ describe OodCore::Job::Adapters::Lsf do
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
 
-  it "claims to NOT support job arrays" do
-    expect(subject.supports_job_arrays?).to be_falsey
+  it "claims to support job arrays" do
+    expect(subject.supports_job_arrays?).to be_truthy
   end
 
   describe "#submit" do
@@ -59,7 +59,7 @@ describe OodCore::Job::Adapters::Lsf do
     before { allow(Time).to receive(:now)  { Time.local(year, 04, 01) } }
 
     # TODO: do we create a complex mock?
-    let(:batch) { double(get_jobs: [job_hash], get_job: job_hash) }
+    let(:batch) { double(get_jobs: [job_hash], get_job: [job_hash]) }
     let(:start_time) { Time.local(year, 3, 31, 14, 46, 44) }
 
     #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
@@ -124,7 +124,7 @@ describe OodCore::Job::Adapters::Lsf do
       end
 
       context "when can't find job" do
-        let(:batch) { double(get_job: nil) }
+        let(:batch) { double(get_job: []) }
 
         it "returns completed OodCore::Job::Info object" do
           expect(adapter.info("542935")).to eq(OodCore::Job::Info.new(id: "542935", status: :completed))

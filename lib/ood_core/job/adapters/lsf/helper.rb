@@ -81,6 +81,8 @@ class OodCore::Job::Adapters::Lsf::Helper
     args += ["-P", script.accounting_id] unless script.accounting_id.nil?
     args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
     args += ["-J", script.job_name] unless script.job_name.nil?
+    args[-1] += "[#{script.job_array_request}]" unless script.job_array_request.nil?
+
     args += ["-q", script.queue_name] unless script.queue_name.nil?
     args += ["-U", script.reservation_id] unless script.reservation_id.nil?
     args += ["-sp", script.priority] unless script.priority.nil?
