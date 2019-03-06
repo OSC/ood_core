@@ -10,7 +10,7 @@ describe OodCore::Job::Adapters::Sge::Helper do
     let(:match_cwd) {'#$  -cwd /home/ood/ondemand'}
     let(:match_multiple_directives) {'#$  -wd /home/ood/ondemand'}
 
-    let(:should_not_match_embedded_wd) {' #$ -j yes -o this-wd /home/ood/ondemand'}
+    let(:should_not_match_embedded_wd) {'#$ -j yes -o this-wd /home/ood/ondemand'}
     let(:should_not_match_bad_indent) {'  #$ -t 1-10:5 -wd /home/ood/ondemand'}
 
     it "detects c?wd directives in a script" do

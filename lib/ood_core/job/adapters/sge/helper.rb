@@ -69,13 +69,10 @@ class OodCore::Job::Adapters::Sge::Helper
   def script_contains_wd_directive?(content)
     content.slice(
       # Only search within the script's first 1024 characters in case the user is
-      # putting non-line delimited data into their scripts.
+      # putting lots of non-line delimited data into their scripts.
       0, 1024
     ).split(
       "\n"
-    ).slice(
-      # Only scan in the first 20 rows
-      0, 20
     ).any? {
       |line|
       # String must start with #$
