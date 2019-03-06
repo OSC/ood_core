@@ -83,7 +83,7 @@ module OodCore
           # SGE supports jod dependencies on job completion
           args = @helper.batch_submit_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
-          @batch.submit(script.content, args, :chdir => script.workdir)
+          @batch.submit(script.content, args)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
