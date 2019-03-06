@@ -95,6 +95,8 @@ class OodCore::Job::Adapters::Sge::Batch
 
       job_hash = listener.parsed_job
 
+      job_hash[:id] = job_id if job_hash[:id]
+
       update_job_hash_status!(job_hash)
 
       job_info = OodCore::Job::Info.new(**job_hash)
@@ -115,8 +117,8 @@ class OodCore::Job::Adapters::Sge::Batch
     if get_status_from_drmaa?(job_hash)
       begin
         job_hash[:status] = get_status_from_drmma(job_hash[:id])
-      rescue DRMAA::DRMAAInvalidArgumentError => e
-        raise Error, e.message
+      rescue DRMAA::DRMAAException => e
+        job_hash[:status] = :completed unless job_hash[:status]
       end
     end
   end
@@ -155,9 +157,8 @@ class OodCore::Job::Adapters::Sge::Batch
   # Call qsub with arguments and the scripts content
   # @param job_id [#to_s]
   # @return job_id [String]
-  def submit(content, args)
-      cmd = ['qsub'] + args
-      @helper.parse_job_id_from_qsub(call(*cmd, :stdin => content))
+  def submit(content, args, chdir: nil)
+      @helper.parse_job_id_from_qsub(call('qsub', *args, :stdin => content, :chdir => chdir))
   end
 
   # Call a forked SGE command for a given batch server
