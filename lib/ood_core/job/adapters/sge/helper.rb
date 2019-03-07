@@ -20,7 +20,12 @@ class OodCore::Job::Adapters::Sge::Helper
     args += ['-h'] if script.submit_as_hold
     args += ['-r', 'yes'] if script.rerunnable
     script.job_environment.each_pair {|k, v| args += ['-v', "#{k.to_s}=#{v.to_s}"]} unless script.job_environment.nil?
-    args += ['-wd', script.workdir] unless script.workdir.nil?
+
+    if script.workdir
+      args += ['-wd', script.workdir]
+    elsif ! script_contains_wd_directive?(script.content)
+      args += ['-cwd']
+    end
 
     on_event_email = []
     on_event_email << 'b' if script.email_on_started  # beginning
@@ -45,6 +50,38 @@ class OodCore::Job::Adapters::Sge::Helper
     args += Array.wrap(script.native) if script.native
 
     args
+  end
+
+  # @brief      Detect whether script content contains either -cwd or -wd
+  #
+  # @param      content  The script content
+  # 
+  # Examples:
+  #     #$-wd /home/ood/ondemand  # should match
+  #     #$  -wd /home/ood/ondemand  # should match
+  #     #$  -cwd /home/ood/ondemand  # should match
+  #     #$ -j yes -wd /home/ood/ondemand  # should match
+  #     #$ -j yes -o this-wd /home/ood/ondemand  # should NOT match
+  #       #$ -t 1-10:5 -wd /home/ood/ondemand  # should NOT match
+  #
+  # @return     [bool]
+  #
+  def script_contains_wd_directive?(content)
+    content.slice(
+      # Only search within the script's first 1024 characters in case the user is
+      # putting lots of non-line delimited data into their scripts.
+      0, 1024
+    ).split(
+      "\n"
+    ).any? {
+      |line|
+      # String must start with #$
+      # Match may be:
+      #   Immediate -c?wd
+      #   Eventual space or tab followed by -c?wd
+      # String may end with multiple characters
+      /^#\$(?:-c?wd|.*[ \t]+-c?wd).*$/ =~ line
+    }
   end
 
   # Raise exceptions when adapter is asked to perform an action that SGE does not support
