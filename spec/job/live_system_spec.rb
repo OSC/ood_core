@@ -23,7 +23,9 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
       output_path: '/dev/null',
       error_path: '/dev/null',
       submit_as_hold: true,
-      accounting_id: (account.nil?) ? nil : account
+      accounting_id: (account.nil?) ? nil : account,
+      wall_time: 900,
+      native: ['--nodes=1', '--mem=1024']
     )
 
     @script_with_array = OodCore::Job::Script.new(
@@ -36,7 +38,9 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
       error_path: '/dev/null',
       submit_as_hold: true,
       job_array_request: '1-4',
-      accounting_id: (account.nil?) ? nil : account
+      accounting_id: (account.nil?) ? nil : account,
+      wall_time: 900,
+      native: ['--nodes=1', '--mem=1024']
     )
 
     # Confirm that live tests will be run, and let the use know the name in case manual cleanup is necessary
@@ -48,12 +52,17 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     puts "\nLive system tests complete. Continuing with other tests:\n"
   end
 
+  it('can get info of all jobs') do
+    expect(@adapter.info_all.any?).to be true
+  end
+
   it('can submit') do
     $id = @adapter.submit(@script)
     expect($id).not_to be_empty
   end
 
   it('can get info') do
+    puts "id: #{$id}"
     # We can get info and that info is not default constructed
     expect(@adapter.info($id).job_name).to eq( @script.job_name )
   end
@@ -78,7 +87,7 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     expect(@adapter.status($id).state).not_to eq(:queued_held)
   end
 
-  it('can delete a job') do
+  xit('can delete a job') do
     @adapter.delete($id)
   end
 
@@ -86,17 +95,17 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
   # Note that it is difficult to use job IDs because job array parents do not
   # compare neatly with their children. Job names seem to compare more easily.
 
-  it('can submit a job array') do
+  xit('can submit a job array') do
     $job_array_parent_id = @adapter.submit(@script_with_array)
     expect($id).not_to be_empty
   end
 
-  it('can get info on a job array parent') do
+  xit('can get info on a job array parent') do
     # We can get info and that info is not default constructed
     expect(@adapter.info($job_array_parent_id).job_name).to include( @script_with_array.job_name )
   end
 
-  it('can get the status of a job array parent') do
+  xit('can get the status of a job array parent') do
     current_status = @adapter.status($job_array_parent_id)
     expect(OodCore::Job::Status.states).to include(current_status)
 
@@ -104,7 +113,7 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     expect([:queued, :queued_held]).to include(current_status.state)
   end
 
-  it("can find status of job in list of all user's jobs") do
+  xit("can find status of job in list of all user's jobs") do
     jobs = @adapter.info_where_owner(OodSupport::User.new.name)
 
     expect(
@@ -116,14 +125,14 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     ).to be(true)
   end
 
-  it('can release a held job array parent') do
+  xit('can release a held job array parent') do
     @adapter.release($job_array_parent_id)
 
     # The status is no longer held
     expect(@adapter.status($job_array_parent_id).state).not_to eq(:queued_held)
   end
 
-  it('can delete a job array') do
+  xit('can delete a job array') do
     @adapter.delete($job_array_parent_id)
   end
 end

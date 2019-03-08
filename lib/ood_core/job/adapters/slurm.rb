@@ -93,15 +93,23 @@ module OodCore
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [])
-            delim = "\x1F"     # don't use "|" because FEATURES uses this
+            record_separator = "\x1E"
+            unit_separator = "\x1F"
+
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.values.join(delim)}"]
+            args += ["-o", "#{options.values.join(unit_separator)}#{record_separator}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
-            lines = call("squeue", *args).split("\n").map(&:strip)
+            lines = call("squeue", *args).split(record_separator).map(&:strip)
 
-            lines.drop(cluster ? 2 : 1).map do |line|
-              Hash[options.keys.zip(line.split(delim))]
+            if id.to_s.empty?
+              lines[(cluster ? 2 : 1)..-2].map do |line|
+                Hash[options.keys.zip(line.split(unit_separator))]
+              end
+            else
+              lines[(cluster ? 2 : 1)..-1].map do |line|
+                Hash[options.keys.zip(line.split(unit_separator))]
+              end
             end
           end
 
