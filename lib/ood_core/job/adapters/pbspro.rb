@@ -85,9 +85,9 @@ module OodCore
           # @param id [#to_s] the id of the job
           # @raise [Error] if `qstat` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "")
-            args = ["-f"]   # display all information
-            args += ["-t"]  # list subjobs
+          def get_jobs(id: "", user: "")
+            args = ["-f", "-t"]   # display all information
+            args += ["-u", user] unless user.empty?
             args += [id.to_s] unless id.to_s.empty?
             lines = call("qstat", *args).gsub("\n\t", "").split("\n").map(&:strip)
 
@@ -306,7 +306,19 @@ module OodCore
         if usr_jobs.size > (qstat_factor * all_jobs.size)
           super
         else
-          usr_jobs.map { |id| info(id) }
+          begin
+            user_job_infos = []
+            usr_jobs.each do |id|
+              job = info(id)
+              user_job_infos << job
+
+              job.tasks.each {|task| user_job_infos << info(task.id)}
+            end
+
+            user_job_infos
+          rescue Batch::Error => e
+            raise JobAdapterError, e.message
+          end
         end
       end
 
