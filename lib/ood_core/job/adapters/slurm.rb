@@ -93,15 +93,17 @@ module OodCore
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [])
-            delim = "\x1F"     # don't use "|" because FEATURES uses this
+            record_separator = "\x1E"
+            unit_separator = "\x1F"
+
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.values.join(delim)}"]
+            args += ["-o", "#{options.values.join(unit_separator)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
-            lines = call("squeue", *args).split("\n").map(&:strip)
+            lines = call("squeue", *args).rstrip.chomp(record_separator).split(record_separator)
 
             lines.drop(cluster ? 2 : 1).map do |line|
-              Hash[options.keys.zip(line.split(delim))]
+              Hash[options.keys.zip(line.strip.split(unit_separator))]
             end
           end
 
@@ -500,7 +502,7 @@ module OodCore
           def handle_job_array(info_ary, id)
             # If only one job was returned we return it
             return info_ary.first unless info_ary.length > 1
-            
+
             parent_task_hash = {:tasks => []}
 
             info_ary.map do |task_info|
