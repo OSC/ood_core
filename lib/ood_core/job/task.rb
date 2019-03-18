@@ -5,7 +5,7 @@ module OodCore
       attr_reader :status
 
       def initialize(id:, status:, **_)
-        @task_id = id
+        @id = id.to_s
         @status = OodCore::Job::Status.new(state: status)
       end
 
