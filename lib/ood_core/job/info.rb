@@ -113,6 +113,21 @@ module OodCore
         @native          = native
       end
 
+      # Create a new Info for a child task
+      # @return [Info] merging the parent and the child task
+      def new_for_child_task(task)
+        parent_only_keys = [
+          :allocated_nodes,
+          :procs,
+          :cpu_time,
+          :dispatch_time,
+          :native,
+          :tasks
+        ]
+
+        new(**to_h.merge(task.to_h).delete_if{|k, v| parent_only_keys.include?(k)})
+      end
+
       # Convert object to hash
       # @return [Hash] object as hash
       def to_h

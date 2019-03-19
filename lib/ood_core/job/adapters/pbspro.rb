@@ -312,7 +312,7 @@ module OodCore
               job = info(id)
               user_job_infos << job
 
-              job.tasks.each {|task| user_job_infos << info(task.id)}
+              job.tasks.each {|task| user_job_infos << job.new_for_child_task(task)}
             end
 
             user_job_infos
@@ -462,7 +462,8 @@ module OodCore
             parent[:tasks] = jobs.reject { |j| /\[\]/ =~ j.id }.map do |j|
               {
                 :id => j.id,
-                :status => j.status.to_sym
+                :status => j.status.to_sym,
+                :wallclock_time => j.wallclock_time
               }
             end
 
