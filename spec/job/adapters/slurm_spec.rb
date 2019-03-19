@@ -274,10 +274,8 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j1.job_name).to eq("Interact")
         expect(j1.queue_name).to eq("RM-small")
         expect(j1.native[:work_dir]).to eq("/home/efranz")
-
-        # FIXME: need to be able to compare status
-        # expect(j1.status).to eq("completed")
-        # expect(j1.status).to eq(OodCore::Job::Status.completed)
+        expect(j1.status).to eq("completed")
+        expect(j1.status).to eq(OodCore::Job::Status.new(state: :completed))
         expect(j1.status.to_s).to eq("completed")
 
         j2 = jobs.last
@@ -286,10 +284,8 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j2.job_name).to eq("LES-data-init")
         expect(j2.queue_name).to eq("RM")
         expect(j2.native[:work_dir]).to eq("/scratch/ct4s8dp/kyu2/LES-data")
-
-        # FIXME: need to be able to compare status
-        # expect(j1.status).to eq("queued")
-        # expect(j1.status).to eq(OodCore::Job::Status.queued)
+        expect(j2.status).to eq("queued")
+        expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
         expect(j2.status.to_s).to eq("queued")
       end
     end
