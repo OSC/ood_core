@@ -237,24 +237,22 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#info_all" do
-    let(:slurm) { double(get_jobs: {}) }
-    subject { adapter.info_all }
-
     context "when no jobs" do
       it "returns an array of all the jobs" do
-        is_expected.to eq([])
-        expect(slurm).to have_received(:get_jobs).with(no_args)
+        adapter = OodCore::Job::Adapters::Slurm.new(slurm: double(get_jobs: []))
+        expect(adapter.info_all).to eq([])
       end
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
-
       it "raises OodCore::JobAdapterError" do
-        expect { subject }.to raise_error(OodCore::JobAdapterError)
+        slurm = double(get_jobs: [])
+        expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error)
+        adapter = OodCore::Job::Adapters::Slurm.new(slurm: slurm)
+
+        expect { adapter.info_all }.to raise_error(OodCore::JobAdapterError)
       end
     end
-
 
     # TODO: add test when jobs in cluster mode - we have an extra line at the top!
     context "when jobs" do
