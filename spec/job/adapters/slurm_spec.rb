@@ -898,7 +898,7 @@ describe OodCore::Job::Adapters::Slurm do
     subject(:batch) { OodCore::Job::Adapters::Slurm::Batch.new }
 
     it "has its fields in the correct order to work with Slurm 18" do
-      expect(batch.send(:fields).values.last).to eq("%b")
+      expect(batch.send(:all_squeue_fields).values.last).to eq("%b")
     end
   end
 

@@ -33,6 +33,9 @@ module OodCore
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
+          UNIT_SEPARATOR = "\x1F"
+          RECORD_SEPARATOR = "\x1E"
+
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
           #   my_batch.cluster #=> "kingspeak"
@@ -92,20 +95,36 @@ module OodCore
           # @param filters [Array<Symbol>] list of attributes to filter on
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "", filters: [])
-            record_separator = "\x1E"
-            unit_separator = "\x1F"
+          def get_jobs(id: "", filters: [], record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
+            fields = squeue_fields(filters)
+            args = squeue_args(id: id, options: fields.values)
 
-            options = filters.empty? ? fields : fields.slice(*filters)
-            args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.values.join(unit_separator)}"]
-            args += ["-j", id.to_s] unless id.to_s.empty?
-            lines = call("squeue", *args).rstrip.chomp(record_separator).split(record_separator)
-
-            lines.drop(cluster ? 2 : 1).map do |line|
-              Hash[options.keys.zip(line.strip.split(unit_separator))]
+            StringIO.open(call("squeue", *args)) do |output|
+              # if cluster, skip 2 lines, else skip 1 line
+              (cluster ? 2 : 1).times { output.gets(RECORD_SEPARATOR) }
+              jobs = []
+              output.each_line(RECORD_SEPARATOR) do |line|
+                jobs << Hash[fields.keys.zip(line.strip.split(unit_separator))] unless line.strip.empty?
+              end
+              jobs
             end
           end
+
+          def squeue_fields(filters)
+            filters.empty? ? all_squeue_fields : all_squeue_fields.slice(*filters)
+          end
+
+          # filters:
+          def squeue_args(id: "", options: [], record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
+            args  = ["--all", "--states=all", "--noconvert"]
+            args += ["-o", "#{options.join(unit_separator)}"]
+            args += ["-j", id.to_s] unless id.to_s.empty?
+            args
+          end
+
+          # command
+          # query
+
 
           # Put a specified job on hold
           # @example Put job "1234" on hold
@@ -163,7 +182,7 @@ module OodCore
 
             # Fields requested from a formatted `squeue` call
             # Note that the order of these fields is important
-            def fields
+            def all_squeue_fields
               {
                 account: "%a",
                 job_id: "%A",
