@@ -98,9 +98,9 @@ module OodCore
           # @param attrs [Array<Symbol>, nil] list of attributes request when calling squeue
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "", attrs: nil, record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
+          def get_jobs(id: "", attrs: nil)
             fields = squeue_fields(attrs)
-            args = squeue_args(id: id, options: fields.values, record_separator: record_separator, unit_separator: unit_separator)
+            args = squeue_args(id: id, options: fields.values)
 
             #TODO: switch mock of Open3 to be the squeue mock script
             # then you can use that for performance metrics
@@ -123,7 +123,7 @@ module OodCore
                 # jobs << job
                 #
                 # assuming keys and values are same length! if not we have an error!
-                jobs << Hash[fields.keys.zip(line.strip.split(unit_separator))] unless line.strip.empty?
+                jobs << Hash[fields.keys.zip(line.strip.split(UNIT_SEPARATOR))] unless line.strip.empty?
               end
               jobs
             end
@@ -148,9 +148,9 @@ module OodCore
           #TODO: how do we add the flag to get the user's own records? do you get the same output, just for the user?
           #
           # -u <user_list> https://slurm.schedmd.com/squeue.html
-          def squeue_args(id: "", options: [], record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
+          def squeue_args(id: "", options: [])
             args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.join(unit_separator)}"]
+            args += ["-o", "#{options.join(UNIT_SEPARATOR)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
             args
           end
