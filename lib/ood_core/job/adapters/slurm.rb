@@ -97,7 +97,7 @@ module OodCore
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", filters: [], record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
             fields = squeue_fields(filters)
-            args = squeue_args(id: id, options: fields.values)
+            args = squeue_args(id: id, options: fields.values, record_separator: record_separator, unit_separator: unit_separator)
 
             StringIO.open(call("squeue", *args)) do |output|
               # if cluster, skip 2 lines, else skip 1 line
