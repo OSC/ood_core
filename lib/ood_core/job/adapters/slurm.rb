@@ -1,5 +1,6 @@
 require "time"
 require "ood_core/refinements/hash_extensions"
+require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
 
 module OodCore
@@ -33,6 +34,8 @@ module OodCore
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
+          using Refinements::ArrayExtensions
+
           UNIT_SEPARATOR = "\x1F"
           RECORD_SEPARATOR = "\x1E"
 
@@ -92,39 +95,64 @@ module OodCore
           #   #  ...
           #   #]
           # @param id [#to_s] the id of the job
-          # @param filters [Array<Symbol>] list of attributes to filter on
+          # @param attrs [Array<Symbol>, nil] list of attributes request when calling squeue
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "", filters: [], record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
-            fields = squeue_fields(filters)
+          def get_jobs(id: "", attrs: nil, record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
+            fields = squeue_fields(attrs)
             args = squeue_args(id: id, options: fields.values, record_separator: record_separator, unit_separator: unit_separator)
 
+            #TODO: switch mock of Open3 to be the squeue mock script
+            # then you can use that for performance metrics
             StringIO.open(call("squeue", *args)) do |output|
               # if cluster, skip 2 lines, else skip 1 line
               (cluster ? 2 : 1).times { output.gets(RECORD_SEPARATOR) }
               jobs = []
               output.each_line(RECORD_SEPARATOR) do |line|
+                # TODO: once you can do performance metrics you can test zip against some other tools
+                # or just small optimizations
+                # for example, fields is ALREADY A HASH and we are setting the VALUES to
+                # "line.strip.split(unit_separator)" array
+                #
+                # i.e. store keys in an array, do Hash[[keys, values].transpose]
+                #
+                # or
+                #
+                # job = {}
+                # keys.each_with_index { |key, index| [key] = values[index] }
+                # jobs << job
+                #
+                # assuming keys and values are same length! if not we have an error!
                 jobs << Hash[fields.keys.zip(line.strip.split(unit_separator))] unless line.strip.empty?
               end
               jobs
             end
           end
 
-          def squeue_fields(filters)
-            filters.empty? ? all_squeue_fields : all_squeue_fields.slice(*filters)
+          #TODO: attrs can also handle the translation of info etc.
+          #
+          # 1. nil arg: all attrs
+          # 2. [] arg: all attrs
+          # 3. [:something] => include minimum required i.e. [:id, :other] but support specifying slurm specific
+          # 4. info keys (hopefully there is no conflict between info and the keys themselves!!!) => convert!
+          # though the conversion could be a separate method we write tests for (and then we are done!)
+          def squeue_fields(attrs)
+            Array.wrap(attrs).empty? ? all_squeue_fields : all_squeue_fields.slice(*Array.wrap(attrs))
           end
 
-          # filters:
+          def info_to_squeue_attrs
+          end
+
+          #TODO: write some barebones test for this? like 2 options and id or no id
+          #TODO: how do we add the flag to get the user's own records? do you get the same output, just for the user?
+          #
+          # -u <user_list> https://slurm.schedmd.com/squeue.html
           def squeue_args(id: "", options: [], record_separator: RECORD_SEPARATOR, unit_separator: UNIT_SEPARATOR)
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.join(unit_separator)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
             args
           end
-
-          # command
-          # query
-
 
           # Put a specified job on hold
           # @example Put job "1234" on hold
