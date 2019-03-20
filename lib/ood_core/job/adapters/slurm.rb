@@ -129,18 +129,19 @@ module OodCore
             end
           end
 
-          #TODO: attrs can also handle the translation of info etc.
-          #
-          # 1. nil arg: all attrs
-          # 2. [] arg: all attrs
-          # 3. [:something] => include minimum required i.e. [:id, :other] but support specifying slurm specific
-          # 4. info keys (hopefully there is no conflict between info and the keys themselves!!!) => convert!
-          # though the conversion could be a separate method we write tests for (and then we are done!)
           def squeue_fields(attrs)
-            Array.wrap(attrs).empty? ? all_squeue_fields : all_squeue_fields.slice(*Array.wrap(attrs))
+            if attrs.nil?
+              all_squeue_fields
+            else
+              all_squeue_fields.slice(*squeue_attrs_for_info_attrs(Array.wrap(attrs) + squeue_required_fields))
+            end
           end
 
-          def info_to_squeue_attrs
+          def squeue_required_fields
+            #TODO: does this need to include ::array_job_task_id?
+            #TODO: does it matter that order of the output can vary depending on the arguments and if "squeue_required_fields" are included?
+            # previously the order was "fields.keys"; i don't think it does
+            [:job_id, :state_compact]
           end
 
           #TODO: write some barebones test for this? like 2 options and id or no id
@@ -196,6 +197,62 @@ module OodCore
             call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
           end
 
+          # Fields requested from a formatted `squeue` call
+          # Note that the order of these fields is important
+          def all_squeue_fields
+            {
+              account: "%a",
+              job_id: "%A",
+              exec_host: "%B",
+              min_cpus: "%c",
+              cpus: "%C",
+              min_tmp_disk: "%d",
+              nodes: "%D",
+              end_time: "%e",
+              dependency: "%E",
+              features: "%f",
+              array_job_id: "%F",
+              group_name: "%g",
+              group_id: "%G",
+              over_subscribe: "%h",
+              sockets_per_node: "%H",
+              array_job_task_id: "%i",
+              cores_per_socket: "%I",
+              job_name: "%j",
+              threads_per_core: "%J",
+              comment: "%k",
+              array_task_id: "%K",
+              time_limit: "%l",
+              time_left: "%L",
+              min_memory: "%m",
+              time_used: "%M",
+              req_node: "%n",
+              node_list: "%N",
+              command: "%o",
+              contiguous: "%O",
+              qos: "%q",
+              partition: "%P",
+              priority: "%Q",
+              reason: "%r",
+              start_time: "%S",
+              state_compact: "%t",
+              state: "%T",
+              user: "%u",
+              user_id: "%U",
+              reservation: "%v",
+              submit_time: "%V",
+              wckey: "%w",
+              licenses: "%W",
+              excluded_nodes: "%x",
+              core_specialization: "%X",
+              nice: "%y",
+              scheduled_nodes: "%Y",
+              sockets_cores_threads: "%z",
+              work_dir: "%Z",
+              gres: "%b",  # must come at the end to fix a bug with Slurm 18
+            }
+          end
+
           private
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
@@ -208,60 +265,25 @@ module OodCore
               s.success? ? o : raise(Error, e)
             end
 
-            # Fields requested from a formatted `squeue` call
-            # Note that the order of these fields is important
-            def all_squeue_fields
-              {
-                account: "%a",
-                job_id: "%A",
-                exec_host: "%B",
-                min_cpus: "%c",
-                cpus: "%C",
-                min_tmp_disk: "%d",
-                nodes: "%D",
-                end_time: "%e",
-                dependency: "%E",
-                features: "%f",
-                array_job_id: "%F",
-                group_name: "%g",
-                group_id: "%G",
-                over_subscribe: "%h",
-                sockets_per_node: "%H",
-                array_job_task_id: "%i",
-                cores_per_socket: "%I",
-                job_name: "%j",
-                threads_per_core: "%J",
-                comment: "%k",
-                array_task_id: "%K",
-                time_limit: "%l",
-                time_left: "%L",
-                min_memory: "%m",
-                time_used: "%M",
-                req_node: "%n",
-                node_list: "%N",
-                command: "%o",
-                contiguous: "%O",
-                qos: "%q",
-                partition: "%P",
-                priority: "%Q",
-                reason: "%r",
-                start_time: "%S",
-                state_compact: "%t",
-                state: "%T",
-                user: "%u",
-                user_id: "%U",
-                reservation: "%v",
-                submit_time: "%V",
-                wckey: "%w",
-                licenses: "%W",
-                excluded_nodes: "%x",
-                core_specialization: "%X",
-                nice: "%y",
-                scheduled_nodes: "%Y",
-                sockets_cores_threads: "%z",
-                work_dir: "%Z",
-                gres: "%b",  # must come at the end to fix a bug with Slurm 18
-              }
+            def squeue_attrs_for_info_attrs(attrs)
+              attrs.map { |a|
+                {
+                  id: :job_id,
+                  status: :state_compact,
+                  allocated_nodes: [:node_list, :scheduled_nodes],
+                  # submit_host: nil,
+                  job_name: :job_name,
+                  job_owner: :user,
+                  accounting_id: :account,
+                  procs: :cpus,
+                  queue_name: :partition,
+                  wallclock_time: :time_used,
+                  wallclock_limit: :time_limit,
+                  # cpu_time: nil,
+                  submission_time: :submit_time,
+                  dispatch_time: :start_time
+                }.fetch(a, a)
+              }.flatten
             end
         end
 
@@ -377,7 +399,7 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all(attrs: nil)
-          @slurm.get_jobs.map do |v|
+          @slurm.get_jobs(attrs: attrs).map do |v|
             parse_job_info(v)
           end
         rescue Batch::Error => e
@@ -418,7 +440,7 @@ module OodCore
           id = id.to_s
           jobs = @slurm.get_jobs(
             id: id,
-            filters: [:job_id, :array_job_task_id, :state_compact]
+            attrs: [:job_id, :array_job_task_id, :state_compact]
           )
           # A job id can return multiple jobs if it corresponds to a job array
           # id, so we need to find the job that corresponds to the given job id

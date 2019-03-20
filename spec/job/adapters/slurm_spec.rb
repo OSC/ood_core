@@ -636,7 +636,7 @@ describe OodCore::Job::Adapters::Slurm do
 
     it "request only job state from OodCore::Job::Adapters::Slurm::Batch" do
       subject
-      expect(slurm).to have_received(:get_jobs).with(id: job_id, filters: [:job_id, :array_job_task_id, :state_compact])
+      expect(slurm).to have_received(:get_jobs).with(id: job_id, attrs: [:job_id, :array_job_task_id, :state_compact])
     end
 
     context "when job is in BF state" do
@@ -899,6 +899,40 @@ describe OodCore::Job::Adapters::Slurm do
 
     it "has its fields in the correct order to work with Slurm 18" do
       expect(batch.send(:all_squeue_fields).values.last).to eq("%b")
+    end
+
+    describe "#squeue_fields" do
+      # 1. nil arg: all attrs
+      # 2. [] arg: only required attrs
+      # 3. [:something] => include minimum required i.e. [:id, :status] and specified attr (either Info or slurm specific attr name)
+      it "returns all fields for nil attrs" do
+        expect(batch.squeue_fields(nil)).to eq(batch.all_squeue_fields)
+      end
+
+      it "ensures id and status are included" do
+        expect(batch.squeue_fields([:time_used]).keys.sort).to eq([:job_id,  :state_compact, :time_used])
+      end
+
+      it "returns only required fields for an empty attrs array" do
+        expect(batch.squeue_fields([]).keys).to eq([:job_id,  :state_compact])
+        expect(batch.squeue_fields([:job_id]).keys.sort).to eq([:job_id,  :state_compact])
+        expect(batch.squeue_fields([:state_compact]).keys.sort).to eq([:job_id,  :state_compact])
+      end
+
+      it "replaces Info attr with squeue attr reqeusts" do
+        expect(batch.squeue_fields([:id, :status, :job_name, :queue_name]).keys.sort).to eq([:job_id,  :job_name, :partition, :state_compact])
+      end
+
+      it "handles allocated_nodes" do
+        expect(batch.squeue_fields([:allocated_nodes]).keys.sort).to include(:node_list, :scheduled_nodes)
+        # expect(batch.squeue_fields([:allocated_nodes]).keys.sort).to eq([:job_id, :node_list, :scheduled_nodes :state_compact])
+      end
+
+      # TODO: what Active Jobs would query
+      # it "handles ActiveJobs query" do
+      #   expect(batch.squeue_fields([:accounting_id, :allocated_nodes, :job_name, :job_owner, :queue_name, :wallclock_time ]).keys.sort).to eq(
+      #     [:account, :job_id, :job_name, :node_list, :partition, :scheduled_nodes, :state_compact, :time_used, :user])
+      # end
     end
   end
 
