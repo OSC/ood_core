@@ -10,6 +10,7 @@ describe OodCore::Job::Adapters::Slurm do
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info_all).with(0).arguments.and_keywords(:attrs) }
+  it { is_expected.to respond_to(:info_where_owner).with(1).argument.and_keywords(:attrs) }
   it { is_expected.to respond_to(:info).with(1).argument }
   it { is_expected.to respond_to(:status).with(1).argument }
   it { is_expected.to respond_to(:hold).with(1).argument }

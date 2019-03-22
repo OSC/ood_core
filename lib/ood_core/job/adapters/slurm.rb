@@ -89,15 +89,17 @@ module OodCore
           #   #  ...
           #   #]
           # @param id [#to_s] the id of the job
+          # @param owner [String] the owner(s) of the job
           # @param filters [Array<Symbol>] list of attributes to filter on
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "", filters: [])
+          def get_jobs(id: "", owner: nil, filters: [])
             delim = "\x1F"     # don't use "|" because FEATURES uses this
             options = filters.empty? ? fields : fields.slice(*filters)
             args  = ["--all", "--states=all", "--noconvert"]
             args += ["-o", "#{options.values.join(delim)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
+            args += ["-u", owner] if owner
             lines = call("squeue", *args).split("\n").map(&:strip)
 
             lines.drop(cluster ? 2 : 1).map do |line|
@@ -358,6 +360,20 @@ module OodCore
           else
             raise JobAdapterError, e.message
           end
+        end
+
+        # Retrieve info for all jobs for a given owner or owners from the
+        # resource manager
+        # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
+        # @raise [JobAdapterError] if something goes wrong getting job info
+        # @return [Array<Info>] information describing submitted jobs
+        def info_where_owner(owner, attrs: nil)
+          owner = Array.wrap(owner).map(&:to_s).join(',')
+          @slurm.get_jobs(owner: owner).map do |v|
+            parse_job_info(v)
+          end
+        rescue Batch::Error => e
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job status from resource manager
