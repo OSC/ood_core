@@ -115,7 +115,7 @@ module OodCore
 
       # Create a new Info for a child task
       # @return [Info] merging the parent and the child task
-      def new_for_child_task(task)
+      def build_child_info(task)
         parent_only_keys = [
           :allocated_nodes,
           :procs,

@@ -312,7 +312,7 @@ module OodCore
               job = info(id)
               user_job_infos << job
 
-              job.tasks.each {|task| user_job_infos << job.new_for_child_task(task)}
+              job.tasks.each {|task| user_job_infos << job.build_child_info(task)}
             end
 
             user_job_infos
