@@ -91,18 +91,7 @@ module OodCore
         # @see Adapter#info
         def info(id)
           info_ary = batch.get_job(id: id).map{|v| info_for_batch_hash(v)}
-
-          case info_ary.size
-          when 0
-            Info.new(
-              id: id,
-              status: :completed
-            )
-          when 1
-            info_ary.first
-          else  # many
-            handle_job_array(info_ary, id)
-          end
+          handle_job_array(info_ary, id)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
@@ -216,6 +205,9 @@ module OodCore
           end
 
           def handle_job_array(info_ary, id)
+            return Info.new(id: id, status: :completed) if info_ary.nil? || info_ary.empty?
+            return info_ary.first if info_ary.size == 1
+
             parent_task_hash = build_proxy_parent(info_ary.first, id)
 
             info_ary.map do |task_info|
