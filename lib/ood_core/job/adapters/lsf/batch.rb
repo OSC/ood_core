@@ -43,10 +43,10 @@ class OodCore::Job::Adapters::Lsf::Batch
   # Get hash detailing the specified job
   # @param id [#to_s] the id of the job to check
   # @raise [Error] if `bjobs` command exited unsuccessfully
-  # @return [Hash] details of specified job
+  # @return [Array<Hash>] details of specified job
   def get_job(id:)
     args = %W( -a -w -W #{id.to_s} )
-    parse_bjobs_output(call("bjobs", *args)).first
+    parse_bjobs_output(call("bjobs", *args))
   end
 
   # status fields available from bjobs

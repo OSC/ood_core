@@ -5,6 +5,14 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     # load job config either from cluster config or from yaml in format { adapter:, ... }
     config = YAML.load_file(ENV['LIVE_CLUSTER_CONFIG'])
     @adapter = OodCore::Job::Factory.build(config.dig("v2", "job") || config)
+
+    native = nil
+    case @adapter.class
+    when OodCore::Job::Adapters::Lsf.class
+      # Allow the job to run on any host
+      native = ['-R', 'select[type == any]']
+    end
+
     account = ENV['LIVE_CLUSTER_ACCOUNT']
 
     @script_content = <<~HERESCRIPT
@@ -23,7 +31,8 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
       output_path: '/dev/null',
       error_path: '/dev/null',
       submit_as_hold: true,
-      accounting_id: (account.nil?) ? nil : account
+      accounting_id: (account.nil?) ? nil : account,
+      native: native
     )
 
     @script_with_array = OodCore::Job::Script.new(
@@ -36,11 +45,12 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
       error_path: '/dev/null',
       submit_as_hold: true,
       job_array_request: '1-4',
-      accounting_id: (account.nil?) ? nil : account
+      accounting_id: (account.nil?) ? nil : account,
+      native: native
     )
 
     # Confirm that live tests will be run, and let the use know the name in case manual cleanup is necessary
-    puts "\nRunning tests on live system with job_name #{@script.job_name}\n"
+    puts "\nRunning tests on live system with job_names #{@script.job_name} and #{@script_with_array.job_name}\n"
   end
 
   after(:all) do

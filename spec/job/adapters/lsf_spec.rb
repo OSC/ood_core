@@ -15,8 +15,8 @@ describe OodCore::Job::Adapters::Lsf do
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
 
-  it "claims to NOT support job arrays" do
-    expect(subject.supports_job_arrays?).to be_falsey
+  it "claims to support job arrays" do
+    expect(subject.supports_job_arrays?).to be_truthy
   end
 
   describe "#submit" do
@@ -59,7 +59,7 @@ describe OodCore::Job::Adapters::Lsf do
     before { allow(Time).to receive(:now)  { Time.local(year, 04, 01) } }
 
     # TODO: do we create a complex mock?
-    let(:batch) { double(get_jobs: [job_hash], get_job: job_hash) }
+    let(:batch) { double(get_jobs: [job_hash], get_job: [job_hash]) }
     let(:start_time) { Time.local(year, 3, 31, 14, 46, 44) }
 
     #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
@@ -124,7 +124,7 @@ describe OodCore::Job::Adapters::Lsf do
       end
 
       context "when can't find job" do
-        let(:batch) { double(get_job: nil) }
+        let(:batch) { double(get_job: []) }
 
         it "returns completed OodCore::Job::Info object" do
           expect(adapter.info("542935")).to eq(OodCore::Job::Info.new(id: "542935", status: :completed))
@@ -158,6 +158,154 @@ describe OodCore::Job::Adapters::Lsf do
       it "doesn't optimize multiple owners" do
         expect(batch).to receive(:get_jobs_for_user).exactly(0).times
         expect(adapter.info_where_owner(["efranz", "jnicklas"])).to eq([expected_info])
+      end
+    end
+  end
+
+  describe "#status and #info for job arrays" do
+    let(:year) { 2017 }
+    before { allow(Time).to receive(:now)  { Time.local(year, 04, 01) } }
+
+    let(:batch) { double(get_jobs: job_hashes, get_job: job_hashes) }
+    let(:start_time) { Time.local(year, 3, 31, 14, 46, 44) }
+
+    #FIXME: using the filters to select specific fields, we can ensure that this doesn't change
+    #as LSF::Batch support more attributes
+    let(:job_hashes) {
+      [{
+        id: "542935",
+        user: "efranz",
+        status: "RUN",
+        queue: "short",
+        from_host: "foobar02.osc.edu",
+        exec_host: "compute013",
+        name: "foo[1]",
+        submit_time: "03/31-14:46:42",
+        project: "default",
+        cpu_used: "000:00:00.00",
+        mem:"2",
+        swap:"32",
+        pids:"25156",
+        start_time: "03/31-14:46:44",
+        finish_time: nil
+      }, {
+        id: "542935",
+        user: "efranz",
+        status: "PEND",
+        queue: "short",
+        from_host: "foobar02.osc.edu",
+        exec_host: "compute013",
+        name: "foo[2]",
+        submit_time: "03/31-14:46:42",
+        project: "default",
+        cpu_used: "000:00:00.00",
+        mem:"2",
+        swap:"32",
+        pids:"25156",
+        start_time: "03/31-14:46:44",
+        finish_time: nil
+      }]
+    }
+
+    let(:job_hashes_odd_name) {
+      [{
+        id: "542935",
+        user: "efranz",
+        status: "RUN",
+        queue: "short",
+        from_host: "foobar02.osc.edu",
+        exec_host: "compute013",
+        name: "[1]",
+        submit_time: "03/31-14:46:42",
+        project: "default",
+        cpu_used: "000:00:00.00",
+        mem:"2",
+        swap:"32",
+        pids:"25156",
+        start_time: "03/31-14:46:44",
+        finish_time: nil
+      }, {
+        id: "542935",
+        user: "efranz",
+        status: "PEND",
+        queue: "short",
+        from_host: "foobar02.osc.edu",
+        exec_host: "compute013",
+        name: "[2]",
+        submit_time: "03/31-14:46:42",
+        project: "default",
+        cpu_used: "000:00:00.00",
+        mem:"2",
+        swap:"32",
+        pids:"25156",
+        start_time: "03/31-14:46:44",
+        finish_time: nil
+      }]
+    }
+
+    let(:expected_info){
+      OodCore::Job::Info.new(
+          :id=>"542935",
+          :status=>OodCore::Job::Status.new(state: :running),
+
+          :submit_host=> job_hashes.first[:from_host],
+          :job_name=>'foo',
+          :job_owner=>job_hashes.first[:user],
+          :accounting_id=>job_hashes.first[:project],
+
+          :procs=>1,
+
+          :queue_name=>job_hashes.first[:queue],
+          :submission_time=>Time.local(year, 3, 31, 14, 46, 42),
+          :native=>job_hashes.first,
+
+          :tasks=>[
+            {:status => :running, :id => '542935[1]'},
+            {:status => :queued, :id => '542935[2]'}
+          ]
+      )
+    }
+
+    let(:expected_info_odd_name){
+      OodCore::Job::Info.new(
+          :id=>"542935",
+          :status=>OodCore::Job::Status.new(state: :running),
+
+          :submit_host=> job_hashes_odd_name.first[:from_host],
+          :job_name=>'',
+          :job_owner=>job_hashes_odd_name.first[:user],
+          :accounting_id=>job_hashes_odd_name.first[:project],
+
+          :procs=>1,
+
+          :queue_name=>job_hashes_odd_name.first[:queue],
+          :submission_time=>Time.local(year, 3, 31, 14, 46, 42),
+          :native=>job_hashes_odd_name.first,
+
+          :tasks=>[
+            {:status => :running, :id => '542935[1]'},
+            {:status => :queued, :id => '542935[2]'}
+          ]
+      )
+    }
+
+    describe "#status" do
+      it "returns running status" do
+        expect(adapter.status("542935")).to eq(OodCore::Job::Status.new(state: :running))
+      end
+    end
+
+    describe "#info" do
+      it "returns running status with info attrs mapped" do
+        expect(adapter.info("542935")).to eq(expected_info)
+      end
+
+      context "when job_name is blank except for a job array spec" do
+        let(:batch) { double(get_jobs: job_hashes_odd_name, get_job: job_hashes_odd_name) }
+
+        it "returns running status with info attrs mapped" do
+          expect(adapter.info("542935")).to eq(expected_info_odd_name)
+        end        
       end
     end
   end
