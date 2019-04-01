@@ -85,9 +85,8 @@ module OodCore
           # @param id [#to_s] the id of the job
           # @raise [Error] if `qstat` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "", user: "")
+          def get_jobs(id: "")
             args = ["-f", "-t"]   # display all information
-            args += ["-u", user] unless user.empty?
             args += [id.to_s] unless id.to_s.empty?
             lines = call("qstat", *args).gsub("\n\t", "").split("\n").map(&:strip)
 
