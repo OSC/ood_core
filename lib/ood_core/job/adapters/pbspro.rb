@@ -338,7 +338,7 @@ module OodCore
           elsif job_infos.length == 1
             job_infos.first
           else
-            process_job_array(job_infos)
+            process_job_array(id, job_infos)
           end
         rescue Batch::Error => e
           # set completed status if can't find job id
@@ -455,8 +455,10 @@ module OodCore
           end
 
           # Combine the array parent with the states of its children
-          def process_job_array(jobs)
-            parent = jobs.select { |j| /\[\]/ =~ j.id }.first.to_h
+          def process_job_array(id, jobs)
+            parent_job = jobs.select { |j| /\[\]/ =~ j.id }.first
+            parent = (parent_job) ? parent_job.to_h : {:id => id, :status => :undetermined}
+
             # create task hashes from children
             parent[:tasks] = jobs.reject { |j| /\[\]/ =~ j.id }.map do |j|
               {
