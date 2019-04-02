@@ -86,8 +86,7 @@ module OodCore
           # @raise [Error] if `qstat` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "")
-            args = ["-f"]   # display all information
-            args += ["-t"]  # list subjobs
+            args = ["-f", "-t"]   # display all information
             args += [id.to_s] unless id.to_s.empty?
             lines = call("qstat", *args).gsub("\n\t", "").split("\n").map(&:strip)
 
@@ -101,7 +100,8 @@ module OodCore
                 k2 ? ( hsh[k1] ||= {} and hsh[k1][k2] = value ) : ( hsh[k1] = value )
               end
             end
-            jobs.reject { |j| /\[\]/ =~ j[:job_id] } # drop main job array jobs
+
+            jobs
           end
 
           # Select batch jobs from the batch server
@@ -181,8 +181,8 @@ module OodCore
           'U' => :suspended,      # cycle-harvesting job is suspended due to keyboard activity
           'E' => :running,        # job is exiting after having run
           'F' => :completed,      # job is finished
-          'X' => :completed       # subjob has completed execution or has been deleted
-          # ignore B as it signifies a job array
+          'X' => :completed,      # subjob has completed execution or has been deleted
+          'B' => :running         # job array has at least one child running
         }
 
         # What percentage of jobs a user owns out of all jobs, used to decide
@@ -266,6 +266,8 @@ module OodCore
           # mimics what the other resource managers do)
           args += ["-j", "oe"] if script.error_path.nil?
 
+          args += ["-J", script.job_array_request] unless script.job_array_request.nil?
+
           # Set native options
           args += script.native if script.native
 
@@ -303,13 +305,21 @@ module OodCore
         if usr_jobs.size > (qstat_factor * all_jobs.size)
           super
         else
-          usr_jobs.map { |id| info(id) }
+          begin
+            user_job_infos = []
+            usr_jobs.each do |id|
+              job = info(id)
+              user_job_infos << job
+
+              job.tasks.each {|task| user_job_infos << job.build_child_info(task)}
+            end
+
+            user_job_infos
+          rescue Batch::Error => e
+            raise JobAdapterError, e.message
+          end
         end
       end
-
-        def supports_job_arrays?
-          false
-        end
 
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job
@@ -318,9 +328,18 @@ module OodCore
         # @see Adapter#info
         def info(id)
           id = id.to_s
-          @pbspro.get_jobs(id: id).map do |v|
+
+          job_infos = @pbspro.get_jobs(id: id).map do |v|
             parse_job_info(v)
-          end.first || Info.new(id: id, status: :completed)
+          end
+
+          if job_infos.empty?
+            Info.new(id: id, status: :completed)
+          elsif job_infos.length == 1
+            job_infos.first
+          else
+            process_job_array(id, job_infos)
+          end
         rescue Batch::Error => e
           # set completed status if can't find job id
           if /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
@@ -433,6 +452,23 @@ module OodCore
               dispatch_time: v[:stime] ? Time.parse(v[:stime]) : nil,
               native: v
             )
+          end
+
+          # Combine the array parent with the states of its children
+          def process_job_array(id, jobs)
+            parent_job = jobs.select { |j| /\[\]/ =~ j.id }.first
+            parent = (parent_job) ? parent_job.to_h : {:id => id, :status => :undetermined}
+
+            # create task hashes from children
+            parent[:tasks] = jobs.reject { |j| /\[\]/ =~ j.id }.map do |j|
+              {
+                :id => j.id,
+                :status => j.status.to_sym,
+                :wallclock_time => j.wallclock_time
+              }
+            end
+
+            Info.new(**parent)
           end
       end
     end
