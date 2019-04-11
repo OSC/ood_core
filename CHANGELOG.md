@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Job array support for LSF and PBSPro
+- Slurm adapter uses `squeue` owner filter for `info_where_owner`
+
+### Fixed
+- Grid Engine adapter now starts scripts in the current directory like all other adapters
+
+
 ## [0.8.0] - 2019-01-29
 ### Added
 - info_all_each and info_where_owner_each super class methods
