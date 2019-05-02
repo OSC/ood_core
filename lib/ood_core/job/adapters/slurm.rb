@@ -1,5 +1,6 @@
 require "time"
 require "ood_core/refinements/hash_extensions"
+require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
 
 module OodCore
@@ -29,10 +30,14 @@ module OodCore
       # resource manager for job management.
       class Slurm < Adapter
         using Refinements::HashExtensions
+        using Refinements::ArrayExtensions
 
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
+          UNIT_SEPARATOR = "\x1F"
+          RECORD_SEPARATOR = "\x1E"
+
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
           #   my_batch.cluster #=> "kingspeak"
@@ -90,21 +95,63 @@ module OodCore
           #   #]
           # @param id [#to_s] the id of the job
           # @param owner [String] the owner(s) of the job
-          # @param filters [Array<Symbol>] list of attributes to filter on
+          # @param attrs [Array<Symbol>, nil] list of attributes request when calling squeue
           # @raise [Error] if `squeue` command exited unsuccessfully
           # @return [Array<Hash>] list of details for jobs
-          def get_jobs(id: "", owner: nil, filters: [])
-            delim = "\x1F"     # don't use "|" because FEATURES uses this
-            options = filters.empty? ? fields : fields.slice(*filters)
-            args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.values.join(delim)}"]
-            args += ["-j", id.to_s] unless id.to_s.empty?
-            args += ["-u", owner] if owner
-            lines = call("squeue", *args).split("\n").map(&:strip)
+          def get_jobs(id: "", owner: nil, attrs: nil)
+            fields = squeue_fields(attrs)
+            args = squeue_args(id: id, owner: owner, options: fields.values)
 
-            lines.drop(cluster ? 2 : 1).map do |line|
-              Hash[options.keys.zip(line.split(delim))]
+            #TODO: switch mock of Open3 to be the squeue mock script
+            # then you can use that for performance metrics
+            StringIO.open(call("squeue", *args)) do |output|
+              advance_past_squeue_header!(output)
+
+              jobs = []
+              output.each_line(RECORD_SEPARATOR) do |line|
+                # TODO: once you can do performance metrics you can test zip against some other tools
+                # or just small optimizations
+                # for example, fields is ALREADY A HASH and we are setting the VALUES to
+                # "line.strip.split(unit_separator)" array
+                #
+                # i.e. store keys in an array, do Hash[[keys, values].transpose]
+                #
+                # or
+                #
+                # job = {}
+                # keys.each_with_index { |key, index| [key] = values[index] }
+                # jobs << job
+                #
+                # assuming keys and values are same length! if not we have an error!
+                values = line.chomp(RECORD_SEPARATOR).strip.split(UNIT_SEPARATOR)
+                jobs << Hash[fields.keys.zip(values)] unless values.empty?
+              end
+              jobs
             end
+          end
+
+          def squeue_fields(attrs)
+            if attrs.nil?
+              all_squeue_fields
+            else
+              all_squeue_fields.slice(*squeue_attrs_for_info_attrs(Array.wrap(attrs) + squeue_required_fields))
+            end
+          end
+
+          def squeue_required_fields
+            #TODO: does this need to include ::array_job_task_id?
+            #TODO: does it matter that order of the output can vary depending on the arguments and if "squeue_required_fields" are included?
+            # previously the order was "fields.keys"; i don't think it does
+            [:job_id, :state_compact]
+          end
+
+          #TODO: write some barebones test for this? like 2 options and id or no id
+          def squeue_args(id: "", owner: nil, options: [])
+            args  = ["--all", "--states=all", "--noconvert"]
+            args += ["-o", "#{RECORD_SEPARATOR}#{options.join(UNIT_SEPARATOR)}"]
+            args += ["-u", owner.to_s] unless owner.to_s.empty?
+            args += ["-j", id.to_s] unless id.to_s.empty?
+            args
           end
 
           # Put a specified job on hold
@@ -149,7 +196,82 @@ module OodCore
             call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
           end
 
+          # Fields requested from a formatted `squeue` call
+          # Note that the order of these fields is important
+          def all_squeue_fields
+            {
+              account: "%a",
+              job_id: "%A",
+              exec_host: "%B",
+              min_cpus: "%c",
+              cpus: "%C",
+              min_tmp_disk: "%d",
+              nodes: "%D",
+              end_time: "%e",
+              dependency: "%E",
+              features: "%f",
+              array_job_id: "%F",
+              group_name: "%g",
+              group_id: "%G",
+              over_subscribe: "%h",
+              sockets_per_node: "%H",
+              array_job_task_id: "%i",
+              cores_per_socket: "%I",
+              job_name: "%j",
+              threads_per_core: "%J",
+              comment: "%k",
+              array_task_id: "%K",
+              time_limit: "%l",
+              time_left: "%L",
+              min_memory: "%m",
+              time_used: "%M",
+              req_node: "%n",
+              node_list: "%N",
+              command: "%o",
+              contiguous: "%O",
+              qos: "%q",
+              partition: "%P",
+              priority: "%Q",
+              reason: "%r",
+              start_time: "%S",
+              state_compact: "%t",
+              state: "%T",
+              user: "%u",
+              user_id: "%U",
+              reservation: "%v",
+              submit_time: "%V",
+              wckey: "%w",
+              licenses: "%W",
+              excluded_nodes: "%x",
+              core_specialization: "%X",
+              nice: "%y",
+              scheduled_nodes: "%Y",
+              sockets_cores_threads: "%z",
+              work_dir: "%Z",
+              gres: "%b",  # must come at the end to fix a bug with Slurm 18
+            }
+          end
+
           private
+            # Modify the StringIO instance by advancing past the squeue header
+            #
+            # The first two "records" should always be discarded. Consider the
+            # following squeue with -M output (invisible characters shown):
+            #
+            #   CLUSTER: slurm_cluster_name\n
+            #   \x1EJOBID\x1F\x1FSTATE\n
+            #   \x1E1\x1F\x1FR\n
+            #   \x1E2\x1F\x1FPD\n
+            #
+            # Splitting on the record separator first gives the Cluster header,
+            # and then the regular header. If -M or --cluster is not specified
+            # the effect is the same because the record separator is at the
+            # start of the format string, so the first "record" would simply be
+            # empty.
+            def advance_past_squeue_header!(squeue_output)
+              2.times { squeue_output.gets(RECORD_SEPARATOR) }
+            end
+
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
@@ -161,60 +283,25 @@ module OodCore
               s.success? ? o : raise(Error, e)
             end
 
-            # Fields requested from a formatted `squeue` call
-            # Note that the order of these fields is important
-            def fields
-              {
-                account: "%a",
-                job_id: "%A",
-                exec_host: "%B",
-                min_cpus: "%c",
-                cpus: "%C",
-                min_tmp_disk: "%d",
-                nodes: "%D",
-                end_time: "%e",
-                dependency: "%E",
-                features: "%f",
-                array_job_id: "%F",
-                group_name: "%g",
-                group_id: "%G",
-                over_subscribe: "%h",
-                sockets_per_node: "%H",
-                array_job_task_id: "%i",
-                cores_per_socket: "%I",
-                job_name: "%j",
-                threads_per_core: "%J",
-                comment: "%k",
-                array_task_id: "%K",
-                time_limit: "%l",
-                time_left: "%L",
-                min_memory: "%m",
-                time_used: "%M",
-                req_node: "%n",
-                node_list: "%N",
-                command: "%o",
-                contiguous: "%O",
-                qos: "%q",
-                partition: "%P",
-                priority: "%Q",
-                reason: "%r",
-                start_time: "%S",
-                state_compact: "%t",
-                state: "%T",
-                user: "%u",
-                user_id: "%U",
-                reservation: "%v",
-                submit_time: "%V",
-                wckey: "%w",
-                licenses: "%W",
-                excluded_nodes: "%x",
-                core_specialization: "%X",
-                nice: "%y",
-                scheduled_nodes: "%Y",
-                sockets_cores_threads: "%z",
-                work_dir: "%Z",
-                gres: "%b",  # must come at the end to fix a bug with Slurm 18
-              }
+            def squeue_attrs_for_info_attrs(attrs)
+              attrs.map { |a|
+                {
+                  id: :job_id,
+                  status: :state_compact,
+                  allocated_nodes: [:node_list, :scheduled_nodes],
+                  # submit_host: nil,
+                  job_name: :job_name,
+                  job_owner: :user,
+                  accounting_id: :account,
+                  procs: :cpus,
+                  queue_name: :partition,
+                  wallclock_time: :time_used,
+                  wallclock_limit: :time_limit,
+                  # cpu_time: nil,
+                  submission_time: :submit_time,
+                  dispatch_time: :start_time
+                }.fetch(a, a)
+              }.flatten
             end
         end
 
@@ -330,7 +417,7 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all(attrs: nil)
-          @slurm.get_jobs.map do |v|
+          @slurm.get_jobs(attrs: attrs).map do |v|
             parse_job_info(v)
           end
         rescue Batch::Error => e
@@ -385,7 +472,7 @@ module OodCore
           id = id.to_s
           jobs = @slurm.get_jobs(
             id: id,
-            filters: [:job_id, :array_job_task_id, :state_compact]
+            attrs: [:job_id, :array_job_task_id, :state_compact]
           )
           # A job id can return multiple jobs if it corresponds to a job array
           # id, so we need to find the job that corresponds to the given job id
@@ -494,6 +581,7 @@ module OodCore
                 allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
               end
             end
+
             Info.new(
               id: v[:job_id],
               status: get_state(v[:state_compact]),
@@ -507,8 +595,8 @@ module OodCore
               wallclock_time: duration_in_seconds(v[:time_used]),
               wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
-              submission_time: Time.parse(v[:submit_time]),
-              dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
+              submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
+              dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v
             )
           end
@@ -516,7 +604,7 @@ module OodCore
           def handle_job_array(info_ary, id)
             # If only one job was returned we return it
             return info_ary.first unless info_ary.length > 1
-            
+
             parent_task_hash = {:tasks => []}
 
             info_ary.map do |task_info|

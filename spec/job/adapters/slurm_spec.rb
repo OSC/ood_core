@@ -238,19 +238,87 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#info_all" do
-    let(:slurm) { double(get_jobs: {}) }
-    subject { adapter.info_all }
-
-    it "returns an array of all the jobs" do
-      is_expected.to eq([])
-      expect(slurm).to have_received(:get_jobs).with(no_args)
+    context "when no jobs" do
+      it "returns an array of all the jobs" do
+        adapter = OodCore::Job::Adapters::Slurm.new(slurm: double(get_jobs: []))
+        expect(adapter.info_all).to eq([])
+      end
     end
 
     context "when OodCore::Job::Adapters::Slurm::Batch::Error is raised" do
-      before { expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error) }
-
       it "raises OodCore::JobAdapterError" do
-        expect { subject }.to raise_error(OodCore::JobAdapterError)
+        slurm = double(get_jobs: [])
+        expect(slurm).to receive(:get_jobs).and_raise(OodCore::Job::Adapters::Slurm::Batch::Error)
+        adapter = OodCore::Job::Adapters::Slurm.new(slurm: slurm)
+
+        expect { adapter.info_all }.to raise_error(OodCore::JobAdapterError)
+      end
+    end
+
+    context "when jobs" do
+      it "returns an array of all the jobs" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(
+                  conf: "/etc/slurm/conf/",
+                  bin: nil,
+                  bin_overrides: { "squeue" => "spec/fixtures/scripts/squeue.rb"}
+        )
+        jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_all
+
+        expect(jobs.count).to eq(2)
+
+        j1 = jobs.first
+        expect(j1.id).to eq("5096321")
+        expect(j1.accounting_id).to eq("oscstaff")
+        expect(j1.job_name).to eq("Interact")
+        expect(j1.queue_name).to eq("RM-small")
+        expect(j1.native[:work_dir]).to eq("/home/efranz")
+        expect(j1.status).to eq("completed")
+        expect(j1.status).to eq(OodCore::Job::Status.new(state: :completed))
+        expect(j1.status.to_s).to eq("completed")
+
+        j2 = jobs.last
+        expect(j2.id).to eq("4320602")
+        expect(j2.accounting_id).to eq("ct4s8dp")
+        expect(j2.job_name).to eq("LES-data-init")
+        expect(j2.queue_name).to eq("RM")
+        expect(j2.native[:work_dir]).to eq("/scratch/ct4s8dp/kyu2/LES-data")
+        expect(j2.status).to eq("queued")
+        expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
+        expect(j2.status.to_s).to eq("queued")
+      end
+    end
+
+    context "when in a multi-cluster environment" do
+      it "returns an array of all the jobs" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(
+                  conf: "/etc/slurm/conf/",
+                  bin: nil,
+                  bin_overrides: { "squeue" => "spec/fixtures/scripts/squeue_with_cluster_header.rb"},
+                  cluster: 'slurm_cluster_two'
+        )
+        jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_all
+
+        expect(jobs.count).to eq(2)
+
+        j1 = jobs.first
+        expect(j1.id).to eq("5096321")
+        expect(j1.accounting_id).to eq("oscstaff")
+        expect(j1.job_name).to eq("Interact")
+        expect(j1.queue_name).to eq("RM-small")
+        expect(j1.native[:work_dir]).to eq("/home/efranz")
+        expect(j1.status).to eq("completed")
+        expect(j1.status).to eq(OodCore::Job::Status.new(state: :completed))
+        expect(j1.status.to_s).to eq("completed")
+
+        j2 = jobs.last
+        expect(j2.id).to eq("4320602")
+        expect(j2.accounting_id).to eq("ct4s8dp")
+        expect(j2.job_name).to eq("LES-data-init")
+        expect(j2.queue_name).to eq("RM")
+        expect(j2.native[:work_dir]).to eq("/scratch/ct4s8dp/kyu2/LES-data")
+        expect(j2.status).to eq("queued")
+        expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
+        expect(j2.status.to_s).to eq("queued")
       end
     end
   end
@@ -602,7 +670,7 @@ describe OodCore::Job::Adapters::Slurm do
 
     it "request only job state from OodCore::Job::Adapters::Slurm::Batch" do
       subject
-      expect(slurm).to have_received(:get_jobs).with(id: job_id, filters: [:job_id, :array_job_task_id, :state_compact])
+      expect(slurm).to have_received(:get_jobs).with(id: job_id, attrs: [:job_id, :array_job_task_id, :state_compact])
     end
 
     context "when job is in BF state" do
@@ -864,7 +932,49 @@ describe OodCore::Job::Adapters::Slurm do
     subject(:batch) { OodCore::Job::Adapters::Slurm::Batch.new }
 
     it "has its fields in the correct order to work with Slurm 18" do
-      expect(batch.send(:fields).values.last).to eq("%b")
+      expect(batch.send(:all_squeue_fields).values.last).to eq("%b")
+    end
+
+    describe "#squeue_fields" do
+      # 1. nil arg: all attrs
+      # 2. [] arg: only required attrs
+      # 3. [:something] => include minimum required i.e. [:id, :status] and specified attr (either Info or slurm specific attr name)
+      it "returns all fields for nil attrs" do
+        expect(batch.squeue_fields(nil)).to eq(batch.all_squeue_fields)
+      end
+
+      it "ensures id and status are included" do
+        expect(batch.squeue_fields([:time_used]).keys.sort).to eq([:job_id,  :state_compact, :time_used])
+      end
+
+      it "returns only required fields for an empty attrs array" do
+        expect(batch.squeue_fields([]).keys).to eq([:job_id,  :state_compact])
+        expect(batch.squeue_fields([:job_id]).keys.sort).to eq([:job_id,  :state_compact])
+        expect(batch.squeue_fields([:state_compact]).keys.sort).to eq([:job_id,  :state_compact])
+      end
+
+      it "replaces Info attr with squeue attr reqeusts" do
+        expect(batch.squeue_fields([:id, :status, :job_name, :queue_name]).keys.sort).to eq([:job_id,  :job_name, :partition, :state_compact])
+      end
+
+      it "handles allocated_nodes" do
+        expect(batch.squeue_fields([:allocated_nodes]).keys.sort).to include(:node_list, :scheduled_nodes)
+        # expect(batch.squeue_fields([:allocated_nodes]).keys.sort).to eq([:job_id, :node_list, :scheduled_nodes :state_compact])
+      end
+
+      it "uses the record separator character once at the start of the format string" do
+        expect(
+          batch.squeue_args(options: batch.squeue_fields(nil).values).one? do |arg|
+            arg.start_with?(OodCore::Job::Adapters::Slurm::Batch::RECORD_SEPARATOR)
+          end
+        ).to be_truthy
+      end
+
+      # TODO: what Active Jobs would query
+      # it "handles ActiveJobs query" do
+      #   expect(batch.squeue_fields([:accounting_id, :allocated_nodes, :job_name, :job_owner, :queue_name, :wallclock_time ]).keys.sort).to eq(
+      #     [:account, :job_id, :job_name, :node_list, :partition, :scheduled_nodes, :state_compact, :time_used, :user])
+      # end
     end
   end
 

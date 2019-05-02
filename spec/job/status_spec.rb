@@ -69,11 +69,16 @@ describe OodCore::Job::Status do
 
   describe "#==" do
     it "equals object with same state" do
-      is_expected.to eq(described_class.new(state: :running))
+      expect(OodCore::Job::Status.new(state: :running)).to eq(OodCore::Job::Status.new(state: :running))
     end
 
     it "doesn't equal object with different state" do
-      is_expected.not_to eq(described_class.new(state: :queued))
+      expect(OodCore::Job::Status.new(state: :running)).not_to eq(OodCore::Job::Status.new(state: :queued))
+    end
+
+    it "equals String or symbol with same state representation" do
+      expect(OodCore::Job::Status.new(state: :running)).to eq("running")
+      expect(OodCore::Job::Status.new(state: :running)).to eq(:running)
     end
   end
 end

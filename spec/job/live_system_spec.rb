@@ -1,18 +1,19 @@
 require 'spec_helper'
 
+def native_for_adapter(adapter)
+  case adapter.class.to_s
+  when OodCore::Job::Adapters::Lsf.class.to_s
+    ['-R', 'select[type == any]']
+  else
+    nil
+  end
+end
+
 describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined do
   before(:all) do
     # load job config either from cluster config or from yaml in format { adapter:, ... }
     config = YAML.load_file(ENV['LIVE_CLUSTER_CONFIG'])
     @adapter = OodCore::Job::Factory.build(config.dig("v2", "job") || config)
-
-    native = nil
-    case @adapter.class
-    when OodCore::Job::Adapters::Lsf.class
-      # Allow the job to run on any host
-      native = ['-R', 'select[type == any]']
-    end
-
     account = ENV['LIVE_CLUSTER_ACCOUNT']
 
     @script_content = <<~HERESCRIPT
@@ -32,7 +33,7 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
       error_path: '/dev/null',
       submit_as_hold: true,
       accounting_id: (account.nil?) ? nil : account,
-      native: native
+      native: native_for_adapter(@adapter)
     )
 
     @script_with_array = OodCore::Job::Script.new(
@@ -46,7 +47,7 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
       submit_as_hold: true,
       job_array_request: '1-4',
       accounting_id: (account.nil?) ? nil : account,
-      native: native
+      native: native_for_adapter(@adapter)
     )
 
     # Confirm that live tests will be run, and let the use know the name in case manual cleanup is necessary
