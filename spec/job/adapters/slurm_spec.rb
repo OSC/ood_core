@@ -254,13 +254,46 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
 
-    # TODO: add test when jobs in cluster mode - we have an extra line at the top!
     context "when jobs" do
       it "returns an array of all the jobs" do
         batch = OodCore::Job::Adapters::Slurm::Batch.new(
                   conf: "/etc/slurm/conf/",
                   bin: nil,
                   bin_overrides: { "squeue" => "spec/fixtures/scripts/squeue.rb"}
+        )
+        jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_all
+
+        expect(jobs.count).to eq(2)
+
+        j1 = jobs.first
+        expect(j1.id).to eq("5096321")
+        expect(j1.accounting_id).to eq("oscstaff")
+        expect(j1.job_name).to eq("Interact")
+        expect(j1.queue_name).to eq("RM-small")
+        expect(j1.native[:work_dir]).to eq("/home/efranz")
+        expect(j1.status).to eq("completed")
+        expect(j1.status).to eq(OodCore::Job::Status.new(state: :completed))
+        expect(j1.status.to_s).to eq("completed")
+
+        j2 = jobs.last
+        expect(j2.id).to eq("4320602")
+        expect(j2.accounting_id).to eq("ct4s8dp")
+        expect(j2.job_name).to eq("LES-data-init")
+        expect(j2.queue_name).to eq("RM")
+        expect(j2.native[:work_dir]).to eq("/scratch/ct4s8dp/kyu2/LES-data")
+        expect(j2.status).to eq("queued")
+        expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
+        expect(j2.status.to_s).to eq("queued")
+      end
+    end
+
+    context "when in a multi-cluster environment" do
+      it "returns an array of all the jobs" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(
+                  conf: "/etc/slurm/conf/",
+                  bin: nil,
+                  bin_overrides: { "squeue" => "spec/fixtures/scripts/squeue_with_cluster_header.rb"},
+                  cluster: 'slurm_cluster_two'
         )
         jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_all
 

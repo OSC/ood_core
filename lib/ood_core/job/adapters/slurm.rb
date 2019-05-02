@@ -105,8 +105,8 @@ module OodCore
             #TODO: switch mock of Open3 to be the squeue mock script
             # then you can use that for performance metrics
             StringIO.open(call("squeue", *args)) do |output|
-              # if cluster, skip 3 lines, else skip 2 line
-              (cluster ? 3 : 2).times { output.gets(RECORD_SEPARATOR) }
+              advance_past_squeue_header(output)
+
               jobs = []
               output.each_line(RECORD_SEPARATOR) do |line|
                 # TODO: once you can do performance metrics you can test zip against some other tools
@@ -255,6 +255,11 @@ module OodCore
           end
 
           private
+            # Advance the StringIO position past the squeue header
+            def advance_past_squeue_header(squeue_output)
+              2.times { squeue_output.gets(RECORD_SEPARATOR) }
+            end
+
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)

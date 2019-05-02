@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+
+# As of Slurm 18-08-7 source the Cluster section does not integrate with the format string handling
+# slurm-slurm-18-7-1/src/squeue/squeue.c
+# static int _multi_cluster(List clusters)
+# {
+#   ListIterator itr;
+#   bool first = true;
+#   int rc = 0, rc2;
+
+#   itr = list_iterator_create(clusters);
+#   while ((working_cluster_rec = list_next(itr))) {
+#     if (first)
+#       first = false;
+#     else
+#       printf("\n");
+#     printf("CLUSTER: %s\n", working_cluster_rec->name);
+#     rc2 = _get_info(true);
+#     rc = MAX(rc, rc2);
+#   }
+#   list_iterator_destroy(itr);
+
+#   return rc;
+# }
+puts "CLUSTER: dawn\n"
+puts "\u001EACCOUNT\u001FJOBID\u001FEXEC_HOST\u001FMIN_CPUS\u001FCPUS\u001FMIN_TMP_DISK\u001FNODES\u001FEND_TIME\u001FDEPENDENCY\u001FFEATURES\u001FARRAY_JOB_ID\u001FGROUP\u001FGROUP\u001FOVER_SUBSCRIBE\u001FSOCKETS_PER_NODE\u001FJOBID\u001FCORES_PER_SOCKET\u001FNAME\u001FTHREADS_PER_CORE\u001FCOMMENT\u001FARRAY_TASK_ID\u001FTIME_LIMIT\u001FTIME_LEFT\u001FMIN_MEMORY\u001FTIME\u001FREQ_NODES\u001FNODELIST\u001FCOMMAND\u001FCONTIGUOUS\u001FQOS\u001FPARTITION\u001FPRIORITY\u001FREASON\u001FSTART_TIME\u001FST\u001FSTATE\u001FUSER\u001FUSER\u001FRESERVATION\u001FSUBMIT_TIME\u001FWCKEY\u001FLICENSES\u001FEXC_NODES\u001FCORE_SPEC\u001FNICE\u001FSCHEDNODES\u001FS:C:T\u001FWORK_DIR\u001FGRES"
+puts "\u001Eoscstaff\u001F5096321\u001Fbr006\u001F1\u001F1\u001F0\u001F1\u001F2019-03-18T10:50:25\u001F\u001F(null)\u001F5096321\u001Foscstaff\u001F15312\u001FOK\u001F*\u001F5096321\u001F*\u001FInteract\u001F*\u001F(null)\u001FN/A\u001F1:00:00\u001F59:55\u001F4400M\u001F0:05\u001F\u001Fr001\u001Fbash\u001F0\u001Frm-interact\u001FRM-small\u001F3985\u001FNone\u001F2019-03-18T10:50:20\u001FCD\u001FCOMPLETED\u001Fefranz\u001F1448\u001F(null)\u001F2019-03-18T10:50:20\u001F(null)\u001F(null)\u001F\u001FN/A\u001F0\u001F(null)\u001F*:*:*\u001F/home/efranz\u001F(null)"
+puts "\u001Ect4s8dp\u001F4320602\u001Fn/a\u001F28\u001F1792\u001F0\u001F64\u001FN/A\u001F\u001F(null)\u001F4320602\u001Fct4s8dp\u001F15900\u001FNO\u001F*\u001F4320602\u001F*\u001FLES-data-init\u001F*\u001F(null)\u001FN/A\u001F2-00:00:00\u001F2-00:00:00\u001F123200M\u001F0:00\u001F\u001F\u001F/scratch/ct4s8dp/kyu2/LES-data/run.q\u001F0\u001Frmlrg\u001FRM\u001F11043\u001FResources\u001FN/A\u001FPD\u001FPENDING\u001Fkyu2\u001F66288\u001F(null)\u001F2018-10-30T20:42:56\u001F(null)\u001F(null)\u001F\u001FN/A\u001F0\u001F(null)\u001F*:*:*\u001F/scratch/ct4s8dp/kyu2/LES-data\u001F(null)"
