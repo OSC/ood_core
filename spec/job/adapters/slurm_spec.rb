@@ -928,6 +928,14 @@ describe OodCore::Job::Adapters::Slurm do
         # expect(batch.squeue_fields([:allocated_nodes]).keys.sort).to eq([:job_id, :node_list, :scheduled_nodes :state_compact])
       end
 
+      it "uses the record separator character once at the start of the format string" do
+        expect(
+          batch.squeue_args(options: batch.squeue_fields(nil).values).one? do |arg|
+            arg.start_with?(OodCore::Job::Adapters::Slurm::Batch::RECORD_SEPARATOR)
+          end
+        ).to be_truthy
+      end
+
       # TODO: what Active Jobs would query
       # it "handles ActiveJobs query" do
       #   expect(batch.squeue_fields([:accounting_id, :allocated_nodes, :job_name, :job_owner, :queue_name, :wallclock_time ]).keys.sort).to eq(

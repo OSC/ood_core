@@ -1,5 +1,9 @@
 require 'spec_helper'
 
+def make_job_name
+  'TEST_' + (0...8).map { (65 + rand(26)).chr }.join
+end
+
 describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined do
   before(:all) do
     # load job config either from cluster config or from yaml in format { adapter:, ... }
@@ -17,7 +21,7 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     @script = OodCore::Job::Script.new(
       # generate a random job name
       # e.g. TEST_SYQECQXW
-      job_name: 'TEST_' + (0...8).map { (65 + rand(26)).chr }.join,
+      job_name: make_job_name,
       content: @script_content,
       # don't clutter the file system with output from tests
       output_path: '/dev/null',
@@ -29,7 +33,7 @@ describe 'a live system', :if => ENV['LIVE_CLUSTER_CONFIG'], :order => :defined 
     @script_with_array = OodCore::Job::Script.new(
       # generate a random job name
       # e.g. TEST_SYQECQXW
-      job_name: 'TEST_' + (0...8).map { (65 + rand(26)).chr }.join,
+      job_name: make_job_name,
       content: @script_content,
       # don't clutter the file system with output from tests
       output_path: '/dev/null',

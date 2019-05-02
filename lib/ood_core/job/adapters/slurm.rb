@@ -105,8 +105,8 @@ module OodCore
             #TODO: switch mock of Open3 to be the squeue mock script
             # then you can use that for performance metrics
             StringIO.open(call("squeue", *args)) do |output|
-              # if cluster, skip 2 lines, else skip 1 line
-              (cluster ? 2 : 1).times { output.gets(RECORD_SEPARATOR) }
+              # if cluster, skip 3 lines, else skip 2 line
+              (cluster ? 3 : 2).times { output.gets(RECORD_SEPARATOR) }
               jobs = []
               output.each_line(RECORD_SEPARATOR) do |line|
                 # TODO: once you can do performance metrics you can test zip against some other tools
@@ -123,7 +123,8 @@ module OodCore
                 # jobs << job
                 #
                 # assuming keys and values are same length! if not we have an error!
-                jobs << Hash[fields.keys.zip(line.strip.split(UNIT_SEPARATOR))] unless line.strip.empty?
+                values = line.gsub(RECORD_SEPARATOR, '').strip.split(UNIT_SEPARATOR)
+                jobs << Hash[fields.keys.zip(values)] unless values.empty?
               end
               jobs
             end
@@ -150,7 +151,7 @@ module OodCore
           # -u <user_list> https://slurm.schedmd.com/squeue.html
           def squeue_args(id: "", options: [])
             args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{options.join(UNIT_SEPARATOR)}"]
+            args += ["-o", "#{RECORD_SEPARATOR}#{options.join(UNIT_SEPARATOR)}"]
             args += ["-j", id.to_s] unless id.to_s.empty?
             args
           end
@@ -549,6 +550,7 @@ module OodCore
                 allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
               end
             end
+
             Info.new(
               id: v[:job_id],
               status: get_state(v[:state_compact]),
@@ -562,8 +564,8 @@ module OodCore
               wallclock_time: duration_in_seconds(v[:time_used]),
               wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
-              submission_time: Time.parse(v[:submit_time]),
-              dispatch_time: v[:start_time] == "N/A" ? nil : Time.parse(v[:start_time]),
+              submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
+              dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v
             )
           end
