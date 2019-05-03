@@ -136,7 +136,7 @@ module OodCore
     # @param other [#to_sym] object to compare against
     # @return [Boolean] whether objects are equivalent
     def ==(other)
-      id == other.to_sym
+      id == other.to_s.to_sym
     end
 
     # Convert object to symbol
