@@ -6,13 +6,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.9.0] - 2019-05-04
 ### Added
 - Job array support for LSF and PBSPro
-- Slurm adapter uses `squeue` owner filter for `info_where_owner`
+- Slurm adapter uses `squeue` owner filter (`-u`) for `info_where_owner`
 
 ### Fixed
 - Grid Engine adapter now starts scripts in the current directory like all other adapters
-
+- Fixed issue where Slurm comment field might break job info parsing
+- Fixed possible crash when comparing two clusters if the id of one of the clusters is nil
+- Fixed bug with the live system test that impacted non-Torque systems
+- Fixed bug with Slurm adapter when submit time is not available
 
 ## [0.8.0] - 2019-01-29
 ### Added
@@ -173,7 +177,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/OSC/ood_core/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/OSC/ood_core/compare/v0.7.1...v0.8.0
 [0.7.1]: https://github.com/OSC/ood_core/compare/v0.7.0...v0.7.1
 [0.7.0]: https://github.com/OSC/ood_core/compare/v0.6.0...v0.7.0
