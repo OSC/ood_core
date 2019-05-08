@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.9.2] - 2019-05-08
+### Changed
+- When `squeue` returns '(null)' for an account the Slurm adapter will now convert that to `nil`
+
 ## [0.9.1] - 2019-05-07
 ### Added
 - Added logic to `OodCore::Job::ArrayIds` to return an empty array when the array request is invalid
