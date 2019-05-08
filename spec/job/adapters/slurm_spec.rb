@@ -654,6 +654,87 @@ describe OodCore::Job::Adapters::Slurm do
         end
       end
     end
+
+    context "when account is '(null)'" do
+      let(:job_hash) {
+        {
+          :account=>"(null)",
+          :job_id=>job_id,
+          :gres=>"(null)",
+          :exec_host=>"kp002",
+          :min_cpus=>"1",
+          :cpus=>"256",
+          :min_tmp_disk=>"0",
+          :nodes=>"14",
+          :end_time=>"2017-04-02T10:21:59",
+          :dependency=>"",
+          :features=>"(null)",
+          :array_job_id=>"2448023",
+          :group_name=>"hooper",
+          :group_id=>"4000175",
+          :over_subscribe=>"NO",
+          :sockets_per_node=>"*",
+          :cores_per_socket=>"*",
+          :job_name=>"big_CB7CB_330Knptall_modTD",
+          :threads_per_core=>"*",
+          :comment=>"(null)",
+          :array_task_id=>"N/A",
+          :time_limit=>"3-00:00:00",
+          :time_left=>"2-01:44:25",
+          :min_memory=>"64000M",
+          :time_used=>"22:15:35",
+          :req_node=>"",
+          :node_list=>"ky123",
+          :command=>"/uufs/chpc.utah.edu/common/home/u0135669/Dima_CB7CB/big_CB7CB_330K_nptall_modTD/sluK_king",
+          :contiguous=>"0",
+          :qos=>"kingspeak",
+          :partition=>"kingspeak",
+          :priority=>"109809",
+          :reason=>"None",
+          :start_time=>"2017-03-30T10:21:54",
+          :state_compact=>"R",
+          :state=>"RUNNING",
+          :user=>"u0135669",
+          :user_id=>"204994",
+          :reservation=>"(null)",
+          :submit_time=>"2017-03-29T13:51:05",
+          :wckey=>"(null)",
+          :licenses=>"(null)",
+          :excluded_nodes=>"",
+          :core_specialization=>"N/A",
+          :nice=>"0",
+          :scheduled_nodes=>"(null)",
+          :sockets_cores_threads=>"*:*:*",
+          :work_dir=>"/uufs/chpc.utah.edu/common/home/u0135669/Dima_CB7CB/big_CB7CB_330K_nptall_modTD"
+        }
+      }
+
+      let(:job_info_hash) {
+        {
+          :id=>job_id,
+          :status=>:running,
+          :allocated_nodes=>[
+            {:name=>"ky123", :procs=>nil}
+          ],
+          :submit_host=>nil,
+          :job_name=>"big_CB7CB_330Knptall_modTD",
+          :job_owner=>"u0135669",
+          :accounting_id=>nil,
+          :procs=>256,
+          :queue_name=>"kingspeak",
+          :wallclock_time=>80135,
+          :wallclock_limit=>259200,
+          :cpu_time=>nil,
+          :submission_time=>Time.parse("2017-03-29T13:51:05"),
+          :dispatch_time=>Time.parse("2017-03-30T10:21:54"),
+          :native=>job_hash
+        }
+      }
+
+      it "returns correct OodCore::Job::Info object" do
+        is_expected.to eql(job_info)
+      end
+    end
   end
 
   describe "#status" do

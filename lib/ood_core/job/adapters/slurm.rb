@@ -589,7 +589,7 @@ module OodCore
               submit_host: nil,
               job_name: v[:job_name],
               job_owner: v[:user],
-              accounting_id: v[:account],
+              accounting_id: handle_null_account(v[:account]),
               procs: v[:cpus],
               queue_name: v[:partition],
               wallclock_time: duration_in_seconds(v[:time_used]),
@@ -599,6 +599,11 @@ module OodCore
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v
             )
+          end
+
+          # Replace '(null)' with nil
+          def handle_null_account(account)
+            (account != '(null)') ? account : nil
           end
 
           def handle_job_array(info_ary, id)
