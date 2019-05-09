@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.9.3] - 2019-05-08
+### Fixed
+- Fixed bug relating to cluster comparison
+
 ## [0.9.2] - 2019-05-08
 ### Changed
 - When `squeue` returns '(null)' for an account the Slurm adapter will now convert that to `nil`
@@ -185,7 +189,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.9.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.9.3...HEAD
+[0.9.3]: https://github.com/OSC/ood_core/compare/v0.9.2...v0.9.3
+[0.9.2]: https://github.com/OSC/ood_core/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/OSC/ood_core/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/OSC/ood_core/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/OSC/ood_core/compare/v0.7.1...v0.8.0
