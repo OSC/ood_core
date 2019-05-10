@@ -17,7 +17,6 @@ module OodCore
 
       class ArraySpecParser < Parslet::Parser
         rule(:integer) { match('[0-9]').repeat(1) }
-        # rule(:integer_gt_zero) { match('[1-9][0-9]*') }
         rule(:max_concurrent) { str('%') >> integer }
         rule(:range) { integer.as(:start) >> str('-') >> integer.as(:stop) }
         rule(:stepped_range) { range >> str(':') >> integer.as(:step) }
@@ -47,7 +46,7 @@ module OodCore
         Array.wrap(ArraySpecParser.new.parse(@spec_string)).map do |component|
           ArraySpecComponent.new(**component).to_a
         end.reduce(:+).sort
-      rescue
+      rescue ArgumentError, Parslet::ParseFailed
         []
       end
     end
