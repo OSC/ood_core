@@ -27,7 +27,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Grid Engine adapter now starts scripts in the current directory like all other adapters
 - Fixed issue where Slurm comment field might break job info parsing
 - Fixed possible crash when comparing two clusters if the id of one of the clusters is nil
-- Fixed bug with the live system test that impacted non-Torque systems
+- Fixed bug with the live system test that impacted non-LSF systems
 - Fixed bug with Slurm adapter when submit time is not available
 
 ## [0.8.0] - 2019-01-29
