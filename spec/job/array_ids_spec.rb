@@ -47,6 +47,12 @@ describe OodCore::Job::ArrayIds do
         described_class.new('1,3-6:3,7,9-11,13,15-17,20-30:2').ids
       ).to eql([1, 3, 6, 7, 9, 10, 11, 13, 15, 16, 17, 20, 22, 24, 26, 28, 30])
     end
+
+    it "returns the correct IDs" do
+      expect( 
+        described_class.new('1,3-6:3,7,9-11,13,15-17,20-30:2%5').ids
+      ).to eql([1, 3, 6, 7, 9, 10, 11, 13, 15, 16, 17, 20, 22, 24, 26, 28, 30])
+    end
   end
 
   context "when the spec is nil" do
@@ -76,6 +82,12 @@ describe OodCore::Job::ArrayIds do
   context "when the spec is garbage" do
     it "returns an empty array" do
       expect(described_class.new('1!@-#$%^&*()DHKI%^&*(@)#@_!-=').ids).to eq([])
+    end
+  end
+
+  context "when the spec is invalid and ends with a comma" do
+    it "returns an empty array" do
+      expect(described_class.new('1-4%2,').ids).to eq([])
     end
   end
 end
