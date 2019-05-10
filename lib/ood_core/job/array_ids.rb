@@ -1,3 +1,6 @@
+require "ood_core/refinements/array_extensions"
+require "parslet"
+
 # Builds a sorted array of job ids given a job array spec string
 #
 # Job array spec strings:
@@ -10,67 +13,42 @@
 module OodCore
   module Job
     class ArrayIds
-      class Error < StandardError ; end
+      using Refinements::ArrayExtensions
 
-      attr_reader :ids
+      class ArraySpecParser < Parslet::Parser
+        rule(:integer) { match('[0-9]').repeat(1) }
+        # rule(:integer_gt_zero) { match('[1-9][0-9]*') }
+        rule(:max_concurrent) { str('%') >> integer }
+        rule(:range) { integer.as(:start) >> str('-') >> integer.as(:stop) }
+        rule(:stepped_range) { range >> str(':') >> integer.as(:step) }
+        rule(:component) { stepped_range | range | integer.as(:start) }
+        rule(:additional_component) { str(',') >> component }
+        rule(:array_spec) { component >> additional_component.repeat >> max_concurrent.maybe }
+        root(:array_spec)
+      end
+
+      class ArraySpecComponent
+        def initialize(start:, stop: nil, step: 1)
+          @start = start.to_i
+          @stop  = (stop) ? stop.to_i : nil
+          @step  = step.to_i
+        end
+
+        def to_a
+          (@stop) ? Range.new(@start, @stop).step(@step).to_a : [@start]
+        end
+      end
+
       def initialize(spec_string)
-        @ids = []
-        begin
-          parse_spec_string(spec_string) if spec_string
-        rescue Error
-        end
+        @spec_string = spec_string
       end
 
-      protected
-      def parse_spec_string(spec_string)
-        @ids = get_components(spec_string).map{
-          |component| process_component(component)
-        }.reduce(:+).sort
-      end
-
-      def get_components(spec_string)
-        base = discard_percent_modifier(spec_string)
-        raise Error unless base
-        base.split(',')
-      end
-
-      # A few adapters use percent to define an arrays maximum number of
-      # simultaneous tasks. The percent is expected to come at the end.
-      def discard_percent_modifier(spec_string)
-        spec_string.split('%').first
-      end
-
-      def process_component(component)
-        if is_range?(component)
-          get_range(component)
-        elsif numbers_valid?([component])
-          [ component.to_i ]
-        else
-          raise Error
-        end
-      end
-
-      def get_range(component)
-        raw_range, raw_step = component.split(':')
-        start, stop = raw_range.split('-')
-        raise Error unless numbers_valid?(
-          # Only include Step if it is not nil
-          [start, stop].tap { |a| a << raw_step if raw_step }
-        )
-        range = Range.new(start.to_i, stop.to_i)
-        step = raw_step.to_i
-        step = 1 if step == 0
-
-        range.step(step).to_a
-      end
-
-      def is_range?(component)
-        component.include?('-')
-      end
-
-      # Protect against Ruby's String#to_i returning 0 for arbitrary strings
-      def numbers_valid?(numbers)
-        numbers.all? { |str| /^[0-9]+$/ =~ str }
+      def ids
+        Array.wrap(ArraySpecParser.new.parse(@spec_string)).map do |component|
+          ArraySpecComponent.new(**component).to_a
+        end.reduce(:+).sort
+      rescue
+        []
       end
     end
   end
