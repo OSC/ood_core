@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo "curl $BASE_URI using token $TOKEN"

@@ -26,28 +26,23 @@ module OodCore
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions
 
-        # The path to the Slurm client installation binaries
-        # @example For Slurm 10.0.0
-        #   my_batch.bin.to_s #=> "/usr/local/slurm/10.0.0/bin
-        # @return [Pathname] path to slurm binaries
+        # The path to the client installation binaries
+        # @return [Pathname] path to binaries
         attr_reader :bin
 
-        # Optional overrides for Slurm client executables
-        # @example
-        #  {'sbatch' => '/usr/local/bin/sbatch'}
+        # Optional overrides for client executables
         # @return Hash<String, String>
         attr_reader :bin_overrides
 
-        attr_reader :token
+        attr_reader :token, :api_base_uri
 
         # @param bin [#to_s] path to slurm installation binaries
-        def initialize(token: nil, bin: nil, bin_overrides: {})
+        def initialize(api_base_uri: nil, token: nil, bin: nil, bin_overrides: {})
+          @api_base_uri = api_base_uri
           @token   = token
           @bin     = Pathname.new(bin.to_s)
           @bin_overrides = bin_overrides
         end
-
-
 
         # Call a forked Slurm command for a given cluster
         # def call(cmd, *args, env: {}, stdin: "")
@@ -82,13 +77,22 @@ module OodCore
           # TODO
         end
 
-        # Retrieve info for all jobs from the resource manager
+        # Retrieve list of all servers from the OpenStack instance
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all(attrs: nil)
+          cmd = "get_servers"
+          cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+          env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
+          args = []
 
-          # TODO
+          o, e, s = Open3.capture3(env, cmd, *args)
+          if s.success?
+            puts o
+          else
+           raise(JobAdapterError, e)
+         end
         end
 
         # Retrieve job info from the resource manager
