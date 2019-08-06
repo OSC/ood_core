@@ -2,7 +2,7 @@ require "time"
 require "ood_core/refinements/hash_extensions"
 require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
-
+require "json"
 module OodCore
   module Job
     class Factory
@@ -89,10 +89,17 @@ module OodCore
 
           o, e, s = Open3.capture3(env, cmd, *args)
           if s.success?
-            puts o
+            #puts o
+   	        o = o.split("\n")
+	          serversHash = JSON.parse(o[0])
+	          #puts serversHash
+            servers = serversHash["servers"]
+            servers.each do |server|
+		          puts server["name"]
+	          end 
           else
            raise(JobAdapterError, e)
-         end
+          end
         end
 
         # Retrieve job info from the resource manager
@@ -106,12 +113,52 @@ module OodCore
           # or Info.new(id: id, status: :completed) for invalid job id (i.e. completed/done/destroyed)
           # or raise JobAdapterError if some other error
         end
-
+        def flavors_all
+	    cmd = "get_flavors.sh"
+            cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+            env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
+            args = []
+ 
+            o, e, s = Open3.capture3(env, cmd, *args)
+            if s.success?
+              #puts o
+              o = o.split("\n")
+             flavorsHash = JSON.parse(o[0])
+              #puts serversHash
+              flavors = flavorsHash["flavors"]
+              flavors.each do |flavor|
+                 puts flavor["name"]
+              end
+            else
+              raise(JobAdapterError, e)
+            end
+	 end
         # Retrieve job status from resource manager
         # @param id [#to_s] the id of the job
         # @raise [JobAdapterError] if something goes wrong getting job status
         # @return [Status] status of job
         # @see Adapter#status
+        def image_all
+            cmd = "get_images.sh"
+            cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+            env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
+            args = []
+ 
+            o, e, s = Open3.capture3(env, cmd, *args)
+            if s.success?
+              #puts o
+              o = o.split("\n")
+              imagesHash = JSON.parse(o[0])
+              #puts serversHash
+              images = imagessHash["images"]
+              images.each do |image|
+                 puts image["name"]
+              end
+            else
+              raise(JobAdapterError, e)
+            end
+        end
+        
         def status(id)
           info(id).status
         end
