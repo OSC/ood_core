@@ -77,26 +77,69 @@ module OodCore
           # TODO
         end
 
+        def submit_job(name: nil, image_id: nil ,flavor_uri: nil, net_uuid: nil)  
+          cmd = "create_server.sh"
+          cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+          env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
+          args = [name,image_id,flavor_uri,net_uuid]
+          
+          o, e, s = Open3.capture3(env, cmd, *args)
+          if s.success?
+            puts o
+            server = JSON.parse(o)["server"]
+          else
+            raise(JobAdapterError, e)
+          end          
+        end
+
+
+
+        #Info objects have a strict set of status symbols, that differ in nameing convention from openstack statuses
+        #This method translates OS statuses into a form that OOD can work with 
+        def convert_status(status)
+          if status.eql? "ACTIVE"
+            status = "running"
+          else
+            status = "undetermined"
+          end
+        end 
         # Retrieve list of all servers from the OpenStack instance
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
         # @see Adapter#info_all
         def info_all(attrs: nil)
-          cmd = "get_servers"
+          cmd = "get_servers.sh"
           cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
           env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
-          args = []
 
           o, e, s = Open3.capture3(env, cmd, *args)
           if s.success?
-            #puts o
-   	        o = o.split("\n")
-	          serversHash = JSON.parse(o[0])
-	          #puts serversHash
-            servers = serversHash["servers"]
-            servers.each do |server|
-		          puts server["name"]
-	          end 
+            puts s
+   	    o = o.split("\n")[1]
+	    servers = JSON.parse(o)["servers"]
+	    puts servers
+            servers.map do |server|
+              id = server["id"]
+              job_name = server["name"]
+              status =  convert_status(server["status"])
+              native = Hash.new
+              native["addresses"] = server["addresses"] 
+              native["iamge"] = server["image"]
+              native["flavor"] = server["flavor"]
+              native["security_groups"] = server["security_groups"]
+              native["user_id"] = server["user_id"]
+              native["OS-EXT-SRV-ATTR:hypervisor_hostname"] = server["OS-EXT-SRV-ATTR:hypervisor_hostname"]
+              native["created"] = server["created"]
+              native["tenant_id"] = server["tenant_id"]
+              native["os-extended-volumes:volumes_attached"] = server["metadata"]
+              native["metadata"] = server["metadata"]
+              Info.new(
+                id: id,
+                job_name: job_name,
+                status: status,
+                native: native
+              )
+            end 
           else
            raise(JobAdapterError, e)
           end
@@ -117,18 +160,11 @@ module OodCore
 	    cmd = "get_flavors.sh"
             cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
             env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
-            args = []
  
             o, e, s = Open3.capture3(env, cmd, *args)
-            if s.success?
-              #puts o
+            if s.success? 
               o = o.split("\n")
-             flavorsHash = JSON.parse(o[0])
-              #puts serversHash
-              flavors = flavorsHash["flavors"]
-              flavors.each do |flavor|
-                 puts flavor["name"]
-              end
+              flavorsHash = JSON.parse(o[1])["flavors"]
             else
               raise(JobAdapterError, e)
             end
@@ -138,7 +174,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong getting job status
         # @return [Status] status of job
         # @see Adapter#status
-        def image_all
+        def images_all
             cmd = "get_images.sh"
             cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
             env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
@@ -146,14 +182,8 @@ module OodCore
  
             o, e, s = Open3.capture3(env, cmd, *args)
             if s.success?
-              #puts o
               o = o.split("\n")
-              imagesHash = JSON.parse(o[0])
-              #puts serversHash
-              images = imagessHash["images"]
-              images.each do |image|
-                 puts image["name"]
-              end
+              imagesHash = JSON.parse(o[1])["images"]     
             else
               raise(JobAdapterError, e)
             end
