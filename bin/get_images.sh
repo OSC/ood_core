@@ -1,6 +1,6 @@
 #!/bin/bash
  
-http_response=$(curl -s -o response.txt -w "%{http_code}"  --show-error --connect-timeout 3  -H "X-Auth-Token: $TOKEN"  http://$BASE_URI/compute/v2.1/images  )
+http_response=$(curl -s -o response.txt -w "%{http_code}"  --show-error --connect-timeout 3  -H "X-Auth-Token: $TOKEN" $BASE_URI/compute/v2.1/images  )
 if [ $http_response != "200" ]; then
   #echo "$http_response" >&2
   cat response.txt >&2

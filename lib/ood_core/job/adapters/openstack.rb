@@ -111,7 +111,7 @@ module OodCore
           cmd = "get_servers.sh"
           cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
           env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
-
+          args= []
           o, e, s = Open3.capture3(env, cmd, *args)
           if s.success?
             puts s
@@ -124,7 +124,7 @@ module OodCore
               status =  convert_status(server["status"])
               native = Hash.new
               native["addresses"] = server["addresses"] 
-              native["iamge"] = server["image"]
+              native["image"] = server["image"]
               native["flavor"] = server["flavor"]
               native["security_groups"] = server["security_groups"]
               native["user_id"] = server["user_id"]
@@ -151,15 +151,44 @@ module OodCore
         # @return [Info] information describing submitted job
         # @see Adapter#info
         def info(id)
-
           # TODO: return Info for existing VM
           # or Info.new(id: id, status: :completed) for invalid job id (i.e. completed/done/destroyed)
           # or raise JobAdapterError if some other error
+          cmd = "get_server.sh"
+          cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+          env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
+          args = [id]
+          o, e, s = Open3.capture3(env, cmd, *args)
+          if s.success?
+            o = o.split("\n")[1]
+            server = JSON.parse(o)["server"]
+            puts server["id"]
+            id = server["id"]
+            job_name = server["name"]
+            status =  convert_status(server["status"])
+            native = Hash.new
+            native["addresses"] = server["addresses"]
+            native["image"] = server["image"]
+            native["flavor"] = server["flavor"]
+            native["security_groups"] = server["security_groups"]
+            native["user_id"] = server["user_id"]
+            native["OS-EXT-SRV-ATTR:hypervisor_hostname"] = server["OS-EXT-SRV-ATTR:hypervisor_hostname"]
+            native["created"] = server["created"]
+            native["tenant_id"] = server["tenant_id"]
+            native["os-extended-volumes:volumes_attached"] = server["metadata"]
+            native["metadata"] = server["metadata"]
+            #puts native
+            Info.new(id: id, job_name: job_name, status: status, native: native)
+          else
+            raise(JobAdapterError, e)
+          end
+
         end
         def flavors_all
 	    cmd = "get_flavors.sh"
             cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
             env = { "TOKEN" => token, "BASE_URI" => api_base_uri}
+            args = []
  
             o, e, s = Open3.capture3(env, cmd, *args)
             if s.success? 
