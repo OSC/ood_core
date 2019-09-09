@@ -13,13 +13,21 @@ module OodCore
       # @option config [Object] :hosts (nil) The list of permissable hosts
       def self.build_fork(config)
         c = config.to_h.symbolize_keys
-        ssh_hosts = c.fetch(:ssh_hosts, [])
         max_timeout = c.fetch(:max_timeout, nil)
         tmux_bin = c.fetch(:tmux_bin, '/usr/bin/tmux')
+        submit_host = c[:submit_host]
+        ssh_hosts = c.fetch(:ssh_hosts, [submit_host])
+        debug = c.fetch(:debug, false)
 
         Adapters::Fork.new(
           ssh_hosts: ssh_hosts,
-          forker: Adapters::Fork::Forker.new(tmux_bin: tmux_bin, max_timeout: max_timeout, ssh_hosts: ssh_hosts)
+          forker: Adapters::Fork::Forker.new(
+            debug: debug,
+            max_timeout: max_timeout,
+            ssh_hosts: ssh_hosts,
+            submit_host: submit_host,
+            tmux_bin: tmux_bin,
+          ),
         )
       end
     end
@@ -61,8 +69,6 @@ module OodCore
         #   execution after dependent jobs have terminated
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
-          host_permitted?(script.native['destination_host'])
-          
           @forker.start_remote_tmux_session(script)
         end
 
@@ -194,7 +200,6 @@ module OodCore
         # @return [void]
         def delete(id)
           session_name, destination_host = *id.split('@')
-          host_permitted?(destination_host)
           @forker.stop_remote_tmux_session(session_name: session_name, hostname: destination_host)
         end
 

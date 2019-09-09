@@ -1,5 +1,5 @@
 #!/bin/bash
-
+hostname
 # Put the script into a temp file on localhost
 <% if debug %>
 tmp_file=$(mktemp -p "$HOME")
@@ -16,11 +16,9 @@ cat << HEREDOC > "$tmp_file"
 # https://unix.stackexchange.com/a/6431/204548
 # Swap sterr and stdout after stdout has been redirected
 # https://unix.stackexchange.com/a/61932/204548
-(
-    {
-<%= script_content %>
-    } | tee "<%= output_path %>"
-) 3>&1 1>&2 2>&3 | tee "<%= error_path %>"
+({
+<%= script_content %>   
+} | tee "<%= output_path %>") 3>&1 1>&2 2>&3 | tee "<%= error_path %>"
 
 # Exit the tmux session when we are complete
 exit 0

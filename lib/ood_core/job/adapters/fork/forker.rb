@@ -3,6 +3,7 @@ require 'etc'
 require 'pathname'
 require 'securerandom'
 require 'shellwords'
+require 'time'
 # Object used for simplified communication SSH hosts
 #
 # @api private
@@ -15,23 +16,26 @@ class OodCore::Job::Adapters::Fork::Forker
 
   # @param tmux_bin [#to_s] Path to the tmux executable
   # @param timeout [#to_i] A period after which the job should be killed or nil
-  def initialize(tmux_bin:, max_timeout: nil, ssh_hosts:, **_)
-    @username = Etc.getlogin
-    @tmux_bin = Pathname.new(tmux_bin)
+  def initialize(tmux_bin:, max_timeout: nil, ssh_hosts:, submit_host:, debug: false, **_)
+    @debug = !! debug
     @max_timeout = max_timeout.to_i
     @session_name_label = 'launched-by-ondemand'
     @ssh_hosts = ssh_hosts
+    @submit_host = submit_host
+    @tmux_bin = Pathname.new(tmux_bin)
+    @username = Etc.getlogin
   end
 
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_tmux_session(script)
-    cmd = ssh_cmd(script.native['destination_host'])
+    cmd = ssh_cmd(@submit_host)
     session_name = unique_session_name
 
-    call(*cmd, stdin: wrapped_script(script, session_name))
+    output = call(*cmd, stdin: wrapped_script(script, session_name))
+    hostname = output.split("\n").first
 
-    "#{session_name}@#{script.native['destination_host']}"
+    "#{session_name}@#{hostname}"
   end
 
   def stop_remote_tmux_session(hostname:, session_name:)
@@ -47,7 +51,7 @@ class OodCore::Job::Adapters::Fork::Forker
 
     host_list.map {
       |hostname| list_remote_tmux_session(hostname)
-    }.flatten
+    }.flatten.sort
   end
 
   private
@@ -74,7 +78,7 @@ class OodCore::Job::Adapters::Fork::Forker
     ).result(binding.tap {|bnd|
       {
         'cd_to_workdir' => (script.workdir) ? "cd #{script.workdir}" : '',
-        'debug' => !! script.native['debug'],
+        'debug' => @debug,
         'environment' => export_env(script.job_environment),
         'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
         'output_path' => (script.output_path) ? script.output_path.to_s : '/dev/null',
@@ -91,11 +95,17 @@ class OodCore::Job::Adapters::Fork::Forker
   # Nuke the current process after @timeout seconds
   def timeout_killer_cmd(script_timeout)
     if @max_timeout == 0
-      ""
+      ''
     else
       # TODO: Handle requested timeout that's longer than system configured timeout by raising Error
       timeout = (@max_timeout < script_timeout.to_i ) ? @max_timeout : script_timeout.to_i
-      "(sleep #{timeout}; kill -9 \$\$) &"
+      current_pid = Shellwords.escape('$$')
+      <<~HEREDOC
+        {
+        sleep #{timeout}
+        kill -9 #{current_pid}
+        } &
+      HEREDOC
     end
   end
 
