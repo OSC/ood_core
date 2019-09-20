@@ -27,22 +27,24 @@ module OodCore
               !clusters.empty?
             end
           rescue Errno::EACCES
+            # Log permission denied?
             false
           end
         elsif config.directory?
-          begin
-            Pathname.glob(config.join("*.yml")).each do |p|
-              CONFIG_VERSION.any? do |version|
+          Pathname.glob(config.join("*.yml")).each do |p|
+            CONFIG_VERSION.any? do |version|
+              begin
                 if cluster = YAML.safe_load(p.read).fetch(version, nil)
                   clusters << Cluster.new(send("parse_#{version}", id: p.basename(".yml").to_s, cluster: cluster))
                   true
                 else
                   false
                 end
+              rescue Errno::EACCES
+                # Log permission denied?
+                false
               end
             end
-          rescue Errno::EACCES
-	          false
           end
         else
           raise ConfigurationNotFound, "configuration file '#{config}' does not exist"
