@@ -27,10 +27,10 @@ module OodCore
               !clusters.empty?
             end
           rescue Errno::EACCES
-	    false
+            false
           end
         elsif config.directory?
-	  begin
+          begin
             Pathname.glob(config.join("*.yml")).each do |p|
               CONFIG_VERSION.any? do |version|
                 if cluster = YAML.safe_load(p.read).fetch(version, nil)
@@ -41,8 +41,8 @@ module OodCore
                 end
               end
             end
-	  rescue Errno::EACCES
-	    false
+          rescue Errno::EACCES
+	          false
           end
         else
           raise ConfigurationNotFound, "configuration file '#{config}' does not exist"
