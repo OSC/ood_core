@@ -18,35 +18,21 @@ module OodCore
         config = Pathname.new(path.to_s).expand_path
 
         clusters = []
-        if config.file?
-          begin
-            CONFIG_VERSION.any? do |version|
-              YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
-                clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
-              end
-              !clusters.empty?
+        if config.file? && config.readable?
+          CONFIG_VERSION.any? do |version|
+            YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
+              clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
             end
-          rescue Errno::EACCES
-            # Log permission denied?
-            false
           end
         elsif config.directory?
-          Pathname.glob(config.join("*.yml")).each do |p|
+          Pathname.glob(config.join("*.yml")).select(&:file?).select(&:readable?).each do |p|
             CONFIG_VERSION.any? do |version|
-              begin
-                if cluster = YAML.safe_load(p.read).fetch(version, nil)
-                  clusters << Cluster.new(send("parse_#{version}", id: p.basename(".yml").to_s, cluster: cluster))
-                  true
-                else
-                  false
-                end
-              rescue Errno::EACCES
-                # Log permission denied?
-                false
+              if cluster = YAML.safe_load(p.read).fetch(version, nil)
+                clusters << Cluster.new(send("parse_#{version}", id: p.basename(".yml").to_s, cluster: cluster))
               end
             end
           end
-        else
+        elsif ! config.exist?
           raise ConfigurationNotFound, "configuration file '#{config}' does not exist"
         end
 
