@@ -19,22 +19,30 @@ module OodCore
 
         clusters = []
         if config.file?
-          CONFIG_VERSION.any? do |version|
-            YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
-              clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+          begin
+            CONFIG_VERSION.any? do |version|
+              YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
+                clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+              end
+              !clusters.empty?
             end
-            !clusters.empty?
+          rescue Errno::EACCES
+	    false
           end
         elsif config.directory?
-          Pathname.glob(config.join("*.yml")).each do |p|
-            CONFIG_VERSION.any? do |version|
-              if cluster = YAML.safe_load(p.read).fetch(version, nil)
-                clusters << Cluster.new(send("parse_#{version}", id: p.basename(".yml").to_s, cluster: cluster))
-                true
-              else
-                false
+	  begin
+            Pathname.glob(config.join("*.yml")).each do |p|
+              CONFIG_VERSION.any? do |version|
+                if cluster = YAML.safe_load(p.read).fetch(version, nil)
+                  clusters << Cluster.new(send("parse_#{version}", id: p.basename(".yml").to_s, cluster: cluster))
+                  true
+                else
+                  false
+                end
               end
             end
+	  rescue Errno::EACCES
+	    false
           end
         else
           raise ConfigurationNotFound, "configuration file '#{config}' does not exist"
