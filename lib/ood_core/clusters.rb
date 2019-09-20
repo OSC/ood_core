@@ -18,10 +18,12 @@ module OodCore
         config = Pathname.new(path.to_s).expand_path
 
         clusters = []
-        if config.file? && config.readable?
-          CONFIG_VERSION.any? do |version|
-            YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
-              clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+        if config.file?
+          if config.readable?
+            CONFIG_VERSION.any? do |version|
+              YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
+                clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+              end
             end
           end
         elsif config.directory?
@@ -32,7 +34,7 @@ module OodCore
               end
             end
           end
-        elsif ! config.exist?
+        else
           raise ConfigurationNotFound, "configuration file '#{config}' does not exist"
         end
 

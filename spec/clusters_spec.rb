@@ -52,5 +52,13 @@ describe OodCore::Clusters do
         OodCore::Clusters.load_file(config)
       end
     end
+
+    context "when cluster config does not exist" do
+      let(:config) { Pathname.pwd + 'spec/fixtures/config/doesnotexist'}
+
+      it "raises OodCore::ConfigurationNotFound" do
+        expect { OodCore::Clusters.load_file(config) }.to raise_error(OodCore::ConfigurationNotFound)
+      end
+    end
   end
 end
