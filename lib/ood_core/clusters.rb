@@ -19,20 +19,18 @@ module OodCore
 
         clusters = []
         if config.file?
-          CONFIG_VERSION.any? do |version|
-            YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
-              clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+          if config.readable?
+            CONFIG_VERSION.any? do |version|
+              YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
+                clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+              end
             end
-            !clusters.empty?
           end
         elsif config.directory?
-          Pathname.glob(config.join("*.yml")).each do |p|
+          Pathname.glob(config.join("*.yml")).select(&:file?).select(&:readable?).each do |p|
             CONFIG_VERSION.any? do |version|
               if cluster = YAML.safe_load(p.read).fetch(version, nil)
                 clusters << Cluster.new(send("parse_#{version}", id: p.basename(".yml").to_s, cluster: cluster))
-                true
-              else
-                false
               end
             end
           end
