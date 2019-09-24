@@ -7,46 +7,72 @@ require 'time'
 # Object used for simplified communication SSH hosts
 #
 # @api private
-class OodCore::Job::Adapters::Fork::Forker
+class OodCore::Job::Adapters::Fork::Launcher
   # The root exception class that all Fork adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
 
   UNIT_SEPARATOR = "\x1F"
 
+  # @param debug Whether the adapter should be used in debug mode
+  # @param max_timeout [#to_i] A period after which the job should be killed or nil
+  # @param singularity_bin  Path to the Singularity executable
+  # @param singularity_bindpath A comma delimited string of host paths to bindmount into the guest; sets SINGULARITY_BINDPATH environment variable
+  # @param singularity_image [#to_s] Path to the Singularity image
+  # @param ssh_hosts List of hosts to check when scanning for running jobs
+  # @param strict_host_checking Allow SSH to perform strict host checking
+  # @param submit_host The SSH-able host
   # @param tmux_bin [#to_s] Path to the tmux executable
-  # @param timeout [#to_i] A period after which the job should be killed or nil
-  def initialize(tmux_bin:, max_timeout: nil, ssh_hosts:, submit_host:, debug: false, **_)
+  def initialize(
+    debug: false,
+    max_timeout: nil,
+    singularity_bin:,
+    singularity_bindpath: '/etc,/media,/mnt,/opt,/srv,/usr,/var,/users',
+    singularity_image:,
+    ssh_hosts:,
+    strict_host_checking: false,
+    submit_host:,
+    tmux_bin:,
+    **_
+  )
     @debug = !! debug
     @max_timeout = max_timeout.to_i
     @session_name_label = 'launched-by-ondemand'
+    @singularity_bin = Pathname.new(singularity_bin)
+    @singularity_bindpath = singularity_bindpath.to_s
+    @singularity_image = Pathname.new(singularity_image)
     @ssh_hosts = ssh_hosts
+    @strict_host_checking = strict_host_checking
     @submit_host = submit_host
-    @tmux_bin = Pathname.new(tmux_bin)
+    @tmux_bin = tmux_bin
     @username = Etc.getlogin
   end
 
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
-  def start_remote_tmux_session(script)
+  def start_remote_session(script)
     cmd = ssh_cmd(@submit_host)
-    session_name = unique_session_name
 
+    session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
-    hostname = output.split("\n").first
+    hostname, pid = output.strip.split(UNIT_SEPARATOR)
 
     "#{session_name}@#{hostname}"
   end
 
-  def stop_remote_tmux_session(hostname:, session_name:)
+  def stop_remote_session(session_name, hostname)
     cmd = ssh_cmd(hostname) + [@tmux_bin, 'kill-session', '-t', session_name]
     call(*cmd)
   rescue Error => e
-    # The Tmux server not running is not an error
-    raise e unless e.message.include?('failed to connect to server')
+    raise e unless (
+      # The tmux server not running is not an error
+      e.message.include?('failed to connect to server') ||
+      # The session not being found is not an error
+      e.message.include?("session not found: #{@session_name_label}")
+    )
   end
 
-  def list_remote_tmux_sessions(host: nil)
+  def list_remote_sessions(host: nil)
     host_list = (host) ? [host] : @ssh_hosts
 
     host_list.map {
@@ -67,8 +93,25 @@ class OodCore::Job::Adapters::Fork::Forker
   # The SSH invocation to send a command
   # -t Force pseudo-terminal allocation (required to allow tmux to run)
   # -o BatchMode=yes (set mode to be non-interactive)
+  # if ! strict_host_checking
+  # -o UserKnownHostsFile=/dev/null (do not update the user's known hosts file)
+  # -o StrictHostKeyChecking=no (do no check the user's known hosts file)
   def ssh_cmd(destination_host)
-    ['ssh', '-t', '-o', 'BatchMode=yes', "#{@username}@#{destination_host}"]
+    if @strict_host_checking
+      [
+        'ssh', '-t',
+        '-o', 'BatchMode=yes',
+        "#{@username}@#{destination_host}"
+      ]
+    else
+      [
+        'ssh', '-t',
+        '-o', 'BatchMode=yes',
+        '-o', 'UserKnownHostsFile=/dev/null',
+        '-o', 'StrictHostKeyChecking=no',
+        "#{@username}@#{destination_host}"
+      ]
+    end
   end
 
   # Wraps a user-provided script into a Tmux invocation
@@ -81,10 +124,13 @@ class OodCore::Job::Adapters::Fork::Forker
         'debug' => @debug,
         'environment' => export_env(script.job_environment),
         'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
+        'job_name' => script.job_name.to_s,
         'output_path' => (script.output_path) ? script.output_path.to_s : '/dev/null',
         'script_content' => script.content,
+        'script_timeout' => script_timeout(script),
         'session_name' => session_name,
-        'timeout_cmd' => timeout_killer_cmd(script.wall_time),
+        'singularity_bin' => @singularity_bin,
+        'singularity_image' => @singularity_image,
         'tmux_bin' => @tmux_bin,
       }.each{
         |key, value| bnd.local_variable_set(key, value)
@@ -92,33 +138,23 @@ class OodCore::Job::Adapters::Fork::Forker
     })
   end
 
-  # Nuke the current process after @timeout seconds
-  def timeout_killer_cmd(script_timeout)
-    if @max_timeout == 0
-      ''
-    else
-      # TODO: Handle requested timeout that's longer than system configured timeout by raising Error
-      timeout = (@max_timeout < script_timeout.to_i ) ? @max_timeout : script_timeout.to_i
-      current_pid = Shellwords.escape('$$')
-      <<~HEREDOC
-        {
-        sleep #{timeout}
-        kill -9 #{current_pid}
-        } &
-      HEREDOC
-    end
+  # Generate the environment export block for this script
+  def export_env(environment)
+    (environment ? environment : {}).tap{
+      |hsh| hsh['SINGULARITY_BINDPATH'] = @singularity_bindpath if @singularity_bindpath
+    }.map{
+      |key, value| "export #{key}=#{Shellwords.escape(value)}"
+    }.sort.join("\n")
+  end
+
+  def script_timeout(script)
+    return [script.wall_time.to_i, @max_timeout].min unless @max_timeout == 0
+    
+    [script.wall_time.to_i, 0].max
   end
 
   def unique_session_name
     "#{@session_name_label}-#{SecureRandom.uuid}"
-  end
-
-  # Generate the environment export block for this script
-  def export_env(environment)
-    # TODO: Need to confirm that quotes are handled properly for value
-    (environment ? environment : {}).map{
-      |key, value| "export #{key}=#{Shellwords.escape(value)}"
-    }.join("\n")
   end
 
   # List all Tmux sessions on destination_host started by this adapter
@@ -127,10 +163,10 @@ class OodCore::Job::Adapters::Fork::Forker
     # Note that the tmux variable substitution looks like Ruby string sub,
     # these must either be single quoted strings or Ruby-string escaped as well
     format_str = Shellwords.escape(
-      ['#{session_name}', '#{session_created}'].join(UNIT_SEPARATOR)
+      ['#{session_name}', '#{session_created}', '#{pane_pid}'].join(UNIT_SEPARATOR)
     )
-    keys = [:session_name, :session_created]
-    cmd = ssh_cmd(destination_host) + ['tmux', 'list-sessions', '-F', format_str]
+    keys = [:session_name, :session_created, :session_pid]
+    cmd = ssh_cmd(destination_host) + ['tmux', 'list-panes', '-F', format_str]
     
     call(*cmd).split(
       "\n"
@@ -143,7 +179,7 @@ class OodCore::Job::Adapters::Fork::Forker
       |session_hash| session_hash[:session_name].start_with?(@session_name_label)
     }
   rescue Error => e
-    # The Tmux server not running is not an error
+    # The tmux server not running is not an error
     raise e unless e.message.include?('failed to connect to server')
     []
   end

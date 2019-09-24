@@ -10,24 +10,40 @@ module OodCore
 
       # Build the Fork adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
-      # @option config [Object] :hosts (nil) The list of permissable hosts
+      # @option config [Object] :debug (false) Use the adapter in a debug mode
+      # @option config [Object] :max_timeout (nil) The longest 'wall_clock' permissible
+      # @option config [Object] :singularity_bin ('/usr/bin/singularity') The path to the Singularity executable
+      # @option config [Object] :singularity_bindpath ('/etc,/media,/mnt,/opt,/srv,/usr,/var,/users') A comma delimited list of paths to bind between the host and the guest
+      # @option config [Object] :singularity_image The path to the Singularity image to use
+      # @option config [Object] :ssh_hosts (nil) The list of permissable hosts, defaults to :submit_host
+      # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking and updating the known_hosts file
+      # @option config [Object] :submit_host The SSH target to connect to, may be the head of a round-robin
+      # @option config [Object] :tmux_bin ('/usr/bin/tmux') The path to the Tmux executable
       def self.build_fork(config)
         c = config.to_h.symbolize_keys
-        max_timeout = c.fetch(:max_timeout, nil)
-        tmux_bin = c.fetch(:tmux_bin, '/usr/bin/tmux')
-        submit_host = c[:submit_host]
-        ssh_hosts = c.fetch(:ssh_hosts, [submit_host])
         debug = c.fetch(:debug, false)
+        max_timeout = c.fetch(:max_timeout, nil)
+        singularity_bin = c.fetch(:singularity_bin, '/usr/bin/singularity')
+        singularity_bindpath = c.fetch(:singularity_bindpath, '/etc,/media,/mnt,/opt,/srv,/usr,/var,/users')
+        singularity_image = c[:singularity_image]
+        ssh_hosts = c.fetch(:ssh_hosts, [c[:submit_host]])
+        strict_host_checking = c.fetch(:strict_host_checking, true)
+        submit_host = c[:submit_host]
+        tmux_bin = c.fetch(:tmux_bin, '/usr/bin/tmux')
 
         Adapters::Fork.new(
           ssh_hosts: ssh_hosts,
-          forker: Adapters::Fork::Forker.new(
+          launcher: Adapters::Fork::Launcher.new(
             debug: debug,
             max_timeout: max_timeout,
+            singularity_bin: singularity_bin,
+            singularity_bindpath: singularity_bindpath,  # '/etc,/media,/mnt,/opt,/srv,/usr,/var,/users',
+            singularity_image: singularity_image,
             ssh_hosts: ssh_hosts,
+            strict_host_checking: strict_host_checking,
             submit_host: submit_host,
             tmux_bin: tmux_bin,
-          ),
+          )
         )
       end
     end
@@ -38,10 +54,10 @@ module OodCore
       class Fork < Adapter
         using Refinements::ArrayExtensions
 
-        require "ood_core/job/adapters/fork/forker"
+        require "ood_core/job/adapters/fork/launcher"
 
-        def initialize(ssh_hosts:, forker:)
-          @forker = forker
+        def initialize(ssh_hosts:, launcher:)
+          @launcher = launcher
           @ssh_hosts = Set.new(ssh_hosts)
         end
 
@@ -69,7 +85,7 @@ module OodCore
         #   execution after dependent jobs have terminated
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
-          @forker.start_remote_tmux_session(script)
+          @launcher.start_remote_session(script)
         end
 
         # Retrieve info for all jobs from the resource manager
@@ -84,7 +100,9 @@ module OodCore
         #   adapters can get by without populating the entire Info object
         # @return [Array<Info>] information describing submitted jobs
         def info_all(attrs: nil, host: nil)
-          @forker.list_remote_tmux_sessions(host: host).map{
+          host_permitted?(host) if host
+
+          @launcher.list_remote_sessions(host: host).map{
             |ls_output| ls_to_info(ls_output)
           }
         end
@@ -200,7 +218,7 @@ module OodCore
         # @return [void]
         def delete(id)
           session_name, destination_host = *id.split('@')
-          @forker.stop_remote_tmux_session(session_name: session_name, hostname: destination_host)
+          @launcher.stop_remote_session(session_name, destination_host)
         end
 
         private
@@ -212,10 +230,10 @@ module OodCore
         # Convert the returned Hash into an Info object
         # TODO: walltime, submit time, allocated nodes, native...these are all definable, there may be others
         def ls_to_info(ls_output)
-            Info.new(
-                id: ls_output[:id],
-                status: :running,
-            )
+          Info.new(
+              id: ls_output[:id],
+              status: :running,
+          )
         end
       end
     end
