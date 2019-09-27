@@ -41,5 +41,6 @@ chmod +x "$tmux_tmp_file"
 # Remove the file
 <% if ! debug %>
 # Wait 1 second to ensure that tmux session has started before the file is removed
-(sleep 1; rm -f "$tmux_tmp_file"; rm -f "$singularity_tmp_file") &
+sleep 1
+rm -f "$tmux_tmp_file"; rm -f "$singularity_tmp_file"
 <% end %>

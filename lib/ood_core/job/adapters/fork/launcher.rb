@@ -39,8 +39,8 @@ class OodCore::Job::Adapters::Fork::Launcher
     @max_timeout = max_timeout.to_i
     @session_name_label = 'launched-by-ondemand'
     @singularity_bin = Pathname.new(singularity_bin)
-    @singularity_bindpath = singularity_bindpath.to_s
-    @singularity_image = Pathname.new(singularity_image)
+    @site_singularity_bindpath = singularity_bindpath.to_s
+    @default_singularity_image = Pathname.new(singularity_image)
     @ssh_hosts = ssh_hosts
     @strict_host_checking = strict_host_checking
     @submit_host = submit_host
@@ -130,7 +130,7 @@ class OodCore::Job::Adapters::Fork::Launcher
         'script_timeout' => script_timeout(script),
         'session_name' => session_name,
         'singularity_bin' => @singularity_bin,
-        'singularity_image' => @singularity_image,
+        'singularity_image' => singularity_image(script),
         'tmux_bin' => @tmux_bin,
       }.each{
         |key, value| bnd.local_variable_set(key, value)
@@ -141,10 +141,24 @@ class OodCore::Job::Adapters::Fork::Launcher
   # Generate the environment export block for this script
   def export_env(environment)
     (environment ? environment : {}).tap{
-      |hsh| hsh['SINGULARITY_BINDPATH'] = @singularity_bindpath if @singularity_bindpath
+      |hsh|
+      hsh['SINGULARITY_BINDPATH'] = singularity_bindpath(environment)
+      hsh.delete('SINGULARITY_CONTAINER')
     }.map{
       |key, value| "export #{key}=#{Shellwords.escape(value)}"
     }.sort.join("\n")
+  end
+
+  def singularity_image(script)
+    image = script.job_environment['SINGULARITY_CONTAINER']
+    (image) ? image : @default_singularity_image
+  end
+
+  def singularity_bindpath(environment)
+    script_bindpath = environment['SINGULARITY_BINDPATH']
+    return script_bindpath if script_bindpath
+
+    @site_singularity_bindpath
   end
 
   def script_timeout(script)
