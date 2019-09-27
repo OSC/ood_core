@@ -8,6 +8,9 @@ require 'time'
 #
 # @api private
 class OodCore::Job::Adapters::Fork::Launcher
+  attr_reader :debug, :site_timeout, :session_name_label, :singularity_bin,
+    :site_singularity_bindpath, :default_singularity_image, :ssh_hosts, 
+    :strict_host_checking, :submit_host, :tmux_bin, :username
   # The root exception class that all Fork adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
@@ -15,7 +18,7 @@ class OodCore::Job::Adapters::Fork::Launcher
   UNIT_SEPARATOR = "\x1F"
 
   # @param debug Whether the adapter should be used in debug mode
-  # @param max_timeout [#to_i] A period after which the job should be killed or nil
+  # @param site_timeout [#to_i] A period after which the job should be killed or nil
   # @param singularity_bin  Path to the Singularity executable
   # @param singularity_bindpath A comma delimited string of host paths to bindmount into the guest; sets SINGULARITY_BINDPATH environment variable
   # @param singularity_image [#to_s] Path to the Singularity image
@@ -25,7 +28,7 @@ class OodCore::Job::Adapters::Fork::Launcher
   # @param tmux_bin [#to_s] Path to the tmux executable
   def initialize(
     debug: false,
-    max_timeout: nil,
+    site_timeout: nil,
     singularity_bin:,
     singularity_bindpath: '/etc,/media,/mnt,/opt,/srv,/usr,/var,/users',
     singularity_image:,
@@ -36,7 +39,7 @@ class OodCore::Job::Adapters::Fork::Launcher
     **_
   )
     @debug = !! debug
-    @max_timeout = max_timeout.to_i
+    @site_timeout = site_timeout.to_i
     @session_name_label = 'launched-by-ondemand'
     @singularity_bin = Pathname.new(singularity_bin)
     @site_singularity_bindpath = singularity_bindpath.to_s
@@ -51,33 +54,38 @@ class OodCore::Job::Adapters::Fork::Launcher
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
-    cmd = ssh_cmd(@submit_host)
+    unless user_script_has_shebang?(script)
+      raise Error, 'User script must start with shebang'
+    end
+    cmd = ssh_cmd(submit_host)
 
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
-    hostname, pid = output.strip.split(UNIT_SEPARATOR)
+    hostname = output.strip
 
     "#{session_name}@#{hostname}"
   end
 
   def stop_remote_session(session_name, hostname)
-    cmd = ssh_cmd(hostname) + [@tmux_bin, 'kill-session', '-t', session_name]
+    cmd = ssh_cmd(hostname) + [tmux_bin, 'kill-session', '-t', session_name]
     call(*cmd)
   rescue Error => e
     raise e unless (
       # The tmux server not running is not an error
       e.message.include?('failed to connect to server') ||
       # The session not being found is not an error
-      e.message.include?("session not found: #{@session_name_label}")
+      e.message.include?("session not found: #{session_name_label}")
     )
   end
 
   def list_remote_sessions(host: nil)
-    host_list = (host) ? [host] : @ssh_hosts
+    host_list = (host) ? [host] : ssh_hosts
 
     host_list.map {
       |hostname| list_remote_tmux_session(hostname)
-    }.flatten.sort
+    }.flatten.sort_by {
+      |hsh| hsh[:session_name]
+    }
   end
 
   private
@@ -97,11 +105,11 @@ class OodCore::Job::Adapters::Fork::Launcher
   # -o UserKnownHostsFile=/dev/null (do not update the user's known hosts file)
   # -o StrictHostKeyChecking=no (do no check the user's known hosts file)
   def ssh_cmd(destination_host)
-    if @strict_host_checking
+    if strict_host_checking
       [
         'ssh', '-t',
         '-o', 'BatchMode=yes',
-        "#{@username}@#{destination_host}"
+        "#{username}@#{destination_host}"
       ]
     else
       [
@@ -109,7 +117,7 @@ class OodCore::Job::Adapters::Fork::Launcher
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',
-        "#{@username}@#{destination_host}"
+        "#{username}@#{destination_host}"
       ]
     end
   end
@@ -121,7 +129,7 @@ class OodCore::Job::Adapters::Fork::Launcher
     ).result(binding.tap {|bnd|
       {
         'cd_to_workdir' => (script.workdir) ? "cd #{script.workdir}" : '',
-        'debug' => @debug,
+        'debug' => debug,
         'environment' => export_env(script.job_environment),
         'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
         'job_name' => script.job_name.to_s,
@@ -129,9 +137,9 @@ class OodCore::Job::Adapters::Fork::Launcher
         'script_content' => script.content,
         'script_timeout' => script_timeout(script),
         'session_name' => session_name,
-        'singularity_bin' => @singularity_bin,
+        'singularity_bin' => singularity_bin,
         'singularity_image' => singularity_image(script),
-        'tmux_bin' => @tmux_bin,
+        'tmux_bin' => tmux_bin,
       }.each{
         |key, value| bnd.local_variable_set(key, value)
       }
@@ -151,24 +159,26 @@ class OodCore::Job::Adapters::Fork::Launcher
 
   def singularity_image(script)
     image = script.job_environment['SINGULARITY_CONTAINER']
-    (image) ? image : @default_singularity_image
+    (image) ? image : default_singularity_image
   end
 
   def singularity_bindpath(environment)
     script_bindpath = environment['SINGULARITY_BINDPATH']
     return script_bindpath if script_bindpath
 
-    @site_singularity_bindpath
+    site_singularity_bindpath
   end
 
   def script_timeout(script)
-    return [script.wall_time.to_i, @max_timeout].min unless @max_timeout == 0
-    
-    [script.wall_time.to_i, 0].max
+    wall_time = script.wall_time.to_i
+    return site_timeout if wall_time == 0
+    return [wall_time, site_timeout].min unless site_timeout == 0
+
+    wall_time
   end
 
   def unique_session_name
-    "#{@session_name_label}-#{SecureRandom.uuid}"
+    "#{session_name_label}-#{SecureRandom.uuid}"
   end
 
   # List all Tmux sessions on destination_host started by this adapter
@@ -190,11 +200,16 @@ class OodCore::Job::Adapters::Fork::Launcher
         session_hash[:id] = "#{session_hash[:session_name]}@#{destination_host}"
       end
     end.select{
-      |session_hash| session_hash[:session_name].start_with?(@session_name_label)
+      |session_hash| session_hash[:session_name].start_with?(session_name_label)
     }
   rescue Error => e
     # The tmux server not running is not an error
     raise e unless e.message.include?('failed to connect to server')
     []
+  end
+
+  def user_script_has_shebang?(script)
+    return false if script.content.empty?
+    script.content.split("\n").first.start_with?('#!/')
   end
 end
