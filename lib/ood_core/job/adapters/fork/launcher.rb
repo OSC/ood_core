@@ -4,6 +4,7 @@ require 'pathname'
 require 'securerandom'
 require 'shellwords'
 require 'time'
+
 # Object used for simplified communication SSH hosts
 #
 # @api private
@@ -125,11 +126,14 @@ class OodCore::Job::Adapters::Fork::Launcher
   # Wraps a user-provided script into a Tmux invocation
   def wrapped_script(script, session_name)
     ERB.new(
-      File.read(Pathname.new(__dir__).join('script_wrapper.erb.sh'))
+      File.read(Pathname.new(__dir__).join('templates/script_wrapper.erb.sh'))
     ).result(binding.tap {|bnd|
       {
+        'arguments' => script_arguments(script),
         'cd_to_workdir' => (script.workdir) ? "cd #{script.workdir}" : '',
         'debug' => debug,
+        'email_on_terminated' => script_email_on_event(script, 'terminated'),
+        'email_on_start' => script_email_on_event(script, 'started'),
         'environment' => export_env(script.job_environment),
         'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
         'job_name' => script.job_name.to_s,
@@ -175,6 +179,28 @@ class OodCore::Job::Adapters::Fork::Launcher
     return [wall_time, site_timeout].min unless site_timeout == 0
 
     wall_time
+  end
+
+  def script_arguments(script)
+    return '' unless script.args
+
+    Shellwords.join(script.args)
+  end
+
+  def script_email_on_event(script, event)
+    return false unless script.email && script.send("email_on_#{event}")
+
+    ERB.new(
+      File.read(Pathname.new(__dir__).join('templates/email.erb.sh'))
+    ).result(binding.tap {|bnd|
+      {
+        'email_recipients' => script.email.map{|addr| Shellwords.escape(addr)}.join(', '),
+        'job_name' => (script.job_name) ? script.job_name : 'Fork_Adapter_Job',
+        'job_status' => event
+      }.each{
+        |key, value| bnd.local_variable_set(key, value)
+      }
+    })
   end
 
   def unique_session_name

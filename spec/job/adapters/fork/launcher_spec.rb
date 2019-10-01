@@ -60,8 +60,8 @@ describe OodCore::Job::Adapters::Fork::Launcher do
         :tmux_bin => '/usr/bin/tmux'
     } }
 
-    let(:exit_success) { Struct.new(:success?).new(true) }
-    let(:exit_failure) { Struct.new(:success?).new(false) }
+    let(:exit_success) { double(success?: true) }
+    let(:exit_failure) { double(success?: false) }
 
     subject(:adapter) {
         described_class.new(**opts)
@@ -178,6 +178,16 @@ describe OodCore::Job::Adapters::Fork::Launcher do
                 ).to eq(parsed_tmux_output_x3)
             end
         end
+
+        context "when SSHing to the execution host fails it" do
+            it "raises an error" do
+                allow(Open3).to receive(:capture3).and_return(['remote_host', 'SSH failure', exit_failure])
+
+                expect{
+                    subject.list_remote_sessions
+                }.to raise_error(OodCore::Job::Adapters::Fork::Launcher::Error)
+            end
+        end
     end
 
     # Private API
@@ -208,13 +218,189 @@ describe OodCore::Job::Adapters::Fork::Launcher do
     end
 
     describe "#wrapped_script" do
-        context "when job_environment is set" do
+        context "when :accounting_id" do
+            # Does not support an accounting_id
+        end
+
+        context "when :args" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({args: ['ARG_A', 'ARG_B', 'ARG_C']}), 'session_name')
+            }
+
+            it "is written to the script" do
+                expect(script).to match(/ARG_A ARG_B ARG_C/)
+            end
+        end
+
+        context "when :args contain shell special characters" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({args: ['#!this n that', '; cat ~/.ssh/id_rsa > ~attacker/their_private_key', 'ARG_C']}), 'session_name')
+            }
+
+            it "is written to the script escaped" do
+                expect(script).to include('\#\!this\ n\ that \;\ cat\ \~/.ssh/id_rsa\ \>\ \~attacker/their_private_key ARG_C')
+            end
+        end
+
+        context "when :email and :email_on_started" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({
+                    email: ['efranz@osc.edu', 'johrstrom@osc.edu', 'mrodgers@osc.edu'],
+                    email_on_started: true
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script).to include('has started" efranz@osc.edu, johrstrom@osc.edu, mrodgers@osc.edu')
+            end
+        end
+
+        context "when :email and :email_on_terminated" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({
+                    email: ['efranz@osc.edu', 'johrstrom@osc.edu', 'mrodgers@osc.edu'],
+                    email_on_terminated: true
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script).to include('has terminated" efranz@osc.edu, johrstrom@osc.edu, mrodgers@osc.edu')
+            end
+        end
+
+        context "when :error_path" do
+            let(:script_with_explicit_error_path) {
+                subject.send(:wrapped_script, build_script({
+                    error_path: "/home/efranz/stderr.log"
+                }), 'session_name')
+            }
+
+            let(:script_with_nil_error_path) {
+                subject.send(:wrapped_script, build_script({
+                    error_path: nil
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script_with_explicit_error_path).to include('ERROR_PATH=/home/efranz/stderr.log')
+            end
+
+            it "is not set in the script" do
+                expect(script_with_nil_error_path).to include('ERROR_PATH=/dev/null')
+            end
+        end
+
+        context "when :input_path" do
+            # Does not support an input_path
+        end
+
+        context "when :job_array_request" do
+            # Does not support job arrays
+        end
+
+        context "when :job_environment" do
             let(:script) {
                 subject.send(:wrapped_script, build_script({job_environment: {'ENV_KEY' => 'ENV_VALUE'}}), 'session_name')
             }
 
             it "is written to the script" do
                 expect(script).to match(/export ENV_KEY=ENV_VALUE/)
+            end
+        end
+
+        context "when :job_name (and :email and one of :email_on_*)" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({
+                    job_name: 'Useful job name',
+                    email: ['efranz@osc.edu'],
+                    email_on_started: true
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script).to include('mail -s "Job Useful job name has')
+                expect(script).to include('Your job Useful job name has')
+            end
+        end
+
+        context "when :output_path" do
+            let(:script_with_explicit_output_path) {
+                subject.send(:wrapped_script, build_script({
+                    output_path: "/home/efranz/stdout.log"
+                }), 'session_name')
+            }
+
+            let(:script_with_nil_output_path) {
+                subject.send(:wrapped_script, build_script({
+                    output_path: nil
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script_with_explicit_output_path).to include('OUTPUT_PATH=/home/efranz/stdout.log')
+            end
+
+            it "is not set in the script" do
+                expect(script_with_nil_output_path).to include('OUTPUT_PATH=/dev/null')
+            end
+        end
+
+        context "when :native" do
+            # Native is currently unused
+            # Might be preferable to declare an alternative image here instead
+            # of in job_environment using SINGULARITY_CONTAINER?
+        end
+
+        context "when :priority" do
+            # Does not support priority
+        end
+
+        context "when :queue_name" do
+            # Does not support queues
+        end
+
+        context "when :rerunnable" do
+            # Does not support rerunning jobs
+        end
+
+        context "when :reservation_id" do
+            # Does not support reservations
+        end
+
+        context "when :shell_path" do
+            # Does not support a shell path; script.content is expected to begin with a shebang
+        end
+
+        context "when :start_time" do
+            # Does not support deferred start; could be implmented using `at`
+        end
+
+        context "when :submit_as_hold" do
+            # Does not support holding the job
+        end
+
+        context "when :wall_time" do
+            # for tests on user/site timeout conflict see #script_timeout
+            let(:script) {
+                subject.send(:wrapped_script, build_script({
+                    wall_time: 60
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script).to match(/TMUX_LAUNCHER.+timeout \d+s.+TMUX_LAUNCHER/m)
+            end
+        end
+
+        context "when :workdir" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({
+                    workdir: '/fs/project/PZS0174/mrodgers'
+                }), 'session_name')
+            }
+
+            it "is set in the script" do
+                expect(script).to match(/TMUX_LAUNCHER.+cd \/fs\/project\/PZS0174\/mrodgers.+TMUX_LAUNCHER/m)
             end
         end
 
@@ -231,12 +417,12 @@ describe OodCore::Job::Adapters::Fork::Launcher do
 
         context "when env var SINGULARITY_BINDPATH is set" do
             let(:script) {
-                subject.send(:wrapped_script, build_script({job_environment: {'SINGULARITY_BINDPATH' => '/home/johstrom'}}), 'session_name')
+                subject.send(:wrapped_script, build_script({job_environment: {'SINGULARITY_BINDPATH' => '/home/johrstrom'}}), 'session_name')
             }
             let(:default_value) { subject.site_singularity_bindpath }
 
             it "uses the requested value" do
-                expect(script).to match(/export SINGULARITY_BINDPATH=\/home\/johstrom/)
+                expect(script).to match(/export SINGULARITY_BINDPATH=\/home\/johrstrom/)
             end
         end
 

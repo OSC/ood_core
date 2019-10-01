@@ -13,16 +13,32 @@ tmux_tmp_file=$(mktemp)
 # Create an executable to run in a tmux session
 cat << TMUX_LAUNCHER > "$tmux_tmp_file"
 #!/bin/bash
+<% if email_on_terminated %>
+exit_script() {
+<%# DO NOT INDENT email_on_terminated may have HEREDOCS %>
+<%= email_on_terminated %>
+trap - SIGINT SIGTERM # clear the trap
+kill -- -$$ # Sends SIGTERM to child/sub processes
+}
+trap exit_script SIGINT SIGTERM
+<% end %>
+
 <%= cd_to_workdir %>
-<%= environment %> 
+<%= environment %>
+
+<%= email_on_start %>
 
 # Redirect stdout and stderr to separate files for all commands run within the curly braces
 # https://unix.stackexchange.com/a/6431/204548
 # Swap sterr and stdout after stdout has been redirected
 # https://unix.stackexchange.com/a/61932/204548
+OUTPUT_PATH=<%= output_path %>
+ERROR_PATH=<%= error_path %>
 ({
-timeout <%= script_timeout %>s <%= singularity_bin %> exec --pid <%= singularity_image %> /bin/bash --login $singularity_tmp_file
-} | tee "<%= output_path %>") 3>&1 1>&2 2>&3 | tee "<%= error_path %>"
+timeout <%= script_timeout %>s <%= singularity_bin %> exec --pid <%= singularity_image %> /bin/bash --login $singularity_tmp_file <%= arguments %>
+} | tee "\$OUTPUT_PATH") 3>&1 1>&2 2>&3 | tee "\$ERROR_PATH"
+
+<%= email_on_terminated %>
 
 # Exit the tmux session when we are complete
 exit 0

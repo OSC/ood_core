@@ -74,12 +74,12 @@ module OodCore
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           unless (after.empty? && afterok.empty? && afternotok.empty? && afterany.empty?)
-            raise JobAdapterError 'Scheduling subsequent jobs is not available.'
+            raise JobAdapterError, 'Scheduling subsequent jobs is not available.'
           end
 
           @launcher.start_remote_session(script)
         rescue Launcher::Error => e
-          raise JobAdapterError e.message
+          raise JobAdapterError, e.message
         end
 
         # Retrieve info for all jobs from the resource manager
@@ -93,12 +93,13 @@ module OodCore
             |ls_output| ls_to_info(ls_output)
           }
         rescue Launcher::Error => e
-          raise JobAdapterError e.message
+          raise JobAdapterError, e.message
         end
 
         # Retrieve info for all jobs for a given owner or owners from the
         # resource manager
         # Note: owner and attrs are present only to complete the interface and are ignored
+        # Note: since this API is used in production no errors or warnings are thrown / issued
         # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
@@ -143,11 +144,11 @@ module OodCore
         # @return [Info] information describing submitted job
         # @see Adapter#info
         def info(id)
-          _, host = *(id.split('@'))
+          _, host = parse_job_id(id)
           job = info_all(host: host).select{|info| info.id == id}.first
           (job) ? job : Info.new(id: id, status: :completed)
         rescue Launcher::Error => e
-          raise JobAdapterError e.message
+          raise JobAdapterError, e.message
         end
 
         # Retrieve job status from resource manager
@@ -157,11 +158,12 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [Status] status of job
         def status(id)
-          _, host = *(id.split('@'))
+          _, host = parse_job_id(id)
           job = info_all(host: host).select{|info| info.id == id}.first
-          (job) ? :running : :completed
+
+          Status.new(state: (job) ? :running : :completed)
         rescue Launcher::Error => e
-          raise JobAdapterError e.message
+          raise JobAdapterError, e.message
         end
 
         # Put the submitted job on hold
@@ -190,16 +192,22 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [void]
         def delete(id)
-          session_name, destination_host = *id.split('@')
+          session_name, destination_host = parse_job_id(id)
           @launcher.stop_remote_session(session_name, destination_host)
         rescue Launcher::Error => e
-          raise JobAdapterError e.message
+          raise JobAdapterError, e.message
         end
 
         private
 
         def host_permitted?(destination_host)
           raise JobAdapterError, "Requested destination host (#{destination_host}) not permitted" unless @ssh_hosts.include?(destination_host)
+        end
+
+        def parse_job_id(id)
+          raise JobAdapterError, "#{id} is not a valid Fork adapter id because it is missing the '@'." unless id.include?('@')
+
+          return id.split('@')
         end
 
         # Convert the returned Hash into an Info object
