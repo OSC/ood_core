@@ -8,11 +8,12 @@ module OodCore
 
         attr_reader :raw_config
 
-        def initialize
+        def self.load_config(app_config_path=nil)
+            AppConfig.new(load_yaml(app_config_path) || {})
         end
 
-        def load_config
-            @raw_config = YAML.load(load_yaml) || {}
+        def initialize(opts={})
+            @raw_config = opts
         end
 
         def branding_bg_color
@@ -150,15 +151,35 @@ module OodCore
             raw_config['whitelist_path'] || []
         end
 
+        def to_h
+            @to_h ||= Hash[
+                AppConfig.instance_methods(false).select do |mthd|
+                    # Don't recurse
+                    ! [:config, :to_h].include? mthd
+                end.sort.map do |mthd|
+                    [mthd, self.send(mthd)]
+                end
+            ]
+        end
+        alias_method :config, :to_h
+
         class Error < StandardError; end
 
         private
 
-        def load_yaml
-            erb_wrapper_path = Pathname.new(ENV['OOD_CONFIG_ERB_WRAPPER'] || '/etc/ood/config/bin/erb_wrapper')
-            app_config_path = Pathname.new(ENV['OOD_APP_CONFIG'] || '/etc/ood/config/app_config.yml')
-            o, e, s = Open3.capture3(erb_wrapper_path.to_s, app_config_path.to_s)
-            s.success? ? o : raise(Error, e)
+        def self.load_yaml(app_config_path)
+            config_generator_path = Pathname.new(ENV['OOD_CONFIG_GENERATOR'] || '/etc/ood/config/bin/config_generator')
+            app_config_path = Pathname.new(app_config_path || ENV['OOD_APP_CONFIG'] || '/etc/ood/config/app_config.yml')
+
+            if config_generator_path.exist?
+                raise Error, "Config generator detected at #{config_generator_path}, but it is not executable" unless config_generator_path.executable?
+                o, e, s = Open3.capture3(config_generator_path.to_s, app_config_path.to_s)
+                s.success? ? YAML.load(o) : raise(Error, e)
+            else
+                YAML.load(app_config_path.read)
+            end
+        rescue StandardError => e
+            raise Error, e.message
         end
 
         def pathname_or_nil(path)

@@ -5,7 +5,7 @@ user_file_system_locations = [].tap do |paths|
   projects = `groups`.split.grep(/^P./)
   paths.concat projects.map { |p| Pathname.new("/fs/project/#{p}")  }
   # add scratch space directories
-  paths << Pathname.new("/fs/scratch/#{user_name}")
+  paths << Pathname.new("/fs/scratch/#{ENV['USER']}")
   paths.concat projects.map { |p| Pathname.new("/fs/scratch/#{p}")  }
 end
 %>
