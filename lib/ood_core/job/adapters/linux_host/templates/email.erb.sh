@@ -4,6 +4,6 @@ Greetings,
 
 Your job <%= job_name %> has <%= job_status %>.
 
-- The OnDemand Fork Adapter
+- The OnDemand Linux Host Adapter
 EMAIL_CONTENT
 fi

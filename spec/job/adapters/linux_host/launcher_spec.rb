@@ -1,9 +1,9 @@
 require "spec_helper"
-require "ood_core/job/adapters/fork"
-require "ood_core/job/adapters/fork/launcher"
+require "ood_core/job/adapters/linux_host"
+require "ood_core/job/adapters/linux_host/launcher"
 
 
-describe OodCore::Job::Adapters::Fork::Launcher do
+describe OodCore::Job::Adapters::LinuxHost::Launcher do
     def build_script(opts = {})
         OodCore::Job::Script.new({
             accounting_id: nil,
@@ -81,7 +81,7 @@ describe OodCore::Job::Adapters::Fork::Launcher do
             it "raises an error" do
                 expect{
                     subject.start_remote_session(build_script({content: ""}))
-                }.to raise_error(OodCore::Job::Adapters::Fork::Launcher::Error)
+                }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
             end
         end
 
@@ -90,7 +90,7 @@ describe OodCore::Job::Adapters::Fork::Launcher do
                 allow(Open3).to receive(:capture3).and_return(['remote_host', '', exit_failure])
                 expect{
                     subject.start_remote_session(build_script)
-                }.to raise_error(OodCore::Job::Adapters::Fork::Launcher::Error)
+                }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
             end
         end
     end
@@ -118,7 +118,7 @@ describe OodCore::Job::Adapters::Fork::Launcher do
 
                 expect{
                     subject.stop_remote_session('job', 'remote_host')
-                }.to raise_error(OodCore::Job::Adapters::Fork::Launcher::Error)
+                }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
             end
         end
     end
@@ -185,7 +185,7 @@ describe OodCore::Job::Adapters::Fork::Launcher do
 
                 expect{
                     subject.list_remote_sessions
-                }.to raise_error(OodCore::Job::Adapters::Fork::Launcher::Error)
+                }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
             end
         end
     end

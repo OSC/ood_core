@@ -51,10 +51,10 @@ module OodCore
     module Adapters
       # An adapter object that describes the communication with a remote host
       # for job management.
-      class Fork < Adapter
+      class LinuxHost < Adapter
         using Refinements::ArrayExtensions
 
-        require "ood_core/job/adapters/fork/launcher"
+        require "ood_core/job/adapters/linux_host/launcher"
 
         def initialize(ssh_hosts:, launcher:)
           @launcher = launcher

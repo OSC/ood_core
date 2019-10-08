@@ -1,7 +1,7 @@
 require "spec_helper"
-require "ood_core/job/adapters/fork"
+require "ood_core/job/adapters/linux_host"
 
-describe OodCore::Job::Adapters::Fork do
+describe OodCore::Job::Adapters::LinuxHost do
     let(:launcher) { double() }
     let(:ssh_hosts) { [
         'owens-login01.hpc.osc.edu',
@@ -157,8 +157,8 @@ describe OodCore::Job::Adapters::Fork do
           end
         end
 
-        context "when OodCore::Job::Adapters::Fork::Launcher::Error is raised" do
-          before { expect(launcher).to receive(:start_remote_session).and_raise(OodCore::Job::Adapters::Fork::Launcher::Error) }
+        context "when OodCore::Job::Adapters::LinuxHost::Launcher::Error is raised" do
+          before { expect(launcher).to receive(:start_remote_session).and_raise(OodCore::Job::Adapters::LinuxHost::Launcher::Error) }
 
           it "raises OodCore::JobAdapterError" do
             expect { adapter.submit(build_script) }.to raise_error(OodCore::JobAdapterError)
@@ -216,8 +216,8 @@ describe OodCore::Job::Adapters::Fork do
             end
         end
 
-        context "when OodCore::Job::Adapters::Fork::Launcher::Error is raised" do
-          before { expect(launcher).to receive(:list_remote_sessions).and_raise(OodCore::Job::Adapters::Fork::Launcher::Error) }
+        context "when OodCore::Job::Adapters::LinuxHost::Launcher::Error is raised" do
+          before { expect(launcher).to receive(:list_remote_sessions).and_raise(OodCore::Job::Adapters::LinuxHost::Launcher::Error) }
 
           it "raises OodCore::JobAdapterError" do
             expect { adapter.info_all }.to raise_error(OodCore::JobAdapterError)
@@ -303,8 +303,8 @@ describe OodCore::Job::Adapters::Fork do
             end
         end
 
-        context "when OodCore::Job::Adapters::Fork::Launcher::Error is raised" do
-          before { expect(launcher).to receive(:stop_remote_session).and_raise(OodCore::Job::Adapters::Fork::Launcher::Error) }
+        context "when OodCore::Job::Adapters::LinuxHost::Launcher::Error is raised" do
+          before { expect(launcher).to receive(:stop_remote_session).and_raise(OodCore::Job::Adapters::LinuxHost::Launcher::Error) }
 
           it "raises OodCore::JobAdapterError" do
             expect { adapter.delete('jobid@owens-login01.hpc.osc.edu') }.to raise_error(OodCore::JobAdapterError)

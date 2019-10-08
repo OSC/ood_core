@@ -8,11 +8,11 @@ require 'time'
 # Object used for simplified communication SSH hosts
 #
 # @api private
-class OodCore::Job::Adapters::Fork::Launcher
+class OodCore::Job::Adapters::LinuxHost::Launcher
   attr_reader :debug, :site_timeout, :session_name_label, :singularity_bin,
     :site_singularity_bindpath, :default_singularity_image, :ssh_hosts, 
     :strict_host_checking, :submit_host, :tmux_bin, :username
-  # The root exception class that all Fork adapter-specific exceptions inherit
+  # The root exception class that all LinuxHost adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
 
@@ -195,7 +195,7 @@ class OodCore::Job::Adapters::Fork::Launcher
     ).result(binding.tap {|bnd|
       {
         'email_recipients' => script.email.map{|addr| Shellwords.escape(addr)}.join(', '),
-        'job_name' => (script.job_name) ? script.job_name : 'Fork_Adapter_Job',
+        'job_name' => (script.job_name) ? script.job_name : 'LinuxHost_Adapter_Job',
         'job_status' => event
       }.each{
         |key, value| bnd.local_variable_set(key, value)
