@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: <%= ENV['USER'] %>
+  name: <%= id %>
+  labels:
+    job: <%= id %>
+    app.kubernetes.io/name: <%= container.name %>
+    app.kubernetes.io/managed-by: open-ondemand
+spec:
+  restartPolicy: <%= @restart_policy %>
+  containers:
+  - name: <%= container.name %>
+    image: <%= container.image %>
+    imagePullPolicy: IfNotPresent
+    <% unless container.command.nil? %>
+    command:
+    <% container.command.each do |cmd| %>
+    - <%= cmd %>
+    <% end %>
+    <% end %>
+    <% unless container.port.nil? %>
+    ports:
+    - containerPort: <%= container.port %>
+    <% end %>
+  <% unless @volumes.nil? %>
+  volumes:
+  <% @volumes.each do |volume| %>
+  <% if volume["type"] == "hostPath" %>
+  - name: <%= volume["name"] %>
+    hostPath: 
+      path: <%= volume["path"] %>
+  <% end %>
+  <% end %>
+  <% end %>
+
