@@ -8,7 +8,7 @@ module OodCore
     class Factory
       using Refinements::HashExtensions
 
-      # Build the Fork adapter from a configuration
+      # Build the LinuxHost adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :debug (false) Use the adapter in a debug mode
       # @option config [Object] :max_timeout (nil) The longest 'wall_clock' permissible
@@ -19,7 +19,7 @@ module OodCore
       # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking and updating the known_hosts file
       # @option config [Object] :submit_host The SSH target to connect to, may be the head of a round-robin
       # @option config [Object] :tmux_bin ('/usr/bin/tmux') The path to the Tmux executable
-      def self.build_fork(config)
+      def self.build_linux_host(config)
         c = config.to_h.symbolize_keys
         debug = c.fetch(:debug, false)
         max_timeout = c.fetch(:max_timeout, nil)
@@ -31,9 +31,9 @@ module OodCore
         submit_host = c[:submit_host]
         tmux_bin = c.fetch(:tmux_bin, '/usr/bin/tmux')
 
-        Adapters::Fork.new(
+        Adapters::LinuxHost.new(
           ssh_hosts: ssh_hosts,
-          launcher: Adapters::Fork::Launcher.new(
+          launcher: Adapters::LinuxHost::Launcher.new(
             debug: debug,
             max_timeout: max_timeout,
             singularity_bin: singularity_bin,
@@ -205,7 +205,7 @@ module OodCore
         end
 
         def parse_job_id(id)
-          raise JobAdapterError, "#{id} is not a valid Fork adapter id because it is missing the '@'." unless id.include?('@')
+          raise JobAdapterError, "#{id} is not a valid LinuxHost adapter id because it is missing the '@'." unless id.include?('@')
 
           return id.split('@')
         end
@@ -225,7 +225,7 @@ module OodCore
               job_owner: Etc.getlogin,
               native: ls_output,
               procs: 1,
-              queue_name: "Fork adapter for #{@submit_host}",
+              queue_name: "LinuxHost adapter for #{@submit_host}",
               status: :running,
               submission_time: ellapsed,
               submit_host: @submit_host,
