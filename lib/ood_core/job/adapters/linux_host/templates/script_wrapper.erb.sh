@@ -11,7 +11,8 @@ tmux_tmp_file=$(mktemp)
 <% end %>
 
 # Create an executable to run in a tmux session
-cat << TMUX_LAUNCHER > "$tmux_tmp_file"
+# The escaped HEREDOC means that we need to substitute in $singularity_tmp_file ourselves
+cat << 'TMUX_LAUNCHER' | sed "s#\$singularity_tmp_file#${singularity_tmp_file}#" > "$tmux_tmp_file"
 #!/bin/bash
 <% if email_on_terminated %>
 exit_script() {
@@ -36,7 +37,7 @@ OUTPUT_PATH=<%= output_path %>
 ERROR_PATH=<%= error_path %>
 ({
 timeout <%= script_timeout %>s <%= singularity_bin %> exec --pid <%= singularity_image %> /bin/bash --login $singularity_tmp_file <%= arguments %>
-} | tee "\$OUTPUT_PATH") 3>&1 1>&2 2>&3 | tee "\$ERROR_PATH"
+} | tee "$OUTPUT_PATH") 3>&1 1>&2 2>&3 | tee "$ERROR_PATH"
 
 <%= email_on_terminated %>
 
@@ -45,7 +46,8 @@ exit 0
 TMUX_LAUNCHER
 
 # Create an executable for Singularity to run
-cat << SINGULARITY_LAUNCHER > "$singularity_tmp_file"
+# Escaped HEREDOC means that we do not have to worry about Shell.escape-ing script_content
+cat << 'SINGULARITY_LAUNCHER' > "$singularity_tmp_file"
 <%= script_content %>
 SINGULARITY_LAUNCHER
 

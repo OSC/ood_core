@@ -15,10 +15,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             error_path: '/users/PZS0002/mrodgers/stderr_from_fork.log',
             input_path: nil,
             job_array_request: nil,
-            job_environment: env = {
-                'KEY' => 'value!',
-                'CHEESE' => 'Brie'
-            },
+            job_environment: nil,
             job_name: nil,
             output_path: '/users/PZS0002/mrodgers/stdout_from_fork.log',
             native: nil,
@@ -77,13 +74,14 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             end
         end
 
-        context "when the job script does not have a shebang" do
-            it "raises an error" do
-                expect{
-                    subject.start_remote_session(build_script({content: ""}))
-                }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
-            end
-        end
+        ## This is a problem for Batch Connect applications which pass a non-shebanged script to the adapter
+        # context "when the job script does not have a shebang" do
+        #     it "raises an error" do
+        #         expect{
+        #             subject.start_remote_session(build_script({content: ""}))
+        #         }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
+        #     end
+        # end
 
         context "when SSHing to the submission host fails it" do
             it "raises an error" do

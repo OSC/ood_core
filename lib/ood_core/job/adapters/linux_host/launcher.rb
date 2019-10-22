@@ -10,7 +10,7 @@ require 'time'
 # @api private
 class OodCore::Job::Adapters::LinuxHost::Launcher
   attr_reader :debug, :site_timeout, :session_name_label, :singularity_bin,
-    :site_singularity_bindpath, :default_singularity_image, :ssh_hosts, 
+    :site_singularity_bindpath, :default_singularity_image, :ssh_hosts,
     :strict_host_checking, :submit_host, :tmux_bin, :username
   # The root exception class that all LinuxHost adapter-specific exceptions inherit
   # from
@@ -55,9 +55,6 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
-    unless user_script_has_shebang?(script)
-      raise Error, 'User script must start with shebang'
-    end
     cmd = ssh_cmd(submit_host)
 
     session_name = unique_session_name
@@ -123,8 +120,17 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     end
   end
 
+  def shell
+    ENV['SHELL'] || '/bin/bash'
+  end
+
   # Wraps a user-provided script into a Tmux invocation
   def wrapped_script(script, session_name)
+    content = script.content
+    unless user_script_has_shebang?(script)
+     content = "#!#{shell}\n#{content}"
+    end
+
     ERB.new(
       File.read(Pathname.new(__dir__).join('templates/script_wrapper.erb.sh'))
     ).result(binding.tap {|bnd|
@@ -138,7 +144,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
         'job_name' => script.job_name.to_s,
         'output_path' => (script.output_path) ? script.output_path.to_s : '/dev/null',
-        'script_content' => script.content,
+        'script_content' => content,
         'script_timeout' => script_timeout(script),
         'session_name' => session_name,
         'singularity_bin' => singularity_bin,
@@ -162,15 +168,18 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   end
 
   def singularity_image(script)
-    image = script.job_environment['SINGULARITY_CONTAINER']
-    (image) ? image : default_singularity_image
+    environment = script.job_environment
+    if environment && environment['SINGULARITY_CONTAINER']
+      return environment['SINGULARITY_CONTAINER']
+    end
+
+    default_singularity_image
   end
 
   def singularity_bindpath(environment)
-    script_bindpath = environment['SINGULARITY_BINDPATH']
-    return script_bindpath if script_bindpath
+    return site_singularity_bindpath unless environment && environment['SINGULARITY_BINDPATH']
 
-    site_singularity_bindpath
+    environment['SINGULARITY_BINDPATH']
   end
 
   def script_timeout(script)
@@ -217,7 +226,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     )
     keys = [:session_name, :session_created, :session_pid]
     cmd = ssh_cmd(destination_host) + ['tmux', 'list-panes', '-F', format_str]
-    
+
     call(*cmd).split(
       "\n"
     ).map do |line|
