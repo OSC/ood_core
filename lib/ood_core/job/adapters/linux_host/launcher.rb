@@ -75,7 +75,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     # find the sinit process for the tmux PID
     # kill the sinit process
     kill_cmd = <<~SCRIPT
-    kill $(pstree -p $(tmux list-panes -aF '#\{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ') | grep -Po 'sinit\\(\\d+' | grep -Po '[0-9]+')
+    kill $(pstree -p $(tmux list-panes -aF '#\{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ') | grep -o 'sinit([[:digit:]]*' | grep -o '[[:digit:]]*')
     SCRIPT
 
     call(*cmd, stdin: kill_cmd)
