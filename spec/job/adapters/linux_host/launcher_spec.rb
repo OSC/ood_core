@@ -343,10 +343,48 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             end
         end
 
-        context "when :native" do
-            # Native is currently unused
-            # Might be preferable to declare an alternative image here instead
-            # of in job_environment using SINGULARITY_CONTAINER?
+        context "when :native singularity_bindpath is not set" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({native: {:singularity_bindpath => nil}}), 'session_name')
+            }
+            let(:default_value) { subject.site_singularity_bindpath }
+
+            it "uses the default value" do
+                expect(script).to match(/export SINGULARITY_BINDPATH=#{default_value}/)
+            end
+        end
+
+        context "when :native singularity_bindpath is set" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({native: {:singularity_bindpath => '/home/johrstrom'}}), 'session_name')
+            }
+            let(:default_value) { subject.site_singularity_bindpath }
+
+            it "uses the configured value" do
+                expect(script).to match(/export SINGULARITY_BINDPATH=\/home\/johrstrom/)
+            end
+        end
+
+        context "when :native singularity_container is not set" do
+            let(:script) {
+                subject.send(:wrapped_script, build_script({native: {:singularity_container => nil}}), 'session_name')
+            }
+            let(:default_value) { subject.default_singularity_image }
+
+            it "uses the default value" do
+                expect(script).to match(/singularity exec\s+--pid #{default_value} \/bin\/bash/)
+            end
+        end
+
+        context "when :native singularity_container is set" do
+            let(:base_image) { '/apps/base_image.sif' }
+            let(:script) {
+                subject.send(:wrapped_script, build_script({native: {:singularity_container => base_image}}), 'session_name')
+            }
+
+            it "uses the default value" do
+                expect(script).to match(/singularity exec\s+--pid #{base_image} \/bin\/bash/)
+            end
         end
 
         context "when :priority" do
@@ -402,40 +440,17 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             end
         end
 
-        context "when env var SINGULARITY_BINDPATH is not set" do
+        context "when contain is truthy" do
             let(:script) {
-                subject.send(:wrapped_script, build_script({job_environment: {}}), 'session_name')
+                described_class.new(
+                    **opts.merge({:contain => true})
+                ).send(
+                    :wrapped_script, build_script({job_environment: {}}), 'session_name'
+                )
             }
-            let(:default_value) { subject.site_singularity_bindpath }
 
-            it "uses the default value" do
-                expect(script).to match(/export SINGULARITY_BINDPATH=#{default_value}/)
-            end
-        end
-
-        context "when env var SINGULARITY_BINDPATH is set" do
-            let(:script) {
-                subject.send(:wrapped_script, build_script({job_environment: {'SINGULARITY_BINDPATH' => '/home/johrstrom'}}), 'session_name')
-            }
-            let(:default_value) { subject.site_singularity_bindpath }
-
-            it "uses the requested value" do
-                expect(script).to match(/export SINGULARITY_BINDPATH=\/home\/johrstrom/)
-            end
-        end
-
-        context "when env var SINGULARITY_CONTAINER is not set by the user script" do
-            let(:script) {
-                subject.send(:wrapped_script, build_script({job_environment: {}}), 'session_name')
-            }
-            let(:default_value) { subject.default_singularity_image }
-
-            it "uses the default value" do
-                expect(script).to match(/singularity exec --pid #{default_value} \/bin\/bash/)
-            end
-
-            it "does not put SINGULARITY_CONTAINER into the environment block" do
-                expect(script).not_to match(/export SINGULARITY_CONTAINER=#{default_value}/)
+            it "generates the --contain flag" do
+                expect(script).to match(/singularity exec\s+--contain\s+--pid/)
             end
         end
 
@@ -446,7 +461,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             let(:user_value) { subject.default_singularity_image }
 
             it "uses the default value" do
-                expect(script).to match(/singularity exec --pid #{user_value} \/bin\/bash/)
+                expect(script).to match(/singularity exec\s+--pid #{user_value} \/bin\/bash/)
             end
 
             it "does not put SINGULARITY_CONTAINER into the environment block" do

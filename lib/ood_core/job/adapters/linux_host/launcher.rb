@@ -9,7 +9,7 @@ require 'time'
 #
 # @api private
 class OodCore::Job::Adapters::LinuxHost::Launcher
-  attr_reader :debug, :site_timeout, :session_name_label, :singularity_bin,
+  attr_reader :contain, :debug, :site_timeout, :session_name_label, :singularity_bin,
     :site_singularity_bindpath, :default_singularity_image, :ssh_hosts,
     :strict_host_checking, :submit_host, :tmux_bin, :username
   # The root exception class that all LinuxHost adapter-specific exceptions inherit
@@ -28,10 +28,11 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param submit_host The SSH-able host
   # @param tmux_bin [#to_s] Path to the tmux executable
   def initialize(
+    contain: false,
     debug: false,
     site_timeout: nil,
     singularity_bin:,
-    singularity_bindpath: '/etc,/media,/mnt,/opt,/srv,/usr,/var,/users',
+    singularity_bindpath: '/etc,/media,/mnt,/opt,/run,/srv,/usr,/var,/users',
     singularity_image:,
     ssh_hosts:,
     strict_host_checking: false,
@@ -39,6 +40,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     tmux_bin:,
     **_
   )
+    @contain = !! contain
     @debug = !! debug
     @site_timeout = site_timeout.to_i
     @session_name_label = 'launched-by-ondemand'
@@ -65,8 +67,18 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   end
 
   def stop_remote_session(session_name, hostname)
-    cmd = ssh_cmd(hostname) + [tmux_bin, 'kill-session', '-t', session_name]
-    call(*cmd)
+    cmd = ssh_cmd(hostname)
+
+    # discover tmux sessions
+    # discover the PID for the given session
+    # get all children of that PID
+    # find the sinit process for the tmux PID
+    # kill the sinit process
+    kill_cmd = <<~SCRIPT
+    kill $(pstree -p $(tmux list-panes -aF '#\{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ') | grep -Po 'sinit\\(\\d+' | grep -Po '[0-9]+')
+    SCRIPT
+
+    call(*cmd, stdin: kill_cmd)
   rescue Error => e
     raise e unless (
       # The tmux server not running is not an error
@@ -137,10 +149,11 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       {
         'arguments' => script_arguments(script),
         'cd_to_workdir' => (script.workdir) ? "cd #{script.workdir}" : '',
+        'contain' => (contain) ? '--contain' : '',
         'debug' => debug,
         'email_on_terminated' => script_email_on_event(script, 'terminated'),
         'email_on_start' => script_email_on_event(script, 'started'),
-        'environment' => export_env(script.job_environment),
+        'environment' => export_env(script),
         'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
         'job_name' => script.job_name.to_s,
         'output_path' => (script.output_path) ? script.output_path.to_s : '/dev/null',
@@ -148,7 +161,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         'script_timeout' => script_timeout(script),
         'session_name' => session_name,
         'singularity_bin' => singularity_bin,
-        'singularity_image' => singularity_image(script),
+        'singularity_image' => singularity_image(script.native),
         'tmux_bin' => tmux_bin,
       }.each{
         |key, value| bnd.local_variable_set(key, value)
@@ -157,29 +170,28 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   end
 
   # Generate the environment export block for this script
-  def export_env(environment)
+  def export_env(script)
+    environment = script.job_environment
     (environment ? environment : {}).tap{
       |hsh|
-      hsh['SINGULARITY_BINDPATH'] = singularity_bindpath(environment)
-      hsh.delete('SINGULARITY_CONTAINER')
+      hsh['SINGULARITY_BINDPATH'] = singularity_bindpath(script.native)
     }.map{
       |key, value| "export #{key}=#{Shellwords.escape(value)}"
     }.sort.join("\n")
   end
 
-  def singularity_image(script)
-    environment = script.job_environment
-    if environment && environment['SINGULARITY_CONTAINER']
-      return environment['SINGULARITY_CONTAINER']
+  def singularity_image(native)
+    if native && native[:singularity_container]
+      return native[:singularity_container]
     end
 
     default_singularity_image
   end
 
-  def singularity_bindpath(environment)
-    return site_singularity_bindpath unless environment && environment['SINGULARITY_BINDPATH']
+  def singularity_bindpath(native)
+    return site_singularity_bindpath unless native && native[:singularity_bindpath]
 
-    environment['SINGULARITY_BINDPATH']
+    native[:singularity_bindpath]
   end
 
   def script_timeout(script)
@@ -225,7 +237,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       ['#{session_name}', '#{session_created}', '#{pane_pid}'].join(UNIT_SEPARATOR)
     )
     keys = [:session_name, :session_created, :session_pid]
-    cmd = ssh_cmd(destination_host) + ['tmux', 'list-panes', '-F', format_str]
+    cmd = ssh_cmd(destination_host) + ['tmux', 'list-panes', '-aF', format_str]
 
     call(*cmd).split(
       "\n"

@@ -36,7 +36,7 @@ trap exit_script SIGINT SIGTERM
 OUTPUT_PATH=<%= output_path %>
 ERROR_PATH=<%= error_path %>
 ({
-timeout <%= script_timeout %>s <%= singularity_bin %> exec --pid <%= singularity_image %> /bin/bash --login $singularity_tmp_file <%= arguments %>
+timeout <%= script_timeout %>s <%= singularity_bin %> exec <%= contain %> --pid <%= singularity_image %> /bin/bash --login $singularity_tmp_file <%= arguments %>
 } | tee "$OUTPUT_PATH") 3>&1 1>&2 2>&3 | tee "$ERROR_PATH"
 
 <%= email_on_terminated %>

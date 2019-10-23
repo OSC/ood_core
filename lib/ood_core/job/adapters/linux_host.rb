@@ -10,6 +10,7 @@ module OodCore
 
       # Build the LinuxHost adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
+      # @option config [Object] :contain (false) Pass `--contain` flag to Singularity; allows overriding bind mounts in singularity.conf
       # @option config [Object] :debug (false) Use the adapter in a debug mode
       # @option config [Object] :max_timeout (nil) The longest 'wall_clock' permissible
       # @option config [Object] :singularity_bin ('/usr/bin/singularity') The path to the Singularity executable
@@ -21,6 +22,7 @@ module OodCore
       # @option config [Object] :tmux_bin ('/usr/bin/tmux') The path to the Tmux executable
       def self.build_linux_host(config)
         c = config.to_h.symbolize_keys
+        contain = c.fetch(:contain, false)
         debug = c.fetch(:debug, false)
         max_timeout = c.fetch(:max_timeout, nil)
         singularity_bin = c.fetch(:singularity_bin, '/usr/bin/singularity')
@@ -34,6 +36,7 @@ module OodCore
         Adapters::LinuxHost.new(
           ssh_hosts: ssh_hosts,
           launcher: Adapters::LinuxHost::Launcher.new(
+            contain: contain,
             debug: debug,
             max_timeout: max_timeout,
             singularity_bin: singularity_bin,
