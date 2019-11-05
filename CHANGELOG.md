@@ -6,6 +6,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.10.0] - 2019-11-05
+### Added
+- Added an adapter for submitting work on Linux hosted systems without using a scheduler
+
+### Fixed
+- Fixed bug where an unreadable cluster config would cause crashes
+
 ## [0.9.3] - 2019-05-08
 ### Fixed
 - Fixed bug relating to cluster comparison
@@ -189,7 +196,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.9.3...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/OSC/ood_core/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/OSC/ood_core/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/OSC/ood_core/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/OSC/ood_core/compare/v0.9.0...v0.9.1
