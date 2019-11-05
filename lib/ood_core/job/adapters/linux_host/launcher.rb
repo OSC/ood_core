@@ -69,13 +69,13 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   def stop_remote_session(session_name, hostname)
     cmd = ssh_cmd(hostname)
 
-    # discover tmux sessions
-    # discover the PID for the given session
-    # get all children of that PID
-    # find the sinit process for the tmux PID
-    # kill the sinit process
     kill_cmd = <<~SCRIPT
-    kill $(pstree -p $(tmux list-panes -aF '#\{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ') | grep -o 'sinit([[:digit:]]*' | grep -o '[[:digit:]]*')
+    # Get the tmux pane PID for the target session
+    pane_pid=$(tmux list-panes -aF '\#{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ')
+    # Find the Singularity sinit PID child of the pane process
+    pane_sinit_pid=$(pstree -p "$pane_pid" | grep -o 'sinit([[:digit:]]*' | grep -o '[[:digit:]]*')
+    # Kill sinit which stops both Singularity-based processes and the tmux session
+    kill "$pane_sinit_pid"
     SCRIPT
 
     call(*cmd, stdin: kill_cmd)
