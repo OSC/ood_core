@@ -125,7 +125,7 @@ module OodCore
                     nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
                   elif command -v lsof >/dev/null 2>&1; then
                     lsof -i :"${port}" >/dev/null 2>&1
-                  elif "$SHELL" == "/bin/bash"; then
+                  elif [ -n "$SHELL" ] && [ "$SHELL" = "/bin/bash" ]; then
                     (: < /dev/tcp/127.0.0.1/8081) >/dev/null 2>&1
                   elif command -v python >/dev/null 2>&1; then
                     python -c "import socket; socket.socket().connect(('$host',$port))" >/dev/null 2>&1
