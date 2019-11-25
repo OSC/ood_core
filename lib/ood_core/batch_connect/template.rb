@@ -127,6 +127,8 @@ module OodCore
                     lsof -i :"${port}" >/dev/null 2>&1
                   elif "$SHELL" == "/bin/bash"; then
                     (: < /dev/tcp/127.0.0.1/8081) >/dev/null 2>&1
+                  elif command -v python >/dev/null 2>&1; then
+                    python -c "import socket; socket.socket().connect(('$host',$port))" >/dev/null 2>&1
                   else
                     return 127
                   fi
@@ -157,7 +159,7 @@ module OodCore
                       return 0
                     elif [ "$port_status" == "127" ]; then
                        echo "command to find port not found, please install it! exiting 127"
-                       echo "command options are lsof, nc or bash's /dev/tcp"
+                       echo "command options are lsof, nc, bash's /dev/tcp, or python with socket lib"
                        return 127
                     fi
                     sleep 0.5
