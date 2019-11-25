@@ -121,7 +121,13 @@ module OodCore
                 port_used () {
                   local port="${1#*:}"
                   local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
-                  nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
+                  if command -v nc >/dev/null 2>&1; then
+                    nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
+                  elif command -v lsof >/dev/null 2>&1; then
+                    lsof -i :"${port}" >/dev/null 2>&1
+                  else
+                    return 127
+                  fi
                 }
                 export -f port_used
 
@@ -148,7 +154,8 @@ module OodCore
                     if [ "$port_status" == "0" ]; then
                       return 0
                     elif [ "$port_status" == "127" ]; then
-                       echo "nc command not found, please install it! exiting 127"
+                       echo "command to find port not found, please install it! exiting 127"
+                       echo "command options are lsof or nc"
                        return 127
                     fi
                     sleep 0.5
