@@ -125,6 +125,8 @@ module OodCore
                     nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
                   elif command -v lsof >/dev/null 2>&1; then
                     lsof -i :"${port}" >/dev/null 2>&1
+                  elif "$SHELL" == "/bin/bash"; then
+                    (: < /dev/tcp/127.0.0.1/8081) >/dev/null 2>&1
                   else
                     return 127
                   fi
@@ -155,7 +157,7 @@ module OodCore
                       return 0
                     elif [ "$port_status" == "127" ]; then
                        echo "command to find port not found, please install it! exiting 127"
-                       echo "command options are lsof or nc"
+                       echo "command options are lsof, nc or bash's /dev/tcp"
                        return 127
                     fi
                     sleep 0.5
