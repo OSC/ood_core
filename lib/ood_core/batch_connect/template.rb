@@ -121,7 +121,7 @@ module OodCore
                 port_used () {
                   local port="${1#*:}"
                   local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
-                  nc -w 2 "${host}" "${port}" < /dev/null &> /dev/null
+                  nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
                 }
                 export -f port_used
 
@@ -143,8 +143,13 @@ module OodCore
                   local port="${1}"
                   local time="${2:-30}"
                   for ((i=1; i<=time*2; i++)); do
-                    if port_used "${port}"; then
+                    port_used "${port}"
+                    port_status=$?
+                    if [ "$port_status" == "0" ]; then
                       return 0
+                    elif [ "$port_status" == "127" ]; then
+                       echo "nc command not found, please install it! exiting 127"
+                       return 127
                     fi
                     sleep 0.5
                   done
