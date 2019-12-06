@@ -157,6 +157,10 @@ module OodCore
       def delete(id)
         raise NotImplementedError, "subclass did not define #delete"
       end
+
+      def directive_prefix
+        raise NotImplementedError, "subclass did not define #directive_prefix"
+      end
     end
   end
 end

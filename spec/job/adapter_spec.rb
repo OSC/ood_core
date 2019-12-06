@@ -12,6 +12,7 @@ describe OodCore::Job::Adapter do
   it { is_expected.to respond_to(:hold).with(1).argument }
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
+  it { is_expected.to respond_to(:directive_prefix).with(0).arguments }
 
   describe "#submit" do
     context "when script not defined" do
