@@ -288,6 +288,10 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        def directive_prefix
+          '#QSUB'
+        end
+
         private
           # Convert duration to seconds
           def duration_in_seconds(time)

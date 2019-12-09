@@ -134,6 +134,7 @@ describe OodCore::Job::Adapters::LinuxHost do
         is_expected.to respond_to(:release).with(1).argument
         is_expected.to respond_to(:delete).with(1).argument
         is_expected.to respond_to(:supports_job_arrays?)
+        is_expected.to respond_to(:directive_prefix).with(0).arguments
     end
 
     it "does not support job arrays" do
@@ -310,5 +311,13 @@ describe OodCore::Job::Adapters::LinuxHost do
             expect { adapter.delete('jobid@owens-login01.hpc.osc.edu') }.to raise_error(OodCore::JobAdapterError)
           end
         end
+    end
+
+    describe "#directive_prefix" do
+      context "when called" do
+        it "returns nil" do
+          expect(adapter.directive_prefix).to eq(nil)
+        end
+      end
     end
 end

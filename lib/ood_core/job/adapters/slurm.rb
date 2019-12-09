@@ -530,6 +530,10 @@ module OodCore
           raise JobAdapterError, e.message unless /Invalid job id specified/ =~ e.message
         end
 
+        def directive_prefix
+          '#SBATCH'
+        end
+
         private
           # Convert duration to seconds
           def duration_in_seconds(time)

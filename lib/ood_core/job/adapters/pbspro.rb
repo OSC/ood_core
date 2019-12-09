@@ -397,6 +397,10 @@ module OodCore
           raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
         end
 
+        def directive_prefix
+          '#PBS'
+        end
+
         private
           # Convert duration to seconds
           def duration_in_seconds(time)

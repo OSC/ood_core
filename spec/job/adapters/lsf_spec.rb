@@ -14,6 +14,7 @@ describe OodCore::Job::Adapters::Lsf do
   it { is_expected.to respond_to(:hold).with(1).argument }
   it { is_expected.to respond_to(:release).with(1).argument }
   it { is_expected.to respond_to(:delete).with(1).argument }
+  it { is_expected.to respond_to(:directive_prefix).with(0).arguments }
 
   it "claims to support job arrays" do
     expect(subject.supports_job_arrays?).to be_truthy
@@ -330,4 +331,12 @@ describe OodCore::Job::Adapters::Lsf do
       )
     end
   end
+
+  describe "#directive_prefix" do
+      context "when called" do
+        it "does not raise an error" do
+          expect { adapter.directive_prefix }.not_to raise_error
+        end
+      end
+    end
 end
