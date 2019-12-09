@@ -38,6 +38,7 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:job_array_request) }
   it { is_expected.to respond_to(:native) }
   it { is_expected.to respond_to(:to_h) }
+  it { is_expected.to respond_to(:copy_environment) }
 
   describe '.new' do
     context "when :context not defined" do
@@ -209,6 +210,7 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:accounting_id) }
     it { is_expected.to have_key(:job_array_request) }
     it { is_expected.to have_key(:native) }
+    it { is_expected.to have_key(:copy_environment) }
   end
 
   describe "#==" do
@@ -218,6 +220,20 @@ describe OodCore::Job::Script do
 
     it "doesn't equal object with different attributes" do
       is_expected.not_to eq(build_script(priority: 123))
+    end
+  end
+
+  describe "#copy_environment" do
+    context "when default constructed" do
+      subject { build_script().copy_environment }
+
+      it { is_expected.to eq(false) }
+    end
+
+    context "when set to be true" do
+      subject { build_script(copy_environment: true).copy_environment }
+
+      it { is_expected.to eq(true) }
     end
   end
 end
