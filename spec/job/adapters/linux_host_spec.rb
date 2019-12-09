@@ -315,8 +315,8 @@ describe OodCore::Job::Adapters::LinuxHost do
 
     describe "#directive_prefix" do
       context "when called" do
-        it "raises an Error" do
-          expect { adapter.directive_prefix }.to raise_error(OodCore::JobAdapterError)
+        it "returns nil" do
+          expect(adapter.directive_prefix).to eq(nil)
         end
       end
     end

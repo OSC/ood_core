@@ -202,7 +202,7 @@ module OodCore
         end
 
         def directive_prefix
-          raise JobAdapterError, "The LinuxHost adapter does not support directive prefixes"
+          nil
         end
 
         private

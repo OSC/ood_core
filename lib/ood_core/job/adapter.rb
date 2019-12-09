@@ -36,7 +36,7 @@ module OodCore
       # Retrieve info for all jobs from the resource manager
       # @abstract Subclass is expected to implement {#info_all}
       # @raise [NotImplementedError] if subclass did not define {#info_all}
-      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided)
       #   This array specifies only attrs you want, in addition to id and status.
       #   If an array, the Info object that is returned to you is not guarenteed
       #   to have a value for any attr besides the ones specified and id and status.
@@ -51,7 +51,7 @@ module OodCore
       # Retrieve info for all jobs for a given owner or owners from the
       # resource manager
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided)
       #   This array specifies only attrs you want, in addition to id and status.
       #   If an array, the Info object that is returned to you is not guarenteed
       #   to have a value for any attr besides the ones specified and id and status.
@@ -69,7 +69,7 @@ module OodCore
       end
 
       # Iterate over each job Info object
-      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided)
       #   This array specifies only attrs you want, in addition to id and status.
       #   If an array, the Info object that is returned to you is not guarenteed
       #   to have a value for any attr besides the ones specified and id and status.
@@ -88,7 +88,7 @@ module OodCore
 
       # Iterate over each job Info object
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided) 
+      # @param attrs [Array<symbol>] defaults to nil (and all attrs are provided)
       #   This array specifies only attrs you want, in addition to id and status.
       #   If an array, the Info object that is returned to you is not guarenteed
       #   to have a value for any attr besides the ones specified and id and status.
@@ -158,6 +158,16 @@ module OodCore
         raise NotImplementedError, "subclass did not define #delete"
       end
 
+      # Return the scheduler-specific directive prefix
+      #
+      # Examples of directive prefixes include #QSUB, #BSUB and allow placing what would
+      # otherwise be command line options inside the job launch script.
+      #
+      # The method should return nil if the adapter does not support prefixes
+      #
+      # @abstract Subclass is expected to implement {#directive_prefix}
+      # @raise [NotImplementedError] if subclass did not defined {#directive_prefix}
+      # @return [String]
       def directive_prefix
         raise NotImplementedError, "subclass did not define #directive_prefix"
       end
