@@ -107,6 +107,7 @@ module OodCore
       # Flag whether the job should contain a copy of its calling environment
       # @return [Boolean] copy environment
       attr_reader :copy_environment
+      alias_method :copy_environment?, :copy_environment
 
       # @param content [#to_s] the script content
       # @param args [Array<#to_s>, nil] arguments supplied to script
