@@ -92,8 +92,9 @@ class OodCore::Job::Adapters::Lsf::Helper
     args += ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
     args += ["-L", script.shell_path.to_s] unless script.shell_path.nil?
 
-    # Skip if nil
+    # environment
     env = script.job_environment || {}
+    # To preserve pre-existing behavior we only act when true or false, when nil we do nothing
     if script.copy_environment?
       args += ["-env", (["all"] + env.keys).join(",")]
     elsif script.copy_environment? == false
@@ -111,9 +112,6 @@ class OodCore::Job::Adapters::Lsf::Helper
     args += ["-u", script.email.join(",")] unless script.email.nil? || script.email.empty?
 
     args += script.native unless script.native.nil?
-
-    # environment
-    env = script.job_environment || {}
 
     {args: args, env: env}
   end
