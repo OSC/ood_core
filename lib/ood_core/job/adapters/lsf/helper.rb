@@ -92,6 +92,14 @@ class OodCore::Job::Adapters::Lsf::Helper
     args += ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
     args += ["-L", script.shell_path.to_s] unless script.shell_path.nil?
 
+    # Skip if nil
+    env = script.job_environment || {}
+    if script.copy_environment?
+      args += ["-env", (["all"] + env.keys).join(",")]
+    elsif script.copy_environment? == false
+      args += ["-env", (["none"] + env.keys).join(",")]
+    end
+
     # input and output files
     args += ["-i", script.input_path] unless script.input_path.nil?
     args += ["-o", script.output_path] unless script.output_path.nil?

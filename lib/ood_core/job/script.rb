@@ -138,7 +138,7 @@ module OodCore
                      output_path: nil, error_path: nil, reservation_id: nil,
                      queue_name: nil, priority: nil, start_time: nil,
                      wall_time: nil, accounting_id: nil, job_array_request: nil,
-                     native: nil, copy_environment: false, **_)
+                     native: nil, copy_environment: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -163,7 +163,7 @@ module OodCore
         @accounting_id      = accounting_id     && accounting_id.to_s
         @job_array_request  = job_array_request && job_array_request.to_s
         @native             = native
-        @copy_environment   = !! copy_environment
+        @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
       end
 
       # Convert object to hash

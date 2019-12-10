@@ -103,6 +103,12 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit).with(content, args: ["-v", "key", "-j", "oe"], env: {"key" => "value"}, chdir: nil) }
     end
 
+    context "with :job_environment and Script#copy_environment = true" do
+      before { adapter.submit(build_script(copy_environment: true, job_environment: {"key" => "value"})) }
+
+      it { expect(pbs).to have_received(:submit).with(content, args: ["-v", "key", "-V", "-j", "oe"], env: {"key" => "value"}, chdir: nil) }
+    end
+
     context "with :workdir" do
       before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 

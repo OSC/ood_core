@@ -20,6 +20,7 @@ class OodCore::Job::Adapters::Sge::Helper
     args += ['-h'] if script.submit_as_hold
     args += ['-r', 'yes'] if script.rerunnable
     script.job_environment.each_pair {|k, v| args += ['-v', "#{k.to_s}=#{v.to_s}"]} unless script.job_environment.nil?
+    args += ["-V"] if script.copy_environment?
 
     if script.workdir
       args += ['-wd', script.workdir]

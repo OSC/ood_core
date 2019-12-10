@@ -227,7 +227,7 @@ describe OodCore::Job::Script do
     context "when default constructed" do
       subject { build_script().copy_environment }
 
-      it { is_expected.to eq(false) }
+      it { is_expected.to eq(nil) }
     end
 
     context "when set to be true" do
