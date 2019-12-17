@@ -261,6 +261,7 @@ module OodCore
           # Set environment variables
           envvars = script.job_environment.to_h
           args += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
+          args += ["-V"] if script.copy_environment?
 
           # If error_path is not specified we join stdout & stderr (as this
           # mimics what the other resource managers do)

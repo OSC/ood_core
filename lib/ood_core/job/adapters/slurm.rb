@@ -192,7 +192,7 @@ module OodCore
           # @return [String] the id of the job that was created
           def submit_string(str, args: [], env: {})
             args = args.map(&:to_s) + ["--parsable"]
-            env = {"SBATCH_EXPORT" => "NONE"}.merge env.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
+            env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
             call("sbatch", *args, env: env, stdin: str.to_s).strip.split(";").first
           end
 
@@ -394,7 +394,10 @@ module OodCore
 
           # Set environment variables
           env = script.job_environment || {}
-          args += ["--export", script.job_environment.keys.join(",")] unless script.job_environment.nil? || script.job_environment.empty?
+          unless (script.job_environment.nil? || script.job_environment.empty?)
+            prefix = script.copy_environment? ? "ALL," : "NONE,"  # NONE if false or nil
+            args += ["--export", prefix + script.job_environment.keys.join(",")]
+          end
 
           # Set native options
           args += script.native if script.native

@@ -86,6 +86,12 @@ describe "#submit" do
       it { expect(batch).to have_received(:submit).with(content, ["-v", "key=value", "-cwd"]) }
     end
 
+    context "with :job_environment and Script#copy_environment" do
+      before { adapter.submit(build_script(copy_environment: true, job_environment: {"key" => "value"})) }
+
+      it { expect(batch).to have_received(:submit).with(content, ["-v", "key=value", "-V", "-cwd"]) }
+    end
+
     context "with :workdir" do
       before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 

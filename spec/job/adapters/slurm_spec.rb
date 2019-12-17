@@ -100,7 +100,13 @@ describe OodCore::Job::Adapters::Slurm do
     context "with :job_environment" do
       before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
 
-      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--export", "key"], env: {"key" => "value"}) }
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--export", "NONE,key"], env: {"key" => "value"}) }
+    end
+
+    context "with :job_environment where copy_environment is true" do
+      before { adapter.submit(build_script(copy_environment: true, job_environment: {"key" => "value"})) }
+
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--export", "ALL,key"], env: {"key" => "value"}) }
     end
 
     context "with :workdir" do

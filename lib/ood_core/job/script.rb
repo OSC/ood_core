@@ -104,6 +104,11 @@ module OodCore
       # @return [Object, nil] native specifications
       attr_reader :native
 
+      # Flag whether the job should contain a copy of its calling environment
+      # @return [Boolean] copy environment
+      attr_reader :copy_environment
+      alias_method :copy_environment?, :copy_environment
+
       # @param content [#to_s] the script content
       # @param args [Array<#to_s>, nil] arguments supplied to script
       # @param submit_as_hold [Boolean, nil] whether job is held after submit
@@ -132,7 +137,8 @@ module OodCore
                      job_name: nil, shell_path: nil, input_path: nil,
                      output_path: nil, error_path: nil, reservation_id: nil,
                      queue_name: nil, priority: nil, start_time: nil,
-                     wall_time: nil, accounting_id: nil, job_array_request: nil, native: nil, **_)
+                     wall_time: nil, accounting_id: nil, job_array_request: nil,
+                     native: nil, copy_environment: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -157,6 +163,7 @@ module OodCore
         @accounting_id      = accounting_id     && accounting_id.to_s
         @job_array_request  = job_array_request && job_array_request.to_s
         @native             = native
+        @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
       end
 
       # Convert object to hash
@@ -184,7 +191,8 @@ module OodCore
           wall_time:           wall_time,
           accounting_id:       accounting_id,
           job_array_request:   job_array_request,
-          native:              native
+          native:              native,
+          copy_environment:    copy_environment
         }
       end
 

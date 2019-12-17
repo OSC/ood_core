@@ -104,6 +104,12 @@ describe OodCore::Job::Adapters::PBSPro do
       it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-v", "key=value", "-j", "oe"], chdir: nil) }
     end
 
+    context "with :job_environment and Script#copy_environment is true" do
+      before { adapter.submit(build_script(copy_environment: true, job_environment: {"key" => "value"})) }
+
+      it { expect(pbspro).to have_received(:submit_string).with(content, args: ["-v", "key=value", "-V", "-j", "oe"], chdir: nil) }
+    end
+
     context "with :workdir" do
       before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 
