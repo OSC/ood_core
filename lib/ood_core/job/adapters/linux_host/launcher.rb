@@ -57,7 +57,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
-    cmd = ssh_cmd(submit_host)
+    cmd = ssh_cmd((script.native && script.native['submit_host_override']) ? script.native['submit_host_override'] : submit_host)
 
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))

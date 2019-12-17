@@ -91,6 +91,20 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
             end
         end
+
+        context "when Script#native has submit_host_override set" do
+            let(:username) { Etc.getlogin }
+            let(:alt_submit_host) { 'pitzer-login01.hpc.osc.edu' }
+            it "attempts to connect to the correct host" do
+                allow(Open3).to receive(:capture3).and_return([alt_submit_host, '', exit_success])
+                # RSpec doesn't seem to have a good way to test a non-first argument in a variadic list
+                allow(subject).to receive(:call)
+                    .with("ssh", "-t", "-o", "BatchMode=yes", "#{username}@#{alt_submit_host}", any_args)
+                    .and_return('')
+                
+                subject.start_remote_session(build_script(native: {'submit_host_override' => alt_submit_host}))
+            end
+        end
     end
 
     describe "#stop_remote_session" do
