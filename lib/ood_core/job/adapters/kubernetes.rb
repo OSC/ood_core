@@ -15,7 +15,7 @@ module OodCore
       # @abstract
       class Kubernetes < Adapter
 
-        require 'ood_core/job/adapters/kubernetes/container'
+        require 'ood_core/job/adapters/kubernetes/resources'
 
         using Refinements::ArrayExtensions
         using Refinements::HashExtensions
@@ -59,11 +59,7 @@ module OodCore
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           raise ArgumentError, 'Must specify the script' if script.nil?
 
-          container = native_to_container(script.native)
-          id = generate_id(container.name)
-          template = ERB.new(File.read(resource_file))
-          resource_yml = template.result(binding)
-
+          resource_yml, id = generate_id_yml(script.native)
           cmd = "#{formatted_ns_cmd} create -f -"
 
           puts "Submitting:\n#{resource_yml}"
@@ -72,6 +68,9 @@ module OodCore
           raise Error, e unless s.success?
 
           id
+        rescue => err # TODO: rm after testing
+          puts "#{err.backtrace}"
+          raise err
         end
 
         def generate_id(name)
@@ -168,14 +167,15 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [Info] information describing submitted job
         def info(id)
-          puts "getting info for #{id}"
-          cmd = "#{formatted_ns_cmd} get pod #{id}"
-          output, _, s = Open3.capture3(cmd)
-          return default_info(id) unless s.success? # throw error up the stack instead?
+          pod_json, _, pod_success = json3_ns_cmd('get', 'pod', id)
+          return default_info(id) unless pod_success.success? # throw error up the stack instead?
 
-          json_data = JSON.parse(output, symbolize_names: true)
-          pod_json_to_info(json_data)
+          service_json, = json3_ns_cmd('get', 'service', service_name(id))
+          secret_json, = json3_ns_cmd('get', 'secret', secret_name(id))
 
+          info = info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
+          puts "info is #{info.inspect}"
+          info
         end
 
         # Retrieve job status from resource manager
@@ -213,11 +213,70 @@ module OodCore
         # @return [void]
         def delete(id)
           cmd = "#{namespaced_cmd} delete pod #{id}"
-          _, error, s = Open3.capture3(cmd)
-          raise error unless s.success?
+          _, error, pod = Open3.capture3(cmd)
+
+          # just eat the results of deleting services and secrets
+          # also can't call json3_ns_cmd bc delete only supports '-o name'
+          # and that complicates that functions implementation
+          cmd = "#{namespaced_cmd} delete service #{service_name(id)}"
+          Open3.capture3(cmd)
+          cmd = "#{namespaced_cmd} delete secret #{secret_name(id)}"
+          Open3.capture3(cmd)
+          cmd = "#{namespaced_cmd} delete configmap #{configmap_name(id)}"
+          Open3.capture3(cmd)
+
+          raise error unless pod.success?
+        end
+
+        def configmap_mount_path
+          '/ood'
         end
 
         private
+
+        def generate_id_yml(native_data)
+          container = container_from_native(native_data)
+          id = generate_id(container.name)
+          configmap = configmap_from_native(native_data, id)
+          init_containers = init_ctrs_from_native(native_data)
+          spec = Resources::PodSpec.new(container, init_containers)
+
+          template = ERB.new(File.read(resource_file))
+
+          [template.result(binding), id]
+        end
+
+        def json3_ns_cmd(verb, resource, id)
+          cmd = "#{formatted_ns_cmd} #{verb} #{resource} #{id}"
+          data, error, success = Open3.capture3(cmd)
+          data = data.empty? ? '{}' : data
+          json_data = JSON.parse(data, symbolize_names: true)
+
+          [json_data, error, success]
+        end
+
+        def info_from_json(pod_json: nil, service_json: nil, secret_json: nil)
+          pod_hash = pod_json_to_info_hash(pod_json)
+          service_hash = service_json_to_info_hash(service_json)
+          secret_hash = secret_json_to_info_hash(secret_json)
+
+          # can't just use deep_merge bc we don't depend *directly* on rails
+          pod_hash[:native] = pod_hash[:native].merge(service_hash[:native])
+          pod_hash[:native] = pod_hash[:native].merge(secret_hash[:native])
+          Info.new(pod_hash)
+        end
+
+        def service_name(id)
+          id + '-service'
+        end
+
+        def secret_name(id)
+          id + '-secret'
+        end
+
+        def configmap_name(id)
+          id + '-configmap'
+        end
 
         def default_info(id)
           Info.new(
@@ -242,9 +301,11 @@ module OodCore
           "#{@bin} --kubeconfig #{@config}"
         end
 
-        def native_to_container(native)
+        def container_from_native(native)
           container = native.fetch(:container)
-          OodCore::Job::Adapters::Kubernetes::Container.new(
+          # TODO: throw the right error here telling folks what they
+          # need to implement if a fetch KeyError is thrown
+          Resources::Container.new(
             container[:name],
             container[:image],
             parse_command(container[:command]),
@@ -252,21 +313,88 @@ module OodCore
           )
         end
 
-        def parse_command(cmd)
-          cmd&.split(' ')
+        def configmap_from_native(native, id)
+          configmap = native.fetch(:configmap, nil)
+          return nil if configmap.nil?
+
+          Resources::ConfigMap.new(
+            configmap_name(id),
+            configmap[:filename],
+            configmap[:data]
+          )
         end
 
-        def pod_json_to_info(json_data)
+        def init_ctrs_from_native(native_data)
+          init_ctrs = []
+          return init_ctrs unless native_data.key?(:init_ctrs)
+
+          ctrs = native_data[:init_ctrs]
+          ctrs.each do |ctr_raw|
+            ctr = Resources::Container.new(
+              ctr_raw[:name],
+              ctr_raw[:image],
+              ctr_raw[:command].to_a
+            )
+            init_ctrs.push(ctr)
+          end
+
+          init_ctrs
+        end
+
+        def parse_command(cmd)
+          command = cmd&.split(' ')
+          command.nil? ? [] : command
+        end
+
+        def pod_json_to_info_hash(json_data)
+          return {} if json_data.nil?
+
           # passing json_data around like it's OK, probably should check for nil?
-          Info.new(
-            id: json_data.dig(:metadata, :name).to_s,
+          id = json_data.dig(:metadata, :name).to_s
+          {
+            id: id,
             job_name: name_from_metadata(json_data.dig(:metadata)),
             status: pod_json_to_status(json_data),
             job_owner: json_data.dig(:metadata, :namespace).to_s,
             submission_time: submission_time(json_data),
             dispatch_time: dispatch_time(json_data),
-            wallclock_time: wallclock_time(json_data)
-          )
+            wallclock_time: wallclock_time(json_data),
+            native: {
+              host: json_data.dig(:status, :hostIP)
+            }
+          }
+        end
+
+        def service_json_to_info_hash(json_data)
+          # .spec.ports[0].nodePort
+          ports = json_data.dig(:spec, :ports)
+          {
+            native:
+              {
+                port: ports[0].dig(:nodePort)
+              }
+          }
+        rescue # bc you never know!
+          empty_native
+        end
+
+        def secret_json_to_info_hash(json_data)
+          return empty_native if json_data.nil?
+
+          raw = json_data.dig(:data, :password)
+          return empty_native if raw.nil?
+          {
+            native:
+              {
+                password: Base64.decode64(raw)
+              }
+          }
+        end
+
+        def empty_native
+          {
+            native: {}
+          }
         end
 
         def dispatch_time(json_data)
@@ -287,25 +415,24 @@ module OodCore
           status = pod_json_to_status(json_data)
           state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
           start_time = dispatch_time(json_data)
-          puts "wallclock_time for #{json_data.dig(:metadata, :name)}"
           return nil if start_time.nil?
 
-          end_time = nil
+          et = end_time(status, state_data)
 
-          if status == 'completed'
-            end_time_string = state_data.dig(:terminated, :finishedAt)
-            end_time = DateTime.parse(end_time_string).to_time.to_i
-          elsif status == 'running'
-            end_time = DateTime.now.to_time.to_i
-          else
-            end_time = nil
-          end
-
-          end_time.nil? ? nil : end_time - start_time
+          et.nil? ? nil : et - start_time
         end
 
-        def end_time(json_data)
-          json_data.dig(:status, :status.startTime)
+        def end_time(status, state_data)
+          if status == 'completed'
+            end_time_string = state_data.dig(:terminated, :finishedAt)
+            et = DateTime.parse(end_time_string).to_time.to_i
+          elsif status == 'running'
+            et = DateTime.now.to_time.to_i
+          else
+            et = nil
+          end
+
+          et
         end
 
         def submission_time(json_data)
@@ -326,7 +453,8 @@ module OodCore
 
           info_array = []
           pods.each do |pod|
-            info = pod_json_to_info(pod)
+            hash = pod_json_to_info_hash(pod)
+            info = Info.new(hash)
             info_array.push(info)
             puts "added info for #{info.inspect}"
           end
@@ -345,6 +473,7 @@ module OodCore
 
           Status.new(state: state)
         end
+
       end
 
     end

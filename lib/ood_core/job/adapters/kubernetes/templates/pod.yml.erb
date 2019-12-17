@@ -10,27 +10,65 @@ metadata:
 spec:
   restartPolicy: <%= @restart_policy %>
   containers:
-  - name: <%= container.name %>
-    image: <%= container.image %>
+  - name: "<%= spec.container.name %>"
+    image: <%= spec.container.image %>
     imagePullPolicy: IfNotPresent
-    <% unless container.command.nil? %>
+    <% unless spec.container.command.nil? %>
     command:
-    <% container.command.each do |cmd| %>
-    - <%= cmd %>
-    <% end %>
-    <% end %>
-    <% unless container.port.nil? %>
+    <% spec.container.command.each do |cmd| %>
+    - "<%= cmd %>"
+    <% end %> <%# for each command %>
+    <% end %> <%# unless command is nil %>
+    <% unless spec.container.port.nil? %>
     ports:
-    - containerPort: <%= container.port %>
+    - containerPort: <%= spec.container.port %>
+    <% end %> 
+    volumeMounts:
+    <% unless configmap.nil? %>
+    - name: configmap-volume
+      mountPath:  <%= configmap_mount_path %>
     <% end %>
-  <% unless @volumes.nil? %>
+  <% unless spec.init_containers.nil? && spec.init_containers.length > 0 %>
+  initContainers:
+  <% spec.init_containers.each do |ctr| %>
+  - name: "<%= ctr.name %>"
+    image: "<%= ctr.image %>"
+    command:
+    <% ctr.command.each do |cmd| %>
+    - "<%= cmd %>"
+    <% end %> <%# command loop  %>
+  <% end %> <%# init container loop  %>
+  <% end %> <%# if init containers  %>
+  <% unless configmap.nil? %>
   volumes:
-  <% @volumes.each do |volume| %>
-  <% if volume["type"] == "hostPath" %>
-  - name: <%= volume["name"] %>
-    hostPath: 
-      path: <%= volume["path"] %>
+  - name: configmap-volume
+    configMap:
+      name: <%= configmap_name(id) %>
   <% end %>
-  <% end %>
-  <% end %>
-
+---
+<% unless spec.container.port.nil? %>
+apiVersion: v1
+kind: Service
+metadata:
+  name: <%= service_name(id) %>
+  namespace: <%= ENV['USER'] %>
+spec:
+  selector:
+    job: <%= id %>
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: <%= spec.container.port %>
+  type: NodePort
+<% end %> <%# end for service %>
+---
+<% unless configmap.nil? %>
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: <%= configmap_name(id) %>
+  namespace: <%= ENV['USER'] %>
+data:
+  <%= configmap.filename %>: |
+    <%= configmap.data %>
+<% end %> <%# end for configmap %>
