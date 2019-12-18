@@ -163,8 +163,8 @@ module OodCore
                     if [ "$port_status" == "0" ]; then
                       return 0
                     elif [ "$port_status" == "127" ]; then
-                       echo "command to find port not found, please install it! exiting 127"
-                       echo "command options are lsof, nc, bash's /dev/tcp, or python with socket lib"
+                       echo "commands to find port were either not found or inaccessible."
+                       echo "command options are lsof, nc, bash's /dev/tcp, or python (or python3) with socket lib."
                        return 127
                     fi
                     sleep 0.5
