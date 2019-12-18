@@ -201,6 +201,10 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        def directive_prefix
+          nil
+        end
+
         private
 
         def host_permitted?(destination_host)

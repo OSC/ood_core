@@ -157,6 +157,10 @@ module OodCore
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
+
+        def directive_prefix
+          '#$'
+        end
       end
     end
   end

@@ -10,67 +10,32 @@
 module OodCore
   module Job
     class ArrayIds
-      class Error < StandardError ; end
+      attr_reader :spec_string
 
-      attr_reader :ids
       def initialize(spec_string)
-        @ids = []
-        begin
-          parse_spec_string(spec_string) if spec_string
-        rescue Error
-        end
+        @spec_string = spec_string
+      end
+
+      def ids
+        @ids ||= parse_spec_string(spec_string)
       end
 
       protected
+
       def parse_spec_string(spec_string)
-        @ids = get_components(spec_string).map{
-          |component| process_component(component)
-        }.reduce(:+).sort
-      end
+        return [] unless spec_string
 
-      def get_components(spec_string)
-        base = discard_percent_modifier(spec_string)
-        raise Error unless base
-        base.split(',')
-      end
+        rx = /^(\d+)-?(\d+)?:?(\d+)?%?\d*$/
+        spec_string.split(',').reduce([]) do |ids, spec|
+          if rx =~ spec
+            start = ($1 || 1).to_i
+            finish = ($2 || start).to_i
+            step = ($3 || 1).to_i
+            ids.concat (start..finish).step(step).to_a
+          end
 
-      # A few adapters use percent to define an arrays maximum number of
-      # simultaneous tasks. The percent is expected to come at the end.
-      def discard_percent_modifier(spec_string)
-        spec_string.split('%').first
-      end
-
-      def process_component(component)
-        if is_range?(component)
-          get_range(component)
-        elsif numbers_valid?([component])
-          [ component.to_i ]
-        else
-          raise Error
+          ids
         end
-      end
-
-      def get_range(component)
-        raw_range, raw_step = component.split(':')
-        start, stop = raw_range.split('-')
-        raise Error unless numbers_valid?(
-          # Only include Step if it is not nil
-          [start, stop].tap { |a| a << raw_step if raw_step }
-        )
-        range = Range.new(start.to_i, stop.to_i)
-        step = raw_step.to_i
-        step = 1 if step == 0
-
-        range.step(step).to_a
-      end
-
-      def is_range?(component)
-        component.include?('-')
-      end
-
-      # Protect against Ruby's String#to_i returning 0 for arbitrary strings
-      def numbers_valid?(numbers)
-        numbers.all? { |str| /^[0-9]+$/ =~ str }
       end
     end
   end

@@ -167,6 +167,10 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        def directive_prefix
+          '#BSUB'
+        end
+
         private
           # Determine state from LSF state code
           def get_state(st)

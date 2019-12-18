@@ -186,5 +186,27 @@ describe OodCore::Job::Adapters::Lsf::Helper do
       expect(args_for(email: ["efranz@osc.edu", "efranz2@osc.edu"])).to eq({args: ["-u", "efranz@osc.edu,efranz2@osc.edu"], env: {}})
       expect(args_for(email: [])).to eq({args: [], env: {}})
     end
+
+    it "when Script#copy_environment? is true, and Script#job_environment is empty" do
+      expect(args_for(copy_environment: true)).to eq({args: ["-env", "all"], env: {}})
+    end
+
+    it "when Script#copy_environment? is false, and Script#job_environment is empty" do
+      expect(args_for(copy_environment: false)).to eq({args: ["-env", "none"], env: {}})
+    end
+
+    it "when Script#copy_environment? is true, and Script#job_environment is not empty" do
+      env = {"FOO" => 'BAR'}
+      expect(args_for(copy_environment: true, job_environment: env)).to eq({args: ["-env", "all,FOO"], env: env})
+    end
+
+    it "when Script#copy_environment? is false, and Script#job_environment is not empty" do
+      env = {"FOO" => 'BAR'}
+      expect(args_for(copy_environment: false, job_environment: env)).to eq({args: ["-env", "none,FOO"], env: env})
+    end
+
+    it "when Script#copy_environment? is nil" do
+      expect(args_for(copy_environment: nil)).to eq({args: [], env: {}})
+    end
   end
 end

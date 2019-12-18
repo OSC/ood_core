@@ -261,6 +261,7 @@ module OodCore
           # Set environment variables
           envvars = script.job_environment.to_h
           args += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
+          args += ["-V"] if script.copy_environment?
 
           # If error_path is not specified we join stdout & stderr (as this
           # mimics what the other resource managers do)
@@ -395,6 +396,10 @@ module OodCore
         rescue Batch::Error => e
           # assume successful job deletion if can't find job id
           raise JobAdapterError, e.message unless /Unknown Job Id/ =~ e.message || /Job has finished/ =~ e.message
+        end
+
+        def directive_prefix
+          '#PBS'
         end
 
         private
