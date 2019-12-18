@@ -88,6 +88,26 @@ describe OodCore::Job::Adapters::Sge::Batch do
     )
   }
 
+  let(:job_from_qstat_jr_mutlislot) {
+    OodCore::Job::Info.new(
+      :accounting_id => nil,
+      :allocated_nodes => [],
+      :cpu_time => nil,
+      :dispatch_time => nil,
+      :id => "942195",
+      :job_name => "RemoteDesktop",
+      :job_owner => "smatott",
+      :native => {},
+      :procs => 16,
+      :queue_name => 'all.q',
+      :status => :running,
+      :submission_time => Time.at(1576525304),
+      :submit_host => nil,
+      :wallclock_limit => 518400,
+      :wallclock_time => nil,
+    )
+  }
+
   describe "#get_all" do
     context "when no owner is set" do
       before {
@@ -139,6 +159,16 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
       it "does not catch errors that it should not" do
         expect{batch.get_info_enqueued_job('1234')}.to raise_error(OodCore::Job::Adapters::Sge::Batch::Error)
+      end
+    end
+
+    context "when the job is running on multiple slots" do
+      before {
+        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/qstat_jr_multislot.xml') }
+      }
+
+      it "expects to receive the correct job info" do
+        expect(batch.get_info_enqueued_job('942195') ).to eq(job_from_qstat_jr_mutlislot)
       end
     end
   end
