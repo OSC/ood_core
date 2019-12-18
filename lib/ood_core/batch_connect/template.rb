@@ -121,14 +121,19 @@ module OodCore
                 port_used () {
                   local port="${1#*:}"
                   local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
-                  if command -v nc >/dev/null 2>&1; then
+                  local python_cmd="import socket; socket.socket().connect(('$host',$port))"
+                  local bash_supported=$(strings /bin/bash | grep tcp)
+
+                  if nc -h >/dev/null 2>&1; then
                     nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
-                  elif command -v lsof >/dev/null 2>&1; then
+                  elif lsof -h >/dev/null 2>&1; then
                     lsof -i :"${port}" >/dev/null 2>&1
-                  elif [ -n "$SHELL" ] && [ "$SHELL" = "/bin/bash" ]; then
+                  elif python -h >/dev/null 2>&1; then
+                    python -c "$python_cmd" >/dev/null 2>&1
+                  elif python3 -h >/dev/null 2>&1; then
+                    python3 -c "$python_cmd" >/dev/null 2>&1
+                  elif [ "$bash_supported" == "/dev/tcp/*/*" ]; then
                     (: < /dev/tcp/127.0.0.1/8081) >/dev/null 2>&1
-                  elif command -v python >/dev/null 2>&1; then
-                    python -c "import socket; socket.socket().connect(('$host',$port))" >/dev/null 2>&1
                   else
                     return 127
                   fi
