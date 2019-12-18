@@ -16,6 +16,7 @@ module OodCore
       class Kubernetes < Adapter
 
         require 'ood_core/job/adapters/kubernetes/resources'
+        require 'ood_core/job/adapters/kubernetes/helper'
 
         using Refinements::ArrayExtensions
         using Refinements::HashExtensions
@@ -27,6 +28,8 @@ module OodCore
           @bin = opts.fetch(:bin, '')
           @volumes = opts.fetch(:volumes, [])
           @restart_policy = opts.fetch(:restart_policy, 'Never')
+
+          @helper = Kubernetes::Helper.new
         end
 
         def resource_file(resource_type = 'pod')
@@ -173,7 +176,7 @@ module OodCore
           service_json, = json3_ns_cmd('get', 'service', service_name(id))
           secret_json, = json3_ns_cmd('get', 'secret', secret_name(id))
 
-          info = info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
+          info = @helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
           puts "info is #{info.inspect}"
           info
         end
@@ -253,17 +256,6 @@ module OodCore
           json_data = JSON.parse(data, symbolize_names: true)
 
           [json_data, error, success]
-        end
-
-        def info_from_json(pod_json: nil, service_json: nil, secret_json: nil)
-          pod_hash = pod_json_to_info_hash(pod_json)
-          service_hash = service_json_to_info_hash(service_json)
-          secret_hash = secret_json_to_info_hash(secret_json)
-
-          # can't just use deep_merge bc we don't depend *directly* on rails
-          pod_hash[:native] = pod_hash[:native].merge(service_hash[:native])
-          pod_hash[:native] = pod_hash[:native].merge(secret_hash[:native])
-          Info.new(pod_hash)
         end
 
         def service_name(id)
@@ -346,107 +338,6 @@ module OodCore
           command.nil? ? [] : command
         end
 
-        def pod_json_to_info_hash(json_data)
-          return {} if json_data.nil?
-
-          # passing json_data around like it's OK, probably should check for nil?
-          id = json_data.dig(:metadata, :name).to_s
-          {
-            id: id,
-            job_name: name_from_metadata(json_data.dig(:metadata)),
-            status: pod_json_to_status(json_data),
-            job_owner: json_data.dig(:metadata, :namespace).to_s,
-            submission_time: submission_time(json_data),
-            dispatch_time: dispatch_time(json_data),
-            wallclock_time: wallclock_time(json_data),
-            native: {
-              host: json_data.dig(:status, :hostIP)
-            }
-          }
-        end
-
-        def service_json_to_info_hash(json_data)
-          # .spec.ports[0].nodePort
-          ports = json_data.dig(:spec, :ports)
-          {
-            native:
-              {
-                port: ports[0].dig(:nodePort)
-              }
-          }
-        rescue # bc you never know!
-          empty_native
-        end
-
-        def secret_json_to_info_hash(json_data)
-          return empty_native if json_data.nil?
-
-          raw = json_data.dig(:data, :password)
-          return empty_native if raw.nil?
-          {
-            native:
-              {
-                password: Base64.decode64(raw)
-              }
-          }
-        end
-
-        def empty_native
-          {
-            native: {}
-          }
-        end
-
-        def dispatch_time(json_data)
-          status = pod_json_to_status(json_data)
-          state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
-          date_string = nil
-
-          if status == 'completed'
-            date_string = state_data.dig(:terminated, :startedAt)
-          elsif status == 'running'
-            date_string = state_data.dig(:running, :startedAt)
-          end
-
-          date_string.nil? ? nil : DateTime.parse(date_string).to_time.to_i
-        end
-
-        def wallclock_time(json_data)
-          status = pod_json_to_status(json_data)
-          state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
-          start_time = dispatch_time(json_data)
-          return nil if start_time.nil?
-
-          et = end_time(status, state_data)
-
-          et.nil? ? nil : et - start_time
-        end
-
-        def end_time(status, state_data)
-          if status == 'completed'
-            end_time_string = state_data.dig(:terminated, :finishedAt)
-            et = DateTime.parse(end_time_string).to_time.to_i
-          elsif status == 'running'
-            et = DateTime.now.to_time.to_i
-          else
-            et = nil
-          end
-
-          et
-        end
-
-        def submission_time(json_data)
-          str = json_data.dig(:status, :startTime)
-          DateTime.parse(str).to_time.to_i
-        end
-
-        def name_from_metadata(metadata)
-          name = metadata.dig(:labels, :'app.kubernetes.io/name')
-          name = metadata.dig(:labels, :'k8s-app') if name.nil?
-          name = metadata.dig(:name) if name.nil? # pod-id but better than nil?
-          name
-        end
-
         def all_pods_to_info(data)
           json_data = JSON.parse(data, symbolize_names: true)
           pods = json_data.dig(:items)
@@ -462,20 +353,8 @@ module OodCore
           info_array
         end
 
-        def pod_json_to_status(json_data)
-          container_statuses = json_data.dig(:status, :containerStatuses)
-          json_state = container_statuses[0].dig(:state) # only support 1 container/pod
-
-          state = 'undetermined'
-          state = 'running' unless json_state.dig(:running).nil?
-          state = 'completed' unless json_state.dig(:terminated).nil?
-          state = 'queued' unless json_state.dig(:waiting).nil?
-
-          Status.new(state: state)
-        end
-
       end
-
+      # end kubernetes class (above)
     end
   end
 end
