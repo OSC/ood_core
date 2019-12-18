@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added directive prefixes to each adapter (e.g. `#QSUB`) ([#161](https://github.com/OSC/ood_core/issues/161))
+
+### Changed
+- Simplified job array parsing ([#144](https://github.com/OSC/ood_core/issues/144))
+
+### Fixed
+- Issue where environment variables were not properly exported to the job ([#158](https://github.com/OSC/ood_core/issues/158))
+
 ## [0.10.0] - 2019-11-05
 ### Added
 - Added an adapter for submitting work on Linux hosted systems without using a scheduler
