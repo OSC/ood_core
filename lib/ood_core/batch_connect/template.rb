@@ -133,7 +133,7 @@ module OodCore
                   elif python3 -h >/dev/null 2>&1; then
                     python3 -c "$python_cmd" >/dev/null 2>&1
                   elif [ "$bash_supported" == "/dev/tcp/*/*" ]; then
-                    (: < /dev/tcp/127.0.0.1/8081) >/dev/null 2>&1
+                    (: < /dev/tcp/${host}/${port}) >/dev/null 2>&1
                   else
                     return 127
                   fi
