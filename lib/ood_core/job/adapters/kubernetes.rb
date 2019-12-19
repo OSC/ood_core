@@ -238,10 +238,10 @@ module OodCore
         private
 
         def generate_id_yml(native_data)
-          container = container_from_native(native_data)
+          container = @helper.container_from_native(native_data)
           id = generate_id(container.name)
-          configmap = configmap_from_native(native_data, id)
-          init_containers = init_ctrs_from_native(native_data)
+          configmap = @helper.configmap_from_native(native_data, id)
+          init_containers = @helper.init_ctrs_from_native(native_data)
           spec = Resources::PodSpec.new(container, init_containers)
 
           template = ERB.new(File.read(resource_file))
@@ -259,15 +259,15 @@ module OodCore
         end
 
         def service_name(id)
-          id + '-service'
+          @helper.service_name(id)
         end
 
         def secret_name(id)
-          id + '-secret'
+          @helper.secret_name(id)
         end
 
         def configmap_name(id)
-          id + '-configmap'
+          @helper.configmap_name(id)
         end
 
         def default_info(id)
@@ -291,51 +291,6 @@ module OodCore
 
         def base_cmd
           "#{@bin} --kubeconfig #{@config}"
-        end
-
-        def container_from_native(native)
-          container = native.fetch(:container)
-          # TODO: throw the right error here telling folks what they
-          # need to implement if a fetch KeyError is thrown
-          Resources::Container.new(
-            container[:name],
-            container[:image],
-            parse_command(container[:command]),
-            container[:port]
-          )
-        end
-
-        def configmap_from_native(native, id)
-          configmap = native.fetch(:configmap, nil)
-          return nil if configmap.nil?
-
-          Resources::ConfigMap.new(
-            configmap_name(id),
-            configmap[:filename],
-            configmap[:data]
-          )
-        end
-
-        def init_ctrs_from_native(native_data)
-          init_ctrs = []
-          return init_ctrs unless native_data.key?(:init_ctrs)
-
-          ctrs = native_data[:init_ctrs]
-          ctrs.each do |ctr_raw|
-            ctr = Resources::Container.new(
-              ctr_raw[:name],
-              ctr_raw[:image],
-              ctr_raw[:command].to_a
-            )
-            init_ctrs.push(ctr)
-          end
-
-          init_ctrs
-        end
-
-        def parse_command(cmd)
-          command = cmd&.split(' ')
-          command.nil? ? [] : command
         end
 
         def all_pods_to_info(data)

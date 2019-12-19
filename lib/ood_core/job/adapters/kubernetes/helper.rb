@@ -1,6 +1,6 @@
 class OodCore::Job::Adapters::Kubernetes::Helper
 
-
+  require 'ood_core/job/adapters/kubernetes/resources'
 
   def info_from_json(pod_json: nil, service_json: nil, secret_json: nil)
     pod_hash = pod_info_from_json(pod_json)
@@ -13,7 +13,62 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     OodCore::Job::Info.new(pod_hash)
   end
 
+  def container_from_native(native)
+    container = native.fetch(:container)
+    # TODO: throw the right error here telling folks what they
+    # need to implement if a fetch KeyError is thrown
+    OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
+      container[:name],
+      container[:image],
+      parse_command(container[:command]),
+      container[:port]
+    )
+  end
 
+  def parse_command(cmd)
+    command = cmd&.split(' ')
+    command.nil? ? [] : command
+  end
+
+  def configmap_from_native(native, id)
+    configmap = native.fetch(:configmap, nil)
+    return nil if configmap.nil?
+
+    OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap.new(
+      configmap_name(id),
+      configmap[:filename],
+      configmap[:data]
+    )
+  end
+
+  def init_ctrs_from_native(native_data)
+    init_ctrs = []
+    return init_ctrs unless native_data.key?(:init_ctrs)
+
+    ctrs = native_data[:init_ctrs]
+    ctrs.each do |ctr_raw|
+      ctr = OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
+        ctr_raw[:name],
+        ctr_raw[:image],
+        ctr_raw[:command].to_a
+      )
+      init_ctrs.push(ctr)
+    end
+
+    init_ctrs
+  end
+
+  def service_name(id)
+    id + '-service'
+  end
+
+  def secret_name(id)
+    id + '-secret'
+  end
+
+  def configmap_name(id)
+    id + '-configmap'
+  end
 
   private 
 
