@@ -14,6 +14,17 @@ describe OodCore::Clusters do
       end
     end
 
+    context "when loading a valid file .yaml" do
+      let(:config) { Pathname.pwd + 'spec/fixtures/config/clusters.d/pitzer.yaml'}
+
+      it "returns an array of OodCore::Cluster" do
+        clusters = OodCore::Clusters.load_file(config)
+        clusters.each do |cluster|
+          expect(cluster).to be_an_instance_of(OodCore::Cluster)
+        end
+      end
+    end
+
     context "when loading directory of valid cluster config" do
       let(:config) { Pathname.pwd + 'spec/fixtures/config/clusters.d'}
 
