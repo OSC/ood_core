@@ -24,10 +24,14 @@ module OodCore
         def initialize(options = {})
           opts = options.to_h.symbolize_keys
 
-          @config = opts.fetch(:config, '')
-          @bin = opts.fetch(:bin, '')
-          @volumes = opts.fetch(:volumes, [])
+          @config_file = opts.fetch(:config_file, "#{Dir.home}/.kube/ood-config")
+          @bin = opts.fetch(:bin, '/usr/bin/kubectl')
           @restart_policy = opts.fetch(:restart_policy, 'Never')
+          @cluster_name = opts.fetch(:cluster_name, 'open-ondemand')
+
+          @using_context = false
+
+          make_kubectl_config(opts)
 
           @helper = Kubernetes::Helper.new
         end
@@ -249,6 +253,10 @@ module OodCore
           [template.result(binding), id]
         end
 
+        # helper to call kubectl and get json data back.
+        # verb, resrouce and id are the kubernetes parlance terms.
+        # example: 'kubectl get pod my-pod-id' is verb=get, resource=pod
+        # and  id=my-pod-id
         def json3_ns_cmd(verb, resource, id)
           cmd = "#{formatted_ns_cmd} #{verb} #{resource} #{id}"
           data, error, success = Open3.capture3(cmd)
@@ -277,20 +285,47 @@ module OodCore
           )
         end
 
+        def namespace
+          default_namespace
+        end
+
         def default_namespace
           ENV['USER'].to_s
         end
 
-        def formatted_ns_cmd(namespace = default_namespace)
-          "#{namespaced_cmd(namespace)} -o json"
+        def context
+          @cluster_name
         end
 
-        def namespaced_cmd(namespace = default_namespace)
+        def default_config_file
+          (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/ood-config")
+        end
+
+        def default_auth
+          {
+            type: 'managaged'
+          }.symbolize_keys
+        end
+
+        def default_server
+          {
+            endpoint: 'https://localhost:8080',
+            cert_authority_file: nil
+          }.symbolize_keys
+        end
+
+        def formatted_ns_cmd
+          "#{namespaced_cmd} -o json"
+        end
+
+        def namespaced_cmd
           "#{base_cmd} --namespace=#{namespace}"
         end
 
         def base_cmd
-          "#{@bin} --kubeconfig #{@config}"
+          base = "#{@bin} --kubeconfig=#{@config_file}"
+          base << " --context=#{context}" if @using_context
+          base
         end
 
         def all_pods_to_info(data)
@@ -306,6 +341,82 @@ module OodCore
           end
 
           info_array
+        end
+
+        def make_kubectl_config(config)
+          set_cluster(config.fetch(:server, default_server).to_h.symbolize_keys)
+          configure_auth(config.fetch(:auth, default_auth).to_h.symbolize_keys)
+        end
+
+        def configure_auth(auth)
+          puts "configuring auth with #{auth.to_h.inspect}"
+          type = auth.fetch(:type)
+
+          case type
+          when 'oidc'
+            use_context
+            set_oidc_user(auth)
+          end
+
+          return if managed?(type)
+
+          set_context
+        end
+
+        def use_context
+          @using_context = true
+        end
+
+        def managed?(type)
+          if type.nil?
+            true # maybe should be false?
+          else
+            type.to_s == 'managed'
+          end
+        end
+
+        def username
+          "ood-#{ENV['USER']}"
+        end
+
+        def set_oidc_user(auth)
+          url = auth.fetch(:issuer_url, 'issuer_url_not_provided')
+          client_id = auth.fetch(:client_id, 'client_id_not_provided')
+          id_token = ENV['HTTP_OIDC_ID_TOKEN'] || 'id_token_not_in_env'
+          refresh_token = ENV['HTTP_OIDC_REFRESH_TOKEN'] || 'refresh_token_not_in_env'
+
+          cmd = "#{base_cmd} config set-credentials #{username}"
+          cmd << ' --auth-provider=oidc'
+          cmd << " --auth-provider-arg=idp-issuer-url=#{url}"
+          cmd << " --auth-provider-arg=id-token=#{id_token}"
+          cmd << " --auth-provider-arg=refresh-token=#{refresh_token}"
+          cmd << " --auth-provider-arg=client-id=#{client_id}"
+
+          call(cmd)
+        end
+
+        def set_context
+          cmd = "#{base_cmd} config set-context #{@cluster_name}"
+          cmd << " --cluster=#{@cluster_name} --namespace=#{namespace}"
+          cmd << " --user=#{username}"
+
+          call(cmd)
+        end
+
+        def set_cluster(config)
+          server = config.fetch(:endpoint)
+          cert = config.fetch(:cert_authority_file)
+
+          cmd = "#{base_cmd} config set-cluster #{@cluster_name}"
+          cmd << " --server=#{server}"
+          cmd << " --certificate-authority=#{cert}" unless cert.nil?
+
+          call(cmd)
+        end
+
+        def call(cmd = '')
+          _, error, s = Open3.capture3(cmd)
+          raise error unless s.success?
         end
 
       end
