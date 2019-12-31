@@ -235,6 +235,8 @@ module OodCore
 
         private
 
+        # helper to template resource yml you're going to submit and
+        # create an id.
         def generate_id_yml(native_data)
           container = @helper.container_from_native(native_data)
           id = generate_id(container.name)
@@ -354,7 +356,6 @@ module OodCore
             use_context
             use_token
           end
-
         end
 
         def use_context

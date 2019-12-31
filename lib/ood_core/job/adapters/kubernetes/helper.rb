@@ -2,6 +2,19 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   require 'ood_core/job/adapters/kubernetes/resources'
 
+  # Extract info from json data. The data is expected to be from the kubectl
+  # command and conform to kubernetes' datatype structures.
+  #
+  # Returns { native: {host: localhost, port:80, password: sshhh }} in the info
+  # object field in lieu of writing a connection.yml
+  #
+  # @param pod_json [#to_h]
+  #   the pod data returned from 'kubectl get pod abc-123'
+  # @param service_json [#to_h]
+  #   the service data returned from 'kubectl get service abc-123-service'
+  # @param secret_json [#to_h]
+  #   the secret data returned from 'kubectl get secret abc-123-secret'
+  # @return [OodCore::Job::Info]
   def info_from_json(pod_json: nil, service_json: nil, secret_json: nil)
     pod_hash = pod_info_from_json(pod_json)
     service_hash = service_info_from_json(service_json)
@@ -25,8 +38,14 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     )
   end
 
+  # Parse a command given from a user and return an array
+  #
+  # @param cmd [#to_s]
+  #   the command to parse
+  # @return [Array<#to_s>]
+  #   the command parsed into an array of arguements
   def parse_command(cmd)
-    command = cmd&.split(' ')
+    command = cmd&.to_s&.split(' ')
     command.nil? ? [] : command
   end
 
@@ -41,6 +60,13 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     )
   end
 
+  # parse initialization containers from native data
+  #
+  # @param native_data [#to_h]
+  #   the native data to parse. Expected key init_ctrs and for that
+  #   key to be an array of hashes.
+  # @return [Array<OodCore::Job::Adapters::Kubernetes::Resources::Container>]
+  #   the array of init containers
   def init_ctrs_from_native(native_data)
     init_ctrs = []
     return init_ctrs unless native_data.key?(:init_ctrs)
@@ -70,6 +96,14 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     id + '-configmap'
   end
 
+  # Extract pod info from json data. The data is expected to be from the kubectl
+  # command and conform to kubernetes' datatype structures.
+  #
+  #
+  # @param json_data [#to_h]
+  #   the pod data returned from 'kubectl get pod abc-123'
+  # @return [#to_h]
+  #   the hash of info expected from adapters
   def pod_info_from_json(json_data)
     return {} if json_data.nil?
 
@@ -99,7 +133,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   end
 
   def service_info_from_json(json_data)
-    # .spec.ports[0].nodePort
+    # all we need is the port - .spec.ports[0].nodePort
     ports = json_data.dig(:spec, :ports)
     {
       native:
