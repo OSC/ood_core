@@ -24,12 +24,13 @@ module OodCore
         def initialize(options = {})
           opts = options.to_h.symbolize_keys
 
-          @config_file = opts.fetch(:config_file, "#{Dir.home}/.kube/ood-config")
+          @config_file = opts.fetch(:config_file, default_config_file)
           @bin = opts.fetch(:bin, '/usr/bin/kubectl')
           @restart_policy = opts.fetch(:restart_policy, 'Never')
           @cluster_name = opts.fetch(:cluster_name, 'open-ondemand')
 
           @using_context = false
+          @using_token = false
 
           make_kubectl_config(opts)
 
@@ -298,7 +299,7 @@ module OodCore
         end
 
         def default_config_file
-          (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/ood-config")
+          (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/config")
         end
 
         def default_auth
@@ -325,6 +326,7 @@ module OodCore
         def base_cmd
           base = "#{@bin} --kubeconfig=#{@config_file}"
           base << " --context=#{context}" if @using_context
+          base << " --token=#{token}" if @using_token
           base
         end
 
@@ -334,7 +336,7 @@ module OodCore
 
           info_array = []
           pods.each do |pod|
-            hash = pod_json_to_info_hash(pod)
+            hash = @helper.pod_info_from_json(pod)
             info = Info.new(hash)
             info_array.push(info)
             puts "added info for #{info.inspect}"
@@ -351,20 +353,29 @@ module OodCore
         def configure_auth(auth)
           puts "configuring auth with #{auth.to_h.inspect}"
           type = auth.fetch(:type)
-
-          case type
-          when 'oidc'
-            use_context
-            set_oidc_user(auth)
-          end
-
           return if managed?(type)
 
-          set_context
+          case type
+          when 'gke'
+            set_gke_config(auth)
+          when 'oidc'
+            set_context
+            use_context
+            use_token
+          end
+
         end
 
         def use_context
           @using_context = true
+        end
+
+        def use_token
+          @using_token = true
+        end
+
+        def token
+          ENV['HTTP_OIDC_ACCESS_TOKEN'] || 'access_token_not_provided'
         end
 
         def managed?(type)
@@ -379,20 +390,28 @@ module OodCore
           "ood-#{ENV['USER']}"
         end
 
-        def set_oidc_user(auth)
-          url = auth.fetch(:issuer_url, 'issuer_url_not_provided')
-          client_id = auth.fetch(:client_id, 'client_id_not_provided')
-          id_token = ENV['HTTP_OIDC_ID_TOKEN'] || 'id_token_not_in_env'
-          refresh_token = ENV['HTTP_OIDC_REFRESH_TOKEN'] || 'refresh_token_not_in_env'
+        def set_gke_config(auth)
+          cred_file = auth.fetch(:svc_acct_file)
 
-          cmd = "#{base_cmd} config set-credentials #{username}"
-          cmd << ' --auth-provider=oidc'
-          cmd << " --auth-provider-arg=idp-issuer-url=#{url}"
-          cmd << " --auth-provider-arg=id-token=#{id_token}"
-          cmd << " --auth-provider-arg=refresh-token=#{refresh_token}"
-          cmd << " --auth-provider-arg=client-id=#{client_id}"
-
+          cmd = "gcloud auth activate-service-account --key-file=#{cred_file}"
           call(cmd)
+
+          set_gke_credentials(auth)
+        end
+
+        def set_gke_credentials(auth)
+
+          zone = auth.fetch(:zone, nil)
+          region = auth.fetch(:region, nil)
+
+          locale = ''
+          locale = "--zone=#{zone}" unless zone.nil?
+          locale = "--region=#{region}" unless region.nil?
+
+          # gke cluster name can probably can differ from what ood calls the cluster
+          cmd = "gcloud container clusters get-credentials #{locale} #{@cluster_name}"
+          env = { 'KUBECONFIG' => @config_file }
+          call(cmd, env)
         end
 
         def set_context
@@ -414,8 +433,8 @@ module OodCore
           call(cmd)
         end
 
-        def call(cmd = '')
-          _, error, s = Open3.capture3(cmd)
+        def call(cmd = '', env = {})
+          _, error, s = Open3.capture3(env, cmd)
           raise error unless s.success?
         end
 
