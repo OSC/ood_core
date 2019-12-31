@@ -70,15 +70,10 @@ module OodCore
           resource_yml, id = generate_id_yml(script.native)
           cmd = "#{formatted_ns_cmd} create -f -"
 
-          puts "Submitting:\n#{resource_yml}"
-
           _, e, s = Open3.capture3(cmd, stdin_data: resource_yml)
           raise Error, e unless s.success?
 
           id
-        rescue => err # TODO: rm after testing
-          puts "#{err.backtrace}"
-          raise err
         end
 
         def generate_id(name)
@@ -181,9 +176,7 @@ module OodCore
           service_json, = json3_ns_cmd('get', 'service', service_name(id))
           secret_json, = json3_ns_cmd('get', 'secret', secret_name(id))
 
-          info = @helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
-          puts "info is #{info.inspect}"
-          info
+          @helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
         end
 
         # Retrieve job status from resource manager
@@ -339,7 +332,6 @@ module OodCore
             hash = @helper.pod_info_from_json(pod)
             info = Info.new(hash)
             info_array.push(info)
-            puts "added info for #{info.inspect}"
           end
 
           info_array
@@ -351,7 +343,6 @@ module OodCore
         end
 
         def configure_auth(auth)
-          puts "configuring auth with #{auth.to_h.inspect}"
           type = auth.fetch(:type)
           return if managed?(type)
 
