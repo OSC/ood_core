@@ -70,8 +70,6 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     id + '-configmap'
   end
 
-  private 
-
   def pod_info_from_json(json_data)
     return {} if json_data.nil?
 
@@ -90,6 +88,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       }
     }
   end
+
+  private
 
   def name_from_metadata(metadata)
     name = metadata.dig(:labels, :'app.kubernetes.io/name')
@@ -131,6 +131,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def dispatch_time(json_data)
     status = pod_status_from_json(json_data)
+    return nil if status == 'undetermined'
+
     state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
     date_string = nil
 
@@ -145,6 +147,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def wallclock_time(json_data)
     status = pod_status_from_json(json_data)
+    return nil if status == 'undetermined'
+
     state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
     start_time = dispatch_time(json_data)
     return nil if start_time.nil?
@@ -168,15 +172,34 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   end
 
   def submission_time(json_data)
-    str = json_data.dig(:status, :startTime)
+    status = json_data.dig(:status)
+    start = status.dig(:startTime)
+
+    if start.nil?
+      # the pod is in some pending state limbo
+      conditions = status.dig(:conditions)
+      # best guess to start time is just the first condition's
+      # transition time
+      str = conditions[0].dig(:lastTransitionTime)
+    else
+      str = start
+    end
+
     DateTime.parse(str).to_time.to_i
   end
 
   def pod_status_from_json(json_data)
-    container_statuses = json_data.dig(:status, :containerStatuses)
-    json_state = container_statuses[0].dig(:state) # only support 1 container/pod
-
     state = 'undetermined'
+    status = json_data.dig(:status)
+    container_statuses = status.dig(:containerStatuses)
+
+    if container_statuses.nil?
+      # if you're here, it means you're pending, probably unschedulable
+      return OodCore::Job::Status.new(state: state)
+    end
+
+    # only support 1 container/pod
+    json_state = container_statuses[0].dig(:state)
     state = 'running' unless json_state.dig(:running).nil?
     state = 'completed' unless json_state.dig(:terminated).nil?
     state = 'queued' unless json_state.dig(:waiting).nil?
