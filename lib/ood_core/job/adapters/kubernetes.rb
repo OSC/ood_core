@@ -235,6 +235,23 @@ module OodCore
 
         private
 
+        def username
+          @username = Etc.getlogin if @username.nil?
+          @username
+        end
+
+        def run_as_user
+          Etc.getpwnam(username).uid
+        end
+
+        def run_as_group
+          Etc.getpwnam(username).gid
+        end
+
+        def fs_group
+          run_as_group
+        end
+
         # helper to template resource yml you're going to submit and
         # create an id.
         def generate_id_yml(native_data)
@@ -286,7 +303,7 @@ module OodCore
         end
 
         def default_namespace
-          ENV['USER'].to_s
+          username
         end
 
         def context
@@ -378,8 +395,8 @@ module OodCore
           end
         end
 
-        def username
-          "ood-#{ENV['USER']}"
+        def ood_username
+          "ood-#{username}"
         end
 
         def set_gke_config(auth)
@@ -409,7 +426,7 @@ module OodCore
         def set_context
           cmd = "#{base_cmd} config set-context #{@cluster_name}"
           cmd << " --cluster=#{@cluster_name} --namespace=#{namespace}"
-          cmd << " --user=#{username}"
+          cmd << " --user=#{ood_username}"
 
           call(cmd)
         end

@@ -28,13 +28,16 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def container_from_native(native)
     container = native.fetch(:container)
+    env = build_env_array(container.fetch(:env))
+
     # TODO: throw the right error here telling folks what they
     # need to implement if a fetch KeyError is thrown
     OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
       container[:name],
       container[:image],
       parse_command(container[:command]),
-      container[:port]
+      container[:port],
+      env
     )
   end
 
@@ -124,6 +127,21 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   end
 
   private
+
+  def build_env_array(data)
+    env_vars = []
+    unless data.nil?
+      data.each do |env|
+        e = OodCore::Job::Adapters::Kubernetes::Resources::EnvVar.new(
+          env[:name],
+          env[:value]
+        )
+        env_vars.push(e)
+      end
+    end
+
+    env_vars
+  end
 
   def name_from_metadata(metadata)
     name = metadata.dig(:labels, :'app.kubernetes.io/name')
