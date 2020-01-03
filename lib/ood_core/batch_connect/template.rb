@@ -116,14 +116,13 @@ module OodCore
                   shuf -i ${1}-${2} -n 1
                 }
                 export -f random_number
-                export python_socket_cmd="import socket; socket.socket().connect(('$1',$2))"
 
                 port_used_python() {
-                  python -c "$python_socket_cmd" >/dev/null 2>&1
+                  python -c "import socket; socket.socket().connect(('$1',$2))" >/dev/null 2>&1
                 }
 
                 port_used_python3() {
-                  python3 -c "$python_socket_cmd" >/dev/null 2>&1
+                  python3 -c "import socket; socket.socket().connect(('$1',$2))" >/dev/null 2>&1
                 }
 
                 port_used_nc(){
