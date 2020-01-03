@@ -40,13 +40,16 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     )
   end
 
-  # Parse a command given from a user and return an array
+  # Parse a command string given from a user and return an array.
+  # If given an array, the input is simply returned back.
   #
   # @param cmd [#to_s]
   #   the command to parse
   # @return [Array<#to_s>]
   #   the command parsed into an array of arguements
   def parse_command(cmd)
+    return cmd if cmd&.is_a?(Array)
+
     command = cmd&.to_s&.split(' ')
     command.nil? ? [] : command
   end
