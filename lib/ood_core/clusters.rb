@@ -27,7 +27,7 @@ module OodCore
             end
           end
         elsif config.directory?
-          Pathname.glob([config.join("*.yml"), config.join("*.yaml")]).select(&:exist?).select(&:readable?).each do |p|
+          Pathname.glob([config.join("*.yml"), config.join("*.yaml")]).select(&:file?).select(&:readable?).each do |p|
             CONFIG_VERSION.any? do |version|
               if cluster = YAML.safe_load(p.read).fetch(version, nil)
                 clusters << Cluster.new(send("parse_#{version}", id: p.basename(p.extname()).to_s, cluster: cluster))
