@@ -11,7 +11,7 @@ require 'time'
 class OodCore::Job::Adapters::LinuxHost::Launcher
   attr_reader :contain, :debug, :site_timeout, :session_name_label, :singularity_bin,
     :site_singularity_bindpath, :default_singularity_image, :ssh_hosts,
-    :strict_host_checking, :submit_host, :tmux_bin, :username
+    :strict_host_checking, :tmux_bin, :username
   # The root exception class that all LinuxHost adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
@@ -57,7 +57,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
-    cmd = ssh_cmd(submit_host)
+    cmd = ssh_cmd(submit_host(script))
 
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
@@ -96,6 +96,14 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     }.flatten.sort_by {
       |hsh| hsh[:session_name]
     }
+  end
+
+  def submit_host(script = nil)
+    if script && script.native && script.native['submit_host_override']
+      script.native['submit_host_override']
+    else
+      @submit_host
+    end
   end
 
   private
