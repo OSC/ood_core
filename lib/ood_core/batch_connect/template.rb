@@ -117,11 +117,47 @@ module OodCore
                 }
                 export -f random_number
 
+                port_used_python() {
+                  python -c "import socket; socket.socket().connect(('$1',$2))" >/dev/null 2>&1
+                }
+
+                port_used_python3() {
+                  python3 -c "import socket; socket.socket().connect(('$1',$2))" >/dev/null 2>&1
+                }
+
+                port_used_nc(){
+                  nc -w 2 "$1" "$2" < /dev/null > /dev/null 2>&1
+                }
+
+                port_used_lsof(){
+                  lsof -i :"$2" >/dev/null 2>&1
+                }
+
+                port_used_bash(){
+                  local bash_supported=$(strings /bin/bash 2>/dev/null | grep tcp)
+                  if [ "$bash_supported" == "/dev/tcp/*/*" ]; then
+                    (: < /dev/tcp/$1/$2) >/dev/null 2>&1
+                  else
+                    return 127
+                  fi
+                }
+
                 # Check if port $1 is in use
                 port_used () {
                   local port="${1#*:}"
                   local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
-                  nc -w 2 "${host}" "${port}" < /dev/null &> /dev/null
+                  local port_strategies=(port_used_nc port_used_lsof port_used_bash port_used_python port_used_python3)
+
+                  for strategy in ${port_strategies[@]};
+                  do
+                    $strategy $host $port
+                    status=$?
+                    if [[ "$status" == "0" ]] || [[ "$status" == "1" ]]; then
+                      return $status
+                    fi
+                  done
+
+                  return 127
                 }
                 export -f port_used
 
@@ -143,8 +179,14 @@ module OodCore
                   local port="${1}"
                   local time="${2:-30}"
                   for ((i=1; i<=time*2; i++)); do
-                    if port_used "${port}"; then
+                    port_used "${port}"
+                    port_status=$?
+                    if [ "$port_status" == "0" ]; then
                       return 0
+                    elif [ "$port_status" == "127" ]; then
+                       echo "commands to find port were either not found or inaccessible."
+                       echo "command options are lsof, nc, bash's /dev/tcp, or python (or python3) with socket lib."
+                       return 127
                     fi
                     sleep 0.5
                   done
