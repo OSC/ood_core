@@ -27,13 +27,15 @@ class QstatXmlJRListener
     @parsed_job = {
       :tasks => [],
       :status => :queued,
-      :procs => 1,  # un-knowable from SGE qstat output
+      :procs => 1,
       :native => {}  # TODO: improve native attribute reporting
     }
     @current_text = nil
     @current_request = nil
 
     @processing_job_array_spec = false
+    @adding_slots = false
+
     @job_array_spec = {
       start: nil,
       stop: nil,
@@ -46,6 +48,8 @@ class QstatXmlJRListener
     case name
     when 'task_id_range'
       toggle_processing_array_spec
+    when 'JB_pe_range'
+      toggle_adding_slots
     end
   end
 
@@ -78,13 +82,16 @@ class QstatXmlJRListener
     when 'djob_info'
       finalize_parsed_job
     when 'RN_min'
-      set_job_array_piece(:start)
+      set_job_array_piece(:start) if @processing_job_array_spec
+      set_slots if @adding_slots
     when 'RN_max'
-      set_job_array_piece(:stop)
+      set_job_array_piece(:stop) if @processing_job_array_spec
     when 'RN_step'
-      set_job_array_piece(:step)
+      set_job_array_piece(:step) if @processing_job_array_spec
     when 'task_id_range'
       toggle_processing_array_spec
+    when 'JB_pe_range'
+      toggle_adding_slots
     end
   end
 
@@ -185,6 +192,14 @@ class QstatXmlJRListener
 
   def toggle_processing_array_spec
     @processing_job_array_spec = ! @processing_job_array_spec
+  end
+
+  def toggle_adding_slots
+    @adding_slots = ! @adding_slots
+  end
+
+  def set_slots
+    @parsed_job[:procs] = @current_text.to_i
   end
 end
 
