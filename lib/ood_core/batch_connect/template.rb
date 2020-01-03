@@ -116,27 +116,49 @@ module OodCore
                   shuf -i ${1}-${2} -n 1
                 }
                 export -f random_number
+                export python_socket_cmd="import socket; socket.socket().connect(('$1',$2))"
+
+                port_used_python() {
+                  python -c "$python_socket_cmd" >/dev/null 2>&1
+                }
+
+                port_used_python3() {
+                  python3 -c "$python_socket_cmd" >/dev/null 2>&1
+                }
+
+                port_used_nc(){
+                  nc -w 2 "$1" "$2" < /dev/null > /dev/null 2>&1
+                }
+
+                port_used_lsof(){
+                  lsof -i :"$2" >/dev/null 2>&1
+                }
+
+                port_used_bash(){
+                  local bash_supported=$(strings /bin/bash 2>/dev/null | grep tcp)
+                  if [ "$bash_supported" == "/dev/tcp/*/*" ]; then
+                    (: < /dev/tcp/$1/$2) >/dev/null 2>&1
+                  else
+                    return 127
+                  fi
+                }
 
                 # Check if port $1 is in use
                 port_used () {
                   local port="${1#*:}"
                   local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
-                  local python_cmd="import socket; socket.socket().connect(('$host',$port))"
-                  local bash_supported=$(strings /bin/bash | grep tcp)
+                  local port_strategies=(port_used_nc port_used_lsof port_used_bash port_used_python port_used_python3)
 
-                  if nc -h >/dev/null 2>&1; then
-                    nc -w 2 "${host}" "${port}" < /dev/null > /dev/null 2>&1
-                  elif lsof -h >/dev/null 2>&1; then
-                    lsof -i :"${port}" >/dev/null 2>&1
-                  elif python -h >/dev/null 2>&1; then
-                    python -c "$python_cmd" >/dev/null 2>&1
-                  elif python3 -h >/dev/null 2>&1; then
-                    python3 -c "$python_cmd" >/dev/null 2>&1
-                  elif [ "$bash_supported" == "/dev/tcp/*/*" ]; then
-                    (: < /dev/tcp/${host}/${port}) >/dev/null 2>&1
-                  else
-                    return 127
-                  fi
+                  for strategy in ${port_strategies[@]};
+                  do
+                    $strategy $host $port
+                    status=$?
+                    if [[ "$status" == "0" ]] || [[ "$status" == "1" ]]; then
+                      return $status
+                    fi
+                  done
+
+                  return 127
                 }
                 export -f port_used
 
