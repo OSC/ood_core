@@ -255,10 +255,10 @@ module OodCore
         # helper to template resource yml you're going to submit and
         # create an id.
         def generate_id_yml(native_data)
-          container = @helper.container_from_native(native_data)
+          container = @helper.container_from_native(native_data[:container])
           id = generate_id(container.name)
           configmap = @helper.configmap_from_native(native_data, id)
-          init_containers = @helper.init_ctrs_from_native(native_data)
+          init_containers = @helper.init_ctrs_from_native(native_data[:init_ctrs]) if native_data.key?(:init_ctrs)
           spec = Resources::PodSpec.new(container, init_containers)
 
           template = ERB.new(File.read(resource_file))

@@ -39,7 +39,7 @@ spec:
     - name: configmap-volume
       mountPath:  <%= configmap_mount_path %>
     <% end %>
-  <% unless spec.init_containers.nil? && spec.init_containers.length > 0 %>
+  <% unless spec.init_containers.nil? || spec.init_containers.length > 0 %>
   initContainers:
   <% spec.init_containers.each do |ctr| %>
   - name: "<%= ctr.name %>"

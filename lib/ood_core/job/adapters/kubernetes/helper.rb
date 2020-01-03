@@ -26,9 +26,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     OodCore::Job::Info.new(pod_hash)
   end
 
-  def container_from_native(native)
-    container = native.fetch(:container)
-    env = build_env_array(container.fetch(:env))
+  def container_from_native(container)
+    env = build_env_array(container.fetch(:env, []))
 
     # TODO: throw the right error here telling folks what they
     # need to implement if a fetch KeyError is thrown
@@ -70,17 +69,11 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   key to be an array of hashes.
   # @return [Array<OodCore::Job::Adapters::Kubernetes::Resources::Container>]
   #   the array of init containers
-  def init_ctrs_from_native(native_data)
+  def init_ctrs_from_native(ctrs)
     init_ctrs = []
-    return init_ctrs unless native_data.key?(:init_ctrs)
 
-    ctrs = native_data[:init_ctrs]
     ctrs.each do |ctr_raw|
-      ctr = OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
-        ctr_raw[:name],
-        ctr_raw[:image],
-        ctr_raw[:command].to_a
-      )
+      ctr = container_from_native(ctr_raw)
       init_ctrs.push(ctr)
     end
 
