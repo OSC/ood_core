@@ -13,7 +13,7 @@ class OodCore::Job::Adapters::Sge::Helper
 
   # Convert script and job dependencies to qsub argument vector
   # @return args [Array<String>]
-  def batch_submit_args(script, after: [], afterok: [], afternotok: [], afterany: [])
+  def batch_submit_args(script, sanitize_job_name, after: [], afterok: [], afternotok: [], afterany: [])
     raise_error_on_unsupported_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
     args = []
@@ -38,7 +38,7 @@ class OodCore::Job::Adapters::Sge::Helper
     args += ['-hold_jid_ad', afterok.join(',')] unless afterok.empty?
 
     # ignoring email_on_started
-    args += ['-N', script.job_name] unless script.job_name.nil?
+    args += ['-N', job_name(script.job_name, sanitize_job_name)] unless script.job_name.nil?
     args += ['-e', script.error_path] unless script.error_path.nil?
     args += ['-o', script.output_path] unless script.output_path.nil?
     args += ['-ar', script.reservation_id] unless script.reservation_id.nil?
@@ -56,7 +56,7 @@ class OodCore::Job::Adapters::Sge::Helper
   # @brief      Detect whether script content contains either -cwd or -wd
   #
   # @param      content  The script content
-  # 
+  #
   # Examples:
   #     #$-wd /home/ood/ondemand  # should match
   #     #$  -wd /home/ood/ondemand  # should match
@@ -92,6 +92,25 @@ class OodCore::Job::Adapters::Sge::Helper
     raise OodCore::Job::Adapters::Sge::Error.new('SGE does not support job dependencies on after start') if after && ! after.empty?
     raise OodCore::Job::Adapters::Sge::Error.new('SGE does not support job dependencies on after not ok') if afternotok && ! afternotok.empty?
     raise OodCore::Job::Adapters::Sge::Error.new('SGE does not support job dependencies on after any') if afterany && ! afterany.empty?
+  end
+
+  # Sanitize a job name replacing illegal characters with underscores
+  # @param     job_name     The job name to sanitize
+  # @param     sanitize_job_name Boolean flag
+  # @return    job_name     The possibly sanitized job name
+  #
+  # Grid Engine circa 2007 said this about the spec for their job names:
+  #
+  #     name
+  #       The name may be any arbitrary alphanumeric ASCII string, but
+  #       may  not contain  "\n", "\t", "\r", "/", ":", "@", "\", "*",
+  #       or "?".
+  def job_name(job_name, sanitize_job_name=false)
+    return job_name unless sanitize_job_name
+
+    # sftp://user@host.edu/place:22 -> sftp___user_host.edu_place_22
+    # where the regex is in the form [blacklist]|[negation of whitelist]
+    job_name.gsub(/([\s\n\t\r\/:@\\*]|[^\x00-\x7F])/, '_')
   end
 
   # Extract the job id from qsub's output

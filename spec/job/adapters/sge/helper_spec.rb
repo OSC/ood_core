@@ -23,4 +23,30 @@ describe OodCore::Job::Adapters::Sge::Helper do
         expect(helper.script_contains_wd_directive?(should_not_match_bad_indent)).to be_falsey
     end
   end
+
+  describe "#job_name" do
+    let(:sftp_command_as_job_name) { 'sftp://user@host.edu/place:22' }
+    let(:acceptable_job_name) { 'bioinformatics_job_01' }
+    let(:batch_connect_job_name) { 'ondemand/sys/dashboard/sys/bc_osc_rstudio_server' }
+    # http://gridscheduler.sourceforge.net/htmlman/htmlman1/sge_types.html?pathrev=V62u5_TAG
+    let(:legal_ge_name_regex) { /^((?![\n\t\r\/:@\\*])[[:ascii:]])*$/ }
+
+    context "when santize_job_name is unset" do
+        it "returns the correct job_name" do
+            expect(acceptable_job_name).to match(legal_ge_name_regex)
+            expect(helper.job_name(acceptable_job_name)).to eq(acceptable_job_name)
+            expect(helper.job_name(sftp_command_as_job_name)).to eq(sftp_command_as_job_name)
+            expect(helper.job_name(batch_connect_job_name)).to eq(batch_connect_job_name)
+        end
+    end
+
+    context "when santize_job_name is true" do
+        it "returns the correct job_name" do
+            expect(acceptable_job_name).to match(legal_ge_name_regex)
+            expect(helper.job_name(acceptable_job_name, true)).to match(legal_ge_name_regex)
+            expect(helper.job_name(sftp_command_as_job_name, true)).to match(legal_ge_name_regex)
+            expect(helper.job_name(batch_connect_job_name, true)).to match(legal_ge_name_regex)
+        end
+    end
+  end
 end

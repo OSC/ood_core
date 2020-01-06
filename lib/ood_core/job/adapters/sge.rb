@@ -7,17 +7,19 @@ module OodCore
       using Refinements::HashExtensions
 
       # Build the Sun Grid Engine adapter from a configuration
-      # @param config [#to_h] the configuration for job adapter
-      # @option config [Object] :cluster (nil) The cluster to communicate with
-      # @option config [Object] :conf (nil) Path to the SGE conf
-      # @option config [Object] :bin (nil) Path to SGE client binaries
-      # @option config [#to_h]  :bin_overrides ({}) Optional overrides to SGE client executables
-      # @option config [Object] :sge_root (nil) Path to SGE root, note that
+      # @param config  [#to_h] the configuration for job adapter
+      # @option config [Object]  :cluster (nil) The cluster to communicate with
+      # @option config [Object]  :conf (nil) Path to the SGE conf
+      # @option config [Object]  :bin (nil) Path to SGE client binaries
+      # @option config [Boolean] :sanitize_job_name (false) Should the adapter mutate the job name to ensure compatibility
+      # @option config [#to_h]   :bin_overrides ({}) Optional overrides to SGE client executables
+      # @option config [Object]  :sge_root (nil) Path to SGE root, note that
       #   this may be nil, but must be set to use the DRMAA API, and there is a
       #   severe performance penalty calling Sge#info without using DRMAA.
       def self.build_sge(config)
         batch = Adapters::Sge::Batch.new(config.to_h.symbolize_keys)
-        Adapters::Sge.new(batch: batch)
+        sanitize_job_name = config.fetch(:sanitize_job_name, false)
+        Adapters::Sge.new(batch: batch, sanitize_job_name: sanitize_job_name)
       end
     end
 
@@ -52,9 +54,10 @@ module OodCore
         class Error < StandardError; end
 
         # @param batch [Adapters::Sge::Batch]
-        def initialize(batch:)
+        def initialize(batch:, sanitize_job_name: false)
           @batch = batch
           @helper = Sge::Helper.new
+          @sanitize_job_name = sanitize_job_name
         end
 
         # Submit a job with the attributes defined in the job template instance
@@ -81,7 +84,7 @@ module OodCore
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           # SGE supports jod dependencies on job completion
-          args = @helper.batch_submit_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
+          args = @helper.batch_submit_args(script, @sanitize_job_name, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 
           @batch.submit(script.content, args)
         rescue Batch::Error => e
