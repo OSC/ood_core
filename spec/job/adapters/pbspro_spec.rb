@@ -782,10 +782,35 @@ describe OodCore::Job::Adapters::PBSPro do
   end
 
   describe "#directive_prefix" do
-      context "when called" do
-        it "does not raise an error" do
-          expect { adapter.directive_prefix }.not_to raise_error
-        end
+    context "when called" do
+      it "does not raise an error" do
+        expect { adapter.directive_prefix }.not_to raise_error
       end
     end
+  end
+
+  describe "#job_name" do
+    let(:sftp_command_as_job_name) { 'sftp://user@host.edu/place:22' }
+    let(:acceptable_job_name) { 'bioinformatics_job_01' }
+    let(:batch_connect_job_name) { 'ondemand/sys/dashboard/sys/bc_osc_rstudio_server' }
+    # https://www.pbsworks.com/pdfs/PBSUserGuide18.2.pdf page 28
+    let(:legal_pbs_name_regex) { /^[a-zA-Z0-9\-_+]{1,236}$/ }
+
+    context "when santize_job_name is unset" do
+      it "returns the correct job_name" do
+          expect(acceptable_job_name).to match(legal_pbs_name_regex)
+          expect(adapter.send(:job_name, acceptable_job_name)).to eq(acceptable_job_name)
+          expect(adapter.send(:job_name, sftp_command_as_job_name)).to eq(sftp_command_as_job_name)
+          expect(adapter.send(:job_name, batch_connect_job_name)).to eq(batch_connect_job_name)
+      end
+    end
+
+    context "when santize_job_name is true" do
+      it "returns the correct job_name" do
+          expect(adapter.send(:job_name, acceptable_job_name, true)).to match(legal_pbs_name_regex)
+          expect(adapter.send(:job_name, sftp_command_as_job_name, true)).to match(legal_pbs_name_regex)
+          expect(adapter.send(:job_name, batch_connect_job_name, true)).to match(legal_pbs_name_regex)
+      end
+    end
+  end
 end

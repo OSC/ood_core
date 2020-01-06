@@ -201,6 +201,7 @@ module OodCore
 
           @pbspro = o.fetch(:pbspro) { raise ArgumentError, "No pbspro object specified. Missing argument: pbspro" }
           @qstat_factor = o.fetch(:qstat_factor, 0.10).to_f
+          @sanitize_job_name = o.fetch(:sanitize_job_name, false)
         end
 
         # Submit a job with the attributes defined in the job template instance
@@ -237,7 +238,7 @@ module OodCore
           elsif script.email_on_terminated
             args += ["-m", "e"]
           end
-          args += ["-N", script.job_name] unless script.job_name.nil?
+          args += ["-N", job_name(script.job_name, @sanitize_job_name)] unless script.job_name.nil?
           args += ["-S", script.shell_path] unless script.shell_path.nil?
           # ignore input_path (not defined in PBS Pro)
           args += ["-o", script.output_path] unless script.output_path.nil?
@@ -474,6 +475,27 @@ module OodCore
             end
 
             Info.new(**parent)
+          end
+
+          # Sanitize a job name replacing illegal characters with underscores
+          # @param     job_name     The job name to sanitize
+          # @param     sanitize_job_name Boolean flag
+          # @return    job_name     The possibly sanitized job name
+          #
+          # https://www.pbsworks.com/pdfs/PBSUserGuide18.2.pdf page 28
+          #
+          #     The job name can be up to 236 characters in length, and must
+          #     consist of printable, non-whitespace characters.  The first
+          #     character must be alphabetic, numeric, hyphen, underscore, or
+          #     plus sign.
+          #     
+          # This description is not correct for PBSPro version 19.1.1; the name
+          # length may be 220 characters, 236 fails with a length error. All
+          # characters appear to need to match the rules for first character.
+          def job_name(job_name, sanitize_job_name=false)
+            return job_name unless sanitize_job_name
+
+            job_name.slice(0, 220).gsub(/[^a-zA-Z0-9\-_+]/, '_')
           end
       end
     end
