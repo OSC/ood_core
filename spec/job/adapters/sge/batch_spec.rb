@@ -7,7 +7,7 @@ def load_resource_file(file_name)
 end
 
 describe OodCore::Job::Adapters::Sge::Batch do
-  subject(:batch) {described_class.new({:conf => '', :cluster => '', :bin => ''})}
+  subject(:batch) {described_class.new({:cluster => '', :bin => ''})}
   let(:jobs_from_qstat) {[
     OodCore::Job::Info.new( # Running job, w/ project
       :id => '88',
@@ -108,6 +108,14 @@ describe OodCore::Job::Adapters::Sge::Batch do
     )
   }
 
+  describe "#new" do
+    context "when bin is nil" do
+      it "does not crash" do
+        described_class.new({cluster: '', bin: nil})
+      end
+    end
+  end
+
   describe "#get_all" do
     context "when no owner is set" do
       before {
@@ -178,7 +186,7 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
     context "when calling with normal config" do
       it "uses the correct command" do
-        batch = described_class.new(conf: "/etc/default/gridengine", bin: "/usr/bin", bin_overrides: {})
+        batch = described_class.new(bin: "/usr/bin", bin_overrides: {})
         allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Sge.new(batch: batch).submit script
@@ -188,7 +196,7 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
     context "when calling with overrides" do
       it "uses the correct command" do
-        batch = described_class.new(conf: "/etc/default/gridengine", bin: "/usr/bin", bin_overrides: {"qsub" => "/usr/local/bin/not_qsub"})
+        batch = described_class.new(bin: "/usr/bin", bin_overrides: {"qsub" => "/usr/local/bin/not_qsub"})
         allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Sge.new(batch: batch).submit script
