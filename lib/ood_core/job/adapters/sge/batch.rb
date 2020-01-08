@@ -33,7 +33,6 @@ class OodCore::Job::Adapters::Sge::Batch
   # @see Factory.build_sge
   def initialize(config)
     @cluster          = config.fetch(:cluster, nil)
-    @conf             = Pathname.new(config.fetch(:conf, nil))
     @bin              = Pathname.new(config.fetch(:bin, nil))
     @sge_root         = Pathname.new(config[:sge_root] || ENV['SGE_ROOT'] || "/var/lib/gridengine")
     @bin_overrides    = config.fetch(:bin_overrides, {})
