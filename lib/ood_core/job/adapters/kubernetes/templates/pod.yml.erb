@@ -39,7 +39,13 @@ spec:
     - name: configmap-volume
       mountPath:  <%= configmap_mount_path %>
     <% end %>
-  <% unless spec.init_containers.nil? || spec.init_containers.length > 0 %>
+    <% unless @mounts.nil? %>
+    <% @mounts.each do |mount| %>
+    - name: <%= mount['name'] %>
+      mountPath: <%= mount['destination_path'] %>
+    <% end %> <%# for each mount %>
+    <% end %> <%# if mounts is not nil %>
+  <% unless spec.init_containers.nil? %>
   initContainers:
   <% spec.init_containers.each do |ctr| %>
   - name: "<%= ctr.name %>"
@@ -50,12 +56,24 @@ spec:
     <% end %> <%# command loop  %>
   <% end %> <%# init container loop  %>
   <% end %> <%# if init containers  %>
-  <% unless configmap.nil? %>
+  <% unless configmap.nil? && @mounts.nil? %>
   volumes:
+  <% end %> <%# configmap.nil? || @mounts.nil? %>
+  <% unless configmap.nil? %>
   - name: configmap-volume
     configMap:
       name: <%= configmap_name(id) %>
   <% end %>
+  <% unless @mounts.nil? %>
+  <% @mounts.each do |mount| %>
+  <% if mount['type'] == 'nfs' %>
+  - name: <%= mount['name'] %>
+    nfs:
+      server: <%= mount['host'] %>
+      path: <%= mount['path'] %>
+  <% end %> <%# if mount is nfs %>
+  <% end %> <%# for each mount %>
+  <% end %> <%# if mounts is not nil %>
 ---
 <% unless spec.container.port.nil? %>
 apiVersion: v1

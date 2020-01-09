@@ -28,6 +28,7 @@ module OodCore
           @bin = opts.fetch(:bin, '/usr/bin/kubectl')
           @restart_policy = opts.fetch(:restart_policy, 'Never')
           @cluster_name = opts.fetch(:cluster_name, 'open-ondemand')
+          @mounts = opts.fetch(:mounts, [])
 
           @using_context = false
           @using_token = false
