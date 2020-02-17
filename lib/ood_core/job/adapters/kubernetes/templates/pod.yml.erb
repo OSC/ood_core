@@ -71,7 +71,12 @@ spec:
     nfs:
       server: <%= mount['host'] %>
       path: <%= mount['path'] %>
-  <% end %> <%# if mount is nfs %>
+  <% elsif mount['type'] == 'host' %>
+  - name: <%= mount['name'] %>
+    hostPath:
+      path: <%= mount['path'] %>
+      type: <%= mount['host_type'] %>
+  <% end %> <%# if mount is [host,nfs] %>
   <% end %> <%# for each mount %>
   <% end %> <%# if mounts is not nil %>
 ---
