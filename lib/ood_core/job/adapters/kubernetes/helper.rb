@@ -1,6 +1,7 @@
 class OodCore::Job::Adapters::Kubernetes::Helper
 
   require 'ood_core/job/adapters/kubernetes/resources'
+  require 'resolv'
 
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
@@ -108,6 +109,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
     # passing json_data around like it's OK, probably should check for nil?
     id = json_data.dig(:metadata, :name).to_s
+    ip = json_data.dig(:status, :hostIP)
     {
       id: id,
       job_name: name_from_metadata(json_data.dig(:metadata)),
@@ -117,7 +119,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       dispatch_time: dispatch_time(json_data),
       wallclock_time: wallclock_time(json_data),
       native: {
-        host: json_data.dig(:status, :hostIP)
+        host: Resolv.getname(ip)
       }
     }
   end
