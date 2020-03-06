@@ -2,6 +2,7 @@ require "ood_core/version"
 require "ood_core/errors"
 require "ood_core/cluster"
 require "ood_core/clusters"
+require "ood_core/app_config"
 
 # The main namespace for ood_core
 module OodCore

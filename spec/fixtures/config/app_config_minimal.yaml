@@ -1,0 +1,27 @@
+---
+## SSH_HOSTS
+# Purpose: Declares SSH hosts for apps
+#   Used by the Files app
+# Type: Sequence<Mapping<>> | null
+# Example:
+# - ssh_host: owens.osc.edu
+#   host_name: Owens
+# - ssh_host: ruby.osc.edu
+#   host_name: Ruby
+# - ssh_host: pitzer.osc.edu
+#   host_name: Pitzer
+# Replaces: OOD_SSH_HOSTS
+# Default: null
+ssh_hosts:
+- ssh_host: owens.osc.edu
+  host_name: Owens
+- ssh_host: ruby.osc.edu
+  host_name: Ruby
+- ssh_host: pitzer.osc.edu
+  host_name: Pitzer
+## poll_delay
+# Purpose: The Dashboard app's polling interval (milliseconds) used when checking for active Batch Connect sessions
+# Type: Integer | null
+# Replaces: POLL_DELAY
+# Default: 10000ms
+poll_delay: 5000
