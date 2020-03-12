@@ -159,6 +159,12 @@ module OodCore
       }
     end
 
+    # This cluster is always valid
+    # @return true
+    def valid?
+      return true
+    end
+
     private
       # Build acl adapter objects from array
       def build_acls(ary)

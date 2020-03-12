@@ -33,8 +33,10 @@ describe OodCore::Clusters do
         clusters.each do |cluster|
           if cluster.id.to_s == 'malformed'
             expect(cluster).to be_an_instance_of(OodCore::InvalidCluster)
+            expect(cluster.valid?).to eql(false)
           else
             expect(cluster).to be_an_instance_of(OodCore::Cluster)
+            expect(cluster.valid?).to eql(true)
           end
         end
       end
@@ -96,6 +98,7 @@ describe OodCore::Clusters do
         clusters = OodCore::Clusters.load_file(config)
         clusters.each do |cluster|
           expect(cluster).to be_an_instance_of(OodCore::InvalidCluster)
+          expect(cluster.valid?).to eql(false)
         end
       end
 
@@ -107,6 +110,7 @@ describe OodCore::Clusters do
 
           expect(id).to eql('malformed')
           expect(error_msg).not_to be_empty
+          expect(cluster.valid?).to eql(false)
         end
       end
     end

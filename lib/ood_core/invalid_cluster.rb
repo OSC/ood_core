@@ -27,5 +27,11 @@ module OodCore
     def allow?
       false
     end
+
+    # This cluster is never valid
+    # @return false
+    def valid?
+      return false
+    end
   end
 end
