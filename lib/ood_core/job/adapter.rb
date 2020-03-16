@@ -171,6 +171,23 @@ module OodCore
       def directive_prefix
         raise NotImplementedError, "subclass did not define #directive_prefix"
       end
+
+      # Replace illegal chars in job name with a dash
+      #
+      # @return [String] job name with dashes replacing illegal chars
+      def sanitize_job_name(job_name)
+        # escape ^ and omit -
+        chars = job_name_illegal_chars.to_s.gsub("^", "\\^").gsub("-", "")
+        job_name.tr(chars, "-")
+      end
+
+      # Illegal chars that should not be used in a job name
+      # A dash is assumed to be legal in job names in all batch schedulers
+      #
+      # @return [String] string of chars
+      def job_name_illegal_chars
+        ENV["OOD_JOB_NAME_ILLEGAL_CHARS"].to_s
+      end
     end
   end
 end

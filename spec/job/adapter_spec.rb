@@ -184,4 +184,28 @@ describe OodCore::Job::Adapter do
       end
     end
   end
+
+  describe "sanitize_job_name" do
+    it "replaces nothing by default" do
+      expect(subject.sanitize_job_name('ood/foo:bar')).to eq('ood/foo:bar')
+    end
+
+    it "can be configured to replace /" do
+      with_modified_env OOD_JOB_NAME_ILLEGAL_CHARS: "/" do
+        expect(subject.sanitize_job_name('ood/foo:bar')).to eq('ood-foo:bar')
+      end
+    end
+
+    it "can be configured to replace :" do
+      with_modified_env OOD_JOB_NAME_ILLEGAL_CHARS: ":" do
+        expect(subject.sanitize_job_name('ood/foo:bar')).to eq('ood/foo-bar')
+      end
+    end
+
+    it "can be configured to replace ^ and :" do
+      with_modified_env OOD_JOB_NAME_ILLEGAL_CHARS: ":^" do
+        expect(subject.sanitize_job_name('ood^foo:bar')).to eq('ood-foo-bar')
+      end
+    end
+  end
 end
