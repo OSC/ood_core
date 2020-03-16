@@ -28,7 +28,7 @@ module OodCore
               rescue Psych::SyntaxError => e
                 clusters << InvalidCluster.new(
                   id: config.basename(config.extname).to_s,
-                  metadata: { error_msg: e.message.to_s }
+                  errors: [ e.message.to_s ]
                 )
               end
             end
@@ -43,7 +43,7 @@ module OodCore
               rescue Psych::SyntaxError => e
                 clusters << InvalidCluster.new(
                   id: p.basename(p.extname).to_s,
-                  metadata: { error_msg: e.message.to_s }
+                  errors: [ e.message.to_s ]
                 )
               end
             end

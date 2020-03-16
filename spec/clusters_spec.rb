@@ -1,6 +1,10 @@
 require "spec_helper"
 require "pathname"
 
+def malformed_msg
+  "(<unknown>): mapping values are not allowed in this context at line 5 column 8"
+end
+
 describe OodCore::Clusters do
   describe "#load_file" do
     context "when loading a valid file" do
@@ -41,15 +45,17 @@ describe OodCore::Clusters do
         end
       end
 
-      it "correctly populates of invalid clusters' id and metadata" do
+      it "correctly populates of invalid clusters' id and errors" do
         clusters = OodCore::Clusters.load_file(config)
         clusters.each do |cluster|
           if cluster.id.to_s == 'malformed'
             id = cluster.id.to_s
-            error_msg = cluster.metadata.error_msg.to_s
   
             expect(id).to eql('malformed')
-            expect(error_msg).not_to be_empty
+            expect(cluster.errors.size).to eql(1)
+            expect(cluster.errors[0]).to eql(malformed_msg)
+          else
+            expect(cluster.errors).to be_empty
           end
         end
       end
@@ -106,11 +112,11 @@ describe OodCore::Clusters do
         clusters = OodCore::Clusters.load_file(config)
         clusters.each do |cluster|
           id = cluster.id.to_s
-          error_msg = cluster.metadata.error_msg.to_s
 
           expect(id).to eql('malformed')
-          expect(error_msg).not_to be_empty
           expect(cluster.valid?).to eql(false)
+          expect(cluster.errors.size).to eql(1)
+          expect(cluster.errors[0]).to eql(malformed_msg)
         end
       end
     end
