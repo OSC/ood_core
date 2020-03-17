@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added directive prefixes to each adapter (e.g. `#QSUB`) ([#161](https://github.com/OSC/ood_core/issues/161))
 - LHA supports `submit_host` field in native ([#164](https://github.com/OSC/ood_core/issues/164))
 - Cluster files can be yaml or yml extensions ([#171](https://github.com/OSC/ood_core/issues/171))
+- Users can add a flag `OOD_JOB_NAME_ILLEGAL_CHARS` to sanitize job names ([#183](https://github.com/OSC/ood_core/issues/183)
 
 ### Changed
 - Simplified job array parsing ([#144](https://github.com/OSC/ood_core/issues/144))
