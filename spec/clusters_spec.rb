@@ -1,6 +1,10 @@
 require "spec_helper"
 require "pathname"
 
+def malformed_msg
+  "(<unknown>): mapping values are not allowed in this context at line 5 column 8"
+end
+
 describe OodCore::Clusters do
   describe "#load_file" do
     context "when loading a valid file" do
@@ -25,13 +29,34 @@ describe OodCore::Clusters do
       end
     end
 
-    context "when loading directory of valid cluster config" do
+    context "when loading directory of cluster configs" do
       let(:config) { Pathname.pwd + 'spec/fixtures/config/clusters.d'}
 
       it "returns an array of OodCore::Cluster" do
         clusters = OodCore::Clusters.load_file(config)
         clusters.each do |cluster|
-          expect(cluster).to be_an_instance_of(OodCore::Cluster)
+          if cluster.id.to_s == 'malformed'
+            expect(cluster).to be_an_instance_of(OodCore::InvalidCluster)
+            expect(cluster.valid?).to eql(false)
+          else
+            expect(cluster).to be_an_instance_of(OodCore::Cluster)
+            expect(cluster.valid?).to eql(true)
+          end
+        end
+      end
+
+      it "correctly populates of invalid clusters' id and errors" do
+        clusters = OodCore::Clusters.load_file(config)
+        clusters.each do |cluster|
+          if cluster.id.to_s == 'malformed'
+            id = cluster.id.to_s
+  
+            expect(id).to eql('malformed')
+            expect(cluster.errors.size).to eql(1)
+            expect(cluster.errors[0]).to eql(malformed_msg)
+          else
+            expect(cluster.errors).to be_empty
+          end
         end
       end
     end
@@ -71,5 +96,30 @@ describe OodCore::Clusters do
         expect { OodCore::Clusters.load_file(config) }.to raise_error(OodCore::ConfigurationNotFound)
       end
     end
+
+    context "when loading a single malformed .yml" do
+      let(:config) { Pathname.pwd + 'spec/fixtures/config/clusters.d/malformed.yml'}
+
+      it "returns an array of OodCore::InvalidCluster" do
+        clusters = OodCore::Clusters.load_file(config)
+        clusters.each do |cluster|
+          expect(cluster).to be_an_instance_of(OodCore::InvalidCluster)
+          expect(cluster.valid?).to eql(false)
+        end
+      end
+
+      it "correctly populates id and metadata" do
+        clusters = OodCore::Clusters.load_file(config)
+        clusters.each do |cluster|
+          id = cluster.id.to_s
+
+          expect(id).to eql('malformed')
+          expect(cluster.valid?).to eql(false)
+          expect(cluster.errors.size).to eql(1)
+          expect(cluster.errors[0]).to eql(malformed_msg)
+        end
+      end
+    end
+
   end
 end

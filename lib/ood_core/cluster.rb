@@ -28,6 +28,10 @@ module OodCore
     # @return [Hash] the acls configuration
     attr_reader :acls_config
 
+    # The errors encountered with configuring this cluster
+    # @return Array<String> the errors
+    attr_reader :errors
+
     # @param cluster [#to_h] the cluster object
     # @option cluster [#to_sym] :id The cluster id
     # @option cluster [#to_h] :metadata ({}) The cluster's metadata
@@ -39,6 +43,8 @@ module OodCore
     #   against
     # @option cluster [#to_h] :batch_connect ({}) Configuration for batch
     #   connect templates
+    # @option cluster [#to_a] :errors ([]) List of configuration errors
+    #
     def initialize(cluster)
       c = cluster.to_h.symbolize_keys
 
@@ -52,6 +58,9 @@ module OodCore
       @custom_config   = c.fetch(:custom, {})  .to_h.symbolize_keys
       @acls_config     = c.fetch(:acls, [])    .map(&:to_h)
       @batch_connect_config = c.fetch(:batch_connect, {}).to_h.symbolize_keys
+
+      # side affects from object creation and validation
+      @errors          = c.fetch(:errors, [])  .to_a
     end
 
     # Metadata that provides extra information about this cluster
@@ -157,6 +166,12 @@ module OodCore
         acls: acls_config,
         batch_connect:  batch_connect_config
       }
+    end
+
+    # This cluster is always valid
+    # @return true
+    def valid?
+      return true
     end
 
     private

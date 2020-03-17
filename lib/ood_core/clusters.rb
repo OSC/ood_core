@@ -21,16 +21,30 @@ module OodCore
         if config.file?
           if config.readable?
             CONFIG_VERSION.any? do |version|
-              YAML.safe_load(config.read).fetch(version, {}).each do |k, v|
-                clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+              begin
+                YAML.safe_load(config.read)&.fetch(version, {}).each do |k, v|
+                  clusters << Cluster.new(send("parse_#{version}", id: k, cluster: v))
+                end
+              rescue Psych::SyntaxError => e
+                clusters << InvalidCluster.new(
+                  id: config.basename(config.extname).to_s,
+                  errors: [ e.message.to_s ]
+                )
               end
             end
           end
         elsif config.directory?
           Pathname.glob([config.join("*.yml"), config.join("*.yaml")]).select(&:file?).select(&:readable?).each do |p|
             CONFIG_VERSION.any? do |version|
-              if cluster = YAML.safe_load(p.read).fetch(version, nil)
-                clusters << Cluster.new(send("parse_#{version}", id: p.basename(p.extname()).to_s, cluster: cluster))
+              begin
+                if cluster = YAML.safe_load(p.read)&.fetch(version, nil)
+                  clusters << Cluster.new(send("parse_#{version}", id: p.basename(p.extname()).to_s, cluster: cluster))
+                end
+              rescue Psych::SyntaxError => e
+                clusters << InvalidCluster.new(
+                  id: p.basename(p.extname).to_s,
+                  errors: [ e.message.to_s ]
+                )
               end
             end
           end
