@@ -8,12 +8,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ## [Unreleased]
 ### Added
 - Added directive prefixes to each adapter (e.g. `#QSUB`) ([#161](https://github.com/OSC/ood_core/issues/161))
+- LHA supports `submit_host` field in native ([#164](https://github.com/OSC/ood_core/issues/164))
+- Cluster files can be yaml or yml extensions ([#171](https://github.com/OSC/ood_core/issues/171))
 
 ### Changed
 - Simplified job array parsing ([#144](https://github.com/OSC/ood_core/issues/144))
 
 ### Fixed
 - Issue where environment variables were not properly exported to the job ([#158](https://github.com/OSC/ood_core/issues/158))
+- Parsing bad cluster files ([#150](https://github.com/OSC/ood_core/issues/150) and [#178](https://github.com/OSC/ood_core/issues/178))
+- netcat is no longer a hard dependency. Now lsof, python and bash can be used ([153](https://github.com/OSC/ood_core/issues/153))
+- GE crash when nil config file was given ([#175](https://github.com/OSC/ood_core/issues/175))
+- GE sometimes reported incorrect core count ([#168](https://github.com/OSC/ood_core/issues/168))
+
 
 ## [0.10.0] - 2019-11-05
 ### Added
