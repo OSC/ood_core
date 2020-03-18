@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.11.1] - 2012-03-18
+### Changed
+- Only the version changed. Had to republish to rubygems.org
+
 ## [0.11.0] - 2012-03-18
 ### Added
 - Added directive prefixes to each adapter (e.g. `#QSUB`) ([#161](https://github.com/OSC/ood_core/issues/161))
@@ -215,7 +219,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.1...HEAD
+[0.11.1]: https://github.com/OSC/ood_core/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/OSC/ood_core/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/OSC/ood_core/compare/v0.9.3...v0.10.0
 [0.9.3]: https://github.com/OSC/ood_core/compare/v0.9.2...v0.9.3
