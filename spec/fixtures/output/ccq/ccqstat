@@ -1,0 +1,11 @@
+Id      Name                                             Scheduler  Status
+--------------------------------------------------------------------------------
+432201  jobname1                                         titan      Completed   
+432202  jobname2                                         titan      Running 
+432203  jobname3                                         titan      Pending 
+432204  jobname4                                         titan      Submitted 
+432205  jobname5                                         titan      Error 
+432206  ccq_ood_script_20200409-56827-1b8r0ad            titan      CreatingCG 
+
+
+
