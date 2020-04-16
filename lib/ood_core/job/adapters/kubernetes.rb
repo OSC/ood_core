@@ -21,6 +21,9 @@ module OodCore
         using Refinements::ArrayExtensions
         using Refinements::HashExtensions
 
+        attr_reader :config_file, :bin, :restart_polciy, :cluster_name, :mounts
+        attr_reader :using_context, :using_token, :helper
+
         def initialize(options = {})
           opts = options.to_h.symbolize_keys
 
@@ -177,7 +180,7 @@ module OodCore
           service_json, = json3_ns_cmd('get', 'service', service_name(id))
           secret_json, = json3_ns_cmd('get', 'secret', secret_name(id))
 
-          @helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
+          helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
         end
 
         # Retrieve job status from resource manager
@@ -237,8 +240,7 @@ module OodCore
         private
 
         def username
-          @username = Etc.getlogin if @username.nil?
-          @username
+          @username ||= Etc.getlogin
         end
 
         def run_as_user
@@ -256,10 +258,10 @@ module OodCore
         # helper to template resource yml you're going to submit and
         # create an id.
         def generate_id_yml(native_data)
-          container = @helper.container_from_native(native_data[:container])
+          container = helper.container_from_native(native_data[:container])
           id = generate_id(container.name)
-          configmap = @helper.configmap_from_native(native_data, id)
-          init_containers = @helper.init_ctrs_from_native(native_data[:init_ctrs]) if native_data.key?(:init_ctrs)
+          configmap = helper.configmap_from_native(native_data, id)
+          init_containers = helper.init_ctrs_from_native(native_data[:init_ctrs]) if native_data.key?(:init_ctrs)
           spec = Resources::PodSpec.new(container, init_containers)
 
           template = ERB.new(File.read(resource_file))
@@ -281,15 +283,15 @@ module OodCore
         end
 
         def service_name(id)
-          @helper.service_name(id)
+          helper.service_name(id)
         end
 
         def secret_name(id)
-          @helper.secret_name(id)
+          helper.secret_name(id)
         end
 
         def configmap_name(id)
-          @helper.configmap_name(id)
+          helper.configmap_name(id)
         end
 
         def default_info(id)
@@ -308,7 +310,7 @@ module OodCore
         end
 
         def context
-          @cluster_name
+          cluster_name
         end
 
         def default_config_file
@@ -337,9 +339,9 @@ module OodCore
         end
 
         def base_cmd
-          base = "#{@bin} --kubeconfig=#{@config_file}"
-          base << " --context=#{context}" if @using_context
-          base << " --token=#{token}" if @using_token
+          base = "#{bin} --kubeconfig=#{config_file}"
+          base << " --context=#{context}" if using_context
+          base << " --token=#{token}" if using_token
           base
         end
 
@@ -349,7 +351,7 @@ module OodCore
 
           info_array = []
           pods.each do |pod|
-            hash = @helper.pod_info_from_json(pod)
+            hash = helper.pod_info_from_json(pod)
             info = Info.new(hash)
             info_array.push(info)
           end
@@ -419,14 +421,14 @@ module OodCore
           locale = "--region=#{region}" unless region.nil?
 
           # gke cluster name can probably can differ from what ood calls the cluster
-          cmd = "gcloud container clusters get-credentials #{locale} #{@cluster_name}"
-          env = { 'KUBECONFIG' => @config_file }
+          cmd = "gcloud container clusters get-credentials #{locale} #{cluster_name}"
+          env = { 'KUBECONFIG' => config_file }
           call(cmd, env)
         end
 
         def set_context
-          cmd = "#{base_cmd} config set-context #{@cluster_name}"
-          cmd << " --cluster=#{@cluster_name} --namespace=#{namespace}"
+          cmd = "#{base_cmd} config set-context #{cluster_name}"
+          cmd << " --cluster=#{cluster_name} --namespace=#{namespace}"
           cmd << " --user=#{ood_username}"
 
           call(cmd)
@@ -436,7 +438,7 @@ module OodCore
           server = config.fetch(:endpoint)
           cert = config.fetch(:cert_authority_file)
 
-          cmd = "#{base_cmd} config set-cluster #{@cluster_name}"
+          cmd = "#{base_cmd} config set-cluster #{cluster_name}"
           cmd << " --server=#{server}"
           cmd << " --certificate-authority=#{cert}" unless cert.nil?
 
