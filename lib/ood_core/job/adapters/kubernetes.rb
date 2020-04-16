@@ -341,7 +341,6 @@ module OodCore
         def base_cmd
           base = "#{bin} --kubeconfig=#{config_file}"
           base << " --context=#{context}" if using_context
-          base << " --token=#{token}" if using_token
           base
         end
 
@@ -374,20 +373,11 @@ module OodCore
           when 'oidc'
             set_context
             use_context
-            use_token
           end
         end
 
         def use_context
           @using_context = true
-        end
-
-        def use_token
-          @using_token = true
-        end
-
-        def token
-          ENV['HTTP_OIDC_ACCESS_TOKEN'] || 'access_token_not_provided'
         end
 
         def managed?(type)
@@ -396,10 +386,6 @@ module OodCore
           else
             type.to_s == 'managed'
           end
-        end
-
-        def ood_username
-          "ood-#{username}"
         end
 
         def set_gke_config(auth)
@@ -429,14 +415,14 @@ module OodCore
         def set_context
           cmd = "#{base_cmd} config set-context #{cluster_name}"
           cmd << " --cluster=#{cluster_name} --namespace=#{namespace}"
-          cmd << " --user=#{ood_username}"
+          cmd << " --user=#{username}"
 
           call(cmd)
         end
 
         def set_cluster(config)
           server = config.fetch(:endpoint)
-          cert = config.fetch(:cert_authority_file)
+          cert = config.fetch(:cert_authority_file, nil)
 
           cmd = "#{base_cmd} config set-cluster #{cluster_name}"
           cmd << " --server=#{server}"
