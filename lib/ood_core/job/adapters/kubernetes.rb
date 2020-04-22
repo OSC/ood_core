@@ -23,7 +23,7 @@ module OodCore
         using Refinements::HashExtensions
 
         attr_reader :config_file, :bin, :restart_polciy, :cluster_name, :mounts
-        attr_reader :using_context, :using_token, :helper
+        attr_reader :using_context, :helper
 
         def initialize(options = {})
           opts = options.to_h.symbolize_keys
@@ -35,7 +35,6 @@ module OodCore
           @mounts = opts.fetch(:mounts, [])
 
           @using_context = false
-          @using_token = false
 
           make_kubectl_config(opts)
 
