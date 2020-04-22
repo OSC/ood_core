@@ -72,10 +72,7 @@ module OodCore
           raise ArgumentError, 'Must specify the script' if script.nil?
 
           resource_yml, id = generate_id_yml(script.native)
-          cmd = "#{formatted_ns_cmd} create -f -"
-
-          _, e, s = Open3.capture3(cmd, stdin_data: resource_yml)
-          raise Error, e unless s.success?
+          call("#{formatted_ns_cmd} create -f -", stdin: resource_yml)
 
           id
         end
@@ -98,9 +95,7 @@ module OodCore
         # @return [Array<Info>] information describing submitted jobs
         def info_all(attrs: nil)
           cmd = "#{base_cmd} get pods -o json --all-namespaces"
-          output, error, s = Open3.capture3(cmd)
-          raise error unless s.success?
-
+          output = call(cmd)
           all_pods_to_info(output)
         end
 
@@ -174,11 +169,16 @@ module OodCore
         # @param id [#to_s] the id of the job
         # @return [Info] information describing submitted job
         def info(id)
-          pod_json, _, pod_success = json3_ns_cmd('get', 'pod', id)
-          return default_info(id) unless pod_success.success? # throw error up the stack instead?
+          pod_json = call_json_output('get', 'pod', id)
 
-          service_json, = json3_ns_cmd('get', 'service', service_name(id))
-          secret_json, = json3_ns_cmd('get', 'secret', secret_name(id))
+          begin
+            service_json = call_json_output('get', 'service', service_name(id))
+            secret_json = call_json_output('get', 'secret', secret_name(id))
+          rescue
+            # it's ok if these don't exist
+            service_json ||= nil
+            secret_json ||= nil
+          end
 
           helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
         end
@@ -211,26 +211,21 @@ module OodCore
           raise NotImplementedError, 'subclass did not define #release'
         end
 
-        # Delete the submitted job
-        # @abstract Subclass is expected to implement {#delete}
-        # @raise [NotImplementedError] if subclass did not define {#delete}
+        # Delete the submitted job.
+        #
         # @param id [#to_s] the id of the job
         # @return [void]
         def delete(id)
-          cmd = "#{namespaced_cmd} delete pod #{id}"
-          _, error, pod = Open3.capture3(cmd)
+          call("#{namespaced_cmd} delete pod #{id}")
 
-          # just eat the results of deleting services and secrets
-          # also can't call json3_ns_cmd bc delete only supports '-o name'
-          # and that complicates that functions implementation
-          cmd = "#{namespaced_cmd} delete service #{service_name(id)}"
-          Open3.capture3(cmd)
-          cmd = "#{namespaced_cmd} delete secret #{secret_name(id)}"
-          Open3.capture3(cmd)
-          cmd = "#{namespaced_cmd} delete configmap #{configmap_name(id)}"
-          Open3.capture3(cmd)
-
-          raise error unless pod.success?
+          begin
+            call("#{namespaced_cmd} delete service #{service_name(id)}")
+            call("#{namespaced_cmd} delete secret #{secret_name(id)}")
+            call("#{namespaced_cmd} delete configmap #{configmap_name(id)}")
+          rescue
+            # FIXME: retries? delete if exists?
+            # just eat the results of deleting services and secrets
+          end
         end
 
         def configmap_mount_path
@@ -273,13 +268,13 @@ module OodCore
         # verb, resrouce and id are the kubernetes parlance terms.
         # example: 'kubectl get pod my-pod-id' is verb=get, resource=pod
         # and  id=my-pod-id
-        def json3_ns_cmd(verb, resource, id)
+        def call_json_output(verb, resource, id, stdin: nil)
           cmd = "#{formatted_ns_cmd} #{verb} #{resource} #{id}"
-          data, error, success = Open3.capture3(cmd)
+          data = call(cmd, stdin: stdin)
           data = data.empty? ? '{}' : data
           json_data = JSON.parse(data, symbolize_names: true)
 
-          [json_data, error, success]
+          json_data
         end
 
         def service_name(id)
@@ -292,13 +287,6 @@ module OodCore
 
         def configmap_name(id)
           helper.configmap_name(id)
-        end
-
-        def default_info(id)
-          Info.new(
-            id: id,
-            status: Status.new(state: 'completed')
-          )
         end
 
         def namespace
@@ -379,7 +367,6 @@ module OodCore
             set_gke_config(auth)
           when 'oidc'
             set_context
-            use_context
           end
         end
 
@@ -425,6 +412,7 @@ module OodCore
           cmd << " --user=#{username}"
 
           call(cmd)
+          use_context
         end
 
         def set_cluster(config)
@@ -438,11 +426,12 @@ module OodCore
           call(cmd)
         end
 
-        def call(cmd = '', env = {})
-          _, error, s = Open3.capture3(env, cmd)
+        def call(cmd = '', env: {}, stdin: nil)
+          o, error, s = Open3.capture3(env, cmd, stdin_data: stdin.to_s)
           raise error unless s.success?
-        end
 
+          o
+        end
       end
       # end kubernetes class (above)
     end
