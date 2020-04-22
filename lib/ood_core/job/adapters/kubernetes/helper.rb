@@ -2,6 +2,11 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   require 'ood_core/job/adapters/kubernetes/resources'
   require 'resolv'
+  require 'base64'
+
+  class K8sDataError < StandardError; end
+
+  Resources = OodCore::Job::Adapters::Kubernetes::Resources
 
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
@@ -25,19 +30,22 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     pod_hash[:native] = pod_hash[:native].merge(service_hash[:native])
     pod_hash[:native] = pod_hash[:native].merge(secret_hash[:native])
     OodCore::Job::Info.new(pod_hash)
+  rescue NoMethodError
+    raise K8sDataError, "unable to read data correctly from json"
   end
 
+  # Turn a container hash into a Kubernetes::Resources::Container
+  #
+  # @param container [#to_h]
+  #   the input container hash
+  # @return  [OodCore::Job::Adapters::Kubernetes::Resources::Container]
   def container_from_native(container)
-    env = build_env_array(container.fetch(:env, []))
-
-    # TODO: throw the right error here telling folks what they
-    # need to implement if a fetch KeyError is thrown
-    OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
+    Resources::Container.new(
       container[:name],
       container[:image],
-      parse_command(container[:command]),
-      container[:port],
-      env
+      command: parse_command(container[:command]),
+      port: container[:port],
+      env: container.fetch(:env, [])
     )
   end
 
@@ -49,17 +57,27 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   # @return [Array<#to_s>]
   #   the command parsed into an array of arguements
   def parse_command(cmd)
-    return cmd if cmd&.is_a?(Array)
-
-    command = cmd&.to_s&.split(' ')
-    command.nil? ? [] : command
+    if cmd&.is_a?(Array)
+      cmd
+    else
+      Shellwords.split(cmd.to_s)
+    end
   end
 
+  # Turn a configmap hash into a Kubernetes::Resources::ConfigMap
+  # that can be used in templates. Needs an id so that the resulting
+  # configmap has a known name.
+  #
+  # @param native [#to_h]
+  #   the input configmap hash
+  # @param id [#to_s]
+  #   the id to use for giving the configmap a name
+  # @return  [OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap]
   def configmap_from_native(native, id)
     configmap = native.fetch(:configmap, nil)
     return nil if configmap.nil?
 
-    OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap.new(
+    Resources::ConfigMap.new(
       configmap_name(id),
       configmap[:filename],
       configmap[:data]
@@ -99,19 +117,13 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   # Extract pod info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
-  #
   # @param json_data [#to_h]
   #   the pod data returned from 'kubectl get pod abc-123'
   # @return [#to_h]
   #   the hash of info expected from adapters
   def pod_info_from_json(json_data)
-    return {} if json_data.nil?
-
-    # passing json_data around like it's OK, probably should check for nil?
-    id = json_data.dig(:metadata, :name).to_s
-    ip = json_data.dig(:status, :hostIP)
     {
-      id: id,
+      id: json_data.dig(:metadata, :name).to_s,
       job_name: name_from_metadata(json_data.dig(:metadata)),
       status: pod_status_from_json(json_data),
       job_owner: json_data.dig(:metadata, :namespace).to_s,
@@ -119,26 +131,20 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       dispatch_time: dispatch_time(json_data),
       wallclock_time: wallclock_time(json_data),
       native: {
-        host: Resolv.getname(ip)
+        host: get_host(json_data.dig(:status, :hostIP))
       }
     }
+  rescue NoMethodError
+    # gotta raise an error because Info.new will throw an error if id is undefined
+    raise K8sDataError, "unable to read data correctly from json"
   end
 
   private
 
-  def build_env_array(data)
-    env_vars = []
-    unless data.nil?
-      data.each do |env|
-        e = OodCore::Job::Adapters::Kubernetes::Resources::EnvVar.new(
-          env[:name],
-          env[:value]
-        )
-        env_vars.push(e)
-      end
-    end
-
-    env_vars
+  def get_host(ip)
+    Resolv.getname(ip)
+  rescue Resolv::ResolvError
+    ip
   end
 
   def name_from_metadata(metadata)
@@ -251,10 +257,19 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     # only support 1 container/pod
     json_state = container_statuses[0].dig(:state)
     state = 'running' unless json_state.dig(:running).nil?
-    state = 'completed' unless json_state.dig(:terminated).nil?
+    state = terminated_state(json_state) unless json_state.dig(:terminated).nil?
     state = 'queued' unless json_state.dig(:waiting).nil?
 
     OodCore::Job::Status.new(state: state)
+  end
+
+  def terminated_state(status)
+    reason = status.dig(:terminated, :reason)
+    if reason == 'Error'
+      'suspended'
+    else
+      'completed'
+    end
   end
 
 end

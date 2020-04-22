@@ -1,0 +1,32 @@
+{
+    "apiVersion": "v1",
+    "kind": "Service",
+    "metadata": {
+        "creationTimestamp": "2020-04-16T18:08:16Z",
+        "name": "jupyter-bmurb8sa-service",
+        "namespace": "johrstrom",
+        "resourceVersion": "15884938",
+        "selfLink": "/api/v1/namespaces/johrstrom/services/jupyter-bmurb8sa-service",
+        "uid": "a2618403-098b-4865-9d6e-feb8a7478366"
+    },
+    "spec": {
+        "clusterIP": "10.109.10.174",
+        "externalTrafficPolicy": "Cluster",
+        "ports": [
+            {
+                "nodePort": 30689,
+                "port": 80,
+                "protocol": "TCP",
+                "targetPort": 8080
+            }
+        ],
+        "selector": {
+            "job": "jupyter-bmurb8sa"
+        },
+        "sessionAffinity": "None",
+        "type": "NodePort"
+    },
+    "status": {
+        "loadBalancer": {}
+    }
+}

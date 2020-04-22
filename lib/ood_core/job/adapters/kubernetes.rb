@@ -17,6 +17,7 @@ module OodCore
 
         require 'ood_core/job/adapters/kubernetes/resources'
         require 'ood_core/job/adapters/kubernetes/helper'
+        require 'json'
 
         using Refinements::ArrayExtensions
         using Refinements::HashExtensions
@@ -262,7 +263,7 @@ module OodCore
           id = generate_id(container.name)
           configmap = helper.configmap_from_native(native_data, id)
           init_containers = helper.init_ctrs_from_native(native_data[:init_ctrs]) if native_data.key?(:init_ctrs)
-          spec = Resources::PodSpec.new(container, init_containers)
+          spec = Resources::PodSpec.new(container, init_containers: init_containers)
 
           template = ERB.new(File.read(resource_file))
 
@@ -350,12 +351,19 @@ module OodCore
 
           info_array = []
           pods.each do |pod|
-            hash = helper.pod_info_from_json(pod)
-            info = Info.new(hash)
-            info_array.push(info)
+            info = pod_info_from_json(pod)
+            info_array.push(info) unless info.nil?
           end
 
           info_array
+        end
+
+        def pod_info_from_json(pod)
+          hash = helper.pod_info_from_json(pod)
+          Info.new(hash)
+        rescue Kubernetes::Helper::K8sDataError
+          # FIXME: silently eating error, could probably use a logger
+          nil
         end
 
         def make_kubectl_config(config)

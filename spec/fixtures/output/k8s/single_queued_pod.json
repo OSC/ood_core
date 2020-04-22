@@ -1,0 +1,417 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "annotations": {
+      "cni.projectcalico.org/podIP": "192.168.255.249/32",
+      "cni.projectcalico.org/podIPs": "192.168.255.249/32"
+    },
+    "creationTimestamp": "2020-04-22T18:27:17Z",
+    "labels": {
+      "app.kubernetes.io/managed-by": "open-ondemand",
+      "app.kubernetes.io/name": "jupyter",
+      "job": "jupyter-28wixphq"
+    },
+    "name": "jupyter-28wixphq",
+    "namespace": "johrstrom",
+    "resourceVersion": "17137143",
+    "selfLink": "/api/v1/namespaces/johrstrom/pods/jupyter-28wixphq",
+    "uid": "96266087-f356-4ea4-a590-3a9babb0c68c"
+  },
+  "spec": {
+    "containers": [
+      {
+        "command": [
+          "/usr/local/bin/start.sh",
+          "/opt/conda/bin/jupyter",
+          "notebook",
+          "--config=/ood/ondemand_config.py"
+        ],
+        "env": [
+          {
+            "name": "NB_UID",
+            "value": "30961"
+          },
+          {
+            "name": "NB_USER",
+            "value": "johrstrom"
+          },
+          {
+            "name": "NB_GID",
+            "value": "5515"
+          },
+          {
+            "name": "HOME",
+            "value": "/users/PZS0714/johrstrom"
+          }
+        ],
+        "image": "jupyter/scipy-notebook",
+        "imagePullPolicy": "IfNotPresent",
+        "name": "jupyter",
+        "ports": [
+          {
+            "containerPort": 8080,
+            "protocol": "TCP"
+          }
+        ],
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/ood",
+            "name": "configmap-volume"
+          },
+          {
+            "mountPath": "/users",
+            "name": "home"
+          },
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      }
+    ],
+    "dnsPolicy": "ClusterFirst",
+    "enableServiceLinks": true,
+    "initContainers": [
+      {
+        "command": [
+          "/bin/save_passwd_as_secret",
+          "johrstrom"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "init-secret",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "command": [
+          "/bin/bash",
+          "-c",
+          "source /bin/create_salt_and_sha1; /bin/add_line_to_configmap \"c.NotebookApp.password=u'sha1:${SALT}:${PASSWORD_SHA1}'\" ondemand_config.py"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "add-passwd-to-cfg",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "command": [
+          "/bin/bash",
+          "-c",
+          "source /bin/find_host_port; /bin/add_line_to_configmap \"c.NotebookApp.base_url='/node/${HOST_CFG}/${PORT_CFG}/'\" ondemand_config.py"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "add-hostport-to-cfg",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "command": [
+          "/bin/add_line_to_configmap",
+          "c.Application.log_level='DEBUG'",
+          "ondemand_config.py"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "add-loglvl-to-cfg",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "command": [
+          "/bin/add_line_to_configmap",
+          "c.NotebookApp.ip = '*'",
+          "ondemand_config.py"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "add-ip-to-cfg",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "command": [
+          "/bin/add_line_to_configmap",
+          "c.NotebookApp.disable_check_xsrf = True",
+          "ondemand_config.py"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "add-xsrf-to-cfg",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      },
+      {
+        "command": [
+          "/bin/add_line_to_configmap",
+          "c.NotebookApp.allow_origin = '*'",
+          "ondemand_config.py"
+        ],
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imagePullPolicy": "Always",
+        "name": "add-origin-to-cfg",
+        "resources": {},
+        "terminationMessagePath": "/dev/termination-log",
+        "terminationMessagePolicy": "File",
+        "volumeMounts": [
+          {
+            "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+            "name": "default-token-6mdh8",
+            "readOnly": true
+          }
+        ]
+      }
+    ],
+    "nodeName": "kubeworker01-dev",
+    "priority": 0,
+    "restartPolicy": "Never",
+    "schedulerName": "default-scheduler",
+    "securityContext": {
+      "fsGroup": 5515,
+      "runAsGroup": 5515,
+      "runAsUser": 30961
+    },
+    "serviceAccount": "default",
+    "serviceAccountName": "default",
+    "terminationGracePeriodSeconds": 30,
+    "tolerations": [
+      {
+        "effect": "NoExecute",
+        "key": "node.kubernetes.io/not-ready",
+        "operator": "Exists",
+        "tolerationSeconds": 300
+      },
+      {
+        "effect": "NoExecute",
+        "key": "node.kubernetes.io/unreachable",
+        "operator": "Exists",
+        "tolerationSeconds": 300
+      }
+    ],
+    "volumes": [
+      {
+        "configMap": {
+          "defaultMode": 420,
+          "name": "jupyter-28wixphq-configmap"
+        },
+        "name": "configmap-volume"
+      },
+      {
+        "hostPath": {
+          "path": "/users",
+          "type": "Directory"
+        },
+        "name": "home"
+      },
+      {
+        "name": "default-token-6mdh8",
+        "secret": {
+          "defaultMode": 420,
+          "secretName": "default-token-6mdh8"
+        }
+      }
+    ]
+  },
+  "status": {
+    "conditions": [
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-04-22T18:27:17Z",
+        "message": "containers with incomplete status: [init-secret add-passwd-to-cfg add-hostport-to-cfg add-loglvl-to-cfg add-ip-to-cfg add-xsrf-to-cfg add-origin-to-cfg]",
+        "reason": "ContainersNotInitialized",
+        "status": "False",
+        "type": "Initialized"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-04-22T18:27:17Z",
+        "message": "containers with unready status: [jupyter]",
+        "reason": "ContainersNotReady",
+        "status": "False",
+        "type": "Ready"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-04-22T18:27:17Z",
+        "message": "containers with unready status: [jupyter]",
+        "reason": "ContainersNotReady",
+        "status": "False",
+        "type": "ContainersReady"
+      },
+      {
+        "lastProbeTime": null,
+        "lastTransitionTime": "2020-04-22T18:27:17Z",
+        "status": "True",
+        "type": "PodScheduled"
+      }
+    ],
+    "containerStatuses": [
+      {
+        "image": "jupyter/scipy-notebook",
+        "imageID": "",
+        "lastState": {},
+        "name": "jupyter",
+        "ready": false,
+        "restartCount": 0,
+        "started": false,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      }
+    ],
+    "hostIP": "10.20.0.40",
+    "initContainerStatuses": [
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "init-secret",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      },
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "add-passwd-to-cfg",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      },
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "add-hostport-to-cfg",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      },
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "add-loglvl-to-cfg",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      },
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "add-ip-to-cfg",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      },
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "add-xsrf-to-cfg",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      },
+      {
+        "image": "jeffohrstrom/ood-k8s-utils:latest",
+        "imageID": "",
+        "lastState": {},
+        "name": "add-origin-to-cfg",
+        "ready": false,
+        "restartCount": 0,
+        "state": {
+          "waiting": {
+            "reason": "PodInitializing"
+          }
+        }
+      }
+    ],
+    "phase": "Pending",
+    "qosClass": "BestEffort",
+    "startTime": "2020-04-22T18:27:17Z"
+  }
+}

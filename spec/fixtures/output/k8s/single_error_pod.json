@@ -1,0 +1,461 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/podIP": "192.168.255.220/32",
+            "cni.projectcalico.org/podIPs": "192.168.255.220/32"
+        },
+        "creationTimestamp": "2020-04-16T20:31:52Z",
+        "labels": {
+            "app.kubernetes.io/managed-by": "open-ondemand",
+            "app.kubernetes.io/name": "jupyter",
+            "job": "jupyter-h6kw06ve"
+        },
+        "name": "jupyter-h6kw06ve",
+        "namespace": "johrstrom",
+        "resourceVersion": "15905888",
+        "selfLink": "/api/v1/namespaces/johrstrom/pods/jupyter-h6kw06ve",
+        "uid": "bbf13e07-a5fb-4e16-a4ae-e930c16e863c"
+    },
+    "spec": {
+        "containers": [
+            {
+                "command": [
+                    "/usr/local/bin/start.sh",
+                    "/opt/conda/bin/jupyter",
+                    "notebook",
+                    "--config=/ood/ondemand_config.py"
+                ],
+                "env": [
+                    {
+                        "name": "NB_UID",
+                        "value": "30961"
+                    },
+                    {
+                        "name": "NB_USER",
+                        "value": "johrstrom"
+                    },
+                    {
+                        "name": "NB_GID",
+                        "value": "5515"
+                    },
+                    {
+                        "name": "HOME",
+                        "value": "/users/PZS0714/johrstrom"
+                    }
+                ],
+                "image": "jupyter/scipy-notebook",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "jupyter",
+                "ports": [
+                    {
+                        "containerPort": 8080,
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/ood",
+                        "name": "configmap-volume"
+                    },
+                    {
+                        "mountPath": "/users",
+                        "name": "home"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "initContainers": [
+            {
+                "command": [
+                    "/bin/save_passwd_as_secret",
+                    "johrstrom"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "init-secret",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "command": [
+                    "/bin/bash",
+                    "-c",
+                    "source /bin/create_salt_and_sha1; /bin/add_line_to_configmap \"c.NotebookApp.password=u'sha1:${SALT}:${PASSWORD_SHA1}'\" ondemand_config.py"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "add-passwd-to-cfg",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "command": [
+                    "/bin/bash",
+                    "-c",
+                    "source /bin/find_host_port; /bin/add_line_to_configmap \"c.NotebookApp.base_url='/node/${HOST_CFG}/${PORT_CFG}/'\" ondemand_config.py"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "add-hostport-to-cfg",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "command": [
+                    "/bin/add_line_to_configmap",
+                    "c.Application.log_level='DEBUG'",
+                    "ondemand_config.py"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "add-loglvl-to-cfg",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "command": [
+                    "/bin/add_line_to_configmap",
+                    "c.NotebookApp.ip = '*'",
+                    "ondemand_config.py"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "add-ip-to-cfg",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "command": [
+                    "/bin/add_line_to_configmap",
+                    "c.NotebookApp.disable_check_xsrf = True",
+                    "ondemand_config.py"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "add-xsrf-to-cfg",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            },
+            {
+                "command": [
+                    "/bin/add_line_to_configmap",
+                    "c.NotebookApp.allow_origin = '*'",
+                    "ondemand_config.py"
+                ],
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imagePullPolicy": "Always",
+                "name": "add-origin-to-cfg",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "nodeName": "kubeworker01-dev",
+        "priority": 0,
+        "restartPolicy": "Never",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+            "fsGroup": 5515,
+            "runAsGroup": 5515,
+            "runAsUser": 30961
+        },
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "configMap": {
+                    "defaultMode": 420,
+                    "name": "jupyter-h6kw06ve-configmap"
+                },
+                "name": "configmap-volume"
+            },
+            {
+                "hostPath": {
+                    "path": "/users",
+                    "type": "Directory"
+                },
+                "name": "home"
+            },
+            {
+                "name": "default-token-6mdh8",
+                "secret": {
+                    "defaultMode": 420,
+                    "secretName": "default-token-6mdh8"
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-16T20:32:05Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-16T20:32:07Z",
+                "message": "containers with unready status: [jupyter]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-16T20:32:07Z",
+                "message": "containers with unready status: [jupyter]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-16T20:31:52Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "docker://0f3ba9ec712c854701409d8c2ab45e141e91de0b4d0ea739258c887e1f31533b",
+                "image": "jupyter/scipy-notebook:latest",
+                "imageID": "docker-pullable://jupyter/scipy-notebook@sha256:4290b1e8ae06b0742a97d3cc4e1c04d8fbcf080b11bb7dcd63af14a3bf96f07f",
+                "lastState": {},
+                "name": "jupyter",
+                "ready": false,
+                "restartCount": 0,
+                "started": false,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://0f3ba9ec712c854701409d8c2ab45e141e91de0b4d0ea739258c887e1f31533b",
+                        "exitCode": 1,
+                        "finishedAt": "2020-04-16T20:32:06Z",
+                        "reason": "Error",
+                        "startedAt": "2020-04-16T20:32:05Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.20.0.40",
+        "initContainerStatuses": [
+            {
+                "containerID": "docker://4cf0fcb3bc5e6801708055d3e4a7980418d73d2905bd5c537ffd1cf16a843d41",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "init-secret",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://4cf0fcb3bc5e6801708055d3e4a7980418d73d2905bd5c537ffd1cf16a843d41",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:31:54Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:31:54Z"
+                    }
+                }
+            },
+            {
+                "containerID": "docker://f7f5510f48d6c15ed2b5de5fa858b61c4597739ee44a1053a0e0c68c46e54847",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "add-passwd-to-cfg",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://f7f5510f48d6c15ed2b5de5fa858b61c4597739ee44a1053a0e0c68c46e54847",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:31:55Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:31:55Z"
+                    }
+                }
+            },
+            {
+                "containerID": "docker://f3407a2443451e29056bdcc39fec394917ec38341e4d7713747e3ed5b999a109",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "add-hostport-to-cfg",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://f3407a2443451e29056bdcc39fec394917ec38341e4d7713747e3ed5b999a109",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:31:57Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:31:57Z"
+                    }
+                }
+            },
+            {
+                "containerID": "docker://f11b75a879ac006a1a622fb393d31a4058cd6db46540b15687365bea4efb0e63",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "add-loglvl-to-cfg",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://f11b75a879ac006a1a622fb393d31a4058cd6db46540b15687365bea4efb0e63",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:31:59Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:31:59Z"
+                    }
+                }
+            },
+            {
+                "containerID": "docker://1fc3c8ab6dafa01ddccfb03f001d27351cfa8966c9ab1528cafc7ab256628605",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "add-ip-to-cfg",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://1fc3c8ab6dafa01ddccfb03f001d27351cfa8966c9ab1528cafc7ab256628605",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:32:01Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:32:01Z"
+                    }
+                }
+            },
+            {
+                "containerID": "docker://77531cdeefcb140d4c14521a8b31d7584265ce07a1fb463020750df8ce2bdc17",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "add-xsrf-to-cfg",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://77531cdeefcb140d4c14521a8b31d7584265ce07a1fb463020750df8ce2bdc17",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:32:03Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:32:03Z"
+                    }
+                }
+            },
+            {
+                "containerID": "docker://4066e8a01eeab57c30ee4d8943efb059f8adfc80b93fc3446521e21fa89eaa6c",
+                "image": "jeffohrstrom/ood-k8s-utils:latest",
+                "imageID": "docker-pullable://jeffohrstrom/ood-k8s-utils@sha256:bb215597bbce60f34a23080d9bb93727cdb9b0ad5fb3f92c55ea8c987abac33b",
+                "lastState": {},
+                "name": "add-origin-to-cfg",
+                "ready": true,
+                "restartCount": 0,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://4066e8a01eeab57c30ee4d8943efb059f8adfc80b93fc3446521e21fa89eaa6c",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-16T20:32:04Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-16T20:32:04Z"
+                    }
+                }
+            }
+        ],
+        "phase": "Failed",
+        "podIP": "192.168.255.220",
+        "podIPs": [
+            {
+                "ip": "192.168.255.220"
+            }
+        ],
+        "qosClass": "BestEffort",
+        "startTime": "2020-04-16T20:31:52Z"
+    }
+}

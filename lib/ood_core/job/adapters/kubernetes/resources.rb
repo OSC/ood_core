@@ -12,28 +12,31 @@ module OodCore::Job::Adapters::Kubernetes::Resources
 
   class Container
     attr_accessor :name, :image, :command, :port, :env
-    def initialize(name, image, command = nil, port = nil, env = [])
+    def initialize(name, image, command: [], port: nil, env: [])
+      raise ArgumentError, "containers need valid names and images" unless name && image
+
       @name = name
       @image = image
       @command = command
-      @port = port
+      @port = port&.to_i
       @env = env
     end
+
+    def ==(other)
+      name == other.name &&
+        image == other.image &&
+        command == other.command &&
+        port == other.port &&
+        env == other.env
+    end
+
   end
 
   class PodSpec
     attr_accessor :container, :init_containers
-    def initialize(container, init_containers = nil)
+    def initialize(container, init_containers: nil)
       @container = container
       @init_containers = init_containers
-    end
-  end
-
-  class EnvVar
-    attr_accessor :name, :value
-    def initialize(name, value)
-      @name = name
-      @value = value
     end
   end
   
