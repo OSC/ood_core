@@ -127,7 +127,7 @@ describe OodCore::Job::Adapters::LinuxHost do
     it "implements the Adapter interface" do
         is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany)
         is_expected.to respond_to(:info_all).with(0).arguments.and_keywords(:attrs)
-        is_expected.to respond_to(:info_where_owner).with(0).arguments.and_keywords(:owner, :attrs)
+        is_expected.to respond_to(:info_where_owner).with(1).arguments.and_keywords(:attrs)
         is_expected.to respond_to(:info).with(1).argument
         is_expected.to respond_to(:status).with(1).argument
         is_expected.to respond_to(:hold).with(1).argument

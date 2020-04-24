@@ -106,7 +106,7 @@ module OodCore
         # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
-        def info_where_owner(owner: nil, attrs: nil)
+        def info_where_owner(_, attrs: nil)
           info_all
         end
 
