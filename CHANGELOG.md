@@ -6,12 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.11.2] - 2020-04-23
+### Fixed
+- fix signature of `LinuxHost#info_where_owner`
 
-## [0.11.1] - 2012-03-18
+## [0.11.1] - 2020-03-18
 ### Changed
 - Only the version changed. Had to republish to rubygems.org
 
-## [0.11.0] - 2012-03-18
+## [0.11.0] - 2020-03-18
 ### Added
 - Added directive prefixes to each adapter (e.g. `#QSUB`) ([#161](https://github.com/OSC/ood_core/issues/161))
 - LHA supports `submit_host` field in native ([#164](https://github.com/OSC/ood_core/issues/164))
@@ -219,7 +222,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.2...HEAD
+[0.11.2]: https://github.com/OSC/ood_core/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/OSC/ood_core/compare/v0.11.0...v0.11.1
 [0.11.0]: https://github.com/OSC/ood_core/compare/v0.10.0...v0.11.0
 [0.10.0]: https://github.com/OSC/ood_core/compare/v0.9.3...v0.10.0
