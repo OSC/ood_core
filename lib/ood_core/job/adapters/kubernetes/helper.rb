@@ -94,7 +94,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   def init_ctrs_from_native(ctrs)
     init_ctrs = []
 
-    ctrs.each do |ctr_raw|
+    ctrs&.each do |ctr_raw|
       ctr = container_from_native(ctr_raw)
       init_ctrs.push(ctr)
     end

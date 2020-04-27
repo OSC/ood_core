@@ -13,15 +13,17 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   class Error < StandardError; end
 
   attr_reader :config_file, :bin, :restart_policy, :cluster_name, :mounts
-  attr_reader :using_context, :helper
+  attr_reader :all_namespaces, :using_context, :helper
 
   def initialize(options = {}, helper = Helper.new)
+    options = options.to_h.symbolize_keys
 
     @config_file = options.fetch(:config_file, default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
     @restart_policy = options.fetch(:restart_policy, 'Never')
     @cluster_name = options.fetch(:cluster_name, 'open-ondemand')
-    @mounts = options.fetch(:mounts, [])
+    @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
+    @all_namespaces = options.fetch(:all_namespaces, false)
 
     @using_context = false
     @helper = helper
@@ -30,6 +32,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
       make_kubectl_config(options)
     rescue
       # FIXME could use a log here
+      # means you couldn't 'kubectl set config'
     end
   end
 
@@ -52,7 +55,12 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def info_all(attrs: nil)
-    cmd = "#{base_cmd} get pods -o json --all-namespaces"
+    cmd = if all_namespaces
+            "#{base_cmd} get pods -o json --all-namespaces"
+          else
+            "#{namespaced_cmd} get pods -o json"
+          end
+
     output = call(cmd)
     all_pods_to_info(output)
   end
@@ -142,7 +150,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     container = helper.container_from_native(native_data[:container])
     id = generate_id(container.name)
     configmap = helper.configmap_from_native(native_data, id)
-    init_containers = helper.init_ctrs_from_native(native_data[:init_ctrs]) if native_data.key?(:init_ctrs)
+    init_containers = helper.init_ctrs_from_native(native_data[:init_containers])
     spec = Resources::PodSpec.new(container, init_containers: init_containers)
 
     template = ERB.new(File.read(resource_file))
@@ -229,12 +237,15 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     end
 
     info_array
+  rescue JSON::ParserError
+    # 'no resources in <namespace>' throws parse error
+    []
   end
 
   def pod_info_from_json(pod)
     hash = helper.pod_info_from_json(pod)
-    Info.new(hash)
-  rescue Kubernetes::Helper::K8sDataError
+    OodCore::Job::Info.new(hash)
+  rescue Helper::K8sDataError
     # FIXME: silently eating error, could probably use a logger
     nil
   end

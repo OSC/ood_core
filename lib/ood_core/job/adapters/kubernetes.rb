@@ -9,9 +9,6 @@ module OodCore
       def self.build_kubernetes(config)
         batch = Adapters::Kubernetes::Batch.new(config.to_h.symbolize_keys, Adapters::Kubernetes::Helper.new)
         Adapters::Kubernetes.new(batch)
-      rescue => e
-        puts e.backtrace
-        raise e
       end
     end
 
@@ -73,7 +70,7 @@ module OodCore
         #   adapters can get by without populating the entire Info object
         # @return [Array<Info>] information describing submitted jobs
         def info_all(attrs: nil)
-          batch.info_all(id.to_s)
+          batch.info_all(attrs: attrs)
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
