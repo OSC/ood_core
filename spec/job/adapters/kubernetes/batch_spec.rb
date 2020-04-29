@@ -4,8 +4,15 @@ require "ood_core/job/adapters/kubernetes/batch"
 describe OodCore::Job::Adapters::Kubernetes::Batch do
 
   Batch = OodCore::Job::Adapters::Kubernetes::Batch
+  Helper = OodCore::Job::Adapters::Kubernetes::Helper
 
-  let(:helper) { double }
+  let(:helper) {
+    helper = Helper.new
+    allow(helper).to receive(:get_host).with(nil).and_return(nil)
+    allow(helper).to receive(:get_host).with('10.20.0.40').and_return('10.20.0.40')
+    helper
+  }
+
   let(:create_pod_yml) { File.read('spec/fixtures/output/k8s/expected_pod_create.yml') }
   let(:several_pods) { File.read('spec/fixtures/output/k8s/several_pods.json') }
   let(:single_running_pod) { File.read('spec/fixtures/output/k8s/single_running_pod.json') }
@@ -62,7 +69,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       stdin_data: ""
     ).and_return(['', '', $?])
 
-    @basic_batch = described_class.new
+    @basic_batch = described_class.new({}, helper)
     allow(@basic_batch).to receive(:username).and_return('testuser')
   end
 
@@ -76,7 +83,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       stdin_data: ""
     ).and_return(['', '', $?])
 
-    batch = described_class.new(config)
+    batch = described_class.new(config, helper)
     allow(batch).to receive(:username).and_return('testuser')
 
     batch
@@ -401,7 +408,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         stdin_data: ""
       ).and_return(['', '', $?])
 
-      batch = described_class.new
+      batch = described_class.new({}, helper)
       allow(batch).to receive(:username).and_return('testuser')
       allow(DateTime).to receive(:now).and_return(past)
 
@@ -438,7 +445,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         stdin_data: ""
       ).and_return(['', '', $?])
 
-      batch = described_class.new
+      batch = described_class.new({}, helper)
       allow(batch).to receive(:username).and_return('testuser')
       allow(DateTime).to receive(:now).and_return(past)
 

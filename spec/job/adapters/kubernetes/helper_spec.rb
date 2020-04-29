@@ -5,7 +5,12 @@ require "date"
 
 
 describe OodCore::Job::Adapters::Kubernetes::Helper do
-  subject(:helper) { described_class.new() }
+  subject(:helper){
+    helper = described_class.new
+    allow(helper).to receive(:get_host).with(nil).and_return(nil)
+    allow(helper).to receive(:get_host).with('10.20.0.40').and_return('10.20.0.40')
+    helper
+  }
 
   let(:single_running_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_running_pod.json'), symbolize_names: true) }
   let(:single_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_error_pod.json'), symbolize_names: true) }
