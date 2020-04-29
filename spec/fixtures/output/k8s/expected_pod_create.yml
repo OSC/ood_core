@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: testuser
+  name: rspec-test-123
+  labels:
+    job: rspec-test-123
+    app.kubernetes.io/name: rspec-test
+    app.kubernetes.io/managed-by: open-ondemand
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 1002
+    fsGroup: 1002
+  containers:
+  - name: "rspec-test"
+    image: ruby:2.5
+    imagePullPolicy: IfNotPresent
+    
+    env:
+    
+    - name: HOME
+      value: "/my/home"
+    
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
+     
+     
+    
+    command:
+    
+    - "rake"
+    
+    - "spec"
+     
+     
+    
+    ports:
+    - containerPort: 8080
+     
+    volumeMounts:
+    
+    - name: configmap-volume
+      mountPath:  /ood
+    
+    
+    
+    - name: home-dir
+      mountPath: /home
+    
+    - name: nfs-dir
+      mountPath: /fs
+     
+     
+  
+  initContainers:
+  
+  - name: "init-1"
+    image: "busybox:latest"
+    command:
+    
+    - "/bin/ls"
+    
+    - "-lrt"
+    
+    - "."
+     
+    volumeMounts:
+    
+    - name: configmap-volume
+      mountPath:  /ood
+    
+    
+    
+    - name: home-dir
+      mountPath: /home
+    
+    - name: nfs-dir
+      mountPath: /fs
+     
+     
+   
+   
+  
+  volumes:
+   
+  
+  - name: configmap-volume
+    configMap:
+      name: rspec-test-123-configmap
+  
+  
+  
+  
+  - name: home-dir
+    hostPath:
+      path: /users
+      type: Directory
+   
+  
+  
+  - name: nfs-dir
+    nfs:
+      server: some.nfs.host
+      path: /fs
+   
+   
+   
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rspec-test-123-service
+  namespace: testuser
+spec:
+  selector:
+    job: rspec-test-123
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: NodePort
+ 
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rspec-test-123-configmap
+  namespace: testuser
+data:
+  config.file: |
+    a = b
+ 
