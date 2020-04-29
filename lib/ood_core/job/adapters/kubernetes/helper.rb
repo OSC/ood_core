@@ -45,7 +45,9 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       container[:image],
       command: parse_command(container[:command]),
       port: container[:port],
-      env: container.fetch(:env, [])
+      env: container.fetch(:env, []),
+      memory: container[:memory],
+      cpu: container[:cpu]
     )
   end
 
@@ -132,7 +134,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       wallclock_time: wallclock_time(json_data),
       native: {
         host: get_host(json_data.dig(:status, :hostIP))
-      }
+      },
+      procs: procs_from_json(json_data)
     }
   rescue NoMethodError
     # gotta raise an error because Info.new will throw an error if id is undefined
@@ -272,4 +275,22 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     end
   end
 
+  def procs_from_json(json_data)
+    containers = json_data.dig(:spec, :containers)
+    resources = containers[0].dig(:resources)
+
+    cpu = resources.dig(:limits, :cpu)
+    millicores_rex = /(\d+)m/
+
+    # ok to return string bc nil.to_i == 0 and we'd rather return
+    # nil (undefined) than 0 which is confusing.
+    if millicores_rex.match?(cpu)
+      millicores =  millicores_rex.match(cpu)[1].to_i
+
+      # have to return at least 1 bc 200m could be 0
+      ((millicores + 1000) / 1000).to_s
+    else
+      cpu
+    end
+  end
 end

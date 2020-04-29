@@ -11,8 +11,9 @@ module OodCore::Job::Adapters::Kubernetes::Resources
   end
 
   class Container
-    attr_accessor :name, :image, :command, :port, :env
-    def initialize(name, image, command: [], port: nil, env: [])
+    attr_accessor :name, :image, :command, :port, :env, :memory, :cpu
+
+    def initialize(name, image, command: [], port: nil, env: [], memory: "4Gi", cpu: "1")
       raise ArgumentError, "containers need valid names and images" unless name && image
 
       @name = name
@@ -20,6 +21,8 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @command = command
       @port = port&.to_i
       @env = env
+      @memory = memory
+      @cpu = cpu
     end
 
     def ==(other)
@@ -27,7 +30,9 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         image == other.image &&
         command == other.command &&
         port == other.port &&
-        env == other.env
+        env == other.env &&
+        memory == other.memory &&
+        cpu == other.cpu
     end
 
   end

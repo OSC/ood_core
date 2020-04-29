@@ -53,6 +53,13 @@ spec:
       mountPath: /fs
      
      
+    resources:
+      limits:
+        memory: "6Gi"
+        cpu: "4"
+      requests:
+        memory: "6Gi"
+        cpu: "4"
   
   initContainers:
   

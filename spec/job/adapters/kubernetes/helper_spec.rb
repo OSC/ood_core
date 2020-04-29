@@ -26,7 +26,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: 154407,
     native: {
       host: "10.20.0.40"
-    }
+    },
+    procs: "1"
   }}
 
   let(:single_error_pod_hash) {{
@@ -39,7 +40,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: nil,
     native: {
       host: "10.20.0.40"
-    }
+    },
+    procs: nil
   }}
 
   let(:single_completed_pod_hash) {{
@@ -52,7 +54,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: 300,
     native: {
       host: "10.20.0.40"
-    }
+    },
+    procs: nil
   }}
 
   let(:single_queued_pod_hash) {{
@@ -65,7 +68,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: nil,
     native: {
       host: "10.20.0.40"
-    }
+    },
+    procs: nil
   }}
 
   let(:single_pending_pod_hash) {{
@@ -78,7 +82,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: nil,
     native: {
       host: nil
-    }
+    },
+    procs: "1"
   }}
 
   let(:pod_with_port) do
@@ -209,7 +214,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         env: [
           name: 'HOME',
           value: '/over/here'
-        ]
+        ],
+        memory: '12Gi',
+        cpu: '6'
       }
     }
 
@@ -220,7 +227,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           'ruby:2.5',
           port: 8080,
           command: ['rake', 'spec'],
-          env: [{ name: 'HOME', value: '/over/here' }]
+          env: [{ name: 'HOME', value: '/over/here' }],
+          memory: '12Gi',
+          cpu: '6'
         )
       )
     end
@@ -233,7 +242,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           'ruby-test-container',
           'ruby:2.5',
           command: ['rake', 'spec'],
-          env: [{ name: 'HOME', value: '/over/here' }]
+          env: [{ name: 'HOME', value: '/over/here' }],
+          memory: '12Gi',
+          cpu: '6'
         )
       )
     end
@@ -246,7 +257,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
-          env: [{ name: 'HOME', value: '/over/here' }]
+          env: [{ name: 'HOME', value: '/over/here' }],
+          memory: '12Gi',
+          cpu: '6'
         )
       )
     end
@@ -260,14 +273,18 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           'ruby:2.5',
           port: 8080,
           command: ['rake', 'spec'],
+          memory: '12Gi',
+          cpu: '6'
         )
       )
     end
 
-    it "correctly parses container with extra fields" do
+    it "correctly parses container with no extra fields" do
       ctr_hash.delete(:env)
       ctr_hash.delete(:command)
       ctr_hash.delete(:port)
+      ctr_hash[:memory] = '4Gi' # cpu and memory defaults
+      ctr_hash[:cpu] = '1'
 
       expect(helper.container_from_native(ctr_hash)).to eq(
         Kubernetes::Resources::Container.new(
@@ -332,6 +349,30 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       info = helper.pod_info_from_json(single_error_pod)
 
       expect(info).to eq(single_error_pod_hash)
+    end
+
+    it "correctly reads a completed pods' data" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.pod_info_from_json(single_completed_pod)
+
+      expect(info).to eq(single_completed_pod_hash)
+    end
+
+    it "correctly reads a queued pods' data" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.pod_info_from_json(single_queued_pod)
+
+      expect(info).to eq(single_queued_pod_hash)
+    end
+
+    it "correctly reads a pending pods' data" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.pod_info_from_json(single_pending_pod)
+
+      expect(info).to eq(single_pending_pod_hash)
     end
 
     it "correctly throws exception on bad data" do

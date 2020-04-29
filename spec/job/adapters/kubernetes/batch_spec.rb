@@ -146,7 +146,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       wallclock_time: 154407,
       native: {
         host: "10.20.0.40"
-      }
+      },
+      procs: 1
     })
   }
 
@@ -163,7 +164,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         host: "10.20.0.40",
         port: 30689,
         password:  "ekmfxbOgNUlmLy4m"
-      }
+      },
+      procs: 1
     })
   }
 
@@ -224,7 +226,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       wallclock_time: nil,
       native: {
         host: nil
-      }
+      },
+      procs: 1
     })
   }
 
@@ -279,7 +282,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
                 name: 'PATH',
                 value: '/usr/bin:/usr/local/bin'
               }
-            ]
+            ],
+            memory: '6Gi',
+            cpu: '4'
           },
           init_containers: [
             name: 'init-1',

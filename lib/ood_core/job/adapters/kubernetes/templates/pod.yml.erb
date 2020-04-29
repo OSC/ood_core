@@ -45,6 +45,13 @@ spec:
       mountPath: <%= mount[:destination_path] %>
     <% end %> <%# for each mount %>
     <% end %> <%# if mounts is not nil %>
+    resources:
+      limits:
+        memory: "<%= spec.container.memory %>"
+        cpu: "<%= spec.container.cpu %>"
+      requests:
+        memory: "<%= spec.container.memory %>"
+        cpu: "<%= spec.container.cpu %>"
   <% unless spec.init_containers.nil? %>
   initContainers:
   <% spec.init_containers.each do |ctr| %>
