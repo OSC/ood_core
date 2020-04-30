@@ -18,11 +18,11 @@ module OodCore::Job::Adapters::Kubernetes::Resources
 
       @name = name
       @image = image
-      @command = command
+      @command = command.nil? ? [] : command
       @port = port&.to_i
-      @env = env
-      @memory = memory
-      @cpu = cpu
+      @env = env.nil? ? [] : env
+      @memory = memory.nil? ? "4Gi" : memory
+      @cpu = cpu.nil? ? "1" : cpu
     end
 
     def ==(other)
