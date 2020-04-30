@@ -17,6 +17,9 @@ spec:
   - name: "<%= spec.container.name %>"
     image: <%= spec.container.image %>
     imagePullPolicy: IfNotPresent
+    <% unless spec.container.working_dir.empty? %>
+    workingDir: "<%= spec.container.working_dir %>"
+    <% end %>
     <% unless spec.container.env.empty? %>
     env:
     <% spec.container.env.each do |env| %>

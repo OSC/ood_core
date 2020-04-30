@@ -18,6 +18,9 @@ spec:
     image: ruby:2.5
     imagePullPolicy: IfNotPresent
     
+    workingDir: "/my/home"
+    
+    
     env:
     
     - name: HOME

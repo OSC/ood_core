@@ -291,7 +291,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
               }
             ],
             memory: '6Gi',
-            cpu: '4'
+            cpu: '4',
+            working_dir: '/my/home'
           },
           init_containers: [
             name: 'init-1',
