@@ -222,6 +222,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         ],
         memory: '12Gi',
         cpu: '6',
+        working_dir: '/over/there',
         restart_policy: 'OnFailure'
       }
     }
@@ -236,6 +237,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
           cpu: '6',
+          working_dir: '/over/there',
           restart_policy: 'OnFailure'
         )
       )
@@ -252,6 +254,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
           cpu: '6',
+          working_dir: '/over/there',
           restart_policy: 'OnFailure'
         )
       )
@@ -268,6 +271,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
           cpu: '6',
+          working_dir: '/over/there',
           restart_policy: 'OnFailure'
         )
       )
@@ -281,6 +285,24 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
+          command: ['rake', 'spec'],
+          memory: '12Gi',
+          cpu: '6',
+          working_dir: '/over/there',
+          restart_policy: 'OnFailure'
+        )
+      )
+    end
+
+    it "correctly parses container with working directory" do
+      ctr_hash.delete(:working_dir)
+
+      expect(helper.container_from_native(ctr_hash)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          port: 8080,
+          env: [{ name: 'HOME', value: '/over/here' }],
           command: ['rake', 'spec'],
           memory: '12Gi',
           cpu: '6',
@@ -301,6 +323,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
           cpu: '6',
+          working_dir: '/over/there',
         )
       )
     end
@@ -313,6 +336,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       ctr_hash[:memory] = '4Gi'
       ctr_hash[:cpu] = '1'
       ctr_hash[:restart_policy] = 'Never'
+      ctr_hash[:working_dir] = ''
 
       expect(helper.container_from_native(ctr_hash)).to eq(
         Kubernetes::Resources::Container.new(
