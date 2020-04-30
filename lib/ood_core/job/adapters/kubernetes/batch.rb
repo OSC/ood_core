@@ -12,7 +12,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   class Error < StandardError; end
 
-  attr_reader :config_file, :bin, :restart_policy, :cluster_name, :mounts
+  attr_reader :config_file, :bin, :cluster_name, :mounts
   attr_reader :all_namespaces, :using_context, :helper
 
   def initialize(options = {}, helper = Helper.new)
@@ -20,7 +20,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
     @config_file = options.fetch(:config_file, default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
-    @restart_policy = options.fetch(:restart_policy, 'Never')
     @cluster_name = options.fetch(:cluster_name, 'open-ondemand')
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)

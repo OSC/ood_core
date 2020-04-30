@@ -49,7 +49,6 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     {
       config_file: '~/kube.config',
       bin: '/usr/bin/wontwork',
-      restart_policy: 'Always',
       cluster_name: 'test-cluster',
       mounts: mounts,
       all_namespaces: true,
@@ -243,14 +242,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "configures correctly when given items" do
       expect(configured_batch.config_file).to eq('~/kube.config')
       expect(configured_batch.bin).to eq('/usr/bin/wontwork')
-      expect(configured_batch.restart_policy).to eq('Always')
       expect(configured_batch.mounts).to eq(mounts)
     end
 
     it "configures correctly configures defaults" do
       expect(@basic_batch.config_file).to eq("#{ENV['HOME']}/.kube/config")
       expect(@basic_batch.bin).to eq('/usr/bin/kubectl')
-      expect(@basic_batch.restart_policy).to eq('Never')
       expect(@basic_batch.mounts).to eq([])
     end
 
@@ -292,7 +289,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             ],
             memory: '6Gi',
             cpu: '4',
-            working_dir: '/my/home'
+            working_dir: '/my/home',
+            restart_policy: 'Always'
           },
           init_containers: [
             name: 'init-1',

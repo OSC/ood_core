@@ -221,7 +221,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           value: '/over/here'
         ],
         memory: '12Gi',
-        cpu: '6'
+        cpu: '6',
+        restart_policy: 'OnFailure'
       }
     }
 
@@ -234,7 +235,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           command: ['rake', 'spec'],
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
-          cpu: '6'
+          cpu: '6',
+          restart_policy: 'OnFailure'
         )
       )
     end
@@ -249,7 +251,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           command: ['rake', 'spec'],
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
-          cpu: '6'
+          cpu: '6',
+          restart_policy: 'OnFailure'
         )
       )
     end
@@ -264,7 +267,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           port: 8080,
           env: [{ name: 'HOME', value: '/over/here' }],
           memory: '12Gi',
-          cpu: '6'
+          cpu: '6',
+          restart_policy: 'OnFailure'
         )
       )
     end
@@ -279,17 +283,36 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           port: 8080,
           command: ['rake', 'spec'],
           memory: '12Gi',
-          cpu: '6'
+          cpu: '6',
+          restart_policy: 'OnFailure'
+        )
+      )
+    end
+
+    it "correctly parses container with no restart_policy" do
+      ctr_hash.delete(:restart_policy)
+
+      expect(helper.container_from_native(ctr_hash)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          port: 8080,
+          command: ['rake', 'spec'],
+          env: [{ name: 'HOME', value: '/over/here' }],
+          memory: '12Gi',
+          cpu: '6',
         )
       )
     end
 
     it "correctly parses container with no extra fields" do
-      ctr_hash.delete(:env)
-      ctr_hash.delete(:command)
+      # expected defaults
+      ctr_hash[:env] = []
+      ctr_hash[:command] = []
       ctr_hash.delete(:port)
-      ctr_hash[:memory] = '4Gi' # cpu and memory defaults
+      ctr_hash[:memory] = '4Gi'
       ctr_hash[:cpu] = '1'
+      ctr_hash[:restart_policy] = 'Never'
 
       expect(helper.container_from_native(ctr_hash)).to eq(
         Kubernetes::Resources::Container.new(

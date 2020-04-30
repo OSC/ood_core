@@ -8,7 +8,7 @@ metadata:
     app.kubernetes.io/name: <%= container.name %>
     app.kubernetes.io/managed-by: open-ondemand
 spec:
-  restartPolicy: <%= @restart_policy %>
+  restartPolicy: <%= spec.container.restart_policy %>
   securityContext:
     runAsUser: <%= run_as_user %>
     runAsGroup: <%= run_as_group %>

@@ -11,11 +11,12 @@ module OodCore::Job::Adapters::Kubernetes::Resources
   end
 
   class Container
-    attr_accessor :name, :image, :command, :port, :env, :memory, :cpu, :working_dir
+    attr_accessor :name, :image, :command, :port, :env, :memory, :cpu, :working_dir,
+                  :restart_policy
 
     def initialize(
         name, image, command: [], port: nil, env: [], memory: "4Gi", cpu: "1",
-        working_dir: ""
+        working_dir: "", restart_policy: "Never"
       )
       raise ArgumentError, "containers need valid names and images" unless name && image
 
@@ -27,6 +28,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @memory = memory.nil? ? "4Gi" : memory
       @cpu = cpu.nil? ? "1" : cpu
       @working_dir = working_dir.nil? ? "" : working_dir
+      @restart_policy = restart_policy.nil? ? "Never" : restart_policy
     end
 
     def ==(other)
@@ -37,7 +39,8 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         env == other.env &&
         memory == other.memory &&
         cpu == other.cpu &&
-        working_dir == other.working_dir
+        working_dir == other.working_dir &&
+        restart_policy == other.restart_policy
     end
 
   end

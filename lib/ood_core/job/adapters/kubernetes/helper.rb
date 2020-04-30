@@ -48,7 +48,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       env: container.fetch(:env, []),
       memory: container[:memory],
       cpu: container[:cpu],
-      working_dir: container[:working_dir]
+      working_dir: container[:working_dir],
+      restart_policy: container[:restart_policy]
     )
   end
 
