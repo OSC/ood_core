@@ -207,15 +207,17 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
     describe "#ssh_cmd" do
         let(:username) { Etc.getlogin }
         context "when strict_host_checking is true" do
-            let(:ssh_cmd) { subject.send(:ssh_cmd, 'remote_host') }
+            let(:ssh_cmd) { subject.send(:ssh_cmd, 'remote_host', ['/bin/bash']) }
 
             it "uses the correct SSH options" do
-                expect(ssh_cmd).to eq(['ssh', '-t', '-o', 'BatchMode=yes', "#{username}@remote_host"])
+                expect(ssh_cmd).to eq(['ssh', '-t', '-o', 'BatchMode=yes', "#{username}@remote_host", '/bin/bash'])
             end
         end
 
         context "when strict_host_checking is false" do
-            let(:ssh_cmd) { described_class.new(**opts.merge({strict_host_checking: false})).send(:ssh_cmd, 'remote_host') }
+            let(:ssh_cmd) { 
+                described_class.new(**opts.merge({strict_host_checking: false})).send(:ssh_cmd, 'remote_host', ['/bin/bash']) 
+            }
 
             it "uses the correct SSH options" do
                 expect(ssh_cmd).to eq([
@@ -223,7 +225,8 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                     '-o', 'BatchMode=yes',
                     '-o', 'UserKnownHostsFile=/dev/null',
                     '-o', 'StrictHostKeyChecking=no',
-                    "#{username}@remote_host"
+                    "#{username}@remote_host",
+                    "/bin/bash"
                 ])
             end
         end
