@@ -127,7 +127,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       [
         'ssh', '-t',
         '-o', 'BatchMode=yes',
-        "#{username}@#{destination_host}",
+        "#{username}@#{destination_host}"
       ].concat(cmd)
     else
       [
@@ -135,7 +135,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',
-        "#{username}@#{destination_host}",
+        "#{username}@#{destination_host}"
       ].concat(cmd)
     end
   end
