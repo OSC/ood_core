@@ -116,12 +116,16 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     s.success? ? o : raise(Error, e)
   end
 
-  # The SSH invocation to send the command you pass into cmd (Array<String>)
+  # The full command to ssh into the destination host and execute the command.
+  # SSH options include:
   # -t Force pseudo-terminal allocation (required to allow tmux to run)
   # -o BatchMode=yes (set mode to be non-interactive)
   # if ! strict_host_checking
   # -o UserKnownHostsFile=/dev/null (do not update the user's known hosts file)
   # -o StrictHostKeyChecking=no (do no check the user's known hosts file)
+  #
+  # @param destination_host [#to_s] the destination host you wish to ssh into
+  # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
     if strict_host_checking
       [
