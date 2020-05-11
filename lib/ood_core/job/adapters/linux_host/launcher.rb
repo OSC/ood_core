@@ -57,7 +57,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param hostname [#to_s] The hostname to submit the work to
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
-    cmd = ssh_cmd(submit_host(script))
+    cmd = ssh_cmd(submit_host(script), ['/usr/bin/env', 'bash'])
 
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
@@ -67,13 +67,13 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   end
 
   def stop_remote_session(session_name, hostname)
-    cmd = ssh_cmd(hostname)
+    cmd = ssh_cmd(hostname, ['/usr/bin/env', 'bash'])
 
     kill_cmd = <<~SCRIPT
     # Get the tmux pane PID for the target session
     pane_pid=$(tmux list-panes -aF '\#{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ')
     # Find the Singularity sinit PID child of the pane process
-    pane_sinit_pid=$(pstree -p "$pane_pid" | grep -o 'sinit([[:digit:]]*' | grep -o '[[:digit:]]*')
+    pane_sinit_pid=$(pstree -p -l "$pane_pid" | grep -o 'sinit([[:digit:]]*' | grep -o '[[:digit:]]*')
     # Kill sinit which stops both Singularity-based processes and the tmux session
     kill "$pane_sinit_pid"
     SCRIPT
@@ -116,19 +116,23 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     s.success? ? o : raise(Error, e)
   end
 
-  # The SSH invocation to send a command
+  # The full command to ssh into the destination host and execute the command.
+  # SSH options include:
   # -t Force pseudo-terminal allocation (required to allow tmux to run)
   # -o BatchMode=yes (set mode to be non-interactive)
   # if ! strict_host_checking
   # -o UserKnownHostsFile=/dev/null (do not update the user's known hosts file)
   # -o StrictHostKeyChecking=no (do no check the user's known hosts file)
-  def ssh_cmd(destination_host)
+  #
+  # @param destination_host [#to_s] the destination host you wish to ssh into
+  # @param cmd [Array<#to_s>] the command to be executed on the destination host
+  def ssh_cmd(destination_host, cmd)
     if strict_host_checking
       [
         'ssh', '-t',
         '-o', 'BatchMode=yes',
         "#{username}@#{destination_host}"
-      ]
+      ].concat(cmd)
     else
       [
         'ssh', '-t',
@@ -136,7 +140,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',
         "#{username}@#{destination_host}"
-      ]
+      ].concat(cmd)
     end
   end
 
@@ -245,7 +249,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       ['#{session_name}', '#{session_created}', '#{pane_pid}'].join(UNIT_SEPARATOR)
     )
     keys = [:session_name, :session_created, :session_pid]
-    cmd = ssh_cmd(destination_host) + ['tmux', 'list-panes', '-aF', format_str]
+    cmd = ssh_cmd(destination_host, ['tmux', 'list-panes', '-aF', format_str])
 
     call(*cmd).split(
       "\n"
