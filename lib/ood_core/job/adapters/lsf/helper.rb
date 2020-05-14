@@ -78,40 +78,40 @@ class OodCore::Job::Adapters::Lsf::Helper
   def batch_submit_args(script, after: [], afterok: [], afternotok: [], afterany: [])
     args = []
 
-    args += ["-P", script.accounting_id] unless script.accounting_id.nil?
-    args += ["-cwd", script.workdir.to_s] unless script.workdir.nil?
-    args += ["-J", script.job_name] unless script.job_name.nil?
-    args[-1] += "[#{script.job_array_request}]" unless script.job_array_request.nil?
+    args.concat ["-P", script.accounting_id] unless script.accounting_id.nil?
+    args.concat ["-cwd", script.workdir.to_s] unless script.workdir.nil?
+    args.concat ["-J", script.job_name] unless script.job_name.nil?
+    args[-1].concat "[#{script.job_array_request}]" unless script.job_array_request.nil?
 
-    args += ["-q", script.queue_name] unless script.queue_name.nil?
-    args += ["-U", script.reservation_id] unless script.reservation_id.nil?
-    args += ["-sp", script.priority] unless script.priority.nil?
-    args += ["-H"] if script.submit_as_hold
-    args += (script.rerunnable ? ["-r"] : ["-rn"]) unless script.rerunnable.nil?
-    args += ["-b", script.start_time.localtime.strftime("%Y:%m:%d:%H:%M")] unless script.start_time.nil?
-    args += ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
-    args += ["-L", script.shell_path.to_s] unless script.shell_path.nil?
+    args.concat ["-q", script.queue_name] unless script.queue_name.nil?
+    args.concat ["-U", script.reservation_id] unless script.reservation_id.nil?
+    args.concat ["-sp", script.priority] unless script.priority.nil?
+    args.concat ["-H"] if script.submit_as_hold
+    args.concat (script.rerunnable ? ["-r"] : ["-rn"]) unless script.rerunnable.nil?
+    args.concat ["-b", script.start_time.localtime.strftime("%Y:%m:%d:%H:%M")] unless script.start_time.nil?
+    args.concat ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
+    args.concat ["-L", script.shell_path.to_s] unless script.shell_path.nil?
 
     # environment
     env = script.job_environment || {}
     # To preserve pre-existing behavior we only act when true or false, when nil we do nothing
     if script.copy_environment?
-      args += ["-env", (["all"] + env.keys).join(",")]
+      args.concat ["-env", (["all"] + env.keys).join(",")]
     elsif script.copy_environment? == false
-      args += ["-env", (["none"] + env.keys).join(",")]
+      args.concat ["-env", (["none"] + env.keys).join(",")]
     end
 
     # input and output files
-    args += ["-i", script.input_path] unless script.input_path.nil?
-    args += ["-o", script.output_path] unless script.output_path.nil?
-    args += ["-e", script.error_path] unless script.error_path.nil?
+    args.concat ["-i", script.input_path] unless script.input_path.nil?
+    args.concat ["-o", script.output_path] unless script.output_path.nil?
+    args.concat ["-e", script.error_path] unless script.error_path.nil?
 
     # email
-    args += ["-B"] if script.email_on_started
-    args += ["-N"] if script.email_on_terminated
-    args += ["-u", script.email.join(",")] unless script.email.nil? || script.email.empty?
+    args.concat ["-B"] if script.email_on_started
+    args.concat ["-N"] if script.email_on_terminated
+    args.concat ["-u", script.email.join(",")] unless script.email.nil? || script.email.empty?
 
-    args += script.native unless script.native.nil?
+    args.concat script.native unless script.native.nil?
 
     {args: args, env: env}
   end

@@ -437,11 +437,11 @@ class OodCore::Job::Adapters::Torque
       # NB: The binary includes many useful filters and is preferred
       def qsub_submit(script, queue, headers, resources, envvars)
         params  = []
-        params += ["-q", "#{queue}"] unless queue.empty?
-        params += headers.map {|k,v| qsub_arg(k,v)}.flatten
-        params += resources.map{|k,v| ["-l", "#{k}=#{v}"]}.flatten
-        params += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
-        params << script
+        params.concat ["-q", "#{queue}"] unless queue.empty?
+        params.concat headers.map {|k,v| qsub_arg(k,v)}.flatten
+        params.concat resources.map{|k,v| ["-l", "#{k}=#{v}"]}.flatten
+        params.concat ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
+        params.concat script
 
         env = {
           "PBS_DEFAULT"     => "#{host}",

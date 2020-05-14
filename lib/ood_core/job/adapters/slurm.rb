@@ -148,9 +148,9 @@ module OodCore
           #TODO: write some barebones test for this? like 2 options and id or no id
           def squeue_args(id: "", owner: nil, options: [])
             args  = ["--all", "--states=all", "--noconvert"]
-            args += ["-o", "#{RECORD_SEPARATOR}#{options.join(UNIT_SEPARATOR)}"]
-            args += ["-u", owner.to_s] unless owner.to_s.empty?
-            args += ["-j", id.to_s] unless id.to_s.empty?
+            args.concat ["-o", "#{RECORD_SEPARATOR}#{options.join(UNIT_SEPARATOR)}"]
+            args.concat ["-u", owner.to_s] unless owner.to_s.empty?
+            args.concat ["-j", id.to_s] unless id.to_s.empty?
             args
           end
 
@@ -276,7 +276,7 @@ module OodCore
             def call(cmd, *args, env: {}, stdin: "")
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
               args  = args.map(&:to_s)
-              args += ["-M", cluster] if cluster
+              args.concat ["-M", cluster] if cluster
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
               o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
@@ -358,30 +358,30 @@ module OodCore
           # Set sbatch options
           args = []
           # ignore args, don't know how to do this for slurm
-          args += ["-H"] if script.submit_as_hold
-          args += (script.rerunnable ? ["--requeue"] : ["--no-requeue"]) unless script.rerunnable.nil?
-          args += ["-D", script.workdir.to_s] unless script.workdir.nil?
-          args += ["--mail-user", script.email.join(",")] unless script.email.nil?
+          args.concat ["-H"] if script.submit_as_hold
+          args.concat (script.rerunnable ? ["--requeue"] : ["--no-requeue"]) unless script.rerunnable.nil?
+          args.concat ["-D", script.workdir.to_s] unless script.workdir.nil?
+          args.concat ["--mail-user", script.email.join(",")] unless script.email.nil?
           if script.email_on_started && script.email_on_terminated
-            args += ["--mail-type", "ALL"]
+            args.concat ["--mail-type", "ALL"]
           elsif script.email_on_started
-            args += ["--mail-type", "BEGIN"]
+            args.concat ["--mail-type", "BEGIN"]
           elsif script.email_on_terminated
-            args += ["--mail-type", "END"]
+            args.concat ["--mail-type", "END"]
           elsif script.email_on_started == false && script.email_on_terminated == false
-            args += ["--mail-type", "NONE"]
+            args.concat ["--mail-type", "NONE"]
           end
-          args += ["-J", script.job_name] unless script.job_name.nil?
-          args += ["-i", script.input_path] unless script.input_path.nil?
-          args += ["-o", script.output_path] unless script.output_path.nil?
-          args += ["-e", script.error_path] unless script.error_path.nil?
-          args += ["--reservation", script.reservation_id] unless script.reservation_id.nil?
-          args += ["-p", script.queue_name] unless script.queue_name.nil?
-          args += ["--priority", script.priority] unless script.priority.nil?
-          args += ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
-          args += ["-A", script.accounting_id] unless script.accounting_id.nil?
-          args += ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
-          args += ['-a', script.job_array_request] unless script.job_array_request.nil?
+          args.concat ["-J", script.job_name] unless script.job_name.nil?
+          args.concat ["-i", script.input_path] unless script.input_path.nil?
+          args.concat ["-o", script.output_path] unless script.output_path.nil?
+          args.concat ["-e", script.error_path] unless script.error_path.nil?
+          args.concat ["--reservation", script.reservation_id] unless script.reservation_id.nil?
+          args.concat ["-p", script.queue_name] unless script.queue_name.nil?
+          args.concat ["--priority", script.priority] unless script.priority.nil?
+          args.concat ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
+          args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
+          args.concat ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+          args.concat ['-a', script.job_array_request] unless script.job_array_request.nil?
           # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies
@@ -390,17 +390,17 @@ module OodCore
           depend << "afterok:#{afterok.join(":")}"       unless afterok.empty?
           depend << "afternotok:#{afternotok.join(":")}" unless afternotok.empty?
           depend << "afterany:#{afterany.join(":")}"     unless afterany.empty?
-          args += ["-d", depend.join(",")]               unless depend.empty?
+          args.concat ["-d", depend.join(",")]               unless depend.empty?
 
           # Set environment variables
           env = script.job_environment || {}
           unless (script.job_environment.nil? || script.job_environment.empty?)
             prefix = script.copy_environment? ? "ALL," : "NONE,"  # NONE if false or nil
-            args += ["--export", prefix + script.job_environment.keys.join(",")]
+            args.concat ["--export", prefix + script.job_environment.keys.join(",")]
           end
 
           # Set native options
-          args += script.native if script.native
+          args.concat script.native if script.native
 
           # Set content
           content = if script.shell_path.nil?
