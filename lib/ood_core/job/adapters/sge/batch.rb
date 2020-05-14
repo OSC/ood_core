@@ -62,7 +62,7 @@ class OodCore::Job::Adapters::Sge::Batch
   def get_all(owner: nil)
     listener = QstatXmlRListener.new
     argv = ['qstat', '-r', '-xml']
-    argv += ['-u', owner] unless owner.nil?
+    argv.concat ['-u', owner] unless owner.nil?
     REXML::Parsers::StreamParser.new(call(*argv), listener).parse
 
     listener.parsed_jobs.map{
