@@ -394,21 +394,7 @@ module OodCore
 
           # Set environment variables
           env = script.job_environment || {}
-          # we default to export NONE, but SLURM defaults to ALL.
-          # we do this bc SLURM setups a new environment loading /etc/profile (modules)
-          # where the PUN (the env sbatch uses) did not.
-          export = if !env.empty? && !script.copy_environment?
-                     env.keys.join(",")
-                   elsif !env.empty? && script.copy_environment?
-                     "ALL," + env.keys.join(",")
-                   elsif env.empty? && script.copy_environment?
-                     # only this option changes behaivor dramatically
-                     "ALL"
-                   else
-                     "NONE"
-                   end
-
-          args += ["--export", export]
+          args += ["--export", export_arg(env, script.copy_environment?)]
 
           # Set native options
           args += script.native if script.native
@@ -640,6 +626,25 @@ module OodCore
             end
 
             Info.new(**parent_task_hash)
+          end
+
+
+          # we default to export NONE, but SLURM defaults to ALL.
+          # we do this bc SLURM setups a new environment, loading /etc/profile
+          # and all giving 'module' function (among other things shells give),
+          # where the PUN did not.
+          # --export=ALL export the PUN's environment.
+          def export_arg(env, copy_environment)
+            if !env.empty? && !copy_environment
+              env.keys.join(",")
+            elsif !env.empty? && copy_environment
+              "ALL," + env.keys.join(",")
+            elsif env.empty? && copy_environment
+              # only this option changes behaivor dramatically
+              "ALL"
+            else
+              "NONE"
+            end
           end
       end
     end
