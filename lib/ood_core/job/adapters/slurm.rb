@@ -394,10 +394,21 @@ module OodCore
 
           # Set environment variables
           env = script.job_environment || {}
-          unless (script.job_environment.nil? || script.job_environment.empty?)
-            prefix = script.copy_environment? ? "ALL," : "NONE,"  # NONE if false or nil
-            args += ["--export", prefix + script.job_environment.keys.join(",")]
-          end
+          # we default to export NONE, but SLURM defaults to ALL.
+          # we do this bc SLURM setups a new environment loading /etc/profile (modules)
+          # where the PUN (the env sbatch uses) did not.
+          export = if !env.empty? && !script.copy_environment?
+                     env.keys.join(",")
+                   elsif !env.empty? && script.copy_environment?
+                     "ALL," + env.keys.join(",")
+                   elsif env.empty? && script.copy_environment?
+                     # only this option changes behaivor dramatically
+                     "ALL"
+                   else
+                     "NONE"
+                   end
+
+          args += ["--export", export]
 
           # Set native options
           args += script.native if script.native
