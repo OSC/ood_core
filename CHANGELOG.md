@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.11.4] - 2020-05-27
+### Fixed
+- Environment exports in SLURM while implementing [#158](https://github.com/OSC/ood_core/issues/158)
+  and [#109](https://github.com/OSC/ood_core/issues/109) in [#163](https://github.com/OSC/ood_core/pull/163)
+
 ## [0.11.3] - 2020-05-11
 ### Fixed
 - LinuxhHost Adapter to work with any login shell ([#188](https://github.com/OSC/ood_core/pull/188))
@@ -228,7 +233,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.3...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.4...HEAD
+[0.11.4]: https://github.com/OSC/ood_core/compare/v0.11.3...v0.11.4
 [0.11.3]: https://github.com/OSC/ood_core/compare/v0.11.2...v0.11.3
 [0.11.2]: https://github.com/OSC/ood_core/compare/v0.11.1...v0.11.2
 [0.11.1]: https://github.com/OSC/ood_core/compare/v0.11.0...v0.11.1
