@@ -131,6 +131,7 @@ module OodCore
       # @param wall_time [#to_i, nil] max real time
       # @param accounting_id [#to_s, nil] accounting id
       # @param native [Object, nil] native specifications
+      # @param copy_environment [Boolean, nil] copy the environment
       def initialize(content:, args: nil, submit_as_hold: nil, rerunnable: nil,
                      job_environment: nil, workdir: nil, email: nil,
                      email_on_started: nil, email_on_terminated: nil,
