@@ -86,8 +86,8 @@ module OodCore
 
           # Set mailing options
           mail_points = ""
-          mail_points.concat "b" if script.email_on_started
-          mail_points.concat "e" if script.email_on_terminated
+          mail_points += "b" if script.email_on_started
+          mail_points += "e" if script.email_on_terminated
 
           # FIXME: Remove the Hash option once all Interactive Apps are
           # converted to Array format
