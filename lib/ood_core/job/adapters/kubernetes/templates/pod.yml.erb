@@ -125,5 +125,5 @@ metadata:
   namespace: <%= namespace %>
 data:
   <%= configmap.filename %>: |
-    <%= configmap.data %>
+    <% config_data_lines(configmap.data).each do |line| %><%= line %><% end %>
 <% end %> <%# end for configmap %>

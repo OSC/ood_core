@@ -299,7 +299,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
           ],
           configmap: {
             filename: 'config.file',
-            data: 'a = b'
+            data: "a = b\nc = d\n  indentation = keepthis"
           }
         }
       )

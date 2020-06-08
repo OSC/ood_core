@@ -143,4 +143,6 @@ metadata:
 data:
   config.file: |
     a = b
+    c = d
+      indentation = keepthis
  

@@ -127,6 +127,20 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   private
 
+  # helper to help format multi-line yaml data from the submit.yml into 
+  # mutli-line yaml in the pod.yml.erb
+  def config_data_lines(data)
+    output = []
+    first = true
+
+    data.to_s.each_line do |line|
+      output.append(first ? line : line.prepend("    "))
+      first = false
+    end
+
+    output
+  end
+
   def username
     @username ||= Etc.getlogin
   end
