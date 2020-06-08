@@ -48,13 +48,14 @@ spec:
       mountPath:  /ood
     
     
-    
     - name: home-dir
       mountPath: /home
     
     - name: nfs-dir
       mountPath: /fs
-     
+    
+    - name: ess
+      mountPath: /fs/ess
      
     resources:
       limits:
@@ -82,13 +83,14 @@ spec:
       mountPath:  /ood
     
     
-    
     - name: home-dir
       mountPath: /home
     
     - name: nfs-dir
       mountPath: /fs
-     
+    
+    - name: ess
+      mountPath: /fs/ess
      
    
    
@@ -99,7 +101,6 @@ spec:
   - name: configmap-volume
     configMap:
       name: rspec-test-123-configmap
-  
   
   
   
@@ -115,6 +116,12 @@ spec:
       server: some.nfs.host
       path: /fs
    
+  
+  
+  - name: ess
+    hostPath:
+      path: /fs/ess
+      type: Directory
    
    
 ---

@@ -42,12 +42,10 @@ spec:
     - name: configmap-volume
       mountPath:  <%= configmap_mount_path %>
     <% end %>
-    <% unless mounts.empty? %>
-    <% mounts.each do |mount| %>
+    <% all_mounts.each do |mount| %>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
     <% end %> <%# for each mount %>
-    <% end %> <%# if mounts is not nil %>
     resources:
       limits:
         memory: "<%= spec.container.memory %>"
@@ -69,24 +67,21 @@ spec:
     - name: configmap-volume
       mountPath:  <%= configmap_mount_path %>
     <% end %>
-    <% unless mounts.empty? %>
-    <% mounts.each do |mount| %>
+    <% all_mounts.each do |mount| %>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
     <% end %> <%# for each mount %>
-    <% end %> <%# if mounts is not nil %>
   <% end %> <%# init container loop  %>
   <% end %> <%# if init containers  %>
-  <% unless configmap.nil? || mounts.empty? %>
+  <% unless configmap.nil? || all_mounts.empty? %>
   volumes:
-  <% end %> <%# configmap.nil? || mounts.empty? %>
+  <% end %> <%# configmap.nil? || all_mounts.empty? %>
   <% unless configmap.nil? %>
   - name: configmap-volume
     configMap:
       name: <%= configmap_name(id) %>
   <% end %>
-  <% unless mounts.empty? %>
-  <% mounts.each do |mount| %>
+  <% all_mounts.each do |mount| %>
   <% if mount[:type] == 'nfs' %>
   - name: <%= mount[:name] %>
     nfs:
@@ -99,7 +94,6 @@ spec:
       type: <%= mount[:host_type] %>
   <% end %> <%# if mount is [host,nfs] %>
   <% end %> <%# for each mount %>
-  <% end %> <%# if mounts is not nil %>
 ---
 <% unless spec.container.port.nil? %>
 apiVersion: v1

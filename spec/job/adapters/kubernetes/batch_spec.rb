@@ -300,7 +300,14 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
           configmap: {
             filename: 'config.file',
             data: "a = b\nc = d\n  indentation = keepthis"
-          }
+          },
+          mounts: [
+            type: 'host',
+            name: 'ess',
+            host_type: 'Directory',
+            destination_path: '/fs/ess',
+            path: '/fs/ess'
+          ]
         }
       )
 
@@ -320,7 +327,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         {},
         "/usr/bin/wontwork --kubeconfig=~/kube.config " \
         "--namespace=testuser -o json create -f -",
-        stdin_data: create_pod_yml
+        stdin_data: create_pod_yml.to_s
       ).and_return(['', '', $?])
 
       configured_batch.submit(script)
