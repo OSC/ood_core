@@ -63,7 +63,11 @@ class QstatXmlRListener
     when 'hard_request'
       end_hard_request
     when 'tasks'
-      add_child_tasks
+      end_child_tasks
+    when 'cpu_usage'
+      end_cpu_usage
+    when 'mem_usage'
+      end_mem_usage
     end
   end
 
@@ -85,40 +89,40 @@ class QstatXmlRListener
 
   # Attributes we need
   def end_JB_job_number
-    @current_job[:id] = @current_text
+    @current_job[:native][:id] = @current_text
   end
 
   def end_JB_owner
-    @current_job[:job_owner] = @current_text
+    @current_job[:native][:job_owner] = @current_text
   end
 
   def end_JB_project
-    @current_job[:accounting_id] = @current_text
+    @current_job[:native][:accounting_id] = @current_text
   end
 
   def end_JB_name
-    @current_job[:job_name] = @current_text
+    @current_job[:native][:job_name] = @current_text
   end
 
   # Note that this is the native SGE type
   def end_state
-    @current_job[:status] = @current_text
+    @current_job[:native][:status] = @current_text
   end
 
   def end_slots
-    @current_job[:procs] = @current_text.to_i
+    @current_job[:native][:procs] = @current_text.to_i
   end
 
   def end_hard_req_queue
-    @current_job[:queue_name] = @current_text
+    @current_job[:native][:queue_name] = @current_text
   end
 
   def end_JB_submission_time
-    @current_job[:submission_time] = DateTime.parse(@current_text).to_time.to_i
+    @current_job[:native][:submission_time] = DateTime.parse(@current_text).to_time.to_i
   end
 
   def end_JAT_start_time
-    @current_job[:dispatch_time] = DateTime.parse(@current_text).to_time.to_i
+    @current_job[:native][:dispatch_time] = DateTime.parse(@current_text).to_time.to_i
   end
 
   def end_hard_request
@@ -126,8 +130,16 @@ class QstatXmlRListener
 
     case @current_request
     when 'h_rt'  # hard run time limit
-      @current_job[:wallclock_limit] = @current_text.to_i
+      @current_job[:native][:wallclock_limit] = @current_text.to_i
     end
+  end
+  
+  def end_cpu_usage
+    @current_job[:native][:cpu_usage] = @current_text
+  end
+
+  def end_mem_usage
+    @current_job[:native][:mem_usage] = @current_text
   end
 
   # Store a completed job and reset current_job for the next pass
@@ -145,4 +157,3 @@ class QstatXmlRListener
     }
   end
 end
-
