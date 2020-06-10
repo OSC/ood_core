@@ -1,5 +1,19 @@
 #!/bin/bash
-hostname
+hostnames=$(hostname -A)
+array_ssh_host=(${ssh_host//:/ }) #replace all : with " "
+hostnameFound=false
+for host in $array_ssh_host
+do
+    if [[ " ${hostnames[@]} " =~ " ${host} " ]]; then
+        hostnameFound=true
+        hostname=$host
+    fi
+done
+
+if [ ! $hostnameFound ]; then
+    echo "ERROR: The specified host is not in the list of ssh hosts configured for this cluster [${array_ssh_host[@]}]. The specified hosts determined by running 'hostname -A' [${hostnames[@]}] on the target host and must match one of the configured ssh hosts"
+    exit 1
+fi
 
 # Put the script into a temp file on localhost
 <% if debug %>

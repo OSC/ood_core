@@ -60,7 +60,11 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     cmd = ssh_cmd(submit_host(script), ['/usr/bin/env', 'bash'])
 
     session_name = unique_session_name
-    output = call(*cmd, stdin: wrapped_script(script, session_name))
+    ssh_host_delimited = ssh_host.to_a.join(':')
+    environment = {"ssh_host" => ssh_host_delimited}
+
+    output = call(*cmd, stdin: wrapped_script(script, session_name), env: environment)
+    
     hostname = output.strip
 
     "#{session_name}@#{hostname}"
