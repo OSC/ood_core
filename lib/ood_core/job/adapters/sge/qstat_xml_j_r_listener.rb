@@ -54,6 +54,11 @@ class QstatXmlJRListener
   end
 
   def tag_end(name)
+    #Add this to native hash if there is a text node
+    if (!@current_text.strip.empty?)
+      @current_job[:native][name] = @current_text
+    end
+
     case name
     when 'JB_ja_tasks'
       end_JB_ja_tasks
@@ -92,10 +97,6 @@ class QstatXmlJRListener
       toggle_processing_array_spec
     when 'JB_pe_range'
       toggle_adding_slots
-    when 'cpu_usage'
-      end_cpu_usage
-    when 'mem_usage'
-      end_mem_usage
     end
   end
 
@@ -106,34 +107,39 @@ class QstatXmlJRListener
 
   # Attributes we need
   def end_JB_job_number
-    @parsed_job[:native][:id] = @current_text
+    @parsed_job[:id] = @current_text
   end
 
   def end_JB_owner
-    @parsed_job[:native][:job_owner] = @current_text
+    @parsed_job[:job_owner] = @current_text
   end
 
   def end_JB_project
-    @parsed_job[:native][:accounting_id] = @current_text
+    @parsed_job[:accounting_id] = @current_text
   end
 
   def end_JB_job_name
-    @parsed_job[:native][:job_name] = @current_text
+    @parsed_job[:job_name] = @current_text
   end
 
   def end_JB_submission_time
+<<<<<<< HEAD
 <<<<<<< HEAD
     @parsed_job[:submission_time] = ms_to_seconds(@current_text.to_i)
 =======
     @parsed_job[:native][:submission_time] = @current_text.to_i
 >>>>>>> Attributes from qstat command now found under native hash
+=======
+    @parsed_job[:submission_time] = @current_text.to_i
+>>>>>>> Saves params under current job and saves all values under current_text[:native]
   end
 
   def end_JB_ja_tasks
-    @parsed_job[:native][:status] = :running
+    @parsed_job[:status] = :running
   end
 
   def end_JAT_start_time
+<<<<<<< HEAD
 <<<<<<< HEAD
     @parsed_job[:status] = :running
     @parsed_job[:dispatch_time] = ms_to_seconds(@current_text.to_i)
@@ -143,6 +149,11 @@ class QstatXmlJRListener
     @parsed_job[:native][:dispatch_time] = @current_text.to_i
     @parsed_job[:native][:wallclock_time] = Time.now.to_i - @parsed_job[:native][:dispatch_time]
 >>>>>>> Attributes from qstat command now found under native hash
+=======
+    @parsed_job[:status] = :running
+    @parsed_job[:dispatch_time] = @current_text.to_i
+    @parsed_job[:wallclock_time] = Time.now.to_i - @parsed_job[:dispatch_time]
+>>>>>>> Saves params under current job and saves all values under current_text[:native]
   end
 
   def end_CE_name
@@ -154,12 +165,12 @@ class QstatXmlJRListener
 
     case @current_request
     when 'h_rt'  # hard run time limit
-      @parsed_job[:native][:wallclock_limit] = @current_text.to_i
+      @parsed_job[:wallclock_limit] = @current_text.to_i
     end
   end
 
   def end_QR_name
-    @parsed_job[:native][:queue_name] = @current_text
+    @parsed_job[:queue_name] = @current_text
   end
 
   # Used to record a running Job Array task
@@ -169,14 +180,6 @@ class QstatXmlJRListener
 
   def set_job_array_piece(key)
     @job_array_spec[key] = @current_text if @processing_job_array_spec
-  end
-
-  def end_cpu_usage
-    @current_job[:native][:cpu_usage] = @current_text
-  end
-
-  def end_mem_usage
-    @current_job[:native][:mem_usage] = @current_text
   end
 
   def spec_string
@@ -221,7 +224,7 @@ class QstatXmlJRListener
   end
 
   def set_slots
-    @parsed_job[:native][:procs] = @current_text.to_i
+    @parsed_job[:procs] = @current_text.to_i
   end
 
   private
