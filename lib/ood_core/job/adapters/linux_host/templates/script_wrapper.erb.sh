@@ -1,5 +1,5 @@
 #!/bin/bash
-hostname
+hostname -A
 
 # Put the script into a temp file on localhost
 <% if debug %>
