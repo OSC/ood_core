@@ -64,12 +64,8 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     hostnames = output.strip.split #Will capture all other data too
     ssh_host_array = @ssh_hosts.to_a #is a Set seen in linux_host.rb
     hostname = (hostnames & ssh_host_array).first
+    raise Error, "The specified host is not in the list of ssh hosts configured for this cluster. The ssh hosts configured are #{ssh_host_array.inspect}. The specified host for this job is determined by running 'hostname -A' on the target host and this output must match one of the specified ssh hosts" unless !hostname.nil?
 
-    if (hostname.nil?)
-      Error => e 
-      raise e unless e.message.include?("The specified host is not in the list of ssh hosts configured for this cluster. The ssh hosts configured are #{ssh_host_array.inspect}. The specified host for this job is determined by running 'hostname -A' on the target host and this output must match one of the specified ssh hosts")
-    end
-    
     "#{session_name}@#{hostname}"
   end
 
