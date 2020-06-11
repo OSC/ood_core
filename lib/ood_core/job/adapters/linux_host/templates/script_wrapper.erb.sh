@@ -11,9 +11,11 @@ do
 done
 
 if [ ! $hostnameFound ]; then
-    echo "ERROR: The specified host is not in the list of ssh hosts configured for this cluster [${array_ssh_host[@]}]. The specified hosts determined by running 'hostname -A' [${hostnames[@]}] on the target host and must match one of the configured ssh hosts"
+    echo >&2 "ERROR: The specified host is not in the list of ssh hosts configured for this cluster [${array_ssh_host[@]}]. The specified hosts determined by running 'hostname -A' [${hostnames[@]}] on the target host and must match one of the configured ssh hosts" 
     exit 1
 fi
+
+echo $hostname
 
 # Put the script into a temp file on localhost
 <% if debug %>
