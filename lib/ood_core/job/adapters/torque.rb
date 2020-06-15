@@ -1,5 +1,6 @@
 require "ood_core/refinements/hash_extensions"
 require "ood_core/job/adapters/helper"
+require 'shellwords'
 
 module OodCore
   module Job
@@ -128,6 +129,9 @@ module OodCore
               resources.merge! script.native.fetch(:resources, {})
               envvars.merge!   script.native.fetch(:envvars, {})
             end
+
+            # Destructively change envvars to shellescape values
+            envvars.each { |k, v| envvars[k] = Shellwords.escape(v)}
 
             # Submit job
             @pbs.submit_string(script.content, queue: script.queue_name, headers: headers, resources: resources, envvars: envvars)
