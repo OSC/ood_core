@@ -131,7 +131,7 @@ module OodCore
             end
 
             # Destructively change envvars to shellescape values
-            envvars.each { |k, v| envvars[k] = Shellwords.escape(v)}
+            envvars.transform_values! { |v| Shellwords.escape(v) }
 
             # Submit job
             @pbs.submit_string(script.content, queue: script.queue_name, headers: headers, resources: resources, envvars: envvars)
