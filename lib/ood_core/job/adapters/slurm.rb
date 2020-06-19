@@ -20,7 +20,8 @@ module OodCore
         conf    = c.fetch(:conf, nil)
         bin     = c.fetch(:bin, nil)
         bin_overrides = c.fetch(:bin_overrides, {})
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides)
+        submit_host   = c.fetch(:submit_host, "")
+        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides, submit_host: submit_host)
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -69,11 +70,12 @@ module OodCore
           # @param cluster [#to_s, nil] the cluster name
           # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {})
+          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "")
             @cluster = cluster && cluster.to_s
             @conf    = conf    && Pathname.new(conf.to_s)
             @bin     = Pathname.new(bin.to_s)
             @bin_overrides = bin_overrides
+            @submit_host   = submit_host
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -275,6 +277,7 @@ module OodCore
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, submit_host)
               args  = args.map(&:to_s)
               args += ["-M", cluster] if cluster
               env = env.to_h
