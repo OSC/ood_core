@@ -36,6 +36,7 @@ class OodCore::Job::Adapters::Sge::Batch
     @bin              = Pathname.new(config.fetch(:bin, nil).to_s)
     @sge_root         = Pathname.new(config[:sge_root] || ENV['SGE_ROOT'] || "/var/lib/gridengine")
     @bin_overrides    = config.fetch(:bin_overrides, {})
+    @submit_host      = config.fetch(:submit_host, "")
 
     # FIXME: hack as this affects env of the process!
     ENV['SGE_ROOT'] = @sge_root.to_s
@@ -166,6 +167,7 @@ class OodCore::Job::Adapters::Sge::Batch
   # Call a forked SGE command for a given batch server
   def call(cmd, *args, env: {}, stdin: "", chdir: nil)
     cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+    cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
     args = args.map(&:to_s)
 
     env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
