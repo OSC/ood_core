@@ -12,7 +12,17 @@ module OodCore
         def self.bin_path(cmd, bin_default, bin_overrides)
           bin_overrides.fetch(cmd.to_s) { Pathname.new(bin_default.to_s).join(cmd.to_s).to_s }
         end
-      end
+        
+        # Gets a command that submits command on another host via ssh
+        # @param cmd [String] the desired command to execute on another host
+        # @param submit_host [String] where to submit the command
+        # @return [String] command wrapped in ssh if submit_host is present
+        def self.ssh_wrap(cmd, submit_host)
+          if submit_host.empty?
+            return cmd
+          end
+          "ssh #{submit_host} \"#{cmd}\""
+        end
     end
   end
 end

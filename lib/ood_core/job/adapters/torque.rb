@@ -14,11 +14,11 @@ module OodCore
       # @option config [#to_h] :custom_bin ({}) Optional overrides to Torque client executables
       def self.build_torque(config)
         c = config.to_h.symbolize_keys
-        host = c.fetch(:host) { raise ArgumentError, "No host specified. Missing argument: host" }.to_s
+        submit_host = c.fetch(:submit_host) { raise ArgumentError, "No host specified in cluster config. Missing argument: submit_host" }.to_s
         lib  = c.fetch(:lib, "").to_s
         bin  = c.fetch(:bin, "").to_s
         custom_bin = c.fetch(:custom_bin, {})
-        pbs  = Adapters::Torque::Batch.new(host: host, lib: lib, bin: bin, custom_bin: custom_bin)
+        pbs  = Adapters::Torque::Batch.new(submit_host: submit_host, lib: lib, bin: bin, custom_bin: custom_bin)
         Adapters::Torque.new(pbs: pbs)
       end
     end
