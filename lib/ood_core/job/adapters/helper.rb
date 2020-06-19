@@ -23,6 +23,7 @@ module OodCore
           end
           "ssh #{submit_host} \"#{cmd}\""
         end
+      end
     end
   end
 end
