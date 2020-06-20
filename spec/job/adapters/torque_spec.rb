@@ -317,6 +317,12 @@ describe OodCore::Job::Adapters::Torque do
         it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {"key" => "value"}) }
       end
 
+      context "with :job_environment having spaces" do
+        before { adapter.submit(build_script(job_environment: {"key" => "value value"})) }
+
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {"key" => "value\\ value"}) }
+      end
+
       context "with :workdir" do
         before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 
