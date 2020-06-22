@@ -2,14 +2,14 @@
 #
 # @api private
 class OodCore::Job::Adapters::Lsf::Batch
-  attr_reader :bindir, :libdir, :envdir, :serverdir, :cluster, :bin_overrides
+  attr_reader :bindir, :libdir, :envdir, :serverdir, :cluster, :bin_overrides, :submit_host
 
   # The root exception class that all LSF-specific exceptions inherit
   # from
   class Error < StandardError; end
 
   # @param bin [#to_s] path to LSF installation binaries
-  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, submit_host: "",**_)
+  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, submit_host: "", **_)
     @bindir = Pathname.new(bindir.to_s)
     @envdir = Pathname.new(envdir.to_s)
     @libdir = Pathname.new(libdir.to_s)

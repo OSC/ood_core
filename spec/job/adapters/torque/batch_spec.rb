@@ -173,4 +173,28 @@ describe OodCore::Job::Adapters::Torque::Batch do
       end
     end
   end
+
+  describe "setting submit_host" do 
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling without submit_host" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "owens.osc.edu", submit_host: "")
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit script.content
+        expect(Open3).to have_received(:capture3).with(anything, "qsub", any_args)
+      end
+    end
+
+    context "when calling with submit_host" do
+      it "uses ssh wrapper" do
+        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "pitzer.osc.edu", submit_host: 'owens.osc.edu')
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit script.content
+        expect(Open3).to have_received(:capture3).with(anything, "ssh -t -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no owens.osc.edu \"qsub\"", any_args)
+      end
+    end
+  end
 end

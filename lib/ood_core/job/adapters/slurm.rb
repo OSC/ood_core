@@ -63,6 +63,11 @@ module OodCore
           # @return Hash<String, String>
           attr_reader :bin_overrides
 
+          # The login node where the job is submitted via ssh
+          # @example owens.osc.edu
+          # @return [String] The login node
+          attr_reader :submit_host
+
           # The root exception class that all Slurm-specific exceptions inherit
           # from
           class Error < StandardError; end
@@ -277,7 +282,7 @@ module OodCore
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, submit_host)
+              cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
               args  = args.map(&:to_s)
               args += ["-M", cluster] if cluster
               env = env.to_h

@@ -26,4 +26,24 @@ describe OodCore::Job::Adapters::Helper do
       end
     end
   end
+
+  describe "#ssh_wrap" do
+    let(:cmd) {"sbatch"}
+
+    context "submit_host: empty" do
+      let(:submit_host) { "" }
+
+      it "returns the command" do 
+        expect(helper.ssh_wrap(cmd, submit_host)).to eq("sbatch")
+      end
+    end
+
+    context "submit_host: owens.osc.edu" do
+      let(:submit_host) { "owens.osc.edu" }
+
+      it "returns the ssh wrapped command" do 
+        expect(helper.ssh_wrap(cmd, submit_host)).to eq("ssh -t -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no owens.osc.edu \"sbatch\"")
+      end
+    end
+  end
 end

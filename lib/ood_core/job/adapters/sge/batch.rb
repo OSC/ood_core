@@ -15,7 +15,7 @@ end
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
 
-  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper
+  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper, :submit_host
   
   require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
   require "ood_core/job/adapters/sge/qstat_xml_r_listener"

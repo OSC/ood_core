@@ -68,7 +68,7 @@ module OodCore
           # @param host [#to_s, nil] the batch server host
           # @param submit_host [#to_s, nil] the login node to ssh to
           # @param exec [#to_s, nil] path to pbs executables
-          def initialize(host: nil, submit_host: nil, pbs_exec: nil, bin_overrides: {})
+          def initialize(host: nil, submit_host: "", pbs_exec: nil, bin_overrides: {})
             @host = host && host.to_s
             @submit_host = submit_host && submit_host.to_s
             @pbs_exec = pbs_exec && Pathname.new(pbs_exec.to_s)
