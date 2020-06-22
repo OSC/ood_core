@@ -18,10 +18,8 @@ module OodCore
         # @param submit_host [String] where to submit the command
         # @return [String] command wrapped in ssh if submit_host is present
         def self.ssh_wrap(cmd, submit_host)
-          if submit_host.empty?
-            return cmd
-          end
-          "ssh #{submit_host} \"#{cmd}\""
+          return cmd if submit_host.empty?
+          "ssh -t -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no #{submit_host} \"#{cmd}\""
         end
       end
     end

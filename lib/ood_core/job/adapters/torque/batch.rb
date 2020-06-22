@@ -7,6 +7,12 @@ class OodCore::Job::Adapters::Torque
     # @example OSC's Oakley batch server
     #   my_conn.host #=> "oak-batch.osc.edu"
     # @return [String] the batch server host
+    attr_reader :host
+
+    # The login node where job is submitted via ssh
+    # @example OSC's owens login node
+    #   my_conn.submit_host #=> "owens.osc.edu"
+    # @return [String] the login node
     attr_reader :submit_host
 
     # The path to the Torque client installation libraries
@@ -31,10 +37,12 @@ class OodCore::Job::Adapters::Torque
     # from
     class Error < StandardError; end
 
-    # @param submit_host [#to_s] the batch server host
+    # @param host [#to_s] the batch server host
+    # @param submit_host [#to_s] the login node
     # @param lib [#to_s] path to FFI installation libraries
     # @param bin [#to_s] path to FFI installation binaries
-    def initialize(submit_host:, lib: "", bin: "", bin_overrides: {}, **_)
+    def initialize(host:, submit_host: "", lib: "", bin: "", bin_overrides: {}, **_)
+      @host           = host.to_s
       @submit_host    = submit_host.to_s
       @lib     = Pathname.new(lib.to_s)
       @bin     = Pathname.new(bin.to_s)
@@ -44,7 +52,7 @@ class OodCore::Job::Adapters::Torque
     # Convert object to hash
     # @return [Hash] the hash describing this object
     def to_h
-      {submit_host: submit_host, lib: lib, bin: bin}
+      {host: host, submit_host: submit_host, lib: lib, bin: bin}
     end
 
     # The comparison operator
@@ -74,7 +82,7 @@ class OodCore::Job::Adapters::Torque
     # @yieldreturn the final value of the block
     def connect(&block)
       FFI.lib = lib.join('libtorque.so')
-      cid = FFI.pbs_connect(submit_host)
+      cid = FFI.pbs_connect(host)
       FFI.raise_error(cid.abs) if cid < 0  # raise error if negative connection id
       begin
         value = yield cid
@@ -444,7 +452,7 @@ class OodCore::Job::Adapters::Torque
         params << script
 
         env = {
-          "PBS_DEFAULT"     => "#{submit_host}",
+          "PBS_DEFAULT"     => "#{host}",
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
         cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bin, bin_overrides)
@@ -454,13 +462,13 @@ class OodCore::Job::Adapters::Torque
         o.chomp
       end
 
-      # Call a forked PBS command for a given submit_host
+      # Call a forked PBS command for a given host
       def call(cmd, *args, env: {}, stdin: "", chdir: nil)
         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
         cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
         args = args.map(&:to_s)
         env  = env.to_h.each_with_object({}) {|(k,v), h| h[k.to_s] = v.to_s}.merge({
-          "PBS_DEFAULT"     => submit_host,
+          "PBS_DEFAULT"     => host,
           "LD_LIBRARY_PATH" => %{#{lib}:#{ENV["LD_LIBRARY_PATH"]}}
         })
         stdin = stdin.to_s
