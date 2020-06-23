@@ -382,6 +382,7 @@ module OodCore
           args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
           args.concat ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           args.concat ['-a', script.job_array_request] unless script.job_array_request.nil?
+          args.concat ['--qos', script.qos] unless script.qos.nil?
           # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies
