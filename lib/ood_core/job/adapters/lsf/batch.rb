@@ -141,8 +141,8 @@ class OodCore::Job::Adapters::Lsf::Batch
     # Call a forked Lsf command for a given cluster
     def call(cmd, *args, env: {}, stdin: "")
       cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
-      cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
       args = cluster_args + args
+      cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
       env = default_env.merge(env.to_h)
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
       s.success? ? o : raise(Error, e)

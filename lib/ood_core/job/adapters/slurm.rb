@@ -281,13 +281,12 @@ module OodCore
 
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
-              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
-              args  = args.map(&:to_s)
               args += ["-M", cluster] if cluster
+              cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
-              o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin.to_s)
+              o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
             end
 

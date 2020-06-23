@@ -456,7 +456,7 @@ class OodCore::Job::Adapters::Torque
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
         cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bin, bin_overrides)
-        cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
+        cmd, params = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, params)
         o, e, s = Open3.capture3(env, cmd, *params)
         raise Error, e unless s.success?
         o.chomp
@@ -465,15 +465,14 @@ class OodCore::Job::Adapters::Torque
       # Call a forked PBS command for a given host
       def call(cmd, *args, env: {}, stdin: "", chdir: nil)
         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-        cmd = OodCore::Job::Adapters::Helper.ssh_wrap(cmd, submit_host)
-        args = args.map(&:to_s)
+        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
         env  = env.to_h.each_with_object({}) {|(k,v), h| h[k.to_s] = v.to_s}.merge({
           "PBS_DEFAULT"     => host,
           "LD_LIBRARY_PATH" => %{#{lib}:#{ENV["LD_LIBRARY_PATH"]}}
         })
         stdin = stdin.to_s
         chdir ||= "."
-        o, e, s = Open3.capture3(env, cmd, *args, stdin_data: stdin, chdir: chdir.to_s)
+        o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin, chdir: chdir.to_s)
         s.success? ? o : raise(Error, e)
       end
   end

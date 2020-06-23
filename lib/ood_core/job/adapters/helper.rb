@@ -14,12 +14,20 @@ module OodCore
         end
         
         # Gets a command that submits command on another host via ssh
-        # @param cmd [String] the desired command to execute on another host
         # @param submit_host [String] where to submit the command
-        # @return [String] command wrapped in ssh if submit_host is present
-        def self.ssh_wrap(cmd, submit_host)
-          return cmd if submit_host.empty?
-          "ssh -t -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no #{submit_host} \"#{cmd}\""
+        # @param cmd [String] the desired command to execute on another host
+        # @param cmd_args [Array] arguments to the command specified above
+        #
+        # @return cmd [String] command wrapped in ssh if submit_host is present
+        # @return args [Array] command arguments including ssh_flags and original command
+        def self.ssh_wrap(submit_host, cmd, cmd_args)
+          return cmd, cmd_args if submit_host.empty?
+          
+          args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', "#{submit_host}"]
+          args.push(cmd_args.unshift(cmd).join(' ')) #line must be in one string
+          cmd = 'ssh'
+
+          return cmd, args
         end
       end
     end
