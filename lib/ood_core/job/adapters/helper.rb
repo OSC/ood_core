@@ -23,7 +23,7 @@ module OodCore
         def self.ssh_wrap(submit_host, cmd, cmd_args)
           return cmd, cmd_args if submit_host.empty?
           
-          args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', "#{submit_host}"]
+          args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', "#{submit_host}"]
           args.push(cmd_args.unshift(cmd).join(' ')) #line must be in one string
           cmd = 'ssh'
 
