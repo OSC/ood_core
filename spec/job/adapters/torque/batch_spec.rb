@@ -193,7 +193,7 @@ describe OodCore::Job::Adapters::Torque::Batch do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         batch.submit script.content
-        expect(Open3).to have_received(:capture3).with(anything, "ssh -t -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no owens.osc.edu \"qsub\"", any_args)
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub', any_args)
       end
     end
   end
