@@ -281,5 +281,25 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
       end
     end
 
+    context "when strict_host_checking = nil" do
+      it "defaults host checking to yes" do
+        batch = OodCore::Job::Adapters::Lsf::Batch.new(submit_host: 'owens.osc.edu', strict_host_checking: nil)
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit_string(str: script.content)
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'bsub', any_args)
+      end
+    end
+
+    context "when strict_host_checking = 'no'" do
+      it "sets host checking to no" do
+        batch = OodCore::Job::Adapters::Lsf::Batch.new(submit_host: 'owens.osc.edu', strict_host_checking: 'no')
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        batch.submit_string(str: script.content)
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'bsub', any_args)
+      end
+    end
+    
   end
 end

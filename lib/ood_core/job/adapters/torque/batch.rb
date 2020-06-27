@@ -15,6 +15,12 @@ class OodCore::Job::Adapters::Torque
     # @return [String] the login node
     attr_reader :submit_host
 
+    # Determines whether to use strict_host_checking for ssh
+    # @example 
+    #   my_conn.strict_host_checking.to_s #=> "owens.osc.edu"
+    # @return [String] Empty if not specified
+    attr_reader :strict_host_checking
+
     # The path to the Torque client installation libraries
     # @example For Torque 5.0.0
     #   my_conn.lib.to_s #=> "/usr/local/Torque/5.0.0/lib"
@@ -39,20 +45,22 @@ class OodCore::Job::Adapters::Torque
 
     # @param host [#to_s] the batch server host
     # @param submit_host [#to_s] the login node
+    # @param strict_host_checking [#to_s] use strict host checking when ssh to submit_host
     # @param lib [#to_s] path to FFI installation libraries
     # @param bin [#to_s] path to FFI installation binaries
-    def initialize(host:, submit_host: "", lib: "", bin: "", bin_overrides: {}, **_)
-      @host           = host.to_s
-      @submit_host    = submit_host.to_s
-      @lib     = Pathname.new(lib.to_s)
-      @bin     = Pathname.new(bin.to_s)
-      @bin_overrides = bin_overrides
+    def initialize(host:, submit_host: "", strict_host_checking: "", lib: "", bin: "", bin_overrides: {}, **_)
+      @host                 = host.to_s
+      @submit_host          = submit_host.to_s
+      @strict_host_checking = strict_host_checking.to_s
+      @lib                  = Pathname.new(lib.to_s)
+      @bin                  = Pathname.new(bin.to_s)
+      @bin_overrides        = bin_overrides
     end
 
     # Convert object to hash
     # @return [Hash] the hash describing this object
     def to_h
-      {host: host, submit_host: submit_host, lib: lib, bin: bin}
+      {host: host, submit_host: submit_host, strict_host_checking: strict_host_checking, lib: lib, bin: bin}
     end
 
     # The comparison operator
@@ -456,7 +464,7 @@ class OodCore::Job::Adapters::Torque
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
         cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bin, bin_overrides)
-        cmd, params = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, params)
+        cmd, params = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, params, strict_host_checking)
         o, e, s = Open3.capture3(env, cmd, *params)
         raise Error, e unless s.success?
         o.chomp
@@ -465,7 +473,7 @@ class OodCore::Job::Adapters::Torque
       # Call a forked PBS command for a given host
       def call(cmd, *args, env: {}, stdin: "", chdir: nil)
         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
+        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
         env  = env.to_h.each_with_object({}) {|(k,v), h| h[k.to_s] = v.to_s}.merge({
           "PBS_DEFAULT"     => host,
           "LD_LIBRARY_PATH" => %{#{lib}:#{ENV["LD_LIBRARY_PATH"]}}

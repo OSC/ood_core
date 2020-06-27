@@ -10,19 +10,21 @@ module OodCore
       # Build the PBS Pro adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :host (nil) The batch server host
-      # @option config [Object] :submit_host (nil) The login node where the job is submitted
+      # @option config [Object] :submit_host ("") The login node where the job is submitted
+      # @option config [Object] :strict_host_checking ("") Whether to use strict host checking when ssh to submit_host
       # @option config [Object] :exec (nil) Path to PBS Pro executables
       # @option config [Object] :qstat_factor (nil) Deciding factor on how to
       #   call qstat for a user
       # @option config [#to_h] :bin_overrides ({}) Optional overrides to PBS Pro client executables
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
-        host = c.fetch(:host, nil)
-        submit_host = c.fetch(:submit_host, "")
-        pbs_exec = c.fetch(:exec, nil)
-        qstat_factor = c.fetch(:qstat_factor, nil)
-        bin_overrides = c.fetch(:bin_overrides, {})
-        pbspro = Adapters::PBSPro::Batch.new(host: host, submit_host: submit_host, pbs_exec: pbs_exec, bin_overrides: bin_overrides)
+        host                 = c.fetch(:host, nil)
+        submit_host          = c.fetch(:submit_host, "")
+        strict_host_checking = c.fetch(:strict_host_checking, "")
+        pbs_exec             = c.fetch(:exec, nil)
+        qstat_factor         = c.fetch(:qstat_factor, nil)
+        bin_overrides         = c.fetch(:bin_overrides, {})
+        pbspro = Adapters::PBSPro::Batch.new(host: host, submit_host: submit_host, strict_host_checking: strict_host_checking, pbs_exec: pbs_exec, bin_overrides: bin_overrides)
         Adapters::PBSPro.new(pbspro: pbspro, qstat_factor: qstat_factor)
       end
     end
@@ -49,6 +51,12 @@ module OodCore
           # @return [String, nil] the login node
           attr_reader :submit_host
 
+          # Whether to use strict host checking when ssh to submit_host
+          # @example
+          #   my_batch.strict_host_checking #=> "false"
+          # @return [String, ""] the login node; "" if not present
+          attr_reader :strict_host_checking
+
           # The path containing the PBS executables
           # @example
           #   my_batch.pbs_exec.to_s #=> "/usr/local/pbspro/10.0.0
@@ -67,12 +75,14 @@ module OodCore
 
           # @param host [#to_s, nil] the batch server host
           # @param submit_host [#to_s, nil] the login node to ssh to
+          # @param strict_host_checking [#to_s, nil] wheter to use strict host checking when ssh to submit_host
           # @param exec [#to_s, nil] path to pbs executables
-          def initialize(host: nil, submit_host: "", pbs_exec: nil, bin_overrides: {})
-            @host = host && host.to_s
-            @submit_host = submit_host && submit_host.to_s
-            @pbs_exec = pbs_exec && Pathname.new(pbs_exec.to_s)
-            @bin_overrides = bin_overrides
+          def initialize(host: nil, submit_host: "", strict_host_checking: "", pbs_exec: nil, bin_overrides: {})
+            @host                 = host && host.to_s
+            @submit_host          = submit_host && submit_host.to_s
+            @strict_host_checking = strict_host_checking && strict_host_checking.to_s
+            @pbs_exec             = pbs_exec && Pathname.new(pbs_exec.to_s)
+            @bin_overrides        = bin_overrides
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -169,7 +179,7 @@ module OodCore
               cmd = cmd.to_s
               bindir = (!!pbs_exec) ? pbs_exec.join("bin").to_s : ''
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
               env["PBS_DEFAULT"] = host.to_s if host
               env["PBS_EXEC"]    = pbs_exec.to_s if pbs_exec

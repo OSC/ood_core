@@ -803,6 +803,26 @@ describe OodCore::Job::Adapters::PBSPro do
         expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub -j oe', any_args)
       end
     end
+
+    context "when strict_host_checking = nil && submit_host specified" do
+      it "defaults host checking to yes" do
+        batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: nil)
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub -j oe', any_args)
+      end
+    end
+
+    context "when strict_host_checking = 'no' && submit_host specified" do
+      it "defaults host checking to no" do
+        batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: 'no')
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'qsub -j oe', any_args)
+      end
+    end
   end
 
   describe "#directive_prefix" do

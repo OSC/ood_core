@@ -31,6 +31,14 @@ describe OodCore::Job::Adapters::Helper do
     let(:cmd) {"sbatch"}
     let(:cmd_args) {['-J', 'Job Name']}
 
+    context "submit_host: nil" do
+      let(:submit_host) { nil }
+
+      it "returns the command" do 
+        expect(helper.ssh_wrap(submit_host, cmd, cmd_args)).to eq(["sbatch", ['-J', 'Job Name']])
+      end
+    end
+
     context "submit_host: empty" do
       let(:submit_host) { "" }
 
@@ -44,6 +52,24 @@ describe OodCore::Job::Adapters::Helper do
 
       it "returns the ssh wrapped command" do 
         expect(helper.ssh_wrap(submit_host, cmd, cmd_args)).to eq(["ssh", ["-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch -J Job Name"]])
+      end
+    end
+
+    context "strict_host_checking = nil and submit_host specified" do 
+      let(:submit_host) { "owens.osc.edu" }
+      let(:strict_host_checking) { nil }
+
+      it "defaults host checking to yes" do
+        expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch -J Job Name"]])
+      end
+    end
+
+    context "strict_host_checking = 'no' and submit_host specified" do 
+      let(:submit_host) { "owens.osc.edu" }
+      let(:strict_host_checking) { 'no' }
+
+      it "defaults host checking to no" do
+        expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "owens.osc.edu", "sbatch -J Job Name"]])
       end
     end
   end

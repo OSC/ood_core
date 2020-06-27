@@ -14,14 +14,17 @@ module OodCore
       # @option config [Object] :conf (nil) Path to the slurm conf
       # @option config [Object] :bin (nil) Path to slurm client binaries
       # @option config [#to_h] :bin_overrides ({}) Optional overrides to Slurm client executables
+      # @option config [Object] :submit_host ("") Submit job on login node via ssh
+      # @option config [Object] :strict_host_checking ("") Whether to use strict host checking when ssh to submit_host
       def self.build_slurm(config)
         c = config.to_h.symbolize_keys
-        cluster = c.fetch(:cluster, nil)
-        conf    = c.fetch(:conf, nil)
-        bin     = c.fetch(:bin, nil)
-        bin_overrides = c.fetch(:bin_overrides, {})
-        submit_host   = c.fetch(:submit_host, "")
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides, submit_host: submit_host)
+        cluster              = c.fetch(:cluster, nil)
+        conf                 = c.fetch(:conf, nil)
+        bin                  = c.fetch(:bin, nil)
+        bin_overrides        = c.fetch(:bin_overrides, {})
+        submit_host          = c.fetch(:submit_host, "")
+        strict_host_checking = c.fetch(:strict_host_checking, "")
+        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides, submit_host: submit_host, strict_host_checking: strict_host_checking)
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -68,6 +71,11 @@ module OodCore
           # @return [String] The login node
           attr_reader :submit_host
 
+          # Wheter to use strict host checking when ssh to submit_host
+          # @example false
+          # @return [String] boolean; "" if empty
+          attr_reader :strict_host_checking
+
           # The root exception class that all Slurm-specific exceptions inherit
           # from
           class Error < StandardError; end
@@ -75,12 +83,16 @@ module OodCore
           # @param cluster [#to_s, nil] the cluster name
           # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
-          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "")
-            @cluster = cluster && cluster.to_s
-            @conf    = conf    && Pathname.new(conf.to_s)
-            @bin     = Pathname.new(bin.to_s)
-            @bin_overrides = bin_overrides
-            @submit_host   = submit_host
+          # @param bin_overrides [#to_h] a hash of bin ovverides to be used in job
+          # @param submit_host [#to_s] Submits the job on a login node via ssh
+          # @param strict_host_checking [#to_s] Whether to use strict host checking when ssh to submit_host
+          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: "")
+            @cluster              = cluster && cluster.to_s
+            @conf                 = conf    && Pathname.new(conf.to_s)
+            @bin                  = Pathname.new(bin.to_s)
+            @bin_overrides        = bin_overrides
+            @submit_host          = submit_host.to_s
+            @strict_host_checking = strict_host_checking.to_s
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -283,7 +295,7 @@ module OodCore
             def call(cmd, *args, env: {}, stdin: "")
               args += ["-M", cluster] if cluster
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)

@@ -15,7 +15,7 @@ end
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
 
-  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper, :submit_host
+  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper, :submit_host, :strict_host_checking
   
   require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
   require "ood_core/job/adapters/sge/qstat_xml_r_listener"
@@ -37,6 +37,7 @@ class OodCore::Job::Adapters::Sge::Batch
     @sge_root         = Pathname.new(config[:sge_root] || ENV['SGE_ROOT'] || "/var/lib/gridengine")
     @bin_overrides    = config.fetch(:bin_overrides, {})
     @submit_host      = config.fetch(:submit_host, "")
+    @strict_host_checking = config.fetch(:strict_host_checking, "")
 
     # FIXME: hack as this affects env of the process!
     ENV['SGE_ROOT'] = @sge_root.to_s
@@ -167,7 +168,7 @@ class OodCore::Job::Adapters::Sge::Batch
   # Call a forked SGE command for a given batch server
   def call(cmd, *args, env: {}, stdin: "", chdir: nil)
     cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args)
+    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
 
     env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
     chdir ||= "."
