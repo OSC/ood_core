@@ -168,9 +168,8 @@ class OodCore::Job::Adapters::Sge::Batch
   # Call a forked SGE command for a given batch server
   def call(cmd, *args, env: {}, stdin: "", chdir: nil)
     cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
-
     env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
+    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
     chdir ||= "."
     o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s, chdir: chdir.to_s)
     s.success? ? o : raise(Error, e)

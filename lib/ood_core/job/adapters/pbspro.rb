@@ -179,10 +179,10 @@ module OodCore
               cmd = cmd.to_s
               bindir = (!!pbs_exec) ? pbs_exec.join("bin").to_s : ''
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
               env["PBS_DEFAULT"] = host.to_s if host
               env["PBS_EXEC"]    = pbs_exec.to_s if pbs_exec
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               chdir ||= "."
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)

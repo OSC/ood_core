@@ -143,8 +143,8 @@ class OodCore::Job::Adapters::Lsf::Batch
     def call(cmd, *args, env: {}, stdin: "")
       cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
       args = cluster_args + args
-      cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
       env = default_env.merge(env.to_h)
+      cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
       s.success? ? o : raise(Error, e)
     end

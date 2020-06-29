@@ -295,9 +295,9 @@ module OodCore
             def call(cmd, *args, env: {}, stdin: "")
               args += ["-M", cluster] if cluster
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
             end
