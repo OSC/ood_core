@@ -32,7 +32,7 @@ module OodCore
           @image = config.fetch(:image, nil)
           @cloud = config.fetch(:cloud, gcp_provider)
           @scheduler = config.fetch(:scheduler, nil)
-          @bin = config.fetch(:bin, nil)
+          @bin = config.fetch(:bin, '/opt/CloudyCluster/srv/CCQ')
           @bin_overrides = config.fetch(:bin_overrides, {})
         end
 

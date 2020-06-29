@@ -67,7 +67,7 @@ describe OodCore::Job::Adapters::CCQ do
 
       it "returns good data" do
         `exit 0` # get a good exit status
-        allow(Open3).to receive(:capture3).with({}, 'ccqstat', stdin_data: "").and_return([ccqstat_output, '', $?])
+        allow(Open3).to receive(:capture3).with({}, '/opt/CloudyCluster/srv/CCQ/ccqstat', stdin_data: "").and_return([ccqstat_output, '', $?])
 
         expect(info_array).to match_array(expected_ccqstat_info)
         expect(info_array.size).to eql(6)
@@ -80,7 +80,7 @@ describe OodCore::Job::Adapters::CCQ do
     context "when ccqstat is good" do
       it "returns good data" do
         `exit 0` # get a good exit status
-        allow(Open3).to receive(:capture3).with({}, 'ccqstat', '-ji', '896090', stdin_data: "").and_return([ccqstat_extended, '', $?])
+        allow(Open3).to receive(:capture3).with({}, '/opt/CloudyCluster/srv/CCQ/ccqstat', '-ji', '896090', stdin_data: "").and_return([ccqstat_extended, '', $?])
         info = adapter.info('896090')
 
         # testing each api directly because it's just to much to test info.native (which is everything)
@@ -107,7 +107,7 @@ describe OodCore::Job::Adapters::CCQ do
 
       it "returns prompt error" do
         `exit 1` # get a bad exit status
-        allow(Open3).to receive(:capture3).with({}, 'ccqstat', '-ji', '896090', stdin_data: "").and_return(['', error_data, $?])
+        allow(Open3).to receive(:capture3).with({}, '/opt/CloudyCluster/srv/CCQ/ccqstat', '-ji', '896090', stdin_data: "").and_return(['', error_data, $?])
 
         expect{ adapter.info('896090') }.to raise_error(PromptError)
       end
@@ -209,7 +209,7 @@ describe OodCore::Job::Adapters::CCQ do
     context "when ccqstat succeeds" do
       it "returns the correct status" do
         `exit 0` # get a good exit status
-        allow(Open3).to receive(:capture3).with({}, 'ccqstat', '-ji', '896090', stdin_data: "").and_return([ccqstat_extended, '', $?])
+        allow(Open3).to receive(:capture3).with({}, '/opt/CloudyCluster/srv/CCQ/ccqstat', '-ji', '896090', stdin_data: "").and_return([ccqstat_extended, '', $?])
 
         expect(adapter.status('896090').to_s).to eql('queued')
       end
