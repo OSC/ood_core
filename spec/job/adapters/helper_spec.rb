@@ -55,18 +55,18 @@ describe OodCore::Job::Adapters::Helper do
       end
     end
 
-    context "strict_host_checking = nil and submit_host specified" do 
+    context "strict_host_checking blank and submit_host specified" do 
       let(:submit_host) { "owens.osc.edu" }
-      let(:strict_host_checking) { nil }
+      let(:strict_host_checking) { true }
 
       it "defaults host checking to yes" do
         expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch -J Job Name"]])
       end
     end
 
-    context "strict_host_checking = 'no' and submit_host specified" do 
+    context "strict_host_checking = false and submit_host specified" do 
       let(:submit_host) { "owens.osc.edu" }
-      let(:strict_host_checking) { 'no' }
+      let(:strict_host_checking) { false }
 
       it "defaults host checking to no" do
         expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "owens.osc.edu", "sbatch -J Job Name"]])

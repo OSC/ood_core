@@ -9,7 +9,7 @@ class OodCore::Job::Adapters::Lsf::Batch
   class Error < StandardError; end
 
   # @param bin [#to_s] path to LSF installation binaries
-  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, submit_host: "", strict_host_checking: "", **_)
+  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, submit_host: "", strict_host_checking: true, **_)
     @bindir = Pathname.new(bindir.to_s)
     @envdir = Pathname.new(envdir.to_s)
     @libdir = Pathname.new(libdir.to_s)
@@ -17,7 +17,7 @@ class OodCore::Job::Adapters::Lsf::Batch
     @cluster = cluster.to_s
     @bin_overrides = bin_overrides
     @submit_host = submit_host.to_s
-    @strict_host_checking = strict_host_checking.to_s
+    @strict_host_checking = strict_host_checking
   end
 
   def default_env

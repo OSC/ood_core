@@ -1119,19 +1119,9 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
 
-    context "when calling with submit_host" do 
-      it "uses ssh wrapper" do 
+    context "when calling with submit_host & strict_host_checking not specified" do 
+      it "uses ssh wrapper & host checking defaults to true" do 
         batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu")
-        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
-
-        OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'sbatch --export NONE --parsable -M owens.osc.edu', any_args)
-      end
-    end
-
-    context "when strict_host_checking = nil && submit_host specified" do
-      it "defaults host checking to yes" do
-        batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: nil)
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
@@ -1141,7 +1131,7 @@ describe OodCore::Job::Adapters::Slurm do
 
     context "when strict_host_checking = 'no' && submit_host specified" do
       it "defaults host checking to yes" do
-        batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: 'no')
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: false)
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script

@@ -187,19 +187,9 @@ describe OodCore::Job::Adapters::Torque::Batch do
       end
     end
 
-    context "when calling with submit_host" do
-      it "uses ssh wrapper" do
+    context "when calling with submit_host & strict_host_checking not specified" do
+      it "uses ssh wrapper & host checking defaults to true" do
         batch = OodCore::Job::Adapters::Torque::Batch.new(host: "pitzer.osc.edu", submit_host: 'owens.osc.edu')
-        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
-
-        batch.submit script.content
-        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub', any_args)
-      end
-    end
-
-    context "when strict_host_checking = nil && submit_host specified" do
-      it "defaults host checking to yes" do
-        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "pitzer.osc.edu", submit_host: 'owens.osc.edu', strict_host_checking: nil)
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         batch.submit script.content
@@ -209,7 +199,7 @@ describe OodCore::Job::Adapters::Torque::Batch do
 
     context "when strict_host_checking = 'no' && submit_host specified" do
       it "defaults host checking to no" do
-        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "pitzer.osc.edu", submit_host: 'owens.osc.edu', strict_host_checking: 'no')
+        batch = OodCore::Job::Adapters::Torque::Batch.new(host: "pitzer.osc.edu", submit_host: 'owens.osc.edu', strict_host_checking: false)
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         batch.submit script.content

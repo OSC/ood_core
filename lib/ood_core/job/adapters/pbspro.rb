@@ -11,7 +11,7 @@ module OodCore
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :host (nil) The batch server host
       # @option config [Object] :submit_host ("") The login node where the job is submitted
-      # @option config [Object] :strict_host_checking ("") Whether to use strict host checking when ssh to submit_host
+      # @option config [Object] :strict_host_checking (true) Whether to use strict host checking when ssh to submit_host
       # @option config [Object] :exec (nil) Path to PBS Pro executables
       # @option config [Object] :qstat_factor (nil) Deciding factor on how to
       #   call qstat for a user
@@ -20,7 +20,7 @@ module OodCore
         c = config.to_h.compact.symbolize_keys
         host                 = c.fetch(:host, nil)
         submit_host          = c.fetch(:submit_host, "")
-        strict_host_checking = c.fetch(:strict_host_checking, "")
+        strict_host_checking = c.fetch(:strict_host_checking, true)
         pbs_exec             = c.fetch(:exec, nil)
         qstat_factor         = c.fetch(:qstat_factor, nil)
         bin_overrides         = c.fetch(:bin_overrides, {})
@@ -54,7 +54,7 @@ module OodCore
           # Whether to use strict host checking when ssh to submit_host
           # @example
           #   my_batch.strict_host_checking #=> "false"
-          # @return [String, ""] the login node; "" if not present
+          # @return [Bool, true] the login node; true if not present
           attr_reader :strict_host_checking
 
           # The path containing the PBS executables
@@ -75,12 +75,12 @@ module OodCore
 
           # @param host [#to_s, nil] the batch server host
           # @param submit_host [#to_s, nil] the login node to ssh to
-          # @param strict_host_checking [#to_s, nil] wheter to use strict host checking when ssh to submit_host
+          # @param strict_host_checking [bool, true] wheter to use strict host checking when ssh to submit_host
           # @param exec [#to_s, nil] path to pbs executables
-          def initialize(host: nil, submit_host: "", strict_host_checking: "", pbs_exec: nil, bin_overrides: {})
+          def initialize(host: nil, submit_host: "", strict_host_checking: true, pbs_exec: nil, bin_overrides: {})
             @host                 = host && host.to_s
             @submit_host          = submit_host && submit_host.to_s
-            @strict_host_checking = strict_host_checking && strict_host_checking.to_s
+            @strict_host_checking = strict_host_checking
             @pbs_exec             = pbs_exec && Pathname.new(pbs_exec.to_s)
             @bin_overrides        = bin_overrides
           end

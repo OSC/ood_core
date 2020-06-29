@@ -18,7 +18,7 @@ class OodCore::Job::Adapters::Torque
     # Determines whether to use strict_host_checking for ssh
     # @example 
     #   my_conn.strict_host_checking.to_s #=> "owens.osc.edu"
-    # @return [String] Empty if not specified
+    # @return [Bool] 
     attr_reader :strict_host_checking
 
     # The path to the Torque client installation libraries
@@ -45,13 +45,13 @@ class OodCore::Job::Adapters::Torque
 
     # @param host [#to_s] the batch server host
     # @param submit_host [#to_s] the login node
-    # @param strict_host_checking [#to_s] use strict host checking when ssh to submit_host
+    # @param strict_host_checking [bool] use strict host checking when ssh to submit_host
     # @param lib [#to_s] path to FFI installation libraries
     # @param bin [#to_s] path to FFI installation binaries
-    def initialize(host:, submit_host: "", strict_host_checking: "", lib: "", bin: "", bin_overrides: {}, **_)
+    def initialize(host:, submit_host: "", strict_host_checking: true, lib: "", bin: "", bin_overrides: {}, **_)
       @host                 = host.to_s
       @submit_host          = submit_host.to_s
-      @strict_host_checking = strict_host_checking.to_s
+      @strict_host_checking = strict_host_checking
       @lib                  = Pathname.new(lib.to_s)
       @bin                  = Pathname.new(bin.to_s)
       @bin_overrides        = bin_overrides

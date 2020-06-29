@@ -21,10 +21,10 @@ module OodCore
         #
         # @return cmd [String] command wrapped in ssh if submit_host is present
         # @return args [Array] command arguments including ssh_flags and original command
-        def self.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking = 'yes')
+        def self.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking = true)
           return cmd, cmd_args if submit_host.to_s.empty?
-          strict_host_checking = 'yes' if strict_host_checking.to_s.empty?
-          args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{strict_host_checking}", "#{submit_host}"]
+          check_host = strict_host_checking ? "yes" : "no"
+          args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
           args.push(cmd_args.unshift(cmd).join(' ')) #line must be in one string
           cmd = 'ssh'
 
