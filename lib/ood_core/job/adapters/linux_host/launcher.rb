@@ -60,10 +60,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     cmd = ssh_cmd(submit_host(script), ['/usr/bin/env', 'bash'])
 
     session_name = unique_session_name
-    environment = {"SSH_HOSTS" => ssh_hosts.to_a.join(' ')}
-
-    output = call(*cmd, stdin: wrapped_script(script, session_name), env: environment)
-    
+    output = call(*cmd, stdin: wrapped_script(script, session_name))
     hostname = output.strip
 
     "#{session_name}@#{hostname}"
@@ -177,6 +174,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         'session_name' => session_name,
         'singularity_bin' => singularity_bin,
         'singularity_image' => singularity_image(script.native),
+        'ssh_hosts' => ssh_hosts,
         'tmux_bin' => tmux_bin,
       }.each{
         |key, value| bnd.local_variable_set(key, value)

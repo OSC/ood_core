@@ -1,15 +1,14 @@
 #!/bin/bash
+SSH_HOSTS=(<%= ssh_hosts.join(' ').to_s =>)
 hostnames=$(hostname -A)
-hostnameFound=false
 for host in $SSH_HOSTS
 do
     if [[ " ${hostnames[@]} " =~ " ${host} " ]]; then
-        hostnameFound=true
         hostname=$host
     fi
 done
 
-if [ ! $hostnameFound ]; then
+if [ -z "$hostname" ]; then
     echo >&2 "ERROR: The specified host is not in the list of ssh hosts configured in this cluster config [${SSH_HOSTS[@]}]. The specified hosts determined by running 'hostname -A' [${hostnames[@]}] on the target host must match one of the configured ssh hosts" 
     exit 1
 fi
