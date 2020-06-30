@@ -203,6 +203,8 @@ describe OodCore::Job::Adapters::Sge::Batch do
     context "when the scheduler is UGE" do
       before {
         allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/uge_qstat_jr.xml') }
+        # have to stub out time becuase the division to turn ms into s is a little flaky
+        allow(Time).to receive(:now){ 1593900000 }
       }
 
       it "expects to receive the correct job info" do
