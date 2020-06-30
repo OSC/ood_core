@@ -28,10 +28,13 @@ class QstatXmlJRListener
       :tasks => [],
       :status => :queued,
       :procs => 1,
-      :native => {}  # TODO: improve native attribute reporting
+      :native => {
+        :ST_name = ''
+      }  # TODO: improve native attribute reporting
     }
     @current_text = nil
     @current_request = nil
+    @stdout_PN_path = false
 
     @processing_job_array_spec = false
     @adding_slots = false
@@ -42,6 +45,7 @@ class QstatXmlJRListener
       step: 1,  # Step can have a default of 1
     }
     @running_tasks = []
+    @native_tags = ['JB_job_number', 'JB_job_name', 'JB_version', 'JB_project', 'JB_exec_file', 'JB_script_file', 'JB_script_size', 'JB_submission_time', 'JB_execution_time', 'JB_deadline', 'JB_owner', 'JB_uid', 'JB_group', 'JB_gid', 'JB_account', 'JB_cwd', 'JB_notify', 'JB_type', 'JB_reserve', 'JB_priority', 'JB_jobshare', 'JB_verify', 'JB_checkpoint_attr', 'JB_checkpoint_interval', 'JB_restart']
   end
 
   def tag_start(name, attrs)
@@ -50,13 +54,15 @@ class QstatXmlJRListener
       toggle_processing_array_spec
     when 'JB_pe_range'
       toggle_adding_slots
+    when 'JB_stdout_path_list'
+      @stdout_PN_path = true
     end
   end
 
   def tag_end(name)
-    #Add this to native hash if there is a text node
-    if (!@current_text.strip.empty?)
-      @current_job[:native][name] = @current_text
+    #Add to native hash if in native_tags
+    if (@native_tags.include?(name))
+      @current_job[:native][:"#{name}"] = @current_text
     end
 
     case name
@@ -97,6 +103,10 @@ class QstatXmlJRListener
       toggle_processing_array_spec
     when 'JB_pe_range'
       toggle_adding_slots
+    when 'PN_path' 
+      end_PN_path
+    when 'ST_name'
+      end_ST_name
     end
   end
 
@@ -176,6 +186,17 @@ class QstatXmlJRListener
   # Used to record a running Job Array task
   def end_JAT_task_number
     @running_tasks << @current_text
+  end
+
+  def end_PN_path
+    if (@stdout_PN_path)
+      @stdout_PN_path = false
+      @current_job[:native][:PN_path] = @current_text
+    end
+  end
+
+  def end_ST_name
+    @parsed_job[:native][:ST_name] = @parsed_job[:native][:ST_name] + @current_text + ' '
   end
 
   def set_job_array_piece(key)
