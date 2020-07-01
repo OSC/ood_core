@@ -29,7 +29,7 @@ class QstatXmlRListener
       }  # TODO: improve native reporting
     }
     @current_text = nil
-    @stdout_PN_path = false
+    @processing_JB_stdout_path_list = false
 
     @current_request = nil
     @native_tags = ['JB_job_number', 'JB_job_name', 'JB_version', 'JB_project', 'JB_exec_file', 'JB_script_file', 'JB_script_size', 'JB_submission_time', 'JB_execution_time', 'JB_deadline', 'JB_owner', 'JB_uid', 'JB_group', 'JB_gid', 'JB_account', 'JB_cwd', 'JB_notify', 'JB_type', 'JB_reserve', 'JB_priority', 'JB_jobshare', 'JB_verify', 'JB_checkpoint_attr', 'JB_checkpoint_interval', 'JB_restart']
@@ -40,7 +40,7 @@ class QstatXmlRListener
     when 'hard_request'
       start_hard_request(attributes)
     when "JB_stdout_path_list"
-      @stdout_PN_path = true
+      @processing_JB_stdout_path_list = true
     end
   end
 
@@ -146,10 +146,8 @@ class QstatXmlRListener
   end
 
   def end_PN_path
-    if (@stdout_PN_path)
-      @stdout_PN_path = false
-      @current_job[:native][:PN_path] = @current_text
-    end
+    @current_job[:native][:PN_path] = @current_text if @processing_JB_stdout_path_list
+    @processing_JB_stdout_path_list = false
   end
 
   def end_ST_name

@@ -34,7 +34,7 @@ class QstatXmlJRListener
     }
     @current_text = nil
     @current_request = nil
-    @stdout_PN_path = false
+    @processing_JB_stdout_path_list = false
 
     @processing_job_array_spec = false
     @adding_slots = false
@@ -55,7 +55,7 @@ class QstatXmlJRListener
     when 'JB_pe_range'
       toggle_adding_slots
     when 'JB_stdout_path_list'
-      @stdout_PN_path = true
+      @processing_JB_stdout_path_list = true
     end
   end
 
@@ -189,10 +189,8 @@ class QstatXmlJRListener
   end
 
   def end_PN_path
-    if (@stdout_PN_path)
-      @stdout_PN_path = false
-      @parsed_job[:native][:PN_path] = @current_text
-    end
+    @parsed_job[:native][:PN_path] = @current_text if @processing_JB_stdout_path_list
+    @processing_JB_stdout_path_list = false
   end
 
   def end_ST_name
