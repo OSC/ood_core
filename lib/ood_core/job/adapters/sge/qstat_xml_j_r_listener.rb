@@ -29,7 +29,7 @@ class QstatXmlJRListener
       :status => :queued,
       :procs => 1,
       :native => {
-        :ST_name = ''
+        :ST_name => ''
       }  # TODO: improve native attribute reporting
     }
     @current_text = nil
@@ -62,7 +62,7 @@ class QstatXmlJRListener
   def tag_end(name)
     #Add to native hash if in native_tags
     if (@native_tags.include?(name))
-      @current_job[:native][:"#{name}"] = @current_text
+      @parsed_job[:native][:"#{name}"] = @current_text
     end
 
     case name
@@ -191,7 +191,7 @@ class QstatXmlJRListener
   def end_PN_path
     if (@stdout_PN_path)
       @stdout_PN_path = false
-      @current_job[:native][:PN_path] = @current_text
+      @parsed_job[:native][:PN_path] = @current_text
     end
   end
 

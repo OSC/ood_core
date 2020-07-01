@@ -25,7 +25,7 @@ class QstatXmlRListener
     @current_job = {
       :tasks => [],
       :native => {
-        :ST_name = ''
+        :ST_name => ''
       }  # TODO: improve native reporting
     }
     @current_text = nil
@@ -74,7 +74,7 @@ class QstatXmlRListener
     when 'hard_request'
       end_hard_request
     when 'tasks'
-      end_child_tasks
+      add_child_tasks
     when 'PN_path'
       end_PN_path
     when 'ST_name'
@@ -153,7 +153,7 @@ class QstatXmlRListener
   end
 
   def end_ST_name
-    @parsed_job[:native][:ST_name] = @parsed_job[:native][:ST_name] + @current_text + ' '
+    @current_job[:native][:ST_name] = @current_job[:native][:ST_name] + @current_text + ' '
   end
 
   # Store a completed job and reset current_job for the next pass
