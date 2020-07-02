@@ -215,6 +215,12 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit).with(content, args: ["-l", "walltime=26:15:34", "-j", "oe"], env: {}, chdir: nil) }
     end
 
+    context "with :qos" do 
+      before { adapter.submit(build_script(qos: "high")) }
+
+      it { expect(pbs).to have_received(:submit).with(content, args: ["-l", "qos=high", "-j", "oe"], env: {}, chdir: nil)}
+    end
+
     context "with :native" do
       before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 

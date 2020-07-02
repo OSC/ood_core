@@ -99,6 +99,10 @@ module OodCore
       # @return [String, nil] job array request
       attr_reader :job_array_request
 
+      # The qos selected for the job
+      # @return [String, nil] qos
+      attr_reader :qos
+
       # Object detailing any native specifications that are implementation specific
       # @note Should not be used at all costs.
       # @return [Object, nil] native specifications
@@ -130,6 +134,8 @@ module OodCore
       # @param start_time [#to_i, nil] eligible start time
       # @param wall_time [#to_i, nil] max real time
       # @param accounting_id [#to_s, nil] accounting id
+      # @param job_array_request [#to_s, nil] job array request
+      # @param qos [#to_s, nil] qos
       # @param native [Object, nil] native specifications
       # @param copy_environment [Boolean, nil] copy the environment
       def initialize(content:, args: nil, submit_as_hold: nil, rerunnable: nil,
@@ -139,7 +145,7 @@ module OodCore
                      output_path: nil, error_path: nil, reservation_id: nil,
                      queue_name: nil, priority: nil, start_time: nil,
                      wall_time: nil, accounting_id: nil, job_array_request: nil,
-                     native: nil, copy_environment: nil, **_)
+                     qos: nil, native: nil, copy_environment: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -163,6 +169,7 @@ module OodCore
         @wall_time          = wall_time         && wall_time.to_i
         @accounting_id      = accounting_id     && accounting_id.to_s
         @job_array_request  = job_array_request && job_array_request.to_s
+        @qos                = qos               && qos.to_s
         @native             = native
         @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
       end
@@ -192,6 +199,7 @@ module OodCore
           wall_time:           wall_time,
           accounting_id:       accounting_id,
           job_array_request:   job_array_request,
+          qos:                 qos,
           native:              native,
           copy_environment:    copy_environment
         }
