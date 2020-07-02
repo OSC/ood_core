@@ -1125,7 +1125,7 @@ describe OodCore::Job::Adapters::Slurm do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'sbatch --export NONE --parsable -M owens.osc.edu', any_args)
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'sbatch', '--export', 'NONE', '--parsable', '-M', 'owens.osc.edu', any_args)
       end
     end
 
@@ -1135,7 +1135,7 @@ describe OodCore::Job::Adapters::Slurm do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'sbatch --export NONE --parsable -M owens.osc.edu', any_args)
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'sbatch', '--export', 'NONE', '--parsable', '-M', 'owens.osc.edu', any_args)
       end
     end
   end
