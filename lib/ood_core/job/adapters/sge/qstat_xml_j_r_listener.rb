@@ -118,7 +118,7 @@ class QstatXmlJRListener
   end
 
   def end_JB_submission_time
-    @parsed_job[:submission_time] = @current_text.to_i
+    @parsed_job[:submission_time] = ms_to_seconds(@current_text.to_i)
   end
 
   def end_JB_ja_tasks
@@ -127,7 +127,7 @@ class QstatXmlJRListener
 
   def end_JAT_start_time
     @parsed_job[:status] = :running
-    @parsed_job[:dispatch_time] = @current_text.to_i
+    @parsed_job[:dispatch_time] = ms_to_seconds(@current_text.to_i)
     @parsed_job[:wallclock_time] = Time.now.to_i - @parsed_job[:dispatch_time]
   end
 
@@ -201,5 +201,12 @@ class QstatXmlJRListener
   def set_slots
     @parsed_job[:procs] = @current_text.to_i
   end
-end
 
+  private
+
+  # Some Grid Engines (like UGE) use milliseconds were others use
+  # seconds past the epoch.
+  def ms_to_seconds(raw)
+    raw.digits.length >= 13 ? raw / 1000 : raw
+  end
+end

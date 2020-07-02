@@ -108,6 +108,26 @@ describe OodCore::Job::Adapters::Sge::Batch do
     )
   }
 
+  let(:job_from_uge_qstat_jr) {
+    OodCore::Job::Info.new(
+      :accounting_id => 'communitycluster',
+      :allocated_nodes => [],
+      :cpu_time => nil,
+      :dispatch_time => Time.at(1592928425),
+      :id => "748172",
+      :job_name => "jupyter_interactive",
+      :job_owner => "johrstrom",
+      :native => {},
+      :procs => 11,
+      :queue_name => 'ondemand',
+      :status => :running,
+      :submission_time => Time.at(1592928409),
+      :submit_host => nil,
+      :wallclock_limit => 14400,
+      :wallclock_time => Time.now.to_i - 1592928425,
+    )
+  }
+
   describe "#new" do
     context "when bin is nil" do
       it "does not crash" do
@@ -177,6 +197,18 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
       it "expects to receive the correct job info" do
         expect(batch.get_info_enqueued_job('942195') ).to eq(job_from_qstat_jr_mutlislot)
+      end
+    end
+
+    context "when the scheduler is UGE" do
+      before {
+        allow(batch).to receive(:call) { load_resource_file('spec/job/adapters/sge/output_examples/uge_qstat_jr.xml') }
+        # have to stub out time becuase the division to turn ms into s is a little flaky
+        allow(Time).to receive(:now){ 1593900000 }
+      }
+
+      it "expects to receive the correct job info" do
+        expect(batch.get_info_enqueued_job('748172') ).to eq(job_from_uge_qstat_jr)
       end
     end
   end
