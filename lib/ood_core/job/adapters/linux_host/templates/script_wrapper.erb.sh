@@ -1,7 +1,7 @@
 #!/bin/bash
 SSH_HOSTS=(<%= ssh_hosts.join(' ').to_s %>)
 hostnames=`hostname -A`
-for host in $SSH_HOSTS
+for host in ${SSH_HOSTS[@]}
 do
     if [[ " ${hostnames[@]} " =~ " ${host} " ]]; then
         hostname=$host
@@ -9,7 +9,7 @@ do
 done
 
 if [ -z "$hostname" ]; then
-    echo >&2 "ERROR: The specified host is not in the list of ssh hosts configured in this cluster config [${SSH_HOSTS[@]}]. The specified hosts determined by running 'hostname -A' [${hostnames[@]}] on the target host must match one of the configured ssh hosts" 
+    printf >&2 "ERROR: Can't start job on [${hostnames[@]}] because it does not match any hostname configured \nin ssh_hosts [${SSH_HOSTS[@]}]. The output of 'hostname -A' must match an entry in ssh_hosts \nfrom the cluster configuration."
     exit 1
 fi
 
