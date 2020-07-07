@@ -1,5 +1,19 @@
 #!/bin/bash
-hostname
+SSH_HOSTS=(<%= ssh_hosts.join(' ').to_s %>)
+hostnames=`hostname -A`
+for host in ${SSH_HOSTS[@]}
+do
+    if [[ " ${hostnames[@]} " =~ " ${host} " ]]; then
+        hostname=$host
+    fi
+done
+
+if [ -z "$hostname" ]; then
+    printf >&2 "ERROR: Can't start job on [${hostnames[@]}] because it does not match any hostname configured \nin ssh_hosts [${SSH_HOSTS[@]}]. The output of 'hostname -A' must match an entry in ssh_hosts \nfrom the cluster configuration."
+    exit 1
+fi
+
+echo $hostname
 
 # Put the script into a temp file on localhost
 <% if debug %>
