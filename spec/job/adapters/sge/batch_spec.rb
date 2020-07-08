@@ -189,7 +189,35 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :id => "748172",
       :job_name => "jupyter_interactive",
       :job_owner => "johrstrom",
-      :native => {},
+      :native => {
+        :ST_name=>"/export/uge/bin/lx-amd64/qsub -wd /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6 -N jupyter_interactive -o /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6/output.log -q ondemand -l h_rt=04:00:00 -P communitycluster -V -pe sm 11 hpcc ",
+        :JB_job_number=>"748172",
+        :JB_job_name=>"jupyter_interactive",
+        :JB_version=>"0",
+        :JB_project=>"communitycluster",
+        :JB_exec_file=>"job_scripts/748172",
+        :JB_script_file=>"STDIN",
+        :JB_script_size=>"0",
+        :JB_submission_time=>"1592928409331",
+        :JB_execution_time=>"0",
+        :JB_deadline=>"0",
+        :JB_owner=>"johrstrom",
+        :JB_uid=>"99577",
+        :JB_group=>"hpcc",
+        :JB_gid=>"101",
+        :JB_account=>"sge",
+        :JB_cwd=>"/home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6",
+        :JB_notify=>"false",
+        :JB_type=>"0",
+        :JB_reserve=>"false",
+        :JB_priority=>"0",
+        :JB_jobshare=>"0",
+        :JB_verify=>"0",
+        :JB_checkpoint_attr=>"0",
+        :JB_checkpoint_interval=>"0",
+        :JB_restart=>"0",
+        :PN_path=>"/home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6/output.log"
+      },
       :procs => 11,
       :queue_name => 'ondemand',
       :status => :running,
@@ -281,6 +309,10 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
       it "expects to receive the correct job info" do
         expect(batch.get_info_enqueued_job('748172') ).to eq(job_from_uge_qstat_jr)
+      end
+
+      it "expects to receive the correct ST_name" do 
+        expect(batch.get_info_enqueued_job('748172').native[:ST_name] ).to eq("/export/uge/bin/lx-amd64/qsub -wd /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6 -N jupyter_interactive -o /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6/output.log -q ondemand -l h_rt=04:00:00 -P communitycluster -V -pe sm 11 hpcc ")
       end
     end
   end

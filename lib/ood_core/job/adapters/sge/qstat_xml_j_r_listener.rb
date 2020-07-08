@@ -30,7 +30,7 @@ class QstatXmlJRListener
       :procs => 1,
       :native => {
         :ST_name => ''
-      }  # TODO: improve native attribute reporting
+      } 
     }
     @current_text = nil
     @current_request = nil
@@ -133,15 +133,7 @@ class QstatXmlJRListener
   end
 
   def end_JB_submission_time
-<<<<<<< HEAD
-<<<<<<< HEAD
     @parsed_job[:submission_time] = ms_to_seconds(@current_text.to_i)
-=======
-    @parsed_job[:native][:submission_time] = @current_text.to_i
->>>>>>> Attributes from qstat command now found under native hash
-=======
-    @parsed_job[:submission_time] = @current_text.to_i
->>>>>>> Saves params under current job and saves all values under current_text[:native]
   end
 
   def end_JB_ja_tasks
@@ -149,21 +141,9 @@ class QstatXmlJRListener
   end
 
   def end_JAT_start_time
-<<<<<<< HEAD
-<<<<<<< HEAD
     @parsed_job[:status] = :running
     @parsed_job[:dispatch_time] = ms_to_seconds(@current_text.to_i)
     @parsed_job[:wallclock_time] = Time.now.to_i - @parsed_job[:dispatch_time]
-=======
-    @parsed_job[:native][:status] = :running
-    @parsed_job[:native][:dispatch_time] = @current_text.to_i
-    @parsed_job[:native][:wallclock_time] = Time.now.to_i - @parsed_job[:native][:dispatch_time]
->>>>>>> Attributes from qstat command now found under native hash
-=======
-    @parsed_job[:status] = :running
-    @parsed_job[:dispatch_time] = @current_text.to_i
-    @parsed_job[:wallclock_time] = Time.now.to_i - @parsed_job[:dispatch_time]
->>>>>>> Saves params under current job and saves all values under current_text[:native]
   end
 
   def end_CE_name

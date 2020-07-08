@@ -26,7 +26,7 @@ class QstatXmlRListener
       :tasks => [],
       :native => {
         :ST_name => ''
-      }  # TODO: improve native reporting
+      } 
     }
     @current_text = nil
     @processing_JB_stdout_path_list = false
