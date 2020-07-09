@@ -20,7 +20,12 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :dispatch_time => DateTime.parse('2018-10-10T14:37:16').to_time.to_i,
       :wallclock_limit => 360,
       :wallclock_time => Time.now.to_i - DateTime.parse('2018-10-10T14:37:16').to_time.to_i,
-      :native => {}
+      :native => {
+        :ST_name=>"", 
+        :JB_job_number=>"88", 
+        :JB_owner=>"vagrant", 
+        :JB_project=>"project_a"
+      }
     ),
     OodCore::Job::Info.new( # Queued job, w/ project
       :id => '1045',
@@ -33,7 +38,12 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :submission_time => DateTime.parse('2018-10-09T18:47:05').to_time.to_i,
       :wallclock_limit => 360,
       :wallclock_time => 0,
-      :native => {}
+      :native => {
+        :JB_job_number=>"1045", 
+        :JB_owner=>"vagrant", 
+        :JB_project=>"project_b", 
+        :JB_submission_time=>"2018-10-09T18:47:05"
+      }
     ),
     OodCore::Job::Info.new( # Queued job w/o project
       :id => '1046',
@@ -45,7 +55,11 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :submission_time => DateTime.parse('2018-10-09T18:47:05').to_time.to_i,
       :wallclock_limit => 360,
       :wallclock_time => 0,
-      :native => {},
+      :native => {
+        :JB_job_number=>"1046", 
+        :JB_owner=>"vagrant", 
+        :JB_submission_time=>"2018-10-09T18:47:05"
+      },
       :tasks => [
         { :id => '1', :status => :queued },
         { :id => '3', :status => :queued },
@@ -64,7 +78,11 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :submission_time => DateTime.parse('2018-10-09T18:35:12').to_time.to_i,
       :wallclock_limit => 360,
       :wallclock_time => 0,
-      :native => {}
+      :native => {
+        :JB_job_number=>"44", 
+        :JB_owner=>"vagrant", 
+        :JB_submission_time=>"2018-10-09T18:35:12"
+      }
     )
   ]}
 
@@ -77,7 +95,34 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :id => "4147342",
       :job_name => "cfSNV_0merged_split_pileup_241.FLASH.recal_10.pbs",
       :job_owner => "shuoli",
-      :native => {},
+      :native =>{
+        :ST_name=>"",
+        :JB_job_number=>"4147342",
+        :JB_exec_file=>"job_scripts/4147342",
+        :JB_submission_time=>"1541444183",
+        :JB_owner=>"shuoli",
+        :JB_uid=>"13287",
+        :JB_group=>"xjzhou",
+        :JB_gid=>"12426",
+        :JB_account=>"sge",
+        :JB_project=>"xjzhou_prj",
+        :JB_notify=>"false",
+        :JB_job_name=>"cfSNV_0merged_split_pileup_241.FLASH.recal_10.pbs",
+        :JB_jobshare=>"0",
+        :JB_script_file=>"cfSNV_0merged_split_pileup_241.FLASH.recal_10.pbs",
+        :JB_cwd=>"/u/project/xjzhou/shuoli/Zo_WES_plasma_SC1810033_10312018/code/0",
+        :JB_deadline=>"0",
+        :JB_execution_time=>"0",
+        :JB_checkpoint_attr=>"0",
+        :JB_checkpoint_interval=>"0",
+        :JB_reserve=>"false",
+        :JB_priority=>"1024",
+        :JB_restart=>"0",
+        :JB_verify=>"0",
+        :JB_script_size=>"0",
+        :JB_version=>"0",
+        :JB_type=>"0"
+      },
       :procs => 1,
       :queue_name => nil,
       :status => :running,
@@ -97,7 +142,34 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :id => "942195",
       :job_name => "RemoteDesktop",
       :job_owner => "smatott",
-      :native => {},
+      :native => {
+        :ST_name=>"",
+        :JB_job_number=>"942195",
+        :JB_exec_file=>"job_scripts/942195",
+        :JB_submission_time=>"1576525304",
+        :JB_owner=>"smatott",
+        :JB_uid=>"1105",
+        :JB_group=>"packages",
+        :JB_gid=>"3002",
+        :JB_account=>"sge",
+        :JB_notify=>"false",
+        :JB_job_name=>"RemoteDesktop",
+        :PN_path=> "/mnt/lustre/users/smatott/ondemand/data/sys/dashboard/batch_connect/sys/bc_desktop/hpc/output/9beca517-07fa-4379-8eb7-934460846a19/output.log",
+        :JB_jobshare=>"0",
+        :JB_script_file=>"STDIN",
+        :JB_cwd=> "/mnt/lustre/users/smatott/ondemand/data/sys/dashboard/batch_connect/sys/bc_desktop/hpc/output/9beca517-07fa-4379-8eb7-934460846a19",
+        :JB_deadline=>"0",
+        :JB_execution_time=>"0",
+        :JB_checkpoint_attr=>"0",
+        :JB_checkpoint_interval=>"0",
+        :JB_reserve=>"false",
+        :JB_priority=>"1024",
+        :JB_restart=>"0",
+        :JB_verify=>"0",
+        :JB_script_size=>"0",
+        :JB_version=>"0",
+        :JB_type=>"0"
+      },
       :procs => 16,
       :queue_name => 'all.q',
       :status => :running,
@@ -117,7 +189,35 @@ describe OodCore::Job::Adapters::Sge::Batch do
       :id => "748172",
       :job_name => "jupyter_interactive",
       :job_owner => "johrstrom",
-      :native => {},
+      :native => {
+        :ST_name=>"/export/uge/bin/lx-amd64/qsub -wd /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6 -N jupyter_interactive -o /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6/output.log -q ondemand -l h_rt=04:00:00 -P communitycluster -V -pe sm 11 hpcc ",
+        :JB_job_number=>"748172",
+        :JB_job_name=>"jupyter_interactive",
+        :JB_version=>"0",
+        :JB_project=>"communitycluster",
+        :JB_exec_file=>"job_scripts/748172",
+        :JB_script_file=>"STDIN",
+        :JB_script_size=>"0",
+        :JB_submission_time=>"1592928409331",
+        :JB_execution_time=>"0",
+        :JB_deadline=>"0",
+        :JB_owner=>"johrstrom",
+        :JB_uid=>"99577",
+        :JB_group=>"hpcc",
+        :JB_gid=>"101",
+        :JB_account=>"sge",
+        :JB_cwd=>"/home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6",
+        :JB_notify=>"false",
+        :JB_type=>"0",
+        :JB_reserve=>"false",
+        :JB_priority=>"0",
+        :JB_jobshare=>"0",
+        :JB_verify=>"0",
+        :JB_checkpoint_attr=>"0",
+        :JB_checkpoint_interval=>"0",
+        :JB_restart=>"0",
+        :PN_path=>"/home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6/output.log"
+      },
       :procs => 11,
       :queue_name => 'ondemand',
       :status => :running,
@@ -209,6 +309,10 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
       it "expects to receive the correct job info" do
         expect(batch.get_info_enqueued_job('748172') ).to eq(job_from_uge_qstat_jr)
+      end
+
+      it "expects to receive the correct ST_name" do 
+        expect(batch.get_info_enqueued_job('748172').native[:ST_name] ).to eq("/export/uge/bin/lx-amd64/qsub -wd /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6 -N jupyter_interactive -o /home/johrstrom/ondemand/data/sys/dashboard/batch_connect/sys/jupyter/output/a4a46499-77d9-4334-bef2-71dd0a0857f6/output.log -q ondemand -l h_rt=04:00:00 -P communitycluster -V -pe sm 11 hpcc ")
       end
     end
   end
