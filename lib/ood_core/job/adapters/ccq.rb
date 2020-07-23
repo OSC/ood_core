@@ -273,17 +273,20 @@ module OodCore
             words = line.split(/\s/).reject(&:empty?)
             next if !words.empty? && words[0] == "Id" # just skip the header
 
-            infos << Info.new(line_to_hash(words)) if words.size == 4
+            infos << Info.new(line_to_hash(words)) if words.size == 5
           end
 
           infos
         end
 
         def line_to_hash(words)
+          return unless words.size == 5
+
           data_hash = {}
           data_hash[:id] = words[0]
           data_hash[:job_name] = words[1]
-          data_hash[:status] = get_state(words[3])
+          data_hash[:job_owner] = words[2]
+          data_hash[:status] = get_state(words[4])
 
           data_hash
         end

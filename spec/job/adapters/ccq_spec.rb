@@ -30,32 +30,38 @@ describe OodCore::Job::Adapters::CCQ do
     [
       OodCore::Job::Info.new({
         id: '432201',
-        job_name: 'jobname1',
+        job_name: 'ccq_ood_script_20200701-29604-1lcxuca',
+        job_owner: 'jeff',
         status: 'completed'
       }),
       OodCore::Job::Info.new({
         id: '432202',
-        job_name: 'jobname2',
+        job_name: 'ccq_ood_script_20200702-29604-1lcxuca',
+        job_owner: 'jeff',
         status: 'running'
       }),
       OodCore::Job::Info.new({
         id: '432203',
-        job_name: 'jobname3',
+        job_name: 'ccq_ood_script_20200703-29604-1lcxuca',
+        job_owner: 'jeff',
         status: 'queued'
       }),
       OodCore::Job::Info.new({
         id: '432204',
-        job_name: 'jobname4',
+        job_name: 'ccq_ood_script_20200704-29604-1lcxuca',
+        job_owner: 'jeff',
         status: 'queued'
       }),
       OodCore::Job::Info.new({
         id: '432205',
-        job_name: 'jobname5',
+        job_name: 'ccq_ood_script_20200705-29604-1lcxuca',
+        job_owner: 'jeff',
         status: 'suspended'
       }),
       OodCore::Job::Info.new({
         id: '432206',
-        job_name: 'ccq_ood_script_20200409-56827-1b8r0ad',
+        job_name: 'ccq_ood_script_20200706-29604-1lcxuca',
+        job_owner: 'jeff',
         status: 'queued'
       })
     ]
