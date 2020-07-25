@@ -4,12 +4,13 @@
 ![GitHub Release](https://img.shields.io/github/release/osc/ood_core.svg)
 ![GitHub License](https://img.shields.io/github/license/osc/ood_core.svg)
 
-Welcome to your new gem! In this directory, you'll find the files you need to
-be able to package up your Ruby library into a gem. Put your Ruby code in the
-file `lib/ood_core`. To experiment with that code, run `bin/console` for an
-interactive prompt.
+- Website: http://openondemand.org/
+- Documentation: https://osc.github.io/ood-documentation/master/
+- Main code repo: https://github.com/OSC/ondemand
+- Core library repo: https://github.com/OSC/ood_core
+- Original repo with JOSS publication: https://github.com/OSC/Open-OnDemand
 
-TODO: Delete this and the text above, and describe your gem
+OnDemand core library with adapters for each batch scheduler.
 
 ## Installation
 
