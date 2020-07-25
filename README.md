@@ -5,10 +5,10 @@
 ![GitHub License](https://img.shields.io/github/license/osc/ood_core.svg)
 
 - Website: http://openondemand.org/
+- Website repo with JOSS publication: https://github.com/OSC/Open-OnDemand
 - Documentation: https://osc.github.io/ood-documentation/master/
 - Main code repo: https://github.com/OSC/ondemand
 - Core library repo: https://github.com/OSC/ood_core
-- Original repo with JOSS publication: https://github.com/OSC/Open-OnDemand
 
 OnDemand core library with adapters for each batch scheduler.
 
