@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: DRMAA
+  
+    &mdash; Documentation by YARD 0.9.25
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "DRMAA";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (D)</a> &raquo;
+    
+    
+    <span class="title">DRMAA</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: DRMAA
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/drmaa.rb<span class="defines">,<br />
+  lib/ood_core/refinements/drmaa_extensions.rb</span>
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="DRMAA/DRMAAAlreadyActiveSessionError.html" title="DRMAA::DRMAAAlreadyActiveSessionError (class)">DRMAAAlreadyActiveSessionError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAAuthenticationError.html" title="DRMAA::DRMAAAuthenticationError (class)">DRMAAAuthenticationError</a></span>, <span class='object_link'><a href="DRMAA/DRMAACommunicationError.html" title="DRMAA::DRMAACommunicationError (class)">DRMAACommunicationError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAConflictingAttributeValuesError.html" title="DRMAA::DRMAAConflictingAttributeValuesError (class)">DRMAAConflictingAttributeValuesError</a></span>, <span class='object_link'><a href="DRMAA/DRMAADefaultContactError.html" title="DRMAA::DRMAADefaultContactError (class)">DRMAADefaultContactError</a></span>, <span class='object_link'><a href="DRMAA/DRMAADeniedError.html" title="DRMAA::DRMAADeniedError (class)">DRMAADeniedError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAException.html" title="DRMAA::DRMAAException (class)">DRMAAException</a></span>, <span class='object_link'><a href="DRMAA/DRMAAHoldInconsistent.html" title="DRMAA::DRMAAHoldInconsistent (class)">DRMAAHoldInconsistent</a></span>, <span class='object_link'><a href="DRMAA/DRMAAInternalError.html" title="DRMAA::DRMAAInternalError (class)">DRMAAInternalError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAInvalidArgumentError.html" title="DRMAA::DRMAAInvalidArgumentError (class)">DRMAAInvalidArgumentError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAInvalidAttributeFormatError.html" title="DRMAA::DRMAAInvalidAttributeFormatError (class)">DRMAAInvalidAttributeFormatError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAInvalidAttributeValueError.html" title="DRMAA::DRMAAInvalidAttributeValueError (class)">DRMAAInvalidAttributeValueError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAInvalidContactError.html" title="DRMAA::DRMAAInvalidContactError (class)">DRMAAInvalidContactError</a></span>, <span class='object_link'><a href="DRMAA/DRMAAInvalidJobError.html" title="DRMAA::DRMAAInvalidJobError (class)">DRMAAInvalidJobError</a></span>, <span class='object_link'><a href="DRMAA/DRMAANoActiveSessionError.html" title="DRMAA::DRMAANoActiveSessionError (class)">DRMAANoActiveSessionError</a></span>, <span class='object_link'><a href="DRMAA/DRMAANoDefaultContactSelected.html" title="DRMAA::DRMAANoDefaultContactSelected (class)">DRMAANoDefaultContactSelected</a></span>, <span class='object_link'><a href="DRMAA/DRMAANoMemoryError.html" title="DRMAA::DRMAANoMemoryError (class)">DRMAANoMemoryError</a></span>, <span class='object_link'><a href="DRMAA/DRMAANoMoreElements.html" title="DRMAA::DRMAANoMoreElements (class)">DRMAANoMoreElements</a></span>, <span class='object_link'><a href="DRMAA/DRMAAReleaseInconsistent.html" title="DRMAA::DRMAAReleaseInconsistent (class)">DRMAAReleaseInconsistent</a></span>, <span class='object_link'><a href="DRMAA/DRMAAResumeInconsistent.html" title="DRMAA::DRMAAResumeInconsistent (class)">DRMAAResumeInconsistent</a></span>, <span class='object_link'><a href="DRMAA/DRMAASessionExitError.html" title="DRMAA::DRMAASessionExitError (class)">DRMAASessionExitError</a></span>, <span class='object_link'><a href="DRMAA/DRMAASessionInitError.html" title="DRMAA::DRMAASessionInitError (class)">DRMAASessionInitError</a></span>, <span class='object_link'><a href="DRMAA/DRMAASuspendInconsistent.html" title="DRMAA::DRMAASuspendInconsistent (class)">DRMAASuspendInconsistent</a></span>, <span class='object_link'><a href="DRMAA/DRMAATimeoutExit.html" title="DRMAA::DRMAATimeoutExit (class)">DRMAATimeoutExit</a></span>, <span class='object_link'><a href="DRMAA/DRMAATryLater.html" title="DRMAA::DRMAATryLater (class)">DRMAATryLater</a></span>, <span class='object_link'><a href="DRMAA/JobInfo.html" title="DRMAA::JobInfo (class)">JobInfo</a></span>, <span class='object_link'><a href="DRMAA/JobTemplate.html" title="DRMAA::JobTemplate (class)">JobTemplate</a></span>, <span class='object_link'><a href="DRMAA/Session.html" title="DRMAA::Session (class)">Session</a></span>, <span class='object_link'><a href="DRMAA/SessionSingleton.html" title="DRMAA::SessionSingleton (class)">SessionSingleton</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="STATE_UNDETERMINED-constant" class="">STATE_UNDETERMINED =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>drmaa_job_ps() constants</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='int'>0x00</span></pre></dd>
+      
+        <dt id="STATE_QUEUED_ACTIVE-constant" class="">STATE_QUEUED_ACTIVE =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x10</span></pre></dd>
+      
+        <dt id="STATE_SYSTEM_ON_HOLD-constant" class="">STATE_SYSTEM_ON_HOLD =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x11</span></pre></dd>
+      
+        <dt id="STATE_USER_ON_HOLD-constant" class="">STATE_USER_ON_HOLD =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x12</span></pre></dd>
+      
+        <dt id="STATE_USER_SYSTEM_ON_HOLD-constant" class="">STATE_USER_SYSTEM_ON_HOLD =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x13</span></pre></dd>
+      
+        <dt id="STATE_RUNNING-constant" class="">STATE_RUNNING =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x20</span></pre></dd>
+      
+        <dt id="STATE_SYSTEM_SUSPENDED-constant" class="">STATE_SYSTEM_SUSPENDED =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x21</span></pre></dd>
+      
+        <dt id="STATE_USER_SUSPENDED-constant" class="">STATE_USER_SUSPENDED =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x22</span></pre></dd>
+      
+        <dt id="STATE_USER_SYSTEM_SUSPENDED-constant" class="">STATE_USER_SYSTEM_SUSPENDED =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x23</span></pre></dd>
+      
+        <dt id="STATE_DONE-constant" class="">STATE_DONE =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x30</span></pre></dd>
+      
+        <dt id="STATE_FAILED-constant" class="">STATE_FAILED =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>0x40</span></pre></dd>
+      
+        <dt id="ACTION_SUSPEND-constant" class="">ACTION_SUSPEND =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>drmaa_control() constants</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='int'>0</span></pre></dd>
+      
+        <dt id="ACTION_RESUME-constant" class="">ACTION_RESUME =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>1</span></pre></dd>
+      
+        <dt id="ACTION_HOLD-constant" class="">ACTION_HOLD =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>2</span></pre></dd>
+      
+        <dt id="ACTION_RELEASE-constant" class="">ACTION_RELEASE =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>3</span></pre></dd>
+      
+        <dt id="ACTION_TERMINATE-constant" class="">ACTION_TERMINATE =
+          
+        </dt>
+        <dd><pre class="code"><span class='int'>4</span></pre></dd>
+      
+        <dt id="PLACEHOLDER_INCR-constant" class="">PLACEHOLDER_INCR =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>placeholders for job input/output/error path and working dir</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>$drmaa_incr_ph$</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="PLACEHOLDER_HD-constant" class="">PLACEHOLDER_HD =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>$drmaa_hd_ph$</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="PLACEHOLDER_WD-constant" class="">PLACEHOLDER_WD =
+          
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>$drmaa_wd_ph$</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="DRMMA_TO_OOD_STATE_MAP-constant" class="">DRMMA_TO_OOD_STATE_MAP =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_UNDETERMINED-constant" title="DRMAA::STATE_UNDETERMINED (constant)">STATE_UNDETERMINED</a></span></span>          <span class='op'>=&gt;</span> <span class='symbol'>:undetermined</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_QUEUED_ACTIVE-constant" title="DRMAA::STATE_QUEUED_ACTIVE (constant)">STATE_QUEUED_ACTIVE</a></span></span>         <span class='op'>=&gt;</span> <span class='symbol'>:queued</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_SYSTEM_ON_HOLD-constant" title="DRMAA::STATE_SYSTEM_ON_HOLD (constant)">STATE_SYSTEM_ON_HOLD</a></span></span>        <span class='op'>=&gt;</span> <span class='symbol'>:queued_held</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_USER_ON_HOLD-constant" title="DRMAA::STATE_USER_ON_HOLD (constant)">STATE_USER_ON_HOLD</a></span></span>          <span class='op'>=&gt;</span> <span class='symbol'>:queued_held</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_USER_SYSTEM_ON_HOLD-constant" title="DRMAA::STATE_USER_SYSTEM_ON_HOLD (constant)">STATE_USER_SYSTEM_ON_HOLD</a></span></span>   <span class='op'>=&gt;</span> <span class='symbol'>:queued_held</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_RUNNING-constant" title="DRMAA::STATE_RUNNING (constant)">STATE_RUNNING</a></span></span>               <span class='op'>=&gt;</span> <span class='symbol'>:running</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_SYSTEM_SUSPENDED-constant" title="DRMAA::STATE_SYSTEM_SUSPENDED (constant)">STATE_SYSTEM_SUSPENDED</a></span></span>      <span class='op'>=&gt;</span> <span class='symbol'>:suspended</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_USER_SUSPENDED-constant" title="DRMAA::STATE_USER_SUSPENDED (constant)">STATE_USER_SUSPENDED</a></span></span>        <span class='op'>=&gt;</span> <span class='symbol'>:suspended</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_USER_SYSTEM_SUSPENDED-constant" title="DRMAA::STATE_USER_SYSTEM_SUSPENDED (constant)">STATE_USER_SYSTEM_SUSPENDED</a></span></span> <span class='op'>=&gt;</span> <span class='symbol'>:suspended</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_DONE-constant" title="DRMAA::STATE_DONE (constant)">STATE_DONE</a></span></span>                  <span class='op'>=&gt;</span> <span class='symbol'>:completed</span><span class='comma'>,</span>
+  <span class='const'>DRMAA</span><span class='op'>::</span><span class='const'><span class='object_link'><a href="#STATE_FAILED-constant" title="DRMAA::STATE_FAILED (constant)">STATE_FAILED</a></span></span>                <span class='op'>=&gt;</span> <span class='symbol'>:completed</span>
+<span class='rbrace'>}</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#contact-class_method" title="contact (class method)">.<strong>contact</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>returns string specifying contact information int drmaa_get_contact(char *,
+size_t, char *, size_t).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#drm_system-class_method" title="drm_system (class method)">.<strong>drm_system</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>returns string specifying the DRM system int drmaa_get_drm_system(char *,
+size_t , char *, size_t).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#drmaa_implementation-class_method" title="drmaa_implementation (class method)">.<strong>drmaa_implementation</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>returns string specifying DRMAA implementation int
+drmaa_get_DRMAA_implementation(char *, size_t , char *, size_t).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#version-class_method" title="version (class method)">.<strong>version</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>returns DRMAA version (e.g. 1.0 or 0.95) int drmaa_version(unsigned int *,
+unsigned int *, char *, size_t ).</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="contact-class_method">
+  
+    .<strong>contact</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>returns string specifying contact information int drmaa_get_contact(char *,
+size_t, char *, size_t)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 252</span>
+
+<span class='kw'>def</span> <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_contact'>contact</span>
+    <span class='id identifier rubyid_contact'>contact</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='const'>ErrSize</span>
+    <span class='id identifier rubyid_err'>err</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='const'>ErrSize</span>
+    <span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI_DRMAA.html" title="FFI_DRMAA (module)">FFI_DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_drmaa_get_contact'>drmaa_get_contact</span><span class='lparen'>(</span><span class='id identifier rubyid_contact'>contact</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_contact'>contact</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_contact'>contact</span><span class='period'>.</span><span class='id identifier rubyid_delete!'>delete!</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\000</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_contact'>contact</span><span class='period'>.</span><span class='id identifier rubyid_strip!'>strip!</span>
+    <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_throw'>throw</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="drm_system-class_method">
+  
+    .<strong>drm_system</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>returns string specifying the DRM system int drmaa_get_drm_system(char *,
+size_t , char *, size_t)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 239</span>
+
+<span class='kw'>def</span> <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_drm_system'>drm_system</span>
+    <span class='id identifier rubyid_drm'>drm</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='int'>20</span>
+    <span class='id identifier rubyid_err'>err</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='const'>ErrSize</span>
+    <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI_DRMAA.html" title="FFI_DRMAA (module)">FFI_DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_drmaa_get_DRM_system'>drmaa_get_DRM_system</span><span class='lparen'>(</span><span class='id identifier rubyid_drm'>drm</span><span class='comma'>,</span> <span class='int'>20</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_drm'>drm</span><span class='comma'>,</span> <span class='int'>20</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rbracket'>]</span>
+    <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_throw'>throw</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_drm'>drm</span><span class='period'>.</span><span class='id identifier rubyid_delete!'>delete!</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\000</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_drm'>drm</span><span class='period'>.</span><span class='id identifier rubyid_strip!'>strip!</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="drmaa_implementation-class_method">
+  
+    .<strong>drmaa_implementation</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>returns string specifying DRMAA implementation int
+drmaa_get_DRMAA_implementation(char *, size_t , char *, size_t)</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+265
+266
+267
+268
+269
+270
+271
+272
+273
+274</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 265</span>
+
+<span class='kw'>def</span> <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_drmaa_implementation'>drmaa_implementation</span>
+    <span class='id identifier rubyid_err'>err</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='const'>ErrSize</span>
+    <span class='id identifier rubyid_impl'>impl</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='int'>30</span>
+    <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI_DRMAA.html" title="FFI_DRMAA (module)">FFI_DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_drmaa_get_DRMAA_implementation'>drmaa_get_DRMAA_implementation</span><span class='lparen'>(</span><span class='id identifier rubyid_impl'>impl</span><span class='comma'>,</span> <span class='int'>30</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_impl'>impl</span><span class='comma'>,</span> <span class='int'>30</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rbracket'>]</span>
+    <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_throw'>throw</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_impl'>impl</span><span class='period'>.</span><span class='id identifier rubyid_delete!'>delete!</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\000</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_impl'>impl</span><span class='period'>.</span><span class='id identifier rubyid_strip!'>strip!</span>
+    <span class='kw'>return</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="version-class_method">
+  
+    .<strong>version</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>returns DRMAA version (e.g. 1.0 or 0.95) int drmaa_version(unsigned int *,
+unsigned int *, char *, size_t )</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+278
+279
+280
+281
+282
+283
+284
+285
+286</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 278</span>
+
+<span class='kw'>def</span> <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_version'>version</span>
+    <span class='id identifier rubyid_err'>err</span><span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'> </span><span class='tstring_end'>&quot;</span></span> <span class='op'>*</span> <span class='const'>ErrSize</span>
+    <span class='id identifier rubyid_major'>major</span> <span class='op'>=</span> <span class='const'>FFI</span><span class='op'>::</span><span class='const'>MemoryPointer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='symbol'>:int</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_minor'>minor</span> <span class='op'>=</span> <span class='const'>FFI</span><span class='op'>::</span><span class='const'>MemoryPointer</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='symbol'>:int</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI_DRMAA.html" title="FFI_DRMAA (module)">FFI_DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_drmaa_version'>drmaa_version</span> <span class='id identifier rubyid_major'>major</span><span class='comma'>,</span><span class='id identifier rubyid_minor'>minor</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span>
+    <span class='id identifier rubyid_r1'>r1</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='id identifier rubyid_major'>major</span><span class='period'>.</span><span class='id identifier rubyid_read_int'>read_int</span><span class='comma'>,</span><span class='id identifier rubyid_minor'>minor</span><span class='period'>.</span><span class='id identifier rubyid_read_int'>read_int</span><span class='comma'>,</span> <span class='id identifier rubyid_err'>err</span><span class='comma'>,</span> <span class='const'>ErrSize</span><span class='rbracket'>]</span>  
+    <span class='const'><span class='object_link'><a href="" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_throw'>throw</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+    <span class='ivar'>@version</span> <span class='op'>=</span> <span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='lparen'>(</span><span class='const'>Float</span><span class='lparen'>(</span><span class='id identifier rubyid_r1'>r1</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='op'>/</span><span class='int'>100</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 27 09:13:43 2020 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.25 (ruby-2.5.0).
+</div>
+
+    </div>
+  </body>
+</html>
