@@ -781,6 +781,40 @@ describe OodCore::Job::Adapters::PBSPro do
     end
   end
 
+  describe "setting submit_host" do 
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling withoug submit_host" do
+      it "uses the correct command" do
+        batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: nil, bin_overrides: {}, submit_host: "")
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "qsub", '-j', 'oe', any_args)
+      end
+    end
+
+    context "when calling with submit_host & strict_host_checking not specifieed" do 
+      it "uses ssh wrapper & host checking defaults to yes" do
+        batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: nil, bin_overrides: {}, submit_host: "owens.osc.edu")
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub', '-j', 'oe', any_args)
+      end
+    end
+
+    context "when strict_host_checking = 'no' && submit_host specified" do
+      it "defaults host checking to no" do
+        batch = OodCore::Job::Adapters::PBSPro::Batch.new(host: "owens.osc.edu", pbs_exec: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: false)
+        allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'qsub', '-j', 'oe', any_args)
+      end
+    end
+  end
+
   describe "#directive_prefix" do
       context "when called" do
         it "does not raise an error" do

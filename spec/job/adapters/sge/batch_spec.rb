@@ -340,4 +340,38 @@ describe OodCore::Job::Adapters::Sge::Batch do
       end
     end
   end
+
+  describe "setting submit_host" do 
+    let(:script) { OodCore::Job::Script.new(content: "echo 'hi'") }
+
+    context "when calling without submit_host" do 
+      it "uses the correct command" do 
+        batch = described_class.new(submit_host: "")
+        allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Sge.new(batch: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, "qsub", '-cwd', any_args)
+      end
+    end
+
+    context "when calling with submit_host & strict_host_checking not specified" do 
+      it "uses ssh wrapper & host checking defaults to yes" do 
+        batch = described_class.new(submit_host: "owens.osc.edu")
+        allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Sge.new(batch: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub', '-cwd', any_args)
+      end
+    end
+
+    context "when strict_host_checking = 'no' && submit_host specified" do
+      it "sets host checking to no" do
+        batch = described_class.new(submit_host: "owens.osc.edu", strict_host_checking: false)
+        allow(Open3).to receive(:capture3).and_return(["Your job 123", "", double("success?" => true)])
+
+        OodCore::Job::Adapters::Sge.new(batch: batch).submit script
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'qsub', '-cwd', any_args)
+      end
+    end
+  end
 end

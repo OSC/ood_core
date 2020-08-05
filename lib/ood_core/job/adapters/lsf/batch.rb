@@ -2,21 +2,22 @@
 #
 # @api private
 class OodCore::Job::Adapters::Lsf::Batch
-  attr_reader :bindir, :libdir, :envdir, :serverdir, :cluster, :bin_overrides
+  attr_reader :bindir, :libdir, :envdir, :serverdir, :cluster, :bin_overrides, :submit_host, :strict_host_checking
 
   # The root exception class that all LSF-specific exceptions inherit
   # from
   class Error < StandardError; end
 
   # @param bin [#to_s] path to LSF installation binaries
-  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, **_)
+  def initialize(bindir: "", envdir: "", libdir: "", serverdir: "", cluster: "", bin_overrides: {}, submit_host: "", strict_host_checking: true, **_)
     @bindir = Pathname.new(bindir.to_s)
-
     @envdir = Pathname.new(envdir.to_s)
     @libdir = Pathname.new(libdir.to_s)
     @serverdir = Pathname.new(serverdir.to_s)
     @cluster = cluster.to_s
     @bin_overrides = bin_overrides
+    @submit_host = submit_host.to_s
+    @strict_host_checking = strict_host_checking
   end
 
   def default_env
@@ -143,6 +144,7 @@ class OodCore::Job::Adapters::Lsf::Batch
       cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
       args = cluster_args + args
       env = default_env.merge(env.to_h)
+      cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
       s.success? ? o : raise(Error, e)
     end
