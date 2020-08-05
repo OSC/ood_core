@@ -107,7 +107,7 @@ module OodCore
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "")
             args = ["-f", "-t"]   # display all information
-            args += [id.to_s] unless id.to_s.empty?
+            args.concat [id.to_s] unless id.to_s.empty?
             lines = call("qstat", *args).gsub("\n\t", "").split("\n").map(&:strip)
 
             jobs = []
@@ -247,28 +247,28 @@ module OodCore
           # Set qsub options
           args = []
           # ignore args, can't use these if submitting from STDIN
-          args += ["-h"] if script.submit_as_hold
-          args += ["-r", script.rerunnable ? "y" : "n"] unless script.rerunnable.nil?
-          args += ["-M", script.email.join(",")] unless script.email.nil?
+          args.concat ["-h"] if script.submit_as_hold
+          args.concat ["-r", script.rerunnable ? "y" : "n"] unless script.rerunnable.nil?
+          args.concat ["-M", script.email.join(",")] unless script.email.nil?
           if script.email_on_started && script.email_on_terminated
-            args += ["-m", "be"]
+            args.concat ["-m", "be"]
           elsif script.email_on_started
-            args += ["-m", "b"]
+            args.concat ["-m", "b"]
           elsif script.email_on_terminated
-            args += ["-m", "e"]
+            args.concat ["-m", "e"]
           end
-          args += ["-N", script.job_name] unless script.job_name.nil?
-          args += ["-S", script.shell_path] unless script.shell_path.nil?
+          args.concat ["-N", script.job_name] unless script.job_name.nil?
+          args.concat ["-S", script.shell_path] unless script.shell_path.nil?
           # ignore input_path (not defined in PBS Pro)
-          args += ["-o", script.output_path] unless script.output_path.nil?
-          args += ["-e", script.error_path] unless script.error_path.nil?
+          args.concat ["-o", script.output_path] unless script.output_path.nil?
+          args.concat ["-e", script.error_path] unless script.error_path.nil?
           # Reservations are actually just queues in PBS Pro
-          args += ["-q", script.reservation_id] if !script.reservation_id.nil? && script.queue_name.nil?
-          args += ["-q", script.queue_name] unless script.queue_name.nil?
-          args += ["-p", script.priority] unless script.priority.nil?
-          args += ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
-          args += ["-A", script.accounting_id] unless script.accounting_id.nil?
-          args += ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
+          args.concat ["-q", script.reservation_id] if !script.reservation_id.nil? && script.queue_name.nil?
+          args.concat ["-q", script.queue_name] unless script.queue_name.nil?
+          args.concat ["-p", script.priority] unless script.priority.nil?
+          args.concat ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
+          args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
+          args.concat ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
 
           # Set dependencies
           depend = []
@@ -276,21 +276,21 @@ module OodCore
           depend << "afterok:#{afterok.join(":")}"       unless afterok.empty?
           depend << "afternotok:#{afternotok.join(":")}" unless afternotok.empty?
           depend << "afterany:#{afterany.join(":")}"     unless afterany.empty?
-          args += ["-W", "depend=#{depend.join(",")}"]   unless depend.empty?
+          args.concat ["-W", "depend=#{depend.join(",")}"]   unless depend.empty?
 
           # Set environment variables
           envvars = script.job_environment.to_h
-          args += ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
-          args += ["-V"] if script.copy_environment?
+          args.concat ["-v", envvars.map{|k,v| "#{k}=#{v}"}.join(",")] unless envvars.empty?
+          args.concat ["-V"] if script.copy_environment?
 
           # If error_path is not specified we join stdout & stderr (as this
           # mimics what the other resource managers do)
-          args += ["-j", "oe"] if script.error_path.nil?
+          args.concat ["-j", "oe"] if script.error_path.nil?
 
-          args += ["-J", script.job_array_request] unless script.job_array_request.nil?
+          args.concat ["-J", script.job_array_request] unless script.job_array_request.nil?
 
           # Set native options
-          args += script.native if script.native
+          args.concat script.native if script.native
 
           # Submit job
           @pbspro.submit_string(script.content, args: args, chdir: script.workdir)

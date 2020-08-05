@@ -28,10 +28,13 @@ class QstatXmlJRListener
       :tasks => [],
       :status => :queued,
       :procs => 1,
-      :native => {}  # TODO: improve native attribute reporting
+      :native => {
+        :ST_name => ''
+      } 
     }
     @current_text = nil
     @current_request = nil
+    @processing_JB_stdout_path_list = false
 
     @processing_job_array_spec = false
     @adding_slots = false
@@ -42,6 +45,7 @@ class QstatXmlJRListener
       step: 1,  # Step can have a default of 1
     }
     @running_tasks = []
+    @native_tags = ['JB_job_number', 'JB_job_name', 'JB_version', 'JB_project', 'JB_exec_file', 'JB_script_file', 'JB_script_size', 'JB_submission_time', 'JB_execution_time', 'JB_deadline', 'JB_owner', 'JB_uid', 'JB_group', 'JB_gid', 'JB_account', 'JB_cwd', 'JB_notify', 'JB_type', 'JB_reserve', 'JB_priority', 'JB_jobshare', 'JB_verify', 'JB_checkpoint_attr', 'JB_checkpoint_interval', 'JB_restart']
   end
 
   def tag_start(name, attrs)
@@ -50,10 +54,17 @@ class QstatXmlJRListener
       toggle_processing_array_spec
     when 'JB_pe_range'
       toggle_adding_slots
+    when 'JB_stdout_path_list'
+      @processing_JB_stdout_path_list = true
     end
   end
 
   def tag_end(name)
+    #Add to native hash if in native_tags
+    if (@native_tags.include?(name))
+      @parsed_job[:native][:"#{name}"] = @current_text
+    end
+
     case name
     when 'JB_ja_tasks'
       end_JB_ja_tasks
@@ -92,6 +103,10 @@ class QstatXmlJRListener
       toggle_processing_array_spec
     when 'JB_pe_range'
       toggle_adding_slots
+    when 'PN_path' 
+      end_PN_path
+    when 'ST_name'
+      end_ST_name
     end
   end
 
@@ -118,7 +133,7 @@ class QstatXmlJRListener
   end
 
   def end_JB_submission_time
-    @parsed_job[:submission_time] = @current_text.to_i
+    @parsed_job[:submission_time] = ms_to_seconds(@current_text.to_i)
   end
 
   def end_JB_ja_tasks
@@ -127,7 +142,7 @@ class QstatXmlJRListener
 
   def end_JAT_start_time
     @parsed_job[:status] = :running
-    @parsed_job[:dispatch_time] = @current_text.to_i
+    @parsed_job[:dispatch_time] = ms_to_seconds(@current_text.to_i)
     @parsed_job[:wallclock_time] = Time.now.to_i - @parsed_job[:dispatch_time]
   end
 
@@ -151,6 +166,15 @@ class QstatXmlJRListener
   # Used to record a running Job Array task
   def end_JAT_task_number
     @running_tasks << @current_text
+  end
+
+  def end_PN_path
+    @parsed_job[:native][:PN_path] = @current_text if @processing_JB_stdout_path_list
+    @processing_JB_stdout_path_list = false
+  end
+
+  def end_ST_name
+    @parsed_job[:native][:ST_name] = @parsed_job[:native][:ST_name] + @current_text + ' '
   end
 
   def set_job_array_piece(key)
@@ -201,5 +225,12 @@ class QstatXmlJRListener
   def set_slots
     @parsed_job[:procs] = @current_text.to_i
   end
-end
 
+  private
+
+  # Some Grid Engines (like UGE) use milliseconds were others use
+  # seconds past the epoch.
+  def ms_to_seconds(raw)
+    raw.digits.length >= 13 ? raw / 1000 : raw
+  end
+end

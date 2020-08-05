@@ -1,5 +1,6 @@
 require "ood_core/refinements/hash_extensions"
 require "ood_core/job/adapters/helper"
+require 'shellwords'
 
 module OodCore
   module Job
@@ -87,7 +88,7 @@ module OodCore
           depend << "afterany:#{afterany.join(':')}"     unless afterany.empty?
 
           # Set mailing options
-          mail_points  = ""
+          mail_points = ""
           mail_points += "b" if script.email_on_started
           mail_points += "e" if script.email_on_terminated
 
@@ -131,40 +132,44 @@ module OodCore
               envvars.merge!   script.native.fetch(:envvars, {})
             end
 
+            # Destructively change envvars to shellescape values
+            envvars.transform_values! { |v| Shellwords.escape(v) }
+
             # Submit job
             @pbs.submit_string(script.content, queue: script.queue_name, headers: headers, resources: resources, envvars: envvars)
           else
             # Set qsub arguments
             args = []
-            args += ["-F", script.args.join(" ")] unless script.args.nil?
-            args += ["-h"] if script.submit_as_hold
-            args += ["-r", script.rerunnable ? "y" : "n"] unless script.rerunnable.nil?
-            args += ["-M", script.email.join(",")] unless script.email.nil?
-            args += ["-m", mail_points] unless mail_points.empty?
-            args += ["-N", script.job_name] unless script.job_name.nil?
-            args += ["-S", script.shell_path] unless script.shell_path.nil?
+            args.concat ["-F", script.args.join(" ")] unless script.args.nil?
+            args.concat ["-h"] if script.submit_as_hold
+            args.concat ["-r", script.rerunnable ? "y" : "n"] unless script.rerunnable.nil?
+            args.concat ["-M", script.email.join(",")] unless script.email.nil?
+            args.concat ["-m", mail_points] unless mail_points.empty?
+            args.concat ["-N", script.job_name] unless script.job_name.nil?
+            args.concat ["-S", script.shell_path] unless script.shell_path.nil?
             # ignore input_path (not defined in Torque)
-            args += ["-o", script.output_path] unless script.output_path.nil?
-            args += ["-e", script.error_path] unless script.error_path.nil?
-            args += ["-W", "x=advres:#{script.reservation_id}"] unless script.reservation_id.nil?
-            args += ["-q", script.queue_name] unless script.queue_name.nil?
-            args += ["-p", script.priority] unless script.priority.nil?
-            args += ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
-            args += ["-A", script.accounting_id] unless script.accounting_id.nil?
-            args += ["-W", "depend=#{depend.join(",")}"] unless depend.empty?
-            args += ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
-            args += ['-t', script.job_array_request] unless script.job_array_request.nil?
+            args.concat ["-o", script.output_path] unless script.output_path.nil?
+            args.concat ["-e", script.error_path] unless script.error_path.nil?
+            args.concat ["-W", "x=advres:#{script.reservation_id}"] unless script.reservation_id.nil?
+            args.concat ["-q", script.queue_name] unless script.queue_name.nil?
+            args.concat ["-p", script.priority] unless script.priority.nil?
+            args.concat ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
+            args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
+            args.concat ["-W", "depend=#{depend.join(",")}"] unless depend.empty?
+            args.concat ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
+            args.concat ['-t', script.job_array_request] unless script.job_array_request.nil?
+            args.concat ['-l', "qos=#{script.qos}"] unless script.qos.nil?
             # Set environment variables
             env = script.job_environment.to_h
-            args += ["-v", env.keys.join(",")] unless env.empty?
-            args += ["-V"] if script.copy_environment?
+            args.concat ["-v", env.keys.join(",")] unless env.empty?
+            args.concat ["-V"] if script.copy_environment?
 
             # If error_path is not specified we join stdout & stderr (as this
             # mimics what the other resource managers do)
-            args += ["-j", "oe"] if script.error_path.nil?
+            args.concat ["-j", "oe"] if script.error_path.nil?
 
             # Set native options
-            args += script.native if script.native
+            args.concat script.native if script.native
 
             # Submit job
             @pbs.submit(script.content, args: args, env: env, chdir: script.workdir)

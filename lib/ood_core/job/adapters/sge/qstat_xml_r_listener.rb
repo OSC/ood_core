@@ -24,21 +24,32 @@ class QstatXmlRListener
     @parsed_jobs = []
     @current_job = {
       :tasks => [],
-      :native => {}  # TODO: improve native reporting
+      :native => {
+        :ST_name => ''
+      } 
     }
     @current_text = nil
+    @processing_JB_stdout_path_list = false
 
     @current_request = nil
+    @native_tags = ['JB_job_number', 'JB_job_name', 'JB_version', 'JB_project', 'JB_exec_file', 'JB_script_file', 'JB_script_size', 'JB_submission_time', 'JB_execution_time', 'JB_deadline', 'JB_owner', 'JB_uid', 'JB_group', 'JB_gid', 'JB_account', 'JB_cwd', 'JB_notify', 'JB_type', 'JB_reserve', 'JB_priority', 'JB_jobshare', 'JB_verify', 'JB_checkpoint_attr', 'JB_checkpoint_interval', 'JB_restart']
   end
 
   def tag_start(name, attributes)
     case name
     when 'hard_request'
       start_hard_request(attributes)
+    when "JB_stdout_path_list"
+      @processing_JB_stdout_path_list = true
     end
   end
 
   def tag_end(name)
+    #Add text if in native_tags
+    if (@native_tags.include?(name))
+      @current_job[:native][:"#{name}"] = @current_text
+    end
+    
     case name
     when 'job_list'
       end_job_list
@@ -64,6 +75,10 @@ class QstatXmlRListener
       end_hard_request
     when 'tasks'
       add_child_tasks
+    when 'PN_path'
+      end_PN_path
+    when 'ST_name'
+      end_ST_name
     end
   end
 
@@ -130,6 +145,15 @@ class QstatXmlRListener
     end
   end
 
+  def end_PN_path
+    @current_job[:native][:PN_path] = @current_text if @processing_JB_stdout_path_list
+    @processing_JB_stdout_path_list = false
+  end
+
+  def end_ST_name
+    @current_job[:native][:ST_name] = @current_job[:native][:ST_name] + @current_text + ' '
+  end
+
   # Store a completed job and reset current_job for the next pass
   def end_job_list
     @parsed_jobs << @current_job
@@ -145,4 +169,3 @@ class QstatXmlRListener
     }
   end
 end
-

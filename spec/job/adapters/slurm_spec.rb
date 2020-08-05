@@ -227,6 +227,12 @@ describe OodCore::Job::Adapters::Slurm do
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["--export", "NONE", "A", "B", "C"], env: {}) }
     end
 
+    context "with :qos" do
+      before { adapter.submit(build_script(qos: 'high')) }
+
+      it { expect(slurm).to have_received(:submit_string).with(content, args:["--qos", "high", "--export", "NONE"], env: {})}
+    end
+
     %i(after afterok afternotok afterany).each do |after|
       context "and :#{after} is defined as a single job id" do
         before { adapter.submit(build_script, after => "job_id") }

@@ -215,6 +215,12 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit).with(content, args: ["-l", "walltime=26:15:34", "-j", "oe"], env: {}, chdir: nil) }
     end
 
+    context "with :qos" do 
+      before { adapter.submit(build_script(qos: "high")) }
+
+      it { expect(pbs).to have_received(:submit).with(content, args: ["-l", "qos=high", "-j", "oe"], env: {}, chdir: nil)}
+    end
+
     context "with :native" do
       before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 
@@ -315,6 +321,12 @@ describe OodCore::Job::Adapters::Torque do
         before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
 
         it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {"key" => "value"}) }
+      end
+
+      context "with :job_environment having spaces" do
+        before { adapter.submit(build_script(job_environment: {"key" => "value value"})) }
+
+        it { expect(pbs).to have_received(:submit_string).with(content, queue: nil, headers: {Join_Path: "oe"}, resources: {}, envvars: {"key" => "value\\ value"}) }
       end
 
       context "with :workdir" do
