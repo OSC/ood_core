@@ -28,10 +28,8 @@ module OodCore
           check_host = strict_host_checking ? "yes" : "no"
           args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
           env.each{|key, value| args.push("export #{key}=#{value};")}
-          args.concat(cmd_args.unshift(cmd))
-          cmd = 'ssh'
 
-          return cmd, args
+          return 'ssh', args + [cmd] + cmd_args
         end
       end
     end
