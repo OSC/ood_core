@@ -6,6 +6,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.12.0] - 2020-08-05
+### Added
+- qos option to Slurm and Torque [#205](https://github.com/OSC/ood_core/pull/205)
+- native hash returned in qstat for SGE adapter [#198](https://github.com/OSC/ood_core/pull/198)
+- option for specifying `submit_host` to submit jobs via ssh on other host [#204](https://github.com/OSC/ood_core/pull/204)
+
+### Fixed
+- SGE handle milliseconds instead of seconds when milliseconds used [#206](https://github.com/OSC/ood_core/issues/206)
+- Torque's native "hash" for job submission now handles env vars values with spaces [#202](https://github.com/OSC/ood_core/pull/202)
+
 ## [0.11.4] - 2020-05-27
 ### Fixed
 - Environment exports in SLURM while implementing [#158](https://github.com/OSC/ood_core/issues/158)
@@ -233,7 +243,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.11.4...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.12.0...HEAD
+[0.12.0]: https://github.com/OSC/ood_core/compare/v0.11.4...v0.12.0
 [0.11.4]: https://github.com/OSC/ood_core/compare/v0.11.3...v0.11.4
 [0.11.3]: https://github.com/OSC/ood_core/compare/v0.11.2...v0.11.3
 [0.11.2]: https://github.com/OSC/ood_core/compare/v0.11.1...v0.11.2
