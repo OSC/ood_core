@@ -227,19 +227,7 @@ module OodCore
         # extended data is just lines of 'key: value' value, so parse
         # it and stick it all in a hash.
         def extended_data_to_hash(data)
-          header = true
-          data_hash = {}
-
-          data.to_s.each_line do |line|
-            unless header
-              words = line.split(':')
-              data_hash[words[0]] = words[1].gsub(/\s+/, "") if words.size == 2
-            end
-
-            header = false if header
-          end
-
-          data_hash
+          Hash[data.to_s.scan(/(\w+): (\S+)/)]
         end
 
         def info_from_ccqstat(data)
