@@ -26,7 +26,7 @@ module OodCore
       class CCQ < Adapter
         using Refinements::ArrayExtensions
 
-        attr_reader :image, :cloud, :scheduler, :bin, :bin_overrides
+        attr_reader :image, :cloud, :scheduler, :bin, :bin_overrides, :jobid_regex
 
         def initialize(config)
           @image = config.fetch(:image, nil)
@@ -34,6 +34,7 @@ module OodCore
           @scheduler = config.fetch(:scheduler, nil)
           @bin = config.fetch(:bin, '/opt/CloudyCluster/srv/CCQ')
           @bin_overrides = config.fetch(:bin_overrides, {})
+          @jobid_regex = config.fetch(:jobid_regex, "job id is: (?<job_id>\\d+) you")
         end
 
         # Submit a job with the attributes defined in the job template instance
@@ -203,9 +204,11 @@ module OodCore
         end
 
         def parse_job_id_from_ccqsub(output)
-          match_data = /job id is: (?<job_id>\d+) you/.match(output)
-          throw JobAdapterError.new "Could not extract job id out of ccqsub output '#{output}'" if match_data.nil? 
-          match_data[:job_id]
+          match_data = /#{jobid_regex}/.match(output)
+          # match_data could be nil, OR re-configured jobid_regex could be looking for a different named group
+          job_id = match_data&.named_captures&.fetch('job_id', nil)
+          throw JobAdapterError.new "Could not extract job id out of ccqsub output '#{output}'" if job_id.nil?
+          job_id
         end
 
         # parse an Ood::Job::Info object from extended ccqstat output

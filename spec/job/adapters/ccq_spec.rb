@@ -249,6 +249,16 @@ describe OodCore::Job::Adapters::CCQ do
         expect { adapter.send(:parse_job_id_from_ccqsub, output) }.to raise_error(ArgumentError)
       end
     end
+
+    context "when given good data but bad configuration" do
+      # named group should be 'job_id' not 'bad_cfg'
+      let(:bad_adapter) { described_class.new({:jobid_regex => "job id is: (?<bad_cfg>\\d+) you"}) }
+      let(:output) { good_ccqsub_output }
+
+      it "throws an error" do
+        expect { bad_adapter.send(:parse_job_id_from_ccqsub, output) }.to raise_error(ArgumentError)
+      end
+    end
   end
 
   describe "#hold" do
