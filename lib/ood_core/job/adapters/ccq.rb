@@ -77,30 +77,6 @@ module OodCore
           info_from_ccqstat(stat_output)
         end
 
-        # Retrieve info for all jobs for a given owner or owners from the
-        # resource manager
-        # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs
-        # @return [Array<Info>] information describing submitted jobs
-        def info_where_owner(owner, attrs: nil)
-          owner = Array.wrap(owner).map(&:to_s)
-
-          # must at least have job_owner to filter by job_owner
-          attrs = Array.wrap(attrs) | [:job_owner] unless attrs.nil?
-
-          info_all(attrs: attrs).select { |info| owner.include? info.job_owner }
-        end
-
-        # Retrieve job info from the resource manager
-        # @param id [#to_s] the id of the job
-        # @return [Info] information describing submitted job
-        def info_all_each(attrs: nil)
-          return to_enum(:info_all_each, attrs: attrs) unless block_given?
-
-          info_all(attrs: attrs).each do |job|
-            yield job
-          end
-        end
-
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job
         # @return [Info] information describing submitted job
