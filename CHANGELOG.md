@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.13.0] - 2020-08-10
+### Added
+- CloudyCluster CCQ Adapter
+
 ## [0.12.0] - 2020-08-05
 ### Added
 - qos option to Slurm and Torque [#205](https://github.com/OSC/ood_core/pull/205)
@@ -243,7 +247,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.12.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.13.0...HEAD
+[0.13.0]: https://github.com/OSC/ood_core/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/OSC/ood_core/compare/v0.11.4...v0.12.0
 [0.11.4]: https://github.com/OSC/ood_core/compare/v0.11.3...v0.11.4
 [0.11.3]: https://github.com/OSC/ood_core/compare/v0.11.2...v0.11.3
