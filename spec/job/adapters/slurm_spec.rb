@@ -1076,6 +1076,36 @@ describe OodCore::Job::Adapters::Slurm do
       #     [:account, :job_id, :job_name, :node_list, :partition, :scheduled_nodes, :state_compact, :time_used, :user])
       # end
     end
+
+    describe "#get_jobs" do
+      let(:squeue_args) {[
+        "squeue",
+        "--all",
+        "--states=all",
+        "--noconvert",
+        "-o",
+        "\u001E%a\u001F%A\u001F%B\u001F%c\u001F%C\u001F%d\u001F%D\u001F%e\u001F%E\u001F%f\u001F%F\u001F%g\u001F%G\u001F%h\u001F%H\u001F%i\u001F%I\u001F%j\u001F%J\u001F%k\u001F%K\u001F%l\u001F%L\u001F%m\u001F%M\u001F%n\u001F%N\u001F%o\u001F%O\u001F%q\u001F%P\u001F%Q\u001F%r\u001F%S\u001F%t\u001F%T\u001F%u\u001F%U\u001F%v\u001F%V\u001F%w\u001F%W\u001F%x\u001F%X\u001F%y\u001F%Y\u001F%z\u001F%Z\u001F%b",
+        "-j",
+        "123"
+      ]}
+
+      it "handles Slurm socket timeouts" do
+        slurm_stderr = "slurm_load_jobs error: Socket timed out on send/recv operation"
+        slurm_stdout = "CLUSTER: saturn"
+
+        allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => true)])
+        expect(batch.get_jobs(id: '123')).to eq([{ id: '123', state: 'undetermined'}])
+      end
+
+      it "still propogates non-zero exitting errors" do
+        slurm_stderr = "Some unhandled error"
+        slurm_stdout = ""
+
+        allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => false)])
+        expect { batch.get_jobs(id: '123') }.to raise_error(Slurm::Batch::Error)
+      end
+    end
+
   end
 
   describe "customizing bin paths" do
