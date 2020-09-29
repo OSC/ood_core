@@ -14,6 +14,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   attr_reader :config_file, :bin, :cluster_name, :mounts
   attr_reader :all_namespaces, :using_context, :helper
+  attr_reader :username_prefix
 
   def initialize(options = {}, helper = Helper.new)
     options = options.to_h.symbolize_keys
@@ -23,6 +24,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @cluster_name = options.fetch(:cluster_name, 'open-ondemand')
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)
+    @username_prefix = options.fetch(:username_prefix, nil)
 
     @using_context = false
     @helper = helper
@@ -143,6 +145,10 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def username
     @username ||= Etc.getlogin
+  end
+
+  def k8s_username
+    username_prefix.nil? ? username : "#{username_prefix}-#{username}"
   end
 
   def run_as_user
@@ -320,7 +326,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   def set_context
     cmd = "#{base_cmd} config set-context #{cluster_name}"
     cmd << " --cluster=#{cluster_name} --namespace=#{namespace}"
-    cmd << " --user=#{username}"
+    cmd << " --user=#{k8s_username}"
 
     call(cmd)
     use_context
