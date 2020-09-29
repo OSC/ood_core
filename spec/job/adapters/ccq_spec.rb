@@ -63,6 +63,18 @@ describe OodCore::Job::Adapters::CCQ do
         job_name: 'ccq_ood_script_20200706-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'queued'
+      }),
+      OodCore::Job::Info.new({
+        id: '432207',
+        job_name: 'short_name',
+        job_owner: 'jeff',
+        status: 'running'
+      }),
+      OodCore::Job::Info.new({
+        id: '432208',
+        job_name: 'name with spaces',
+        job_owner: 'jeff',
+        status: 'queued'
       })
     ]
   }
@@ -76,7 +88,6 @@ describe OodCore::Job::Adapters::CCQ do
         allow(Open3).to receive(:capture3).with({}, '/opt/CloudyCluster/srv/CCQ/ccqstat', stdin_data: "").and_return([ccqstat_output, '', $?])
 
         expect(info_array).to match_array(expected_ccqstat_info)
-        expect(info_array.size).to eql(6)
       end
     end
   end

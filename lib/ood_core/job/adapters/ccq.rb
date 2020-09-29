@@ -203,6 +203,10 @@ module OodCore
           'ccq_ood_script_'
         end
 
+        def ccqstat_regex
+          /^(?<id>\S+)\s+(?<name>.+)\s+(?<username>\S+)\s+(?<scheduler>\S+)\s+(?<status>\S+)\s*$/
+        end
+
         def parse_job_id_from_ccqsub(output)
           match_data = /#{jobid_regex}/.match(output)
           # match_data could be nil, OR re-configured jobid_regex could be looking for a different named group
@@ -236,26 +240,29 @@ module OodCore
         def info_from_ccqstat(data)
           infos = []
 
-          data.to_s.each_line do |line|
-            words = line.split(/\s/).reject(&:empty?)
-            next if !words.empty? && words[0] == "Id" # just skip the header
-
-            infos << Info.new(line_to_hash(words)) if words.size == 5
+          data.to_s.lines.drop(1).each do |line|
+            match_data = ccqstat_regex.match(line)
+            infos << Info.new(ccqstat_match_to_hash(match_data)) if valid_ccqstat_match?(match_data)
           end
 
           infos
         end
 
-        def line_to_hash(words)
-          return unless words.size == 5
-
+        def ccqstat_match_to_hash(match)
           data_hash = {}
-          data_hash[:id] = words[0]
-          data_hash[:job_name] = words[1]
-          data_hash[:job_owner] = words[2]
-          data_hash[:status] = get_state(words[4])
+          data_hash[:id] = match.named_captures.fetch('id', nil)
+          data_hash[:job_owner] = match.named_captures.fetch('username', nil)
+          data_hash[:status] = get_state(match.named_captures.fetch('status', nil))
+
+          # The regex leaves trailing empty spaces. There's no way to tell if they're _actually_
+          # a part of the job name or not, so we assume they're not and add the rstrip.
+          data_hash[:job_name] = match.named_captures.fetch('name', nil).to_s.rstrip
 
           data_hash
+        end
+
+        def valid_ccqstat_match?(match)
+          !match.nil? && !match.named_captures.fetch('id', nil).nil?
         end
 
         def get_state(state)
