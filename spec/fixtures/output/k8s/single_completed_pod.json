@@ -1,0 +1,157 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/podIP": "192.168.255.212/32",
+            "cni.projectcalico.org/podIPs": "192.168.255.212/32",
+            "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"v1\",\"kind\":\"Pod\",\"metadata\":{\"annotations\":{},\"name\":\"bash\",\"namespace\":\"johrstrom\"},\"spec\":{\"containers\":[{\"command\":[\"bash\",\"-c\",\"cd $HOME \\u0026\\u0026 ls -l \\u0026\\u0026 id \\u0026\\u0026 sleep 300\"],\"env\":[{\"name\":\"HOME\",\"value\":\"/users/PZS0714/johrstrom\"}],\"image\":\"bash:4\",\"name\":\"bash-home-test\",\"volumeMounts\":[{\"mountPath\":\"/users\",\"name\":\"users\"}]}],\"restartPolicy\":\"OnFailure\",\"securityContext\":{\"fsGroup\":5515,\"runAsGroup\":5515,\"runAsUser\":30961},\"volumes\":[{\"hostPath\":{\"path\":\"/users\"},\"name\":\"users\"}]}}\n"
+        },
+        "creationTimestamp": "2020-04-21T22:03:52Z",
+        "name": "bash",
+        "namespace": "johrstrom",
+        "resourceVersion": "16960779",
+        "selfLink": "/api/v1/namespaces/johrstrom/pods/bash",
+        "uid": "ef8a7663-9202-4cc0-935d-0788e56541b7"
+    },
+    "spec": {
+        "containers": [
+            {
+                "command": [
+                    "bash",
+                    "-c",
+                    "cd $HOME \u0026\u0026 ls -l \u0026\u0026 id \u0026\u0026 sleep 300"
+                ],
+                "env": [
+                    {
+                        "name": "HOME",
+                        "value": "/users/PZS0714/johrstrom"
+                    }
+                ],
+                "image": "bash:4",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "bash-home-test",
+                "resources": {},
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/users",
+                        "name": "users"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "default-token-6mdh8",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "nodeName": "kubeworker01-dev",
+        "priority": 0,
+        "restartPolicy": "OnFailure",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+            "fsGroup": 5515,
+            "runAsGroup": 5515,
+            "runAsUser": 30961
+        },
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "hostPath": {
+                    "path": "/users",
+                    "type": ""
+                },
+                "name": "users"
+            },
+            {
+                "name": "default-token-6mdh8",
+                "secret": {
+                    "defaultMode": 420,
+                    "secretName": "default-token-6mdh8"
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-21T22:03:52Z",
+                "reason": "PodCompleted",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-21T22:08:54Z",
+                "reason": "PodCompleted",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-21T22:08:54Z",
+                "reason": "PodCompleted",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2020-04-21T22:03:52Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "docker://05e5bbeeb195dd2df06d9b86d998cf07d5012f15125bbb61b4226778b395d724",
+                "image": "bash:4",
+                "imageID": "docker-pullable://bash@sha256:cf4ea9f89989805da7d5bc8f8381a02ad9c1f64bb87bb70d2de0f856fab7742b",
+                "lastState": {},
+                "name": "bash-home-test",
+                "ready": false,
+                "restartCount": 0,
+                "started": false,
+                "state": {
+                    "terminated": {
+                        "containerID": "docker://05e5bbeeb195dd2df06d9b86d998cf07d5012f15125bbb61b4226778b395d724",
+                        "exitCode": 0,
+                        "finishedAt": "2020-04-21T22:08:53Z",
+                        "reason": "Completed",
+                        "startedAt": "2020-04-21T22:03:53Z"
+                    }
+                }
+            }
+        ],
+        "hostIP": "10.20.0.40",
+        "phase": "Succeeded",
+        "podIP": "192.168.255.212",
+        "podIPs": [
+            {
+                "ip": "192.168.255.212"
+            }
+        ],
+        "qosClass": "BestEffort",
+        "startTime": "2020-04-21T22:03:52Z"
+    }
+}
