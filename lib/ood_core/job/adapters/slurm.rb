@@ -124,16 +124,9 @@ module OodCore
             fields = squeue_fields(attrs)
             args = squeue_args(id: id, owner: owner, options: fields.values)
 
-            begin
-              squeue_output = call("squeue", *args)
-            rescue SlurmTimeoutError
-              # TODO: could use a log entry here
-              return [{ id: id, state: 'undetermined' }]
-            end
-
             #TODO: switch mock of Open3 to be the squeue mock script
             # then you can use that for performance metrics
-            StringIO.open(squeue_output) do |output|
+            StringIO.open(call("squeue", *args)) do |output|
               advance_past_squeue_header!(output)
 
               jobs = []
@@ -157,6 +150,9 @@ module OodCore
               end
               jobs
             end
+          rescue SlurmTimeoutError
+            # TODO: could use a log entry here
+            return [{ id: id, state: 'undetermined' }]
           end
 
           def squeue_fields(attrs)
