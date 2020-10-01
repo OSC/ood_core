@@ -166,7 +166,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         'email_on_terminated' => script_email_on_event(script, 'terminated'),
         'email_on_start' => script_email_on_event(script, 'started'),
         'environment' => export_env(script),
-        'error_path' => (script.error_path) ? script.error_path.to_s : '/dev/null',
+        'error_path' => error_path(script),
         'job_name' => script.job_name.to_s,
         'output_path' => (script.output_path) ? script.output_path.to_s : '/dev/null',
         'script_content' => content,
@@ -271,5 +271,12 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   def user_script_has_shebang?(script)
     return false if script.content.empty?
     script.content.split("\n").first.start_with?('#!/')
+  end
+
+  def error_path(script)
+    return script.error_path.to_s if script.error_path
+    return script.output_path.to_s if script.output_path
+
+    '/dev/null'
   end
 end

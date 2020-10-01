@@ -296,12 +296,23 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 }), 'session_name')
             }
 
+            let(:script_with_both_paths_nil) {
+                subject.send(:wrapped_script, build_script({
+                    error_path: nil,
+                    output_path: nil,
+                }), 'session_name')
+            }
+
             it "is set in the script" do
                 expect(script_with_explicit_error_path).to include('ERROR_PATH=/home/efranz/stderr.log')
             end
 
-            it "is not set in the script" do
-                expect(script_with_nil_error_path).to include('ERROR_PATH=/dev/null')
+            it "is not set in the script when there's no output_path" do
+                expect(script_with_both_paths_nil).to include('ERROR_PATH=/dev/null')
+            end
+
+            it "uses output_path if it exists" do
+                expect(script_with_nil_error_path).to include('ERROR_PATH=/users/PZS0002/mrodgers/stdout_from_fork.log')
             end
         end
 
