@@ -80,6 +80,9 @@ module OodCore
           # from
           class Error < StandardError; end
 
+          # An error indicating the slurm command timed out
+          class SlurmTimeoutError < Error; end
+
           # @param cluster [#to_s, nil] the cluster name
           # @param conf [#to_s, nil] path to the slurm conf
           # @param bin [#to_s] path to slurm installation binaries
@@ -147,6 +150,9 @@ module OodCore
               end
               jobs
             end
+          rescue SlurmTimeoutError
+            # TODO: could use a log entry here
+            return [{ id: id, state: 'undetermined' }]
           end
 
           def squeue_fields(attrs)
@@ -303,7 +309,18 @@ module OodCore
 
               cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
-              s.success? ? o : raise(Error, e)
+              s.success? ? interpret_and_raise(o, e) : raise(Error, e)
+            end
+
+            # Helper function to raise an error based on the contents of stderr.
+            # Slurm exits 0 even when the command fails, so we need to interpret stderr
+            # to see if the command was actually successful.
+            def interpret_and_raise(stdout, stderr)
+              return stdout if stderr.empty?
+
+              raise SlurmTimeoutError, stderr if /^slurm_load_jobs error: Socket timed out/.match(stderr)
+
+              stdout
             end
 
             def squeue_attrs_for_info_attrs(attrs)
