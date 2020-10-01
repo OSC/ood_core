@@ -176,6 +176,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         'singularity_image' => singularity_image(script.native),
         'ssh_hosts' => ssh_hosts,
         'tmux_bin' => tmux_bin,
+        'workdir' => (script.workdir) ? script.workdir.to_s : '/tmp',
       }.each{
         |key, value| bnd.local_variable_set(key, value)
       }

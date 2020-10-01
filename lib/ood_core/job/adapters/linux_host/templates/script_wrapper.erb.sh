@@ -16,13 +16,9 @@ fi
 echo $hostname
 
 # Put the script into a temp file on localhost
-<% if debug %>
-singularity_tmp_file=$(mktemp -p "$HOME" --suffix '_sing')
-tmux_tmp_file=$(mktemp -p "$HOME" --suffix "_tmux")
-<% else %>
-singularity_tmp_file=$(mktemp)
-tmux_tmp_file=$(mktemp)
-<% end %>
+singularity_tmp_file=$(mktemp -p "<%= workdir %>" --suffix '_sing')
+tmux_tmp_file=$(mktemp -p "<%= workdir %>" --suffix "_tmux")
+
 
 # Create an executable to run in a tmux session
 # The escaped HEREDOC means that we need to substitute in $singularity_tmp_file ourselves
@@ -69,10 +65,3 @@ SINGULARITY_LAUNCHER
 chmod +x "$singularity_tmp_file"
 chmod +x "$tmux_tmp_file"
 <%= tmux_bin %> new-session -d -s "<%= session_name %>" "$tmux_tmp_file"
-
-# Remove the file
-<% if ! debug %>
-# Wait 1 second to ensure that tmux session has started before the file is removed
-sleep 1
-rm -f "$tmux_tmp_file"; rm -f "$singularity_tmp_file"
-<% end %>
