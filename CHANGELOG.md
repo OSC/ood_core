@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.14.0] - 2020-10-01
+### Added 
+- Kubernetes adapter in PR [156](https://github.com/OSC/ood_core/pull/156)
+
+### Fixed
+- Catch Slurm times. [209](https://github.com/OSC/ood_core/pull/209)
+- LHA race condition in deleteing tmp files. [212](https://github.com/OSC/ood_core/pull/212)
+
 ## [0.13.0] - 2020-08-10
 ### Added
 - CloudyCluster CCQ Adapter
@@ -247,7 +255,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.13.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.14.0...HEAD
+[0.14.0]: https://github.com/OSC/ood_core/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/OSC/ood_core/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/OSC/ood_core/compare/v0.11.4...v0.12.0
 [0.11.4]: https://github.com/OSC/ood_core/compare/v0.11.3...v0.11.4
