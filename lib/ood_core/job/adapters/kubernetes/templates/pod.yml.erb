@@ -7,6 +7,7 @@ metadata:
     job: <%= id %>
     app.kubernetes.io/name: <%= container.name %>
     app.kubernetes.io/managed-by: open-ondemand
+    account: <%= script.accounting_id %>
 spec:
   restartPolicy: <%= spec.container.restart_policy %>
   securityContext:
