@@ -174,7 +174,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     spec = Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
 
-    template = ERB.new(File.read(resource_file))
+    template = ERB.new(File.read(resource_file), nil, '-')
 
     [template.result(binding), id]
   end
