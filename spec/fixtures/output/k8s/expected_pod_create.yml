@@ -18,46 +18,26 @@ spec:
   - name: "rspec-test"
     image: ruby:2.5
     imagePullPolicy: IfNotPresent
-    
     workingDir: "/my/home"
-    
-    
     env:
-    
     - name: HOME
       value: "/my/home"
-    
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
-     
-     
-    
     command:
-    
     - "rake"
-    
     - "spec"
-     
-     
-    
     ports:
     - containerPort: 8080
-     
     volumeMounts:
-    
     - name: configmap-volume
       mountPath:  /ood
-    
-    
     - name: home-dir
       mountPath: /home
-    
     - name: nfs-dir
       mountPath: /fs
-    
     - name: ess
       mountPath: /fs/ess
-     
     resources:
       limits:
         memory: "6Gi"
@@ -65,68 +45,39 @@ spec:
       requests:
         memory: "6Gi"
         cpu: "4"
-  
   initContainers:
-  
   - name: "init-1"
     image: "busybox:latest"
     command:
-    
     - "/bin/ls"
-    
     - "-lrt"
-    
     - "."
-     
     volumeMounts:
-    
     - name: configmap-volume
       mountPath:  /ood
-    
-    
     - name: home-dir
       mountPath: /home
-    
     - name: nfs-dir
       mountPath: /fs
-    
     - name: ess
       mountPath: /fs/ess
-     
-   
-   
-  
   volumes:
-   
-  
   - name: configmap-volume
     configMap:
       name: rspec-test-123-configmap
-  
-  
-  
   - name: home-dir
     hostPath:
       path: /users
       type: Directory
-   
-  
-  
   - name: nfs-dir
     nfs:
       server: some.nfs.host
       path: /fs
-   
-  
-  
   - name: ess
     hostPath:
       path: /fs/ess
       type: Directory
-   
-   
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -140,9 +91,7 @@ spec:
     port: 80
     targetPort: 8080
   type: NodePort
- 
 ---
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -153,4 +102,3 @@ data:
     a = b
     c = d
       indentation = keepthis
- 

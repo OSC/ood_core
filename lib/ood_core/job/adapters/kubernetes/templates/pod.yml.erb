@@ -20,35 +20,35 @@ spec:
   - name: "<%= spec.container.name %>"
     image: <%= spec.container.image %>
     imagePullPolicy: IfNotPresent
-    <% unless spec.container.working_dir.empty? %>
+    <%- unless spec.container.working_dir.empty? -%>
     workingDir: "<%= spec.container.working_dir %>"
-    <% end %>
-    <% unless spec.container.env.empty? %>
+    <%- end -%>
+    <%- unless spec.container.env.empty? -%>
     env:
-    <% spec.container.env.each do |env| %>
+    <%- spec.container.env.each do |env| -%>
     - name: <%= env[:name] %>
       value: "<%= env[:value] %>"
-    <% end %> <%# for each env %>
-    <% end %> <%# unless env is nil %>
-    <% unless spec.container.command.empty? %>
+    <%- end # for each env -%>
+    <%- end # unless env is nil -%>
+    <%- unless spec.container.command.empty? -%>
     command:
-    <% spec.container.command.each do |cmd| %>
+    <%- spec.container.command.each do |cmd| -%>
     - "<%= cmd %>"
-    <% end %> <%# for each command %>
-    <% end %> <%# unless command is nil %>
-    <% unless spec.container.port.nil? %>
+    <%- end # for each command -%>
+    <%- end # unless command is nil -%>
+    <%- unless spec.container.port.nil? -%>
     ports:
     - containerPort: <%= spec.container.port %>
-    <% end %> 
+    <%- end -%>
     volumeMounts:
-    <% unless configmap.nil? %>
+    <%- unless configmap.nil? -%>
     - name: configmap-volume
       mountPath:  <%= configmap_mount_path %>
-    <% end %>
-    <% all_mounts.each do |mount| %>
+    <%- end -%>
+    <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
-    <% end %> <%# for each mount %>
+    <%- end # for each mount -%>
     resources:
       limits:
         memory: "<%= spec.container.memory %>"
@@ -56,49 +56,49 @@ spec:
       requests:
         memory: "<%= spec.container.memory %>"
         cpu: "<%= spec.container.cpu %>"
-  <% unless spec.init_containers.nil? %>
+  <%- unless spec.init_containers.nil? -%>
   initContainers:
-  <% spec.init_containers.each do |ctr| %>
+  <%- spec.init_containers.each do |ctr| -%>
   - name: "<%= ctr.name %>"
     image: "<%= ctr.image %>"
     command:
-    <% ctr.command.each do |cmd| %>
+    <%- ctr.command.each do |cmd| -%>
     - "<%= cmd %>"
-    <% end %> <%# command loop  %>
+    <%- end # command loop -%>
     volumeMounts:
-    <% unless configmap.nil? %>
+    <%- unless configmap.nil? -%>
     - name: configmap-volume
       mountPath:  <%= configmap_mount_path %>
-    <% end %>
-    <% all_mounts.each do |mount| %>
+    <%- end -%>
+    <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
-    <% end %> <%# for each mount %>
-  <% end %> <%# init container loop  %>
-  <% end %> <%# if init containers  %>
-  <% unless configmap.nil? || all_mounts.empty? %>
+    <%- end # for each mount -%>
+  <%- end # init container loop -%>
+  <%- end # if init containers -%>
+  <%- unless configmap.nil? || all_mounts.empty? -%>
   volumes:
-  <% end %> <%# configmap.nil? || all_mounts.empty? %>
-  <% unless configmap.nil? %>
+  <%- end # configmap.nil? || all_mounts.empty? -%>
+  <%- unless configmap.nil? -%>
   - name: configmap-volume
     configMap:
       name: <%= configmap_name(id) %>
-  <% end %>
-  <% all_mounts.each do |mount| %>
-  <% if mount[:type] == 'nfs' %>
+  <%- end -%>
+  <%- all_mounts.each do |mount| -%>
+  <%- if mount[:type] == 'nfs' -%>
   - name: <%= mount[:name] %>
     nfs:
       server: <%= mount[:host] %>
       path: <%= mount[:path] %>
-  <% elsif mount[:type] == 'host' %>
+  <%- elsif mount[:type] == 'host' -%>
   - name: <%= mount[:name] %>
     hostPath:
       path: <%= mount[:path] %>
       type: <%= mount[:host_type] %>
-  <% end %> <%# if mount is [host,nfs] %>
-  <% end %> <%# for each mount %>
+  <%- end # if mount is [host,nfs] -%>
+  <%- end # for each mount -%>
 ---
-<% unless spec.container.port.nil? %>
+<%- unless spec.container.port.nil? -%>
 apiVersion: v1
 kind: Service
 metadata:
@@ -112,9 +112,9 @@ spec:
     port: 80
     targetPort: <%= spec.container.port %>
   type: NodePort
-<% end %> <%# end for service %>
+<%- end # end for service -%>
 ---
-<% unless configmap.nil? %>
+<%- unless configmap.nil? -%>
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -123,4 +123,4 @@ metadata:
 data:
   <%= configmap.filename %>: |
     <% config_data_lines(configmap.data).each do |line| %><%= line %><% end %>
-<% end %> <%# end for configmap %>
+<%- end # end for configmap -%>
