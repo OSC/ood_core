@@ -49,7 +49,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     {
       config_file: '~/kube.config',
       bin: '/usr/bin/wontwork',
-      cluster_name: 'test-cluster',
+      cluster: 'test-cluster',
       mounts: mounts,
       all_namespaces: true,
       server: {
