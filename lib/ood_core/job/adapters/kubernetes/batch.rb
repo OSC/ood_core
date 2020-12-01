@@ -12,7 +12,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   class Error < StandardError; end
 
-  attr_reader :config_file, :bin, :cluster_name, :mounts
+  attr_reader :config_file, :bin, :cluster, :mounts
   attr_reader :all_namespaces, :using_context, :helper
   attr_reader :username_prefix, :namespace_prefix
 
@@ -21,7 +21,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
     @config_file = options.fetch(:config_file, default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
-    @cluster_name = options.fetch(:cluster_name, 'open-ondemand')
+    @cluster = options.fetch(:cluster, 'open-ondemand')
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, nil)
@@ -213,7 +213,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def context
-    cluster_name
+    cluster
   end
 
   def default_config_file
@@ -319,14 +319,14 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     locale = "--region=#{region}" unless region.nil?
 
     # gke cluster name can probably can differ from what ood calls the cluster
-    cmd = "gcloud container clusters get-credentials #{locale} #{cluster_name}"
+    cmd = "gcloud container clusters get-credentials #{locale} #{cluster}"
     env = { 'KUBECONFIG' => config_file }
     call(cmd, env)
   end
 
   def set_context
-    cmd = "#{base_cmd} config set-context #{cluster_name}"
-    cmd << " --cluster=#{cluster_name} --namespace=#{namespace}"
+    cmd = "#{base_cmd} config set-context #{cluster}"
+    cmd << " --cluster=#{cluster} --namespace=#{namespace}"
     cmd << " --user=#{k8s_username}"
 
     call(cmd)
@@ -337,7 +337,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     server = config.fetch(:endpoint)
     cert = config.fetch(:cert_authority_file, nil)
 
-    cmd = "#{base_cmd} config set-cluster #{cluster_name}"
+    cmd = "#{base_cmd} config set-cluster #{cluster}"
     cmd << " --server=#{server}"
     cmd << " --certificate-authority=#{cert}" unless cert.nil?
 
