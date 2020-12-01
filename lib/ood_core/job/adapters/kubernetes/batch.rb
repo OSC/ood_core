@@ -14,7 +14,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   attr_reader :config_file, :bin, :cluster_name, :mounts
   attr_reader :all_namespaces, :using_context, :helper
-  attr_reader :username_prefix
+  attr_reader :username_prefix, :namespace_prefix
 
   def initialize(options = {}, helper = Helper.new)
     options = options.to_h.symbolize_keys
@@ -25,6 +25,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, nil)
+    @namespace_prefix = options.fetch(:namespace_prefix, '')
 
     @using_context = false
     @helper = helper
@@ -208,7 +209,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def default_namespace
-    username
+    namespace_prefix + username
   end
 
   def context
