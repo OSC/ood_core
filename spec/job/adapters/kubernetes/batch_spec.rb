@@ -271,6 +271,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
     it "submits with correct yml file" do
       script = build_script(
+        accounting_id: 'test',
         native: {
           container: {
             name: 'rspec-test',
@@ -318,7 +319,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
-      template, = configured_batch.send(:generate_id_yml, script.native)
+      template, = configured_batch.send(:generate_id_yml, script)
       expect(template.to_s).to eql(create_pod_yml.to_s)
 
       # make sure template get's passed into command correctly

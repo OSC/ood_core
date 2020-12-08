@@ -45,7 +45,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
     raise ArgumentError, 'Must specify the script' if script.nil?
 
-    resource_yml, id = generate_id_yml(script.native)
+    resource_yml, id = generate_id_yml(script)
     call("#{formatted_ns_cmd} create -f -", stdin: resource_yml)
 
     id
@@ -166,7 +166,8 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   # helper to template resource yml you're going to submit and
   # create an id.
-  def generate_id_yml(native_data)
+  def generate_id_yml(script)
+    native_data = script.native
     container = helper.container_from_native(native_data[:container])
     id = generate_id(container.name)
     configmap = helper.configmap_from_native(native_data, id)
@@ -174,7 +175,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     spec = Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
 
-    template = ERB.new(File.read(resource_file))
+    template = ERB.new(File.read(resource_file), nil, '-')
 
     [template.result(binding), id]
   end
