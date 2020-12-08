@@ -108,7 +108,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         submission_time: 1588023135,
         wallclock_time: 300,
         native: {
-          host: "10.20.0.40"
+          ood_connection_info: {
+            host: "10.20.0.40"
+          }
         }
       }),
       OodCore::Job::Info.new({
@@ -120,7 +122,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         submission_time: 1588023155,
         wallclock_time: nil,
         native: {
-          host: nil
+          ood_connection_info: {
+            host: nil
+          }
         }
       }),
       OodCore::Job::Info.new({
@@ -132,7 +136,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         submission_time: 1588106996,
         wallclock_time: nil,
         native: {
-          host: "10.20.0.40"
+          ood_connection_info: {
+            host: "10.20.0.40"
+          }
         }
       }),
       OodCore::Job::Info.new({
@@ -144,8 +150,10 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         submission_time: 1588089047,
         wallclock_time: 16051,
         native: {
-          host: "10.20.0.40"
-        }
+          ood_connection_info: {
+            host: "10.20.0.40"
+          }
+        },
       })
     ]
   }
@@ -160,7 +168,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       submission_time: 1587060496,
       wallclock_time: 154407,
       native: {
-        host: "10.20.0.40"
+        ood_connection_info: {
+          host: "10.20.0.40"
+        }
       },
       procs: 1
     })
@@ -176,9 +186,11 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       submission_time: 1587060496,
       wallclock_time: 154407,
       native: {
-        host: "10.20.0.40",
-        port: 30689,
-        password:  "ekmfxbOgNUlmLy4m"
+        ood_connection_info: {
+          host: "10.20.0.40",
+          port: 30689,
+          password:  "ekmfxbOgNUlmLy4m"
+        }
       },
       procs: 1
     })
@@ -194,8 +206,10 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       submission_time: 1587069112,
       wallclock_time: nil,
       native: {
-        host: "10.20.0.40"
-      }
+        ood_connection_info: {
+          host: "10.20.0.40"
+        }
+      },
     })
   }
 
@@ -209,7 +223,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       submission_time: 1587506632,
       wallclock_time: 300,
       native: {
-        host: "10.20.0.40"
+        ood_connection_info: {
+          host: "10.20.0.40"
+        }
       }
     })
   }
@@ -225,7 +241,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       submission_time: 1587580037,
       wallclock_time: nil,
       native: {
-        host: "10.20.0.40"
+        ood_connection_info: {
+          host: "10.20.0.40"
+        }
       }
     })
   }
@@ -240,7 +258,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       submission_time: 1587580581,
       wallclock_time: nil,
       native: {
-        host: nil
+        ood_connection_info: {
+          host: nil
+        }
       },
       procs: 1
     })

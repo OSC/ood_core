@@ -3,6 +3,7 @@ require "ood_core/job/adapters/kubernetes/helper"
 require "json"
 require "date"
 
+using OodCore::Refinements::HashExtensions
 
 describe OodCore::Job::Adapters::Kubernetes::Helper do
   subject(:helper){
@@ -32,7 +33,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     submission_time: 1587060496,
     wallclock_time: 154407,
     native: {
-      host: "10.20.0.40"
+      ood_connection_info: {
+        host: "10.20.0.40"
+      }
     },
     procs: "1"
   }}
@@ -46,7 +49,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     submission_time: 1587069112,
     wallclock_time: nil,
     native: {
-      host: "10.20.0.40"
+      ood_connection_info: {
+        host: "10.20.0.40"
+      }
     },
     procs: nil
   }}
@@ -60,7 +65,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     submission_time: 1587506632,
     wallclock_time: 300,
     native: {
-      host: "10.20.0.40"
+      ood_connection_info: {
+        host: "10.20.0.40"
+      }
     },
     procs: nil
   }}
@@ -74,7 +81,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     submission_time: 1587580037,
     wallclock_time: nil,
     native: {
-      host: "10.20.0.40"
+      ood_connection_info: {
+        host: "10.20.0.40"
+      }
     },
     procs: nil
   }}
@@ -88,7 +97,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     submission_time: 1587580581,
     wallclock_time: nil,
     native: {
-      host: nil
+      ood_connection_info: {
+        host: nil
+      }
     },
     procs: "1"
   }}
@@ -109,13 +120,13 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
   let(:pod_with_port) do
     pod = single_running_pod_hash
-    pod[:native] = pod[:native].merge({ port: 30689 })
+    pod[:native][:ood_connection_info] = pod[:native][:ood_connection_info].merge({ port: 30689 })
     pod
   end
 
   let(:pod_with_port_and_secret) do
     pod = pod_with_port
-    pod[:native] = pod[:native].merge({ password: "ekmfxbOgNUlmLy4m" })
+    pod[:native][:ood_connection_info] = pod[:native][:ood_connection_info].merge({ password: "ekmfxbOgNUlmLy4m" })
     pod
   end
 

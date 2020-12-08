@@ -8,6 +8,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   Resources = OodCore::Job::Adapters::Kubernetes::Resources
 
+  using OodCore::Refinements::HashExtensions
+
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
@@ -29,8 +31,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     secret_hash = secret_info_from_json(secret_json)
 
     # can't just use deep_merge bc we don't depend *directly* on rails
-    pod_hash[:native] = pod_hash[:native].merge(service_hash[:native])
-    pod_hash[:native] = pod_hash[:native].merge(secret_hash[:native])
+    pod_hash.deep_merge!(service_hash)
+    pod_hash.deep_merge!(secret_hash)
     OodCore::Job::Info.new(pod_hash)
   rescue NoMethodError
     raise K8sDataError, "unable to read data correctly from json"
@@ -143,7 +145,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       dispatch_time: dispatch_time(json_data),
       wallclock_time: wallclock_time(json_data),
       native: {
-        host: get_host(json_data.dig(:status, :hostIP))
+        ood_connection_info: { host: get_host(json_data.dig(:status, :hostIP)) }
       },
       procs: procs_from_json(json_data)
     }
@@ -172,9 +174,12 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     ports = json_data.dig(:spec, :ports)
     {
       native:
-        {
-          port: ports[0].dig(:nodePort)
-        }
+      {
+        ood_connection_info:
+          {
+            port: ports[0].dig(:nodePort)
+          }
+      }
     }
   rescue
     empty_native
@@ -184,9 +189,12 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     raw = json_data.dig(:data, :password)
     {
       native:
-        {
-          password: Base64.decode64(raw)
-        }
+      {
+        ood_connection_info:
+          {
+            password: Base64.decode64(raw)
+          }
+      }
     }
   rescue
     empty_native
