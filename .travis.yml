@@ -1,9 +1,0 @@
-sudo: false
-language: ruby
-rvm:
-  - 2.5.5
-before_install: gem install bundler -v '~> 1.17'
-notifications:
-  email:
-    on_success: never
-    on_failure: always
