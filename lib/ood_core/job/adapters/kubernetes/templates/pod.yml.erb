@@ -7,7 +7,7 @@ metadata:
     job: <%= id %>
     app.kubernetes.io/name: <%= container.name %>
     app.kubernetes.io/managed-by: open-ondemand
-    <%- if script.accounting_id -%>
+    <%- if !script.accounting_id.nil? && script.accounting_id != "" -%>
     account: <%= script.accounting_id %>
     <%- end -%>
 spec:
