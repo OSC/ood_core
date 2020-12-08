@@ -118,6 +118,10 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     id + '-configmap'
   end
 
+  def seconds_to_duration(s)
+    "%02dh%02dm%02ds" % [s / 3600, s / 60 % 60, s % 60]
+  end
+
   # Extract pod info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
