@@ -1,6 +1,6 @@
 # OodCore
 
-[![Build Status](https://travis-ci.org/OSC/ood_core.svg?branch=master)](https://travis-ci.org/OSC/ood_core)
+[![Build Status](https://github.com/osc/ood_core/workflows/Unit%20Tests/badge.svg)](https://github.com/OSC/ood_core/actions?query=workflow%3A%22Unit+Tests%22)
 ![GitHub Release](https://img.shields.io/github/release/osc/ood_core.svg)
 ![GitHub License](https://img.shields.io/github/license/osc/ood_core.svg)
 
