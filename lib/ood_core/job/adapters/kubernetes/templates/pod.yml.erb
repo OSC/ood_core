@@ -108,6 +108,8 @@ kind: Service
 metadata:
   name: <%= service_name(id) %>
   namespace: <%= namespace %>
+  labels:
+    job: <%= id %>
 spec:
   selector:
     job: <%= id %>
@@ -124,6 +126,8 @@ kind: ConfigMap
 metadata:
   name: <%= configmap_name(id) %>
   namespace: <%= namespace %>
+  labels:
+    job: <%= id %>
 data:
   <%= configmap.filename %>: |
     <% config_data_lines(configmap.data).each do |line| %><%= line %><% end %>

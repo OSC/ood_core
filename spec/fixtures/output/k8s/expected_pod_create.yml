@@ -84,6 +84,8 @@ kind: Service
 metadata:
   name: rspec-test-123-service
   namespace: testuser
+  labels:
+    job: rspec-test-123
 spec:
   selector:
     job: rspec-test-123
@@ -98,6 +100,8 @@ kind: ConfigMap
 metadata:
   name: rspec-test-123-configmap
   namespace: testuser
+  labels:
+    job: rspec-test-123
 data:
   config.file: |
     a = b
