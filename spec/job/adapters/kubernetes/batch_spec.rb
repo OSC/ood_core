@@ -21,7 +21,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   let(:single_error_pod) { File.read('spec/fixtures/output/k8s/single_error_pod.json') }
   let(:single_completed_pod) { File.read('spec/fixtures/output/k8s/single_completed_pod.json') }
   let(:single_queued_pod) { File.read('spec/fixtures/output/k8s/single_queued_pod.json') }
-  let(:single_pending_pod) { File.read('spec/fixtures/output/k8s/single_pending_pod.json') }
+  let(:single_unscheduleable_pod) { File.read('spec/fixtures/output/k8s/single_unscheduleable_pod.json') }
   let(:single_service) { File.read('spec/fixtures/output/k8s/single_service.json') }
   let(:single_secret) { File.read('spec/fixtures/output/k8s/single_secret.json') }
   let(:single_secret) { File.read('spec/fixtures/output/k8s/single_secret.json') }
@@ -229,7 +229,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     })
   }
 
-  let(:single_pending_pod_info) {
+  let(:single_unscheduleable_pod_info) {
     OodCore::Job::Info.new({
       id: "bash",
       status: OodCore::Job::Status.new(state: "undetermined"),
@@ -573,9 +573,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       expect(batch.info('jupyter-28wixphq')).to eq(single_queued_pod_info)
     end
 
-    it "correctly returns a pending pod" do
-      batch = info_batch('bash', single_pending_pod)
-      expect(batch.info('bash')).to eq(single_pending_pod_info)
+    it "correctly returns a unscheduleable pod" do
+      batch = info_batch('bash', single_unscheduleable_pod)
+      expect(batch.info('bash')).to eq(single_unscheduleable_pod_info)
     end
 
     it "correctly returns native info from service and secret" do

@@ -17,7 +17,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
   let(:single_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_error_pod.json'), symbolize_names: true) }
   let(:single_completed_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_completed_pod.json'), symbolize_names: true) }
   let(:single_queued_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_queued_pod.json'), symbolize_names: true) }
-  let(:single_pending_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_pending_pod.json'), symbolize_names: true) }
+  let(:single_unscheduleable_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_unscheduleable_pod.json'), symbolize_names: true) }
   let(:single_service) { JSON.parse(File.read('spec/fixtures/output/k8s/single_service.json'), symbolize_names: true) }
   let(:single_secret) { JSON.parse(File.read('spec/fixtures/output/k8s/single_secret.json'), symbolize_names: true) }
   let(:ns_prefixed_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/ns_prefixed_pod.json'), symbolize_names: true) }
@@ -79,7 +79,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     procs: nil
   }}
 
-  let(:single_pending_pod_hash) {{
+  let(:single_unscheduleable_pod_hash) {{
     id: "bash",
     status: OodCore::Job::Status.new(state: "undetermined"),
     job_name: "bash",
@@ -199,16 +199,16 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     end
 
 
-    it "correctly reads a pending pods' data" do
+    it "correctly reads a unscheduleable pods' data" do
       allow(DateTime).to receive(:now).and_return(now)
 
       info = helper.info_from_json(
-        pod_json: single_pending_pod,
+        pod_json: single_unscheduleable_pod,
         service_json: nil,
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(single_pending_pod_hash))
+      expect(info).to eq(OodCore::Job::Info.new(single_unscheduleable_pod_hash))
       expect(info.status.undetermined?).to be true
     end
 
@@ -456,12 +456,12 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       expect(info).to eq(single_queued_pod_hash)
     end
 
-    it "correctly reads a pending pods' data" do
+    it "correctly reads a unscheduleable pods' data" do
       allow(DateTime).to receive(:now).and_return(now)
 
-      info = helper.pod_info_from_json(single_pending_pod)
+      info = helper.pod_info_from_json(single_unscheduleable_pod)
 
-      expect(info).to eq(single_pending_pod_hash)
+      expect(info).to eq(single_unscheduleable_pod_hash)
     end
 
     it "correctly throws exception on bad data" do
