@@ -258,20 +258,19 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   end
 
   def pod_status_from_json(json_data)
-    state = 'undetermined'
-    status = json_data.dig(:status)
-    container_statuses = status.dig(:containerStatuses)
-
-    if container_statuses.nil?
-      # if you're here, it means you're pending, probably unschedulable
-      return OodCore::Job::Status.new(state: 'queued')
-    end
-
-    # only support 1 container/pod
-    json_state = container_statuses[0].dig(:state)
-    state = 'running' unless json_state.dig(:running).nil?
-    state = terminated_state(json_state) unless json_state.dig(:terminated).nil?
-    state = 'queued' unless json_state.dig(:waiting).nil?
+    phase = json_data.dig(:status, :phase)
+    state = case phase
+            when "Running"
+              "running"
+            when "Pending"
+              "queued"
+            when "Failed"
+              "suspended"
+            when "Succeeded"
+              "completed"
+            else
+              "undetermined"
+            end
 
     OodCore::Job::Status.new(state: state)
   end
