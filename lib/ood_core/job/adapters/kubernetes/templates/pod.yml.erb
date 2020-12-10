@@ -10,6 +10,10 @@ metadata:
     <%- if !script.accounting_id.nil? && script.accounting_id != "" -%>
     account: <%= script.accounting_id %>
     <%- end -%>
+  annotations:
+    <%- unless script.wall_time.nil? -%>
+    pod.kubernetes.io/lifetime: <%= helper.seconds_to_duration(script.wall_time) %>
+    <%- end -%>
 spec:
   restartPolicy: <%= spec.container.restart_policy %>
   securityContext:
@@ -104,6 +108,8 @@ kind: Service
 metadata:
   name: <%= service_name(id) %>
   namespace: <%= namespace %>
+  labels:
+    job: <%= id %>
 spec:
   selector:
     job: <%= id %>
@@ -120,6 +126,8 @@ kind: ConfigMap
 metadata:
   name: <%= configmap_name(id) %>
   namespace: <%= namespace %>
+  labels:
+    job: <%= id %>
 data:
   <%= configmap.filename %>: |
     <% config_data_lines(configmap.data).each do |line| %><%= line %><% end %>

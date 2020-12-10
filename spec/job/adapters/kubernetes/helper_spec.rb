@@ -386,6 +386,14 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     end
   end
 
+  describe "#seconds_to_duration" do
+    it "handles seconds to duration" do
+      expect(helper.seconds_to_duration(3600)).to eq('01h00m00s')
+      expect(helper.seconds_to_duration(3660)).to eq('01h01m00s')
+      expect(helper.seconds_to_duration(3662)).to eq('01h01m02s')
+    end
+  end
+
   describe "#pod_info_from_json" do
     it "correctly reads a running pods' info" do
       allow(DateTime).to receive(:now).and_return(now)
