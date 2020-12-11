@@ -200,9 +200,10 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def dispatch_time(json_data)
     status = pod_status_from_json(json_data)
-    return nil if status == 'undetermined' || unscheduleable?(json_data)
+    container_statuses = json_data.dig(:status, :containerStatuses)
+    return nil if container_statuses.nil?
 
-    state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
+    state_data = container_statuses[0].dig(:state)
     date_string = nil
 
     if status == 'completed'
@@ -216,9 +217,10 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def wallclock_time(json_data)
     status = pod_status_from_json(json_data)
-    return nil if status == 'undetermined' || unscheduleable?(json_data)
+    container_statuses = json_data.dig(:status, :containerStatuses)
+    return nil if container_statuses.nil?
 
-    state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
+    state_data = container_statuses[0].dig(:state)
     start_time = dispatch_time(json_data)
     return nil if start_time.nil?
 
