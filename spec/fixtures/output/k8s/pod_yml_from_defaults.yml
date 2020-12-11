@@ -8,7 +8,6 @@ metadata:
     app.kubernetes.io/name: rspec-test
     app.kubernetes.io/managed-by: open-ondemand
     account: test
-  annotations:
 spec:
   restartPolicy: Always
   securityContext:
@@ -33,10 +32,6 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath:  /ood
-    - name: home-dir
-      mountPath: /home
-    - name: nfs-dir
-      mountPath: /fs
     - name: ess
       mountPath: /fs/ess
     resources:
@@ -56,24 +51,12 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath:  /ood
-    - name: home-dir
-      mountPath: /home
-    - name: nfs-dir
-      mountPath: /fs
     - name: ess
       mountPath: /fs/ess
   volumes:
   - name: configmap-volume
     configMap:
       name: rspec-test-123-configmap
-  - name: home-dir
-    hostPath:
-      path: /users
-      type: Directory
-  - name: nfs-dir
-    nfs:
-      server: some.nfs.host
-      path: /fs
   - name: ess
     hostPath:
       path: /fs/ess
@@ -84,8 +67,6 @@ kind: Service
 metadata:
   name: rspec-test-123-service
   namespace: testuser
-  labels:
-    job: rspec-test-123
 spec:
   selector:
     job: rspec-test-123
@@ -100,8 +81,6 @@ kind: ConfigMap
 metadata:
   name: rspec-test-123-configmap
   namespace: testuser
-  labels:
-    job: rspec-test-123
 data:
   config.file: |
     a = b

@@ -206,11 +206,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def namespace
-    default_namespace
-  end
-
-  def default_namespace
-    namespace_prefix + username
+    "#{namespace_prefix}#{username}"
   end
 
   def context

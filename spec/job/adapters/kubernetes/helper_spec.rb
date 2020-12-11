@@ -9,6 +9,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     helper = described_class.new
     allow(helper).to receive(:get_host).with(nil).and_return(nil)
     allow(helper).to receive(:get_host).with('10.20.0.40').and_return('10.20.0.40')
+    allow(helper).to receive(:get_host).with('192.148.247.227').and_return('192.148.247.227')
     helper
   }
 
@@ -19,6 +20,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
   let(:single_pending_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_pending_pod.json'), symbolize_names: true) }
   let(:single_service) { JSON.parse(File.read('spec/fixtures/output/k8s/single_service.json'), symbolize_names: true) }
   let(:single_secret) { JSON.parse(File.read('spec/fixtures/output/k8s/single_secret.json'), symbolize_names: true) }
+  let(:ns_prefixed_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/ns_prefixed_pod.json'), symbolize_names: true) }
   let(:now) { DateTime.parse("2020-04-18 13:01:56 +0000") }
 
   let(:single_running_pod_hash) {{
@@ -87,6 +89,20 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: nil,
     native: {
       host: nil
+    },
+    procs: "1"
+  }}
+
+  let(:ns_prefixed_pod_hash) {{
+    id: "jupyter-3o4n6z3e",
+    status: OodCore::Job::Status.new(state: "running"),
+    job_name: "jupyter",
+    job_owner: "johrstrom",
+    dispatch_time: 1607638123,
+    submission_time: 1607637118,
+    wallclock_time: 76885,
+    native: {
+      host: "192.148.247.227"
     },
     procs: "1"
   }}
@@ -206,6 +222,19 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           secret_json: empty_json
         )
       }.to raise_error(Kubernetes::Helper::K8sDataError, "unable to read data correctly from json")
+    end
+
+    it "correctly deals with namespace prefixed pods" do
+      allow(DateTime).to receive(:now).and_return(DateTime.parse("2020-12-11 14:30:08 -0500"))
+
+      info = helper.info_from_json(
+        pod_json: ns_prefixed_pod,
+        service_json: nil,
+        secret_json: nil,
+        ns_prefix: 'user-'
+      )
+
+      expect(info).to eq(OodCore::Job::Info.new(ns_prefixed_pod_hash))
     end
   end
 
@@ -441,6 +470,14 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       expect {
         helper.pod_info_from_json(empty_json)
       }.to raise_error(Kubernetes::Helper::K8sDataError, "unable to read data correctly from json")
+    end
+
+    it "correctly deals with namespace prefixed pods" do
+      allow(DateTime).to receive(:now).and_return(DateTime.parse("2020-12-11 14:30:08 -0500"))
+
+      info = helper.pod_info_from_json(ns_prefixed_pod, ns_prefix: 'user-')
+
+      expect(info).to eq(ns_prefixed_pod_hash)
     end
   end
 end

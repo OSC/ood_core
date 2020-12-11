@@ -20,9 +20,11 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   the service data returned from 'kubectl get service abc-123-service'
   # @param secret_json [#to_h]
   #   the secret data returned from 'kubectl get secret abc-123-secret'
+  # @param ns_prefix [#to_s]
+  #   the namespace prefix so that namespaces can be converted back to usernames
   # @return [OodCore::Job::Info]
-  def info_from_json(pod_json: nil, service_json: nil, secret_json: nil)
-    pod_hash = pod_info_from_json(pod_json)
+  def info_from_json(pod_json: nil, service_json: nil, secret_json: nil, ns_prefix: nil)
+    pod_hash = pod_info_from_json(pod_json, ns_prefix: ns_prefix)
     service_hash = service_info_from_json(service_json)
     secret_hash = secret_info_from_json(secret_json)
 
@@ -127,14 +129,16 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #
   # @param json_data [#to_h]
   #   the pod data returned from 'kubectl get pod abc-123'
+  # @param ns_prefix [#to_s]
+  #   the namespace prefix so that namespaces can be converted back to usernames
   # @return [#to_h]
   #   the hash of info expected from adapters
-  def pod_info_from_json(json_data)
+  def pod_info_from_json(json_data, ns_prefix: nil)
     {
       id: json_data.dig(:metadata, :name).to_s,
       job_name: name_from_metadata(json_data.dig(:metadata)),
       status: pod_status_from_json(json_data),
-      job_owner: json_data.dig(:metadata, :namespace).to_s,
+      job_owner: job_owner_from_json(json_data, ns_prefix),
       submission_time: submission_time(json_data),
       dispatch_time: dispatch_time(json_data),
       wallclock_time: wallclock_time(json_data),
@@ -298,5 +302,10 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     else
       cpu
     end
+  end
+
+  def job_owner_from_json(json_data = {}, ns_prefix = nil)
+    namespace = json_data.dig(:metadata, :namespace).to_s
+    namespace.delete_prefix(ns_prefix.to_s)
   end
 end
