@@ -270,6 +270,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
               "suspended"
             when "Succeeded"
               "completed"
+            when "Unknown"
+              "undetermined"
             else
               "undetermined"
             end
