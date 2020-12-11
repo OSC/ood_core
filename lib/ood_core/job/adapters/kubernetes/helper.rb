@@ -200,7 +200,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def dispatch_time(json_data)
     status = pod_status_from_json(json_data)
-    return nil if status == 'undetermined'
+    return nil if status == 'undetermined' || unscheduleable?(json_data)
 
     state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
     date_string = nil
@@ -216,7 +216,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def wallclock_time(json_data)
     status = pod_status_from_json(json_data)
-    return nil if status == 'undetermined'
+    return nil if status == 'undetermined' || unscheduleable?(json_data)
 
     state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
     start_time = dispatch_time(json_data)
@@ -264,7 +264,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
     if container_statuses.nil?
       # if you're here, it means you're pending, probably unschedulable
-      return OodCore::Job::Status.new(state: state)
+      return OodCore::Job::Status.new(state: 'queued')
     end
 
     # only support 1 container/pod

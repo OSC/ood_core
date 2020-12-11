@@ -81,7 +81,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
   let(:single_unscheduleable_pod_hash) {{
     id: "bash",
-    status: OodCore::Job::Status.new(state: "undetermined"),
+    status: OodCore::Job::Status.new(state: "queued"),
     job_name: "bash",
     job_owner: "johrstrom",
     dispatch_time: nil,
@@ -209,7 +209,6 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       )
 
       expect(info).to eq(OodCore::Job::Info.new(single_unscheduleable_pod_hash))
-      expect(info.status.undetermined?).to be true
     end
 
     it "correctly throws exception on bad data" do

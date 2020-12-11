@@ -112,7 +112,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       }),
       OodCore::Job::Info.new({
         id: "bash-ssd",
-        status:  "undetermined",
+        status:  "queued",
         job_name: "bash-ssd",
         job_owner: "johrstrom",
         dispatch_time: nil,
@@ -232,7 +232,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   let(:single_unscheduleable_pod_info) {
     OodCore::Job::Info.new({
       id: "bash",
-      status: OodCore::Job::Status.new(state: "undetermined"),
+      status: OodCore::Job::Status.new(state: "queued"),
       job_name: "bash",
       job_owner: "johrstrom",
       dispatch_time: nil,
