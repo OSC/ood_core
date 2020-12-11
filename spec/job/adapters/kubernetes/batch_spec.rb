@@ -68,8 +68,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       stdin_data: ""
     ).and_return(['', '', $?])
 
-    @basic_batch = described_class.new({}, helper)
+    @basic_batch = described_class.new({})
     allow(@basic_batch).to receive(:username).and_return('testuser')
+    allow(@basic_batch).to receive(:helper).and_return(helper)
   end
 
   let(:configured_batch){
@@ -82,8 +83,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       stdin_data: ""
     ).and_return(['', '', $?])
 
-    batch = described_class.new(config, helper)
+    batch = described_class.new(config)
     allow(batch).to receive(:username).and_return('testuser')
+    allow(batch).to receive(:helper).and_return(helper)
 
     batch
   }
@@ -415,8 +417,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         stdin_data: ""
       ).and_return(['', '', $?])
 
-      batch = described_class.new({}, helper)
+      batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
+      allow(batch).to receive(:helper).and_return(helper)
       allow(DateTime).to receive(:now).and_return(past)
 
       allow(Open3).to receive(:capture3).with(
@@ -452,7 +455,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         stdin_data: ""
       ).and_return(['', '', $?])
 
-      batch = described_class.new({}, helper)
+      batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(DateTime).to receive(:now).and_return(past)
 

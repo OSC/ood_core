@@ -7,7 +7,7 @@ module OodCore
       using Refinements::HashExtensions
 
       def self.build_kubernetes(config)
-        batch = Adapters::Kubernetes::Batch.new(config.to_h.symbolize_keys, Adapters::Kubernetes::Helper.new)
+        batch = Adapters::Kubernetes::Batch.new(config.to_h.symbolize_keys)
         Adapters::Kubernetes.new(batch)
       end
     end
