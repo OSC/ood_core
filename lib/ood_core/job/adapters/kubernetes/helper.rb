@@ -3,6 +3,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   require 'ood_core/job/adapters/kubernetes/resources'
   require 'resolv'
   require 'base64'
+  require 'active_support/core_ext/hash'
 
   class K8sDataError < StandardError; end
 
