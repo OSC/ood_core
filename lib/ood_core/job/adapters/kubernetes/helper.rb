@@ -9,8 +9,6 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   Resources = OodCore::Job::Adapters::Kubernetes::Resources
 
-  using OodCore::Refinements::HashExtensions
-
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
