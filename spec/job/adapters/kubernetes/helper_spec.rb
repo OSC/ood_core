@@ -113,7 +113,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     submission_time: 1607637118,
     wallclock_time: 76885,
     native: {
-      host: "192.148.247.227"
+      ood_connection_info: {
+        host: "192.148.247.227"
+      }
     },
     procs: "1"
   }}
