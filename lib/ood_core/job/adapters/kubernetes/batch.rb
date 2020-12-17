@@ -16,7 +16,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   attr_reader :all_namespaces, :using_context, :helper
   attr_reader :username_prefix, :namespace_prefix
 
-  def initialize(options = {}, helper = Helper.new)
+  def initialize(options = {})
     options = options.to_h.symbolize_keys
 
     @config_file = options.fetch(:config_file, default_config_file)
@@ -28,7 +28,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @namespace_prefix = options.fetch(:namespace_prefix, '')
 
     @using_context = false
-    @helper = helper
+    @helper = Helper.new
 
     begin
       make_kubectl_config(options)
@@ -206,11 +206,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def namespace
-    default_namespace
-  end
-
-  def default_namespace
-    namespace_prefix + username
+    "#{namespace_prefix}#{username}"
   end
 
   def context
