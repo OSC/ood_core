@@ -200,9 +200,10 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def dispatch_time(json_data)
     status = pod_status_from_json(json_data)
-    return nil if status == 'undetermined'
+    container_statuses = json_data.dig(:status, :containerStatuses)
+    return nil if container_statuses.nil?
 
-    state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
+    state_data = container_statuses[0].dig(:state)
     date_string = nil
 
     if status == 'completed'
@@ -216,9 +217,10 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def wallclock_time(json_data)
     status = pod_status_from_json(json_data)
-    return nil if status == 'undetermined'
+    container_statuses = json_data.dig(:status, :containerStatuses)
+    return nil if container_statuses.nil?
 
-    state_data = json_data.dig(:status, :containerStatuses)[0].dig(:state)
+    state_data = container_statuses[0].dig(:state)
     start_time = dispatch_time(json_data)
     return nil if start_time.nil?
 
@@ -258,20 +260,21 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   end
 
   def pod_status_from_json(json_data)
-    state = 'undetermined'
-    status = json_data.dig(:status)
-    container_statuses = status.dig(:containerStatuses)
-
-    if container_statuses.nil?
-      # if you're here, it means you're pending, probably unschedulable
-      return OodCore::Job::Status.new(state: state)
-    end
-
-    # only support 1 container/pod
-    json_state = container_statuses[0].dig(:state)
-    state = 'running' unless json_state.dig(:running).nil?
-    state = terminated_state(json_state) unless json_state.dig(:terminated).nil?
-    state = 'queued' unless json_state.dig(:waiting).nil?
+    phase = json_data.dig(:status, :phase)
+    state = case phase
+            when "Running"
+              "running"
+            when "Pending"
+              "queued"
+            when "Failed"
+              "suspended"
+            when "Succeeded"
+              "completed"
+            when "Unknown"
+              "undetermined"
+            else
+              "undetermined"
+            end
 
     OodCore::Job::Status.new(state: state)
   end
