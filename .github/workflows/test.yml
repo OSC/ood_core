@@ -15,18 +15,16 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v2
-      - uses: actions/setup-ruby@v1
+
+      - name: Setup Ruby using Bundler
+        uses: ruby/setup-ruby@v1
         with:
-          ruby-version: '2.5'
-      - uses: actions/cache@v2
-        with:
-          path: ~/vendor/bundle
-          key: ${{ runner.os }}-gems-${{ hashFiles('Gemfile.lock') }}
-      - name: setup bundler
-        run: |
-          gem install bundler -v 1.17.3
-          bundle config path ~/vendor/bundle
+          ruby-version: "2.7.1"
+          bundler-cache: true
+          bundler: "2.1.4"
+
       - name: install gems
         run: bundle install
+
       - name: test
         run: bundle exec rake spec
