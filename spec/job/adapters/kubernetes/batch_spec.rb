@@ -99,7 +99,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
   let(:several_pods_info){
     [
-      OodCore::Job::Info.new({
+      OodCore::Job::ExtendedInfo.new({
         id: "bash",
         status:  "completed",
         job_name: "bash",
@@ -107,13 +107,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: 1588023136,
         submission_time: 1588023135,
         wallclock_time: 300,
-        native: {
-          ood_connection_info: {
-            host: "10.20.0.40"
-          }
-        }
+        ood_connection_info: { host: "10.20.0.40" }
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::ExtendedInfo.new({
         id: "bash-ssd",
         status:  "queued",
         job_name: "bash-ssd",
@@ -121,13 +117,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: nil,
         submission_time: 1588023155,
         wallclock_time: nil,
-        native: {
-          ood_connection_info: {
-            host: nil
-          }
-        }
+        ood_connection_info: { host: nil }
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::ExtendedInfo.new({
         id: 'jupyter-3pjruck9',
         status: 'suspended',
         job_name: "jupyter",
@@ -135,13 +127,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: nil,
         submission_time: 1588106996,
         wallclock_time: nil,
-        native: {
-          ood_connection_info: {
-            host: "10.20.0.40"
-          }
-        }
+        ood_connection_info: { host: "10.20.0.40" }
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::ExtendedInfo.new({
         id: 'jupyter-q323v88u',
         status: 'running',
         job_name: "jupyter",
@@ -149,17 +137,13 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: 1588089059,
         submission_time: 1588089047,
         wallclock_time: 16051,
-        native: {
-          ood_connection_info: {
-            host: "10.20.0.40"
-          }
-        },
+        ood_connection_info: { host: "10.20.0.40" }
       })
     ]
   }
 
   let(:single_running_pod_info) {
-    OodCore::Job::Info.new({
+    OodCore::Job::ExtendedInfo.new({
       id: "jupyter-bmurb8sa",
       status: OodCore::Job::Status.new(state: "running"),
       job_name: "jupyter",
@@ -167,17 +151,13 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: 1587060509,
       submission_time: 1587060496,
       wallclock_time: 154407,
-      native: {
-        ood_connection_info: {
-          host: "10.20.0.40"
-        }
-      },
+      ood_connection_info: { host: "10.20.0.40" },
       procs: 1
     })
   }
 
   let(:single_running_pod_with_native_info) {
-    OodCore::Job::Info.new({
+    OodCore::Job::ExtendedInfo.new({
       id: "jupyter-bmurb8sa",
       status: OodCore::Job::Status.new(state: "running"),
       job_name: "jupyter",
@@ -185,19 +165,17 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: 1587060509,
       submission_time: 1587060496,
       wallclock_time: 154407,
-      native: {
-        ood_connection_info: {
-          host: "10.20.0.40",
-          port: 30689,
-          password:  "ekmfxbOgNUlmLy4m"
-        }
+      ood_connection_info: {
+        host: "10.20.0.40",
+        port: 30689,
+        password:  "ekmfxbOgNUlmLy4m"
       },
       procs: 1
     })
   }
 
   let(:single_error_pod_info) {
-    OodCore::Job::Info.new({
+    OodCore::Job::ExtendedInfo.new({
       id: "jupyter-h6kw06ve",
       status: OodCore::Job::Status.new(state: "suspended"),
       job_name: "jupyter",
@@ -205,16 +183,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: nil,
       submission_time: 1587069112,
       wallclock_time: nil,
-      native: {
-        ood_connection_info: {
-          host: "10.20.0.40"
-        }
-      },
+      ood_connection_info: { host: "10.20.0.40" }
     })
   }
 
   let(:single_completed_pod_info) {
-    OodCore::Job::Info.new({
+    OodCore::Job::ExtendedInfo.new({
       id: "bash",
       status: OodCore::Job::Status.new(state: "completed"),
       job_name: "bash",
@@ -222,17 +196,13 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: 1587506633,
       submission_time: 1587506632,
       wallclock_time: 300,
-      native: {
-        ood_connection_info: {
-          host: "10.20.0.40"
-        }
-      }
+      ood_connection_info: { host: "10.20.0.40"}
     })
   }
 
 
   let(:single_queued_pod_info) {
-    OodCore::Job::Info.new({
+    OodCore::Job::ExtendedInfo.new({
       id: "jupyter-28wixphq",
       status: OodCore::Job::Status.new(state: "queued"),
       job_name: "jupyter",
@@ -240,16 +210,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: nil,
       submission_time: 1587580037,
       wallclock_time: nil,
-      native: {
-        ood_connection_info: {
-          host: "10.20.0.40"
-        }
-      }
+      ood_connection_info: { host: "10.20.0.40" }
     })
   }
 
   let(:single_unscheduleable_pod_info) {
-    OodCore::Job::Info.new({
+    OodCore::Job::ExtendedInfo.new({
       id: "bash",
       status: OodCore::Job::Status.new(state: "queued"),
       job_name: "bash",
@@ -257,11 +223,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: nil,
       submission_time: 1587580581,
       wallclock_time: nil,
-      native: {
-        ood_connection_info: {
-          host: nil
-        }
-      },
+      ood_connection_info: { host: nil },
       procs: 1
     })
   }

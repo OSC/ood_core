@@ -32,11 +32,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1587060509,
     submission_time: 1587060496,
     wallclock_time: 154407,
-    native: {
-      ood_connection_info: {
-        host: "10.20.0.40"
-      }
-    },
+    ood_connection_info: { host: "10.20.0.40" },
     procs: "1"
   }}
 
@@ -48,11 +44,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1587069112,
     wallclock_time: nil,
-    native: {
-      ood_connection_info: {
-        host: "10.20.0.40"
-      }
-    },
+    ood_connection_info: { host: "10.20.0.40" },
     procs: nil
   }}
 
@@ -64,11 +56,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1587506633,
     submission_time: 1587506632,
     wallclock_time: 300,
-    native: {
-      ood_connection_info: {
-        host: "10.20.0.40"
-      }
-    },
+    ood_connection_info: { host: "10.20.0.40" },
     procs: nil
   }}
 
@@ -80,11 +68,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1587580037,
     wallclock_time: nil,
-    native: {
-      ood_connection_info: {
-        host: "10.20.0.40"
-      }
-    },
+    ood_connection_info: { host: "10.20.0.40" },
     procs: nil
   }}
 
@@ -96,11 +80,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1587580581,
     wallclock_time: nil,
-    native: {
-      ood_connection_info: {
-        host: nil
-      }
-    },
+    ood_connection_info: { host: nil },
     procs: "1"
   }}
 
@@ -112,23 +92,19 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1607638123,
     submission_time: 1607637118,
     wallclock_time: 76885,
-    native: {
-      ood_connection_info: {
-        host: "192.148.247.227"
-      }
-    },
+    ood_connection_info: { host: "192.148.247.227" },
     procs: "1"
   }}
 
   let(:pod_with_port) do
     pod = single_running_pod_hash
-    pod[:native][:ood_connection_info] = pod[:native][:ood_connection_info].merge({ port: 30689 })
+    pod[:ood_connection_info] = pod[:ood_connection_info].merge({ port: 30689 })
     pod
   end
 
   let(:pod_with_port_and_secret) do
     pod = pod_with_port
-    pod[:native][:ood_connection_info] = pod[:native][:ood_connection_info].merge({ password: "ekmfxbOgNUlmLy4m" })
+    pod[:ood_connection_info] = pod[:ood_connection_info].merge({ password: "ekmfxbOgNUlmLy4m" })
     pod
   end
 
