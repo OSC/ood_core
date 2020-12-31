@@ -1,0 +1,12 @@
+dashboard:
+  some_thing: 'yesPlease!'
+  show_this: true
+  favorite_apps:
+    - 'one'
+    - 'two'
+    - 'three'
+files:
+  favorite_dirs:
+    - '/home'
+    - '/project'
+    - '/home/ondemand/dev'
