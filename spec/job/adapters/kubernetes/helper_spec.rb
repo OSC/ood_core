@@ -1,5 +1,6 @@
 require "ood_core/job/adapters/kubernetes"
 require "ood_core/job/adapters/kubernetes/helper"
+require "ood_core/job/adapters/kubernetes/k8s_job_info"
 require "json"
 require "date"
 
@@ -118,7 +119,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(single_running_pod_hash))
+      expect(info).to eq(K8sJobInfo.new(single_running_pod_hash))
       expect(info.status.running?).to be true
     end
 
@@ -131,7 +132,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(pod_with_port))
+      expect(info).to eq(K8sJobInfo.new(pod_with_port))
       expect(info.status.running?).to be true
     end
 
@@ -144,7 +145,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: single_secret
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(pod_with_port_and_secret))
+      expect(info).to eq(K8sJobInfo.new(pod_with_port_and_secret))
       expect(info.status.running?).to be true
     end
 
@@ -157,7 +158,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(single_error_pod_hash))
+      expect(info).to eq(K8sJobInfo.new(single_error_pod_hash))
       expect(info.status.suspended?).to be true
     end
 
@@ -170,7 +171,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(single_completed_pod_hash))
+      expect(info).to eq(K8sJobInfo.new(single_completed_pod_hash))
       expect(info.status.completed?).to be true
     end
 
@@ -183,7 +184,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(single_queued_pod_hash))
+      expect(info).to eq(K8sJobInfo.new(single_queued_pod_hash))
       expect(info.status.queued?).to be true
     end
 
@@ -197,7 +198,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         secret_json: nil
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(single_unscheduleable_pod_hash))
+      expect(info).to eq(K8sJobInfo.new(single_unscheduleable_pod_hash))
     end
 
     it "correctly throws exception on bad data" do
@@ -222,7 +223,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         ns_prefix: 'user-'
       )
 
-      expect(info).to eq(OodCore::Job::Info.new(ns_prefixed_pod_hash))
+      expect(info).to eq(K8sJobInfo.new(ns_prefixed_pod_hash))
     end
   end
 

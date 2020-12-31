@@ -1,6 +1,7 @@
 class OodCore::Job::Adapters::Kubernetes::Helper
 
-  require 'ood_core/job/adapters/kubernetes/resources'
+  require_relative 'resources'
+  require_relative 'k8s_job_info'
   require 'resolv'
   require 'base64'
   require 'active_support/core_ext/hash'
@@ -8,6 +9,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   class K8sDataError < StandardError; end
 
   Resources = OodCore::Job::Adapters::Kubernetes::Resources
+  K8sJobInfo = OodCore::Job::Adapters::Kubernetes::K8sJobInfo
 
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
@@ -31,7 +33,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
     pod_hash.deep_merge!(service_hash)
     pod_hash.deep_merge!(secret_hash)
-    OodCore::Job::ExtendedInfo.new(pod_hash)
+    K8sJobInfo.new(pod_hash)
   rescue NoMethodError
     raise K8sDataError, "unable to read data correctly from json"
   end

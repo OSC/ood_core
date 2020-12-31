@@ -5,6 +5,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
   Batch = OodCore::Job::Adapters::Kubernetes::Batch
   Helper = OodCore::Job::Adapters::Kubernetes::Helper
+  K8sJobInfo = OodCore::Job::Adapters::Kubernetes::K8sJobInfo
 
   let(:helper) {
     helper = Helper.new
@@ -99,7 +100,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
   let(:several_pods_info){
     [
-      OodCore::Job::ExtendedInfo.new({
+      K8sJobInfo.new({
         id: "bash",
         status:  "completed",
         job_name: "bash",
@@ -109,7 +110,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         wallclock_time: 300,
         ood_connection_info: { host: "10.20.0.40" }
       }),
-      OodCore::Job::ExtendedInfo.new({
+      K8sJobInfo.new({
         id: "bash-ssd",
         status:  "queued",
         job_name: "bash-ssd",
@@ -119,7 +120,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         wallclock_time: nil,
         ood_connection_info: { host: nil }
       }),
-      OodCore::Job::ExtendedInfo.new({
+      K8sJobInfo.new({
         id: 'jupyter-3pjruck9',
         status: 'suspended',
         job_name: "jupyter",
@@ -129,7 +130,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         wallclock_time: nil,
         ood_connection_info: { host: "10.20.0.40" }
       }),
-      OodCore::Job::ExtendedInfo.new({
+      K8sJobInfo.new({
         id: 'jupyter-q323v88u',
         status: 'running',
         job_name: "jupyter",
@@ -143,7 +144,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   }
 
   let(:single_running_pod_info) {
-    OodCore::Job::ExtendedInfo.new({
+    K8sJobInfo.new({
       id: "jupyter-bmurb8sa",
       status: OodCore::Job::Status.new(state: "running"),
       job_name: "jupyter",
@@ -157,7 +158,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   }
 
   let(:single_running_pod_with_native_info) {
-    OodCore::Job::ExtendedInfo.new({
+    K8sJobInfo.new({
       id: "jupyter-bmurb8sa",
       status: OodCore::Job::Status.new(state: "running"),
       job_name: "jupyter",
@@ -175,7 +176,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   }
 
   let(:single_error_pod_info) {
-    OodCore::Job::ExtendedInfo.new({
+    K8sJobInfo.new({
       id: "jupyter-h6kw06ve",
       status: OodCore::Job::Status.new(state: "suspended"),
       job_name: "jupyter",
@@ -188,7 +189,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   }
 
   let(:single_completed_pod_info) {
-    OodCore::Job::ExtendedInfo.new({
+    K8sJobInfo.new({
       id: "bash",
       status: OodCore::Job::Status.new(state: "completed"),
       job_name: "bash",
@@ -202,7 +203,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
 
   let(:single_queued_pod_info) {
-    OodCore::Job::ExtendedInfo.new({
+    K8sJobInfo.new({
       id: "jupyter-28wixphq",
       status: OodCore::Job::Status.new(state: "queued"),
       job_name: "jupyter",
@@ -215,7 +216,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   }
 
   let(:single_unscheduleable_pod_info) {
-    OodCore::Job::ExtendedInfo.new({
+    K8sJobInfo.new({
       id: "bash",
       status: OodCore::Job::Status.new(state: "queued"),
       job_name: "bash",
