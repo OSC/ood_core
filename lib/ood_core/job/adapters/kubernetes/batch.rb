@@ -11,6 +11,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   using OodCore::Refinements::HashExtensions
 
   class Error < StandardError; end
+  class NotFoundError < StandardError; end
 
   attr_reader :config_file, :bin, :cluster, :mounts
   attr_reader :all_namespaces, :using_context, :helper
@@ -93,16 +94,11 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def info(id)
-    pod_json = call_json_output('get', 'pod', id)
+    pod_json = safe_call('get', 'pod', id)
+    return OodCore::Job::Info.new({ id: id, status: 'completed' }) if pod_json.empty?
 
-    begin
-      service_json = call_json_output('get', 'service', service_name(id))
-      secret_json = call_json_output('get', 'secret', secret_name(id))
-    rescue
-      # it's ok if these don't exist
-      service_json ||= nil
-      secret_json ||= nil
-    end
+    service_json = safe_call('get', 'service', service_name(id))
+    secret_json = safe_call('get', 'secret', secret_name(id))
 
     helper.info_from_json(pod_json: pod_json, service_json: service_json, secret_json: secret_json)
   end
@@ -112,16 +108,10 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def delete(id)
-    call("#{namespaced_cmd} delete pod #{id}")
-
-    begin
-      call("#{namespaced_cmd} delete service #{service_name(id)}")
-      call("#{namespaced_cmd} delete secret #{secret_name(id)}")
-      call("#{namespaced_cmd} delete configmap #{configmap_name(id)}")
-    rescue
-      # FIXME: retries? delete if exists?
-      # just eat the results of deleting services and secrets
-    end
+    safe_call("delete", "pod", id)
+    safe_call("delete", "service", service_name(id))
+    safe_call("delete", "secret", secret_name(id))
+    safe_call("delete", "configmap", configmap_name(id))
   end
 
   def configmap_mount_path
@@ -129,6 +119,19 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   private
+
+  def safe_call(verb, resource, id)
+    begin
+      case verb.to_s
+      when "get"
+        call_json_output('get', resource, id)
+      when "delete"
+        call("#{namespaced_cmd} delete #{resource} #{id}")
+      end
+    rescue NotFoundError
+      {}
+    end
+  end
 
   # helper to help format multi-line yaml data from the submit.yml into 
   # mutli-line yaml in the pod.yml.erb
@@ -342,7 +345,12 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def call(cmd = '', env: {}, stdin: nil)
-    o, error, s = Open3.capture3(env, cmd, stdin_data: stdin.to_s)
-    s.success? ? o : raise(Error, error)
+    o, e, s = Open3.capture3(env, cmd, stdin_data: stdin.to_s)
+    s.success? ? o : interpret_and_raise(e)
+  end
+
+  def interpret_and_raise(stderr)
+    raise NotFoundError, stderr if /^Error from server \(NotFound\):/.match(stderr)
+    raise(Error, stderr)
   end
 end

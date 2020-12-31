@@ -30,6 +30,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   let(:now) { DateTime.parse("2020-04-28 20:18:30 +0000") }
   let(:past) { DateTime.parse("2020-04-18 13:01:56 +0000") }
 
+  let(:success) { double("success?" => true) }
+  let(:failure) { double("success?" => false) }
+
   let(:mounts) {
     [
       {
@@ -66,13 +69,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   }
 
   before(:each) do
-    `true`
     allow(Open3).to receive(:capture3).with(
       {},
       "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
       "config set-cluster open-ondemand --server=https://localhost:8080",
       stdin_data: ""
-    ).and_return(['', '', $?])
+    ).and_return(['', '', success])
 
     @basic_batch = described_class.new({})
     allow(@basic_batch).to receive(:username).and_return('testuser')
@@ -80,14 +82,13 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   end
 
   let(:configured_batch){
-    `true`
     allow(Open3).to receive(:capture3).with(
       {},
       "/usr/bin/wontwork --kubeconfig=~/kube.config " \
       "config set-cluster test-cluster --server=https://some.k8s.host " \
       "--certificate-authority=/etc/some.cert",
       stdin_data: ""
-    ).and_return(['', '', $?])
+    ).and_return(['', '', success])
 
     batch = described_class.new(config)
     allow(batch).to receive(:username).and_return('testuser')
@@ -261,8 +262,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     end
 
     it "does not throw an error when it can't configure" do
-      `false` # false here means call() should throw errors
-      allow(Open3).to receive(:capture3).and_return(['', '', $?])
+      allow(Open3).to receive(:capture3).and_return(['', '', failure])
 
       expect { described_class.new }.not_to raise_error
       expect { described_class.new(config) }.not_to raise_error
@@ -332,13 +332,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       expect(template.to_s).to eql(pod_yml_from_all_configs.to_s)
 
       # make sure template get's passed into command correctly
-      `true`
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/wontwork --kubeconfig=~/kube.config " \
         "--namespace=user-testuser -o json create -f -",
         stdin_data: pod_yml_from_all_configs.to_s
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
 
       configured_batch.submit(script)
     end
@@ -397,13 +396,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       expect(template.to_s).to eql(pod_yml_from_defaults.to_s)
 
       # make sure template get's passed into command correctly
-      `true`
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_from_defaults.to_s
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
 
       @basic_batch.submit(script)
     end
@@ -418,27 +416,59 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser delete pod test-pod-123",
         stdin_data: ""
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser delete secret test-pod-123-secret",
         stdin_data: ""
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser delete service test-pod-123-service",
         stdin_data: ""
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser delete configmap test-pod-123-configmap",
         stdin_data: ""
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
 
       @basic_batch.delete('test-pod-123')
+    end
+
+    it "safely tries to delete resources that don't exist" do
+
+      id = "rspec-test"
+
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser delete pod #{id}",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): pods \"#{id}\" not found", failure])
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser delete secret #{id}-secret",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): secrets \"#{id}-secret\" not found", failure])
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser delete service #{id}-service",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser delete configmap #{id}-configmap",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): configmaps \"#{id}-configmap\" not found", failure])
+
+      @basic_batch.delete(id)
     end
   end
 
@@ -449,20 +479,20 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser get pods -o json",
         stdin_data: ""
-      ).and_return(['No resources found in testuser namespace.', '', $?])
+      ).and_return(['No resources found in testuser namespace.', '', success])
 
       expect(@basic_batch.info_all).to eq([])
     end
 
+    errmsg = 'Error from server (Forbidden): pods is forbidden: User "testuser" cannot list resource "pods" in API group "" at the cluster scope'
     it "throws error up the stack with --all-namespaces" do
-      `false`
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/wontwork --kubeconfig=~/kube.config get pods -o json --all-namespaces",
         stdin_data: ""
-      ).and_return(['', 'Error from server (Forbidden): pods is forbidden: User "testuser" cannot list resource "pods" in API group "" at the cluster scope', $?])
+      ).and_return(['', errmsg, failure])
 
-      expect { configured_batch.info_all }.to raise_error(Batch::Error)
+      expect { configured_batch.info_all }.to raise_error(Batch::Error, errmsg)
     end
 
     it "correctly handles good data" do
@@ -471,7 +501,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser get pods -o json",
         stdin_data: ""
-      ).and_return([several_pods, '', $?])
+      ).and_return([several_pods, '', success])
 
       allow(DateTime).to receive(:now).and_return(now)
 
@@ -481,13 +511,12 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
   describe "#info" do
     def info_batch(id, file)
-      `true`
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "config set-cluster open-ondemand --server=https://localhost:8080",
         stdin_data: ""
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
 
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
@@ -499,33 +528,31 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json get pod #{id}",
         stdin_data: ""
-      ).and_return([file, '', $?])
+      ).and_return([file, '', success])
 
-      `false`
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json get service #{id}-service",
         stdin_data: ""
-      ).and_return(['', 'error message', $?])
+      ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json get secret #{id}-secret",
         stdin_data: ""
-      ).and_return(['', 'error message', $?])
+      ).and_return(['', "Error from server (NotFound): secret \"#{id}-secret\" not found", failure])
 
       batch
     end
 
     def info_batch_full(id)
-      `true`
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "config set-cluster open-ondemand --server=https://localhost:8080",
         stdin_data: ""
-      ).and_return(['', '', $?])
+      ).and_return(['', '', success])
 
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
@@ -536,19 +563,55 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json get pod #{id}",
         stdin_data: ""
-      ).and_return([single_running_pod, '', $?])
+      ).and_return([single_running_pod, '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json get service #{id}-service",
         stdin_data: ""
-      ).and_return([single_service, '', $?])
+      ).and_return([single_service, '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json get secret #{id}-secret",
         stdin_data: ""
-      ).and_return([single_secret, '', $?])
+      ).and_return([single_secret, '', success])
+
+      batch
+    end
+
+    def not_found_batch(id)
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "config set-cluster open-ondemand --server=https://localhost:8080",
+        stdin_data: ""
+      ).and_return(['', '', success])
+
+      batch = described_class.new({})
+      allow(batch).to receive(:username).and_return('testuser')
+      allow(batch).to receive(:helper).and_return(helper)
+      allow(DateTime).to receive(:now).and_return(past)
+
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser -o json get pod #{id}",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): pod \"#{id}\" not found", failure])
+
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser -o json get service #{id}-service",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser -o json get secret #{id}-secret",
+        stdin_data: ""
+      ).and_return(['', "Error from server (NotFound): secret \"#{id}-secret\" not found", failure])
 
       batch
     end
@@ -581,6 +644,13 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "correctly returns native info from service and secret" do
       batch = info_batch_full("jupyter-bmurb8sa")
       expect(batch.info("jupyter-bmurb8sa")).to eq(single_running_pod_with_native_info)
+    end
+
+    it "handles not finding the pod" do
+      id = "jupyter-3o4n6z3e"
+      batch = not_found_batch(id)
+      completed_info = OodCore::Job::Info.new({ id: id, status: 'completed' })
+      expect(batch.info(id)).to eq(completed_info)
     end
   end
 
