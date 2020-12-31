@@ -28,47 +28,30 @@ describe OodCore::UserPreferences do
 
   describe "#preferences" do
 
-    before(:each) do
-      # nil out preferences before each test
-      OodCore::UserPreferences.instance_variable_set(:@_pref, nil)
-    end
-
     it "loads preferences" do
       with_modified_env OOD_PREFERENCES_FILE: preferences_file do
-        prefs = OodCore::UserPreferences.preferences
+        prefs = OodCore::UserPreferences.new.preferences
         expect(prefs.to_h).to eq(new_preferences)
-      end
-    end
-
-    it "re-loads preferences" do
-      Tempfile.create do |cfgfile|
-        with_modified_env OOD_PREFERENCES_FILE: cfgfile.path do
-          # tmpfile here is trouble to re-write so just close it and use File APIs
-          cfgfile.close
-
-          File.open(cfgfile.path, 'w') { |f| f.write(old_preferences.to_yaml) }
-
-          prefs = OodCore::UserPreferences.preferences(reload: true)
-          expect(prefs.to_h).to eq(old_preferences)
-
-          File.open(cfgfile.path, 'w+') { |f| f.write(new_preferences.to_yaml) }
-
-          prefs = OodCore::UserPreferences.preferences(reload: true)
-          expect(prefs.to_h).to eq(new_preferences)
-        end
       end
     end
 
     it "returns preferences for a single app" do
       with_modified_env OOD_PREFERENCES_FILE: preferences_file do
-        prefs = OodCore::UserPreferences.preferences(app: 'files')
+        prefs = OodCore::UserPreferences.new.preferences(app: 'files')
         expect(prefs.to_h).to eq(files_preferences)
+      end
+    end
+
+    it "returns empty hash for undefined app" do
+      with_modified_env OOD_PREFERENCES_FILE: preferences_file do
+        prefs = OodCore::UserPreferences.new.preferences(app: 'new-app-no-configs')
+        expect(prefs.to_h).to eq({})
       end
     end
 
     it "always returns at least an empty hash" do
       with_modified_env OOD_PREFERENCES_FILE:  "/dev/null" do
-        prefs = OodCore::UserPreferences.preferences
+        prefs = OodCore::UserPreferences.new.preferences
         expect(prefs.to_h).to eq({})
       end
     end
