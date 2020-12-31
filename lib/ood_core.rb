@@ -11,7 +11,6 @@ module OodCore
     require "ood_core/job/node_info"
     require "ood_core/job/script"
     require "ood_core/job/info"
-    require "ood_core/job/extended_info"
     require "ood_core/job/status"
     require "ood_core/job/adapter"
     require "ood_core/job/factory"
