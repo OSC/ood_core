@@ -14,8 +14,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
-  # Returns { ood_connection_info: {host: localhost, port:80, password: sshhh }} in the
-  # extended info object field in lieu of writing a connection.yml
+  # Returns K8sJobInfo in the in lieu of writing a connection.yml
   #
   # @param pod_json [#to_h]
   #   the pod data returned from 'kubectl get pod abc-123'
@@ -25,7 +24,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   the secret data returned from 'kubectl get secret abc-123-secret'
   # @param ns_prefix [#to_s]
   #   the namespace prefix so that namespaces can be converted back to usernames
-  # @return [OodCore::Job::ExtendedInfo]
+  # @return [OodCore::Job::Adapters::Kubernetes::K8sJobInfo]
   def info_from_json(pod_json: nil, service_json: nil, secret_json: nil, ns_prefix: nil)
     pod_hash = pod_info_from_json(pod_json, ns_prefix: ns_prefix)
     service_hash = service_info_from_json(service_json)
