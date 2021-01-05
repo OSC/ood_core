@@ -80,10 +80,9 @@ spec:
     <%- end # for each mount -%>
   <%- end # init container loop -%>
   <%- end # if init containers -%>
-  <%- unless configmap.nil? || all_mounts.empty? -%>
+  <%- unless (configmap.to_s.empty? && all_mounts.empty?) -%>
   volumes:
-  <%- end # configmap.nil? || all_mounts.empty? -%>
-  <%- unless configmap.nil? -%>
+  <%- unless configmap.to_s.empty? -%>
   - name: configmap-volume
     configMap:
       name: <%= configmap_name(id) %>
@@ -101,6 +100,7 @@ spec:
       type: <%= mount[:host_type] %>
   <%- end # if mount is [host,nfs] -%>
   <%- end # for each mount -%>
+  <%- end # (configmap.to_s.empty? || all_mounts.empty?) -%>
 ---
 <%- unless spec.container.port.nil? -%>
 apiVersion: v1
