@@ -98,6 +98,14 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     batch
   }
 
+  let(:ten_twenty_host_connection){{ host: "10.20.0.40" }}
+  let(:nil_connection){{ host: nil}}
+  let(:full_connection){{
+    host: "10.20.0.40",
+    port: 30689,
+    password:  "ekmfxbOgNUlmLy4m"
+  }}
+
   let(:several_pods_info){
     [
       K8sJobInfo.new({
@@ -108,7 +116,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: 1588023136,
         submission_time: 1588023135,
         wallclock_time: 300,
-        ood_connection_info: { host: "10.20.0.40" }
+        ood_connection_info: ten_twenty_host_connection
       }),
       K8sJobInfo.new({
         id: "bash-ssd",
@@ -118,7 +126,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: nil,
         submission_time: 1588023155,
         wallclock_time: nil,
-        ood_connection_info: { host: nil }
+        ood_connection_info: nil_connection
       }),
       K8sJobInfo.new({
         id: 'jupyter-3pjruck9',
@@ -128,7 +136,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: nil,
         submission_time: 1588106996,
         wallclock_time: nil,
-        ood_connection_info: { host: "10.20.0.40" }
+        ood_connection_info: ten_twenty_host_connection
       }),
       K8sJobInfo.new({
         id: 'jupyter-q323v88u',
@@ -138,7 +146,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         dispatch_time: 1588089059,
         submission_time: 1588089047,
         wallclock_time: 16051,
-        ood_connection_info: { host: "10.20.0.40" }
+        ood_connection_info: ten_twenty_host_connection
       })
     ]
   }
@@ -152,7 +160,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: 1587060509,
       submission_time: 1587060496,
       wallclock_time: 154407,
-      ood_connection_info: { host: "10.20.0.40" },
+      ood_connection_info: ten_twenty_host_connection,
       procs: 1
     })
   }
@@ -166,11 +174,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: 1587060509,
       submission_time: 1587060496,
       wallclock_time: 154407,
-      ood_connection_info: {
-        host: "10.20.0.40",
-        port: 30689,
-        password:  "ekmfxbOgNUlmLy4m"
-      },
+      ood_connection_info: full_connection,
       procs: 1
     })
   }
@@ -184,7 +188,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: nil,
       submission_time: 1587069112,
       wallclock_time: nil,
-      ood_connection_info: { host: "10.20.0.40" }
+      ood_connection_info: ten_twenty_host_connection
     })
   }
 
@@ -197,7 +201,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: 1587506633,
       submission_time: 1587506632,
       wallclock_time: 300,
-      ood_connection_info: { host: "10.20.0.40"}
+      ood_connection_info: ten_twenty_host_connection
     })
   }
 
@@ -211,7 +215,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: nil,
       submission_time: 1587580037,
       wallclock_time: nil,
-      ood_connection_info: { host: "10.20.0.40" }
+      ood_connection_info: ten_twenty_host_connection
     })
   }
 
@@ -224,7 +228,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
       dispatch_time: nil,
       submission_time: 1587580581,
       wallclock_time: nil,
-      ood_connection_info: { host: nil },
+      ood_connection_info: nil_connection,
       procs: 1
     })
   }
@@ -601,32 +605,44 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
     it "correctly returns a running pod" do
       batch = info_batch('jupyter-bmurb8sa', single_running_pod)
-      expect(batch.info('jupyter-bmurb8sa')).to eq(single_running_pod_info)
+      info = batch.info('jupyter-bmurb8sa')
+      expect(info).to eq(single_running_pod_info)
+      expect(info.ood_connection_info).to eq(ten_twenty_host_connection)
     end
 
     it "correctly returns a errored pod" do
       batch = info_batch('jupyter-h6kw06ve', single_error_pod)
-      expect(batch.info('jupyter-h6kw06ve')).to eq(single_error_pod_info)
+      info = batch.info('jupyter-h6kw06ve')
+      expect(info).to eq(single_error_pod_info)
+      expect(info.ood_connection_info).to eq(ten_twenty_host_connection)
     end
 
     it "correctly returns a completed pod" do
       batch = info_batch('bash', single_completed_pod)
-      expect(batch.info('bash')).to eq(single_completed_pod_info)
+      info = batch.info('bash')
+      expect(info).to eq(single_completed_pod_info)
+      expect(info.ood_connection_info).to eq(ten_twenty_host_connection)
     end
 
     it "correctly returns a queued pod" do
       batch = info_batch('jupyter-28wixphq', single_queued_pod)
-      expect(batch.info('jupyter-28wixphq')).to eq(single_queued_pod_info)
+      info = batch.info('jupyter-28wixphq')
+      expect(info).to eq(single_queued_pod_info)
+      expect(info.ood_connection_info).to eq(ten_twenty_host_connection)
     end
 
     it "correctly returns a unscheduleable pod" do
       batch = info_batch('bash', single_unscheduleable_pod)
-      expect(batch.info('bash')).to eq(single_unscheduleable_pod_info)
+      info = batch.info('bash')
+      expect(info).to eq(single_unscheduleable_pod_info)
+      expect(info.ood_connection_info).to eq(nil_connection)
     end
 
     it "correctly returns native info from service and secret" do
       batch = info_batch_full("jupyter-bmurb8sa")
-      expect(batch.info("jupyter-bmurb8sa")).to eq(single_running_pod_with_native_info)
+      info = batch.info("jupyter-bmurb8sa")
+      expect(info).to eq(single_running_pod_with_native_info)
+      expect(info.ood_connection_info).to eq(full_connection)
     end
 
     it "handles not finding the pod" do
