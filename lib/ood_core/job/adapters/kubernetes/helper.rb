@@ -1,18 +1,20 @@
 class OodCore::Job::Adapters::Kubernetes::Helper
 
-  require 'ood_core/job/adapters/kubernetes/resources'
+  require_relative 'resources'
+  require_relative 'k8s_job_info'
   require 'resolv'
   require 'base64'
+  require 'active_support/core_ext/hash'
 
   class K8sDataError < StandardError; end
 
   Resources = OodCore::Job::Adapters::Kubernetes::Resources
+  K8sJobInfo = OodCore::Job::Adapters::Kubernetes::K8sJobInfo
 
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
-  # Returns { native: {host: localhost, port:80, password: sshhh }} in the info
-  # object field in lieu of writing a connection.yml
+  # Returns K8sJobInfo in the in lieu of writing a connection.yml
   #
   # @param pod_json [#to_h]
   #   the pod data returned from 'kubectl get pod abc-123'
@@ -22,16 +24,15 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   the secret data returned from 'kubectl get secret abc-123-secret'
   # @param ns_prefix [#to_s]
   #   the namespace prefix so that namespaces can be converted back to usernames
-  # @return [OodCore::Job::Info]
+  # @return [OodCore::Job::Adapters::Kubernetes::K8sJobInfo]
   def info_from_json(pod_json: nil, service_json: nil, secret_json: nil, ns_prefix: nil)
     pod_hash = pod_info_from_json(pod_json, ns_prefix: ns_prefix)
     service_hash = service_info_from_json(service_json)
     secret_hash = secret_info_from_json(secret_json)
 
-    # can't just use deep_merge bc we don't depend *directly* on rails
-    pod_hash[:native] = pod_hash[:native].merge(service_hash[:native])
-    pod_hash[:native] = pod_hash[:native].merge(secret_hash[:native])
-    OodCore::Job::Info.new(pod_hash)
+    pod_hash.deep_merge!(service_hash)
+    pod_hash.deep_merge!(secret_hash)
+    K8sJobInfo.new(pod_hash)
   rescue NoMethodError
     raise K8sDataError, "unable to read data correctly from json"
   end
@@ -142,9 +143,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       submission_time: submission_time(json_data),
       dispatch_time: dispatch_time(json_data),
       wallclock_time: wallclock_time(json_data),
-      native: {
-        host: get_host(json_data.dig(:status, :hostIP))
-      },
+      ood_connection_info: { host: get_host(json_data.dig(:status, :hostIP)) },
       procs: procs_from_json(json_data)
     }
   rescue NoMethodError
@@ -170,32 +169,16 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   def service_info_from_json(json_data)
     # all we need is the port - .spec.ports[0].nodePort
     ports = json_data.dig(:spec, :ports)
-    {
-      native:
-        {
-          port: ports[0].dig(:nodePort)
-        }
-    }
+    { ood_connection_info: { port: ports[0].dig(:nodePort) } }
   rescue
-    empty_native
+    {}
   end
 
   def secret_info_from_json(json_data)
     raw = json_data.dig(:data, :password)
-    {
-      native:
-        {
-          password: Base64.decode64(raw)
-        }
-    }
+    { ood_connection_info: { password: Base64.decode64(raw) } }
   rescue
-    empty_native
-  end
-
-  def empty_native
-    {
-      native: {}
-    }
+    {}
   end
 
   def dispatch_time(json_data)

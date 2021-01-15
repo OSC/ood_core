@@ -3,10 +3,12 @@ require "json"
 
 class OodCore::Job::Adapters::Kubernetes::Batch
 
-  require "ood_core/job/adapters/kubernetes/helper"
+  require_relative "helper"
+  require_relative "k8s_job_info"
 
   Helper = OodCore::Job::Adapters::Kubernetes::Helper
   Resources = OodCore::Job::Adapters::Kubernetes::Resources
+  K8sJobInfo = OodCore::Job::Adapters::Kubernetes::K8sJobInfo
 
   using OodCore::Refinements::HashExtensions
 
@@ -265,7 +267,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def pod_info_from_json(pod)
     hash = helper.pod_info_from_json(pod)
-    OodCore::Job::Info.new(hash)
+    K8sJobInfo.new(hash)
   rescue Helper::K8sDataError
     # FIXME: silently eating error, could probably use a logger
     nil
