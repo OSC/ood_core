@@ -8,9 +8,6 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   class K8sDataError < StandardError; end
 
-  Resources = OodCore::Job::Adapters::Kubernetes::Resources
-  K8sJobInfo = OodCore::Job::Adapters::Kubernetes::K8sJobInfo
-
   # Extract info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
@@ -43,7 +40,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   the input container hash
   # @return  [OodCore::Job::Adapters::Kubernetes::Resources::Container]
   def container_from_native(container)
-    Resources::Container.new(
+    Kubernetes::Resources::Container.new(
       container[:name],
       container[:image],
       command: parse_command(container[:command]),
@@ -84,7 +81,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     configmap = native.fetch(:configmap, nil)
     return nil if configmap.nil?
 
-    Resources::ConfigMap.new(
+    Kubernetes::Resources::ConfigMap.new(
       configmap_name(id),
       configmap[:filename],
       configmap[:data]
