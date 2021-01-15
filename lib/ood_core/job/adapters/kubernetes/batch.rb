@@ -6,10 +6,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   require_relative "helper"
   require_relative "k8s_job_info"
 
-  Helper = OodCore::Job::Adapters::Kubernetes::Helper
-  Resources = OodCore::Job::Adapters::Kubernetes::Resources
-  K8sJobInfo = OodCore::Job::Adapters::Kubernetes::K8sJobInfo
-
   using OodCore::Refinements::HashExtensions
 
   class Error < StandardError; end
@@ -177,7 +173,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     id = generate_id(container.name)
     configmap = helper.configmap_from_native(native_data, id)
     init_containers = helper.init_ctrs_from_native(native_data[:init_containers])
-    spec = Resources::PodSpec.new(container, init_containers: init_containers)
+    spec = Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
 
     template = ERB.new(File.read(resource_file), nil, '-')
