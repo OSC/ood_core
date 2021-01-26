@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.15.0] - 2021-01-26
+### Fixed
+- ccq adapter now accepts job names with spaces in [210](https://github.com/OSC/ood_core/pull/209)
+- k8s correctly handles having no mount volumes in [239](https://github.com/OSC/ood_core/pull/239)
+
+### Added
+- k8s adapter now applies account metadata to resources in [216](https://github.com/OSC/ood_core/pull/216) and
+  [231](https://github.com/OSC/ood_core/pull/231)
+- k8s adapter can now prefix namespaces in [218](https://github.com/OSC/ood_core/pull/218)
+- k8s adapter now applies time limits to pods in [224](https://github.com/OSC/ood_core/pull/224)
+
+### Changed
+- testing automation is now done in github actions in [221](https://github.com/OSC/ood_core/pull/218)
+- update bunlder to 2.1.4 and ruby to 2.7 in [235](https://github.com/OSC/ood_core/pull/218) updated bundler and ruby
+- k8s adapter more appropriately labels unschedulable pods as queued in [230](https://github.com/OSC/ood_core/pull/230)
+- k8s adapter now uses the script#ood_connection_info API instead of script#native in
+  [222](https://github.com/OSC/ood_core/pull/222)
+
 ## [0.14.0] - 2020-10-01
 ### Added 
 - Kubernetes adapter in PR [156](https://github.com/OSC/ood_core/pull/156)
@@ -255,7 +273,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.14.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.15.0...HEAD
+[0.15.0]: https://github.com/OSC/ood_core/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/OSC/ood_core/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/OSC/ood_core/compare/v0.12.0...v0.13.0
 [0.12.0]: https://github.com/OSC/ood_core/compare/v0.11.4...v0.12.0
