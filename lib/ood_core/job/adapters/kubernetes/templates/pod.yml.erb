@@ -19,7 +19,18 @@ spec:
   securityContext:
     runAsUser: <%= run_as_user %>
     runAsGroup: <%= run_as_group %>
+    <%- if spec.container.supplemental_groups.empty? -%>
+    supplementalGroups: []
+    <%- else -%>
+    supplementalGroups:
+    <%- spec.container.supplemental_groups.each do |supplemental_group| -%>
+    - "<%= supplemental_group %>"
+    <%- end -%>
+    <%- end -%>
     fsGroup: <%= fs_group %>
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
   containers:
   - name: "<%= spec.container.name %>"
     image: <%= spec.container.image %>
@@ -60,6 +71,12 @@ spec:
       requests:
         memory: "<%= spec.container.memory %>"
         cpu: "<%= spec.container.cpu %>"
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      privileged: false
   <%- unless spec.init_containers.nil? -%>
   initContainers:
   <%- spec.init_containers.each do |ctr| -%>
@@ -78,6 +95,12 @@ spec:
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
     <%- end # for each mount -%>
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      privileged: false
   <%- end # init container loop -%>
   <%- end # if init containers -%>
   <%- unless (configmap.to_s.empty? && all_mounts.empty?) -%>
