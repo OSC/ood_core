@@ -14,7 +14,11 @@ spec:
   securityContext:
     runAsUser: 1001
     runAsGroup: 1002
+    supplementalGroups: []
     fsGroup: 1002
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
   containers:
   - name: "rspec-test"
     image: ruby:2.5
@@ -40,6 +44,12 @@ spec:
       requests:
         memory: "6Gi"
         cpu: "4"
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      privileged: false
   initContainers:
   - name: "init-1"
     image: "busybox:latest"
@@ -50,6 +60,12 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath:  /ood
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      privileged: false
   volumes:
   - name: configmap-volume
     configMap:
