@@ -14,6 +14,7 @@ spec:
   securityContext:
     runAsUser: 1001
     runAsGroup: 1002
+    runAsNonRoot: true
     supplementalGroups: []
     fsGroup: 1002
   hostNetwork: false

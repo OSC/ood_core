@@ -19,6 +19,7 @@ spec:
   securityContext:
     runAsUser: <%= run_as_user %>
     runAsGroup: <%= run_as_group %>
+    runAsNonRoot: true
     <%- if spec.container.supplemental_groups.empty? -%>
     supplementalGroups: []
     <%- else -%>
