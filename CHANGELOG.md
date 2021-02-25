@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.15.1] - 2021-02-25
+### Fixed
+- kubernetes adapter uses the full module for helpers in [245](https://github.com/OSC/ood_core/pull/245).
+
+### Changed
+- kubernetes pods spawn with runAsNonRoot set to true in [247](https://github.com/OSC/ood_core/pull/247).
+- kubernetes pods can spawn with supplemental groups along with some other in security defaults in
+  [246](https://github.com/OSC/ood_core/pull/246).
+
 ## [0.15.0] - 2021-01-26
 ### Fixed
 - ccq adapter now accepts job names with spaces in [210](https://github.com/OSC/ood_core/pull/209)
@@ -273,7 +282,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.15.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.15.1...HEAD
+[0.15.1]: https://github.com/OSC/ood_core/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/OSC/ood_core/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/OSC/ood_core/compare/v0.13.0...v0.14.0
 [0.13.0]: https://github.com/OSC/ood_core/compare/v0.12.0...v0.13.0
