@@ -27,7 +27,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @namespace_prefix = options.fetch(:namespace_prefix, '')
 
     @using_context = false
-    @helper = Helper.new
+    @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
 
     begin
       make_kubectl_config(options)
@@ -173,7 +173,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     id = generate_id(container.name)
     configmap = helper.configmap_from_native(native_data, id)
     init_containers = helper.init_ctrs_from_native(native_data[:init_containers])
-    spec = Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
+    spec = OodCore::Job::Adapters::Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
 
     template = ERB.new(File.read(resource_file), nil, '-')

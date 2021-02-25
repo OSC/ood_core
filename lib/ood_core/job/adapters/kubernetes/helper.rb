@@ -29,7 +29,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
     pod_hash.deep_merge!(service_hash)
     pod_hash.deep_merge!(secret_hash)
-    K8sJobInfo.new(pod_hash)
+    OodCore::Job::Adapters::Kubernetes::K8sJobInfo.new(pod_hash)
   rescue NoMethodError
     raise K8sDataError, "unable to read data correctly from json"
   end
@@ -40,7 +40,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   the input container hash
   # @return  [OodCore::Job::Adapters::Kubernetes::Resources::Container]
   def container_from_native(container)
-    Kubernetes::Resources::Container.new(
+    OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
       container[:name],
       container[:image],
       command: parse_command(container[:command]),
@@ -81,7 +81,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     configmap = native.fetch(:configmap, nil)
     return nil if configmap.nil?
 
-    Kubernetes::Resources::ConfigMap.new(
+    OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap.new(
       configmap_name(id),
       configmap[:filename],
       configmap[:data]
