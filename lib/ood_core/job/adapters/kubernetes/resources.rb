@@ -1,12 +1,28 @@
 module OodCore::Job::Adapters::Kubernetes::Resources
+  require_relative 'batch'
 
   class ConfigMap
-    attr_accessor :name, :filename, :data
+    attr_accessor :name, :files
 
-    def initialize(name, filename, data)
+    def initialize(name, files)
       @name = name
-      @filename = filename
-      @data = data
+      @files = []
+      files.each do |f|
+        @files << ConfigMapFile.new(f)
+      end
+    end
+  end
+
+  class ConfigMapFile
+    attr_accessor :filename, :data, :mount_path, :sub_path, :init_mount_path, :init_sub_path
+
+    def initialize(data)
+      @filename = data[:filename]
+      @data = data[:data]
+      @mount_path = data[:mount_path]
+      @sub_path = data[:sub_path]
+      @init_mount_path = data[:init_mount_path]
+      @init_sub_path = data[:init_sub_path]
     end
   end
 

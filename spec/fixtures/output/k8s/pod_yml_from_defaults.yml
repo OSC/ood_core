@@ -26,8 +26,20 @@ spec:
     imagePullPolicy: IfNotPresent
     workingDir: "/my/home"
     env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: USER
+      value: "testuser"
+    - name: UID
+      value: "1001"
     - name: HOME
       value: "/my/home"
+    - name: GROUP
+      value: "testgroup"
+    - name: GID
+      value: "1002"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:
@@ -37,7 +49,7 @@ spec:
     - containerPort: 8080
     volumeMounts:
     - name: configmap-volume
-      mountPath:  /ood
+      mountPath: /ood
     - name: ess
       mountPath: /fs/ess
     resources:
@@ -56,13 +68,28 @@ spec:
   initContainers:
   - name: "init-1"
     image: "busybox:latest"
+    env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: USER
+      value: "testuser"
+    - name: UID
+      value: "1001"
+    - name: HOME
+      value: "/my/home"
+    - name: GROUP
+      value: "testgroup"
+    - name: GID
+      value: "1002"
     command:
     - "/bin/ls"
     - "-lrt"
     - "."
     volumeMounts:
     - name: configmap-volume
-      mountPath:  /ood
+      mountPath: /ood
     - name: ess
       mountPath: /fs/ess
     securityContext:

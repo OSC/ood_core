@@ -153,16 +153,28 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     username_prefix.nil? ? username : "#{username_prefix}-#{username}"
   end
 
+  def user
+    @user ||= Etc.getpwnam(username)
+  end
+
+  def home_dir
+    user.dir
+  end
+
   def run_as_user
-    Etc.getpwnam(username).uid
+    user.uid
   end
 
   def run_as_group
-    Etc.getpwnam(username).gid
+    user.gid
   end
 
   def fs_group
     run_as_group
+  end
+
+  def group
+    Etc.getgrgid(run_as_group).name
   end
 
   # helper to template resource yml you're going to submit and

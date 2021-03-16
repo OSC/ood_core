@@ -50,6 +50,12 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath: /ood
+    - name: configmap-volume
+      mountPath: /etc/passwd
+      subPath: passwd
+    - name: configmap-volume
+      mountPath: /etc/group
+      subPath: group
     resources:
       limits:
         memory: "6Gi"
@@ -88,6 +94,8 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath: /ood
+    - name: configmap-volume
+      mountPath: /passwd
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
