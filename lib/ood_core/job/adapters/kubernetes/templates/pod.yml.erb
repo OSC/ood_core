@@ -60,9 +60,14 @@ spec:
     <%- end -%>
     volumeMounts:
     <%- unless configmap.nil? -%>
+    <%- configmap.files.each do |file| -%>
     - name: configmap-volume
-      mountPath:  <%= configmap_mount_path %>
-    <%- end -%>
+      mountPath: <%= file.mount_path || configmap_mount_path %>
+      <%- unless file.sub_path.nil? -%>
+      subPath: <%= file.sub_path %>
+      <%- end # end unless file.sub_path.nil? -%>
+    <%- end # end configmap.data.each -%>
+    <%- end # unless configmap -%>
     <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
@@ -100,9 +105,15 @@ spec:
     <%- end # command loop -%>
     volumeMounts:
     <%- unless configmap.nil? -%>
+    <%- configmap.files.each do |file| -%>
+    <%- next if file.init_mount_path == false -%>
     - name: configmap-volume
-      mountPath:  <%= configmap_mount_path %>
-    <%- end -%>
+      mountPath: <%= file.init_mount_path || configmap_mount_path %>
+      <%- unless file.init_sub_path.nil? -%>
+      subPath: <%= file.init_sub_path %>
+      <%- end # end unless file.sub_path.nil? -%>
+    <%- end # end configmap.data.each -%>
+    <%- end # unless configmap -%>
     <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
@@ -164,6 +175,9 @@ metadata:
   labels:
     job: <%= id %>
 data:
-  <%= configmap.filename %>: |
-    <% config_data_lines(configmap.data).each do |line| %><%= line %><% end %>
-<%- end # end for configmap -%>
+<%- configmap.files.each do |file| -%>
+  <%- next if file.data.nil? || file.filename.nil? -%>
+  <%= file.filename %>: |
+    <% config_data_lines(file.data).each do |line| %><%= line %><% end %>
+<%- end # end for configmap files -%>
+<%- end # end configmap.nil? %>

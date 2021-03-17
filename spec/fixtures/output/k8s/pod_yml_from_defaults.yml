@@ -49,7 +49,7 @@ spec:
     - containerPort: 8080
     volumeMounts:
     - name: configmap-volume
-      mountPath:  /ood
+      mountPath: /ood
     - name: ess
       mountPath: /fs/ess
     resources:
@@ -91,7 +91,7 @@ spec:
     - "."
     volumeMounts:
     - name: configmap-volume
-      mountPath:  /ood
+      mountPath: /ood
     - name: ess
       mountPath: /fs/ess
     securityContext:
