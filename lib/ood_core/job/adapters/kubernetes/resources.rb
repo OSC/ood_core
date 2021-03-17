@@ -11,12 +11,12 @@ module OodCore::Job::Adapters::Kubernetes::Resources
   end
 
   class Container
-    attr_accessor :name, :image, :command, :port, :env, :memory, :cpu, :working_dir,
+    attr_accessor :name, :image, :command, :port, :memory, :cpu, :working_dir,
                   :restart_policy, :supplemental_groups
 
     def initialize(
-        name, image, command: [], port: nil, env: [], memory: "4Gi", cpu: "1",
-        working_dir: "", restart_policy: "Never", supplemental_groups: []
+        name, image, command: [], port: nil, env: {}, memory: "4Gi", cpu: "1",
+        working_dir: "", restart_policy: "Never", supplemental_groups: [], default_env: {}
       )
       raise ArgumentError, "containers need valid names and images" unless name && image
 
@@ -24,12 +24,13 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @image = image
       @command = command.nil? ? [] : command
       @port = port&.to_i
-      @env = env.nil? ? [] : env
+      @env = env.nil? ? {} : env.to_h.symbolize_keys
       @memory = memory.nil? ? "4Gi" : memory
       @cpu = cpu.nil? ? "1" : cpu
       @working_dir = working_dir.nil? ? "" : working_dir
       @restart_policy = restart_policy.nil? ? "Never" : restart_policy
       @supplemental_groups = supplemental_groups.nil? ? [] : supplemental_groups
+      @default_env = default_env
     end
 
     def ==(other)
@@ -45,6 +46,13 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         supplemental_groups == other.supplemental_groups
     end
 
+    def env
+      @default_env.each_pair do |name, value|
+        next if @env.key?(name)
+        @env[name] = value
+      end
+      @env
+    end
   end
 
   class PodSpec

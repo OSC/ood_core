@@ -26,10 +26,22 @@ spec:
     imagePullPolicy: IfNotPresent
     workingDir: "/my/home"
     env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
     - name: HOME
       value: "/my/home"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
+    - name: USER
+      value: "testuser"
+    - name: UID
+      value: "1001"
+    - name: GROUP
+      value: "testgroup"
+    - name: GID
+      value: "1002"
     command:
     - "rake"
     - "spec"
@@ -60,6 +72,23 @@ spec:
   initContainers:
   - name: "init-1"
     image: "busybox:latest"
+    env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: HOME
+      value: "/my/home"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
+    - name: USER
+      value: "testuser"
+    - name: UID
+      value: "1001"
+    - name: GROUP
+      value: "testgroup"
+    - name: GID
+      value: "1002"
     command:
     - "/bin/ls"
     - "-lrt"

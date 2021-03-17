@@ -38,18 +38,21 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #
   # @param container [#to_h]
   #   the input container hash
+  # @param default_env [#to_h]
+  #   Default env to merge with defined env
   # @return  [OodCore::Job::Adapters::Kubernetes::Resources::Container]
-  def container_from_native(container)
+  def container_from_native(container, default_env)
     OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
       container[:name],
       container[:image],
       command: parse_command(container[:command]),
       port: container[:port],
-      env: container.fetch(:env, []),
+      env: container.fetch(:env, {}),
       memory: container[:memory],
       cpu: container[:cpu],
       working_dir: container[:working_dir],
-      restart_policy: container[:restart_policy]
+      restart_policy: container[:restart_policy],
+      default_env: default_env
     )
   end
 
@@ -93,13 +96,15 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   # @param native_data [#to_h]
   #   the native data to parse. Expected key init_ctrs and for that
   #   key to be an array of hashes.
+  # @param default_env [#to_h]
+  #   Default env to merge with defined env
   # @return [Array<OodCore::Job::Adapters::Kubernetes::Resources::Container>]
   #   the array of init containers
-  def init_ctrs_from_native(ctrs)
+  def init_ctrs_from_native(ctrs, default_env)
     init_ctrs = []
 
     ctrs&.each do |ctr_raw|
-      ctr = container_from_native(ctr_raw)
+      ctr = container_from_native(ctr_raw, default_env)
       init_ctrs.push(ctr)
     end
 

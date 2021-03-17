@@ -39,13 +39,15 @@ spec:
     <%- unless spec.container.working_dir.empty? -%>
     workingDir: "<%= spec.container.working_dir %>"
     <%- end -%>
-    <%- unless spec.container.env.empty? -%>
     env:
-    <%- spec.container.env.each do |env| -%>
-    - name: <%= env[:name] %>
-      value: "<%= env[:value] %>"
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    <%- spec.container.env.each_pair do |name, value| -%>
+    - name: <%= name %>
+      value: "<%= value %>"
     <%- end # for each env -%>
-    <%- end # unless env is nil -%>
     <%- unless spec.container.command.empty? -%>
     command:
     <%- spec.container.command.each do |cmd| -%>
@@ -83,6 +85,15 @@ spec:
   <%- spec.init_containers.each do |ctr| -%>
   - name: "<%= ctr.name %>"
     image: "<%= ctr.image %>"
+    env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    <%- ctr.env.each_pair do |name, value| -%>
+    - name: <%= name %>
+      value: "<%= value %>"
+    <%- end # for each env -%>
     command:
     <%- ctr.command.each do |cmd| -%>
     - "<%= cmd %>"

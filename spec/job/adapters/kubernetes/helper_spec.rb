@@ -234,10 +234,9 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         image: 'ruby:2.5',
         command: 'rake spec',
         port: 8080,
-        env: [
-          name: 'HOME',
-          value: '/over/here'
-        ],
+        env: {
+          'HOME' => '/over/here',
+        },
         memory: '12Gi',
         cpu: '6',
         working_dir: '/over/there',
@@ -245,14 +244,24 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       }
     }
 
+    let(:default_env) {
+      {
+        HOME: '/home/test',
+        UID: 1000,
+      }
+    }
+
     it "correctly parses a full container" do
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
           command: ['rake', 'spec'],
-          env: [{ name: 'HOME', value: '/over/here' }],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
@@ -264,12 +273,15 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "correctly parses container with no port" do
       ctr_hash.delete(:port)
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           command: ['rake', 'spec'],
-          env: [{ name: 'HOME', value: '/over/here' }],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
@@ -281,12 +293,15 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "correctly parses container with no command" do
       ctr_hash.delete(:command)
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
-          env: [{ name: 'HOME', value: '/over/here' }],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
@@ -298,11 +313,15 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "correctly parses container with no env" do
       ctr_hash.delete(:env)
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
+          env: {
+            HOME: '/home/test',
+            UID: 1000,
+          },
           command: ['rake', 'spec'],
           memory: '12Gi',
           cpu: '6',
@@ -315,12 +334,15 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "correctly parses container with working directory" do
       ctr_hash.delete(:working_dir)
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
-          env: [{ name: 'HOME', value: '/over/here' }],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
           command: ['rake', 'spec'],
           memory: '12Gi',
           cpu: '6',
@@ -332,13 +354,16 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "correctly parses container with no restart_policy" do
       ctr_hash.delete(:restart_policy)
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
           command: ['rake', 'spec'],
-          env: [{ name: 'HOME', value: '/over/here' }],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
@@ -348,7 +373,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
     it "correctly parses container with no extra fields" do
       # expected defaults
-      ctr_hash[:env] = []
+      ctr_hash[:env] = {}
       ctr_hash[:command] = []
       ctr_hash.delete(:port)
       ctr_hash[:memory] = '4Gi'
@@ -356,10 +381,14 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       ctr_hash[:restart_policy] = 'Never'
       ctr_hash[:working_dir] = ''
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
-          'ruby:2.5'
+          'ruby:2.5',
+          env: {
+            HOME: '/home/test',
+            UID: 1000,
+          }
         )
       )
     end
@@ -367,14 +396,14 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "throws an error when no name is given" do
       ctr = { image: 'ruby:25' }
       expect{ 
-        helper.container_from_native(ctr) 
+        helper.container_from_native(ctr, default_env) 
       }.to raise_error(ArgumentError, "containers need valid names and images")
     end
 
     it "throws an error when no name is given" do
       ctr = { name: 'ruby-test-container' }
       expect{ 
-        helper.container_from_native(ctr) 
+        helper.container_from_native(ctr, default_env) 
       }.to raise_error(ArgumentError, "containers need valid names and images")
     end
   end
