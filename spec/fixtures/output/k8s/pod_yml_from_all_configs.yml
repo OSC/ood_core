@@ -20,6 +20,8 @@ spec:
   hostNetwork: false
   hostIPC: false
   hostPID: false
+  imagePullSecrets:
+  - name: docker-registry-secret
   containers:
   - name: "rspec-test"
     image: ruby:2.5
