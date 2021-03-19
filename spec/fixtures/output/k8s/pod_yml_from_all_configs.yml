@@ -30,18 +30,18 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
-    - name: HOME
-      value: "/my/home"
-    - name: PATH
-      value: "/usr/bin:/usr/local/bin"
     - name: USER
       value: "testuser"
     - name: UID
       value: "1001"
+    - name: HOME
+      value: "/my/home"
     - name: GROUP
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
     command:
     - "rake"
     - "spec"
@@ -77,18 +77,18 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
-    - name: HOME
-      value: "/my/home"
-    - name: PATH
-      value: "/usr/bin:/usr/local/bin"
     - name: USER
       value: "testuser"
     - name: UID
       value: "1001"
+    - name: HOME
+      value: "/my/home"
     - name: GROUP
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
     command:
     - "/bin/ls"
     - "-lrt"

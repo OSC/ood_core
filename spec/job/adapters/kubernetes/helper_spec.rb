@@ -396,14 +396,14 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "throws an error when no name is given" do
       ctr = { image: 'ruby:25' }
       expect{ 
-        helper.container_from_native(ctr, default_env) 
+        helper.container_from_native(ctr, default_env)
       }.to raise_error(ArgumentError, "containers need valid names and images")
     end
 
     it "throws an error when no name is given" do
       ctr = { name: 'ruby-test-container' }
       expect{ 
-        helper.container_from_native(ctr, default_env) 
+        helper.container_from_native(ctr, default_env)
       }.to raise_error(ArgumentError, "containers need valid names and images")
     end
   end

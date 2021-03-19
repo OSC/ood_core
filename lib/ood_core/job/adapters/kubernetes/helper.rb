@@ -42,17 +42,17 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   Default env to merge with defined env
   # @return  [OodCore::Job::Adapters::Kubernetes::Resources::Container]
   def container_from_native(container, default_env)
+    env = container.fetch(:env, {}).to_h.symbolize_keys
     OodCore::Job::Adapters::Kubernetes::Resources::Container.new(
       container[:name],
       container[:image],
       command: parse_command(container[:command]),
       port: container[:port],
-      env: container.fetch(:env, {}),
+      env: default_env.merge(env),
       memory: container[:memory],
       cpu: container[:cpu],
       working_dir: container[:working_dir],
       restart_policy: container[:restart_policy],
-      default_env: default_env
     )
   end
 

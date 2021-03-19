@@ -30,8 +30,6 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
-    - name: PATH
-      value: "/usr/bin:/usr/local/bin"
     - name: USER
       value: "testuser"
     - name: UID
@@ -42,6 +40,8 @@ spec:
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
     command:
     - "rake"
     - "spec"
@@ -71,8 +71,6 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
-    - name: PATH
-      value: "/usr/bin:/usr/local/bin"
     - name: USER
       value: "testuser"
     - name: UID
@@ -83,6 +81,8 @@ spec:
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
     command:
     - "/bin/ls"
     - "-lrt"
