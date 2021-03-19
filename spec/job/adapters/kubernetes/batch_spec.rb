@@ -450,16 +450,10 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             image: 'ruby:2.5',
             command: 'rake spec',
             port: 8080,
-            env: [
-              {
-                name: 'HOME',
-                value: '/my/home'
-              },
-              {
-                name: 'PATH',
-                value: '/usr/bin:/usr/local/bin'
-              }
-            ],
+            env: {
+              HOME: '/my/home',
+              PATH: '/usr/bin:/usr/local/bin'
+            },
             memory: '6Gi',
             cpu: '4',
             working_dir: '/my/home',
@@ -495,8 +489,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
 
       allow(@basic_batch).to receive(:generate_id).with('rspec-test').and_return('rspec-test-123')
       allow(@basic_batch).to receive(:username).and_return('testuser')
-      allow(@basic_batch).to receive(:run_as_user).and_return(1001)
-      allow(@basic_batch).to receive(:run_as_group).and_return(1002)
+      allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
+      allow(@basic_batch).to receive(:group).and_return('testgroup')
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
