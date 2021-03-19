@@ -15,7 +15,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
                   :restart_policy, :supplemental_groups
 
     def initialize(
-        name, image, command: [], port: nil, env: [], memory: "4Gi", cpu: "1",
+        name, image, command: [], port: nil, env: {}, memory: "4Gi", cpu: "1",
         working_dir: "", restart_policy: "Never", supplemental_groups: []
       )
       raise ArgumentError, "containers need valid names and images" unless name && image
@@ -24,7 +24,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @image = image
       @command = command.nil? ? [] : command
       @port = port&.to_i
-      @env = env.nil? ? [] : env
+      @env = env.nil? ? {} : env
       @memory = memory.nil? ? "4Gi" : memory
       @cpu = cpu.nil? ? "1" : cpu
       @working_dir = working_dir.nil? ? "" : working_dir
@@ -44,7 +44,6 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         restart_policy == other.restart_policy &&
         supplemental_groups == other.supplemental_groups
     end
-
   end
 
   class PodSpec

@@ -153,26 +153,48 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     username_prefix.nil? ? username : "#{username_prefix}-#{username}"
   end
 
+  def user
+    @user ||= Etc.getpwnam(username)
+  end
+
+  def home_dir
+    user.dir
+  end
+
   def run_as_user
-    Etc.getpwnam(username).uid
+    user.uid
   end
 
   def run_as_group
-    Etc.getpwnam(username).gid
+    user.gid
   end
 
   def fs_group
     run_as_group
   end
 
+  def group
+    Etc.getgrgid(run_as_group).name
+  end
+
+  def default_env
+    {
+      USER: username,
+      UID: run_as_user,
+      HOME: home_dir,
+      GROUP: group,
+      GID: run_as_group,
+    }
+  end
+
   # helper to template resource yml you're going to submit and
   # create an id.
   def generate_id_yml(script)
     native_data = script.native
-    container = helper.container_from_native(native_data[:container])
+    container = helper.container_from_native(native_data[:container], default_env)
     id = generate_id(container.name)
     configmap = helper.configmap_from_native(native_data, id)
-    init_containers = helper.init_ctrs_from_native(native_data[:init_containers])
+    init_containers = helper.init_ctrs_from_native(native_data[:init_containers], container.env)
     spec = OodCore::Job::Adapters::Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
 
