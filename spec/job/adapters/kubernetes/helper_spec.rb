@@ -382,13 +382,16 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     it "correctly parses container with no image_pull_secret" do
       ctr_hash.delete(:image_pull_secret)
 
-      expect(helper.container_from_native(ctr_hash)).to eq(
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(
           'ruby-test-container',
           'ruby:2.5',
           port: 8080,
           command: ['rake', 'spec'],
-          env: [{ name: 'HOME', value: '/over/here' }],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
