@@ -86,8 +86,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
     OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap.new(
       configmap_name(id),
-      configmap[:filename],
-      configmap[:data]
+      (configmap[:files] || [])
     )
   end
 

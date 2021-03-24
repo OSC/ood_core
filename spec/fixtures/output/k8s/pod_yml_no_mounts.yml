@@ -49,7 +49,7 @@ spec:
     - containerPort: 8080
     volumeMounts:
     - name: configmap-volume
-      mountPath:  /ood
+      mountPath: /ood
     resources:
       limits:
         memory: "6Gi"
@@ -89,7 +89,7 @@ spec:
     - "."
     volumeMounts:
     - name: configmap-volume
-      mountPath:  /ood
+      mountPath: /ood
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:

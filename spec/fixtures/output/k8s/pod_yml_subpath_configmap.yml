@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  namespace: user-testuser
+  namespace: testuser
   name: rspec-test-123
   labels:
     job: rspec-test-123
@@ -50,12 +50,12 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath: /ood
-    - name: home-dir
-      mountPath: /home
-    - name: nfs-dir
-      mountPath: /fs
-    - name: ess
-      mountPath: /fs/ess
+    - name: configmap-volume
+      mountPath: /etc/passwd
+      subPath: passwd
+    - name: configmap-volume
+      mountPath: /etc/group
+      subPath: group
     resources:
       limits:
         memory: "6Gi"
@@ -96,12 +96,8 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath: /ood
-    - name: home-dir
-      mountPath: /home
-    - name: nfs-dir
-      mountPath: /fs
-    - name: ess
-      mountPath: /fs/ess
+    - name: configmap-volume
+      mountPath: /passwd
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -112,24 +108,12 @@ spec:
   - name: configmap-volume
     configMap:
       name: rspec-test-123-configmap
-  - name: home-dir
-    hostPath:
-      path: /users
-      type: Directory
-  - name: nfs-dir
-    nfs:
-      server: some.nfs.host
-      path: /fs
-  - name: ess
-    hostPath:
-      path: /fs/ess
-      type: Directory
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: rspec-test-123-service
-  namespace: user-testuser
+  namespace: testuser
   labels:
     job: rspec-test-123
 spec:
@@ -145,7 +129,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rspec-test-123-configmap
-  namespace: user-testuser
+  namespace: testuser
   labels:
     job: rspec-test-123
 data:
