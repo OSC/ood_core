@@ -10,6 +10,14 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         @files << ConfigMapFile.new(f)
       end
     end
+
+    def mounts?
+      @files.any? { |f| f.mount_path }
+    end
+
+    def init_mounts?
+      @files.any? { |f| f.init_mount_path }
+    end
   end
 
   class ConfigMapFile

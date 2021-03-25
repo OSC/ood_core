@@ -58,20 +58,21 @@ spec:
     ports:
     - containerPort: <%= spec.container.port %>
     <%- end -%>
+    <%- if configmap.mounts? || !all_mounts.empty? -%>
     volumeMounts:
-    <%- unless configmap.nil? -%>
     <%- configmap.files.each do |file| -%>
+      <%- next if file.mount_path.nil? -%>
     - name: configmap-volume
-      mountPath: <%= file.mount_path || configmap_mount_path %>
+      mountPath: <%= file.mount_path %>
       <%- unless file.sub_path.nil? -%>
       subPath: <%= file.sub_path %>
       <%- end # end unless file.sub_path.nil? -%>
-    <%- end # end configmap.data.each -%>
-    <%- end # unless configmap -%>
+    <%- end # end configmap.files.each -%>
     <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
     <%- end # for each mount -%>
+    <%- end # configmap mounts? and all_mounts not empty -%>
     resources:
       limits:
         memory: "<%= spec.container.memory %>"
@@ -103,21 +104,21 @@ spec:
     <%- ctr.command.each do |cmd| -%>
     - "<%= cmd %>"
     <%- end # command loop -%>
+    <%- if configmap.init_mounts? || !all_mounts.empty? -%>
     volumeMounts:
-    <%- unless configmap.nil? -%>
     <%- configmap.files.each do |file| -%>
-    <%- next if file.init_mount_path == false -%>
+    <%- next if file.init_mount_path.nil? -%>
     - name: configmap-volume
-      mountPath: <%= file.init_mount_path || configmap_mount_path %>
+      mountPath: <%= file.init_mount_path %>
       <%- unless file.init_sub_path.nil? -%>
       subPath: <%= file.init_sub_path %>
       <%- end # end unless file.sub_path.nil? -%>
-    <%- end # end configmap.data.each -%>
-    <%- end # unless configmap -%>
+    <%- end # end configmap.files.each -%>
     <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
     <%- end # for each mount -%>
+    <%- end # if config_map init mounts and all_mounts not empty -%>
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:

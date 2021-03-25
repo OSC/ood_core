@@ -112,10 +112,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     safe_call("delete", "configmap", configmap_name(id))
   end
 
-  def configmap_mount_path
-    '/ood'
-  end
-
   private
 
   def safe_call(verb, resource, id)

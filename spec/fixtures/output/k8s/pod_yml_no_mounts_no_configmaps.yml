@@ -47,9 +47,6 @@ spec:
     - "spec"
     ports:
     - containerPort: 8080
-    volumeMounts:
-    - name: configmap-volume
-      mountPath: /ood
     resources:
       limits:
         memory: "6Gi"
