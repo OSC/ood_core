@@ -90,8 +90,6 @@ spec:
     - "-lrt"
     - "."
     volumeMounts:
-    - name: configmap-volume
-      mountPath: /ood
     - name: ess
       mountPath: /fs/ess
     securityContext:

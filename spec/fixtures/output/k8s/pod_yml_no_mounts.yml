@@ -47,9 +47,6 @@ spec:
     - "spec"
     ports:
     - containerPort: 8080
-    volumeMounts:
-    - name: configmap-volume
-      mountPath: /ood
     resources:
       limits:
         memory: "6Gi"
@@ -87,9 +84,6 @@ spec:
     - "/bin/ls"
     - "-lrt"
     - "."
-    volumeMounts:
-    - name: configmap-volume
-      mountPath: /ood
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:

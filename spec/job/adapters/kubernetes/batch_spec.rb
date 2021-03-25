@@ -294,7 +294,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
           configmap: {
             files: [{
               filename: 'config.file',
-              data: "a = b\nc = d\n  indentation = keepthis"
+              data: "a = b\nc = d\n  indentation = keepthis",
+              mount_path: '/ood',
+              init_mount_path: '/ood'
             }],
           },
           mounts: [
@@ -354,7 +356,8 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
           configmap: {
             files: [{
               filename: 'config.file',
-              data: "a = b\nc = d\n  indentation = keepthis"
+              data: "a = b\nc = d\n  indentation = keepthis",
+              mount_path: '/ood'
             }],
           },
           mounts: [
@@ -468,7 +471,9 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             files: [
               {
                 filename: 'config.file',
-                data: "a = b\nc = d\n  indentation = keepthis"
+                data: "a = b\nc = d\n  indentation = keepthis",
+                mount_path: '/ood',
+                init_mount_path: '/ood'
               },
               {
                 filename: 'passwd',
@@ -480,7 +485,6 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
                 filename: 'group',
                 mount_path: '/etc/group',
                 sub_path: 'group',
-                init_mount_path: false
               }
             ],
           },
