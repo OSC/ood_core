@@ -16,7 +16,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # from
   class Error < StandardError; end
 
-  UNIT_SEPARATOR = "\x1F"
+  UNIT_SEPARATOR = ","
 
   # @param debug Whether the adapter should be used in debug mode
   # @param site_timeout [#to_i] A period after which the job should be killed or nil

@@ -136,9 +136,10 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
     end
 
     describe "#list_remote_sessions" do
-        let(:tmux_output_a) { "launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70\u001F1569609529\u001F175138\n" }
-        let(:tmux_output_b) { "launched-by-ondemand-b8e85cd4-791d-49fa-8be1-5bd5c1009d70\u001F1569609529\u001F175138\n" }
-        let(:tmux_output_c) { "launched-by-ondemand-c8e85cd4-791d-49fa-8be1-5bd5c1009d70\u001F1569609529\u001F175138\n" }
+        sep = OodCore::Job::Adapters::LinuxHost::Launcher::UNIT_SEPARATOR
+        let(:tmux_output_a) { "launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138\n" }
+        let(:tmux_output_b) { "launched-by-ondemand-b8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138\n" }
+        let(:tmux_output_c) { "launched-by-ondemand-c8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138\n" }
         let(:parsed_tmux_output_x3) { [
             {
                 :destination_host=>"owens-login01.hpc.osc.edu",
