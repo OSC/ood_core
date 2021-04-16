@@ -148,6 +148,10 @@ spec:
   <%- end # if mount is [host,nfs] -%>
   <%- end # for each mount -%>
   <%- end # (configmap.to_s.empty? || all_mounts.empty?) -%>
+  <%- unless cluster.nil? -%>
+  nodeSelector:
+    cluster: <%= cluster %>
+  <%- end -%>
 ---
 <%- unless spec.container.port.nil? -%>
 apiVersion: v1

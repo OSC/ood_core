@@ -193,6 +193,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     init_containers = helper.init_ctrs_from_native(native_data[:init_containers], container.env)
     spec = OodCore::Job::Adapters::Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
+    cluster = native_data[:cluster]
 
     template = ERB.new(File.read(resource_file), nil, '-')
 
