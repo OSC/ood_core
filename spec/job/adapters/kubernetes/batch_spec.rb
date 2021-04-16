@@ -306,7 +306,10 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             host_type: 'Directory',
             destination_path: '/fs/ess',
             path: '/fs/ess'
-          ]
+          ],
+          node_selector: {
+            cluster: 'test',
+          }
         }
       )
 

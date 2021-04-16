@@ -124,6 +124,8 @@ spec:
     hostPath:
       path: /fs/ess
       type: Directory
+  nodeSelector:
+    cluster: "test"
 ---
 apiVersion: v1
 kind: Service
