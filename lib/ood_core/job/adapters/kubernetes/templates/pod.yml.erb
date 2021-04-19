@@ -32,6 +32,10 @@ spec:
   hostNetwork: false
   hostIPC: false
   hostPID: false
+  <%- unless spec.container.image_pull_secret.nil? -%>
+  imagePullSecrets:
+  - name: <%= spec.container.image_pull_secret %>
+  <%- end -%>
   containers:
   - name: "<%= spec.container.name %>"
     image: <%= spec.container.image %>

@@ -276,6 +276,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
           container: {
             name: 'rspec-test',
             image: 'ruby:2.5',
+            image_pull_secret: 'docker-registry-secret',
             command: 'rake spec',
             port: 8080,
             env: {

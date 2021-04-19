@@ -240,7 +240,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         memory: '12Gi',
         cpu: '6',
         working_dir: '/over/there',
-        restart_policy: 'OnFailure'
+        restart_policy: 'OnFailure',
+        image_pull_secret: 'docker-registry-secret'
       }
     }
 
@@ -265,7 +266,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
-          restart_policy: 'OnFailure'
+          restart_policy: 'OnFailure',
+          image_pull_secret: 'docker-registry-secret'
         )
       )
     end
@@ -285,7 +287,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
-          restart_policy: 'OnFailure'
+          restart_policy: 'OnFailure',
+          image_pull_secret: 'docker-registry-secret'
         )
       )
     end
@@ -305,7 +308,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
-          restart_policy: 'OnFailure'
+          restart_policy: 'OnFailure',
+          image_pull_secret: 'docker-registry-secret'
         )
       )
     end
@@ -326,7 +330,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
-          restart_policy: 'OnFailure'
+          restart_policy: 'OnFailure',
+          image_pull_secret: 'docker-registry-secret'
         )
       )
     end
@@ -346,7 +351,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           command: ['rake', 'spec'],
           memory: '12Gi',
           cpu: '6',
-          restart_policy: 'OnFailure'
+          restart_policy: 'OnFailure',
+          image_pull_secret: 'docker-registry-secret'
         )
       )
     end
@@ -367,6 +373,30 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
           memory: '12Gi',
           cpu: '6',
           working_dir: '/over/there',
+          restart_policy: 'Never',
+          image_pull_secret: 'docker-registry-secret'
+        )
+      )
+    end
+
+    it "correctly parses container with no image_pull_secret" do
+      ctr_hash.delete(:image_pull_secret)
+
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          port: 8080,
+          command: ['rake', 'spec'],
+          env: {
+            HOME: '/over/here',
+            UID: 1000,
+          },
+          memory: '12Gi',
+          cpu: '6',
+          working_dir: '/over/there',
+          restart_policy: 'OnFailure',
+          image_pull_secret: nil
         )
       )
     end
@@ -380,6 +410,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       ctr_hash[:cpu] = '1'
       ctr_hash[:restart_policy] = 'Never'
       ctr_hash[:working_dir] = ''
+      ctr_hash[:image_pull_secret] = nil
 
       expect(helper.container_from_native(ctr_hash, default_env)).to eq(
         Kubernetes::Resources::Container.new(

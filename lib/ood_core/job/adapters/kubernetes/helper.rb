@@ -53,6 +53,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       cpu: container[:cpu],
       working_dir: container[:working_dir],
       restart_policy: container[:restart_policy],
+      image_pull_secret: container[:image_pull_secret]
     )
   end
 
