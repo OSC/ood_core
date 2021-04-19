@@ -109,16 +109,14 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
 
     describe "#stop_remote_session" do
         context "when the tmux server is not running" do
-            it "does not raise an error" do
+            it "does not raise an error for 1.8 messages" do
                 allow(Open3).to receive(:capture3).and_return(['remote_host', 'failed to connect to server', exit_failure])
 
                 subject.stop_remote_session('job', 'remote_host')
             end
-        end
 
-        context "when the tmux session name is not found" do
-            it "does not raise an error" do
-                allow(Open3).to receive(:capture3).and_return(['remote_host', "session not found: #{subject.session_name_label}", exit_failure])
+            it "does not raise an error for 2.7 messages" do
+                allow(Open3).to receive(:capture3).and_return(['remote_host', 'no server running on /tmp/tmux-30961/default', exit_failure])
 
                 subject.stop_remote_session('job', 'remote_host')
             end

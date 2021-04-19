@@ -80,12 +80,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
 
     call(*cmd, stdin: kill_cmd)
   rescue Error => e
-    raise e unless (
-      # The tmux server not running is not an error
-      e.message.include?('failed to connect to server') ||
-      # The session not being found is not an error
-      e.message.include?("session not found: #{session_name_label}")
-    )
+    interpret_and_raise(e)
   end
 
   def list_remote_sessions(host: nil)
@@ -264,8 +259,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       |session_hash| session_hash[:session_name].start_with?(session_name_label)
     }
   rescue Error => e
-    # The tmux server not running is not an error
-    raise e unless e.message.include?('failed to connect to server')
+    interpret_and_raise(e)
     []
   end
 
@@ -279,5 +273,18 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     return script.output_path.to_s if script.output_path
 
     '/dev/null'
+  end
+
+  # under some conditions tmux returns status code 1 but it's not an actual
+  # error. These are when the session is not found or there are no sessions
+  # at all.
+  def interpret_and_raise(error)
+    if error.message.include?('failed to connect to server') # no sessions in tmux 1.8
+      nil
+    elsif error.message.include?('no server running on') # no sessions in tmux 2.7+ message
+      nil
+    else
+      raise error
+    end
   end
 end
