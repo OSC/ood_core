@@ -6,6 +6,24 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+## [0.16.0] - 2021-04-20
+### Fixed
+- tmux 2.7+ bug in the linux host adapter in [2.5.8](https://github.com/OSC/ood_core/pull/258)
+  and [259](https://github.com/OSC/ood_core/pull/259).
+
+### Changed
+
+- Changed how k8s configmaps in are defined in [251](https://github.com/OSC/ood_core/pull/251).
+  The data structure now expects a key called files which is an array of objects that hold
+  filename, data, mount_path, sub_path and init_mount_path.
+  [255](https://github.com/OSC/ood_core/pull/255) also relates to this interface change.
+
+### Added
+
+- The k8s adapter can now specify environment variables and creates defaults 
+  in [252](https://github.com/OSC/ood_core/pull/252).
+- The k8s adapter can now specify image pull secrets in [253](https://github.com/OSC/ood_core/pull/253).
+
 ## [0.15.1] - 2021-02-25
 ### Fixed
 - kubernetes adapter uses the full module for helpers in [245](https://github.com/OSC/ood_core/pull/245).
@@ -282,7 +300,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.15.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.16.0...HEAD
+[0.15.2]: https://github.com/OSC/ood_core/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/OSC/ood_core/compare/v0.15.0...v0.15.1
 [0.15.0]: https://github.com/OSC/ood_core/compare/v0.14.0...v0.15.0
 [0.14.0]: https://github.com/OSC/ood_core/compare/v0.13.0...v0.14.0
