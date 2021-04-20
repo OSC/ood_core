@@ -36,6 +36,8 @@ describe OodCore::Job::Script do
   it { is_expected.to respond_to(:wall_time) }
   it { is_expected.to respond_to(:accounting_id) }
   it { is_expected.to respond_to(:job_array_request) }
+  it { is_expected.to respond_to(:qos) }
+  it { is_expected.to respond_to(:gpus_per_node) }
   it { is_expected.to respond_to(:native) }
   it { is_expected.to respond_to(:to_h) }
   it { is_expected.to respond_to(:copy_environment) }
@@ -178,6 +180,18 @@ describe OodCore::Job::Script do
     it { is_expected.to eq("my_account") }
   end
 
+  describe "#qos" do
+    subject { build_script(qos: double(to_s: "test")).qos }
+
+    it { is_expected.to eq("test") }
+  end
+
+  describe "#gpus_per_node" do
+    subject { build_script(gpus_per_node: double(to_i: 1)).gpus_per_node }
+
+    it { is_expected.to eq(1) }
+  end
+
   describe "#native" do
     subject { build_script(native: "native").native }
 
@@ -209,6 +223,8 @@ describe OodCore::Job::Script do
     it { is_expected.to have_key(:wall_time) }
     it { is_expected.to have_key(:accounting_id) }
     it { is_expected.to have_key(:job_array_request) }
+    it { is_expected.to have_key(:qos) }
+    it { is_expected.to have_key(:gpus_per_node) }
     it { is_expected.to have_key(:native) }
     it { is_expected.to have_key(:copy_environment) }
   end

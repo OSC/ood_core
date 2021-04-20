@@ -423,6 +423,7 @@ module OodCore
           args.concat ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           args.concat ['-a', script.job_array_request] unless script.job_array_request.nil?
           args.concat ['--qos', script.qos] unless script.qos.nil?
+          args.concat ['--gpus-per-node', script.gpus_per_node] unless script.gpus_per_node.nil?
           # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies

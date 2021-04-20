@@ -221,6 +221,18 @@ describe OodCore::Job::Adapters::Slurm do
       it { expect(slurm).to have_received(:submit_string).with(content, args: ["-t", "26:15:34", "--export", "NONE"], env: {}) }
     end
 
+    context "with :qos" do
+      before { adapter.submit(build_script(qos: "test")) }
+
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--qos", "test", "--export", "NONE"], env: {}) }
+    end
+
+    context "with :gpus_per_node" do
+      before { adapter.submit(build_script(gpus_per_node: 1)) }
+
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--gpus-per-node", 1, "--export", "NONE"], env: {}) }
+    end
+
     context "with :native" do
       before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 

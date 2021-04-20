@@ -272,6 +272,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "submits with correct yml file given all config options" do
       script = build_script(
         accounting_id: 'test',
+        gpus_per_node: 1,
         native: {
           container: {
             name: 'rspec-test',

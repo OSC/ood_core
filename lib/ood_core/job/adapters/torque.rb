@@ -159,6 +159,8 @@ module OodCore
             args.concat ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
             args.concat ['-t', script.job_array_request] unless script.job_array_request.nil?
             args.concat ['-l', "qos=#{script.qos}"] unless script.qos.nil?
+            args.concat ['-l', "gpus=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
+
             # Set environment variables
             env = script.job_environment.to_h
             args.concat ["-v", env.keys.join(",")] unless env.empty?

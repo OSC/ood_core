@@ -103,6 +103,10 @@ module OodCore
       # @return [String, nil] qos
       attr_reader :qos
 
+      # The GPUs per node for the job
+      # @return [Integer, nil] gpus per node
+      attr_reader :gpus_per_node
+
       # Object detailing any native specifications that are implementation specific
       # @note Should not be used at all costs.
       # @return [Object, nil] native specifications
@@ -136,6 +140,7 @@ module OodCore
       # @param accounting_id [#to_s, nil] accounting id
       # @param job_array_request [#to_s, nil] job array request
       # @param qos [#to_s, nil] qos
+      # @param gpus_per_node [#to_i, nil] gpus per node
       # @param native [Object, nil] native specifications
       # @param copy_environment [Boolean, nil] copy the environment
       def initialize(content:, args: nil, submit_as_hold: nil, rerunnable: nil,
@@ -145,7 +150,7 @@ module OodCore
                      output_path: nil, error_path: nil, reservation_id: nil,
                      queue_name: nil, priority: nil, start_time: nil,
                      wall_time: nil, accounting_id: nil, job_array_request: nil,
-                     qos: nil, native: nil, copy_environment: nil, **_)
+                     qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -170,6 +175,7 @@ module OodCore
         @accounting_id      = accounting_id     && accounting_id.to_s
         @job_array_request  = job_array_request && job_array_request.to_s
         @qos                = qos               && qos.to_s
+        @gpus_per_node      = gpus_per_node     && gpus_per_node.to_i
         @native             = native
         @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
       end
@@ -200,6 +206,7 @@ module OodCore
           accounting_id:       accounting_id,
           job_array_request:   job_array_request,
           qos:                 qos,
+          gpus_per_node:       gpus_per_node,
           native:              native,
           copy_environment:    copy_environment
         }

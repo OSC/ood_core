@@ -221,6 +221,12 @@ describe OodCore::Job::Adapters::Torque do
       it { expect(pbs).to have_received(:submit).with(content, args: ["-l", "qos=high", "-j", "oe"], env: {}, chdir: nil)}
     end
 
+    context "with :gpus_per_node" do
+      before { adapter.submit(build_script(gpus_per_node: 1)) }
+
+      it { expect(pbs).to have_received(:submit).with(content, args: ["-l", "gpus=1", "-j", "oe"], env: {}, chdir: nil)}
+    end
+
     context "with :native" do
       before { adapter.submit(build_script(native: ["A", "B", "C"])) }
 
