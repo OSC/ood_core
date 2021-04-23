@@ -53,4 +53,28 @@ describe OodCore::Cluster do
       end
     end
   end
+
+  context "with cluster with acls" do
+    let(:owens) { OodCore::Cluster.new({ id: "owens", acls: [{adapter: 'group', groups: ['foo'], type: 'whitelist'}]}) }
+
+    it "blocks users not in specified group" do
+      allow_any_instance_of(OodSupport::User).to receive(:groups).and_return(['bar'])
+
+      expect(owens.allow?).to be false
+    end
+
+    it "allows users in specified group" do
+      allow_any_instance_of(OodSupport::User).to receive(:groups).and_return(['foo'])
+
+      expect(owens.allow?).to be true
+    end
+
+    it "only checks group membership once" do
+      expect_any_instance_of(OodSupport::User).to receive(:groups).once.and_return(['foo'])
+
+      owens.allow?
+      owens.allow?
+      owens.allow?
+    end
+  end
 end
