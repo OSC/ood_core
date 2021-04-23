@@ -78,7 +78,9 @@ module OodCore
     # Whether the login feature is allowed
     # @return [Boolean] is login allowed
     def login_allow?
-      allow? && !login_config.empty?
+      return @login_allow if defined?(@login_allow)
+
+      @login_allow = (allow? && !login_config.empty?)
     end
 
     # Build a job adapter from the job configuration
@@ -90,9 +92,11 @@ module OodCore
     # Whether the job feature is allowed based on the ACLs
     # @return [Boolean] is the job feature allowed
     def job_allow?
-      allow? &&
-        !job_config.empty? &&
-        build_acls(job_config.fetch(:acls, []).map(&:to_h)).all?(&:allow?)
+      return @job_allow if defined?(@job_allow)
+
+      @job_allow = (allow? && ! job_config.empty? && build_acls(
+        job_config.fetch(:acls, []).map(&:to_h)
+      ).all?(&:allow?))
     end
 
     # The batch connect template configuration used for this cluster
@@ -138,7 +142,9 @@ module OodCore
     # Whether this cluster is allowed to be used
     # @return [Boolean] whether cluster is allowed
     def allow?
-      acls.all?(&:allow?)
+      return @allow if defined?(@allow)
+
+      @allow = acls.all?(&:allow?)
     end
 
     # The comparison operator
