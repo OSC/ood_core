@@ -23,7 +23,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @cluster = options.fetch(:cluster, 'open-ondemand')
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)
-    @username_prefix = options.fetch(:username_prefix, nil)
+    @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
 
     @using_context = false
@@ -146,7 +146,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def k8s_username
-    username_prefix.nil? ? username : "#{username_prefix}-#{username}"
+    "#{username_prefix}#{username}"
   end
 
   def user
