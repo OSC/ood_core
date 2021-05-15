@@ -39,7 +39,7 @@ spec:
   containers:
   - name: "<%= spec.container.name %>"
     image: <%= spec.container.image %>
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: <%= spec.container.image_pull_policy %>
     <%- unless spec.container.working_dir.empty? -%>
     workingDir: "<%= spec.container.working_dir %>"
     <%- end -%>
@@ -95,6 +95,7 @@ spec:
   <%- spec.init_containers.each do |ctr| -%>
   - name: "<%= ctr.name %>"
     image: "<%= ctr.image %>"
+    imagePullPolicy: <%= ctr.image_pull_policy %>
     env:
     - name: POD_NAME
       valueFrom:

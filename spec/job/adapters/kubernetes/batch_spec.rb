@@ -277,6 +277,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             name: 'rspec-test',
             image: 'ruby:2.5',
             image_pull_secret: 'docker-registry-secret',
+            image_pull_policy: 'Always',
             command: 'rake spec',
             port: 8080,
             env: {
@@ -291,6 +292,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
           init_containers: [
             name: 'init-1',
             image: 'busybox:latest',
+            image_pull_policy: 'Always',
             command: '/bin/ls -lrt .'
           ],
           configmap: {
