@@ -41,6 +41,14 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   let(:success) { double("success?" => true) }
   let(:failure) { double("success?" => false) }
 
+  let(:script_content) do
+    content = <<-EOS
+#!/bin/bash
+foo
+EOS
+    content.strip
+  end
+
   let(:mounts) {
     [
       {
@@ -275,6 +283,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "submits with correct yml file given all config options" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         gpus_per_node: 1,
         native: {
           container: {
@@ -344,6 +353,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "submits with correct yml file given default options" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         native: {
           container: {
             name: 'rspec-test',
@@ -405,6 +415,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "submits with correct yml file with no mounts" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         native: {
           container: {
             name: 'rspec-test',
@@ -515,6 +526,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "submits with correct yml file with subpath mounts for configmap" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         native: {
           container: {
             name: 'rspec-test',
@@ -584,6 +596,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     it "submits with correct yml file with no mounts no configmap mounts" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         native: {
           container: {
             name: 'rspec-test',

@@ -192,7 +192,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     native_data = script.native
     container = helper.container_from_native(native_data[:container], default_env)
     id = generate_id(container.name)
-    configmap = helper.configmap_from_native(native_data, id)
+    configmap = helper.configmap_from_native(native_data, id, script.content)
     init_containers = helper.init_ctrs_from_native(native_data[:init_containers], container.env)
     spec = OodCore::Job::Adapters::Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
