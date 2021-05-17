@@ -48,6 +48,10 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
     <%- spec.container.env.each_pair do |name, value| -%>
     - name: <%= name %>
       value: "<%= value %>"
@@ -100,6 +104,10 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.name
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
     <%- ctr.env.each_pair do |name, value| -%>
     - name: <%= name %>
       value: "<%= value %>"
