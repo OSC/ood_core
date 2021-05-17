@@ -235,6 +235,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     if start.nil?
       # the pod is in some pending state limbo
       conditions = status.dig(:conditions)
+      return nil if conditions.nil?
+      return nil if conditions.size == 0
       # best guess to start time is just the first condition's
       # transition time
       str = conditions[0].dig(:lastTransitionTime)
