@@ -45,6 +45,9 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     raise ArgumentError, 'Must specify the script' if script.nil?
 
     resource_yml, id = generate_id_yml(script)
+    if !script.workdir.nil? && Dir.exist?(script.workdir)
+      File.open(File.join(script.workdir, 'pod.yml'), 'w') { |f| f.write resource_yml }
+    end
     call("#{formatted_ns_cmd} create -f -", stdin: resource_yml)
 
     id
