@@ -834,4 +834,18 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
     end
   end
 
+  describe '#set_context' do
+    it 'generates correct command' do
+      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=testuser"
+      expect(@basic_batch).to receive(:call).with(expected_cmd)
+      @basic_batch.send(:set_context)
+    end
+
+    it 'generates correct command when username prefix defined' do
+      allow(@basic_batch).to receive(:username_prefix).and_return('dev-')
+      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=dev-testuser"
+      expect(@basic_batch).to receive(:call).with(expected_cmd)
+      @basic_batch.send(:set_context)
+    end
+  end
 end
