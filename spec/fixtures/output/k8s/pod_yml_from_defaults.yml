@@ -72,6 +72,7 @@ spec:
   initContainers:
   - name: "init-1"
     image: "busybox:latest"
+    imagePullPolicy: IfNotPresent
     env:
     - name: POD_NAME
       valueFrom:

@@ -25,7 +25,7 @@ spec:
   containers:
   - name: "rspec-test"
     image: ruby:2.5
-    imagePullPolicy: IfNotPresent
+    imagePullPolicy: Always
     workingDir: "/my/home"
     env:
     - name: POD_NAME
@@ -78,6 +78,7 @@ spec:
   initContainers:
   - name: "init-1"
     image: "busybox:latest"
+    imagePullPolicy: Always
     env:
     - name: POD_NAME
       valueFrom:
