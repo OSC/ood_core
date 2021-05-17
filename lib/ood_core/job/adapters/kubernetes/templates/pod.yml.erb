@@ -161,6 +161,12 @@ spec:
   <%- end # if mount is [host,nfs] -%>
   <%- end # for each mount -%>
   <%- end # (configmap.to_s.empty? || all_mounts.empty?) -%>
+  <%- unless node_selector.empty? -%>
+  nodeSelector:
+  <%- node_selector.each_pair do |key, value| -%>
+    <%= key %>: "<%= value %>"
+  <%- end # node_selector.each_pair -%>
+  <%- end #unless node_selector.empty? -%>
 ---
 <%- unless spec.container.port.nil? -%>
 apiVersion: v1
