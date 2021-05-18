@@ -701,6 +701,7 @@ EOS
         script = build_script(
           accounting_id: 'test',
           workdir: tmp,
+          content: script_content,
           native: {
             container: {
               name: 'rspec-test',
