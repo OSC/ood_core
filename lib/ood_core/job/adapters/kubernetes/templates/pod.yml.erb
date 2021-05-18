@@ -52,10 +52,6 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    <%- unless script.workdir.nil? -%>
-    - name: WORKDIR
-      value: "<%= script.workdir %>"
-    <%- end -%>
     <%- spec.container.env.each_pair do |name, value| -%>
     - name: <%= name %>
       value: "<%= value %>"
@@ -121,10 +117,6 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
-    <%- unless script.workdir.nil? -%>
-    - name: WORKDIR
-      value: "<%= script.workdir %>"
-    <%- end -%>
     <%- ctr.env.each_pair do |name, value| -%>
     - name: <%= name %>
       value: "<%= value %>"
