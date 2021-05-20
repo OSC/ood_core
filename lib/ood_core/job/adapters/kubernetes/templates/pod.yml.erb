@@ -176,6 +176,8 @@ metadata:
   namespace: <%= namespace %>
   labels:
     job: <%= id %>
+    app.kubernetes.io/name: <%= container.name %>
+    app.kubernetes.io/managed-by: open-ondemand
 spec:
   selector:
     job: <%= id %>
@@ -194,6 +196,8 @@ metadata:
   namespace: <%= namespace %>
   labels:
     job: <%= id %>
+    app.kubernetes.io/name: <%= container.name %>
+    app.kubernetes.io/managed-by: open-ondemand
 data:
 <%- configmap.files.each do |file| -%>
   <%- next if file.data.nil? || file.filename.nil? -%>
