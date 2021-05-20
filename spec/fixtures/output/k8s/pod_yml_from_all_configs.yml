@@ -145,6 +145,8 @@ metadata:
   namespace: user-testuser
   labels:
     job: rspec-test-123
+    app.kubernetes.io/name: rspec-test
+    app.kubernetes.io/managed-by: open-ondemand
 spec:
   selector:
     job: rspec-test-123
@@ -161,6 +163,8 @@ metadata:
   namespace: user-testuser
   labels:
     job: rspec-test-123
+    app.kubernetes.io/name: rspec-test
+    app.kubernetes.io/managed-by: open-ondemand
 data:
   config.file: |
     a = b
