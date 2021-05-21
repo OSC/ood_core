@@ -544,12 +544,6 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             image: 'busybox:latest',
             command: '/bin/ls -lrt .'
           ],
-          configmap: {
-            files: [{
-              filename: 'config.file',
-              data: "a = b\nc = d\n  indentation = keepthis",
-            }],
-          },
         }
       )
 

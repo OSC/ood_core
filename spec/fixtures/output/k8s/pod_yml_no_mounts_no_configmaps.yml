@@ -99,10 +99,6 @@ spec:
         drop:
         - all
       privileged: false
-  volumes:
-  - name: configmap-volume
-    configMap:
-      name: rspec-test-123-configmap
 ---
 apiVersion: v1
 kind: Service
@@ -121,18 +117,3 @@ spec:
     port: 80
     targetPort: 8080
   type: NodePort
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: rspec-test-123-configmap
-  namespace: testuser
-  labels:
-    job: rspec-test-123
-    app.kubernetes.io/name: rspec-test
-    app.kubernetes.io/managed-by: open-ondemand
-data:
-  config.file: |
-    a = b
-    c = d
-      indentation = keepthis

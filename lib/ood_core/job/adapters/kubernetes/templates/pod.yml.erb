@@ -66,7 +66,7 @@ spec:
     ports:
     - containerPort: <%= spec.container.port %>
     <%- end -%>
-    <%- if configmap.mounts? || !all_mounts.empty? -%>
+    <%- if !configmap.nil? && (configmap.mounts? || !all_mounts.empty?) -%>
     volumeMounts:
     <%- configmap.files.each do |file| -%>
       <%- next if file.mount_path.nil? -%>
@@ -117,7 +117,7 @@ spec:
     <%- ctr.command.each do |cmd| -%>
     - "<%= cmd %>"
     <%- end # command loop -%>
-    <%- if configmap.init_mounts? || !all_mounts.empty? -%>
+    <%- if !configmap.nil? && (configmap.init_mounts? || !all_mounts.empty?) -%>
     volumeMounts:
     <%- configmap.files.each do |file| -%>
     <%- next if file.init_mount_path.nil? -%>
@@ -187,8 +187,8 @@ spec:
     targetPort: <%= spec.container.port %>
   type: NodePort
 <%- end # end for service -%>
----
 <%- unless configmap.nil? -%>
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:
