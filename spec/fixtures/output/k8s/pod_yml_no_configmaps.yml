@@ -1,0 +1,130 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: testuser
+  name: rspec-test-123
+  labels:
+    job: rspec-test-123
+    app.kubernetes.io/name: rspec-test
+    app.kubernetes.io/managed-by: open-ondemand
+    account: test
+  annotations:
+spec:
+  restartPolicy: Always
+  securityContext:
+    runAsUser: 1001
+    runAsGroup: 1002
+    runAsNonRoot: true
+    supplementalGroups: []
+    fsGroup: 1002
+  hostNetwork: false
+  hostIPC: false
+  hostPID: false
+  containers:
+  - name: "rspec-test"
+    image: ruby:2.5
+    imagePullPolicy: IfNotPresent
+    workingDir: "/my/home"
+    env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: USER
+      value: "testuser"
+    - name: UID
+      value: "1001"
+    - name: HOME
+      value: "/home/testuser"
+    - name: GROUP
+      value: "testgroup"
+    - name: GID
+      value: "1002"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
+    command:
+    - "rake"
+    - "spec"
+    ports:
+    - containerPort: 8080
+    volumeMounts:
+    - name: ess
+      mountPath: /fs/ess
+    resources:
+      limits:
+        memory: "6Gi"
+        cpu: "4"
+      requests:
+        memory: "6Gi"
+        cpu: "4"
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      privileged: false
+  initContainers:
+  - name: "init-1"
+    image: "busybox:latest"
+    imagePullPolicy: IfNotPresent
+    env:
+    - name: POD_NAME
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.name
+    - name: POD_NAMESPACE
+      valueFrom:
+        fieldRef:
+          fieldPath: metadata.namespace
+    - name: USER
+      value: "testuser"
+    - name: UID
+      value: "1001"
+    - name: HOME
+      value: "/home/testuser"
+    - name: GROUP
+      value: "testgroup"
+    - name: GID
+      value: "1002"
+    - name: PATH
+      value: "/usr/bin:/usr/local/bin"
+    command:
+    - "/bin/ls"
+    - "-lrt"
+    - "."
+    volumeMounts:
+    - name: ess
+      mountPath: /fs/ess
+    securityContext:
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop:
+        - all
+      privileged: false
+  volumes:
+  - name: ess
+    hostPath:
+      path: /fs/ess
+      type: Directory
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rspec-test-123-service
+  namespace: testuser
+  labels:
+    job: rspec-test-123
+    app.kubernetes.io/name: rspec-test
+    app.kubernetes.io/managed-by: open-ondemand
+spec:
+  selector:
+    job: rspec-test-123
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8080
+  type: NodePort
