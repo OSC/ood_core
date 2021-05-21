@@ -66,8 +66,9 @@ spec:
     ports:
     - containerPort: <%= spec.container.port %>
     <%- end -%>
-    <%- if configmap.mounts? || !all_mounts.empty? -%>
+    <%- if !all_mounts.empty? || (!configmap.nil? && configmap.mounts?) -%>
     volumeMounts:
+    <%- unless configmap.nil? -%>
     <%- configmap.files.each do |file| -%>
       <%- next if file.mount_path.nil? -%>
     - name: configmap-volume
@@ -76,6 +77,7 @@ spec:
       subPath: <%= file.sub_path %>
       <%- end # end unless file.sub_path.nil? -%>
     <%- end # end configmap.files.each -%>
+    <%- end # unless configmap.nil? -%>
     <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
@@ -117,8 +119,9 @@ spec:
     <%- ctr.command.each do |cmd| -%>
     - "<%= cmd %>"
     <%- end # command loop -%>
-    <%- if configmap.init_mounts? || !all_mounts.empty? -%>
+    <%- if !all_mounts.empty? || (!configmap.nil? && configmap.init_mounts?) -%>
     volumeMounts:
+    <%- unless configmap.nil? -%>
     <%- configmap.files.each do |file| -%>
     <%- next if file.init_mount_path.nil? -%>
     - name: configmap-volume
@@ -127,6 +130,7 @@ spec:
       subPath: <%= file.init_sub_path %>
       <%- end # end unless file.sub_path.nil? -%>
     <%- end # end configmap.files.each -%>
+    <%- end # unless configmap.nil? -%>
     <%- all_mounts.each do |mount| -%>
     - name: <%= mount[:name] %>
       mountPath: <%= mount[:destination_path] %>
@@ -187,8 +191,8 @@ spec:
     targetPort: <%= spec.container.port %>
   type: NodePort
 <%- end # end for service -%>
----
 <%- unless configmap.nil? -%>
+---
 apiVersion: v1
 kind: ConfigMap
 metadata:

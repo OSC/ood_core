@@ -51,6 +51,9 @@ spec:
     - "spec"
     ports:
     - containerPort: 8080
+    volumeMounts:
+    - name: ess
+      mountPath: /fs/ess
     resources:
       limits:
         memory: "6Gi"
@@ -93,12 +96,20 @@ spec:
     - "/bin/ls"
     - "-lrt"
     - "."
+    volumeMounts:
+    - name: ess
+      mountPath: /fs/ess
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
         - all
       privileged: false
+  volumes:
+  - name: ess
+    hostPath:
+      path: /fs/ess
+      type: Directory
 ---
 apiVersion: v1
 kind: Service

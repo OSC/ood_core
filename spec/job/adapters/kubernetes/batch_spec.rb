@@ -22,6 +22,7 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
   let(:pod_yml_no_mounts) { File.read('spec/fixtures/output/k8s/pod_yml_no_mounts.yml') }
   let(:pod_yml_subpath_configmap) { File.read('spec/fixtures/output/k8s/pod_yml_subpath_configmap.yml') }
   let(:pod_yml_no_mounts_no_configmaps) { File.read('spec/fixtures/output/k8s/pod_yml_no_mounts_no_configmaps.yml') }
+  let(:pod_yml_no_configmaps) { File.read('spec/fixtures/output/k8s/pod_yml_no_configmaps.yml') }
   let(:several_pods) { File.read('spec/fixtures/output/k8s/several_pods.json') }
   let(:single_running_pod) { File.read('spec/fixtures/output/k8s/single_running_pod.json') }
   let(:single_error_pod) { File.read('spec/fixtures/output/k8s/single_error_pod.json') }
@@ -544,12 +545,6 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
             image: 'busybox:latest',
             command: '/bin/ls -lrt .'
           ],
-          configmap: {
-            files: [{
-              filename: 'config.file',
-              data: "a = b\nc = d\n  indentation = keepthis",
-            }],
-          },
         }
       )
 
@@ -570,6 +565,60 @@ describe OodCore::Job::Adapters::Kubernetes::Batch do
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_no_mounts_no_configmaps.to_s
+      ).and_return(['', '', $?])
+
+      @basic_batch.submit(script)
+    end
+
+    it "submits with correct yml file with no configmap mounts" do
+      script = build_script(
+        accounting_id: 'test',
+        native: {
+          container: {
+            name: 'rspec-test',
+            image: 'ruby:2.5',
+            command: 'rake spec',
+            port: 8080,
+            env: {
+              PATH: '/usr/bin:/usr/local/bin'
+            },
+            memory: '6Gi',
+            cpu: '4',
+            working_dir: '/my/home',
+            restart_policy: 'Always'
+          },
+          init_containers: [
+            name: 'init-1',
+            image: 'busybox:latest',
+            command: '/bin/ls -lrt .'
+          ],
+          mounts: [
+            type: 'host',
+            name: 'ess',
+            host_type: 'Directory',
+            destination_path: '/fs/ess',
+            path: '/fs/ess'
+          ]
+        }
+      )
+
+      allow(@basic_batch).to receive(:generate_id).with('rspec-test').and_return('rspec-test-123')
+      allow(@basic_batch).to receive(:username).and_return('testuser')
+      allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
+      allow(@basic_batch).to receive(:group).and_return('testgroup')
+
+      # make sure it get's templated right, also helpful in debugging bc
+      # it'll show a better diff than the test below.
+      template, = @basic_batch.send(:generate_id_yml, script)
+      expect(template.to_s).to eql(pod_yml_no_configmaps.to_s)
+
+      # make sure template get's passed into command correctly
+      `true`
+      allow(Open3).to receive(:capture3).with(
+        {},
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "--namespace=testuser -o json create -f -",
+        stdin_data: pod_yml_no_configmaps.to_s
       ).and_return(['', '', $?])
 
       @basic_batch.submit(script)
