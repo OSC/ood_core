@@ -96,7 +96,7 @@ spec:
         drop:
         - all
       privileged: false
-  <%- unless spec.init_containers.nil? -%>
+  <%- unless spec.init_containers.empty? -%>
   initContainers:
   <%- spec.init_containers.each do |ctr| -%>
   - name: "<%= ctr.name %>"
