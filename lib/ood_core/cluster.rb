@@ -147,6 +147,15 @@ module OodCore
       @allow = acls.all?(&:allow?)
     end
 
+    # Whether this cluster supports SSH to batch connect nodes
+    # @return [Boolean] whether cluster supports SSH to batch connect node
+    def batch_connect_ssh_allow?(default = true)
+      return @batch_connect_ssh_allow if defined?(@batch_connect_ssh_allow)
+      return @batch_connect_ssh_allow = default if batch_connect_config.nil?
+
+      @batch_connect_ssh_allow = batch_connect_config.fetch(:ssh_allow, default)
+    end
+
     # The comparison operator
     # @param other [#to_sym] object to compare against
     # @return [Boolean] whether objects are equivalent

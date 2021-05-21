@@ -51,6 +51,20 @@ describe OodCore::Cluster do
         expect(owens).to receive(:allow?).once
         2.times { owens.login_allow? }
       end
+
+      it 'has default for batch_connect_ssh_allow?' do
+        expect(owens.batch_connect_ssh_allow?).to be true
+      end
+
+      it 'can disable batch_connect_ssh_allow?' do
+        owens = OodCore::Cluster.new({id: "owens", batch_connect: { ssh_allow: false } })
+        expect(owens.batch_connect_ssh_allow?).to be false
+      end
+
+      it "caches batch_connect_ssh_allow?" do
+        expect(owens).to receive(:batch_connect_config).once
+        2.times { owens.batch_connect_ssh_allow? }
+      end
     end
   end
 
