@@ -87,9 +87,15 @@ spec:
       limits:
         memory: "<%= spec.container.memory %>"
         cpu: "<%= spec.container.cpu %>"
+        <%- unless script.gpus_per_node.nil? -%>
+        <%= gpu_type %>: <%= script.gpus_per_node %>
+        <%- end -%>
       requests:
         memory: "<%= spec.container.memory %>"
         cpu: "<%= spec.container.cpu %>"
+        <%- unless script.gpus_per_node.nil? -%>
+        <%= gpu_type %>: <%= script.gpus_per_node %>
+        <%- end -%>
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:

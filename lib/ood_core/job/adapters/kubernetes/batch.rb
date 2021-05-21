@@ -197,6 +197,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     spec = OodCore::Job::Adapters::Kubernetes::Resources::PodSpec.new(container, init_containers: init_containers)
     all_mounts = native_data[:mounts].nil? ? mounts : mounts + native_data[:mounts]
     node_selector = native_data[:node_selector].nil? ? {} : native_data[:node_selector]
+    gpu_type = native_data[:gpu_type].nil? ? "nvidia.com/gpu" : native_data[:gpu_type]
 
     template = ERB.new(File.read(resource_file), nil, '-')
 
