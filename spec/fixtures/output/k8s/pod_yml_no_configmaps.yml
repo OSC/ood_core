@@ -52,6 +52,9 @@ spec:
     ports:
     - containerPort: 8080
     volumeMounts:
+    - name: configmap-volume
+      mountPath: /ood/script.sh
+      subPath: script.sh
     - name: ess
       mountPath: /fs/ess
     resources:
@@ -106,6 +109,9 @@ spec:
         - all
       privileged: false
   volumes:
+  - name: configmap-volume
+    configMap:
+      name: rspec-test-123-configmap
   - name: ess
     hostPath:
       path: /fs/ess
@@ -128,3 +134,17 @@ spec:
     port: 80
     targetPort: 8080
   type: NodePort
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rspec-test-123-configmap
+  namespace: testuser
+  labels:
+    job: rspec-test-123
+    app.kubernetes.io/name: rspec-test
+    app.kubernetes.io/managed-by: open-ondemand
+data:
+  script.sh: |
+    #!/bin/bash
+    foo

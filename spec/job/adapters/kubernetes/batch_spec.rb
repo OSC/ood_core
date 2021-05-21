@@ -470,6 +470,7 @@ EOS
     it "submits with correct yml file given no init containers" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         native: {
           container: {
             name: 'rspec-test',
@@ -644,6 +645,7 @@ EOS
     it "submits with correct yml file with no configmap mounts" do
       script = build_script(
         accounting_id: 'test',
+        content: script_content,
         native: {
           container: {
             name: 'rspec-test',
