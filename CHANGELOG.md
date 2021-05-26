@@ -26,6 +26,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Kubernetes pods now have access the environment variable POD_NAMESPACE in
   [275](https://github.com/OSC/ood_core/pull/275).
 - Kubernetes pods can now specify the image pull policy in [272](https://github.com/OSC/ood_core/pull/272).
+- Cluster config's batch_connect now support `ssh_allow` to disable sshing to compute
+  nodes per cluster in [286](https://github.com/OSC/ood_core/pull/286).
+- Kubernetes will now add the templated script content to a configmap in
+  [273](https://github.com/OSC/ood_core/pull/273).
 
 ### Changed
 
