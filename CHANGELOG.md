@@ -6,6 +6,37 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.17.0] - 5-26-2021
+
+### Fixed
+
+- All Kubernetes resources now have the same labels in [280](https://github.com/OSC/ood_core/pull/280).
+- Kubernetes does not crash when no configmap is defined in [282](https://github.com/OSC/ood_core/pull/282).
+- Kubernetes will not specify init containers if there are none in
+  [284](https://github.com/OSC/ood_core/pull/284).
+
+### Added
+
+- Kubernetes, Slurm and Torque now support the script option `gpus_per_node` in
+  [266](https://github.com/OSC/ood_core/pull/266).
+- Kubernetes will now save the pod.yml into the staged root in
+  [277](https://github.com/OSC/ood_core/pull/277).
+- Kubernetes now allows for node selector in [264](https://github.com/OSC/ood_core/pull/264).
+- Kubernetes pods now have access the environment variable POD_NAMESPACE in
+  [275](https://github.com/OSC/ood_core/pull/275).
+- Kubernetes pods can now specify the image pull policy in [272](https://github.com/OSC/ood_core/pull/272).
+- Cluster config's batch_connect now support `ssh_allow` to disable sshing to compute
+  nodes per cluster in [286](https://github.com/OSC/ood_core/pull/286).
+- Kubernetes will now add the templated script content to a configmap in
+  [273](https://github.com/OSC/ood_core/pull/273).
+
+### Changed
+
+- Kubernetes username prefix no longer appends a - in [271](https://github.com/OSC/ood_core/pull/271).
+
+
+
 ## [0.16.1] - 2021-04-23
 ### Fixed
 - memorized some allow? variables to have better support around ACLS in
@@ -305,7 +336,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.16.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.16.0...HEAD
+[0.17.0]: https://github.com/OSC/ood_core/compare/v0.16.1...v0.17.0
 [0.16.1]: https://github.com/OSC/ood_core/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/OSC/ood_core/compare/v0.15.1...v0.16.0
 [0.15.1]: https://github.com/OSC/ood_core/compare/v0.15.0...v0.15.1
