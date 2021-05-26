@@ -249,11 +249,20 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
   def pod_status_from_json(json_data)
     phase = json_data.dig(:status, :phase)
+    conditions = json_data.dig(:status, :conditions)
+    unschedulable = false
+    unless conditions.nil?
+      unschedulable = conditions.any? { |c| c.dig(:reason) == "Unschedulable" }
+    end
     state = case phase
             when "Running"
               "running"
             when "Pending"
-              "queued"
+              if unschedulable
+                "queued_held"
+              else
+                "queued"
+              end
             when "Failed"
               "suspended"
             when "Succeeded"
