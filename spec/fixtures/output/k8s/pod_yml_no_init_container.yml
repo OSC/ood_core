@@ -54,6 +54,9 @@ spec:
     volumeMounts:
     - name: configmap-volume
       mountPath: /ood
+    - name: configmap-volume
+      mountPath: /ood/script.sh
+      subPath: script.sh
     - name: ess
       mountPath: /fs/ess
     resources:
@@ -110,3 +113,6 @@ data:
     a = b
     c = d
       indentation = keepthis
+  script.sh: |
+    #!/bin/bash
+    foo

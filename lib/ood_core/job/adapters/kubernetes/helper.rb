@@ -81,10 +81,18 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   #   the input configmap hash
   # @param id [#to_s]
   #   the id to use for giving the configmap a name
+  # @param script_content [#to_s]
+  #   the batch script content
   # @return  [OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap]
-  def configmap_from_native(native, id)
-    configmap = native.fetch(:configmap, nil)
-    return nil if configmap.nil?
+  def configmap_from_native(native, id, script_content)
+    configmap = native.fetch(:configmap, {})
+    configmap[:files] ||= []
+    configmap[:files] << {
+      filename: 'script.sh',
+      data: script_content,
+      mount_path: '/ood/script.sh',
+      sub_path: 'script.sh',
+    } unless configmap[:files].any? { |f| f[:filename] == 'script.sh' }
 
     OodCore::Job::Adapters::Kubernetes::Resources::ConfigMap.new(
       configmap_name(id),

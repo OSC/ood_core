@@ -60,6 +60,9 @@ spec:
     - name: configmap-volume
       mountPath: /etc/group
       subPath: group
+    - name: configmap-volume
+      mountPath: /ood/script.sh
+      subPath: script.sh
     resources:
       limits:
         memory: "6Gi"
@@ -150,3 +153,6 @@ data:
     a = b
     c = d
       indentation = keepthis
+  script.sh: |
+    #!/bin/bash
+    foo
