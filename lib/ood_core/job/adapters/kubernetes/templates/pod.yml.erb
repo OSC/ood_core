@@ -52,6 +52,10 @@ spec:
       valueFrom:
         fieldRef:
           fieldPath: metadata.namespace
+    <%- unless spec.container.port.nil? -%>
+    - name: POD_PORT
+      value: "<%= spec.container.port %>"
+    <%- end -%>
     <%- spec.container.env.each_pair do |name, value| -%>
     - name: <%= name %>
       value: "<%= value %>"
