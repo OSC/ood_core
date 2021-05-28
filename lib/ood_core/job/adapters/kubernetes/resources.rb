@@ -33,13 +33,47 @@ module OodCore::Job::Adapters::Kubernetes::Resources
     end
   end
 
+  class Probe
+    attr_accessor :initial_delay_seconds, :failure_threshold, :period_seconds
+
+    def initialize(data)
+      data ||= {}
+      @initial_delay_seconds = data[:initial_delay_seconds] || 2
+      @failure_threshold = data[:failure_threshold] || 5
+      @period_seconds = data[:period_seconds] || 5
+    end
+
+    def to_h
+      {
+        initial_delay_seconds: initial_delay_seconds,
+        failure_threshold: failure_threshold,
+        period_seconds: period_seconds,
+      }
+    end
+  end
+
+  class TCPProbe < Probe
+    attr_accessor :port
+
+    def initialize(port, data)
+      super(data)
+      @port = port
+    end
+
+    def to_h
+      super.merge({port: port})
+    end
+  end
+
   class Container
     attr_accessor :name, :image, :command, :port, :env, :memory, :cpu, :working_dir,
-                  :restart_policy, :image_pull_policy, :image_pull_secret, :supplemental_groups
+                  :restart_policy, :image_pull_policy, :image_pull_secret, :supplemental_groups,
+                  :startup_probe
 
     def initialize(
         name, image, command: [], port: nil, env: {}, memory: "4Gi", cpu: "1",
-        working_dir: "", restart_policy: "Never", image_pull_policy: nil, image_pull_secret: nil, supplemental_groups: []
+        working_dir: "", restart_policy: "Never", image_pull_policy: nil, image_pull_secret: nil, supplemental_groups: [],
+        startup_probe: {}
       )
       raise ArgumentError, "containers need valid names and images" unless name && image
 
@@ -55,6 +89,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @image_pull_policy = image_pull_policy.nil? ? "IfNotPresent" : image_pull_policy
       @image_pull_secret = image_pull_secret
       @supplemental_groups = supplemental_groups.nil? ? [] : supplemental_groups
+      @startup_probe = TCPProbe.new(@port, startup_probe)
     end
 
     def ==(other)
@@ -69,7 +104,8 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         restart_policy == other.restart_policy &&
         image_pull_policy == other.image_pull_policy &&
         image_pull_secret == other.image_pull_secret &&
-        supplemental_groups == other.supplemental_groups
+        supplemental_groups == other.supplemental_groups &&
+        startup_probe.to_h == other.startup_probe.to_h
     end
   end
 

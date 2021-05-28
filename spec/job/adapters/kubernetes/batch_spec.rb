@@ -293,6 +293,7 @@ EOS
             image_pull_policy: 'Always',
             command: 'rake spec',
             port: 8080,
+            startup_probe: { failure_threshold: 10 },
             env: {
               HOME: '/my/home',
               PATH: '/usr/bin:/usr/local/bin'
