@@ -33,11 +33,12 @@ module OodCore::Job::Adapters::Kubernetes::Resources
     end
   end
 
-  class Probe
-    attr_accessor :initial_delay_seconds, :failure_threshold, :period_seconds
+  class TCPProbe
+    attr_accessor :port, :initial_delay_seconds, :failure_threshold, :period_seconds
 
-    def initialize(data)
+    def initialize(port, data)
       data ||= {}
+      @port = port
       @initial_delay_seconds = data[:initial_delay_seconds] || 2
       @failure_threshold = data[:failure_threshold] || 5
       @period_seconds = data[:period_seconds] || 5
@@ -45,23 +46,11 @@ module OodCore::Job::Adapters::Kubernetes::Resources
 
     def to_h
       {
+        port: port,
         initial_delay_seconds: initial_delay_seconds,
         failure_threshold: failure_threshold,
         period_seconds: period_seconds,
       }
-    end
-  end
-
-  class TCPProbe < Probe
-    attr_accessor :port
-
-    def initialize(port, data)
-      super(data)
-      @port = port
-    end
-
-    def to_h
-      super.merge({port: port})
     end
   end
 
