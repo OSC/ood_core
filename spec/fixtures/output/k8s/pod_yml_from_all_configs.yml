@@ -48,6 +48,8 @@ spec:
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: KUBECONFIG
+      value: "/my/home/.kube/config"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:
@@ -105,6 +107,8 @@ spec:
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: KUBECONFIG
+      value: "/my/home/.kube/config"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:

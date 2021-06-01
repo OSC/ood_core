@@ -46,6 +46,8 @@ spec:
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: KUBECONFIG
+      value: "/dev/null"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:
@@ -97,6 +99,8 @@ spec:
       value: "testgroup"
     - name: GID
       value: "1002"
+    - name: KUBECONFIG
+      value: "/dev/null"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:

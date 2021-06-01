@@ -295,7 +295,8 @@ EOS
             port: 8080,
             env: {
               HOME: '/my/home',
-              PATH: '/usr/bin:/usr/local/bin'
+              PATH: '/usr/bin:/usr/local/bin',
+              KUBECONFIG: '/my/home/.kube/config',
             },
             memory: '6Gi',
             cpu: '4',

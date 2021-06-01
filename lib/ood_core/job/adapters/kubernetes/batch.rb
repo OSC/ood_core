@@ -183,6 +183,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
       HOME: home_dir,
       GROUP: group,
       GID: run_as_group,
+      KUBECONFIG: '/dev/null',
     }
   end
 
