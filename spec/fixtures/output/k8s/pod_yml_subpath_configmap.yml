@@ -55,6 +55,12 @@ spec:
     - "spec"
     ports:
     - containerPort: 8080
+    startupProbe:
+      tcpSocket:
+        port: 8080
+      initialDelaySeconds: 2
+      failureThreshold: 5
+      periodSeconds: 5
     volumeMounts:
     - name: configmap-volume
       mountPath: /ood

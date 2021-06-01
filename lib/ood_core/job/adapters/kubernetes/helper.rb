@@ -54,7 +54,8 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       working_dir: container[:working_dir],
       restart_policy: container[:restart_policy],
       image_pull_policy: container[:image_pull_policy],
-      image_pull_secret: container[:image_pull_secret]
+      image_pull_secret: container[:image_pull_secret],
+      startup_probe: container[:startup_probe],
     )
   end
 

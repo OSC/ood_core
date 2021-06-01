@@ -69,6 +69,12 @@ spec:
     <%- unless spec.container.port.nil? -%>
     ports:
     - containerPort: <%= spec.container.port %>
+    startupProbe:
+      tcpSocket:
+        port: <%= spec.container.startup_probe.port %>
+      initialDelaySeconds: <%= spec.container.startup_probe.initial_delay_seconds %>
+      failureThreshold: <%= spec.container.startup_probe.failure_threshold %>
+      periodSeconds: <%= spec.container.startup_probe.period_seconds %>
     <%- end -%>
     <%- if !all_mounts.empty? || (!configmap.nil? && configmap.mounts?) -%>
     volumeMounts:
