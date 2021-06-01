@@ -135,7 +135,7 @@ EOS
       }),
       K8sJobInfo.new({
         id: "bash-ssd",
-        status:  "queued",
+        status:  "queued_held",
         job_name: "bash-ssd",
         job_owner: "johrstrom",
         dispatch_time: nil,
@@ -237,7 +237,7 @@ EOS
   let(:single_unscheduleable_pod_info) {
     K8sJobInfo.new({
       id: "bash",
-      status: OodCore::Job::Status.new(state: "queued"),
+      status: OodCore::Job::Status.new(state: "queued_held"),
       job_name: "bash",
       job_owner: "johrstrom",
       dispatch_time: nil,

@@ -75,7 +75,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
   let(:single_unscheduleable_pod_hash) {{
     id: "bash",
-    status: OodCore::Job::Status.new(state: "queued"),
+    status: OodCore::Job::Status.new(state: "queued_held"),
     job_name: "bash",
     job_owner: "johrstrom",
     dispatch_time: nil,
