@@ -242,7 +242,11 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     start = status.dig(:startTime)
     creation = json_data.dig(:metadata, :creationTimestamp)
 
-    if start.nil? && creation.nil?
+    if !creation.nil?
+      str = creation
+    elsif !start.nil?
+      str = start
+    else
       # the pod is in some pending state limbo
       conditions = status.dig(:conditions)
       return nil if conditions.nil?
@@ -250,10 +254,6 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       # best guess to start time is just the first condition's
       # transition time
       str = conditions[0].dig(:lastTransitionTime)
-    elsif start.nil?
-      str = creation
-    else
-      str = start
     end
 
     DateTime.parse(str).to_time.to_i
