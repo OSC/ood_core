@@ -241,7 +241,7 @@ EOS
       job_name: "bash",
       job_owner: "johrstrom",
       dispatch_time: nil,
-      submission_time: 1587580581,
+      submission_time: 1587580582,
       wallclock_time: nil,
       ood_connection_info: nil_connection,
       procs: 1

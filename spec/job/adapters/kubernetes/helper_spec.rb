@@ -79,7 +79,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     job_name: "bash",
     job_owner: "johrstrom",
     dispatch_time: nil,
-    submission_time: 1587580581,
+    submission_time: 1587580582,
     wallclock_time: nil,
     ood_connection_info: { host: nil },
     procs: "1"
