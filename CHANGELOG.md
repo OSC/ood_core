@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.17.1] - 6-14-2021
+
+### Fixed
+
+- Fixed [278](https://github.com/OSC/ood_core/pull/278) where unschedulable pods will now show up as
+  queued_held status.
+
+### Changed
+
+- KUBECONFIG now defaults to /dev/null in the kubernetes adapter in [292](https://github.com/OSC/ood_core/pull/292).
+
+### Added
+
+- Sites can now set `batch_connect.ssh_allow` on the cluster to disable the buttons to start
+  a shell session to compute nodes in [289](https://github.com/OSC/ood_core/pull/289).
+- `POD_PORT` is now available to jobs in the kubernetes adapter in [290](https://github.com/OSC/ood_core/pull/290).
+- Kubernetes pods now support a startProbe in [291](https://github.com/OSC/ood_core/pull/291).
+
 ## [0.17.0] - 5-26-2021
 
 ### Fixed
@@ -336,7 +354,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.16.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.17.1...HEAD
+[0.17.1]: https://github.com/OSC/ood_core/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/OSC/ood_core/compare/v0.16.1...v0.17.0
 [0.16.1]: https://github.com/OSC/ood_core/compare/v0.16.0...v0.16.1
 [0.16.0]: https://github.com/OSC/ood_core/compare/v0.15.1...v0.16.0
