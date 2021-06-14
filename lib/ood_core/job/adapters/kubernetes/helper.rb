@@ -254,6 +254,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       # best guess to start time is just the first condition's
       # transition time
       str = conditions[0].dig(:lastTransitionTime)
+      return nil if str.nil?
     end
 
     DateTime.parse(str).to_time.to_i
