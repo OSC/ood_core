@@ -344,7 +344,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def set_context
-    cmd = "#{kubectl_cmd} config set-context #{cluster}"
+    cmd = "#{kubectl_cmd} config set-context #{context}"
     cmd << " --cluster=#{cluster} --namespace=#{namespace}"
     cmd << " --user=#{k8s_username}"
 
