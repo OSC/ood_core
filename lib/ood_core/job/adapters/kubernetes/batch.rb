@@ -263,7 +263,11 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def base_cmd
-    "#{bin} --kubeconfig=#{config_file} --context=#{context}"
+    "#{kubectl_cmd} --context=#{context}"
+  end
+
+  def kubectl_cmd
+    "#{bin} --kubeconfig=#{config_file}"
   end
 
   def all_pods_to_info(data)
@@ -291,6 +295,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def make_kubectl_config(config)
+    set_cluster(config.fetch(:server, default_server).to_h.symbolize_keys)
     configure_auth(config.fetch(:auth, default_auth).to_h.symbolize_keys)
   end
 
@@ -301,6 +306,8 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     case type
     when 'gke'
       set_gke_config(auth)
+    when 'oidc'
+      set_context
     end
   end
 
@@ -334,6 +341,25 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     cmd = "gcloud container clusters get-credentials #{locale} #{cluster}"
     env = { 'KUBECONFIG' => config_file }
     call(cmd, env)
+  end
+
+  def set_context
+    cmd = "#{kubectl_cmd} config set-context #{cluster}"
+    cmd << " --cluster=#{cluster} --namespace=#{namespace}"
+    cmd << " --user=#{k8s_username}"
+
+    call(cmd)
+  end
+
+  def set_cluster(config)
+    server = config.fetch(:endpoint)
+    cert = config.fetch(:cert_authority_file, nil)
+
+    cmd = "#{kubectl_cmd} config set-cluster #{cluster}"
+    cmd << " --server=#{server}"
+    cmd << " --certificate-authority=#{cert}" unless cert.nil?
+
+    call(cmd)
   end
 
   def call(cmd = '', env: {}, stdin: nil)
