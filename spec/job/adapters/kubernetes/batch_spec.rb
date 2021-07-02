@@ -85,27 +85,12 @@ EOS
   }
 
   before(:each) do
-    allow(Open3).to receive(:capture3).with(
-      {},
-      "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-      "config set-cluster open-ondemand --server=https://localhost:8080",
-      stdin_data: ""
-    ).and_return(['', '', success])
-
     @basic_batch = described_class.new({})
     allow(@basic_batch).to receive(:username).and_return('testuser')
     allow(@basic_batch).to receive(:helper).and_return(helper)
   end
 
   let(:configured_batch){
-    allow(Open3).to receive(:capture3).with(
-      {},
-      "/usr/bin/wontwork --kubeconfig=~/kube.config " \
-      "config set-cluster test-cluster --server=https://some.k8s.host " \
-      "--certificate-authority=/etc/some.cert",
-      stdin_data: ""
-    ).and_return(['', '', success])
-
     batch = described_class.new(config)
     allow(batch).to receive(:username).and_return('testuser')
     allow(batch).to receive(:helper).and_return(helper)
@@ -344,7 +329,7 @@ EOS
       # make sure template get's passed into command correctly
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/wontwork --kubeconfig=~/kube.config " \
+        "/usr/bin/wontwork --kubeconfig=~/kube.config --context=test-cluster " \
         "--namespace=user-testuser -o json create -f -",
         stdin_data: pod_yml_from_all_configs.to_s
       ).and_return(['', '', success])
@@ -406,7 +391,7 @@ EOS
       # make sure template get's passed into command correctly
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_from_defaults.to_s
       ).and_return(['', '', success])
@@ -461,7 +446,7 @@ EOS
       `true`
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_no_mounts.to_s
       ).and_return(['', '', $?])
@@ -518,7 +503,7 @@ EOS
       # make sure template get's passed into command correctly
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_no_init_container.to_s
       ).and_return(['', '', success])
@@ -588,7 +573,7 @@ EOS
       `true`
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_subpath_configmap.to_s
       ).and_return(['', '', $?])
@@ -636,7 +621,7 @@ EOS
       `true`
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_no_mounts_no_configmaps.to_s
       ).and_return(['', '', $?])
@@ -691,7 +676,7 @@ EOS
       `true`
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json create -f -",
         stdin_data: pod_yml_no_configmaps.to_s
       ).and_return(['', '', $?])
@@ -753,7 +738,7 @@ EOS
         # make sure template get's passed into command correctly
         allow(Open3).to receive(:capture3).with(
           {},
-          "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+          "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
           "--namespace=testuser -o json create -f -",
           stdin_data: pod_yml_from_defaults.to_s
         ).and_return(['', '', success])
@@ -771,25 +756,25 @@ EOS
       # be sure to delete the pod and all the extra resources
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete pod test-pod-123",
         stdin_data: ""
       ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete secret test-pod-123-secret",
         stdin_data: ""
       ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete service test-pod-123-service",
         stdin_data: ""
       ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete configmap test-pod-123-configmap",
         stdin_data: ""
       ).and_return(['', '', success])
@@ -803,25 +788,25 @@ EOS
 
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete pod #{id}",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): pods \"#{id}\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete secret #{id}-secret",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): secrets \"#{id}-secret\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete service #{id}-service",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser delete configmap #{id}-configmap",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): configmaps \"#{id}-configmap\" not found", failure])
@@ -834,7 +819,7 @@ EOS
     it "correctly handles no data" do
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser get pods -o json",
         stdin_data: ""
       ).and_return(['No resources found in testuser namespace.', '', success])
@@ -846,7 +831,7 @@ EOS
     it "throws error up the stack with --all-namespaces" do
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/wontwork --kubeconfig=~/kube.config get pods -o json --all-namespaces",
+        "/usr/bin/wontwork --kubeconfig=~/kube.config --context=test-cluster get pods -o json --all-namespaces",
         stdin_data: ""
       ).and_return(['', errmsg, failure])
 
@@ -856,7 +841,7 @@ EOS
     it "correctly handles good data" do
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser get pods -o json",
         stdin_data: ""
       ).and_return([several_pods, '', success])
@@ -869,13 +854,6 @@ EOS
 
   describe "#info" do
     def info_batch(id, file)
-      allow(Open3).to receive(:capture3).with(
-        {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "config set-cluster open-ondemand --server=https://localhost:8080",
-        stdin_data: ""
-      ).and_return(['', '', success])
-
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(batch).to receive(:helper).and_return(helper)
@@ -883,20 +861,20 @@ EOS
 
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get pod #{id}",
         stdin_data: ""
       ).and_return([file, '', success])
 
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get service #{id}-service",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get secret #{id}-secret",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): secret \"#{id}-secret\" not found", failure])
@@ -905,32 +883,25 @@ EOS
     end
 
     def info_batch_full(id)
-      allow(Open3).to receive(:capture3).with(
-        {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "config set-cluster open-ondemand --server=https://localhost:8080",
-        stdin_data: ""
-      ).and_return(['', '', success])
-
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(DateTime).to receive(:now).and_return(past)
 
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get pod #{id}",
         stdin_data: ""
       ).and_return([single_running_pod, '', success])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get service #{id}-service",
         stdin_data: ""
       ).and_return([single_service, '', success])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get secret #{id}-secret",
         stdin_data: ""
       ).and_return([single_secret, '', success])
@@ -939,13 +910,6 @@ EOS
     end
 
     def not_found_batch(id)
-      allow(Open3).to receive(:capture3).with(
-        {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "config set-cluster open-ondemand --server=https://localhost:8080",
-        stdin_data: ""
-      ).and_return(['', '', success])
-
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(batch).to receive(:helper).and_return(helper)
@@ -953,20 +917,20 @@ EOS
 
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get pod #{id}",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): pod \"#{id}\" not found", failure])
 
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get service #{id}-service",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
+        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config --context=open-ondemand " \
         "--namespace=testuser -o json get secret #{id}-secret",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): secret \"#{id}-secret\" not found", failure])
@@ -1021,21 +985,6 @@ EOS
       batch = not_found_batch(id)
       completed_info = OodCore::Job::Info.new({ id: id, status: 'completed' })
       expect(batch.info(id)).to eq(completed_info)
-    end
-  end
-
-  describe '#set_context' do
-    it 'generates correct command' do
-      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=testuser"
-      expect(@basic_batch).to receive(:call).with(expected_cmd)
-      @basic_batch.send(:set_context)
-    end
-
-    it 'generates correct command when username prefix defined' do
-      allow(@basic_batch).to receive(:username_prefix).and_return('dev-')
-      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=dev-testuser"
-      expect(@basic_batch).to receive(:call).with(expected_cmd)
-      @basic_batch.send(:set_context)
     end
   end
 end

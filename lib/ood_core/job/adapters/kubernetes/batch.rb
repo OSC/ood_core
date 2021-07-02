@@ -12,7 +12,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   class NotFoundError < StandardError; end
 
   attr_reader :config_file, :bin, :cluster, :mounts
-  attr_reader :all_namespaces, :using_context, :helper
+  attr_reader :all_namespaces, :helper
   attr_reader :username_prefix, :namespace_prefix
 
   def initialize(options = {})
@@ -26,7 +26,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
 
-    @using_context = false
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
 
     begin
@@ -264,9 +263,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def base_cmd
-    base = "#{bin} --kubeconfig=#{config_file}"
-    base << " --context=#{context}" if using_context
-    base
+    "#{bin} --kubeconfig=#{config_file} --context=#{context}"
   end
 
   def all_pods_to_info(data)
@@ -294,7 +291,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def make_kubectl_config(config)
-    set_cluster(config.fetch(:server, default_server).to_h.symbolize_keys)
     configure_auth(config.fetch(:auth, default_auth).to_h.symbolize_keys)
   end
 
@@ -305,13 +301,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     case type
     when 'gke'
       set_gke_config(auth)
-    when 'oidc'
-      set_context
     end
-  end
-
-  def use_context
-    @using_context = true
   end
 
   def managed?(type)
@@ -344,26 +334,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     cmd = "gcloud container clusters get-credentials #{locale} #{cluster}"
     env = { 'KUBECONFIG' => config_file }
     call(cmd, env)
-  end
-
-  def set_context
-    cmd = "#{base_cmd} config set-context #{cluster}"
-    cmd << " --cluster=#{cluster} --namespace=#{namespace}"
-    cmd << " --user=#{k8s_username}"
-
-    call(cmd)
-    use_context
-  end
-
-  def set_cluster(config)
-    server = config.fetch(:endpoint)
-    cert = config.fetch(:cert_authority_file, nil)
-
-    cmd = "#{base_cmd} config set-cluster #{cluster}"
-    cmd << " --server=#{server}"
-    cmd << " --certificate-authority=#{cert}" unless cert.nil?
-
-    call(cmd)
   end
 
   def call(cmd = '', env: {}, stdin: nil)
