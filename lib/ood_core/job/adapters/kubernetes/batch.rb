@@ -25,6 +25,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
+    @auth = options.fetch(:auth, default_auth).to_h.symbolize_keys
 
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
 
@@ -263,7 +264,8 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def base_cmd
-    "#{kubectl_cmd} --context=#{context}"
+    cmd = "#{kubectl_cmd}"
+    cmd << " --context=#{context}" unless auth_type == "gke"
   end
 
   def kubectl_cmd
@@ -296,16 +298,20 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def make_kubectl_config(config)
     set_cluster(config.fetch(:server, default_server).to_h.symbolize_keys)
-    configure_auth(config.fetch(:auth, default_auth).to_h.symbolize_keys)
+    configure_auth
   end
 
-  def configure_auth(auth)
-    type = auth.fetch(:type)
+  def auth_type
+    @auth.fetch(:type)
+  end
+
+  def configure_auth
+    type = auth_type
     return if managed?(type)
 
     case type
     when 'gke'
-      set_gke_config(auth)
+      set_gke_config
     when 'oidc'
       set_context
     end
@@ -319,19 +325,18 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     end
   end
 
-  def set_gke_config(auth)
-    cred_file = auth.fetch(:svc_acct_file)
+  def set_gke_config
+    cred_file = @auth.fetch(:svc_acct_file)
 
     cmd = "gcloud auth activate-service-account --key-file=#{cred_file}"
     call(cmd)
 
-    set_gke_credentials(auth)
+    set_gke_credentials
   end
 
-  def set_gke_credentials(auth)
-
-    zone = auth.fetch(:zone, nil)
-    region = auth.fetch(:region, nil)
+  def set_gke_credentials
+    zone = @auth.fetch(:zone, nil)
+    region = @auth.fetch(:region, nil)
 
     locale = ''
     locale = "--zone=#{zone}" unless zone.nil?
