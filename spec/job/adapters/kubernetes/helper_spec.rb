@@ -12,11 +12,14 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     allow(helper).to receive(:get_host).with(nil).and_return(nil)
     allow(helper).to receive(:get_host).with('10.20.0.40').and_return('10.20.0.40')
     allow(helper).to receive(:get_host).with('192.148.247.227').and_return('192.148.247.227')
+    allow(helper).to receive(:get_host).with('192.148.247.170').and_return('192.148.247.170')
     helper
   }
 
   let(:single_running_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_running_pod.json'), symbolize_names: true) }
   let(:single_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_error_pod.json'), symbolize_names: true) }
+  let(:single_image_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_image_error_pod.json'), symbolize_names: true) }
+  let(:single_crash_loop_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_crash_loop_pod.json'), symbolize_names: true) }
   let(:single_completed_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_completed_pod.json'), symbolize_names: true) }
   let(:single_queued_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_queued_pod.json'), symbolize_names: true) }
   let(:single_unscheduleable_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_unscheduleable_pod.json'), symbolize_names: true) }
@@ -47,6 +50,30 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     wallclock_time: nil,
     ood_connection_info: { host: "10.20.0.40" },
     procs: nil
+  }}
+
+  let(:single_image_error_pod_hash) {{
+    id: "jupyter-jhdte09m",
+    status: OodCore::Job::Status.new(state: "queued"),
+    job_name: "jupyter",
+    job_owner: "user-tdockendorf",
+    dispatch_time: nil,
+    submission_time: 1626112960,
+    wallclock_time: nil,
+    ood_connection_info: { host: "192.148.247.170" },
+    procs: 1
+  }}
+
+  let(:single_crash_loop_pod_hash) {{
+    id: "jupyter-se6t7pfe",
+    status: OodCore::Job::Status.new(state: "undetermined"),
+    job_name: "jupyter",
+    job_owner: "user-tdockendorf",
+    dispatch_time: nil,
+    submission_time: 1626113242,
+    wallclock_time: nil,
+    ood_connection_info: { host: "192.148.247.170" },
+    procs: 1
   }}
 
   let(:single_completed_pod_hash) {{
@@ -160,6 +187,32 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
       expect(info).to eq(K8sJobInfo.new(single_error_pod_hash))
       expect(info.status.suspended?).to be true
+    end
+
+    it "correctly reads a image errored pods' data" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.info_from_json(
+        pod_json: single_image_error_pod,
+        service_json: nil,
+        secret_json: nil
+      )
+
+      expect(info).to eq(K8sJobInfo.new(single_image_error_pod_hash))
+      expect(info.status.queued?).to be true
+    end
+
+    it "correctly reads a crash loop pods' data" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.info_from_json(
+        pod_json: single_crash_loop_pod,
+        service_json: nil,
+        secret_json: nil
+      )
+
+      expect(info).to eq(K8sJobInfo.new(single_crash_loop_pod_hash))
+      expect(info.status.undetermined?).to be true
     end
 
     it "correctly reads a completed pods' data" do
