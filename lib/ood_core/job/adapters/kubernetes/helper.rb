@@ -265,7 +265,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     conditions = json_data.dig(:status, :conditions)
     container_statuses = json_data.dig(:status, :containerStatuses)
     unschedulable = conditions.to_a.any? { |c| c.dig(:reason) == "Unschedulable" }
-    ready = container_statuses.to_a.any? { |s| s.dig(:ready) == true }
+    ready = !container_statuses.to_a.empty? && container_statuses.to_a.all? { |s| s.dig(:ready) == true }
     if ready
       state = "running"
     else
