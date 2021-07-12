@@ -65,15 +65,15 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
   }}
 
   let(:single_crash_loop_pod_hash) {{
-    id: "jupyter-h6kw06ve",
+    id: "jupyter-se6t7pfe",
     status: OodCore::Job::Status.new(state: "undetermined"),
     job_name: "jupyter",
-    job_owner: "johrstrom",
+    job_owner: "user-tdockendorf",
     dispatch_time: nil,
-    submission_time: 1587069112,
+    submission_time: 1626113242,
     wallclock_time: nil,
-    ood_connection_info: { host: "10.20.0.40" },
-    procs: nil
+    ood_connection_info: { host: "192.148.247.170" },
+    procs: 1
   }}
 
   let(:single_completed_pod_hash) {{
