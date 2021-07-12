@@ -12,6 +12,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     allow(helper).to receive(:get_host).with(nil).and_return(nil)
     allow(helper).to receive(:get_host).with('10.20.0.40').and_return('10.20.0.40')
     allow(helper).to receive(:get_host).with('192.148.247.227').and_return('192.148.247.227')
+    allow(helper).to receive(:get_host).with('192.148.247.170').and_return('192.148.247.170')
     helper
   }
 
@@ -52,15 +53,15 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
   }}
 
   let(:single_image_error_pod_hash) {{
-    id: "jupyter-h6kw06ve",
+    id: "jupyter-jhdte09m",
     status: OodCore::Job::Status.new(state: "queued"),
     job_name: "jupyter",
-    job_owner: "johrstrom",
+    job_owner: "user-tdockendorf",
     dispatch_time: nil,
-    submission_time: 1587069112,
+    submission_time: 1626112960,
     wallclock_time: nil,
-    ood_connection_info: { host: "10.20.0.40" },
-    procs: nil
+    ood_connection_info: { host: "192.148.247.170" },
+    procs: 1
   }}
 
   let(:single_crash_loop_pod_hash) {{
