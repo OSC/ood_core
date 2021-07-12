@@ -263,25 +263,29 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   def pod_status_from_json(json_data)
     phase = json_data.dig(:status, :phase)
     conditions = json_data.dig(:status, :conditions)
+    container_statuses = json_data.dig(:status, :containerStatuses)
     unschedulable = conditions.to_a.any? { |c| c.dig(:reason) == "Unschedulable" }
-    state = case phase
-            when "Running"
-              "running"
-            when "Pending"
-              if unschedulable
-                "queued_held"
-              else
-                "queued"
-              end
-            when "Failed"
-              "suspended"
-            when "Succeeded"
-              "completed"
-            when "Unknown"
-              "undetermined"
+    ready = container_statuses.to_a.any? { |s| s.dig(:ready) == true }
+    if ready
+      state = "running"
+    else
+      state = case phase
+          when "Pending"
+            if unschedulable
+              "queued_held"
             else
-              "undetermined"
+              "queued"
             end
+          when "Failed"
+            "suspended"
+          when "Succeeded"
+            "completed"
+          when "Unknown"
+            "undetermined"
+          else
+            "undetermined"
+          end
+    end
 
     OodCore::Job::Status.new(state: state)
   end
