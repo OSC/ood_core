@@ -17,6 +17,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
   let(:single_running_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_running_pod.json'), symbolize_names: true) }
   let(:single_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_error_pod.json'), symbolize_names: true) }
+  let(:single_image_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_image_error_pod.json'), symbolize_names: true) }
   let(:single_completed_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_completed_pod.json'), symbolize_names: true) }
   let(:single_queued_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_queued_pod.json'), symbolize_names: true) }
   let(:single_unscheduleable_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_unscheduleable_pod.json'), symbolize_names: true) }
@@ -40,6 +41,18 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
   let(:single_error_pod_hash) {{
     id: "jupyter-h6kw06ve",
     status: OodCore::Job::Status.new(state: "suspended"),
+    job_name: "jupyter",
+    job_owner: "johrstrom",
+    dispatch_time: nil,
+    submission_time: 1587069112,
+    wallclock_time: nil,
+    ood_connection_info: { host: "10.20.0.40" },
+    procs: nil
+  }}
+
+  let(:single_image_error_pod_hash) {{
+    id: "jupyter-h6kw06ve",
+    status: OodCore::Job::Status.new(state: "queued"),
     job_name: "jupyter",
     job_owner: "johrstrom",
     dispatch_time: nil,
@@ -160,6 +173,19 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
       expect(info).to eq(K8sJobInfo.new(single_error_pod_hash))
       expect(info.status.suspended?).to be true
+    end
+
+    it "correctly reads a image errored pods' data" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.info_from_json(
+        pod_json: single_image_error_pod,
+        service_json: nil,
+        secret_json: nil
+      )
+
+      expect(info).to eq(K8sJobInfo.new(single_image_error_pod_hash))
+      expect(info.status.queued?).to be true
     end
 
     it "correctly reads a completed pods' data" do
