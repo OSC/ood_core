@@ -267,6 +267,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     unschedulable = conditions.to_a.any? { |c| c.dig(:reason) == "Unschedulable" }
     ready = !container_statuses.to_a.empty? && container_statuses.to_a.all? { |s| s.dig(:ready) == true }
     return "running" if ready
+
     state = case phase
             when "Pending"
               if unschedulable
