@@ -150,7 +150,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     {
       id: json_data.dig(:metadata, :name).to_s,
       job_name: name_from_metadata(json_data.dig(:metadata)),
-      status: pod_status_from_json(json_data),
+      status: OodCore::Job::Status.new(state: pod_status_from_json(json_data)),
       job_owner: job_owner_from_json(json_data, ns_prefix),
       submission_time: submission_time(json_data),
       dispatch_time: dispatch_time(json_data),
@@ -263,10 +263,12 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   def pod_status_from_json(json_data)
     phase = json_data.dig(:status, :phase)
     conditions = json_data.dig(:status, :conditions)
+    container_statuses = json_data.dig(:status, :containerStatuses)
     unschedulable = conditions.to_a.any? { |c| c.dig(:reason) == "Unschedulable" }
+    ready = !container_statuses.to_a.empty? && container_statuses.to_a.all? { |s| s.dig(:ready) == true }
+    return "running" if ready
+
     state = case phase
-            when "Running"
-              "running"
             when "Pending"
               if unschedulable
                 "queued_held"
@@ -282,8 +284,6 @@ class OodCore::Job::Adapters::Kubernetes::Helper
             else
               "undetermined"
             end
-
-    OodCore::Job::Status.new(state: state)
   end
 
   def terminated_state(status)

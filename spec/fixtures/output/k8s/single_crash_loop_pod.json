@@ -1,0 +1,445 @@
+{
+    "apiVersion": "v1",
+    "kind": "Pod",
+    "metadata": {
+        "annotations": {
+            "cni.projectcalico.org/podIP": "192.168.32.252/32",
+            "cni.projectcalico.org/podIPs": "192.168.32.252/32",
+            "pod.kubernetes.io/lifetime": "01h00m00s"
+        },
+        "creationTimestamp": "2021-07-12T18:07:22Z",
+        "labels": {
+            "account": "PZS0708",
+            "app.kubernetes.io/managed-by": "open-ondemand",
+            "app.kubernetes.io/name": "jupyter",
+            "job": "jupyter-se6t7pfe"
+        },
+        "name": "jupyter-se6t7pfe",
+        "namespace": "user-tdockendorf",
+        "resourceVersion": "117098216",
+        "uid": "1aff96a6-f9bd-4d1c-a279-6fe7ba39373d"
+    },
+    "spec": {
+        "containers": [
+            {
+                "command": [
+                    "/bin/bash",
+                    "-l",
+                    "exit 1"
+                ],
+                "env": [
+                    {
+                        "name": "POD_NAME",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.name"
+                            }
+                        }
+                    },
+                    {
+                        "name": "POD_NAMESPACE",
+                        "valueFrom": {
+                            "fieldRef": {
+                                "apiVersion": "v1",
+                                "fieldPath": "metadata.namespace"
+                            }
+                        }
+                    },
+                    {
+                        "name": "POD_PORT",
+                        "value": "8080"
+                    },
+                    {
+                        "name": "USER",
+                        "value": "tdockendorf"
+                    },
+                    {
+                        "name": "UID",
+                        "value": "20821"
+                    },
+                    {
+                        "name": "HOME",
+                        "value": "/users/sysp/tdockendorf"
+                    },
+                    {
+                        "name": "GROUP",
+                        "value": "PZS0708"
+                    },
+                    {
+                        "name": "GID",
+                        "value": "5509"
+                    },
+                    {
+                        "name": "KUBECONFIG",
+                        "value": "/dev/null"
+                    },
+                    {
+                        "name": "NB_UID",
+                        "value": "20821"
+                    },
+                    {
+                        "name": "NB_USER",
+                        "value": "tdockendorf"
+                    },
+                    {
+                        "name": "NB_GID",
+                        "value": "5509"
+                    },
+                    {
+                        "name": "CLUSTER",
+                        "value": "pitzer"
+                    }
+                ],
+                "image": "docker-registry.osc.edu/ondemand/ondemand-base-rhel7:0.1.0",
+                "imagePullPolicy": "IfNotPresent",
+                "name": "jupyter",
+                "ports": [
+                    {
+                        "containerPort": 8080,
+                        "protocol": "TCP"
+                    }
+                ],
+                "resources": {
+                    "limits": {
+                        "cpu": "1",
+                        "memory": "4Gi"
+                    },
+                    "requests": {
+                        "cpu": "1",
+                        "memory": "4Gi"
+                    }
+                },
+                "securityContext": {
+                    "allowPrivilegeEscalation": false,
+                    "capabilities": {
+                        "drop": [
+                            "all"
+                        ]
+                    },
+                    "privileged": false
+                },
+                "startupProbe": {
+                    "failureThreshold": 5,
+                    "initialDelaySeconds": 2,
+                    "periodSeconds": 5,
+                    "successThreshold": 1,
+                    "tcpSocket": {
+                        "port": 8080
+                    },
+                    "timeoutSeconds": 1
+                },
+                "terminationMessagePath": "/dev/termination-log",
+                "terminationMessagePolicy": "File",
+                "volumeMounts": [
+                    {
+                        "mountPath": "/ood/script.sh",
+                        "name": "configmap-volume",
+                        "subPath": "script.sh"
+                    },
+                    {
+                        "mountPath": "/users/sysp/tdockendorf",
+                        "name": "home"
+                    },
+                    {
+                        "mountPath": "/users/PZS0645/support",
+                        "name": "support"
+                    },
+                    {
+                        "mountPath": "/fs/project",
+                        "name": "project"
+                    },
+                    {
+                        "mountPath": "/fs/scratch",
+                        "name": "scratch"
+                    },
+                    {
+                        "mountPath": "/fs/ess",
+                        "name": "ess"
+                    },
+                    {
+                        "mountPath": "/var/run/munge/munge.socket.2",
+                        "name": "munge-socket"
+                    },
+                    {
+                        "mountPath": "/etc/slurm",
+                        "name": "slurm-conf"
+                    },
+                    {
+                        "mountPath": "/var/lib/sss/pipes",
+                        "name": "sssd-pipes"
+                    },
+                    {
+                        "mountPath": "/etc/sssd",
+                        "name": "sssd-conf"
+                    },
+                    {
+                        "mountPath": "/etc/nsswitch.conf",
+                        "name": "nsswitch"
+                    },
+                    {
+                        "mountPath": "/etc/profile.d/lmod.sh",
+                        "name": "lmod-init"
+                    },
+                    {
+                        "mountPath": "/opt/intel",
+                        "name": "intel"
+                    },
+                    {
+                        "mountPath": "/apps",
+                        "name": "apps"
+                    },
+                    {
+                        "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                        "name": "kube-api-access-l6hnk",
+                        "readOnly": true
+                    }
+                ]
+            }
+        ],
+        "dnsPolicy": "ClusterFirst",
+        "enableServiceLinks": true,
+        "imagePullSecrets": [
+            {
+                "name": "private-docker-registry"
+            }
+        ],
+        "nodeName": "kubeworker02-dev",
+        "nodeSelector": {
+            "osc.edu/cluster": "pitzer"
+        },
+        "preemptionPolicy": "PreemptLowerPriority",
+        "priority": 0,
+        "restartPolicy": "OnFailure",
+        "schedulerName": "default-scheduler",
+        "securityContext": {
+            "fsGroup": 5509,
+            "runAsGroup": 5509,
+            "runAsNonRoot": true,
+            "runAsUser": 20821
+        },
+        "serviceAccount": "default",
+        "serviceAccountName": "default",
+        "terminationGracePeriodSeconds": 30,
+        "tolerations": [
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/not-ready",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            },
+            {
+                "effect": "NoExecute",
+                "key": "node.kubernetes.io/unreachable",
+                "operator": "Exists",
+                "tolerationSeconds": 300
+            }
+        ],
+        "volumes": [
+            {
+                "configMap": {
+                    "defaultMode": 420,
+                    "name": "jupyter-se6t7pfe-configmap"
+                },
+                "name": "configmap-volume"
+            },
+            {
+                "hostPath": {
+                    "path": "/users/sysp/tdockendorf",
+                    "type": "Directory"
+                },
+                "name": "home"
+            },
+            {
+                "hostPath": {
+                    "path": "/users/PZS0645/support",
+                    "type": "Directory"
+                },
+                "name": "support"
+            },
+            {
+                "hostPath": {
+                    "path": "/fs/project",
+                    "type": "Directory"
+                },
+                "name": "project"
+            },
+            {
+                "hostPath": {
+                    "path": "/fs/scratch",
+                    "type": "Directory"
+                },
+                "name": "scratch"
+            },
+            {
+                "hostPath": {
+                    "path": "/fs/ess",
+                    "type": "Directory"
+                },
+                "name": "ess"
+            },
+            {
+                "hostPath": {
+                    "path": "/var/run/munge/munge.socket.2",
+                    "type": "Socket"
+                },
+                "name": "munge-socket"
+            },
+            {
+                "hostPath": {
+                    "path": "/etc/slurm",
+                    "type": "Directory"
+                },
+                "name": "slurm-conf"
+            },
+            {
+                "hostPath": {
+                    "path": "/var/lib/sss/pipes",
+                    "type": "Directory"
+                },
+                "name": "sssd-pipes"
+            },
+            {
+                "hostPath": {
+                    "path": "/etc/sssd",
+                    "type": "Directory"
+                },
+                "name": "sssd-conf"
+            },
+            {
+                "hostPath": {
+                    "path": "/etc/nsswitch.conf",
+                    "type": "File"
+                },
+                "name": "nsswitch"
+            },
+            {
+                "hostPath": {
+                    "path": "/apps/pitzer/lmod/lmod.sh",
+                    "type": "File"
+                },
+                "name": "lmod-init"
+            },
+            {
+                "hostPath": {
+                    "path": "/nfsroot/pitzer/opt/intel",
+                    "type": "Directory"
+                },
+                "name": "intel"
+            },
+            {
+                "hostPath": {
+                    "path": "/apps/pitzer",
+                    "type": "Directory"
+                },
+                "name": "apps"
+            },
+            {
+                "name": "kube-api-access-l6hnk",
+                "projected": {
+                    "defaultMode": 420,
+                    "sources": [
+                        {
+                            "serviceAccountToken": {
+                                "expirationSeconds": 3607,
+                                "path": "token"
+                            }
+                        },
+                        {
+                            "configMap": {
+                                "items": [
+                                    {
+                                        "key": "ca.crt",
+                                        "path": "ca.crt"
+                                    }
+                                ],
+                                "name": "kube-root-ca.crt"
+                            }
+                        },
+                        {
+                            "downwardAPI": {
+                                "items": [
+                                    {
+                                        "fieldRef": {
+                                            "apiVersion": "v1",
+                                            "fieldPath": "metadata.namespace"
+                                        },
+                                        "path": "namespace"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    },
+    "status": {
+        "conditions": [
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-07-12T18:07:23Z",
+                "status": "True",
+                "type": "Initialized"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-07-12T18:07:23Z",
+                "message": "containers with unready status: [jupyter]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "Ready"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-07-12T18:07:23Z",
+                "message": "containers with unready status: [jupyter]",
+                "reason": "ContainersNotReady",
+                "status": "False",
+                "type": "ContainersReady"
+            },
+            {
+                "lastProbeTime": null,
+                "lastTransitionTime": "2021-07-12T18:07:23Z",
+                "status": "True",
+                "type": "PodScheduled"
+            }
+        ],
+        "containerStatuses": [
+            {
+                "containerID": "containerd://dac6b3bd0a742b91b0fbfe207955d385ed46c735187c5bcb6b4b6b321e3b48cc",
+                "image": "docker-registry.osc.edu/ondemand/ondemand-base-rhel7:0.1.0",
+                "imageID": "docker-registry.osc.edu/ondemand/ondemand-base-rhel7@sha256:de12a66d74578b15484954560ed0e5cd565ac60b1aabedd4dcd4989132072dd7",
+                "lastState": {
+                    "terminated": {
+                        "containerID": "containerd://dac6b3bd0a742b91b0fbfe207955d385ed46c735187c5bcb6b4b6b321e3b48cc",
+                        "exitCode": 127,
+                        "finishedAt": "2021-07-12T18:07:28Z",
+                        "reason": "Error",
+                        "startedAt": "2021-07-12T18:07:28Z"
+                    }
+                },
+                "name": "jupyter",
+                "ready": false,
+                "restartCount": 1,
+                "started": false,
+                "state": {
+                    "waiting": {
+                        "message": "back-off 10s restarting failed container=jupyter pod=jupyter-se6t7pfe_user-tdockendorf(1aff96a6-f9bd-4d1c-a279-6fe7ba39373d)",
+                        "reason": "CrashLoopBackOff"
+                    }
+                }
+            }
+        ],
+        "hostIP": "192.148.247.170",
+        "phase": "Running",
+        "podIP": "192.168.32.252",
+        "podIPs": [
+            {
+                "ip": "192.168.32.252"
+            }
+        ],
+        "qosClass": "Guaranteed",
+        "startTime": "2021-07-12T18:07:23Z"
+    }
+}
