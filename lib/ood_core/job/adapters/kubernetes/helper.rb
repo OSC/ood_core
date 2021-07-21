@@ -266,7 +266,9 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     container_statuses = json_data.dig(:status, :containerStatuses)
     unschedulable = conditions.to_a.any? { |c| c.dig(:reason) == "Unschedulable" }
     ready = !container_statuses.to_a.empty? && container_statuses.to_a.all? { |s| s.dig(:ready) == true }
+    started = !container_statuses.to_a.empty? && container_statuses.to_a.any? { |s| s.fetch(:state, {}).key?(:running) }
     return "running" if ready
+    return "queued" if phase == "Running" && started
 
     state = case phase
             when "Pending"

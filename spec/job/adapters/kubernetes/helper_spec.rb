@@ -17,6 +17,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
   }
 
   let(:single_running_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_running_pod.json'), symbolize_names: true) }
+  let(:single_running_pod_not_ready) { JSON.parse(File.read('spec/fixtures/output/k8s/single_running_pod_not_ready.json'), symbolize_names: true) }
   let(:single_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_error_pod.json'), symbolize_names: true) }
   let(:single_image_error_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_image_error_pod.json'), symbolize_names: true) }
   let(:single_crash_loop_pod) { JSON.parse(File.read('spec/fixtures/output/k8s/single_crash_loop_pod.json'), symbolize_names: true) }
@@ -36,6 +37,18 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1587060509,
     submission_time: 1587060496,
     wallclock_time: 154407,
+    ood_connection_info: { host: "10.20.0.40" },
+    procs: "1"
+  }}
+
+  let(:single_running_pod_not_ready_hash) {{
+    id: "rstudio-server-2cv0zupu",
+    status: OodCore::Job::Status.new(state: "queued"),
+    job_name: "rstudio-server",
+    job_owner: "user-tdockendorf",
+    dispatch_time: nil,
+    submission_time: 1626897251,
+    wallclock_time: nil,
     ood_connection_info: { host: "10.20.0.40" },
     procs: "1"
   }}
@@ -148,6 +161,19 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
 
       expect(info).to eq(K8sJobInfo.new(single_running_pod_hash))
       expect(info.status.running?).to be true
+    end
+
+    it "correctly reads a running pods' not ready info" do
+      allow(DateTime).to receive(:now).and_return(now)
+
+      info = helper.info_from_json(
+        pod_json: single_running_pod_not_ready,
+        service_json: nil,
+        secret_json: nil
+      )
+
+      expect(info).to eq(K8sJobInfo.new(single_running_pod_not_ready_hash))
+      expect(info.status.queued?).to be true
     end
 
     it "correctly reads a running pods' info with service data" do
