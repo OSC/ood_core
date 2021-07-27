@@ -177,7 +177,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def supplemental_groups
-    OodSupport::User.new.groups.sort_by(&:id).map(&:id)
+    OodSupport::User.new.groups.sort_by(&:id).map(&:id).reject { |id| id < 1000 }
   end
 
   def default_env
