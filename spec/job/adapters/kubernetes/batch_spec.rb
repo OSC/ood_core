@@ -82,7 +82,7 @@ EOS
         endpoint: 'https://some.k8s.host',
         cert_authority_file: '/etc/some.cert'
       },
-      enable_supplemental_groups: true
+      auto_supplemental_groups: true
     }
   }
 
@@ -463,7 +463,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
-      allow(@basic_batch).to receive(:enable_supplemental_groups).and_return(true)
+      allow(@basic_batch).to receive(:auto_supplemental_groups).and_return(true)
       allow(@basic_batch).to receive(:default_supplemental_groups).and_return([1000,1001])
 
       # make sure it get's templated right, also helpful in debugging bc

@@ -14,7 +14,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   attr_reader :config_file, :bin, :cluster, :mounts
   attr_reader :all_namespaces, :using_context, :helper
   attr_reader :username_prefix, :namespace_prefix
-  attr_reader :enable_supplemental_groups
+  attr_reader :auto_supplemental_groups
 
   def initialize(options = {})
     options = options.to_h.symbolize_keys
@@ -26,7 +26,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
-    @enable_supplemental_groups = options.fetch(:enable_supplemental_groups, false)
+    @auto_supplemental_groups = options.fetch(:auto_supplemental_groups, false)
 
     @using_context = false
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
@@ -184,7 +184,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def supplemental_groups(groups = [])
     sgroups = []
-    if enable_supplemental_groups
+    if auto_supplemental_groups
       sgroups.concat(default_supplemental_groups)
     end
     sgroups.concat(groups.to_a)
