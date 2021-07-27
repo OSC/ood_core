@@ -335,6 +335,7 @@ EOS
       allow(configured_batch).to receive(:username).and_return('testuser')
       allow(configured_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(configured_batch).to receive(:group).and_return('testgroup')
+      allow(configured_batch).to receive(:supplemental_groups).and_return([1000,1001])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -397,6 +398,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
+      allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -451,6 +453,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
+      allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -509,6 +512,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
+      allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -578,6 +582,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
+      allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -626,6 +631,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
+      allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -681,6 +687,7 @@ EOS
       allow(@basic_batch).to receive(:username).and_return('testuser')
       allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
       allow(@basic_batch).to receive(:group).and_return('testgroup')
+      allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
       # make sure it get's templated right, also helpful in debugging bc
       # it'll show a better diff than the test below.
@@ -747,6 +754,7 @@ EOS
         allow(@basic_batch).to receive(:username).and_return('testuser')
         allow(@basic_batch).to receive(:user).and_return(User.new(dir: '/home/testuser', uid: 1001, gid: 1002))
         allow(@basic_batch).to receive(:group).and_return('testgroup')
+        allow(@basic_batch).to receive(:supplemental_groups).and_return([])
 
         template, = @basic_batch.send(:generate_id_yml, script)
 

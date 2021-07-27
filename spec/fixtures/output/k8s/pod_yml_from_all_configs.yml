@@ -15,7 +15,9 @@ spec:
     runAsUser: 1001
     runAsGroup: 1002
     runAsNonRoot: true
-    supplementalGroups: []
+    supplementalGroups:
+    - 1000
+    - 1001
     fsGroup: 1002
   hostNetwork: false
   hostIPC: false

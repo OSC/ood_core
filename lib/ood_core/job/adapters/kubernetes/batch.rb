@@ -176,6 +176,10 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     Etc.getgrgid(run_as_group).name
   end
 
+  def supplemental_groups
+    OodSupport::User.new.groups.sort_by(&:id).map(&:id)
+  end
+
   def default_env
     {
       USER: username,
