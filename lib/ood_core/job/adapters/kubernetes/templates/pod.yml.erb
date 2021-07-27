@@ -20,18 +20,11 @@ spec:
     runAsUser: <%= run_as_user %>
     runAsGroup: <%= run_as_group %>
     runAsNonRoot: true
-    <%- if spec.container.supplemental_groups.empty? && !supplemental_groups.empty? -%>
-    supplementalGroups:
-    <%- supplemental_groups.each do |supplemental_group| -%>
-    - <%= supplemental_group %>
-    <%- end -%>
-    <%- elsif  !spec.container.supplemental_groups.empty? -%>
+    <%- unless spec.container.supplemental_groups.empty? -%>
     supplementalGroups:
     <%- spec.container.supplemental_groups.each do |supplemental_group| -%>
     - <%= supplemental_group %>
     <%- end -%>
-    <%- else -%>
-    supplementalGroups: []
     <%- end -%>
     fsGroup: <%= fs_group %>
   hostNetwork: false

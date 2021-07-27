@@ -14,6 +14,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   attr_reader :config_file, :bin, :cluster, :mounts
   attr_reader :all_namespaces, :using_context, :helper
   attr_reader :username_prefix, :namespace_prefix
+  attr_reader :enable_supplemental_groups
 
   def initialize(options = {})
     options = options.to_h.symbolize_keys
@@ -25,6 +26,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
+    @enable_supplemental_groups = options.fetch(:enable_supplemental_groups, false)
 
     @using_context = false
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
@@ -176,8 +178,17 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     Etc.getgrgid(run_as_group).name
   end
 
-  def supplemental_groups
+  def default_supplemental_groups
     OodSupport::User.new.groups.sort_by(&:id).map(&:id).reject { |id| id < 1000 }
+  end
+
+  def supplemental_groups(groups = [])
+    sgroups = []
+    if enable_supplemental_groups
+      sgroups.concat(default_supplemental_groups)
+    end
+    sgroups.concat(groups.to_a)
+    sgroups.uniq.sort
   end
 
   def default_env
@@ -195,6 +206,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   # create an id.
   def generate_id_yml(script)
     native_data = script.native
+    native_data[:container][:supplemental_groups] = supplemental_groups(native_data[:container][:supplemental_groups])
     container = helper.container_from_native(native_data[:container], default_env)
     id = generate_id(container.name)
     configmap = helper.configmap_from_native(native_data, id, script.content)

@@ -55,6 +55,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       restart_policy: container[:restart_policy],
       image_pull_policy: container[:image_pull_policy],
       image_pull_secret: container[:image_pull_secret],
+      supplemental_groups: container[:supplemental_groups],
       startup_probe: container[:startup_probe],
     )
   end
