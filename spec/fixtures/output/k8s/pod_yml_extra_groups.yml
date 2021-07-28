@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  namespace: user-testuser
+  namespace: testuser
   name: rspec-test-123
   labels:
     job: rspec-test-123
@@ -15,17 +15,15 @@ spec:
     runAsUser: 1001
     runAsGroup: 1002
     runAsNonRoot: true
-    supplementalGroups: [1000, 1001]
+    supplementalGroups: [1000, 1001, 1002]
     fsGroup: 1002
   hostNetwork: false
   hostIPC: false
   hostPID: false
-  imagePullSecrets:
-  - name: docker-registry-secret
   containers:
   - name: "rspec-test"
     image: ruby:2.5
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     workingDir: "/my/home"
     env:
     - name: POD_NAME
@@ -49,7 +47,7 @@ spec:
     - name: GID
       value: "1002"
     - name: KUBECONFIG
-      value: "/my/home/.kube/config"
+      value: "/dev/null"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:
@@ -61,7 +59,7 @@ spec:
       tcpSocket:
         port: 8080
       initialDelaySeconds: 2
-      failureThreshold: 10
+      failureThreshold: 5
       periodSeconds: 5
     volumeMounts:
     - name: configmap-volume
@@ -69,21 +67,15 @@ spec:
     - name: configmap-volume
       mountPath: /ood/script.sh
       subPath: script.sh
-    - name: home-dir
-      mountPath: /home
-    - name: nfs-dir
-      mountPath: /fs
     - name: ess
       mountPath: /fs/ess
     resources:
       limits:
         memory: "6Gi"
         cpu: "4"
-        nvidia.com/gpu: 1
       requests:
         memory: "6Gi"
         cpu: "4"
-        nvidia.com/gpu: 1
     securityContext:
       allowPrivilegeEscalation: false
       capabilities:
@@ -93,7 +85,7 @@ spec:
   initContainers:
   - name: "init-1"
     image: "busybox:latest"
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
     env:
     - name: POD_NAME
       valueFrom:
@@ -114,7 +106,7 @@ spec:
     - name: GID
       value: "1002"
     - name: KUBECONFIG
-      value: "/my/home/.kube/config"
+      value: "/dev/null"
     - name: PATH
       value: "/usr/bin:/usr/local/bin"
     command:
@@ -122,12 +114,6 @@ spec:
     - "-lrt"
     - "."
     volumeMounts:
-    - name: configmap-volume
-      mountPath: /ood
-    - name: home-dir
-      mountPath: /home
-    - name: nfs-dir
-      mountPath: /fs
     - name: ess
       mountPath: /fs/ess
     securityContext:
@@ -140,26 +126,16 @@ spec:
   - name: configmap-volume
     configMap:
       name: rspec-test-123-configmap
-  - name: home-dir
-    hostPath:
-      path: /users
-      type: Directory
-  - name: nfs-dir
-    nfs:
-      server: some.nfs.host
-      path: /fs
   - name: ess
     hostPath:
       path: /fs/ess
       type: Directory
-  nodeSelector:
-    cluster: "test"
 ---
 apiVersion: v1
 kind: Service
 metadata:
   name: rspec-test-123-service
-  namespace: user-testuser
+  namespace: testuser
   labels:
     job: rspec-test-123
     app.kubernetes.io/name: rspec-test
@@ -177,7 +153,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rspec-test-123-configmap
-  namespace: user-testuser
+  namespace: testuser
   labels:
     job: rspec-test-123
     app.kubernetes.io/name: rspec-test
