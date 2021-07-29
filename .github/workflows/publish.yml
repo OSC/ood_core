@@ -2,10 +2,8 @@ name: Publish Gem
 
 on:
   push:
-    branches:
-      - "*"
     tags:
-      - "v*"
+      - "*"
 
 jobs:
   publish:
