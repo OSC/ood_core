@@ -1,0 +1,43 @@
+name: Publish Gem
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set version
+        id: version
+        run: echo ::set-output name=version::${GITHUB_REF#refs/*/v}
+
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Ruby using Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: "2.7.1"
+          bundler-cache: true
+          bundler: "2.1.4"
+
+      - name: install gems
+        run: bundle install
+
+      - name: Setup Rubygems credentials
+        run: |
+          set +x
+          mkdir -p ~/.gem
+          cat << EOF > ~/.gem/credentials
+          ---
+          :rubygems_api_key: ${{secrets.OSC_RUBYGEMS_API_KEY}}
+          EOF
+          chmod 0600 ~/.gem/credentials
+
+      - name: Publish Gem
+        run: |
+          rake build
+          gem push pkg/ood_core-${{ steps.version.outputs.version }}.gem
