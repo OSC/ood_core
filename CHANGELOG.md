@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.17.3] - 7-29-2021
+
+### Fixed
+
+- Fixed handling of pods in a startup phase in [303](https://github.com/OSC/ood_core/pull/303).
+
+### Added
+
+- Enable automatic population of supplemental groups in [305](https://github.com/OSC/ood_core/pull/305).
+
 ## [0.17.2] - 7-14-2021
 
 ### Fixed
@@ -360,7 +370,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.17.2...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.17.3...HEAD
+[0.17.3]: https://github.com/OSC/ood_core/compare/v0.17.3...v0.17.2
 [0.17.2]: https://github.com/OSC/ood_core/compare/v0.17.1...v0.17.2
 [0.17.1]: https://github.com/OSC/ood_core/compare/v0.17.0...v0.17.1
 [0.17.0]: https://github.com/OSC/ood_core/compare/v0.16.1...v0.17.0
