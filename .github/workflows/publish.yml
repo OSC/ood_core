@@ -39,5 +39,5 @@ jobs:
 
       - name: Publish Gem
         run: |
-          rake build
+          bundle exec rake build
           gem push pkg/ood_core-${{ steps.version.outputs.version }}.gem
