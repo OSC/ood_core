@@ -125,7 +125,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
       when "get"
         call_json_output('get', resource, id)
       when "delete"
-        call("#{namespaced_cmd} delete #{resource} #{id}")
+        call("#{namespaced_cmd} delete #{resource} #{id} --wait=false")
       end
     rescue NotFoundError
       {}

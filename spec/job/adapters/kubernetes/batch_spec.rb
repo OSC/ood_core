@@ -840,25 +840,25 @@ EOS
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete pod test-pod-123",
+        "--namespace=testuser delete pod test-pod-123 --wait=false",
         stdin_data: ""
       ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete secret test-pod-123-secret",
+        "--namespace=testuser delete secret test-pod-123-secret --wait=false",
         stdin_data: ""
       ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete service test-pod-123-service",
+        "--namespace=testuser delete service test-pod-123-service --wait=false",
         stdin_data: ""
       ).and_return(['', '', success])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete configmap test-pod-123-configmap",
+        "--namespace=testuser delete configmap test-pod-123-configmap --wait=false",
         stdin_data: ""
       ).and_return(['', '', success])
 
@@ -872,25 +872,25 @@ EOS
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete pod #{id}",
+        "--namespace=testuser delete pod #{id} --wait=false",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): pods \"#{id}\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete secret #{id}-secret",
+        "--namespace=testuser delete secret #{id}-secret --wait=false",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): secrets \"#{id}-secret\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete service #{id}-service",
+        "--namespace=testuser delete service #{id}-service --wait=false",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): services \"#{id}-service\" not found", failure])
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser delete configmap #{id}-configmap",
+        "--namespace=testuser delete configmap #{id}-configmap --wait=false",
         stdin_data: ""
       ).and_return(['', "Error from server (NotFound): configmaps \"#{id}-configmap\" not found", failure])
 
