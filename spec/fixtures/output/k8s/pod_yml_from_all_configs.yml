@@ -8,6 +8,7 @@ metadata:
     app.kubernetes.io/name: rspec-test
     app.kubernetes.io/managed-by: open-ondemand
     account: test
+    cluster: "foo"
   annotations:
 spec:
   restartPolicy: Always
