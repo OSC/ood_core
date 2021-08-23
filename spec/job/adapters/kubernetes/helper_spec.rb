@@ -316,10 +316,8 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
         env: {
           'HOME' => '/over/here',
         },
-        memory_limit: '12Gi',
-        memory_request: '12Gi',
-        cpu_limit: '6',
-        cpu_request: '6',
+        memory: '12Gi',
+        cpu: '6',
         working_dir: '/over/there',
         restart_policy: 'OnFailure',
         image_pull_secret: 'docker-registry-secret'
