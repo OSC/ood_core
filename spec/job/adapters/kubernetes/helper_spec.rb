@@ -519,6 +519,64 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       )
     end
 
+    it "correctly parses container with no resource limits" do
+      # expected defaults
+      ctr_hash[:env] = {}
+      ctr_hash[:command] = []
+      ctr_hash.delete(:port)
+      ctr_hash.delete(:cpu)
+      ctr_hash.delete(:memory)
+      ctr_hash[:restart_policy] = 'Never'
+      ctr_hash[:working_dir] = ''
+      ctr_hash[:image_pull_secret] = nil
+
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          env: {
+            HOME: '/home/test',
+            UID: 1000,
+          },
+          memory_limit: '4Gi',
+          memory_request: '4Gi',
+          cpu_limit: '1',
+          cpu_request: '1',
+        )
+      )
+    end
+
+    it "when cpu, memory and limits/requests are defined" do
+      # expected defaults
+      ctr_hash[:env] = {}
+      ctr_hash[:command] = []
+      ctr_hash.delete(:port)
+      ctr_hash[:memory] = '4Gi'
+      ctr_hash[:memory_limit] = '8Gi'
+      ctr_hash[:memory_request] = '4Gi'
+      ctr_hash[:cpu] = '1'
+      ctr_hash[:cpu_limit] = '2'
+      ctr_hash[:cpu_request] = '1'
+      ctr_hash[:restart_policy] = 'Never'
+      ctr_hash[:working_dir] = ''
+      ctr_hash[:image_pull_secret] = nil
+
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          env: {
+            HOME: '/home/test',
+            UID: 1000,
+          },
+          memory_limit: '8Gi',
+          memory_request: '4Gi',
+          cpu_limit: '2',
+          cpu_request: '1',
+        )
+      )
+    end
+
     it "throws an error when no name is given" do
       ctr = { image: 'ruby:25' }
       expect{ 
