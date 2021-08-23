@@ -10,6 +10,9 @@ metadata:
     <%- if !script.accounting_id.nil? && script.accounting_id != "" -%>
     account: <%= script.accounting_id %>
     <%- end -%>
+    <%- spec.container.labels.each_pair do |key, value| -%>
+    <%= key %>: "<%= value %>"
+    <%- end -%>
   annotations:
     <%- unless script.wall_time.nil? -%>
     pod.kubernetes.io/lifetime: <%= helper.seconds_to_duration(script.wall_time) %>

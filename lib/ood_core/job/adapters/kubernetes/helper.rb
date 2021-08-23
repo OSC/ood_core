@@ -57,6 +57,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       image_pull_secret: container[:image_pull_secret],
       supplemental_groups: container[:supplemental_groups],
       startup_probe: container[:startup_probe],
+      labels: container[:labels],
     )
   end
 

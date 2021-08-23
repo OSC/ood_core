@@ -301,6 +301,9 @@ EOS
               PATH: '/usr/bin:/usr/local/bin',
               KUBECONFIG: '/my/home/.kube/config',
             },
+            labels: {
+              cluster: 'foo',
+            },
             memory: '6Gi',
             cpu: '4',
             working_dir: '/my/home',
