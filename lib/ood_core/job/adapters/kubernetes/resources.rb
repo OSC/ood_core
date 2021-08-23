@@ -62,7 +62,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
 
     def initialize(
         name, image, command: [], port: nil, env: {},
-        memory: "4Gi", memory_limit: nil, memory_request: nil, cpu: "1", cpu_limit: nil, cpu_request: nil,
+        memory_limit: nil, memory_request: nil, cpu_limit: nil, cpu_request: nil,
         working_dir: "", restart_policy: "Never", image_pull_policy: nil, image_pull_secret: nil, supplemental_groups: [],
         startup_probe: {}, labels: {}
       )
@@ -73,10 +73,10 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @command = command.nil? ? [] : command
       @port = port&.to_i
       @env = env.nil? ? {} : env
-      @memory_limit = memory_limit.nil? ? memory : memory_limit
-      @memory_request = memory_request.nil? ? memory : memory_request
-      @cpu_limit = cpu_limit.nil? ? cpu : cpu_limit
-      @cpu_request = cpu_request.nil? ? cpu : cpu_request
+      @memory_limit = memory_limit.nil? ? "4Gi" : memory_limit
+      @memory_request = memory_request.nil? ? "4Gi" : memory_request
+      @cpu_limit = cpu_limit.nil? ? "1" : cpu_limit
+      @cpu_request = cpu_request.nil? ? "1" : cpu_request
       @working_dir = working_dir.nil? ? "" : working_dir
       @restart_policy = restart_policy.nil? ? "Never" : restart_policy
       @image_pull_policy = image_pull_policy.nil? ? "IfNotPresent" : image_pull_policy
