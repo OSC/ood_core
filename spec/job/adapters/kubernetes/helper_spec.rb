@@ -551,10 +551,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       ctr_hash[:env] = {}
       ctr_hash[:command] = []
       ctr_hash.delete(:port)
-      ctr_hash[:memory] = '4Gi'
+      ctr_hash[:memory] = '9000Gi'
       ctr_hash[:memory_limit] = '8Gi'
       ctr_hash[:memory_request] = '4Gi'
-      ctr_hash[:cpu] = '1'
+      ctr_hash[:cpu] = '9000'
       ctr_hash[:cpu_limit] = '2'
       ctr_hash[:cpu_request] = '1'
       ctr_hash[:restart_policy] = 'Never'
