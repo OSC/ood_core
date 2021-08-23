@@ -55,12 +55,14 @@ module OodCore::Job::Adapters::Kubernetes::Resources
   end
 
   class Container
-    attr_accessor :name, :image, :command, :port, :env, :memory, :cpu, :working_dir,
+    attr_accessor :name, :image, :command, :port, :env, :working_dir,
+                  :memory_limit, :memory_request, :cpu_limit, :cpu_request, 
                   :restart_policy, :image_pull_policy, :image_pull_secret, :supplemental_groups,
                   :startup_probe, :labels
 
     def initialize(
-        name, image, command: [], port: nil, env: {}, memory: "4Gi", cpu: "1",
+        name, image, command: [], port: nil, env: {},
+        memory: "4Gi", memory_limit: nil, memory_request: nil, cpu: "1", cpu_limit: nil, cpu_request: nil,
         working_dir: "", restart_policy: "Never", image_pull_policy: nil, image_pull_secret: nil, supplemental_groups: [],
         startup_probe: {}, labels: {}
       )
@@ -71,8 +73,10 @@ module OodCore::Job::Adapters::Kubernetes::Resources
       @command = command.nil? ? [] : command
       @port = port&.to_i
       @env = env.nil? ? {} : env
-      @memory = memory.nil? ? "4Gi" : memory
-      @cpu = cpu.nil? ? "1" : cpu
+      @memory_limit = memory_limit.nil? ? memory : memory_limit
+      @memory_request = memory_request.nil? ? memory : memory_request
+      @cpu_limit = cpu_limit.nil? ? cpu : cpu_limit
+      @cpu_request = cpu_request.nil? ? cpu : cpu_request
       @working_dir = working_dir.nil? ? "" : working_dir
       @restart_policy = restart_policy.nil? ? "Never" : restart_policy
       @image_pull_policy = image_pull_policy.nil? ? "IfNotPresent" : image_pull_policy
@@ -88,8 +92,10 @@ module OodCore::Job::Adapters::Kubernetes::Resources
         command == other.command &&
         port == other.port &&
         env == other.env &&
-        memory == other.memory &&
-        cpu == other.cpu &&
+        memory_limit == other.memory_limit &&
+        memory_request == other.memory_request &&
+        cpu_limit == other.cpu_limit &&
+        cpu_request == other.cpu_request &&
         working_dir == other.working_dir &&
         restart_policy == other.restart_policy &&
         image_pull_policy == other.image_pull_policy &&

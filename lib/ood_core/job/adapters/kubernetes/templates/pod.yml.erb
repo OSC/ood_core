@@ -91,14 +91,14 @@ spec:
     <%- end # configmap mounts? and all_mounts not empty -%>
     resources:
       limits:
-        memory: "<%= spec.container.memory %>"
-        cpu: "<%= spec.container.cpu %>"
+        memory: "<%= spec.container.memory_limit %>"
+        cpu: "<%= spec.container.cpu_limit %>"
         <%- unless script.gpus_per_node.nil? -%>
         <%= gpu_type %>: <%= script.gpus_per_node %>
         <%- end -%>
       requests:
-        memory: "<%= spec.container.memory %>"
-        cpu: "<%= spec.container.cpu %>"
+        memory: "<%= spec.container.memory_request %>"
+        cpu: "<%= spec.container.cpu_request %>"
         <%- unless script.gpus_per_node.nil? -%>
         <%= gpu_type %>: <%= script.gpus_per_node %>
         <%- end -%>
