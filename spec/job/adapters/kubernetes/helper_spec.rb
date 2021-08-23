@@ -342,8 +342,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             HOME: '/over/here',
             UID: 1000,
           },
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           working_dir: '/over/there',
           restart_policy: 'OnFailure',
           image_pull_secret: 'docker-registry-secret'
@@ -363,8 +365,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             HOME: '/over/here',
             UID: 1000,
           },
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           working_dir: '/over/there',
           restart_policy: 'OnFailure',
           image_pull_secret: 'docker-registry-secret'
@@ -384,8 +388,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             HOME: '/over/here',
             UID: 1000,
           },
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           working_dir: '/over/there',
           restart_policy: 'OnFailure',
           image_pull_secret: 'docker-registry-secret'
@@ -406,8 +412,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             UID: 1000,
           },
           command: ['rake', 'spec'],
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           working_dir: '/over/there',
           restart_policy: 'OnFailure',
           image_pull_secret: 'docker-registry-secret'
@@ -428,8 +436,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             UID: 1000,
           },
           command: ['rake', 'spec'],
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           restart_policy: 'OnFailure',
           image_pull_secret: 'docker-registry-secret'
         )
@@ -449,8 +459,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             HOME: '/over/here',
             UID: 1000,
           },
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           working_dir: '/over/there',
           restart_policy: 'Never',
           image_pull_secret: 'docker-registry-secret'
@@ -471,8 +483,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             HOME: '/over/here',
             UID: 1000,
           },
-          memory: '12Gi',
-          cpu: '6',
+          memory_limit: '12Gi',
+          memory_request: '12Gi',
+          cpu_limit: '6',
+          cpu_request: '6',
           working_dir: '/over/there',
           restart_policy: 'OnFailure',
           image_pull_secret: nil
@@ -485,8 +499,10 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
       ctr_hash[:env] = {}
       ctr_hash[:command] = []
       ctr_hash.delete(:port)
-      ctr_hash[:memory] = '4Gi'
-      ctr_hash[:cpu] = '1'
+      ctr_hash[:memory_limit] = '4Gi'
+      ctr_hash[:memory_request] = '4Gi'
+      ctr_hash[:cpu_limit] = '1'
+      ctr_hash[:cpu_request] = '1'
       ctr_hash[:restart_policy] = 'Never'
       ctr_hash[:working_dir] = ''
       ctr_hash[:image_pull_secret] = nil
@@ -499,6 +515,64 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
             HOME: '/home/test',
             UID: 1000,
           }
+        )
+      )
+    end
+
+    it "correctly parses container with no resource limits" do
+      # expected defaults
+      ctr_hash[:env] = {}
+      ctr_hash[:command] = []
+      ctr_hash.delete(:port)
+      ctr_hash.delete(:cpu)
+      ctr_hash.delete(:memory)
+      ctr_hash[:restart_policy] = 'Never'
+      ctr_hash[:working_dir] = ''
+      ctr_hash[:image_pull_secret] = nil
+
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          env: {
+            HOME: '/home/test',
+            UID: 1000,
+          },
+          memory_limit: '4Gi',
+          memory_request: '4Gi',
+          cpu_limit: '1',
+          cpu_request: '1',
+        )
+      )
+    end
+
+    it "when cpu, memory and limits/requests are defined" do
+      # expected defaults
+      ctr_hash[:env] = {}
+      ctr_hash[:command] = []
+      ctr_hash.delete(:port)
+      ctr_hash[:memory] = '9000Gi'
+      ctr_hash[:memory_limit] = '8Gi'
+      ctr_hash[:memory_request] = '4Gi'
+      ctr_hash[:cpu] = '9000'
+      ctr_hash[:cpu_limit] = '2'
+      ctr_hash[:cpu_request] = '1'
+      ctr_hash[:restart_policy] = 'Never'
+      ctr_hash[:working_dir] = ''
+      ctr_hash[:image_pull_secret] = nil
+
+      expect(helper.container_from_native(ctr_hash, default_env)).to eq(
+        Kubernetes::Resources::Container.new(
+          'ruby-test-container',
+          'ruby:2.5',
+          env: {
+            HOME: '/home/test',
+            UID: 1000,
+          },
+          memory_limit: '8Gi',
+          memory_request: '4Gi',
+          cpu_limit: '2',
+          cpu_request: '1',
         )
       )
     end

@@ -304,8 +304,10 @@ EOS
             labels: {
               cluster: 'foo',
             },
-            memory: '6Gi',
-            cpu: '4',
+            memory_limit: '4Gi',
+            memory_request: '2Gi',
+            cpu_limit: '1',
+            cpu_request: '0.5',
             working_dir: '/my/home',
             restart_policy: 'Always'
           },
