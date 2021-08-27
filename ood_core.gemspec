@@ -30,5 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "pry", "~> 0.10"
   spec.add_development_dependency "timecop", "~> 0.8"
-  spec.add_development_dependency "climate_control", "~> 0.2.0"
+  spec.add_development_dependency "climate_control", "~> 1.0.0"
 end
