@@ -242,22 +242,22 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   def list_remote_tmux_session(destination_host)
     # Note that the tmux variable substitution looks like Ruby string sub,
     # these must either be single quoted strings or Ruby-string escaped as well
-    format_str = Shellwords.escape(
-      ['#{session_name}', '#{session_created}', '#{pane_pid}'].join(UNIT_SEPARATOR)
-    )
+    format_str = Shellwords.escape(['#{session_name}', '#{session_created}', '#{pane_pid}'].join(UNIT_SEPARATOR))
     keys = [:session_name, :session_created, :session_pid]
     cmd = ssh_cmd(destination_host, ['tmux', 'list-panes', '-aF', format_str])
-
-    call(*cmd).split(
-      "\n"
-    ).map do |line|
+    
+    call(*cmd).split("\n").map do |line|
       Hash[keys.zip(line.split(UNIT_SEPARATOR))].tap do |session_hash|
         session_hash[:destination_host] = destination_host
         session_hash[:id] = "#{session_hash[:session_name]}@#{destination_host}"
       end
-    end.select{
-      |session_hash| session_hash[:session_name].start_with?(session_name_label)
-    }
+    end.select do |session_hash| 
+      # delme
+      # prevent calling start_with? on nil.
+      if !session_hash[:session_name].nil?
+        session_hash[:session_name].start_with?(session_name_label)
+      end
+    end
   rescue Error => e
     interpret_and_raise(e)
     []

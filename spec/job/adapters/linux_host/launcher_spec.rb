@@ -159,6 +159,22 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 :session_pid=>"175138"
             }
         ] }
+        let(:tmux_broken_output) { "----------------  ------------------------------------
+            Usage Statistics for project PZS0714
+Time              2021-09-12 to 2021-09-13
+PI                alanc@osc.edu
+Remaining Budget  -0.25
+----------------  ------------------------------------
+
+User           Jobs    Dollars    Status
+-------------  ------  ---------  --------
+alanc          0       0.0        ACTIVE
+johrstrom      0       0.0        ACTIVE
+johrstromtest  0       0.0        ACTIVE
+travert        0       0.0        ACTIVE
+--             --      --
+TOTAL          0       0.0
+launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70,1569609529,175138" }
 
         context "when host is set" do
             it "only connects to the one host and parses correctly" do
@@ -197,6 +213,17 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 expect{
                     subject.list_remote_sessions
                 }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
+            end
+        end
+
+        context "When SSH output breaks OOD parsing for card" do
+            let(:owens_remote_host) { opts[:ssh_hosts].first }
+            it "still connects successfully" do
+                allow(Open3).to receive(:capture3).and_return([tmux_broken_output, '', exit_success])
+
+                expect(
+                    subject.list_remote_sessions(host: owens_remote_host)
+                ).to eq([parsed_tmux_output_x3.first])
             end
         end
     end

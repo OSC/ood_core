@@ -1,4 +1,5 @@
 module OodCore
   # The current version of {OodCore}
-  VERSION = "0.17.1"
+  # delme iterate this to rebuild for dashboard
+  VERSION = "0.17.7"
 end
