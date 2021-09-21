@@ -61,7 +61,9 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
 
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
-    hostname = output.strip
+    # add helper function to make sure this isn't just stripping the string of \n
+    # and actually processing the string to hand us what we expect for the job id.
+    hostname = parse_hostname(output)
 
     "#{session_name}@#{hostname}"
   end
@@ -252,11 +254,9 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         session_hash[:id] = "#{session_hash[:session_name]}@#{destination_host}"
       end
     end.select do |session_hash| 
-      # delme
-      # prevent calling start_with? on nil.
-      if !session_hash[:session_name].nil?
+      session_hash.compact.length >= 5 && 
+        !session_hash[:session_name].nil? && 
         session_hash[:session_name].start_with?(session_name_label)
-      end
     end
   rescue Error => e
     interpret_and_raise(e)
@@ -286,5 +286,12 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     else
       raise error
     end
+  end
+
+  def parse_hostname(output)
+    output_new_line_stripped = output.strip
+    #parsed_hostname = output_new_line_stripped.match(/\w+-\w+\.\w+\.\w+\.\w+/)
+    # ensure echo newline too
+    parsed_hostname = output_new_line_stripped.match(/^(([a-zA-Z]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])*$/)
   end
 end
