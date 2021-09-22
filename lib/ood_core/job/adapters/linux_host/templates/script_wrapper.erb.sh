@@ -13,8 +13,8 @@ if [ -z "$hostname" ]; then
     exit 1
 fi
 
-echo $hostname
 echo ""
+echo $hostname
 
 # Put the script into a temp file on localhost
 singularity_tmp_file=$(mktemp -p "<%= workdir %>" --suffix '_sing')

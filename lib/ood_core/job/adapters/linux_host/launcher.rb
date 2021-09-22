@@ -289,9 +289,8 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   end
 
   def parse_hostname(output)
-    output_new_line_stripped = output.strip
-    #parsed_hostname = output_new_line_stripped.match(/\w+-\w+\.\w+\.\w+\.\w+/)
-    # ensure echo newline too
-    parsed_hostname = output_new_line_stripped.match(/^(([a-zA-Z]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)+([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])*$/)
+    output.split($/).map do |line|
+      line.match(/^(([\w+]|[a-zA-Z0-9][\w*-]*\.))*$/)
+    end.compact.last.to_s
   end
 end

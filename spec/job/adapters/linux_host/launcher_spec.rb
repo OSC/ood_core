@@ -107,24 +107,35 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
         end
 
         context "When tmux returns extra data along with the hostname it" do
-            let(:broken_data) { 
+            # let(:broken_data) { 
+            #     <<~HEREDOC
+            #     Code Server (launched-by-ondemand-74542f25-fa6e-4e33-8e47-
+            #     feb166af57a9@---------------- ----------------------------
+            #     -------- Usage Statistics for project PZS0714 Time 2021-09-16 to
+            #      2021-09-17 PI alanc@osc.edu Remaining Budget -0.25 
+            #      ---------------- ------------------------------------ 
+            #      User Jobs Dollars Status ------------- ------ --------- -------- 
+            #      alanc 0 0.0 ACTIVE johrstrom 15 0.0 ACTIVE johrstromtest 0 0.0 ACTIVE 
+            #      travert 9 0.0 ACTIVE -- -- -- TOTAL 24 0.0 
+            #      owens-login01.hpc.osc.edu )
+            #  HEREDOC
+            # }
+            let(:broken_data) {
                 <<~HEREDOC
-                Code Server (launched-by-ondemand-74542f25-fa6e-4e33-8e47-
-                feb166af57a9@---------------- ----------------------------
-                -------- Usage Statistics for project PZS0714 Time 2021-09-16 to
-                 2021-09-17 PI alanc@osc.edu Remaining Budget -0.25 
-                 ---------------- ------------------------------------ 
-                 User Jobs Dollars Status ------------- ------ --------- -------- 
-                 alanc 0 0.0 ACTIVE johrstrom 15 0.0 ACTIVE johrstromtest 0 0.0 ACTIVE 
-                 travert 9 0.0 ACTIVE -- -- -- TOTAL 24 0.0 owens-login01.hpc.osc.edu)
-             HEREDOC
+                text and more text 
+                for filler
+                launched-by-ondemand-74542f25-fa6e-4e33-8e47-feb166af57a9@
+                some.bad.stuff@hpc
+                some.dot.stuff
+                owens-login01.hpc.osc.edu
+                more strings.
+            HEREDOC
             }
             it "parses remote host correctly" do
                 allow(Open3).to receive(:capture3).and_return([broken_data, '', exit_success])
 
-                expect{
-                    subject.start_remote_session(build_script).to match(/owens-login01\.hpc\.osc\.edu/)
-                }
+                session = subject.start_remote_session(build_script)
+                expect(session).to match(/^launched-by-ondemand.+@owens-login01\.hpc\.osc\.edu$/)
             end
         end
     end
