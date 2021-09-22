@@ -61,8 +61,6 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
 
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
-    # add helper function to make sure this isn't just stripping the string of \n
-    # and actually processing the string to hand us what we expect for the job id.
     hostname = parse_hostname(output)
 
     "#{session_name}@#{hostname}"
