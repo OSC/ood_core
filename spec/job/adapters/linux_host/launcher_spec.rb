@@ -107,19 +107,6 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
         end
 
         context "When tmux returns extra data along with the hostname it" do
-            # let(:broken_data) { 
-            #     <<~HEREDOC
-            #     Code Server (launched-by-ondemand-74542f25-fa6e-4e33-8e47-
-            #     feb166af57a9@---------------- ----------------------------
-            #     -------- Usage Statistics for project PZS0714 Time 2021-09-16 to
-            #      2021-09-17 PI alanc@osc.edu Remaining Budget -0.25 
-            #      ---------------- ------------------------------------ 
-            #      User Jobs Dollars Status ------------- ------ --------- -------- 
-            #      alanc 0 0.0 ACTIVE johrstrom 15 0.0 ACTIVE johrstromtest 0 0.0 ACTIVE 
-            #      travert 9 0.0 ACTIVE -- -- -- TOTAL 24 0.0 
-            #      owens-login01.hpc.osc.edu )
-            #  HEREDOC
-            # }
             let(:broken_data) {
                 <<~HEREDOC
                 text and more text 
@@ -211,10 +198,10 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             travert        0       0.0        ACTIVE
             --             --      --
             TOTAL          0       0.0
-            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70,1569609529,175138
-            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70,1569609529
+            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138
+            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529
             launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70
-            a8e85cd4-791d-49fa-8be1-5bd5c1009d70,1569609529,175138
+            a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138
          HEREDOC
         }
 
