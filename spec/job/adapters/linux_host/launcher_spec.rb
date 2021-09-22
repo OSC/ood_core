@@ -105,6 +105,26 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 subject.start_remote_session(build_script(native: {'submit_host_override' => alt_submit_host}))
             end
         end
+
+        context "When tmux returns extra data along with the hostname it" do
+            let(:broken_data) {
+                <<~HEREDOC
+                text and more text 
+                for filler
+                launched-by-ondemand-74542f25-fa6e-4e33-8e47-feb166af57a9@
+                some.bad.stuff@hpc
+                some.dot.stuff
+                owens-login01.hpc.osc.edu
+                more strings.
+            HEREDOC
+            }
+            it "parses remote host correctly" do
+                allow(Open3).to receive(:capture3).and_return([broken_data, '', exit_success])
+
+                session = subject.start_remote_session(build_script)
+                expect(session).to match(/^launched-by-ondemand.+@owens-login01\.hpc\.osc\.edu$/)
+            end
+        end
     end
 
     describe "#stop_remote_session" do
@@ -135,6 +155,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
 
     describe "#list_remote_sessions" do
         sep = OodCore::Job::Adapters::LinuxHost::Launcher::UNIT_SEPARATOR
+        let(:owens_remote_host) { opts[:ssh_hosts].first }
         let(:tmux_output_a) { "launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138\n" }
         let(:tmux_output_b) { "launched-by-ondemand-b8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138\n" }
         let(:tmux_output_c) { "launched-by-ondemand-c8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138\n" }
@@ -159,6 +180,30 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 :session_pid=>"175138"
             }
         ] }
+
+        let(:tmux_broken_output_with_many_returned_fields) {
+            <<~HEREDOC
+            ----------------  ------------------------------------
+            Usage Statistics for project PZS0714
+            Time              2021-09-12 to 2021-09-13
+            PI                alanc@osc.edu
+            Remaining Budget  -0.25
+            ----------------  ------------------------------------
+
+            User           Jobs    Dollars    Status
+            -------------  ------  ---------  --------
+            alanc          0       0.0        ACTIVE
+            johrstrom      0       0.0        ACTIVE
+            johrstromtest  0       0.0        ACTIVE
+            travert        0       0.0        ACTIVE
+            --             --      --
+            TOTAL          0       0.0
+            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138
+            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529
+            launched-by-ondemand-a8e85cd4-791d-49fa-8be1-5bd5c1009d70
+            a8e85cd4-791d-49fa-8be1-5bd5c1009d70#{sep}1569609529#{sep}175138
+         HEREDOC
+        }
 
         context "when host is set" do
             it "only connects to the one host and parses correctly" do
@@ -197,6 +242,16 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 expect{
                     subject.list_remote_sessions
                 }.to raise_error(OodCore::Job::Adapters::LinuxHost::Launcher::Error)
+            end
+        end
+
+        context "When SSH output has multiple fields with some being incomplete it" do
+            it "parses and extracts the correct hash." do
+                allow(Open3).to receive(:capture3).and_return([tmux_broken_output_with_many_returned_fields, '', exit_success])
+
+                expect(
+                    subject.list_remote_sessions(host: owens_remote_host)
+                ).to eq([parsed_tmux_output_x3.first])
             end
         end
     end
