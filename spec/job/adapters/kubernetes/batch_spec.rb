@@ -87,27 +87,12 @@ EOS
   }
 
   before(:each) do
-    allow(Open3).to receive(:capture3).with(
-      {},
-      "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-      "config set-cluster open-ondemand --server=https://localhost:8080",
-      stdin_data: ""
-    ).and_return(['', '', success])
-
     @basic_batch = described_class.new({})
     allow(@basic_batch).to receive(:username).and_return('testuser')
     allow(@basic_batch).to receive(:helper).and_return(helper)
   end
 
   let(:configured_batch){
-    allow(Open3).to receive(:capture3).with(
-      {},
-      "/usr/bin/wontwork --kubeconfig=~/kube.config " \
-      "config set-cluster test-cluster --server=https://some.k8s.host " \
-      "--certificate-authority=/etc/some.cert",
-      stdin_data: ""
-    ).and_return(['', '', success])
-
     batch = described_class.new(config)
     allow(batch).to receive(:username).and_return('testuser')
     allow(batch).to receive(:helper).and_return(helper)
@@ -942,13 +927,6 @@ EOS
 
   describe "#info" do
     def info_batch(id, file)
-      allow(Open3).to receive(:capture3).with(
-        {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "config set-cluster open-ondemand --server=https://localhost:8080",
-        stdin_data: ""
-      ).and_return(['', '', success])
-
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(batch).to receive(:helper).and_return(helper)
@@ -978,13 +956,6 @@ EOS
     end
 
     def info_batch_full(id)
-      allow(Open3).to receive(:capture3).with(
-        {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "config set-cluster open-ondemand --server=https://localhost:8080",
-        stdin_data: ""
-      ).and_return(['', '', success])
-
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(DateTime).to receive(:now).and_return(past)
@@ -1012,13 +983,6 @@ EOS
     end
 
     def not_found_batch(id)
-      allow(Open3).to receive(:capture3).with(
-        {},
-        "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "config set-cluster open-ondemand --server=https://localhost:8080",
-        stdin_data: ""
-      ).and_return(['', '', success])
-
       batch = described_class.new({})
       allow(batch).to receive(:username).and_return('testuser')
       allow(batch).to receive(:helper).and_return(helper)
