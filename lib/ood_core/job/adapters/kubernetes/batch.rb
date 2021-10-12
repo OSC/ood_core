@@ -11,7 +11,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   class Error < StandardError; end
   class NotFoundError < StandardError; end
 
-  attr_reader :config_file, :bin, :cluster, :conset-clustertext, :mounts
+  attr_reader :config_file, :bin, :cluster, :context, :mounts
   attr_reader :all_namespaces, :helper
   attr_reader :username_prefix, :namespace_prefix
   attr_reader :auto_supplemental_groups
@@ -19,7 +19,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   def initialize(options = {})
     options = options.to_h.symbolize_keys
 
-    @config_file = options.fetch(:config_file, default_config_file)
+    @config_file = options.fetch(:config_file, Batch.default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
     @cluster = options.fetch(:cluster, 'open-ondemand')
     @context = options.fetch(:context, nil)
@@ -108,6 +108,32 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     safe_call("delete", "service", service_name(id))
     safe_call("delete", "secret", secret_name(id))
     safe_call("delete", "configmap", configmap_name(id))
+  end
+
+  class << self
+    def default_config_file
+      (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/config")
+    end
+
+    def default_auth
+      {
+        type: 'managaged'
+      }.symbolize_keys
+    end
+
+    def default_server
+      {
+        endpoint: 'https://localhost:8080',
+        cert_authority_file: nil
+      }.symbolize_keys
+    end
+
+    def configure_kube!(config)
+      k = self.new(config)
+      # TODO: probably shouldn't be using send here
+      k.send(:set_cluster, config.fetch(:server, default_server).to_h.symbolize_keys)
+      k.send(:configure_auth, config.fetch(:auth, default_auth).to_h.symbolize_keys)
+    end
   end
 
   private
@@ -243,23 +269,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     "#{namespace_prefix}#{username}"
   end
 
-  def default_config_file
-    (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/config")
-  end
-
-  def default_auth
-    {
-      type: 'managaged'
-    }.symbolize_keys
-  end
-
-  def default_server
-    {
-      endpoint: 'https://localhost:8080',
-      cert_authority_file: nil
-    }.symbolize_keys
-  end
-
   def formatted_ns_cmd
     "#{namespaced_cmd} -o json"
   end
@@ -296,12 +305,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   rescue Helper::K8sDataError
     # FIXME: silently eating error, could probably use a logger
     nil
-  end
-
-  def self.initialize!(config)
-    k = self.new(config)
-    k.set_cluster(config.fetch(:server, default_server).to_h.symbolize_keys)
-    k.configure_auth(config.fetch(:auth, default_auth).to_h.symbolize_keys)
   end
 
   def configure_auth(auth)

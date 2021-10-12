@@ -74,6 +74,7 @@ EOS
       config_file: '~/kube.config',
       bin: '/usr/bin/wontwork',
       cluster: 'test-cluster',
+      context: 'ood-test-cluster',
       mounts: mounts,
       all_namespaces: true,
       namespace_prefix: 'user-',
@@ -248,6 +249,7 @@ EOS
       expect(@basic_batch.config_file).to eq("#{ENV['HOME']}/.kube/config")
       expect(@basic_batch.bin).to eq('/usr/bin/kubectl')
       expect(@basic_batch.mounts).to eq([])
+      expect(@basic_batch.context).to eq(nil)
     end
 
     it "does not throw an error when it can't configure" do
@@ -337,7 +339,7 @@ EOS
       # make sure template get's passed into command correctly
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/wontwork --kubeconfig=~/kube.config " \
+        "/usr/bin/wontwork --kubeconfig=~/kube.config --context=ood-test-cluster " \
         "--namespace=user-testuser -o json create -f -",
         stdin_data: pod_yml_from_all_configs.to_s
       ).and_return(['', '', success])
@@ -904,7 +906,7 @@ EOS
     it "throws error up the stack with --all-namespaces" do
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/wontwork --kubeconfig=~/kube.config get pods -o json --all-namespaces",
+        "/usr/bin/wontwork --kubeconfig=~/kube.config --context=ood-test-cluster get pods -o json --all-namespaces",
         stdin_data: ""
       ).and_return(['', errmsg, failure])
 
@@ -1061,16 +1063,22 @@ EOS
     end
   end
 
-  describe '#set_context' do
+  describe '#configure_kube!' do
     it 'generates correct command' do
-      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=testuser"
-      expect(@basic_batch).to receive(:call).with(expected_cmd)
-      @basic_batch.send(:set_context)
+      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-cluster open-ondemand --server=https://localhost:8080"
+      expect_any_instance_of(Batch).to receive(:call).with(expected_cmd)
+      Batch.configure_kube!({})
     end
 
     it 'generates correct command when username prefix defined' do
       allow(@basic_batch).to receive(:username_prefix).and_return('dev-')
       expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=dev-testuser"
+      expect(@basic_batch).to receive(:call).with(expected_cmd)
+      @basic_batch.send(:set_context)
+    end
+
+    it 'generates correct command' do
+      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=testuser"
       expect(@basic_batch).to receive(:call).with(expected_cmd)
       @basic_batch.send(:set_context)
     end
