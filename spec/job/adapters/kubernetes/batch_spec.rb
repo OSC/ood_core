@@ -260,6 +260,22 @@ EOS
 
       expect { described_class.new }.not_to raise_error
       expect { described_class.new(config) }.not_to raise_error
+      expect { described_class.new({}) }.not_to raise_error
+    end
+
+    it "defaults context to cluster for oidc auth" do
+      cfg = {
+        :cluster => 'some-cluster',
+        :auth => {
+          :type => 'oidc'
+        }
+      }
+
+      k = described_class.new(cfg)
+      expect(k.context).to eq(k.cluster)
+      expect(k.context).to eq('some-cluster')
+      expect(k.cluster).to eq('some-cluster')
+      expect(k.send(:context?)).to eq(true)
     end
   end
 
@@ -1090,6 +1106,22 @@ EOS
       expect_any_instance_of(Batch).to receive(:username).and_return('jessie')
       expect_any_instance_of(Batch).to receive(:call).with(set_context)
       Batch.configure_kube!(config)
+    end
+
+    it 'generates sets oidc context with default context' do
+      set_cluster = "/usr/bin/wontwork --kubeconfig=~/kube.config config set-cluster test-cluster " \
+        "--server=https://some.k8s.host --certificate-authority=/etc/some.cert"
+      set_context = "/usr/bin/wontwork --kubeconfig=~/kube.config config set-context test-cluster " \
+        "--cluster=test-cluster --namespace=user-jessie --user=dev-jessie"
+
+      expect_any_instance_of(Batch).to receive(:call).with(set_cluster)
+      expect_any_instance_of(Batch).to receive(:username).and_return('jessie')
+      expect_any_instance_of(Batch).to receive(:username).and_return('jessie')
+      expect_any_instance_of(Batch).to receive(:call).with(set_context)
+
+      # let's make sure --context=#{cluster}
+      cfg = config.tap { |h| h.delete(:context) }
+      Batch.configure_kube!(cfg)
     end
 
     it 'runs the correct gke commands' do
