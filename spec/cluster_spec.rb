@@ -110,7 +110,7 @@ describe OodCore::Cluster do
     end
 
     it "responds to linux_host?" do
-      expect(clusters.select { |cluster| cluster.kubernetes? }.size).to eql(0)
+      expect(clusters.select { |cluster| cluster.linux_host? }.size).to eql(0)
     end
 
     it "responds to lsf?" do
@@ -118,11 +118,11 @@ describe OodCore::Cluster do
     end
 
     it "responds to pbspro?" do
-      expect(clusters.select { |cluster| cluster.lsf? }.size).to eql(0)
+      expect(clusters.select { |cluster| cluster.pbspro? }.size).to eql(0)
     end
 
     it "responds to sge?" do
-      expect(clusters.select { |cluster| cluster.lsf? }.size).to eql(0)
+      expect(clusters.select { |cluster| cluster.sge? }.size).to eql(0)
     end
 
     it "responds to slurm?" do
