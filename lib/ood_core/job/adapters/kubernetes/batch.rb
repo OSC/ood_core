@@ -352,7 +352,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     # gke cluster name can probably can differ from what ood calls the cluster
     cmd = "gcloud container clusters get-credentials #{locale} #{cluster}"
     env = { 'KUBECONFIG' => config_file }
-    call(cmd, env)
+    call(cmd, env: env)
   end
 
   def set_context

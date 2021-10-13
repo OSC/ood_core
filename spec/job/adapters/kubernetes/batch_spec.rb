@@ -1092,7 +1092,7 @@ EOS
       Batch.configure_kube!(config)
     end
 
-    it 'runs the correct gke commans' do
+    it 'runs the correct gke commands' do
       cfg = {
         :auth => {
           :type => 'gke',
@@ -1105,12 +1105,38 @@ EOS
 
       set_cluster = "/usr/bin/kubectl --kubeconfig=~/.gke/oakley.config config set-cluster gke-cluster-oakley " \
         "--server=https://localhost:8080"
-      gcloud = "gcloud auth activate-service-account --key-file=~/.gke/acct.key"
-      # env = {:env  }
+      auth_activate = "gcloud auth activate-service-account --key-file=~/.gke/acct.key"
+      ctr_cluster = "gcloud container clusters get-credentials --region=ohio gke-cluster-oakley"
+      env = env = { 'KUBECONFIG' => '~/.gke/oakley.config' }
 
-      # expect_any_instance_of(Batch).to receive(:call).with(set_cluster)
-      # expect_any_instance_of(Batch).to receive(:call).with(gcloud, { 'KUBECONFIG' => '~/.gke/oakley.config' })
-      # Batch.configure_kube!(cfg)
+      expect_any_instance_of(Batch).to receive(:call).with(set_cluster)
+      expect_any_instance_of(Batch).to receive(:call).with(auth_activate)
+      expect_any_instance_of(Batch).to receive(:call).with(ctr_cluster, env: env)
+      Batch.configure_kube!(cfg)
+    end
+
+    # same as the test above, only using --zone instead of --region
+    it 'zone works in gke' do
+      cfg = {
+        :auth => {
+          :type => 'gke',
+          :zone => 'ohio',
+          :svc_acct_file => '~/.gke/acct.key',
+        },
+        :cluster => 'gke-cluster-oakley',
+        :config_file => '~/.gke/oakley.config',
+      }
+
+      set_cluster = "/usr/bin/kubectl --kubeconfig=~/.gke/oakley.config config set-cluster gke-cluster-oakley " \
+        "--server=https://localhost:8080"
+      auth_activate = "gcloud auth activate-service-account --key-file=~/.gke/acct.key"
+      ctr_cluster = "gcloud container clusters get-credentials --zone=ohio gke-cluster-oakley"
+      env = env = { 'KUBECONFIG' => '~/.gke/oakley.config' }
+
+      expect_any_instance_of(Batch).to receive(:call).with(set_cluster)
+      expect_any_instance_of(Batch).to receive(:call).with(auth_activate)
+      expect_any_instance_of(Batch).to receive(:call).with(ctr_cluster, env: env)
+      Batch.configure_kube!(cfg)
     end
   end
 end
