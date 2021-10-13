@@ -310,13 +310,13 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def configure_auth(auth)
-   if managed_auth?(auth)
-    return
-   elsif gke_auth?(auth)
-    set_gke_config(auth)
-   elsif oidc_auth?(auth)
-    set_context
-   end
+    if managed_auth?(auth)
+      return
+    elsif gke_auth?(auth)
+      set_gke_config(auth)
+    elsif oidc_auth?(auth)
+      set_context
+    end
   end
 
   def context?
