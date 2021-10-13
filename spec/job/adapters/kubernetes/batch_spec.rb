@@ -78,10 +78,13 @@ EOS
       mounts: mounts,
       all_namespaces: true,
       namespace_prefix: 'user-',
-      username_prefix: 'dev',
+      username_prefix: 'dev-',
       server: {
         endpoint: 'https://some.k8s.host',
         cert_authority_file: '/etc/some.cert'
+      },
+      auth: {
+        type: 'oidc'
       },
       auto_supplemental_groups: true
     }
@@ -1064,23 +1067,50 @@ EOS
   end
 
   describe '#configure_kube!' do
-    it 'generates correct command' do
+    it 'generates correct default commands' do
       expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-cluster open-ondemand --server=https://localhost:8080"
       expect_any_instance_of(Batch).to receive(:call).with(expected_cmd)
       Batch.configure_kube!({})
     end
 
-    it 'generates correct command when username prefix defined' do
-      allow(@basic_batch).to receive(:username_prefix).and_return('dev-')
-      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=dev-testuser"
-      expect(@basic_batch).to receive(:call).with(expected_cmd)
-      @basic_batch.send(:set_context)
+    it 'generates correct default auth commands' do
+      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-cluster open-ondemand --server=https://localhost:8080"
+      expect_any_instance_of(Batch).to receive(:call).with(expected_cmd)
+      Batch.configure_kube!({ :auth => Batch.default_auth })
     end
 
-    it 'generates correct command' do
-      expected_cmd = "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config config set-context open-ondemand --cluster=open-ondemand --namespace=testuser --user=testuser"
-      expect(@basic_batch).to receive(:call).with(expected_cmd)
-      @basic_batch.send(:set_context)
+    it 'generates sets oidc context' do
+      set_cluster = "/usr/bin/wontwork --kubeconfig=~/kube.config config set-cluster test-cluster " \
+        "--server=https://some.k8s.host --certificate-authority=/etc/some.cert"
+      set_context = "/usr/bin/wontwork --kubeconfig=~/kube.config config set-context ood-test-cluster " \
+        "--cluster=test-cluster --namespace=user-jessie --user=dev-jessie"
+
+      expect_any_instance_of(Batch).to receive(:call).with(set_cluster)
+      expect_any_instance_of(Batch).to receive(:username).and_return('jessie')
+      expect_any_instance_of(Batch).to receive(:username).and_return('jessie')
+      expect_any_instance_of(Batch).to receive(:call).with(set_context)
+      Batch.configure_kube!(config)
+    end
+
+    it 'runs the correct gke commans' do
+      cfg = {
+        :auth => {
+          :type => 'gke',
+          :region => 'ohio',
+          :svc_acct_file => '~/.gke/acct.key',
+        },
+        :cluster => 'gke-cluster-oakley',
+        :config_file => '~/.gke/oakley.config',
+      }
+
+      set_cluster = "/usr/bin/kubectl --kubeconfig=~/.gke/oakley.config config set-cluster gke-cluster-oakley " \
+        "--server=https://localhost:8080"
+      gcloud = "gcloud auth activate-service-account --key-file=~/.gke/acct.key"
+      # env = {:env  }
+
+      # expect_any_instance_of(Batch).to receive(:call).with(set_cluster)
+      # expect_any_instance_of(Batch).to receive(:call).with(gcloud, { 'KUBECONFIG' => '~/.gke/oakley.config' })
+      # Batch.configure_kube!(cfg)
     end
   end
 end

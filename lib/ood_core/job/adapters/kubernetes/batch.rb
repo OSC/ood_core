@@ -117,7 +117,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
     def default_auth
       {
-        type: 'managaged'
+        type: 'managed'
       }.symbolize_keys
     end
 
@@ -357,7 +357,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def set_context
     # can't really use base_cmd, bc it may use --context flag
-    cmd = "#{bin} --kubeconfig=#{config_file} config set-context #{cluster}"
+    cmd = "#{bin} --kubeconfig=#{config_file} config set-context #{context}"
     cmd << " --cluster=#{cluster} --namespace=#{namespace}"
     cmd << " --user=#{k8s_username}"
 
@@ -368,7 +368,8 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     server = config.fetch(:endpoint)
     cert = config.fetch(:cert_authority_file, nil)
 
-    cmd = "#{base_cmd} config set-cluster #{cluster}"
+    # shouldn't use context here either
+    cmd = "#{bin} --kubeconfig=#{config_file} config set-cluster #{cluster}"
     cmd << " --server=#{server}"
     cmd << " --certificate-authority=#{cert}" unless cert.nil?
 
