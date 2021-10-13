@@ -63,6 +63,20 @@ module OodCore
       @errors          = c.fetch(:errors, [])  .to_a
     end
 
+
+    # programatically define some methods like slurm? or torque?
+    Dir.entries("#{__dir__}/job/adapters").select do |f|
+      File.file?("#{__dir__}/job/adapters/#{f}") && File.extname(f) == '.rb'
+    end.map do |f|
+      File.basename(f, '.rb')
+    end.reject do |f|
+      ['helper', 'drmaa' ].include?(f)
+    end.each do |adapter|
+      define_method(:"#{adapter}?")  do
+        job_config.fetch(:adapter, nil) == adapter
+      end
+    end
+
     # Metadata that provides extra information about this cluster
     # @return [OpenStruct] the metadata
     def metadata
