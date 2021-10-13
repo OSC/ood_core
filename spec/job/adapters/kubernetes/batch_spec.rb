@@ -914,7 +914,7 @@ EOS
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser get pods -o json",
+        "--namespace=testuser -o json get pods",
         stdin_data: ""
       ).and_return(['No resources found in testuser namespace.', '', success])
 
@@ -925,7 +925,7 @@ EOS
     it "throws error up the stack with --all-namespaces" do
       allow(Open3).to receive(:capture3).with(
         {},
-        "/usr/bin/wontwork --kubeconfig=~/kube.config --context=ood-test-cluster get pods -o json --all-namespaces",
+        "/usr/bin/wontwork --kubeconfig=~/kube.config --context=ood-test-cluster -o json get pods --all-namespaces",
         stdin_data: ""
       ).and_return(['', errmsg, failure])
 
@@ -936,7 +936,7 @@ EOS
       allow(Open3).to receive(:capture3).with(
         {},
         "/usr/bin/kubectl --kubeconfig=#{ENV['HOME']}/.kube/config " \
-        "--namespace=testuser get pods -o json",
+        "--namespace=testuser -o json get pods",
         stdin_data: ""
       ).and_return([several_pods, '', success])
 

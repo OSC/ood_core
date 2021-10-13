@@ -56,10 +56,10 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def info_all(attrs: nil)
-    cmd = if all_namespaces
-            "#{base_cmd} get pods -o json --all-namespaces"
+    cmd = if @all_namespaces
+            "#{base_cmd} -o json get pods --all-namespaces"
           else
-            "#{namespaced_cmd} get pods -o json"
+            "#{namespaced_cmd} -o json get pods"
           end
 
     output = call(cmd)
@@ -248,6 +248,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   # and  id=my-pod-id
   def call_json_output(verb, resource, id, stdin: nil)
     cmd = "#{formatted_ns_cmd} #{verb} #{resource} #{id}"
+
     data = call(cmd, stdin: stdin)
     data = data.empty? ? '{}' : data
     json_data = JSON.parse(data, symbolize_names: true)
