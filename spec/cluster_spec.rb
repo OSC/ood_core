@@ -96,4 +96,45 @@ describe OodCore::Cluster do
       owens.allow?
     end
   end
+
+  describe "#adapter?" do
+    let(:config) { Pathname.pwd + 'spec/fixtures/config/clusters.d'}
+    let(:clusters) { OodCore::Clusters.load_file(config) }
+
+    it "responds to ccq?" do
+      expect(clusters.select { |cluster| cluster.ccq? }.size).to eql(0)
+    end
+
+    it "responds to kubernetes?" do
+      expect(clusters.select { |cluster| cluster.kubernetes? }.size).to eql(0)
+    end
+
+    it "responds to linux_host?" do
+      expect(clusters.select { |cluster| cluster.kubernetes? }.size).to eql(0)
+    end
+
+    it "responds to lsf?" do
+      expect(clusters.select { |cluster| cluster.lsf? }.size).to eql(0)
+    end
+
+    it "responds to pbspro?" do
+      expect(clusters.select { |cluster| cluster.lsf? }.size).to eql(0)
+    end
+
+    it "responds to sge?" do
+      expect(clusters.select { |cluster| cluster.lsf? }.size).to eql(0)
+    end
+
+    it "responds to slurm?" do
+      expect(clusters.select { |cluster| cluster.slurm? }.size).to eql(0)
+    end
+
+    it "responds to torque?" do
+      expect(clusters.select { |cluster| cluster.torque? }.size).to eql(5)
+    end
+
+    it "fails on undefined things" do
+      expect { clusters.select { |cluster| cluster.vmware? }.size }.to raise_error(NoMethodError)
+    end
+  end
 end
