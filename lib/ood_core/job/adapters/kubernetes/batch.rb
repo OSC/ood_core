@@ -22,12 +22,14 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @config_file = options.fetch(:config_file, Batch.default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
     @cluster = options.fetch(:cluster, 'open-ondemand')
-    @context = options.fetch(:context, nil)
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
     @auto_supplemental_groups = options.fetch(:auto_supplemental_groups, false)
+
+    tmp_ctx = options.fetch(:context, nil)
+    @context = tmp_ctx.nil? && oidc_auth?(options.fetch(:auth, {})) ? @cluster : tmp_ctx
 
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
   end
@@ -308,22 +310,29 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def configure_auth(auth)
-    type = auth.fetch(:type)
-    return if managed?(type)
-
-    case type
-    when 'gke'
-      set_gke_config(auth)
-    when 'oidc'
-      set_context
-    end
+   if managed_auth?(auth)
+    return
+   elsif gke_auth?(auth)
+    set_gke_config(auth)
+   elsif oidc_auth?(auth)
+    set_context
+   end
   end
 
   def context?
     !@context.nil?
   end
 
-  def managed?(type)
+  def gke_auth?(auth = {})
+    auth.fetch(:type, nil) == 'gke'
+  end
+
+  def oidc_auth?(auth = {})
+    auth.fetch(:type, nil) == 'oidc'
+  end
+
+  def managed_auth?(auth = {})
+    type = auth.fetch(:type, nil)
     if type.nil?
       true # maybe should be false?
     else
