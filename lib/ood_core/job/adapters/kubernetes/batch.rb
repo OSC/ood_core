@@ -11,32 +11,25 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   class Error < StandardError; end
   class NotFoundError < StandardError; end
 
-  attr_reader :config_file, :bin, :cluster, :mounts
-  attr_reader :all_namespaces, :using_context, :helper
+  attr_reader :config_file, :bin, :cluster, :context, :mounts
+  attr_reader :all_namespaces, :helper
   attr_reader :username_prefix, :namespace_prefix
   attr_reader :auto_supplemental_groups
 
   def initialize(options = {})
     options = options.to_h.symbolize_keys
 
-    @config_file = options.fetch(:config_file, default_config_file)
+    @config_file = options.fetch(:config_file, Batch.default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
     @cluster = options.fetch(:cluster, 'open-ondemand')
+    @context = options.fetch(:context, nil)
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
     @all_namespaces = options.fetch(:all_namespaces, false)
     @username_prefix = options.fetch(:username_prefix, '')
     @namespace_prefix = options.fetch(:namespace_prefix, '')
     @auto_supplemental_groups = options.fetch(:auto_supplemental_groups, false)
 
-    @using_context = false
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
-
-    begin
-      make_kubectl_config(options)
-    rescue
-      # FIXME could use a log here
-      # means you couldn't 'kubectl set config'
-    end
   end
 
   def resource_file(resource_type = 'pod')
@@ -115,6 +108,32 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     safe_call("delete", "service", service_name(id))
     safe_call("delete", "secret", secret_name(id))
     safe_call("delete", "configmap", configmap_name(id))
+  end
+
+  class << self
+    def default_config_file
+      (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/config")
+    end
+
+    def default_auth
+      {
+        type: 'managed'
+      }.symbolize_keys
+    end
+
+    def default_server
+      {
+        endpoint: 'https://localhost:8080',
+        cert_authority_file: nil
+      }.symbolize_keys
+    end
+
+    def configure_kube!(config)
+      k = self.new(config)
+      # TODO: probably shouldn't be using send here
+      k.send(:set_cluster, config.fetch(:server, default_server).to_h.symbolize_keys)
+      k.send(:configure_auth, config.fetch(:auth, default_auth).to_h.symbolize_keys)
+    end
   end
 
   private
@@ -250,27 +269,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     "#{namespace_prefix}#{username}"
   end
 
-  def context
-    cluster
-  end
-
-  def default_config_file
-    (ENV['KUBECONFIG'] || "#{Dir.home}/.kube/config")
-  end
-
-  def default_auth
-    {
-      type: 'managaged'
-    }.symbolize_keys
-  end
-
-  def default_server
-    {
-      endpoint: 'https://localhost:8080',
-      cert_authority_file: nil
-    }.symbolize_keys
-  end
-
   def formatted_ns_cmd
     "#{namespaced_cmd} -o json"
   end
@@ -281,7 +279,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def base_cmd
     base = "#{bin} --kubeconfig=#{config_file}"
-    base << " --context=#{context}" if using_context
+    base << " --context=#{context}" if context?
     base
   end
 
@@ -309,11 +307,6 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     nil
   end
 
-  def make_kubectl_config(config)
-    set_cluster(config.fetch(:server, default_server).to_h.symbolize_keys)
-    configure_auth(config.fetch(:auth, default_auth).to_h.symbolize_keys)
-  end
-
   def configure_auth(auth)
     type = auth.fetch(:type)
     return if managed?(type)
@@ -326,8 +319,8 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     end
   end
 
-  def use_context
-    @using_context = true
+  def context?
+    !@context.nil?
   end
 
   def managed?(type)
@@ -359,23 +352,24 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     # gke cluster name can probably can differ from what ood calls the cluster
     cmd = "gcloud container clusters get-credentials #{locale} #{cluster}"
     env = { 'KUBECONFIG' => config_file }
-    call(cmd, env)
+    call(cmd, env: env)
   end
 
   def set_context
-    cmd = "#{base_cmd} config set-context #{cluster}"
+    # can't really use base_cmd, bc it may use --context flag
+    cmd = "#{bin} --kubeconfig=#{config_file} config set-context #{context}"
     cmd << " --cluster=#{cluster} --namespace=#{namespace}"
     cmd << " --user=#{k8s_username}"
 
     call(cmd)
-    use_context
   end
 
   def set_cluster(config)
     server = config.fetch(:endpoint)
     cert = config.fetch(:cert_authority_file, nil)
 
-    cmd = "#{base_cmd} config set-cluster #{cluster}"
+    # shouldn't use context here either
+    cmd = "#{bin} --kubeconfig=#{config_file} config set-cluster #{cluster}"
     cmd << " --server=#{server}"
     cmd << " --certificate-authority=#{cert}" unless cert.nil?
 
