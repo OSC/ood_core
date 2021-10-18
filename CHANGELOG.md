@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.18.1] - 10-18-2021
+
+### Fixed
+
+- Fixed kubernetes initialization in [331](https://github.com/OSC/ood_core/pull/331).
+
 ## [0.18.0] - 10-18-2021
 
 ### Fixed
@@ -405,7 +411,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.18.1...HEAD
+[0.18.1]: https://github.com/OSC/ood_core/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/OSC/ood_core/compare/v0.17.8...v0.18.0
 [0.17.6]: https://github.com/OSC/ood_core/compare/v0.17.5...v0.17.6
 [0.17.5]: https://github.com/OSC/ood_core/compare/v0.17.4...v0.17.5
