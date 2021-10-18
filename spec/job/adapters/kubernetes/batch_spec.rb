@@ -265,9 +265,9 @@ EOS
 
     it "defaults context to cluster for oidc auth" do
       cfg = {
-        :cluster => 'some-cluster',
-        :auth => {
-          :type => 'oidc'
+        'cluster' => 'some-cluster',
+        'auth' => {
+          'type' => 'oidc'
         }
       }
 
