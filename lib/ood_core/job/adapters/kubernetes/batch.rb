@@ -19,7 +19,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   def initialize(options = {})
     options = options.to_h.symbolize_keys
 
-    @config_file = options.fetch(:config_file, Batch.default_config_file)
+    @config_file = options.fetch(:config_file, self.class.default_config_file)
     @bin = options.fetch(:bin, '/usr/bin/kubectl')
     @cluster = options.fetch(:cluster, 'open-ondemand')
     @mounts = options.fetch(:mounts, []).map { |m| m.to_h.symbolize_keys }
@@ -29,7 +29,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     @auto_supplemental_groups = options.fetch(:auto_supplemental_groups, false)
 
     tmp_ctx = options.fetch(:context, nil)
-    @context = tmp_ctx.nil? && oidc_auth?(options.fetch(:auth, {})) ? @cluster : tmp_ctx
+    @context = tmp_ctx.nil? && oidc_auth?(options.fetch(:auth, {}).symbolize_keys) ? @cluster : tmp_ctx
 
     @helper = OodCore::Job::Adapters::Kubernetes::Helper.new
   end
@@ -316,7 +316,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     elsif gke_auth?(auth)
       set_gke_config(auth)
     elsif oidc_auth?(auth)
-      set_context
+      set_context if context?
     end
   end
 
