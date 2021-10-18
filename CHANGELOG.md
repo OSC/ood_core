@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.18.0] - 10-18-2021
+
+### Fixed
+
+- Fixed LHA crashing on strange bash output in [322](https://github.com/OSC/ood_core/pull/322).
+
+### Added
+
+- All adapters now respond to #{adapter}? methods like slurm?, pbspro?, kubernetes? and so on
+  in [326](https://github.com/OSC/ood_core/pull/326).
+
+### Changed
+
+- The kubernetes adapter now expects to set context statically in [324](https://github.com/OSC/ood_core/pull/324).
+  And can now accept context as a part of it's interface. It will now also always send --context when using OIDC
+  and that context defaults to the clustername in [327](https://github.com/OSC/ood_core/pull/327).
+- Removed the activesupport dependency in [329](https://github.com/OSC/ood_core/pull/329).
+
 ## [0.17.6] - 8-24-2021
 
 ### Added
@@ -387,7 +405,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.17.6...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/OSC/ood_core/compare/v0.17.8...v0.18.0
 [0.17.6]: https://github.com/OSC/ood_core/compare/v0.17.5...v0.17.6
 [0.17.5]: https://github.com/OSC/ood_core/compare/v0.17.4...v0.17.5
 [0.17.4]: https://github.com/OSC/ood_core/compare/v0.17.3...v0.17.4
