@@ -163,10 +163,15 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
 
   def script_timeout(script)
     wall_time = script.wall_time.to_i
-    return site_timeout if wall_time == 0
-    return [wall_time, site_timeout].min unless site_timeout == 0
-
-    wall_time
+    if wall_time == 0
+      # this is the only way it can be 0
+      # so make it into infinify for systemd to never terminate
+      site_timeout == 0 ? 'infinity' : site_timeout
+    elsif site_timeout != 0
+      [wall_time, site_timeout].min
+    else
+      wall_time
+    end
   end
 
   def script_arguments(script)
