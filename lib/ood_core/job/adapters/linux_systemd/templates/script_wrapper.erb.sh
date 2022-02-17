@@ -21,12 +21,11 @@ echo "HOSTNAME:$hostname"
 loginctl enable-linger
 
 # Put the script into a temp file on localhost
-systemd_service_tmp_file_base=$(mktemp -d "<%= workdir %>/XXXXXXXXXXXXX" --suffix '_systemd')
-systemd_service_tmp_file="${systemd_service_tmp_file_base}/service.sh"
-systemd_service_tmp_file_pre="${systemd_service_tmp_file_base}/pre.sh"
-systemd_service_tmp_file_post="${systemd_service_tmp_file_base}/post.sh"
+systemd_service_file="<%= workdir %>/systemd_service.sh"
+systemd_service_file_pre="<%= workdir %>/systemd_pre.sh"
+systemd_service_file_post="<%= workdir %>/systemd_post.sh"
 
-cat << 'SYSTEMD_EXEC_PRE' > "$systemd_service_tmp_file_pre"
+cat << 'SYSTEMD_EXEC_PRE' > "$systemd_service_file_pre"
 #!/bin/bash
 <%= cd_to_workdir %>
 <% if email_on_start %>
@@ -34,7 +33,7 @@ cat << 'SYSTEMD_EXEC_PRE' > "$systemd_service_tmp_file_pre"
 <% end %>
 SYSTEMD_EXEC_PRE
 
-cat << 'SYSTEMD_EXEC_POST' > "$systemd_service_tmp_file_post"
+cat << 'SYSTEMD_EXEC_POST' > "$systemd_service_file_post"
 #!/bin/bash
 <%= cd_to_workdir %>
 <% if email_on_terminated %>
@@ -44,14 +43,14 @@ SYSTEMD_EXEC_POST
 
 # Create an executable for systemd service to run
 # Escaped HEREDOC means that we do not have to worry about Shell.escape-ing script_content
-cat << 'SYSTEMD_EXEC' > "$systemd_service_tmp_file"
+cat << 'SYSTEMD_EXEC' > "$systemd_service_file"
 <%= script_content %>
 SYSTEMD_EXEC
 
 # Run the script inside a transient systemd user service
-chmod +x "$systemd_service_tmp_file_pre" "$systemd_service_tmp_file" "$systemd_service_tmp_file_post"
+chmod +x "$systemd_service_file_pre" "$systemd_service_file" "$systemd_service_file_post"
 <%= cd_to_workdir %>
 systemd-run --user -r --no-block --unit=<%= session_name %> -p RuntimeMaxSec=<%= script_timeout %> \
-	-p ExecStartPre="$systemd_service_tmp_file_pre" -p ExecStartPost="$systemd_service_tmp_file_post" \
+	-p ExecStartPre="$systemd_service_file_pre" -p ExecStartPost="$systemd_service_file_post" \
 	-p StandardOutput="file:<%= output_path %>" -p StandardError="file:<%= error_path %>" \
-	-p Description="<%= job_name %>" "$systemd_service_tmp_file"
+	-p Description="<%= job_name %>" "$systemd_service_file"
