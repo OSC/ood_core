@@ -192,7 +192,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   end
 
   def unique_session_name
-    "#{session_name_label}-#{SecureRandom.uuid}"
+    "#{session_name_label}-#{SecureRandom.alphanumeric(10)}"
   end
 
   # List all Systemd sessions on destination_host started by this adapter
