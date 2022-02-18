@@ -15,7 +15,7 @@ module OodCore
       # @option config [Object] :ssh_hosts (nil) The list of permissable hosts, defaults to :submit_host
       # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking and updating the known_hosts file
       # @option config [Object] :submit_host The SSH target to connect to, may be the head of a round-robin
-      def self.build_linux_systemd(config)
+      def self.build_systemd(config)
         c = config.to_h.symbolize_keys
         debug = c.fetch(:debug, false)
         max_timeout = c.fetch(:max_timeout, nil)
@@ -42,7 +42,7 @@ module OodCore
       class LinuxSystemd < Adapter
         using Refinements::ArrayExtensions
 
-        require "ood_core/job/adapters/linux_systemd/launcher"
+        require "ood_core/job/adapters/systemd/launcher"
 
         def initialize(ssh_hosts:, launcher:)
           @launcher = launcher
