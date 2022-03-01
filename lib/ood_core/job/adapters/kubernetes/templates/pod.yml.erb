@@ -106,7 +106,9 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - all
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
       privileged: false
   <%- unless spec.init_containers.empty? -%>
   initContainers:
@@ -152,7 +154,9 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - all
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
       privileged: false
   <%- end # init container loop -%>
   <%- end # if init containers -%>

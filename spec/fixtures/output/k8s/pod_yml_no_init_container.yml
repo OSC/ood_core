@@ -80,7 +80,9 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - all
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
       privileged: false
   volumes:
   - name: configmap-volume
