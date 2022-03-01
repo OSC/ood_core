@@ -78,7 +78,9 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - all
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
       privileged: false
   initContainers:
   - name: "init-1"
@@ -115,7 +117,9 @@ spec:
       allowPrivilegeEscalation: false
       capabilities:
         drop:
-        - all
+        - ALL
+      seccompProfile:
+        type: RuntimeDefault
       privileged: false
   volumes:
   - name: configmap-volume
