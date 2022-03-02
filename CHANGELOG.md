@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.19.0] - 02-03-2022
+
+### Added
+
+- Systemd adapter in [743](https://github.com/OSC/ood_core/pull/743).
+
+### Fixed
+
+- The linux host adapter is a little more portable in [333](https://github.com/OSC/ood_core/pull/333).
+- Improved pod security for the k8s adapter in [748](https://github.com/OSC/ood_core/pull/748).
+
 ## [0.18.1] - 10-18-2021
 
 ### Fixed
@@ -411,7 +422,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.18.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/OSC/ood_core/compare/v0.18.1...v0.19.0
 [0.18.1]: https://github.com/OSC/ood_core/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/OSC/ood_core/compare/v0.17.8...v0.18.0
 [0.17.6]: https://github.com/OSC/ood_core/compare/v0.17.5...v0.17.6
