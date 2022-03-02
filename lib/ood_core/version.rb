@@ -1,4 +1,4 @@
 module OodCore
   # The current version of {OodCore}
-  VERSION = "0.18.1"
+  VERSION = "0.19.0"
 end
