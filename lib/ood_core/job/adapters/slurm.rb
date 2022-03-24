@@ -98,22 +98,22 @@ module OodCore
             @strict_host_checking = strict_host_checking
           end
 
-          # Get a hash describing the number of nodes_active, nodes_total, processors_total, and processors_active
-          # @return [Hash] details about the cluster's active and total nodes, processors, and gpu nodes
-          def get_cluster_stats()
+          # Get a ClusterInfo object containing information about the given cluster
+          # @return [ClusterInfo] object containing cluster details
+          def get_cluster_info
             sinfo_out = call("sinfo", ["-a", "-h", "-o %A/%D/%C"]).strip.split('/')
             gres_length = call("sinfo", ["-o %G"]).lines.map(&:strip).map(&:length).max
             sinfo_out2 = call("sinfo", ["-N", "-h", "-a", "--Format='nodehost,gres:3#{gres_length},statelong'"])
-            gpu_nodes_total = sinfo_out2.lines.uniq.grep(/gpu:/).count
-            gpu_nodes_free = sinfo_out2.lines.uniq.grep(/gpu:/).grep(/idle/).count
-            {
-              "nodes_active": sinfo_out[0].to_i,
-              "nodes_total": sinfo_out[2].to_i,
-              "processors_total": sinfo_out[6].to_i,
-              "processors_active": sinfo_out[3].to_i,
-              "gpu_nodes_total": gpu_nodes_total,
-              "gpu_nodes_active": gpu_nodes_total - gpu_nodes_free
-            }
+            gpu_total = sinfo_out2.lines.uniq.grep(/gpu:/).count
+            gpu_free = sinfo_out2.lines.uniq.grep(/gpu:/).grep(/idle/).count
+            ClusterInfo.new(cluster_name: cluster,
+                            nodes_active: sinfo_out[0].to_i,
+                            nodes_total: sinfo_out[2].to_i,
+                            processors_active: sinfo_out[3].to_i,
+                            processors_total: sinfo_out[6].to_i,
+                            gpu_nodes_active: gpu_total - gpu_free,
+                            gpu_nodes_total: gpu_total
+            )
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -474,8 +474,8 @@ module OodCore
 
         # Retrieve info about active and total cpus, gpus, and nodes
         # @return [Hash] information about cluster usage
-        def cluster_stats()
-          @slurm.get_cluster_stats()
+        def cluster_info()
+          @slurm.get_cluster_info()
         end
 
         # Retrieve info for all jobs from the resource manager
