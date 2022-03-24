@@ -65,6 +65,10 @@ module OodCore
       # @return [Object] native info
       attr_reader :native
 
+      # If the job is using/requesting a gpu
+      # @return [Boolean] job uses gpu
+      attr_reader :uses_gpu
+
       # List of job array child task statuses
       # @note only relevant for job arrays
       # @return [Array<Task>] tasks
@@ -90,7 +94,7 @@ module OodCore
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
-                     dispatch_time: nil, native: nil, tasks: [],
+                     dispatch_time: nil, native: nil, uses_gpu: nil, tasks: [],
                      **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
@@ -111,6 +115,7 @@ module OodCore
         @status = job_array_aggregate_status unless @tasks.empty?
 
         @native          = native
+        @uses_gpu        = uses_gpu || native[:gres].include?("gpu")
       end
 
       # Create a new Info for a child task
@@ -147,6 +152,7 @@ module OodCore
           submission_time: submission_time,
           dispatch_time:   dispatch_time,
           native:          native,
+          uses_gpu:        uses_gpu,
           tasks: tasks
         }
       end
