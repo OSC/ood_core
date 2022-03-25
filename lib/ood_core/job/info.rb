@@ -160,7 +160,6 @@ module OodCore
 
       def gpu?
         gpus.positive?
-        #native&.dig(:gres)&.include?("gpu") || false
       end
 
       # The comparison operator
