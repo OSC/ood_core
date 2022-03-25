@@ -115,7 +115,7 @@ module OodCore
         @status = job_array_aggregate_status unless @tasks.empty?
 
         @native          = native
-        @uses_gpu        = uses_gpu || native[:gres] ? native[:gres].include?("gpu") : false
+        @uses_gpu        = uses_gpu || native && native[:gres] ? native[:gres].include?("gpu") : false
       end
 
       # Create a new Info for a child task
