@@ -102,7 +102,6 @@ module OodCore
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
             sinfo_out = call("sinfo", "-aho %A/%D/%C").strip.split('/')
-            gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max
             sinfo_out2 = call("sinfo", "-Nhao %n/%G/%T").lines.uniq
             gpu_total = sinfo_out2.grep(/gpu:/).count
             gpu_free = sinfo_out2.grep(/gpu:/).grep(/idle/).count
