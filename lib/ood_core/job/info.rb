@@ -90,12 +90,12 @@ module OodCore
       # @param dispatch_time [#to_i, nil] dispatch time
       # @param tasks [Array<Hash>] tasks e.g. { id: '12345.owens-batch', status: :running }
       # @param native [Object] native info
-      # @param gpus [#to_i, nil] allocated total number of gpus
+      # @param gpus [#to_i, 0] allocated total number of gpus
       def initialize(id:, status:, allocated_nodes: [], submit_host: nil,
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
-                     dispatch_time: nil, native: nil, gpus: nil, tasks: [],
+                     dispatch_time: nil, native: nil, gpus: 0, tasks: [],
                      **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
