@@ -619,9 +619,7 @@ module OodCore
 
           def get_gpu_count(gres)
             gpus = 0
-            if gres
-              gres.split(',').each { |s| gpus += s.split(':').last.to_i }
-            end
+            gres&.split(',')&.each { |s| gpus += s.split(':').last.to_i }
             gpus
           end
 
