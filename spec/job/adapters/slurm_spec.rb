@@ -1195,4 +1195,29 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe "#get_gpu_count" do
+    batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: false)
+    adapter = OodCore::Job::Adapters::Slurm.new(slurm: batch)
+
+    context "when called" do
+      gres_cases = [
+        [nil, 0],
+        ["", 0],
+        ["gpu:v100-32g:2", 2],
+        ["gpu:v100-32g:2,pfsdir:1", 2],
+        ["third-thing:sub-thing:17,gpu:v100-32g:2,pfsdir:1", 2],
+        ["third-thing:sub-thing:17,pfsdir:1,gpu:v100-32g:2", 2],
+        ["gpu:v30-12g:2,gpu:v31-32g:1", 4],
+        ["gres:gpu:1", 1],
+        ["gres:pfsdir:ess", 0]
+      ]
+      gres_cases.each do |gc| 
+        it "does not return the correct number of gpus when gres=\"#{gc[0]}\"" do
+          gpus = adapter.send(:get_gpu_count, gc[0])
+          expect(gpus).to be(gc[1]);
+        end
+      end
+    end
+  end
 end
