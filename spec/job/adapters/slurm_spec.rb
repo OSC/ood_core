@@ -1208,7 +1208,7 @@ describe OodCore::Job::Adapters::Slurm do
         ["gpu:v100-32g:2,pfsdir:1", 2],
         ["third-thing:sub-thing:17,gpu:v100-32g:2,pfsdir:1", 2],
         ["third-thing:sub-thing:17,pfsdir:1,gpu:v100-32g:2", 2],
-        ["gpu:v30-12g:2,gpu:v31-32g:1", 4],
+        ["gpu:v30-12g:2,gpu:v31-32g:1", 3],
         ["gres:gpu:1", 1],
         ["gres:pfsdir:ess", 0]
       ]
