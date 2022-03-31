@@ -617,7 +617,7 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
-          def get_gpu_count(gres)
+          def gpus_from_gres(gres)
             gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
           end
 
