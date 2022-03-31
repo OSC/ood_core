@@ -618,9 +618,7 @@ module OodCore
           end
 
           def get_gpu_count(gres)
-            gpus = 0
-            gres.to_s.scan(/gpu:[^,]*(\d+)/).each { |val| gpus += val[0].to_i }
-            gpus
+            gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
           end
 
           # Parse hash describing Slurm job status
