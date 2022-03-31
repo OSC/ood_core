@@ -105,8 +105,7 @@ module OodCore
             sinfo_out2 = call("sinfo", "-Nhao %n/%G/%T").lines.uniq
             gpu_total = sinfo_out2.grep(/gpu:/).count
             gpu_free = sinfo_out2.grep(/gpu:/).grep(/idle/).count
-            ClusterInfo.new(cluster_name: cluster,
-                            nodes_active: sinfo_out[0].to_i,
+            ClusterInfo.new(nodes_active: sinfo_out[0].to_i,
                             nodes_total: sinfo_out[2].to_i,
                             processors_active: sinfo_out[3].to_i,
                             processors_total: sinfo_out[6].to_i,
