@@ -101,14 +101,14 @@ module OodCore
           # Get a ClusterInfo object containing information about the given cluster
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
-            sinfo_out = call("sinfo", "-aho %A/%D/%C").strip.split('/')
-            sinfo_out2 = call("sinfo", "-Nhao %n/%G/%T").lines.uniq
-            gpu_total = sinfo_out2.grep(/gpu:/).count
-            gpu_free = sinfo_out2.grep(/gpu:/).grep(/idle/).count
-            ClusterInfo.new(nodes_active: sinfo_out[0].to_i,
-                            nodes_total: sinfo_out[2].to_i,
-                            processors_active: sinfo_out[3].to_i,
-                            processors_total: sinfo_out[6].to_i,
+            node_cpu_info = call("sinfo", "-aho %A/%D/%C").strip.split('/')
+            gres_info = call("sinfo", "-Nhao %n/%G/%T").lines.uniq
+            gpu_total = gres_info.grep(/gpu:/).count
+            gpu_free = gres_info.grep(/gpu:/).grep(/idle/).count
+            ClusterInfo.new(nodes_active: node_cpu_info[0].to_i,
+                            nodes_total: node_cpu_info[2].to_i,
+                            processors_active: node_cpu_info[3].to_i,
+                            processors_total: node_cpu_info[6].to_i,
                             gpu_nodes_active: gpu_total - gpu_free,
                             gpu_nodes_total: gpu_total
             )
