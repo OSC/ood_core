@@ -105,12 +105,12 @@ module OodCore
             gres_info = call("sinfo", "-Nhao %n/%G/%T").lines.uniq
             gpu_total = gres_info.grep(/gpu:/).count
             gpu_free = gres_info.grep(/gpu:/).grep(/idle/).count
-            ClusterInfo.new(nodes_active: node_cpu_info[0].to_i,
-                            nodes_total: node_cpu_info[2].to_i,
-                            processors_active: node_cpu_info[3].to_i,
-                            processors_total: node_cpu_info[6].to_i,
-                            gpu_nodes_active: gpu_total - gpu_free,
-                            gpu_nodes_total: gpu_total
+            ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
+                            total_nodes: node_cpu_info[2].to_i,
+                            active_processors: node_cpu_info[3].to_i,
+                            total_processors: node_cpu_info[6].to_i,
+                            active_gpu_nodes: gpu_total - gpu_free,
+                            total_gpu_nodes: gpu_total
             )
           end
 

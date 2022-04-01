@@ -4,23 +4,27 @@ module OodCore
     class ClusterInfo
       using Refinements::HashExtensions
 
-      attr_reader :nodes_active, :nodes_total, :processors_active, :processors_total, :gpu_nodes_active,
-                  :gpu_nodes_total
+      attr_reader :active_nodes, :total_nodes, :active_processors, :total_processors, :active_gpu_nodes,
+                  :total_gpu_nodes
 
       def initialize(opts = {})
-        puts opts
-        opts = opts.symbolize_keys
+        opts = opts.transform_keys(&:to_sym)
         @active_nodes        = opts.fetch(:active_nodes, nil).to_i
+        @total_nodes         = opts.fetch(:total_nodes, nil).to_i
+        @active_processors   = opts.fetch(:active_processors, nil).to_i
+        @total_processors    = opts.fetch(:total_processors, nil).to_i
+        @active_gpu_nodes    = opts.fetch(:active_gpu_nodes, nil).to_i
+        @total_gpu_nodes     = opts.fetch(:total_gpu_nodes, nil).to_i
       end
 
       def to_h
         {
-          nodes_active: nodes_active,
-          nodes_total: nodes_total,
-          processors_active: processors_active,
-          processors_total: processors_total,
-          gpu_nodes_active: gpu_nodes_active,
-          gpu_nodes_total: gpu_nodes_total
+          active_nodes: active_nodes,
+          total_nodes: total_nodes,
+          active_processors: active_processors,
+          total_processors: total_processors,
+          active_gpu_nodes: active_gpu_nodes,
+          total_gpu_nodes: total_gpu_nodes
         }
       end
     end
