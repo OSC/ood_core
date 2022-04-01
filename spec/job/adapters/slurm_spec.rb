@@ -306,6 +306,8 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j1.status).to eq("completed")
         expect(j1.status).to eq(OodCore::Job::Status.new(state: :completed))
         expect(j1.status.to_s).to eq("completed")
+        expect(j1.gpus).to eq(1)
+        expect(j1.gpu?).to eq(true)
 
         j2 = jobs.last
         expect(j2.id).to eq("4320602")
@@ -316,6 +318,8 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j2.status).to eq("queued")
         expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
         expect(j2.status.to_s).to eq("queued")
+        expect(j2.gpus).to eq(0)
+        expect(j2.gpu?).to eq(false)
       end
     end
 
