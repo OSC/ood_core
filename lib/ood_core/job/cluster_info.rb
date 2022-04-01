@@ -2,10 +2,13 @@ module OodCore
   module Job
     # An object that contains details about the cluster's active and total nodes, processors, and gpu nodes
     class ClusterInfo
+      using Refinements::HashExtensions
+
       attr_reader :nodes_active, :nodes_total, :processors_active, :processors_total, :gpu_nodes_active,
                   :gpu_nodes_total
 
       def initialize(opts = {})
+        puts opts
         opts = opts.symbolize_keys
         @active_nodes        = opts.fetch(:active_nodes, nil).to_i
       end
