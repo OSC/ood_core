@@ -101,16 +101,27 @@ module OodCore
           # Get a ClusterInfo object containing information about the given cluster
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
+            def gpus_from_gres(gres)
+              gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
+            end
             node_cpu_info = call("sinfo", "-aho %A/%D/%C").strip.split('/')
-            gres_info = call("sinfo", "-Nhao %n/%G/%T").lines.uniq
-            gpu_total = gres_info.grep(/gpu:/).count
-            gpu_free = gres_info.grep(/gpu:/).grep(/idle/).count
+            gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
+            # First format property is dropped for some reason, so a comma is added before nodehost
+              # Only happens when running with call method. Calling through terminal works fine
+            gres_output = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length}")
+            active_gpus = 0
+            total_gpus = 0
+            gres_output.lines.uniq.each do |line|
+              line = line.split
+              total_gpus += gpus_from_gres(line[1])
+              active_gpus += gpus_from_gres(line[2])
+            end
             ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
                             total_nodes: node_cpu_info[2].to_i,
                             active_processors: node_cpu_info[3].to_i,
                             total_processors: node_cpu_info[6].to_i,
-                            active_gpu_nodes: gpu_total - gpu_free,
-                            total_gpu_nodes: gpu_total
+                            active_gpus: active_gpus,
+                            total_gpus: total_gpus
             )
           end
 

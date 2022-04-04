@@ -5,7 +5,7 @@ module OodCore
       using Refinements::HashExtensions
 
       attr_reader :active_nodes, :total_nodes, :active_processors, :total_processors, :active_gpu_nodes,
-                  :total_gpu_nodes
+                  :total_gpu_nodes, :active_gpus, :total_gpus
 
       def initialize(opts = {})
         opts = opts.transform_keys(&:to_sym)
@@ -13,8 +13,8 @@ module OodCore
         @total_nodes         = opts.fetch(:total_nodes, nil).to_i
         @active_processors   = opts.fetch(:active_processors, nil).to_i
         @total_processors    = opts.fetch(:total_processors, nil).to_i
-        @active_gpu_nodes    = opts.fetch(:active_gpu_nodes, nil).to_i
-        @total_gpu_nodes     = opts.fetch(:total_gpu_nodes, nil).to_i
+        @active_gpus         = opts.fetch(:active_gpus, nil).to_i
+        @total_gpus          = opts.fetch(:total_gpus, nil).to_i
       end
 
       def to_h
@@ -23,8 +23,8 @@ module OodCore
           total_nodes: total_nodes,
           active_processors: active_processors,
           total_processors: total_processors,
-          active_gpu_nodes: active_gpu_nodes,
-          total_gpu_nodes: total_gpu_nodes
+          active_gpus: active_gpus,
+          total_gpus: total_gpus
         }
       end
     end
