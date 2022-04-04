@@ -109,13 +109,9 @@ module OodCore
             # First format property is dropped for some reason, so a comma is added before nodehost
               # Only happens when running with call method. Calling through terminal works fine
             gres_output = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length}")
-            active_gpus = 0
-            total_gpus = 0
-            gres_output.lines.uniq.each do |line|
-              line = line.split
-              total_gpus += gpus_from_gres(line[1])
-              active_gpus += gpus_from_gres(line[2])
-            end
+            gres_lines = gres_output.lines.uniq.map(&:split)
+            total_gpus = gres_lines.sum { |line| gpus_from_gres(line[1]) }
+            active_gpus = gres_lines.sum { |line| gpus_from_gres(line[2]) }
             ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
                             total_nodes: node_cpu_info[2].to_i,
                             active_processors: node_cpu_info[3].to_i,
