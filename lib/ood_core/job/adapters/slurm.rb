@@ -110,14 +110,12 @@ module OodCore
               # Only happens when running with call method. Calling through terminal works fine
             gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length}")
                          .lines.uniq.map(&:split)
-            total_gpus = gres_lines.sum { |line| gpus_from_gres(line[1]) }
-            active_gpus = gres_lines.sum { |line| gpus_from_gres(line[2]) }
             ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
                             total_nodes: node_cpu_info[2].to_i,
                             active_processors: node_cpu_info[3].to_i,
                             total_processors: node_cpu_info[6].to_i,
-                            active_gpus: active_gpus,
-                            total_gpus: total_gpus
+                            active_gpus: gres_lines.sum { |line| gpus_from_gres(line[2]) },
+                            total_gpus: gres_lines.sum { |line| gpus_from_gres(line[1]) }
             )
           end
 
