@@ -106,8 +106,6 @@ module OodCore
             end
             node_cpu_info = call("sinfo", "-aho %A/%D/%C").strip.split('/')
             gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
-            # First format property is dropped for some reason, so a comma is added before nodehost
-              # Only happens when running with call method. Calling through terminal works fine
             gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length}")
                          .lines.uniq.map(&:split)
             ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
