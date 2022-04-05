@@ -1,6 +1,6 @@
 module OodCore
   module Job
-    # An object that contains details about the cluster's active and total nodes, processors, and gpu nodes
+    # An object that contains details about the cluster's active and total nodes, processors, and gpus
     class ClusterInfo
       using Refinements::HashExtensions
 

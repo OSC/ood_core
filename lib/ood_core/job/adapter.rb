@@ -33,11 +33,11 @@ module OodCore
         raise NotImplementedError, "subclass did not define #submit"
       end
 
-      # Retrieve the number of active and total cpus, nodes, and gpu nodes
+      # Retrieve the number of active and total cpus, nodes, and gpus
       # @abstract Subclass is expected to implement {#cluster_stats}
       # @raise [NotImplementedError] if subclass did not define {#cluster_stats}
       # @return [ClusterInfo] Object containing quantified statistics about the
-      #   cluster's active/total cpus, nodes, and gpu nodes
+      #   cluster's active/total cpus, nodes, and gpus
       def cluster_info
         raise NotImplementedError, "subclass did not define #cluster_stats"
       end
