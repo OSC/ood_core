@@ -306,6 +306,8 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j1.status).to eq("completed")
         expect(j1.status).to eq(OodCore::Job::Status.new(state: :completed))
         expect(j1.status.to_s).to eq("completed")
+        expect(j1.gpus).to eq(1)
+        expect(j1.gpu?).to eq(true)
 
         j2 = jobs.last
         expect(j2.id).to eq("4320602")
@@ -316,6 +318,8 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j2.status).to eq("queued")
         expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
         expect(j2.status.to_s).to eq("queued")
+        expect(j2.gpus).to eq(0)
+        expect(j2.gpu?).to eq(false)
       end
     end
 
@@ -1192,6 +1196,32 @@ describe OodCore::Job::Adapters::Slurm do
     context "when called" do
       it "does not raise an error" do
         expect { adapter.directive_prefix }.not_to raise_error
+      end
+    end
+  end
+
+  describe "#gpus_from_gres" do
+    batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: false)
+    adapter = OodCore::Job::Adapters::Slurm.new(slurm: batch)
+
+    context "when called" do
+      gres_cases = [
+        [nil, 0],
+        ["", 0],
+        ["N/A", 0],
+        ["gres:gpu:v100-32g:2", 2],
+        ["gres:gpu:v100-32g:2,gres:pfsdir:1", 2],
+        ["gres:third-thing:sub-thing:17,gres:gpu:v100-32g:2,gres:pfsdir:1", 2],
+        ["gres:third-thing:sub-thing:17,gres:pfsdir:1,gres:gpu:v100-32g:2", 2],
+        ["gres:gpu:v30-12g:2,gres:gpu:v31-32g:1", 3],
+        ["gres:gpu:1", 1],
+        ["gres:pfsdir:ess", 0]
+      ]
+      gres_cases.each do |gc| 
+        it "does not return the correct number of gpus when gres=\"#{gc[0]}\"" do
+          gpus = adapter.send(:gpus_from_gres, gc[0])
+          expect(gpus).to be(gc[1]);
+        end
       end
     end
   end

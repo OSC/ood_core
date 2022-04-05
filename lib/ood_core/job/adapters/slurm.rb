@@ -617,6 +617,10 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
+          def gpus_from_gres(gres)
+            gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
+          end
+
           # Parse hash describing Slurm job status
           def parse_job_info(v)
             allocated_nodes = parse_nodes(v[:node_list])
@@ -643,7 +647,8 @@ module OodCore
               cpu_time: nil,
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
-              native: v
+              native: v,
+              gpus: gpus_from_gres(v[:gres])
             )
           end
 
