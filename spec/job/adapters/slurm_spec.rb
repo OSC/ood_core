@@ -1218,7 +1218,8 @@ describe OodCore::Job::Adapters::Slurm do
         ["gres:pfsdir:ess", 0],
         ["gres/gpu:v100-32g=2", 2],
         ["gres/gpu:v100-32g=2,gres/gpu:v100-32g=4", 6],
-        ["gres/gpu:v100-32g=2,gres:gpu:1,gres/gpu:v100-32g=4", 7]
+        ["gres/gpu:v100-32g=2,gres:gpu:1,gres/gpu:v100-32g=4", 7],
+        ["gres/gpu:v100-32g=2,gres:pfsdir:1", 2]
       ]
       gres_cases.each do |gc| 
         it "does not return the correct number of gpus when gres=\"#{gc[0]}\"" do
