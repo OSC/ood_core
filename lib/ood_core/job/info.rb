@@ -65,6 +65,10 @@ module OodCore
       # @return [Object] native info
       attr_reader :native
 
+      # Number of gpus allocated for job
+      # @return [Integer, nil] allocated total number of gpus
+      attr_reader :gpus
+
       # List of job array child task statuses
       # @note only relevant for job arrays
       # @return [Array<Task>] tasks
@@ -86,11 +90,12 @@ module OodCore
       # @param dispatch_time [#to_i, nil] dispatch time
       # @param tasks [Array<Hash>] tasks e.g. { id: '12345.owens-batch', status: :running }
       # @param native [Object] native info
+      # @param gpus [#to_i, 0] allocated total number of gpus
       def initialize(id:, status:, allocated_nodes: [], submit_host: nil,
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
-                     dispatch_time: nil, native: nil, tasks: [],
+                     dispatch_time: nil, native: nil, gpus: 0, tasks: [],
                      **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
@@ -111,6 +116,7 @@ module OodCore
         @status = job_array_aggregate_status unless @tasks.empty?
 
         @native          = native
+        @gpus            = gpus            && gpus.to_i
       end
 
       # Create a new Info for a child task
@@ -147,8 +153,13 @@ module OodCore
           submission_time: submission_time,
           dispatch_time:   dispatch_time,
           native:          native,
+          gpus:            gpus,
           tasks: tasks
         }
+      end
+
+      def gpu?
+        gpus.positive?
       end
 
       # The comparison operator

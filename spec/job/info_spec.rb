@@ -32,6 +32,7 @@ describe OodCore::Job::Info do
   it { is_expected.to respond_to(:submission_time) }
   it { is_expected.to respond_to(:dispatch_time) }
   it { is_expected.to respond_to(:native) }
+  it { is_expected.to respond_to(:gpus) }
   it { is_expected.to respond_to(:to_h) }
   it { is_expected.to respond_to(:tasks) }
 
@@ -151,6 +152,12 @@ describe OodCore::Job::Info do
     it { is_expected.to eq("native") }
   end
 
+  describe "#gpus" do
+    subject { build_info(native: "gpus").native }
+
+    it { is_expected.to eq("gpus") }
+  end
+
   describe "#to_h" do
     subject { build_info.to_h }
 
@@ -170,6 +177,7 @@ describe OodCore::Job::Info do
     it { is_expected.to have_key(:submission_time) }
     it { is_expected.to have_key(:dispatch_time) }
     it { is_expected.to have_key(:native) }
+    it { is_expected.to have_key(:gpus) }
   end
 
   describe "#==" do
