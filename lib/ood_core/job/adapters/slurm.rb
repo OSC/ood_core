@@ -101,9 +101,6 @@ module OodCore
           # Get a ClusterInfo object containing information about the given cluster
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
-            def gpus_from_gres(gres)
-              gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
-            end
             node_cpu_info = call("sinfo", "-aho %A/%D/%C").strip.split('/')
             gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
             gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length}")
@@ -361,6 +358,10 @@ module OodCore
                   dispatch_time: :start_time
                 }.fetch(a, a)
               }.flatten
+            end
+
+            def gpus_from_gres(gres)
+              gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
             end
         end
 
@@ -642,10 +643,6 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
-          def gpus_from_gres(gres)
-            gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
-          end
-
           # Parse hash describing Slurm job status
           def parse_job_info(v)
             allocated_nodes = parse_nodes(v[:node_list])
@@ -673,7 +670,7 @@ module OodCore
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v,
-              gpus: gpus_from_gres(v[:gres])
+              gpus: @batch.gpus_from_gres(v[:gres])
             )
           end
 
