@@ -475,8 +475,8 @@ module OodCore
 
         # Retrieve info about active and total cpus, gpus, and nodes
         # @return [Hash] information about cluster usage
-        def cluster_info()
-          @slurm.get_cluster_info()
+        def cluster_info
+          @slurm.get_cluster_info
         end
 
         # Retrieve info for all jobs from the resource manager
