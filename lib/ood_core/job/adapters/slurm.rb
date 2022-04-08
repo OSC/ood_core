@@ -36,6 +36,13 @@ module OodCore
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions
 
+        # Get integer representing the number of gpus used by a node or job,
+        # calculated from gres string
+        # @return [Integer] the number of gpus in gres
+        def gpus_from_gres(gres)
+          gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
+        end
+
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
@@ -359,10 +366,6 @@ module OodCore
                 }.fetch(a, a)
               }.flatten
             end
-
-            def gpus_from_gres(gres)
-              gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
-            end
         end
 
         # Mapping of state codes for Slurm
@@ -670,7 +673,7 @@ module OodCore
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v,
-              gpus: @batch.gpus_from_gres(v[:gres])
+              gpus: gpus_from_gres(v[:gres])
             )
           end
 
