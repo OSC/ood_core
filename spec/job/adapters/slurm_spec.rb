@@ -1223,7 +1223,7 @@ describe OodCore::Job::Adapters::Slurm do
       ]
       gres_cases.each do |gc| 
         it "does not return the correct number of gpus when gres=\"#{gc[0]}\"" do
-          gpus = adapter.send(:gpus_from_gres, gc[0])
+          gpus = adapter.gpus_from_gres(gc[0]);
           expect(gpus).to be(gc[1]);
         end
       end

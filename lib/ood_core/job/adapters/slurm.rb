@@ -36,6 +36,13 @@ module OodCore
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions
 
+        # Get integer representing the number of gpus used by a node or job,
+        # calculated from gres string
+        # @return [Integer] the number of gpus in gres
+        def gpus_from_gres(gres)
+          gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
+        end
+
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
@@ -96,6 +103,22 @@ module OodCore
             @bin_overrides        = bin_overrides
             @submit_host          = submit_host.to_s
             @strict_host_checking = strict_host_checking
+          end
+
+          # Get a ClusterInfo object containing information about the given cluster
+          # @return [ClusterInfo] object containing cluster details
+          def get_cluster_info
+            node_cpu_info = call("sinfo", "-aho %A/%D/%C").strip.split('/')
+            gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
+            gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length}")
+                         .lines.uniq.map(&:split)
+            ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
+                            total_nodes: node_cpu_info[2].to_i,
+                            active_processors: node_cpu_info[3].to_i,
+                            total_processors: node_cpu_info[6].to_i,
+                            active_gpus: gres_lines.sum { |line| gpus_from_gres(line[2]) },
+                            total_gpus: gres_lines.sum { |line| gpus_from_gres(line[1]) }
+            )
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
@@ -454,6 +477,12 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        # Retrieve info about active and total cpus, gpus, and nodes
+        # @return [Hash] information about cluster usage
+        def cluster_info
+          @slurm.get_cluster_info
+        end
+
         # Retrieve info for all jobs from the resource manager
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
@@ -615,10 +644,6 @@ module OodCore
           # Determine state from Slurm state code
           def get_state(st)
             STATE_MAP.fetch(st, :undetermined)
-          end
-
-          def gpus_from_gres(gres)
-            gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
           end
 
           # Parse hash describing Slurm job status
