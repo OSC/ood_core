@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-## [0.19.1] - 06-03-2022
+## [0.20.0] - 06-03-2022
 
+- Added cluster_info in [752](https://github.com/OSC/ood_core/pull/752)
+- Added uses_gpu flag to Job Info class in [753](https://github.com/OSC/ood_core/pull/753)
+- Added gpus_from_gres gres/gpu tests in [754](https://github.com/OSC/ood_core/pull/754)
 - Support Ruby 3 in [759](https://github.com/OSC/ood_core/pull/759)
 
 ## [0.19.0] - 02-03-2022
