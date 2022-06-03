@@ -28,49 +28,49 @@ describe OodCore::Job::Adapters::CCQ do
   let(:ccqstat_output) { File.read('spec/fixtures/output/ccq/ccqstat') }
   let(:expected_ccqstat_info) {
     [
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432201',
         job_name: 'ccq_ood_script_20200701-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'completed'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432202',
         job_name: 'ccq_ood_script_20200702-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'running'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432203',
         job_name: 'ccq_ood_script_20200703-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'queued'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432204',
         job_name: 'ccq_ood_script_20200704-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'queued'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432205',
         job_name: 'ccq_ood_script_20200705-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'suspended'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432206',
         job_name: 'ccq_ood_script_20200706-29604-1lcxuca',
         job_owner: 'jeff',
         status: 'queued'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432207',
         job_name: 'short_name',
         job_owner: 'jeff',
         status: 'running'
       }),
-      OodCore::Job::Info.new({
+      OodCore::Job::Info.new(**{
         id: '432208',
         job_name: 'name with spaces',
         job_owner: 'jeff',
@@ -134,9 +134,9 @@ describe OodCore::Job::Adapters::CCQ do
   describe "#submit" do
     def build_script(opts = {})
       OodCore::Job::Script.new(
-        {
+        **{
           content: "echo 'hello world'"
-        }.merge opts
+        }.merge(opts)
       )
     end
 

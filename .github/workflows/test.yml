@@ -10,8 +10,15 @@ on:
 
 jobs:
   tests:
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7.1"]
+        bundler: ["2.1.4"]
+        include:
+          - ruby: "3.0.2"
+            bundler: "2.3.5"
     runs-on: ubuntu-latest
-
     steps:
       - name: checkout
         uses: actions/checkout@v2
@@ -19,9 +26,8 @@ jobs:
       - name: Setup Ruby using Bundler
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: "2.7.1"
-          bundler-cache: true
-          bundler: "2.1.4"
+          ruby-version: ${{ matrix.ruby }}
+          bundler: ${{ matrix.bundler }}
 
       - name: install gems
         run: bundle install

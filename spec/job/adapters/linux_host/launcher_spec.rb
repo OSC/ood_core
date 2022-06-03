@@ -5,7 +5,7 @@ require "ood_core/job/adapters/linux_host/launcher"
 
 describe OodCore::Job::Adapters::LinuxHost::Launcher do
     def build_script(opts = {})
-        OodCore::Job::Script.new({
+        OodCore::Job::Script.new(**{
             accounting_id: nil,
             args: nil,
             content: content,
@@ -28,7 +28,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             submit_as_hold: nil,
             wall_time: 360,
             workdir: '/users/PZS0002/mrodgers/dev/ood_core'
-        }.merge opts)
+        }.merge(opts))
     end
 
     def content

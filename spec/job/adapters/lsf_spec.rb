@@ -23,9 +23,9 @@ describe OodCore::Job::Adapters::Lsf do
   describe "#submit" do
     def build_script(opts = {})
       OodCore::Job::Script.new(
-        {
+        **{
           content: content
-        }.merge opts
+        }.merge(opts)
       )
     end
 

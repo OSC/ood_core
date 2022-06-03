@@ -158,7 +158,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
     end
 
   describe "#default_env" do
-    subject(:batch) { described_class.new(config).default_env }
+    subject(:batch) { described_class.new(**config).default_env }
 
     context "when {}" do
       let(:config) { {}  }
@@ -197,7 +197,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
   end
 
   describe "multinode" do
-    subject(:batch) { described_class.new(config).cluster_args }
+    subject(:batch) { described_class.new(**config).cluster_args }
     context "when cluster not set" do
       let(:config) {
         {
@@ -231,7 +231,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         batch = OodCore::Job::Adapters::Lsf::Batch.new
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
-        batch.submit_string(str: script.content)
+        batch.submit_string(script.content)
         expect(Open3).to have_received(:capture3).with(anything, "bsub", any_args)
       end
     end
@@ -241,7 +241,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         batch = OodCore::Job::Adapters::Lsf::Batch.new(bindir: "/bin", bin_overrides: {})
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
-        batch.submit_string(str: script.content)
+        batch.submit_string(script.content)
         expect(Open3).to have_received(:capture3).with(anything, "/bin/bsub", any_args)
       end
     end
@@ -251,7 +251,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         batch = OodCore::Job::Adapters::Lsf::Batch.new(bin_overrides: {"bsub" => "not_bsub"})
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
-        batch.submit_string(str: script.content)
+        batch.submit_string(script.content)
         expect(Open3).to have_received(:capture3).with(anything, "not_bsub", any_args)
       end
     end
@@ -266,7 +266,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         batch = OodCore::Job::Adapters::Lsf::Batch.new
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
-        batch.submit_string(str: script.content)
+        batch.submit_string(script.content)
         expect(Open3).to have_received(:capture3).with(anything, "bsub", any_args)
       end
     end
@@ -276,7 +276,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         batch = OodCore::Job::Adapters::Lsf::Batch.new(submit_host: 'owens.osc.edu')
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
-        batch.submit_string(str: script.content)
+        batch.submit_string(script.content)
         expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'bsub', any_args)
       end
     end
@@ -286,7 +286,7 @@ JOBID      USER    STAT  QUEUE      FROM_HOST   EXEC_HOST   JOB_NAME   SUBMIT_TI
         batch = OodCore::Job::Adapters::Lsf::Batch.new(submit_host: 'owens.osc.edu', strict_host_checking: false)
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
-        batch.submit_string(str: script.content)
+        batch.submit_string(script.content)
         expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'bsub', any_args)
       end
     end

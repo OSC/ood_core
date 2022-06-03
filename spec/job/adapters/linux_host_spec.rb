@@ -144,9 +144,9 @@ describe OodCore::Job::Adapters::LinuxHost do
     describe "#submit" do
         def build_script(opts = {})
           OodCore::Job::Script.new(
-            {
+            **{
               content: content
-            }.merge opts
+            }.merge(opts)
           )
         end
 

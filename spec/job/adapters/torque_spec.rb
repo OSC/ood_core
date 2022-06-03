@@ -35,9 +35,9 @@ describe OodCore::Job::Adapters::Torque do
   describe "#submit" do
     def build_script(opts = {})
       OodCore::Job::Script.new(
-        {
+        **{
           content: content
-        }.merge opts
+        }.merge(opts)
       )
     end
 
@@ -260,10 +260,10 @@ describe OodCore::Job::Adapters::Torque do
     context "when native is a Hash" do
       def build_script(opts = {})
         OodCore::Job::Script.new(
-          {
+          **{
             content: content,
             native: {}
-          }.merge opts
+          }.merge(opts)
         )
       end
 
@@ -526,7 +526,7 @@ describe OodCore::Job::Adapters::Torque do
   describe "#info" do
     def job_info(opts = {})
       OodCore::Job::Info.new(
-        job_info_hash.merge opts
+        **job_info_hash.merge(opts)
       )
     end
 

@@ -282,9 +282,9 @@ EOS
   describe "#submit" do
     def build_script(opts = {})
       OodCore::Job::Script.new(
-        {
+        **{
           content: nil
-        }.merge opts
+        }.merge(opts)
       )
     end
 
@@ -1077,7 +1077,7 @@ EOS
     it "handles not finding the pod" do
       id = "jupyter-3o4n6z3e"
       batch = not_found_batch(id)
-      completed_info = OodCore::Job::Info.new({ id: id, status: 'completed' })
+      completed_info = OodCore::Job::Info.new(**{ id: id, status: 'completed' })
       expect(batch.info(id)).to eq(completed_info)
     end
   end

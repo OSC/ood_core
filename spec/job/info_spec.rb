@@ -3,10 +3,10 @@ require "spec_helper"
 describe OodCore::Job::Info do
   def build_info(opts = {})
     described_class.new(
-      {
+      **{
         id: id,
         status: status
-      }.merge opts
+      }.merge(opts)
     )
   end
 
