@@ -16,7 +16,7 @@ module OodCore
       # @option config [#to_h] :bin_overrides ({}) Optional overrides to LSF client executables
       # @option config [#to_s] :submit_host ('') Host to submit commands to
       def self.build_lsf(config)
-        batch = Adapters::Lsf::Batch.new(config.to_h.symbolize_keys)
+        batch = Adapters::Lsf::Batch.new(**config.to_h.symbolize_keys)
         Adapters::Lsf.new(batch: batch)
       end
     end

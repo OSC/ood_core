@@ -93,7 +93,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def info(id)
     pod_json = safe_call('get', 'pod', id)
-    return OodCore::Job::Info.new({ id: id, status: 'completed' }) if pod_json.empty?
+    return OodCore::Job::Info.new(**{ id: id, status: 'completed' }) if pod_json.empty?
 
     service_json = safe_call('get', 'service', service_name(id))
     secret_json = safe_call('get', 'secret', secret_name(id))

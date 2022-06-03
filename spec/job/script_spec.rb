@@ -3,9 +3,9 @@ require "spec_helper"
 describe OodCore::Job::Script do
   def build_script(opts = {})
     described_class.new(
-      {
+      **{
         content: content
-      }.merge opts
+      }.merge(opts)
     )
   end
 

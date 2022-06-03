@@ -3,10 +3,10 @@ require "spec_helper"
 describe OodCore::Job::NodeInfo do
   def build_ninfo(opts = {})
     described_class.new(
-      {
+      **{
         name: name,
         procs: procs
-      }.merge opts
+      }.merge(opts)
     )
   end
 

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.19.1] - 06-03-2022
+
+- Support Ruby 3 in [759](https://github.com/OSC/ood_core/pull/759)
+
 ## [0.19.0] - 02-03-2022
 
 ### Added

@@ -135,7 +135,8 @@ describe OodCore::Job::Adapters::Lsf::Helper do
   describe "#batch_submit_args" do
     # get batch_submit_args for the given script attributes
     def args_for(attrs = {})
-      helper.batch_submit_args(OodCore::Job::Script.new({ content: "my job" }.merge(attrs)))
+      a = { content: "my job" }.merge(attrs)
+      helper.batch_submit_args(OodCore::Job::Script.new(**a))
     end
 
     it "with :accounting_id" do

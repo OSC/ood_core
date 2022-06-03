@@ -99,7 +99,7 @@ module OodCore
                      **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
-        @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(n.to_h) }
+        @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(**n.to_h) }
         @submit_host     = submit_host     && submit_host.to_s
         @job_name        = job_name        && job_name.to_s
         @job_owner       = job_owner       && job_owner.to_s

@@ -228,7 +228,7 @@ module OodCore
           data_hash[:submission_time] = raw['dateSubmitted'].to_i
           data_hash[:queue_name] = raw['criteriaPriority']
 
-          Info.new(data_hash)
+          Info.new(**data_hash)
         end
 
         # extended data is just lines of 'key: value' value, so parse
@@ -242,7 +242,7 @@ module OodCore
 
           data.to_s.lines.drop(1).each do |line|
             match_data = ccqstat_regex.match(line)
-            infos << Info.new(ccqstat_match_to_hash(match_data)) if valid_ccqstat_match?(match_data)
+            infos << Info.new(**ccqstat_match_to_hash(match_data)) if valid_ccqstat_match?(match_data)
           end
 
           infos

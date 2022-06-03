@@ -31,7 +31,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
 
     pod_hash.deep_merge!(service_hash)
     pod_hash.deep_merge!(secret_hash)
-    OodCore::Job::Adapters::Kubernetes::K8sJobInfo.new(pod_hash)
+    OodCore::Job::Adapters::Kubernetes::K8sJobInfo.new(**pod_hash)
   rescue NoMethodError
     raise K8sDataError, "unable to read data correctly from json"
   end
