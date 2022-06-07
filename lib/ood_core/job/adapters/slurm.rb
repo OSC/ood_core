@@ -39,7 +39,7 @@ module OodCore
         # Get integer representing the number of gpus used by a node or job,
         # calculated from gres string
         # @return [Integer] the number of gpus in gres
-        def gpus_from_gres(gres)
+        def self.gpus_from_gres(gres)
           gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
         end
 
@@ -116,8 +116,8 @@ module OodCore
                             total_nodes: node_cpu_info[2].to_i,
                             active_processors: node_cpu_info[3].to_i,
                             total_processors: node_cpu_info[6].to_i,
-                            active_gpus: gres_lines.sum { |line| gpus_from_gres(line[2]) },
-                            total_gpus: gres_lines.sum { |line| gpus_from_gres(line[1]) }
+                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) },
+                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }
             )
           end
 
