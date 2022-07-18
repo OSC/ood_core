@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: OodCore::Job::Adapters::Kubernetes::Batch
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "OodCore::Job::Adapters::Kubernetes::Batch";
+  relpath = '../../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../../_index.html">Index (B)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Kubernetes.html" title="OodCore::Job::Adapters::Kubernetes (class)">Kubernetes</a></span></span>
+     &raquo; 
+    <span class="title">Batch</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: OodCore::Job::Adapters::Kubernetes::Batch
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">OodCore::Job::Adapters::Kubernetes::Batch</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/kubernetes/batch.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Batch/Error.html" title="OodCore::Job::Adapters::Kubernetes::Batch::Error (class)">Error</a></span>, <span class='object_link'><a href="Batch/NotFoundError.html" title="OodCore::Job::Adapters::Kubernetes::Batch::NotFoundError (class)">NotFoundError</a></span>
+    
+  
+</p>
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#all_namespaces-instance_method" title="#all_namespaces (instance method)">#<strong>all_namespaces</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute all_namespaces.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#auto_supplemental_groups-instance_method" title="#auto_supplemental_groups (instance method)">#<strong>auto_supplemental_groups</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute auto_supplemental_groups.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bin-instance_method" title="#bin (instance method)">#<strong>bin</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute bin.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#cluster-instance_method" title="#cluster (instance method)">#<strong>cluster</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute cluster.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#config_file-instance_method" title="#config_file (instance method)">#<strong>config_file</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute config_file.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#context-instance_method" title="#context (instance method)">#<strong>context</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute context.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#helper-instance_method" title="#helper (instance method)">#<strong>helper</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute helper.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#mounts-instance_method" title="#mounts (instance method)">#<strong>mounts</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute mounts.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#namespace_prefix-instance_method" title="#namespace_prefix (instance method)">#<strong>namespace_prefix</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute namespace_prefix.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#username_prefix-instance_method" title="#username_prefix (instance method)">#<strong>username_prefix</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute username_prefix.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#configure_kube!-class_method" title="configure_kube! (class method)">.<strong>configure_kube!</strong>(config)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#default_auth-class_method" title="default_auth (class method)">.<strong>default_auth</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#default_config_file-class_method" title="default_config_file (class method)">.<strong>default_config_file</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#default_server-class_method" title="default_server (class method)">.<strong>default_server</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#delete-instance_method" title="#delete (instance method)">#<strong>delete</strong>(id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#generate_id-instance_method" title="#generate_id (instance method)">#<strong>generate_id</strong>(name)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#info-instance_method" title="#info (instance method)">#<strong>info</strong>(id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#info_all-instance_method" title="#info_all (instance method)">#<strong>info_all</strong>(attrs: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#info_all_each-instance_method" title="#info_all_each (instance method)">#<strong>info_all_each</strong>(attrs: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#info_where_owner-instance_method" title="#info_where_owner (instance method)">#<strong>info_where_owner</strong>(owner, attrs: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#info_where_owner_each-instance_method" title="#info_where_owner_each (instance method)">#<strong>info_where_owner_each</strong>(owner, attrs: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(options = {})  &#x21d2; Batch </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Batch.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#resource_file-instance_method" title="#resource_file (instance method)">#<strong>resource_file</strong>(resource_type = &#39;pod&#39;)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#status-instance_method" title="#status (instance method)">#<strong>status</strong>(id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#submit-instance_method" title="#submit (instance method)">#<strong>submit</strong>(script, after: [], afterok: [], afternotok: [], afterany: [])  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(options = {})  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::Kubernetes::Batch (class)">Batch</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Batch.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_options'>options</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+
+  <span class='ivar'>@config_file</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:config_file</span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_default_config_file'>default_config_file</span><span class='rparen'>)</span>
+  <span class='ivar'>@bin</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/bin/kubectl</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@cluster</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:cluster</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>open-ondemand</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@mounts</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:mounts</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_m'>m</span><span class='op'>|</span> <span class='id identifier rubyid_m'>m</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span> <span class='rbrace'>}</span>
+  <span class='ivar'>@all_namespaces</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:all_namespaces</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rparen'>)</span>
+  <span class='ivar'>@username_prefix</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:username_prefix</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@namespace_prefix</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:namespace_prefix</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='ivar'>@auto_supplemental_groups</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:auto_supplemental_groups</span><span class='comma'>,</span> <span class='kw'>false</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_tmp_ctx'>tmp_ctx</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:context</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@context</span> <span class='op'>=</span> <span class='id identifier rubyid_tmp_ctx'>tmp_ctx</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_oidc_auth?'>oidc_auth?</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:auth</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='ivar'>@cluster</span> <span class='op'>:</span> <span class='id identifier rubyid_tmp_ctx'>tmp_ctx</span>
+
+  <span class='ivar'>@helper</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Kubernetes.html" title="OodCore::Job::Adapters::Kubernetes (class)">Kubernetes</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Helper.html" title="OodCore::Job::Adapters::Kubernetes::Helper (class)">Helper</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../Kubernetes.html#initialize-instance_method" title="OodCore::Job::Adapters::Kubernetes#initialize (method)">new</a></span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="all_namespaces-instance_method">
+  
+    #<strong>all_namespaces</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute all_namespaces.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_all_namespaces'>all_namespaces</span>
+  <span class='ivar'>@all_namespaces</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="auto_supplemental_groups-instance_method">
+  
+    #<strong>auto_supplemental_groups</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute auto_supplemental_groups.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+17
+18
+19</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 17</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_auto_supplemental_groups'>auto_supplemental_groups</span>
+  <span class='ivar'>@auto_supplemental_groups</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="bin-instance_method">
+  
+    #<strong>bin</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute bin.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bin'>bin</span>
+  <span class='ivar'>@bin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="cluster-instance_method">
+  
+    #<strong>cluster</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute cluster.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_cluster'>cluster</span>
+  <span class='ivar'>@cluster</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="config_file-instance_method">
+  
+    #<strong>config_file</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute config_file.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_config_file'>config_file</span>
+  <span class='ivar'>@config_file</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="context-instance_method">
+  
+    #<strong>context</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute context.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_context'>context</span>
+  <span class='ivar'>@context</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="helper-instance_method">
+  
+    #<strong>helper</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute helper.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_helper'>helper</span>
+  <span class='ivar'>@helper</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="mounts-instance_method">
+  
+    #<strong>mounts</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute mounts.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_mounts'>mounts</span>
+  <span class='ivar'>@mounts</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="namespace_prefix-instance_method">
+  
+    #<strong>namespace_prefix</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute namespace_prefix.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 16</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_namespace_prefix'>namespace_prefix</span>
+  <span class='ivar'>@namespace_prefix</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="username_prefix-instance_method">
+  
+    #<strong>username_prefix</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute username_prefix.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 16</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_username_prefix'>username_prefix</span>
+  <span class='ivar'>@username_prefix</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="configure_kube!-class_method">
+  
+    .<strong>configure_kube!</strong>(config)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+133
+134
+135
+136
+137
+138</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 133</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_configure_kube!'>configure_kube!</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_k'>k</span> <span class='op'>=</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+  <span class='comment'># TODO: probably shouldn&#39;t be using send here
+</span>  <span class='id identifier rubyid_k'>k</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:set_cluster</span><span class='comma'>,</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:server</span><span class='comma'>,</span> <span class='id identifier rubyid_default_server'>default_server</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_k'>k</span><span class='period'>.</span><span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='symbol'>:configure_auth</span><span class='comma'>,</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:auth</span><span class='comma'>,</span> <span class='id identifier rubyid_default_auth'>default_auth</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="default_auth-class_method">
+  
+    .<strong>default_auth</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+120
+121
+122
+123
+124</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 120</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_default_auth'>default_auth</span>
+  <span class='lbrace'>{</span>
+    <span class='label'>type:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>managed</span><span class='tstring_end'>&#39;</span></span>
+  <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="default_config_file-class_method">
+  
+    .<strong>default_config_file</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+116
+117
+118</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 116</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_default_config_file'>default_config_file</span>
+  <span class='lparen'>(</span><span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>KUBECONFIG</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_home'>home</span><span class='embexpr_end'>}</span><span class='tstring_content'>/.kube/config</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="default_server-class_method">
+  
+    .<strong>default_server</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+126
+127
+128
+129
+130
+131</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 126</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_default_server'>default_server</span>
+  <span class='lbrace'>{</span>
+    <span class='label'>endpoint:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>https://localhost:8080</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='label'>cert_authority_file:</span> <span class='kw'>nil</span>
+  <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="delete-instance_method">
+  
+    #<strong>delete</strong>(id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+108
+109
+110
+111
+112
+113</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 108</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pod</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>service</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_service_name'>service_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>secret</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_secret_name'>secret_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>configmap</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_configmap_name'>configmap_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="generate_id-instance_method">
+  
+    #<strong>generate_id</strong>(name)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+53
+54
+55
+56</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 53</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_generate_id'>generate_id</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='comment'># 2_821_109_907_456 = 36**8
+</span>  <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span><span class='period'>.</span><span class='id identifier rubyid_tr'>tr</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-</span><span class='tstring_end'>&#39;</span></span> <span class='op'>+</span> <span class='id identifier rubyid_rand'>rand</span><span class='lparen'>(</span><span class='int'>2_821_109_907_456</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='int'>36</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="info-instance_method">
+  
+    #<strong>info</strong>(id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+94
+95
+96
+97
+98
+99
+100
+101
+102</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 94</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_pod_json'>pod_json</span> <span class='op'>=</span> <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>get</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pod</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='const'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../Info.html#initialize-instance_method" title="OodCore::Job::Info#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='op'>**</span><span class='lbrace'>{</span> <span class='label'>id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>completed</span><span class='tstring_end'>&#39;</span></span> <span class='rbrace'>}</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_pod_json'>pod_json</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+
+  <span class='id identifier rubyid_service_json'>service_json</span> <span class='op'>=</span> <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>get</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>service</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_service_name'>service_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_secret_json'>secret_json</span> <span class='op'>=</span> <span class='id identifier rubyid_safe_call'>safe_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>get</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>secret</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_secret_name'>secret_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_helper'>helper</span><span class='period'>.</span><span class='id identifier rubyid_info_from_json'>info_from_json</span><span class='lparen'>(</span><span class='label'>pod_json:</span> <span class='id identifier rubyid_pod_json'>pod_json</span><span class='comma'>,</span> <span class='label'>service_json:</span> <span class='id identifier rubyid_service_json'>service_json</span><span class='comma'>,</span> <span class='label'>secret_json:</span> <span class='id identifier rubyid_secret_json'>secret_json</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="info_all-instance_method">
+  
+    #<strong>info_all</strong>(attrs: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 58</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='ivar'>@all_namespaces</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_base_cmd'>base_cmd</span><span class='embexpr_end'>}</span><span class='tstring_content'> -o json get pods --all-namespaces</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>else</span>
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_namespaced_cmd'>namespaced_cmd</span><span class='embexpr_end'>}</span><span class='tstring_content'> -o json get pods</span><span class='tstring_end'>&quot;</span></span>
+        <span class='kw'>end</span>
+
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_all_pods_to_info'>all_pods_to_info</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="info_all_each-instance_method">
+  
+    #<strong>info_all_each</strong>(attrs: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+78
+79
+80
+81
+82
+83
+84</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 78</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_info_all_each'>info_all_each</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_to_enum'>to_enum</span><span class='lparen'>(</span><span class='symbol'>:info_all_each</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+
+  <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_job'>job</span><span class='op'>|</span>
+    <span class='kw'>yield</span> <span class='id identifier rubyid_job'>job</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="info_where_owner-instance_method">
+  
+    #<strong>info_where_owner</strong>(owner, attrs: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+69
+70
+71
+72
+73
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_owner'>owner</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
+
+  <span class='comment'># must at least have job_owner to filter by job_owner
+</span>  <span class='id identifier rubyid_attrs'>attrs</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span> <span class='op'>|</span> <span class='lbracket'>[</span><span class='symbol'>:job_owner</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_info'>info</span><span class='op'>|</span> <span class='id identifier rubyid_owner'>owner</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span> <span class='id identifier rubyid_info'>info</span><span class='period'>.</span><span class='id identifier rubyid_job_owner'>job_owner</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="info_where_owner_each-instance_method">
+  
+    #<strong>info_where_owner_each</strong>(owner, attrs: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+86
+87
+88
+89
+90
+91
+92</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 86</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner_each'>info_where_owner_each</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_to_enum'>to_enum</span><span class='lparen'>(</span><span class='symbol'>:info_where_owner_each</span><span class='comma'>,</span> <span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
+
+  <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_job'>job</span><span class='op'>|</span>
+    <span class='kw'>yield</span> <span class='id identifier rubyid_job'>job</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="resource_file-instance_method">
+  
+    #<strong>resource_file</strong>(resource_type = &#39;pod&#39;)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+37
+38
+39</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 37</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_resource_file'>resource_file</span><span class='lparen'>(</span><span class='id identifier rubyid_resource_type'>resource_type</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pod</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_dirname'>dirname</span><span class='lparen'>(</span><span class='kw'>__FILE__</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/templates/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_resource_type'>resource_type</span><span class='embexpr_end'>}</span><span class='tstring_content'>.yml.erb</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="status-instance_method">
+  
+    #<strong>status</strong>(id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+104
+105
+106</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 104</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="submit-instance_method">
+  
+    #<strong>submit</strong>(script, after: [], afterok: [], afternotok: [], afterany: [])  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>ArgumentError</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/batch.rb', line 41</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Must specify the script</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='id identifier rubyid_resource_yml'>resource_yml</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_generate_id_yml'>generate_id_yml</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='op'>!</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_workdir'>workdir</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>&amp;&amp;</span> <span class='const'>Dir</span><span class='period'>.</span><span class='id identifier rubyid_exist?'>exist?</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_workdir'>workdir</span><span class='rparen'>)</span>
+    <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_workdir'>workdir</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>pod.yml</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>w</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span> <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span> <span class='id identifier rubyid_resource_yml'>resource_yml</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_formatted_ns_cmd'>formatted_ns_cmd</span><span class='embexpr_end'>}</span><span class='tstring_content'> create -f -</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>stdin:</span> <span class='id identifier rubyid_resource_yml'>resource_yml</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_id'>id</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 18 14:41:09 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>

@@ -1,0 +1,3488 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: OodCore::Job::Adapters::Torque::Batch
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "OodCore::Job::Adapters::Torque::Batch";
+  relpath = '../../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../../_index.html">Index (B)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Torque.html" title="OodCore::Job::Adapters::Torque (class)">Torque</a></span></span>
+     &raquo; 
+    <span class="title">Batch</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: OodCore::Job::Adapters::Torque::Batch
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">OodCore::Job::Adapters::Torque::Batch</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/torque/batch.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Object used for simplified communication with a batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Batch/Error.html" title="OodCore::Job::Adapters::Torque::Batch::Error (class)">Error</a></span>
+    
+  
+</p>
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bin-instance_method" title="#bin (instance method)">#<strong>bin</strong>  &#x21d2; Pathname </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The path to the Torque client installation binaries.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#bin_overrides-instance_method" title="#bin_overrides (instance method)">#<strong>bin_overrides</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Optional overrides for Torque client executables.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#host-instance_method" title="#host (instance method)">#<strong>host</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The host of the Torque batch server.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#lib-instance_method" title="#lib (instance method)">#<strong>lib</strong>  &#x21d2; Pathname </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The path to the Torque client installation libraries.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#strict_host_checking-instance_method" title="#strict_host_checking (instance method)">#<strong>strict_host_checking</strong>  &#x21d2; Bool </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Determines whether to use strict_host_checking for ssh.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#submit_host-instance_method" title="#submit_host (instance method)">#<strong>submit_host</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The login node where job is submitted via ssh.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#==-instance_method" title="#== (instance method)">#<strong>==</strong>(other)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The comparison operator.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#connect-instance_method" title="#connect (instance method)">#<strong>connect</strong> {|cid| ... } &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Creates a connection to batch server and calls block in context of this connection.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#delete_job-instance_method" title="#delete_job (instance method)">#<strong>delete_job</strong>(id)  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Delete a specified job from batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#eql%3F-instance_method" title="#eql? (instance method)">#<strong>eql?</strong>(other)  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Checks whether two batch server objects are completely identical to each other.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_job-instance_method" title="#get_job (instance method)">#<strong>get_job</strong>(id, **kwargs)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get info for given batch server’s job.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_jobs-instance_method" title="#get_jobs (instance method)">#<strong>get_jobs</strong>(id: &#39;&#39;, filters: [])  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a list of hashes of the jobs on the batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_node-instance_method" title="#get_node (instance method)">#<strong>get_node</strong>(id, **kwargs)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get info for given batch server’s node.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_nodes-instance_method" title="#get_nodes (instance method)">#<strong>get_nodes</strong>(id: &#39;&#39;, filters: [])  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a list of hashes of the nodes on the batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_queue-instance_method" title="#get_queue (instance method)">#<strong>get_queue</strong>(id, **kwargs)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get info for given batch server’s queue.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_queues-instance_method" title="#get_queues (instance method)">#<strong>get_queues</strong>(id: &#39;&#39;, filters: [])  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a list of hashes of the queues on the batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#get_status-instance_method" title="#get_status (instance method)">#<strong>get_status</strong>(filters: [])  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a hash with status info for this batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hash-instance_method" title="#hash (instance method)">#<strong>hash</strong>  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Generates a hash value for this object.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#hold_job-instance_method" title="#hold_job (instance method)">#<strong>hold_job</strong>(id, type: :u)  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Put specified job on hold Possible hold types:   :u =&gt; Available to the owner of the job, the batch operator and the batch administrator   :o =&gt; Available to the batch operator and the batch administrator   :s =&gt; Available to the batch administrator.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(host:, submit_host: &quot;&quot;, strict_host_checking: true, lib: &quot;&quot;, bin: &quot;&quot;, bin_overrides: {}, **_)  &#x21d2; Batch </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Batch.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#release_job-instance_method" title="#release_job (instance method)">#<strong>release_job</strong>(id, type: :u)  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Release a specified job that is on hold Possible hold types:   :u =&gt; Available to the owner of the job, the batch operator and the batch administrator   :o =&gt; Available to the batch operator and the batch administrator   :s =&gt; Available to the batch administrator.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#select_jobs-instance_method" title="#select_jobs (instance method)">#<strong>select_jobs</strong>(attribs: [])  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Get a list of hashes of the selected jobs on the batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#submit-instance_method" title="#submit (instance method)">#<strong>submit</strong>(content, args: [], env: {}, chdir: nil)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Submit a script expanded as a string to the batch server.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public deprecated">
+  <span class="summary_signature">
+    
+      <a href="#submit_script-instance_method" title="#submit_script (instance method)">#<strong>submit_script</strong>(script, queue: nil, headers: {}, resources: {}, envvars: {}, qsub: true)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  <span class="deprecated note title">deprecated</span>
+  
+
+  
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
+<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public deprecated">
+  <span class="summary_signature">
+    
+      <a href="#submit_string-instance_method" title="#submit_string (instance method)">#<strong>submit_string</strong>(string, **kwargs)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  <span class="deprecated note title">deprecated</span>
+  
+
+  
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
+<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#to_h-instance_method" title="#to_h (instance method)">#<strong>to_h</strong>  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Convert object to hash.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(host:, submit_host: &quot;&quot;, strict_host_checking: true, lib: &quot;&quot;, bin: &quot;&quot;, bin_overrides: {}, **_)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::Torque::Batch (class)">Batch</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of Batch.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>host</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the batch server host</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>submit_host</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&quot;&quot;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the login node</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>strict_host_checking</span>
+      
+      
+        <span class='type'>(<tt>bool</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>use strict host checking when ssh to submit_host</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>lib</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&quot;&quot;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to FFI installation libraries</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bin</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&quot;&quot;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to FFI installation binaries</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53
+54
+55
+56
+57
+58</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>host:</span><span class='comma'>,</span> <span class='label'>submit_host:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>strict_host_checking:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>lib:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>bin:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>bin_overrides:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid__'>_</span><span class='rparen'>)</span>
+  <span class='ivar'>@host</span>                 <span class='op'>=</span> <span class='id identifier rubyid_host'>host</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='ivar'>@submit_host</span>          <span class='op'>=</span> <span class='id identifier rubyid_submit_host'>submit_host</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='ivar'>@strict_host_checking</span> <span class='op'>=</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span>
+  <span class='ivar'>@lib</span>                  <span class='op'>=</span> <span class='const'>Pathname</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_lib'>lib</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+  <span class='ivar'>@bin</span>                  <span class='op'>=</span> <span class='const'>Pathname</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_bin'>bin</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+  <span class='ivar'>@bin_overrides</span>        <span class='op'>=</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="bin-instance_method">
+  
+    #<strong>bin</strong>  &#x21d2; <tt>Pathname</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The path to the Torque client installation binaries</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>For Torque 5.0.0</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_bin'>bin</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/Torque/5.0.0/bin&quot;</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Pathname</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to Torque binaries</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+34
+35
+36</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 34</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bin'>bin</span>
+  <span class='ivar'>@bin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="bin_overrides-instance_method">
+  
+    #<strong>bin_overrides</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Optional overrides for Torque client executables</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qsub</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/local/bin/qsub</span><span class='tstring_end'>&#39;</span></span><span class='rbrace'>}</span></code></pre>
+    
+  </div>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+40
+41
+42</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 40</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span>
+  <span class='ivar'>@bin_overrides</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="host-instance_method">
+  
+    #<strong>host</strong>  &#x21d2; <tt>String</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The host of the Torque batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>OSC’s Oakley batch server</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_host'>host</span> <span class='comment'>#=&gt; &quot;oak-batch.osc.edu&quot;</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the batch server host</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_host'>host</span>
+  <span class='ivar'>@host</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="lib-instance_method">
+  
+    #<strong>lib</strong>  &#x21d2; <tt>Pathname</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The path to the Torque client installation libraries</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>For Torque 5.0.0</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_lib'>lib</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/Torque/5.0.0/lib&quot;</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Pathname</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to Torque libraries</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+28
+29
+30</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 28</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_lib'>lib</span>
+  <span class='ivar'>@lib</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="strict_host_checking-instance_method">
+  
+    #<strong>strict_host_checking</strong>  &#x21d2; <tt>Bool</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Determines whether to use strict_host_checking for ssh</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;owens.osc.edu&quot;</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Bool</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span>
+  <span class='ivar'>@strict_host_checking</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="submit_host-instance_method">
+  
+    #<strong>submit_host</strong>  &#x21d2; <tt>String</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The login node where job is submitted via ssh</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>OSC’s owens login node</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_submit_host'>submit_host</span> <span class='comment'>#=&gt; &quot;owens.osc.edu&quot;</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the login node</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+16
+17
+18</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 16</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_submit_host'>submit_host</span>
+  <span class='ivar'>@submit_host</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="==-instance_method">
+  
+    #<strong>==</strong>(other)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The comparison operator</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt>#<span class='object_link'><a href="#to_h-instance_method" title="OodCore::Job::Adapters::Torque::Batch#to_h (method)">to_h</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>batch server to compare against</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>how batch servers compare</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+69
+70
+71</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_to_h'>to_h</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="connect-instance_method">
+  
+    #<strong>connect</strong> {|cid| ... } &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Creates a connection to batch server and calls block in context of this connection</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Yield Parameters:</p>
+<ul class="yieldparam">
+  
+    <li>
+      
+        <span class='name'>cid</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection id from established batch server connection</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Yield Returns:</p>
+<ul class="yieldreturn">
+  
+    <li>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        
+        <div class='inline'>
+<p>the final value of the block</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 91</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_connect'>connect</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='id identifier rubyid_block'>block</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_lib'><span class='object_link'><a href="FFI.html#lib-class_method" title="OodCore::Job::Adapters::Torque::FFI.lib (method)">lib</a></span></span> <span class='op'>=</span> <span class='id identifier rubyid_lib'>lib</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>libtorque.so</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cid'>cid</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_connect'><span class='object_link'><a href="FFI.html#pbs_connect-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_connect (method)">pbs_connect</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_host'>host</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_raise_error'><span class='object_link'><a href="FFI.html#raise_error-class_method" title="OodCore::Job::Adapters::Torque::FFI.raise_error (method)">raise_error</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cid'>cid</span><span class='period'>.</span><span class='id identifier rubyid_abs'>abs</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_cid'>cid</span> <span class='op'>&lt;</span> <span class='int'>0</span>  <span class='comment'># raise error if negative connection id
+</span>  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_value'>value</span> <span class='op'>=</span> <span class='kw'>yield</span> <span class='id identifier rubyid_cid'>cid</span>
+  <span class='kw'>ensure</span>
+    <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_disconnect'><span class='object_link'><a href="FFI.html#pbs_disconnect-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_disconnect (method)">pbs_disconnect</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cid'>cid</span><span class='rparen'>)</span>            <span class='comment'># always close connection
+</span>  <span class='kw'>end</span>
+  <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_check_for_error'><span class='object_link'><a href="FFI.html#check_for_error-class_method" title="OodCore::Job::Adapters::Torque::FFI.check_for_error (method)">check_for_error</a></span></span>                  <span class='comment'># check for errors at end
+</span>  <span class='id identifier rubyid_value'>value</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="delete_job-instance_method">
+  
+    #<strong>delete_job</strong>(id)  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Delete a specified job from batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Delete job ‘10219837.oak-batch.osc.edu’ from batch</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the job</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+320
+321
+322
+323
+324</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 320</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_deljob'><span class='object_link'><a href="FFI.html#pbs_deljob-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_deljob (method)">pbs_deljob</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="eql?-instance_method">
+  
+    #<strong>eql?</strong>(other)  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Checks whether two batch server objects are completely identical to each other</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>other</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::Torque::Batch (class)">Batch</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>batch server to compare against</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>whether same objects</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+77
+78
+79</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 77</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>&amp;&amp;</span> <span class='kw'>self</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_job-instance_method">
+  
+    #<strong>get_job</strong>(id, **kwargs)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get info for given batch server’s job</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley’s ‘10219837.oak-batch.osc.edu’ job</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_job'>get_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>102719837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;10219837.oak-batch.osc.edu&quot; =&gt; {
+</span><span class='comment'>#    :Job_Owner =&gt; &quot;bob@oakley02.osc.edu&quot;,
+</span><span class='comment'>#    :Job_Name =&gt; &quot;CFD_Solver&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  }
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of requested information</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filters</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of attribs to filter on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash with details of job</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+279
+280
+281</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 279</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_job'>get_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_jobs-instance_method">
+  
+    #<strong>get_jobs</strong>(id: &#39;&#39;, filters: [])  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a list of hashes of the jobs on the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley jobs</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;10219837.oak-batch.osc.edu&quot; =&gt; {
+</span><span class='comment'>#    :Job_Owner =&gt; &quot;bob@oakley02.osc.edu&quot;,
+</span><span class='comment'>#    :Job_Name =&gt; &quot;CFD_Solver&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  &quot;10219838.oak-batch.osc.edu&quot; =&gt; {
+</span><span class='comment'>#    :Job_Owner =&gt; &quot;sally@oakley01.osc.edu&quot;,
+</span><span class='comment'>#    :Job_Name =&gt; &quot;FEA_Solver&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  ...
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of requested information</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filters</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of attribs to filter on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash of details for jobs</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+258
+259
+260
+261
+262
+263
+264</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 258</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>filters:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='id identifier rubyid_filters'>filters</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_list'><span class='object_link'><a href="FFI/Attrl.html#from_list-class_method" title="OodCore::Job::Adapters::Torque::FFI::Attrl.from_list (method)">from_list</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_filters'>filters</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statjob'><span class='object_link'><a href="FFI.html#pbs_statjob-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statjob (method)">pbs_statjob</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_filters'>filters</span><span class='comma'>,</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statfree'><span class='object_link'><a href="FFI.html#pbs_statfree-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statfree (method)">pbs_statfree</a></span></span> <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_node-instance_method">
+  
+    #<strong>get_node</strong>(id, **kwargs)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get info for given batch server’s node</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley’s ‘n0001’ node</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_node'>get_node</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>n0001</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;n0001&quot; =&gt; {
+</span><span class='comment'>#    :np =&gt; &quot;12&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  }
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of requested information</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filters</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of attribs to filter on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>status info for the node</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+205
+206
+207</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 205</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_node'>get_node</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_get_nodes'>get_nodes</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_nodes-instance_method">
+  
+    #<strong>get_nodes</strong>(id: &#39;&#39;, filters: [])  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a list of hashes of the nodes on the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley nodes</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_nodes'>get_nodes</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;n0001&quot; =&gt; {
+</span><span class='comment'>#    :np =&gt; &quot;12&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  &quot;n0002&quot; =&gt; {
+</span><span class='comment'>#    :np =&gt; &quot;12&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  ...
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of requested information</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filters</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of attribs to filter on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash of details for nodes</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+185
+186
+187
+188
+189
+190
+191</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 185</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_nodes'>get_nodes</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>filters:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='id identifier rubyid_filters'>filters</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_list'><span class='object_link'><a href="FFI/Attrl.html#from_list-class_method" title="OodCore::Job::Adapters::Torque::FFI::Attrl.from_list (method)">from_list</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_filters'>filters</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statnode'><span class='object_link'><a href="FFI.html#pbs_statnode-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statnode (method)">pbs_statnode</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_filters'>filters</span><span class='comma'>,</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statfree'><span class='object_link'><a href="FFI.html#pbs_statfree-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statfree (method)">pbs_statfree</a></span></span> <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_queue-instance_method">
+  
+    #<strong>get_queue</strong>(id, **kwargs)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get info for given batch server’s queue</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley’s parallel queue</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_queue'>get_queue</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>parallel</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;parallel&quot; =&gt; {
+</span><span class='comment'>#    :queue_type =&gt; &quot;Execution&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  }
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>status info for the queue</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+162
+163
+164</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 162</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_queue'>get_queue</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_get_queues'>get_queues</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_queues-instance_method">
+  
+    #<strong>get_queues</strong>(id: &#39;&#39;, filters: [])  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a list of hashes of the queues on the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley queues</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_queues'>get_queues</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;parallel&quot; =&gt; {
+</span><span class='comment'>#    :queue_type =&gt; &quot;Execution&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  &quot;serial&quot; =&gt; {
+</span><span class='comment'>#    :queue_type =&gt; &quot;Execution&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  ...
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of requested information</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>filters</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of attribs to filter on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash of details for the queues</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+142
+143
+144
+145
+146
+147
+148</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 142</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_queues'>get_queues</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='label'>filters:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='id identifier rubyid_filters'>filters</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_list'><span class='object_link'><a href="FFI/Attrl.html#from_list-class_method" title="OodCore::Job::Adapters::Torque::FFI::Attrl.from_list (method)">from_list</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_filters'>filters</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statque'><span class='object_link'><a href="FFI.html#pbs_statque-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statque (method)">pbs_statque</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_filters'>filters</span><span class='comma'>,</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statfree'><span class='object_link'><a href="FFI.html#pbs_statfree-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statfree (method)">pbs_statfree</a></span></span> <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="get_status-instance_method">
+  
+    #<strong>get_status</strong>(filters: [])  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a hash with status info for this batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for OSC Oakley batch server</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_status'>get_status</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;oak-batch.osc.edu:15001&quot; =&gt; {
+</span><span class='comment'>#    :server_state =&gt; &quot;Idle&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  }
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>filters</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;Symbol&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of attribs to filter on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>status info for batch server</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+116
+117
+118
+119
+120
+121
+122</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 116</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_get_status'>get_status</span><span class='lparen'>(</span><span class='label'>filters:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='id identifier rubyid_filters'>filters</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_list'><span class='object_link'><a href="FFI/Attrl.html#from_list-class_method" title="OodCore::Job::Adapters::Torque::FFI::Attrl.from_list (method)">from_list</a></span></span> <span class='id identifier rubyid_filters'>filters</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statserver'><span class='object_link'><a href="FFI.html#pbs_statserver-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statserver (method)">pbs_statserver</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_filters'>filters</span><span class='comma'>,</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statfree'><span class='object_link'><a href="FFI.html#pbs_statfree-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statfree (method)">pbs_statfree</a></span></span> <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="hash-instance_method">
+  
+    #<strong>hash</strong>  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Generates a hash value for this object</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash value of object</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+83
+84
+85</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 83</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hash'>hash</span>
+  <span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='comma'>,</span> <span class='id identifier rubyid_to_h'>to_h</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="hold_job-instance_method">
+  
+    #<strong>hold_job</strong>(id, type: :u)  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Put specified job on hold Possible hold types:</p>
+
+<pre class="code ruby"><code class="ruby">:u =&gt; Available to the owner of the job, the batch operator and the batch administrator
+:o =&gt; Available to the batch operator and the batch administrator
+:s =&gt; Available to the batch administrator
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Put job ‘10219837.oak-batch.osc.edu’ on hold</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the job</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>:u</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of hold to be applied</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+293
+294
+295
+296
+297</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 293</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:u</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_holdjob'><span class='object_link'><a href="FFI.html#pbs_holdjob-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_holdjob (method)">pbs_holdjob</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="release_job-instance_method">
+  
+    #<strong>release_job</strong>(id, type: :u)  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Release a specified job that is on hold Possible hold types:</p>
+
+<pre class="code ruby"><code class="ruby">:u =&gt; Available to the owner of the job, the batch operator and the batch administrator
+:o =&gt; Available to the batch operator and the batch administrator
+:s =&gt; Available to the batch administrator
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Release job ‘10219837.oak-batch.osc.edu’ from hold</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the job</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>type</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>:u</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of hold to be removed</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+309
+310
+311
+312
+313</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 309</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='label'>type:</span> <span class='symbol'>:u</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_rlsjob'><span class='object_link'><a href="FFI.html#pbs_rlsjob-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_rlsjob (method)">pbs_rlsjob</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_type'>type</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='kw'>nil</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="select_jobs-instance_method">
+  
+    #<strong>select_jobs</strong>(attribs: [])  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Get a list of hashes of the selected jobs on the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Status info for jobs owned by Bob</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_select_jobs'>select_jobs</span><span class='lparen'>(</span><span class='label'>attribs:</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>User_List</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>bob</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>op:</span> <span class='symbol'>:eq</span><span class='rbrace'>}</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+<span class='comment'>#=&gt;
+</span><span class='comment'>#{
+</span><span class='comment'>#  &quot;10219837.oak-batch.osc.edu&quot; =&gt; {
+</span><span class='comment'>#    :Job_Owner =&gt; &quot;bob@oakley02.osc.edu&quot;,
+</span><span class='comment'>#    :Job_Name =&gt; &quot;CFD_Solver&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  &quot;10219839.oak-batch.osc.edu&quot; =&gt; {
+</span><span class='comment'>#    :Job_Owner =&gt; &quot;bob@oakley02.osc.edu&quot;,
+</span><span class='comment'>#    :Job_Name =&gt; &quot;CFD_Solver2&quot;,
+</span><span class='comment'>#    ...
+</span><span class='comment'>#  },
+</span><span class='comment'>#  ...
+</span><span class='comment'>#}</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>attribs</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;#<span class='object_link'><a href="#to_h-instance_method" title="OodCore::Job::Adapters::Torque::Batch#to_h (method)">to_h</a></span>&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>list of hashes describing attributes to select on</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>hash of details of selected jobs</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+230
+231
+232
+233
+234
+235
+236</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 230</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_select_jobs'>select_jobs</span><span class='lparen'>(</span><span class='label'>attribs:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_connect'>connect</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_cid'>cid</span><span class='op'>|</span>
+    <span class='id identifier rubyid_attribs'>attribs</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="FFI/Attropl.html" title="OodCore::Job::Adapters::Torque::FFI::Attropl (class)">Attropl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_from_list'><span class='object_link'><a href="FFI/Attropl.html#from_list-class_method" title="OodCore::Job::Adapters::Torque::FFI::Attropl.from_list (method)">from_list</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_attribs'>attribs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_h</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_selstat'><span class='object_link'><a href="FFI.html#pbs_selstat-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_selstat (method)">pbs_selstat</a></span></span> <span class='id identifier rubyid_cid'>cid</span><span class='comma'>,</span> <span class='id identifier rubyid_attribs'>attribs</span><span class='comma'>,</span> <span class='kw'>nil</span>
+    <span class='id identifier rubyid_batch_status'>batch_status</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_tap'>tap</span> <span class='lbrace'>{</span> <span class='const'><span class='object_link'><a href="FFI.html" title="OodCore::Job::Adapters::Torque::FFI (class)">FFI</a></span></span><span class='period'>.</span><span class='id identifier rubyid_pbs_statfree'><span class='object_link'><a href="FFI.html#pbs_statfree-class_method" title="OodCore::Job::Adapters::Torque::FFI.pbs_statfree (method)">pbs_statfree</a></span></span> <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='rbrace'>}</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="submit-instance_method">
+  
+    #<strong>submit</strong>(content, args: [], env: {}, chdir: nil)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Submit a script expanded as a string to the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>content</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>script as a string</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>args</span>
+      
+      
+        <span class='type'>(<tt>Array&lt;#to_s&gt;</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>[]</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>arguments passed to ‘qsub` command</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>env</span>
+      
+      
+        <span class='type'>(<tt>Hash{#to_s =&gt; #to_s}</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>environment variables set</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>chdir</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>, <tt>nil</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>working directory where ‘qsub` is called from</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the job that was created</p>
+</div>
+      
+    </li>
+  
+</ul>
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="Batch/Error.html" title="OodCore::Job::Adapters::Torque::Batch::Error (class)">Error</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if ‘qsub` command exited unsuccessfully</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+374
+375
+376</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 374</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_content'>content</span><span class='comma'>,</span> <span class='label'>args:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>env:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>chdir:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='symbol'>:qsub</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='label'>env:</span> <span class='id identifier rubyid_env'>env</span><span class='comma'>,</span> <span class='label'>stdin:</span> <span class='id identifier rubyid_content'>content</span><span class='comma'>,</span> <span class='label'>chdir:</span> <span class='id identifier rubyid_chdir'>chdir</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="submit_script-instance_method">
+  
+    #<strong>submit_script</strong>(script, queue: nil, headers: {}, resources: {}, envvars: {}, qsub: true)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
+</div></div>
+
+<p>Submit a script to the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Submit a script with a few PBS directives</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_submit_script'>submit_script</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/path/to/script</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+  <span class='label'>headers:</span> <span class='lbrace'>{</span>
+    <span class='label'>Job_Name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>myjob</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>Join_Path:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>oe</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='label'>resources:</span> <span class='lbrace'>{</span>
+    <span class='label'>nodes:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>4:ppn=12</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+    <span class='label'>walltime:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>12:00:00</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rbrace'>}</span><span class='comma'>,</span>
+  <span class='label'>envvars:</span> <span class='lbrace'>{</span>
+    <span class='label'>TOKEN:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>asd90f9sd8g90hk34</span><span class='tstring_end'>&quot;</span></span>
+  <span class='rbrace'>}</span>
+<span class='rparen'>)</span>
+<span class='comment'>#=&gt; &quot;6621251.oak-batch.osc.edu&quot;</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>script</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to the script</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>queue</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>queue to submit script to</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>headers</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs headers</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>resources</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs resources</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>envvars</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>{}</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs environment variables</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>qsub</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>true</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>whether use library or binary for submission</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the job that was created</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+350
+351
+352</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 350</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_submit_script'>submit_script</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>queue:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>headers:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>resources:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>envvars:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>qsub:</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_send'>send</span><span class='lparen'>(</span><span class='id identifier rubyid_qsub'>qsub</span> <span class='op'>?</span> <span class='symbol'>:qsub_submit</span> <span class='op'>:</span> <span class='symbol'>:pbs_submit</span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_queue'>queue</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='comma'>,</span> <span class='id identifier rubyid_resources'>resources</span><span class='comma'>,</span> <span class='id identifier rubyid_envvars'>envvars</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="submit_string-instance_method">
+  
+    #<strong>submit_string</strong>(string, **kwargs)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
+<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
+</div></div>
+
+<p>Submit a script expanded into a string to the batch server</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>string</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>script as a string</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>script</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to the script</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>queue</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>queue to submit script to</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>headers</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs headers</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>resources</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs resources</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>envvars</span>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs environment variables</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>qsub</span>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>whether use library or binary for submission</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the id of the job that was created</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+359
+360
+361
+362
+363
+364
+365</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 359</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_submit_string'>submit_string</span><span class='lparen'>(</span><span class='id identifier rubyid_string'>string</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='const'>Tempfile</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qsub.</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_f'>f</span><span class='op'>|</span>
+    <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_write'>write</span> <span class='id identifier rubyid_string'>string</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+    <span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_close'>close</span>
+    <span class='id identifier rubyid_submit_script'>submit_script</span><span class='lparen'>(</span><span class='id identifier rubyid_f'>f</span><span class='period'>.</span><span class='id identifier rubyid_path'>path</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid_kwargs'>kwargs</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="to_h-instance_method">
+  
+    #<strong>to_h</strong>  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Convert object to hash</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the hash describing this object</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/batch.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
+  <span class='lbrace'>{</span><span class='label'>host:</span> <span class='id identifier rubyid_host'>host</span><span class='comma'>,</span> <span class='label'>submit_host:</span> <span class='id identifier rubyid_submit_host'>submit_host</span><span class='comma'>,</span> <span class='label'>strict_host_checking:</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span><span class='comma'>,</span> <span class='label'>lib:</span> <span class='id identifier rubyid_lib'>lib</span><span class='comma'>,</span> <span class='label'>bin:</span> <span class='id identifier rubyid_bin'>bin</span><span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 18 14:41:08 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>

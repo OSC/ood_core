@@ -1,0 +1,2832 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: OodCore::Job::Adapters::Torque::FFI
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "OodCore::Job::Adapters::Torque::FFI";
+  relpath = '../../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../../_index.html">Index (F)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Torque.html" title="OodCore::Job::Adapters::Torque (class)">Torque</a></span></span>
+     &raquo; 
+    <span class="title">FFI</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: OodCore::Job::Adapters::Torque::FFI
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">OodCore::Job::Adapters::Torque::FFI</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  <dl>
+      <dt>Extended by:</dt>
+      <dd>FFI::Library</dd>
+  </dl>
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/torque/ffi.rb<span class="defines">,<br />
+  lib/ood_core/job/adapters/torque/error.rb</span>
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>An interface to the C-library of Torque</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="FFI/AlrdyexitError.html" title="OodCore::Job::Adapters::Torque::FFI::AlrdyexitError (class)">AlrdyexitError</a></span>, <span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span>, <span class='object_link'><a href="FFI/Attropl.html" title="OodCore::Job::Adapters::Torque::FFI::Attropl (class)">Attropl</a></span>, <span class='object_link'><a href="FFI/AttrroError.html" title="OodCore::Job::Adapters::Torque::FFI::AttrroError (class)">AttrroError</a></span>, <span class='object_link'><a href="FFI/AttrtypeError.html" title="OodCore::Job::Adapters::Torque::FFI::AttrtypeError (class)">AttrtypeError</a></span>, <span class='object_link'><a href="FFI/AuthInvalidError.html" title="OodCore::Job::Adapters::Torque::FFI::AuthInvalidError (class)">AuthInvalidError</a></span>, <span class='object_link'><a href="FFI/BadArrayDataError.html" title="OodCore::Job::Adapters::Torque::FFI::BadArrayDataError (class)">BadArrayDataError</a></span>, <span class='object_link'><a href="FFI/BadArrayReqError.html" title="OodCore::Job::Adapters::Torque::FFI::BadArrayReqError (class)">BadArrayReqError</a></span>, <span class='object_link'><a href="FFI/BadParameterError.html" title="OodCore::Job::Adapters::Torque::FFI::BadParameterError (class)">BadParameterError</a></span>, <span class='object_link'><a href="FFI/BadacctError.html" title="OodCore::Job::Adapters::Torque::FFI::BadacctError (class)">BadacctError</a></span>, <span class='object_link'><a href="FFI/BadaclhostError.html" title="OodCore::Job::Adapters::Torque::FFI::BadaclhostError (class)">BadaclhostError</a></span>, <span class='object_link'><a href="FFI/BadatlstError.html" title="OodCore::Job::Adapters::Torque::FFI::BadatlstError (class)">BadatlstError</a></span>, <span class='object_link'><a href="FFI/BadatvalError.html" title="OodCore::Job::Adapters::Torque::FFI::BadatvalError (class)">BadatvalError</a></span>, <span class='object_link'><a href="FFI/BadcredError.html" title="OodCore::Job::Adapters::Torque::FFI::BadcredError (class)">BadcredError</a></span>, <span class='object_link'><a href="FFI/BaddependError.html" title="OodCore::Job::Adapters::Torque::FFI::BaddependError (class)">BaddependError</a></span>, <span class='object_link'><a href="FFI/BaddisallowtypeError.html" title="OodCore::Job::Adapters::Torque::FFI::BaddisallowtypeError (class)">BaddisallowtypeError</a></span>, <span class='object_link'><a href="FFI/BadgrpError.html" title="OodCore::Job::Adapters::Torque::FFI::BadgrpError (class)">BadgrpError</a></span>, <span class='object_link'><a href="FFI/BadhostError.html" title="OodCore::Job::Adapters::Torque::FFI::BadhostError (class)">BadhostError</a></span>, <span class='object_link'><a href="FFI/BadmomstateError.html" title="OodCore::Job::Adapters::Torque::FFI::BadmomstateError (class)">BadmomstateError</a></span>, <span class='object_link'><a href="FFI/BadndatvalError.html" title="OodCore::Job::Adapters::Torque::FFI::BadndatvalError (class)">BadndatvalError</a></span>, <span class='object_link'><a href="FFI/BadscriptError.html" title="OodCore::Job::Adapters::Torque::FFI::BadscriptError (class)">BadscriptError</a></span>, <span class='object_link'><a href="FFI/BadstateError.html" title="OodCore::Job::Adapters::Torque::FFI::BadstateError (class)">BadstateError</a></span>, <span class='object_link'><a href="FFI/BaduserError.html" title="OodCore::Job::Adapters::Torque::FFI::BaduserError (class)">BaduserError</a></span>, <span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span>, <span class='object_link'><a href="FFI/CanNotMoveFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotMoveFileError (class)">CanNotMoveFileError</a></span>, <span class='object_link'><a href="FFI/CanNotOpenFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotOpenFileError (class)">CanNotOpenFileError</a></span>, <span class='object_link'><a href="FFI/CanNotSaveFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotSaveFileError (class)">CanNotSaveFileError</a></span>, <span class='object_link'><a href="FFI/CanNotWriteFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotWriteFileError (class)">CanNotWriteFileError</a></span>, <span class='object_link'><a href="FFI/CantcontactsistersError.html" title="OodCore::Job::Adapters::Torque::FFI::CantcontactsistersError (class)">CantcontactsistersError</a></span>, <span class='object_link'><a href="FFI/CantcreatetmpdirError.html" title="OodCore::Job::Adapters::Torque::FFI::CantcreatetmpdirError (class)">CantcreatetmpdirError</a></span>, <span class='object_link'><a href="FFI/CantopensocketError.html" title="OodCore::Job::Adapters::Torque::FFI::CantopensocketError (class)">CantopensocketError</a></span>, <span class='object_link'><a href="FFI/CkpbsyError.html" title="OodCore::Job::Adapters::Torque::FFI::CkpbsyError (class)">CkpbsyError</a></span>, <span class='object_link'><a href="FFI/CkpshortError.html" title="OodCore::Job::Adapters::Torque::FFI::CkpshortError (class)">CkpshortError</a></span>, <span class='object_link'><a href="FFI/CleanedoutError.html" title="OodCore::Job::Adapters::Torque::FFI::CleanedoutError (class)">CleanedoutError</a></span>, <span class='object_link'><a href="FFI/ClientInvalidError.html" title="OodCore::Job::Adapters::Torque::FFI::ClientInvalidError (class)">ClientInvalidError</a></span>, <span class='object_link'><a href="FFI/ConnectError.html" title="OodCore::Job::Adapters::Torque::FFI::ConnectError (class)">ConnectError</a></span>, <span class='object_link'><a href="FFI/ContinueError.html" title="OodCore::Job::Adapters::Torque::FFI::ContinueError (class)">ContinueError</a></span>, <span class='object_link'><a href="FFI/DisprotoError.html" title="OodCore::Job::Adapters::Torque::FFI::DisprotoError (class)">DisprotoError</a></span>, <span class='object_link'><a href="FFI/DuplistError.html" title="OodCore::Job::Adapters::Torque::FFI::DuplistError (class)">DuplistError</a></span>, <span class='object_link'><a href="FFI/Error.html" title="OodCore::Job::Adapters::Torque::FFI::Error (class)">Error</a></span>, <span class='object_link'><a href="FFI/ExcqrescError.html" title="OodCore::Job::Adapters::Torque::FFI::ExcqrescError (class)">ExcqrescError</a></span>, <span class='object_link'><a href="FFI/ExecthereError.html" title="OodCore::Job::Adapters::Torque::FFI::ExecthereError (class)">ExecthereError</a></span>, <span class='object_link'><a href="FFI/ExlimitError.html" title="OodCore::Job::Adapters::Torque::FFI::ExlimitError (class)">ExlimitError</a></span>, <span class='object_link'><a href="FFI/ExpiredError.html" title="OodCore::Job::Adapters::Torque::FFI::ExpiredError (class)">ExpiredError</a></span>, <span class='object_link'><a href="FFI/GmoderrError.html" title="OodCore::Job::Adapters::Torque::FFI::GmoderrError (class)">GmoderrError</a></span>, <span class='object_link'><a href="FFI/HopcountError.html" title="OodCore::Job::Adapters::Torque::FFI::HopcountError (class)">HopcountError</a></span>, <span class='object_link'><a href="FFI/IffNotFoundError.html" title="OodCore::Job::Adapters::Torque::FFI::IffNotFoundError (class)">IffNotFoundError</a></span>, <span class='object_link'><a href="FFI/InternalError.html" title="OodCore::Job::Adapters::Torque::FFI::InternalError (class)">InternalError</a></span>, <span class='object_link'><a href="FFI/InvalidMutexError.html" title="OodCore::Job::Adapters::Torque::FFI::InvalidMutexError (class)">InvalidMutexError</a></span>, <span class='object_link'><a href="FFI/InvalidSyntaxError.html" title="OodCore::Job::Adapters::Torque::FFI::InvalidSyntaxError (class)">InvalidSyntaxError</a></span>, <span class='object_link'><a href="FFI/IvalreqError.html" title="OodCore::Job::Adapters::Torque::FFI::IvalreqError (class)">IvalreqError</a></span>, <span class='object_link'><a href="FFI/JobAlreadyInQueueError.html" title="OodCore::Job::Adapters::Torque::FFI::JobAlreadyInQueueError (class)">JobAlreadyInQueueError</a></span>, <span class='object_link'><a href="FFI/JobFileCorruptError.html" title="OodCore::Job::Adapters::Torque::FFI::JobFileCorruptError (class)">JobFileCorruptError</a></span>, <span class='object_link'><a href="FFI/JobRecycledError.html" title="OodCore::Job::Adapters::Torque::FFI::JobRecycledError (class)">JobRecycledError</a></span>, <span class='object_link'><a href="FFI/JobRerunError.html" title="OodCore::Job::Adapters::Torque::FFI::JobRerunError (class)">JobRerunError</a></span>, <span class='object_link'><a href="FFI/JobexistError.html" title="OodCore::Job::Adapters::Torque::FFI::JobexistError (class)">JobexistError</a></span>, <span class='object_link'><a href="FFI/JobnotfoundError.html" title="OodCore::Job::Adapters::Torque::FFI::JobnotfoundError (class)">JobnotfoundError</a></span>, <span class='object_link'><a href="FFI/JobsubstateError.html" title="OodCore::Job::Adapters::Torque::FFI::JobsubstateError (class)">JobsubstateError</a></span>, <span class='object_link'><a href="FFI/JobtypeError.html" title="OodCore::Job::Adapters::Torque::FFI::JobtypeError (class)">JobtypeError</a></span>, <span class='object_link'><a href="FFI/JobworkdelayError.html" title="OodCore::Job::Adapters::Torque::FFI::JobworkdelayError (class)">JobworkdelayError</a></span>, <span class='object_link'><a href="FFI/MaxquedError.html" title="OodCore::Job::Adapters::Torque::FFI::MaxquedError (class)">MaxquedError</a></span>, <span class='object_link'><a href="FFI/MaxuserquedError.html" title="OodCore::Job::Adapters::Torque::FFI::MaxuserquedError (class)">MaxuserquedError</a></span>, <span class='object_link'><a href="FFI/MemMallocError.html" title="OodCore::Job::Adapters::Torque::FFI::MemMallocError (class)">MemMallocError</a></span>, <span class='object_link'><a href="FFI/ModatrrunError.html" title="OodCore::Job::Adapters::Torque::FFI::ModatrrunError (class)">ModatrrunError</a></span>, <span class='object_link'><a href="FFI/MomrejectError.html" title="OodCore::Job::Adapters::Torque::FFI::MomrejectError (class)">MomrejectError</a></span>, <span class='object_link'><a href="FFI/MungeNotFoundError.html" title="OodCore::Job::Adapters::Torque::FFI::MungeNotFoundError (class)">MungeNotFoundError</a></span>, <span class='object_link'><a href="FFI/MutexAlreadyLockedError.html" title="OodCore::Job::Adapters::Torque::FFI::MutexAlreadyLockedError (class)">MutexAlreadyLockedError</a></span>, <span class='object_link'><a href="FFI/MutexAlreadyUnlockedError.html" title="OodCore::Job::Adapters::Torque::FFI::MutexAlreadyUnlockedError (class)">MutexAlreadyUnlockedError</a></span>, <span class='object_link'><a href="FFI/MutexError.html" title="OodCore::Job::Adapters::Torque::FFI::MutexError (class)">MutexError</a></span>, <span class='object_link'><a href="FFI/MutualexError.html" title="OodCore::Job::Adapters::Torque::FFI::MutualexError (class)">MutualexError</a></span>, <span class='object_link'><a href="FFI/NoattrError.html" title="OodCore::Job::Adapters::Torque::FFI::NoattrError (class)">NoattrError</a></span>, <span class='object_link'><a href="FFI/NobatchError.html" title="OodCore::Job::Adapters::Torque::FFI::NobatchError (class)">NobatchError</a></span>, <span class='object_link'><a href="FFI/NoconnectsError.html" title="OodCore::Job::Adapters::Torque::FFI::NoconnectsError (class)">NoconnectsError</a></span>, <span class='object_link'><a href="FFI/NocopyfileError.html" title="OodCore::Job::Adapters::Torque::FFI::NocopyfileError (class)">NocopyfileError</a></span>, <span class='object_link'><a href="FFI/NodeDownError.html" title="OodCore::Job::Adapters::Torque::FFI::NodeDownError (class)">NodeDownError</a></span>, <span class='object_link'><a href="FFI/NodeexistError.html" title="OodCore::Job::Adapters::Torque::FFI::NodeexistError (class)">NodeexistError</a></span>, <span class='object_link'><a href="FFI/NodenbigError.html" title="OodCore::Job::Adapters::Torque::FFI::NodenbigError (class)">NodenbigError</a></span>, <span class='object_link'><a href="FFI/NofaultintolerantError.html" title="OodCore::Job::Adapters::Torque::FFI::NofaultintolerantError (class)">NofaultintolerantError</a></span>, <span class='object_link'><a href="FFI/NofaulttolerantError.html" title="OodCore::Job::Adapters::Torque::FFI::NofaulttolerantError (class)">NofaulttolerantError</a></span>, <span class='object_link'><a href="FFI/NointeractiveError.html" title="OodCore::Job::Adapters::Torque::FFI::NointeractiveError (class)">NointeractiveError</a></span>, <span class='object_link'><a href="FFI/NojobarraysError.html" title="OodCore::Job::Adapters::Torque::FFI::NojobarraysError (class)">NojobarraysError</a></span>, <span class='object_link'><a href="FFI/NonodesError.html" title="OodCore::Job::Adapters::Torque::FFI::NonodesError (class)">NonodesError</a></span>, <span class='object_link'><a href="FFI/NononrerunableError.html" title="OodCore::Job::Adapters::Torque::FFI::NononrerunableError (class)">NononrerunableError</a></span>, <span class='object_link'><a href="FFI/NorelymomError.html" title="OodCore::Job::Adapters::Torque::FFI::NorelymomError (class)">NorelymomError</a></span>, <span class='object_link'><a href="FFI/NorerunError.html" title="OodCore::Job::Adapters::Torque::FFI::NorerunError (class)">NorerunError</a></span>, <span class='object_link'><a href="FFI/NorerunableError.html" title="OodCore::Job::Adapters::Torque::FFI::NorerunableError (class)">NorerunableError</a></span>, <span class='object_link'><a href="FFI/NoserverError.html" title="OodCore::Job::Adapters::Torque::FFI::NoserverError (class)">NoserverError</a></span>, <span class='object_link'><a href="FFI/NosupError.html" title="OodCore::Job::Adapters::Torque::FFI::NosupError (class)">NosupError</a></span>, <span class='object_link'><a href="FFI/NosyncmstrError.html" title="OodCore::Job::Adapters::Torque::FFI::NosyncmstrError (class)">NosyncmstrError</a></span>, <span class='object_link'><a href="FFI/NotImplementedError.html" title="OodCore::Job::Adapters::Torque::FFI::NotImplementedError (class)">NotImplementedError</a></span>, <span class='object_link'><a href="FFI/NotsnodeError.html" title="OodCore::Job::Adapters::Torque::FFI::NotsnodeError (class)">NotsnodeError</a></span>, <span class='object_link'><a href="FFI/PermError.html" title="OodCore::Job::Adapters::Torque::FFI::PermError (class)">PermError</a></span>, <span class='object_link'><a href="FFI/PrematureEofError.html" title="OodCore::Job::Adapters::Torque::FFI::PrematureEofError (class)">PrematureEofError</a></span>, <span class='object_link'><a href="FFI/ProtocolError.html" title="OodCore::Job::Adapters::Torque::FFI::ProtocolError (class)">ProtocolError</a></span>, <span class='object_link'><a href="FFI/QacessError.html" title="OodCore::Job::Adapters::Torque::FFI::QacessError (class)">QacessError</a></span>, <span class='object_link'><a href="FFI/QuebusyError.html" title="OodCore::Job::Adapters::Torque::FFI::QuebusyError (class)">QuebusyError</a></span>, <span class='object_link'><a href="FFI/QueexistError.html" title="OodCore::Job::Adapters::Torque::FFI::QueexistError (class)">QueexistError</a></span>, <span class='object_link'><a href="FFI/QuenbigError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenbigError (class)">QuenbigError</a></span>, <span class='object_link'><a href="FFI/QuenodfltError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenodfltError (class)">QuenodfltError</a></span>, <span class='object_link'><a href="FFI/QuenoenError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenoenError (class)">QuenoenError</a></span>, <span class='object_link'><a href="FFI/QuenotavailableError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenotavailableError (class)">QuenotavailableError</a></span>, <span class='object_link'><a href="FFI/QunoenbError.html" title="OodCore::Job::Adapters::Torque::FFI::QunoenbError (class)">QunoenbError</a></span>, <span class='object_link'><a href="FFI/RegrouteError.html" title="OodCore::Job::Adapters::Torque::FFI::RegrouteError (class)">RegrouteError</a></span>, <span class='object_link'><a href="FFI/RelayedToMomError.html" title="OodCore::Job::Adapters::Torque::FFI::RelayedToMomError (class)">RelayedToMomError</a></span>, <span class='object_link'><a href="FFI/RescunavError.html" title="OodCore::Job::Adapters::Torque::FFI::RescunavError (class)">RescunavError</a></span>, <span class='object_link'><a href="FFI/RouteexpdError.html" title="OodCore::Job::Adapters::Torque::FFI::RouteexpdError (class)">RouteexpdError</a></span>, <span class='object_link'><a href="FFI/RouterejError.html" title="OodCore::Job::Adapters::Torque::FFI::RouterejError (class)">RouterejError</a></span>, <span class='object_link'><a href="FFI/SelectError.html" title="OodCore::Job::Adapters::Torque::FFI::SelectError (class)">SelectError</a></span>, <span class='object_link'><a href="FFI/ServerBusyError.html" title="OodCore::Job::Adapters::Torque::FFI::ServerBusyError (class)">ServerBusyError</a></span>, <span class='object_link'><a href="FFI/ServerNotFoundError.html" title="OodCore::Job::Adapters::Torque::FFI::ServerNotFoundError (class)">ServerNotFoundError</a></span>, <span class='object_link'><a href="FFI/SiscommError.html" title="OodCore::Job::Adapters::Torque::FFI::SiscommError (class)">SiscommError</a></span>, <span class='object_link'><a href="FFI/SisrejectError.html" title="OodCore::Job::Adapters::Torque::FFI::SisrejectError (class)">SisrejectError</a></span>, <span class='object_link'><a href="FFI/SocketCloseError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketCloseError (class)">SocketCloseError</a></span>, <span class='object_link'><a href="FFI/SocketDataError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketDataError (class)">SocketDataError</a></span>, <span class='object_link'><a href="FFI/SocketFaultError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketFaultError (class)">SocketFaultError</a></span>, <span class='object_link'><a href="FFI/SocketInformationError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketInformationError (class)">SocketInformationError</a></span>, <span class='object_link'><a href="FFI/SocketListenError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketListenError (class)">SocketListenError</a></span>, <span class='object_link'><a href="FFI/SocketReadError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketReadError (class)">SocketReadError</a></span>, <span class='object_link'><a href="FFI/SocketWriteError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketWriteError (class)">SocketWriteError</a></span>, <span class='object_link'><a href="FFI/StageinError.html" title="OodCore::Job::Adapters::Torque::FFI::StageinError (class)">StageinError</a></span>, <span class='object_link'><a href="FFI/SvrdownError.html" title="OodCore::Job::Adapters::Torque::FFI::SvrdownError (class)">SvrdownError</a></span>, <span class='object_link'><a href="FFI/SystemError.html" title="OodCore::Job::Adapters::Torque::FFI::SystemError (class)">SystemError</a></span>, <span class='object_link'><a href="FFI/ThreadError.html" title="OodCore::Job::Adapters::Torque::FFI::ThreadError (class)">ThreadError</a></span>, <span class='object_link'><a href="FFI/ThreadattrError.html" title="OodCore::Job::Adapters::Torque::FFI::ThreadattrError (class)">ThreadattrError</a></span>, <span class='object_link'><a href="FFI/TimeoutError.html" title="OodCore::Job::Adapters::Torque::FFI::TimeoutError (class)">TimeoutError</a></span>, <span class='object_link'><a href="FFI/TmpdiffownerError.html" title="OodCore::Job::Adapters::Torque::FFI::TmpdiffownerError (class)">TmpdiffownerError</a></span>, <span class='object_link'><a href="FFI/TmpnonameError.html" title="OodCore::Job::Adapters::Torque::FFI::TmpnonameError (class)">TmpnonameError</a></span>, <span class='object_link'><a href="FFI/TmpnotdirError.html" title="OodCore::Job::Adapters::Torque::FFI::TmpnotdirError (class)">TmpnotdirError</a></span>, <span class='object_link'><a href="FFI/ToomanyError.html" title="OodCore::Job::Adapters::Torque::FFI::ToomanyError (class)">ToomanyError</a></span>, <span class='object_link'><a href="FFI/UnkarrayidError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkarrayidError (class)">UnkarrayidError</a></span>, <span class='object_link'><a href="FFI/UnkjobidError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkjobidError (class)">UnkjobidError</a></span>, <span class='object_link'><a href="FFI/UnknodeError.html" title="OodCore::Job::Adapters::Torque::FFI::UnknodeError (class)">UnknodeError</a></span>, <span class='object_link'><a href="FFI/UnknodeatrError.html" title="OodCore::Job::Adapters::Torque::FFI::UnknodeatrError (class)">UnknodeatrError</a></span>, <span class='object_link'><a href="FFI/UnkqueError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkqueError (class)">UnkqueError</a></span>, <span class='object_link'><a href="FFI/UnkreqError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkreqError (class)">UnkreqError</a></span>, <span class='object_link'><a href="FFI/UnkrescError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkrescError (class)">UnkrescError</a></span>, <span class='object_link'><a href="FFI/UnksigError.html" title="OodCore::Job::Adapters::Torque::FFI::UnksigError (class)">UnksigError</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="BatchOp-constant" class="">BatchOp =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Enum for Batch Operation</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='id identifier rubyid_enum'>enum</span><span class='lparen'>(</span><span class='symbol'>:set</span><span class='comma'>,</span> <span class='symbol'>:unset</span><span class='comma'>,</span> <span class='symbol'>:incr</span><span class='comma'>,</span> <span class='symbol'>:decr</span><span class='comma'>,</span> <span class='symbol'>:eq</span><span class='comma'>,</span> <span class='symbol'>:ne</span><span class='comma'>,</span> <span class='symbol'>:ge</span><span class='comma'>,</span> <span class='symbol'>:gt</span><span class='comma'>,</span> <span class='symbol'>:le</span><span class='comma'>,</span> <span class='symbol'>:lt</span><span class='comma'>,</span> <span class='symbol'>:dflt</span><span class='comma'>,</span> <span class='symbol'>:merge</span><span class='comma'>,</span> <span class='symbol'>:incr_old</span><span class='rparen'>)</span></pre></dd>
+      
+        <dt id="ERROR_CODES-constant" class="">ERROR_CODES =
+          <div class="docstring">
+  <div class="discussion">
+    
+<p>Defined error codes, valid as of Torque &gt;=4.2.10</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='int'>15001</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnkjobidError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkjobidError (class)">UnkjobidError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15002</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NoattrError.html" title="OodCore::Job::Adapters::Torque::FFI::NoattrError (class)">NoattrError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15003</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/AttrroError.html" title="OodCore::Job::Adapters::Torque::FFI::AttrroError (class)">AttrroError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15004</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/IvalreqError.html" title="OodCore::Job::Adapters::Torque::FFI::IvalreqError (class)">IvalreqError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15005</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnkreqError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkreqError (class)">UnkreqError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15006</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ToomanyError.html" title="OodCore::Job::Adapters::Torque::FFI::ToomanyError (class)">ToomanyError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15007</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/PermError.html" title="OodCore::Job::Adapters::Torque::FFI::PermError (class)">PermError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15008</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/IffNotFoundError.html" title="OodCore::Job::Adapters::Torque::FFI::IffNotFoundError (class)">IffNotFoundError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15009</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MungeNotFoundError.html" title="OodCore::Job::Adapters::Torque::FFI::MungeNotFoundError (class)">MungeNotFoundError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15010</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadhostError.html" title="OodCore::Job::Adapters::Torque::FFI::BadhostError (class)">BadhostError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15011</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobexistError.html" title="OodCore::Job::Adapters::Torque::FFI::JobexistError (class)">JobexistError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15012</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SystemError.html" title="OodCore::Job::Adapters::Torque::FFI::SystemError (class)">SystemError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15013</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/InternalError.html" title="OodCore::Job::Adapters::Torque::FFI::InternalError (class)">InternalError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15014</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/RegrouteError.html" title="OodCore::Job::Adapters::Torque::FFI::RegrouteError (class)">RegrouteError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15015</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnksigError.html" title="OodCore::Job::Adapters::Torque::FFI::UnksigError (class)">UnksigError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15016</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadatvalError.html" title="OodCore::Job::Adapters::Torque::FFI::BadatvalError (class)">BadatvalError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15017</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ModatrrunError.html" title="OodCore::Job::Adapters::Torque::FFI::ModatrrunError (class)">ModatrrunError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15018</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadstateError.html" title="OodCore::Job::Adapters::Torque::FFI::BadstateError (class)">BadstateError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15020</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnkqueError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkqueError (class)">UnkqueError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15021</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadcredError.html" title="OodCore::Job::Adapters::Torque::FFI::BadcredError (class)">BadcredError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15022</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ExpiredError.html" title="OodCore::Job::Adapters::Torque::FFI::ExpiredError (class)">ExpiredError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15023</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QunoenbError.html" title="OodCore::Job::Adapters::Torque::FFI::QunoenbError (class)">QunoenbError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15024</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QacessError.html" title="OodCore::Job::Adapters::Torque::FFI::QacessError (class)">QacessError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15025</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BaduserError.html" title="OodCore::Job::Adapters::Torque::FFI::BaduserError (class)">BaduserError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15026</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/HopcountError.html" title="OodCore::Job::Adapters::Torque::FFI::HopcountError (class)">HopcountError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15027</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QueexistError.html" title="OodCore::Job::Adapters::Torque::FFI::QueexistError (class)">QueexistError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15028</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/AttrtypeError.html" title="OodCore::Job::Adapters::Torque::FFI::AttrtypeError (class)">AttrtypeError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15029</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QuebusyError.html" title="OodCore::Job::Adapters::Torque::FFI::QuebusyError (class)">QuebusyError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15030</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QuenbigError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenbigError (class)">QuenbigError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15031</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NosupError.html" title="OodCore::Job::Adapters::Torque::FFI::NosupError (class)">NosupError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15032</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QuenoenError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenoenError (class)">QuenoenError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15033</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ProtocolError.html" title="OodCore::Job::Adapters::Torque::FFI::ProtocolError (class)">ProtocolError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15034</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadatlstError.html" title="OodCore::Job::Adapters::Torque::FFI::BadatlstError (class)">BadatlstError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15035</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NoconnectsError.html" title="OodCore::Job::Adapters::Torque::FFI::NoconnectsError (class)">NoconnectsError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15036</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NoserverError.html" title="OodCore::Job::Adapters::Torque::FFI::NoserverError (class)">NoserverError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15037</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnkrescError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkrescError (class)">UnkrescError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15038</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ExcqrescError.html" title="OodCore::Job::Adapters::Torque::FFI::ExcqrescError (class)">ExcqrescError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15039</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QuenodfltError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenodfltError (class)">QuenodfltError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15040</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NorerunError.html" title="OodCore::Job::Adapters::Torque::FFI::NorerunError (class)">NorerunError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15041</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/RouterejError.html" title="OodCore::Job::Adapters::Torque::FFI::RouterejError (class)">RouterejError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15042</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/RouteexpdError.html" title="OodCore::Job::Adapters::Torque::FFI::RouteexpdError (class)">RouteexpdError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15043</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MomrejectError.html" title="OodCore::Job::Adapters::Torque::FFI::MomrejectError (class)">MomrejectError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15044</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadscriptError.html" title="OodCore::Job::Adapters::Torque::FFI::BadscriptError (class)">BadscriptError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15045</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/StageinError.html" title="OodCore::Job::Adapters::Torque::FFI::StageinError (class)">StageinError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15046</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/RescunavError.html" title="OodCore::Job::Adapters::Torque::FFI::RescunavError (class)">RescunavError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15047</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadgrpError.html" title="OodCore::Job::Adapters::Torque::FFI::BadgrpError (class)">BadgrpError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15048</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MaxquedError.html" title="OodCore::Job::Adapters::Torque::FFI::MaxquedError (class)">MaxquedError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15049</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CkpbsyError.html" title="OodCore::Job::Adapters::Torque::FFI::CkpbsyError (class)">CkpbsyError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15050</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ExlimitError.html" title="OodCore::Job::Adapters::Torque::FFI::ExlimitError (class)">ExlimitError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15051</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadacctError.html" title="OodCore::Job::Adapters::Torque::FFI::BadacctError (class)">BadacctError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15052</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/AlrdyexitError.html" title="OodCore::Job::Adapters::Torque::FFI::AlrdyexitError (class)">AlrdyexitError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15053</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NocopyfileError.html" title="OodCore::Job::Adapters::Torque::FFI::NocopyfileError (class)">NocopyfileError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15054</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CleanedoutError.html" title="OodCore::Job::Adapters::Torque::FFI::CleanedoutError (class)">CleanedoutError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15055</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NosyncmstrError.html" title="OodCore::Job::Adapters::Torque::FFI::NosyncmstrError (class)">NosyncmstrError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15056</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BaddependError.html" title="OodCore::Job::Adapters::Torque::FFI::BaddependError (class)">BaddependError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15057</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/DuplistError.html" title="OodCore::Job::Adapters::Torque::FFI::DuplistError (class)">DuplistError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15058</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/DisprotoError.html" title="OodCore::Job::Adapters::Torque::FFI::DisprotoError (class)">DisprotoError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15059</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ExecthereError.html" title="OodCore::Job::Adapters::Torque::FFI::ExecthereError (class)">ExecthereError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15060</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SisrejectError.html" title="OodCore::Job::Adapters::Torque::FFI::SisrejectError (class)">SisrejectError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15061</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SiscommError.html" title="OodCore::Job::Adapters::Torque::FFI::SiscommError (class)">SiscommError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15062</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SvrdownError.html" title="OodCore::Job::Adapters::Torque::FFI::SvrdownError (class)">SvrdownError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15063</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CkpshortError.html" title="OodCore::Job::Adapters::Torque::FFI::CkpshortError (class)">CkpshortError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15064</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnknodeError.html" title="OodCore::Job::Adapters::Torque::FFI::UnknodeError (class)">UnknodeError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15065</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnknodeatrError.html" title="OodCore::Job::Adapters::Torque::FFI::UnknodeatrError (class)">UnknodeatrError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15066</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NonodesError.html" title="OodCore::Job::Adapters::Torque::FFI::NonodesError (class)">NonodesError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15067</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NodenbigError.html" title="OodCore::Job::Adapters::Torque::FFI::NodenbigError (class)">NodenbigError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15068</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NodeexistError.html" title="OodCore::Job::Adapters::Torque::FFI::NodeexistError (class)">NodeexistError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15069</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadndatvalError.html" title="OodCore::Job::Adapters::Torque::FFI::BadndatvalError (class)">BadndatvalError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15070</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MutualexError.html" title="OodCore::Job::Adapters::Torque::FFI::MutualexError (class)">MutualexError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15071</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/GmoderrError.html" title="OodCore::Job::Adapters::Torque::FFI::GmoderrError (class)">GmoderrError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15072</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NorelymomError.html" title="OodCore::Job::Adapters::Torque::FFI::NorelymomError (class)">NorelymomError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15073</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NotsnodeError.html" title="OodCore::Job::Adapters::Torque::FFI::NotsnodeError (class)">NotsnodeError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15074</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobtypeError.html" title="OodCore::Job::Adapters::Torque::FFI::JobtypeError (class)">JobtypeError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15075</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadaclhostError.html" title="OodCore::Job::Adapters::Torque::FFI::BadaclhostError (class)">BadaclhostError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15076</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MaxuserquedError.html" title="OodCore::Job::Adapters::Torque::FFI::MaxuserquedError (class)">MaxuserquedError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15077</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BaddisallowtypeError.html" title="OodCore::Job::Adapters::Torque::FFI::BaddisallowtypeError (class)">BaddisallowtypeError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15078</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NointeractiveError.html" title="OodCore::Job::Adapters::Torque::FFI::NointeractiveError (class)">NointeractiveError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15079</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NobatchError.html" title="OodCore::Job::Adapters::Torque::FFI::NobatchError (class)">NobatchError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15080</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NorerunableError.html" title="OodCore::Job::Adapters::Torque::FFI::NorerunableError (class)">NorerunableError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15081</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NononrerunableError.html" title="OodCore::Job::Adapters::Torque::FFI::NononrerunableError (class)">NononrerunableError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15082</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/UnkarrayidError.html" title="OodCore::Job::Adapters::Torque::FFI::UnkarrayidError (class)">UnkarrayidError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15083</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadArrayReqError.html" title="OodCore::Job::Adapters::Torque::FFI::BadArrayReqError (class)">BadArrayReqError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15084</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadArrayDataError.html" title="OodCore::Job::Adapters::Torque::FFI::BadArrayDataError (class)">BadArrayDataError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15085</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/TimeoutError.html" title="OodCore::Job::Adapters::Torque::FFI::TimeoutError (class)">TimeoutError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15086</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobnotfoundError.html" title="OodCore::Job::Adapters::Torque::FFI::JobnotfoundError (class)">JobnotfoundError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15087</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NofaulttolerantError.html" title="OodCore::Job::Adapters::Torque::FFI::NofaulttolerantError (class)">NofaulttolerantError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15088</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NofaultintolerantError.html" title="OodCore::Job::Adapters::Torque::FFI::NofaultintolerantError (class)">NofaultintolerantError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15089</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NojobarraysError.html" title="OodCore::Job::Adapters::Torque::FFI::NojobarraysError (class)">NojobarraysError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15090</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/RelayedToMomError.html" title="OodCore::Job::Adapters::Torque::FFI::RelayedToMomError (class)">RelayedToMomError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15091</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MemMallocError.html" title="OodCore::Job::Adapters::Torque::FFI::MemMallocError (class)">MemMallocError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15092</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MutexError.html" title="OodCore::Job::Adapters::Torque::FFI::MutexError (class)">MutexError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15093</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ThreadattrError.html" title="OodCore::Job::Adapters::Torque::FFI::ThreadattrError (class)">ThreadattrError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15094</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ThreadError.html" title="OodCore::Job::Adapters::Torque::FFI::ThreadError (class)">ThreadError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15095</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SelectError.html" title="OodCore::Job::Adapters::Torque::FFI::SelectError (class)">SelectError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15096</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketFaultError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketFaultError (class)">SocketFaultError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15097</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketWriteError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketWriteError (class)">SocketWriteError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15098</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketReadError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketReadError (class)">SocketReadError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15099</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketCloseError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketCloseError (class)">SocketCloseError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15100</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketListenError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketListenError (class)">SocketListenError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15101</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/AuthInvalidError.html" title="OodCore::Job::Adapters::Torque::FFI::AuthInvalidError (class)">AuthInvalidError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15102</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NotImplementedError.html" title="OodCore::Job::Adapters::Torque::FFI::NotImplementedError (class)">NotImplementedError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15103</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/QuenotavailableError.html" title="OodCore::Job::Adapters::Torque::FFI::QuenotavailableError (class)">QuenotavailableError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15104</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/TmpdiffownerError.html" title="OodCore::Job::Adapters::Torque::FFI::TmpdiffownerError (class)">TmpdiffownerError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15105</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/TmpnotdirError.html" title="OodCore::Job::Adapters::Torque::FFI::TmpnotdirError (class)">TmpnotdirError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15106</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/TmpnonameError.html" title="OodCore::Job::Adapters::Torque::FFI::TmpnonameError (class)">TmpnonameError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15107</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CantopensocketError.html" title="OodCore::Job::Adapters::Torque::FFI::CantopensocketError (class)">CantopensocketError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15108</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CantcontactsistersError.html" title="OodCore::Job::Adapters::Torque::FFI::CantcontactsistersError (class)">CantcontactsistersError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15109</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CantcreatetmpdirError.html" title="OodCore::Job::Adapters::Torque::FFI::CantcreatetmpdirError (class)">CantcreatetmpdirError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15110</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadmomstateError.html" title="OodCore::Job::Adapters::Torque::FFI::BadmomstateError (class)">BadmomstateError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15111</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketInformationError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketInformationError (class)">SocketInformationError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15112</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/SocketDataError.html" title="OodCore::Job::Adapters::Torque::FFI::SocketDataError (class)">SocketDataError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15113</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ClientInvalidError.html" title="OodCore::Job::Adapters::Torque::FFI::ClientInvalidError (class)">ClientInvalidError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15114</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/PrematureEofError.html" title="OodCore::Job::Adapters::Torque::FFI::PrematureEofError (class)">PrematureEofError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15115</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CanNotSaveFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotSaveFileError (class)">CanNotSaveFileError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15116</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CanNotOpenFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotOpenFileError (class)">CanNotOpenFileError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15117</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CanNotWriteFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotWriteFileError (class)">CanNotWriteFileError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15118</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobFileCorruptError.html" title="OodCore::Job::Adapters::Torque::FFI::JobFileCorruptError (class)">JobFileCorruptError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15119</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobRerunError.html" title="OodCore::Job::Adapters::Torque::FFI::JobRerunError (class)">JobRerunError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15120</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ConnectError.html" title="OodCore::Job::Adapters::Torque::FFI::ConnectError (class)">ConnectError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15121</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobworkdelayError.html" title="OodCore::Job::Adapters::Torque::FFI::JobworkdelayError (class)">JobworkdelayError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15122</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/BadParameterError.html" title="OodCore::Job::Adapters::Torque::FFI::BadParameterError (class)">BadParameterError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15123</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ContinueError.html" title="OodCore::Job::Adapters::Torque::FFI::ContinueError (class)">ContinueError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15124</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobsubstateError.html" title="OodCore::Job::Adapters::Torque::FFI::JobsubstateError (class)">JobsubstateError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15125</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/CanNotMoveFileError.html" title="OodCore::Job::Adapters::Torque::FFI::CanNotMoveFileError (class)">CanNotMoveFileError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15126</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobRecycledError.html" title="OodCore::Job::Adapters::Torque::FFI::JobRecycledError (class)">JobRecycledError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15127</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/JobAlreadyInQueueError.html" title="OodCore::Job::Adapters::Torque::FFI::JobAlreadyInQueueError (class)">JobAlreadyInQueueError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15128</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/InvalidMutexError.html" title="OodCore::Job::Adapters::Torque::FFI::InvalidMutexError (class)">InvalidMutexError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15129</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MutexAlreadyLockedError.html" title="OodCore::Job::Adapters::Torque::FFI::MutexAlreadyLockedError (class)">MutexAlreadyLockedError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15130</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/MutexAlreadyUnlockedError.html" title="OodCore::Job::Adapters::Torque::FFI::MutexAlreadyUnlockedError (class)">MutexAlreadyUnlockedError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15131</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/InvalidSyntaxError.html" title="OodCore::Job::Adapters::Torque::FFI::InvalidSyntaxError (class)">InvalidSyntaxError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15132</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/NodeDownError.html" title="OodCore::Job::Adapters::Torque::FFI::NodeDownError (class)">NodeDownError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15133</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ServerNotFoundError.html" title="OodCore::Job::Adapters::Torque::FFI::ServerNotFoundError (class)">ServerNotFoundError</a></span></span><span class='comma'>,</span>
+  <span class='int'>15134</span> <span class='op'>=&gt;</span>   <span class='const'><span class='object_link'><a href="FFI/ServerBusyError.html" title="OodCore::Job::Adapters::Torque::FFI::ServerBusyError (class)">ServerBusyError</a></span></span><span class='comma'>,</span>
+<span class='rbrace'>}</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+  <h2>Class Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_errno-class_method" title="pbs_errno (class method)">.<strong>pbs_errno</strong>  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The internal PBS error number   int pbs_errno.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_server-class_method" title="pbs_server (class method)">.<strong>pbs_server</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The PBS server name   char *pbs_server.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Class Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#check_for_error-class_method" title="check_for_error (class method)">.<strong>check_for_error</strong>  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Check for any errors set in the errno.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#lib-class_method" title="lib (class method)">.<strong>lib</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The path to the torque library file.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#lib=-class_method" title="lib= (class method)">.<strong>lib=</strong>(lib)  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Define torque methods using a supplied library.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_connect-class_method" title="pbs_connect (class method)">.<strong>pbs_connect</strong>(server)  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Connect to PBS batch server   int pbs_connect(char *server).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_default-class_method" title="pbs_default (class method)">.<strong>pbs_default</strong>  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Default PBS server name   char *pbs_default(void).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_deljob-class_method" title="pbs_deljob (class method)">.<strong>pbs_deljob</strong>(connect, job_id, extend)  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Delete a PBS batch job   int pbs_deljob(int connect, char *job_id, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_disconnect-class_method" title="pbs_disconnect (class method)">.<strong>pbs_disconnect</strong>(connect)  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Disconnect from a PBS batch server   int pbs_disconnect(int connect).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_holdjob-class_method" title="pbs_holdjob (class method)">.<strong>pbs_holdjob</strong>(connect, job_id, hold_type, extend)  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Place a hold on a PBS batch job   int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_rlsjob-class_method" title="pbs_rlsjob (class method)">.<strong>pbs_rlsjob</strong>(connect, job_id, hold_type, extend)  &#x21d2; Fixnum </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Release a hold on a PBS batch job   int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_selstat-class_method" title="pbs_selstat (class method)">.<strong>pbs_selstat</strong>(connect, attrib, extend)  &#x21d2; BatchStatus </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Obtain status of selected PBS batch jobs   batch_status * pbs_selstat(int connect, struct attropl *sel_list, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_statfree-class_method" title="pbs_statfree (class method)">.<strong>pbs_statfree</strong>(stat)  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Free the memory allocated by <span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span> object   void pbs_statfree(struct batch_status *stat).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_statjob-class_method" title="pbs_statjob (class method)">.<strong>pbs_statjob</strong>(connect, id, attrib, extend)  &#x21d2; BatchStatus </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Obtain status of PBS batch jobs   batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_statnode-class_method" title="pbs_statnode (class method)">.<strong>pbs_statnode</strong>(connect, id, attrib, extend)  &#x21d2; BatchStatus </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Obtain status of PBS nodes   batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_statque-class_method" title="pbs_statque (class method)">.<strong>pbs_statque</strong>(connect, id, attrib, extend)  &#x21d2; BatchStatus </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Obtain status of PBS batch queues   batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_statserver-class_method" title="pbs_statserver (class method)">.<strong>pbs_statserver</strong>(connect, attrib, extend)  &#x21d2; BatchStatus </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Obtain status of a PBS batch server   batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_strerror-class_method" title="pbs_strerror (class method)">.<strong>pbs_strerror</strong>(errno)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Generates PBS error string from given error number   char *pbs_strerror(int errno).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#pbs_submit-class_method" title="pbs_submit (class method)">.<strong>pbs_submit</strong>(connect, attrib, script, destination, extend)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Submit a PBS batch job   char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend).</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#raise_error-class_method" title="raise_error (class method)">.<strong>raise_error</strong>(errno)  &#x21d2; void </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>For a given errno, raise the corresponding error with error message.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  <div id="class_attr_details" class="attr_details">
+    <h2>Class Attribute Details</h2>
+    
+      
+      <span id="pbs_errno=-class_method"></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="pbs_errno-class_method">
+  
+    .<strong>pbs_errno</strong>  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The internal PBS error number</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_int'>int</span> <span class='id identifier rubyid_pbs_errno'>pbs_errno</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs error number</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 8</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_server-class_method">
+  
+    .<strong>pbs_server</strong>  &#x21d2; <tt>String</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The PBS server name</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_char'>char</span> <span class='op'>*</span><span class='id identifier rubyid_pbs_server'>pbs_server</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs server name</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 13</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="class_method_details" class="method_details_list">
+    <h2>Class Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="check_for_error-class_method">
+  
+    .<strong>check_for_error</strong>  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Check for any errors set in the errno</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+182
+183
+184
+185
+186</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 182</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_check_for_error'>check_for_error</span>
+  <span class='id identifier rubyid_errno'>errno</span> <span class='op'>=</span> <span class='id identifier rubyid_pbs_errno'>pbs_errno</span>
+  <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_pbs_errno'>pbs_errno</span> <span class='op'>=</span> <span class='int'>0</span>  <span class='comment'># reset error number
+</span>  <span class='id identifier rubyid_raise_error'>raise_error</span><span class='lparen'>(</span><span class='id identifier rubyid_errno'>errno</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_errno'>errno</span> <span class='op'>&gt;</span> <span class='int'>0</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="lib-class_method">
+  
+    .<strong>lib</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The path to the torque library file</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to torque library</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+145
+146
+147</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 145</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_lib'>lib</span>
+  <span class='ivar'>@lib</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="lib=-class_method">
+  
+    .<strong>lib=</strong>(lib)  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Define torque methods using a supplied library</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>lib</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>path to library file</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 152</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_lib='>lib=</span><span class='lparen'>(</span><span class='id identifier rubyid_lib'>lib</span><span class='rparen'>)</span>
+  <span class='ivar'>@lib</span> <span class='op'>=</span> <span class='id identifier rubyid_lib'>lib</span> <span class='op'>?</span> <span class='id identifier rubyid_lib'>lib</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>torque</span><span class='tstring_end'>&#39;</span></span>
+
+  <span class='comment'># Set up FFI to use this library
+</span>  <span class='id identifier rubyid_ffi_lib'>ffi_lib</span> <span class='ivar'>@lib</span>
+
+  <span class='id identifier rubyid_attach_variable'>attach_variable</span> <span class='symbol'>:pbs_errno</span><span class='comma'>,</span> <span class='symbol'>:int</span>
+  <span class='id identifier rubyid_attach_variable'>attach_variable</span> <span class='symbol'>:pbs_server</span><span class='comma'>,</span> <span class='symbol'>:string</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_strerror</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:string</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_default</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:string</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_connect</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:int</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_disconnect</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:int</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_deljob</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:int</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_holdjob</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:int</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_rlsjob</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:int</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_statfree</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='const'><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:void</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_statjob</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_statnode</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_statque</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_statserver</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span>
+  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_selstat</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/Attropl.html" title="OodCore::Job::Adapters::Torque::FFI::Attropl (class)">Attropl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span>
+
+  <span class='comment'># FIXME: The space for the job_identifier string is allocated by
+</span>  <span class='comment'># pbs_submit() and should be released via a call to free() when no longer
+</span>  <span class='comment'># needed
+</span>  <span class='id identifier rubyid_attach_function'>attach_function</span> <span class='symbol'>:pbs_submit</span><span class='comma'>,</span> <span class='lbracket'>[</span> <span class='symbol'>:int</span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="FFI/Attropl.html" title="OodCore::Job::Adapters::Torque::FFI::Attropl (class)">Attropl</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ptr'>ptr</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span><span class='comma'>,</span> <span class='symbol'>:string</span> <span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:string</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_connect-class_method">
+  
+    .<strong>pbs_connect</strong>(server)  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Connect to PBS batch server</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_int'>int</span> <span class='id identifier rubyid_pbs_connect'>pbs_connect</span><span class='lparen'>(</span><span class='id identifier rubyid_char'>char</span> <span class='op'>*</span><span class='id identifier rubyid_server'>server</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>server</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>name of pbs server</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_connect" target="_parent" title="http://linux.die.net/man/3/pbs_connect">http://linux.die.net/man/3/pbs_connect</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 30</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_default-class_method">
+  
+    .<strong>pbs_default</strong>  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Default PBS server name</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_char'>char</span> <span class='op'>*</span><span class='id identifier rubyid_pbs_default'>pbs_default</span><span class='lparen'>(</span><span class='id identifier rubyid_void'>void</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>default pbs server name</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_default" target="_parent" title="http://linux.die.net/man/3/pbs_default">http://linux.die.net/man/3/pbs_default</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 24</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_deljob-class_method">
+  
+    .<strong>pbs_deljob</strong>(connect, job_id, extend)  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Delete a PBS batch job</p>
+
+<pre class="code ruby"><code class="ruby">int pbs_deljob(int connect, char *job_id, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>job_id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the job id</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>exit status code</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_deljob" target="_parent" title="http://linux.die.net/man/3/pbs_deljob">http://linux.die.net/man/3/pbs_deljob</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 44</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_disconnect-class_method">
+  
+    .<strong>pbs_disconnect</strong>(connect)  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Disconnect from a PBS batch server</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_int'>int</span> <span class='id identifier rubyid_pbs_disconnect'>pbs_disconnect</span><span class='lparen'>(</span><span class='id identifier rubyid_int'>int</span> <span class='id identifier rubyid_connect'>connect</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>exit status code</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_disconnect" target="_parent" title="http://linux.die.net/man/3/pbs_disconnect">http://linux.die.net/man/3/pbs_disconnect</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 37</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_holdjob-class_method">
+  
+    .<strong>pbs_holdjob</strong>(connect, job_id, hold_type, extend)  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Place a hold on a PBS batch job</p>
+
+<pre class="code ruby"><code class="ruby">int pbs_holdjob(int connect, char *job_id, char *hold_type, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>job_id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the job id</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hold_type</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of hold to be applied</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>exit status code</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_holdjob" target="_parent" title="http://linux.die.net/man/3/pbs_holdjob">http://linux.die.net/man/3/pbs_holdjob</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 53</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_rlsjob-class_method">
+  
+    .<strong>pbs_rlsjob</strong>(connect, job_id, hold_type, extend)  &#x21d2; <tt>Fixnum</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Release a hold on a PBS batch job</p>
+
+<pre class="code ruby"><code class="ruby">int pbs_rlsjob(int connect, char *job_id, char *hold_type, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>job_id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the job id</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hold_type</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>type of hold to be released</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>exit status code</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_rlsjob" target="_parent" title="http://linux.die.net/man/3/pbs_rlsjob">http://linux.die.net/man/3/pbs_rlsjob</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 63</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_selstat-class_method">
+  
+    .<strong>pbs_selstat</strong>(connect, attrib, extend)  &#x21d2; <tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>It is up to the user to free the space of the batch status objects</p>
+</div>
+  </div>
+
+
+<p>Obtain status of selected PBS batch jobs</p>
+
+<pre class="code ruby"><code class="ruby">batch_status * pbs_selstat(int connect, struct attropl *sel_list, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attrib</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Attropl.html" title="OodCore::Job::Adapters::Torque::FFI::Attropl (class)">Attropl</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attribute operation c-linked list object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>c-linked list of batch status objects</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_selstat" target="_parent" title="http://linux.die.net/man/3/pbs_selstat">http://linux.die.net/man/3/pbs_selstat</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 122</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_statfree-class_method">
+  
+    .<strong>pbs_statfree</strong>(stat)  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>Free the memory allocated by <span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span> object</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_void'>void</span> <span class='id identifier rubyid_pbs_statfree'>pbs_statfree</span><span class='lparen'>(</span><span class='id identifier rubyid_struct'>struct</span> <span class='id identifier rubyid_batch_status'>batch_status</span> <span class='op'>*</span><span class='id identifier rubyid_stat'>stat</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>stat</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the batch status object</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 73</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_statjob-class_method">
+  
+    .<strong>pbs_statjob</strong>(connect, id, attrib, extend)  &#x21d2; <tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>It is up to the user to free the space of the batch status objects</p>
+</div>
+  </div>
+
+
+<p>Obtain status of PBS batch jobs</p>
+
+<pre class="code ruby"><code class="ruby">batch_status * pbs_statjob(int connect, char *id, struct attrl *attrib, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>job or destination identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attrib</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attribute c-linked list object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>c-linked list of batch status objects</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_statjob" target="_parent" title="http://linux.die.net/man/3/pbs_statjob">http://linux.die.net/man/3/pbs_statjob</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 79</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_statnode-class_method">
+  
+    .<strong>pbs_statnode</strong>(connect, id, attrib, extend)  &#x21d2; <tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>It is up to the user to free the space of the batch status objects</p>
+</div>
+  </div>
+
+
+<p>Obtain status of PBS nodes</p>
+
+<pre class="code ruby"><code class="ruby">batch_status * pbs_statnode(int connect, char *id, struct attrl *attrib, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>name of a node or null string</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attrib</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attribute c-linked list object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>c-linked list of batch status objects</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_statnode" target="_parent" title="http://linux.die.net/man/3/pbs_statnode">http://linux.die.net/man/3/pbs_statnode</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 90</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_statque-class_method">
+  
+    .<strong>pbs_statque</strong>(connect, id, attrib, extend)  &#x21d2; <tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>It is up to the user to free the space of the batch status objects</p>
+</div>
+  </div>
+
+
+<p>Obtain status of PBS batch queues</p>
+
+<pre class="code ruby"><code class="ruby">batch_status * pbs_statque(int connect, char *id, struct attrl *attrib, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>id</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>name of a queue or null string</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attrib</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attribute c-linked list object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>c-linked list of batch status objects</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_statque" target="_parent" title="http://linux.die.net/man/3/pbs_statque">http://linux.die.net/man/3/pbs_statque</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 101</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_statserver-class_method">
+  
+    .<strong>pbs_statserver</strong>(connect, attrib, extend)  &#x21d2; <tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+  <div class="note notetag">
+    <strong>Note:</strong>
+    <div class='inline'>
+<p>It is up to the user to free the space of the batch status objects</p>
+</div>
+  </div>
+
+
+<p>Obtain status of a PBS batch server</p>
+
+<pre class="code ruby"><code class="ruby">batch_status * pbs_statserver(int connect, struct attrl *attrib, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attrib</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Attrl.html" title="OodCore::Job::Adapters::Torque::FFI::Attrl (class)">Attrl</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attribute c-linked list object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/BatchStatus.html" title="OodCore::Job::Adapters::Torque::FFI::BatchStatus (class)">BatchStatus</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>c-linked list of batch status objects</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_statserver" target="_parent" title="http://linux.die.net/man/3/pbs_statserver">http://linux.die.net/man/3/pbs_statserver</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 112</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_strerror-class_method">
+  
+    .<strong>pbs_strerror</strong>(errno)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Generates PBS error string from given error number</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_char'>char</span> <span class='op'>*</span><span class='id identifier rubyid_pbs_strerror'>pbs_strerror</span><span class='lparen'>(</span><span class='id identifier rubyid_int'>int</span> <span class='id identifier rubyid_errno'>errno</span><span class='rparen'>)</span>
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>errno</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs error number</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>pbs error string</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 18</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="pbs_submit-class_method">
+  
+    .<strong>pbs_submit</strong>(connect, attrib, script, destination, extend)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Submit a PBS batch job</p>
+
+<pre class="code ruby"><code class="ruby">char *pbs_submit(int connect, struct attropl *attrib, char *script, char *destination, char *extend)
+</code></pre>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>connect</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>connection identifier</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>attrib</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Attropl.html" title="OodCore::Job::Adapters::Torque::FFI::Attropl (class)">Attropl</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the attribute operation c-linked list object</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>script</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the path to the script</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>destination</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the queue to send job to</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extend</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>implementation defined extensions</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the job id</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  <p class="tag_title">See Also:</p>
+  <ul class="see">
+    
+      <li><a href="http://linux.die.net/man/3/pbs_submit" target="_parent" title="http://linux.die.net/man/3/pbs_submit">http://linux.die.net/man/3/pbs_submit</a></li>
+    
+  </ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 132</span>
+
+</pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="raise_error-class_method">
+  
+    .<strong>raise_error</strong>(errno)  &#x21d2; <tt>void</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note returns_void">This method returns an undefined value.</p>
+<p>For a given errno, raise the corresponding error with error message</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>errno</span>
+      
+      
+        <span class='type'>(<tt>Fixnum</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the error number</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Raises:</p>
+<ul class="raise">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="FFI/Error.html" title="OodCore::Job::Adapters::Torque::FFI::Error (class)">Error</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>if errno is not 0</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+192
+193
+194</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/torque/ffi.rb', line 192</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_raise_error'>raise_error</span><span class='lparen'>(</span><span class='id identifier rubyid_errno'>errno</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_raise'>raise</span> <span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#ERROR_CODES-constant" title="OodCore::Job::Adapters::Torque::FFI::ERROR_CODES (constant)">ERROR_CODES</a></span></span><span class='lbracket'>[</span><span class='id identifier rubyid_errno'>errno</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='const'>PBS</span><span class='op'>::</span><span class='const'>Error</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pbs_strerror'>pbs_strerror</span><span class='lparen'>(</span><span class='id identifier rubyid_errno'>errno</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 18 14:41:08 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>

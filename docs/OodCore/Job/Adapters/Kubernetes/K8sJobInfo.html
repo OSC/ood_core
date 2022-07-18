@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: OodCore::Job::Adapters::Kubernetes::K8sJobInfo
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "OodCore::Job::Adapters::Kubernetes::K8sJobInfo";
+  relpath = '../../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../../_index.html">Index (K)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Kubernetes.html" title="OodCore::Job::Adapters::Kubernetes (class)">Kubernetes</a></span></span>
+     &raquo; 
+    <span class="title">K8sJobInfo</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: OodCore::Job::Adapters::Kubernetes::K8sJobInfo
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName"><span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next"><span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></li>
+          
+            <li class="next">OodCore::Job::Adapters::Kubernetes::K8sJobInfo</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/kubernetes/k8s_job_info.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>An object that describes a submitted kubernetes job with extended information</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ood_connection_info-instance_method" title="#ood_connection_info (instance method)">#<strong>ood_connection_info</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute ood_connection_info.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+  
+  
+  <h3 class="inherited">Attributes inherited from <span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../Info.html#accounting_id-instance_method" title="OodCore::Job::Info#accounting_id (method)">#accounting_id</a></span>, <span class='object_link'><a href="../../Info.html#allocated_nodes-instance_method" title="OodCore::Job::Info#allocated_nodes (method)">#allocated_nodes</a></span>, <span class='object_link'><a href="../../Info.html#cpu_time-instance_method" title="OodCore::Job::Info#cpu_time (method)">#cpu_time</a></span>, <span class='object_link'><a href="../../Info.html#dispatch_time-instance_method" title="OodCore::Job::Info#dispatch_time (method)">#dispatch_time</a></span>, <span class='object_link'><a href="../../Info.html#gpus-instance_method" title="OodCore::Job::Info#gpus (method)">#gpus</a></span>, <span class='object_link'><a href="../../Info.html#id-instance_method" title="OodCore::Job::Info#id (method)">#id</a></span>, <span class='object_link'><a href="../../Info.html#job_name-instance_method" title="OodCore::Job::Info#job_name (method)">#job_name</a></span>, <span class='object_link'><a href="../../Info.html#job_owner-instance_method" title="OodCore::Job::Info#job_owner (method)">#job_owner</a></span>, <span class='object_link'><a href="../../Info.html#native-instance_method" title="OodCore::Job::Info#native (method)">#native</a></span>, <span class='object_link'><a href="../../Info.html#procs-instance_method" title="OodCore::Job::Info#procs (method)">#procs</a></span>, <span class='object_link'><a href="../../Info.html#queue_name-instance_method" title="OodCore::Job::Info#queue_name (method)">#queue_name</a></span>, <span class='object_link'><a href="../../Info.html#status-instance_method" title="OodCore::Job::Info#status (method)">#status</a></span>, <span class='object_link'><a href="../../Info.html#submission_time-instance_method" title="OodCore::Job::Info#submission_time (method)">#submission_time</a></span>, <span class='object_link'><a href="../../Info.html#submit_host-instance_method" title="OodCore::Job::Info#submit_host (method)">#submit_host</a></span>, <span class='object_link'><a href="../../Info.html#tasks-instance_method" title="OodCore::Job::Info#tasks (method)">#tasks</a></span>, <span class='object_link'><a href="../../Info.html#wallclock_limit-instance_method" title="OodCore::Job::Info#wallclock_limit (method)">#wallclock_limit</a></span>, <span class='object_link'><a href="../../Info.html#wallclock_time-instance_method" title="OodCore::Job::Info#wallclock_time (method)">#wallclock_time</a></span></p>
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(options)  &#x21d2; K8sJobInfo </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of K8sJobInfo.</p>
+</div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../../Info.html#==-instance_method" title="OodCore::Job::Info#== (method)">#==</a></span>, <span class='object_link'><a href="../../Info.html#build_child_info-instance_method" title="OodCore::Job::Info#build_child_info (method)">#build_child_info</a></span>, <span class='object_link'><a href="../../Info.html#eql%3F-instance_method" title="OodCore::Job::Info#eql? (method)">#eql?</a></span>, <span class='object_link'><a href="../../Info.html#gpu%3F-instance_method" title="OodCore::Job::Info#gpu? (method)">#gpu?</a></span>, <span class='object_link'><a href="../../Info.html#hash-instance_method" title="OodCore::Job::Info#hash (method)">#hash</a></span>, <span class='object_link'><a href="../../Info.html#to_h-instance_method" title="OodCore::Job::Info#to_h (method)">#to_h</a></span></p>
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(options)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::Kubernetes::K8sJobInfo (class)">K8sJobInfo</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of K8sJobInfo.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+5
+6
+7
+8</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/k8s_job_info.rb', line 5</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='kw'>super</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_options'>options</span><span class='rparen'>)</span>
+  <span class='ivar'>@ood_connection_info</span> <span class='op'>=</span> <span class='id identifier rubyid_options'>options</span><span class='lbracket'>[</span><span class='symbol'>:ood_connection_info</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="ood_connection_info-instance_method">
+  
+    #<strong>ood_connection_info</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute ood_connection_info.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+3
+4
+5</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/k8s_job_info.rb', line 3</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ood_connection_info'>ood_connection_info</span>
+  <span class='ivar'>@ood_connection_info</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 18 14:41:10 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>

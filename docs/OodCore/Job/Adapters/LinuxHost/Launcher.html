@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: OodCore::Job::Adapters::LinuxHost::Launcher
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "OodCore::Job::Adapters::LinuxHost::Launcher";
+  relpath = '../../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../../_index.html">Index (L)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../LinuxHost.html" title="OodCore::Job::Adapters::LinuxHost (class)">LinuxHost</a></span></span>
+     &raquo; 
+    <span class="title">Launcher</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: OodCore::Job::Adapters::LinuxHost::Launcher
+  
+  
+  <span class="private note title">Private</span>
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">OodCore::Job::Adapters::LinuxHost::Launcher</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/linux_host/launcher.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This class is part of a private API.</strong>
+  You should avoid using this class if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Object used for simplified communication SSH hosts</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
+<p class="children">
+  
+    
+  
+    
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Launcher/Error.html" title="OodCore::Job::Adapters::LinuxHost::Launcher::Error (class)">Error</a></span>
+    
+  
+</p>
+
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="UNIT_SEPARATOR-constant" class="">UNIT_SEPARATOR =
+          <div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>,</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#contain-instance_method" title="#contain (instance method)">#<strong>contain</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#debug-instance_method" title="#debug (instance method)">#<strong>debug</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#default_singularity_image-instance_method" title="#default_singularity_image (instance method)">#<strong>default_singularity_image</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#session_name_label-instance_method" title="#session_name_label (instance method)">#<strong>session_name_label</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#singularity_bin-instance_method" title="#singularity_bin (instance method)">#<strong>singularity_bin</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#site_singularity_bindpath-instance_method" title="#site_singularity_bindpath (instance method)">#<strong>site_singularity_bindpath</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#site_timeout-instance_method" title="#site_timeout (instance method)">#<strong>site_timeout</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#ssh_hosts-instance_method" title="#ssh_hosts (instance method)">#<strong>ssh_hosts</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#strict_host_checking-instance_method" title="#strict_host_checking (instance method)">#<strong>strict_host_checking</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tmux_bin-instance_method" title="#tmux_bin (instance method)">#<strong>tmux_bin</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#username-instance_method" title="#username (instance method)">#<strong>username</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(contain: false, debug: false, site_timeout: nil, singularity_bin:, singularity_bindpath: &#39;/etc,/media,/mnt,/opt,/run,/srv,/usr,/var,/users&#39;, singularity_image:, ssh_hosts:, strict_host_checking: false, submit_host:, tmux_bin:, **_)  &#x21d2; Launcher </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of Launcher.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#list_remote_sessions-instance_method" title="#list_remote_sessions (instance method)">#<strong>list_remote_sessions</strong>(host: nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#start_remote_session-instance_method" title="#start_remote_session (instance method)">#<strong>start_remote_session</strong>(script)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#stop_remote_session-instance_method" title="#stop_remote_session (instance method)">#<strong>stop_remote_session</strong>(session_name, hostname)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#submit_host-instance_method" title="#submit_host (instance method)">#<strong>submit_host</strong>(script = nil)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+<div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>(contain: false, debug: false, site_timeout: nil, singularity_bin:, singularity_bindpath: &#39;/etc,/media,/mnt,/opt,/run,/srv,/usr,/var,/users&#39;, singularity_image:, ssh_hosts:, strict_host_checking: false, submit_host:, tmux_bin:, **_)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::LinuxHost::Launcher (class)">Launcher</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Returns a new instance of Launcher.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>debug</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Whether the adapter should be used in debug mode</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>site_timeout</span>
+      
+      
+        <span class='type'>(<tt>#to_i</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>nil</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A period after which the job should be killed or nil</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>singularity_bin</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Path to the Singularity executable</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>singularity_bindpath</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>&#39;/etc,/media,/mnt,/opt,/run,/srv,/usr,/var,/users&#39;</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>A comma delimited string of host paths to bindmount into the guest; sets SINGULARITY_BINDPATH environment variable</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>singularity_image</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Path to the Singularity image</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ssh_hosts</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>List of hosts to check when scanning for running jobs</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>strict_host_checking</span>
+      
+      
+        <span class='type'></span>
+      
+      
+        <em class="default">(defaults to: <tt>false</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Allow SSH to perform strict host checking</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>submit_host</span>
+      
+      
+        <span class='type'></span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The SSH-able host</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tmux_bin</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Path to the tmux executable</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 30</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span>
+  <span class='label'>contain:</span> <span class='kw'>false</span><span class='comma'>,</span>
+  <span class='label'>debug:</span> <span class='kw'>false</span><span class='comma'>,</span>
+  <span class='label'>site_timeout:</span> <span class='kw'>nil</span><span class='comma'>,</span>
+  <span class='label'>singularity_bin:</span><span class='comma'>,</span>
+  <span class='label'>singularity_bindpath:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/etc,/media,/mnt,/opt,/run,/srv,/usr,/var,/users</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+  <span class='label'>singularity_image:</span><span class='comma'>,</span>
+  <span class='label'>ssh_hosts:</span><span class='comma'>,</span>
+  <span class='label'>strict_host_checking:</span> <span class='kw'>false</span><span class='comma'>,</span>
+  <span class='label'>submit_host:</span><span class='comma'>,</span>
+  <span class='label'>tmux_bin:</span><span class='comma'>,</span>
+  <span class='op'>**</span><span class='id identifier rubyid__'>_</span>
+<span class='rparen'>)</span>
+  <span class='ivar'>@contain</span> <span class='op'>=</span> <span class='op'>!</span><span class='op'>!</span> <span class='id identifier rubyid_contain'>contain</span>
+  <span class='ivar'>@debug</span> <span class='op'>=</span> <span class='op'>!</span><span class='op'>!</span> <span class='id identifier rubyid_debug'>debug</span>
+  <span class='ivar'>@site_timeout</span> <span class='op'>=</span> <span class='id identifier rubyid_site_timeout'>site_timeout</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='ivar'>@session_name_label</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>launched-by-ondemand</span><span class='tstring_end'>&#39;</span></span>
+  <span class='ivar'>@singularity_bin</span> <span class='op'>=</span> <span class='const'>Pathname</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_singularity_bin'>singularity_bin</span><span class='rparen'>)</span>
+  <span class='ivar'>@site_singularity_bindpath</span> <span class='op'>=</span> <span class='id identifier rubyid_singularity_bindpath'>singularity_bindpath</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='ivar'>@default_singularity_image</span> <span class='op'>=</span> <span class='const'>Pathname</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_singularity_image'>singularity_image</span><span class='rparen'>)</span>
+  <span class='ivar'>@ssh_hosts</span> <span class='op'>=</span> <span class='id identifier rubyid_ssh_hosts'>ssh_hosts</span>
+  <span class='ivar'>@strict_host_checking</span> <span class='op'>=</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span>
+  <span class='ivar'>@submit_host</span> <span class='op'>=</span> <span class='id identifier rubyid_submit_host'>submit_host</span>
+  <span class='ivar'>@tmux_bin</span> <span class='op'>=</span> <span class='id identifier rubyid_tmux_bin'>tmux_bin</span>
+  <span class='ivar'>@username</span> <span class='op'>=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getlogin'>getlogin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="contain-instance_method">
+  
+    #<strong>contain</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_contain'>contain</span>
+  <span class='ivar'>@contain</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="debug-instance_method">
+  
+    #<strong>debug</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_debug'>debug</span>
+  <span class='ivar'>@debug</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="default_singularity_image-instance_method">
+  
+    #<strong>default_singularity_image</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_default_singularity_image'>default_singularity_image</span>
+  <span class='ivar'>@default_singularity_image</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="session_name_label-instance_method">
+  
+    #<strong>session_name_label</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_session_name_label'>session_name_label</span>
+  <span class='ivar'>@session_name_label</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="singularity_bin-instance_method">
+  
+    #<strong>singularity_bin</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_singularity_bin'>singularity_bin</span>
+  <span class='ivar'>@singularity_bin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="site_singularity_bindpath-instance_method">
+  
+    #<strong>site_singularity_bindpath</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_site_singularity_bindpath'>site_singularity_bindpath</span>
+  <span class='ivar'>@site_singularity_bindpath</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="site_timeout-instance_method">
+  
+    #<strong>site_timeout</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_site_timeout'>site_timeout</span>
+  <span class='ivar'>@site_timeout</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="ssh_hosts-instance_method">
+  
+    #<strong>ssh_hosts</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_ssh_hosts'>ssh_hosts</span>
+  <span class='ivar'>@ssh_hosts</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="strict_host_checking-instance_method">
+  
+    #<strong>strict_host_checking</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span>
+  <span class='ivar'>@strict_host_checking</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="tmux_bin-instance_method">
+  
+    #<strong>tmux_bin</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_tmux_bin'>tmux_bin</span>
+  <span class='ivar'>@tmux_bin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="username-instance_method">
+  
+    #<strong>username</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_username'>username</span>
+  <span class='ivar'>@username</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="list_remote_sessions-instance_method">
+  
+    #<strong>list_remote_sessions</strong>(host: nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+86
+87
+88
+89
+90
+91
+92
+93
+94</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 86</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_list_remote_sessions'>list_remote_sessions</span><span class='lparen'>(</span><span class='label'>host:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_host_list'>host_list</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_host'>host</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='lbracket'>[</span><span class='id identifier rubyid_host'>host</span><span class='rbracket'>]</span> <span class='op'>:</span> <span class='id identifier rubyid_ssh_hosts'>ssh_hosts</span>
+
+  <span class='id identifier rubyid_host_list'>host_list</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span>
+    <span class='op'>|</span><span class='id identifier rubyid_hostname'>hostname</span><span class='op'>|</span> <span class='id identifier rubyid_list_remote_tmux_session'>list_remote_tmux_session</span><span class='lparen'>(</span><span class='id identifier rubyid_hostname'>hostname</span><span class='rparen'>)</span>
+  <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_sort_by'>sort_by</span> <span class='lbrace'>{</span>
+    <span class='op'>|</span><span class='id identifier rubyid_hsh'>hsh</span><span class='op'>|</span> <span class='id identifier rubyid_hsh'>hsh</span><span class='lbracket'>[</span><span class='symbol'>:session_name</span><span class='rbracket'>]</span>
+  <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="start_remote_session-instance_method">
+  
+    #<strong>start_remote_session</strong>(script)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>hostname</span>
+      
+      
+        <span class='type'>(<tt>#to_s</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The hostname to submit the work to</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>script</span>
+      
+      
+        <span class='type'>(<tt><span class='object_link'><a href="../../Script.html" title="OodCore::Job::Script (class)">OodCore::Job::Script</a></span></tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The script object defining the work</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+59
+60
+61
+62
+63
+64
+65
+66
+67</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 59</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_start_remote_session'>start_remote_session</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='id identifier rubyid_ssh_cmd'>ssh_cmd</span><span class='lparen'>(</span><span class='id identifier rubyid_submit_host'>submit_host</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/bin/env</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_session_name'>session_name</span> <span class='op'>=</span> <span class='id identifier rubyid_unique_session_name'>unique_session_name</span>
+  <span class='id identifier rubyid_output'>output</span> <span class='op'>=</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='label'>stdin:</span> <span class='id identifier rubyid_wrapped_script'>wrapped_script</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='id identifier rubyid_session_name'>session_name</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_hostname'>hostname</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_hostname'>parse_hostname</span><span class='lparen'>(</span><span class='id identifier rubyid_output'>output</span><span class='rparen'>)</span>
+
+  <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_session_name'>session_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>@</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_hostname'>hostname</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="stop_remote_session-instance_method">
+  
+    #<strong>stop_remote_session</strong>(session_name, hostname)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 69</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_stop_remote_session'>stop_remote_session</span><span class='lparen'>(</span><span class='id identifier rubyid_session_name'>session_name</span><span class='comma'>,</span> <span class='id identifier rubyid_hostname'>hostname</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='id identifier rubyid_ssh_cmd'>ssh_cmd</span><span class='lparen'>(</span><span class='id identifier rubyid_hostname'>hostname</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/bin/env</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>bash</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_kill_cmd'>kill_cmd</span> <span class='op'>=</span> <span class='heredoc_beg'>&lt;&lt;~SCRIPT</span>
+<span class='tstring_content'>  # Get the tmux pane PID for the target session
+</span><span class='tstring_content'>  pane_pid=$(tmux list-panes -aF &#39;\#{session_name} \#{pane_pid}&#39; | grep &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_session_name'>session_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; | cut -f 2 -d &#39; &#39;)
+</span><span class='tstring_content'>  # Find the Singularity sinit PID child of the pane process
+</span><span class='tstring_content'>  pane_sinit_pid=$(pstree -p -l &quot;$pane_pid&quot; | egrep -o &#39;sinit[(][[:digit:]]*|shim-init[(][[:digit:]]*&#39; | grep -o &#39;[[:digit:]]*&#39;) 
+</span><span class='tstring_content'>  # Kill sinit which stops both Singularity-based processes and the tmux session
+</span><span class='tstring_content'>  kill &quot;$pane_sinit_pid&quot;
+</span><span class='heredoc_end'>  SCRIPT
+</span>
+  <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='label'>stdin:</span> <span class='id identifier rubyid_kill_cmd'>kill_cmd</span><span class='rparen'>)</span>
+<span class='kw'>rescue</span> <span class='const'><span class='object_link'><a href="Launcher/Error.html" title="OodCore::Job::Adapters::LinuxHost::Launcher::Error (class)">Error</a></span></span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+  <span class='id identifier rubyid_interpret_and_raise'>interpret_and_raise</span><span class='lparen'>(</span><span class='id identifier rubyid_e'>e</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="submit_host-instance_method">
+  
+    #<strong>submit_host</strong>(script = nil)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+96
+97
+98
+99
+100
+101
+102</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/linux_host/launcher.rb', line 96</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_submit_host'>submit_host</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_script'>script</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>submit_host_override</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>submit_host_override</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+  <span class='kw'>else</span>
+    <span class='ivar'>@submit_host</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 18 14:41:10 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>

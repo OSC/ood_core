@@ -1,0 +1,1830 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Class: QstatXmlJRListener
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "QstatXmlJRListener";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index (Q)</a> &raquo;
+    
+    
+    <span class="title">QstatXmlJRListener</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Class: QstatXmlJRListener
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd>
+      <span class="inheritName">Object</span>
+      
+        <ul class="fullTree">
+          <li>Object</li>
+          
+            <li class="next">QstatXmlJRListener</li>
+          
+        </ul>
+        <a href="#" class="inheritanceTree">show all</a>
+      
+    </dd>
+  </dl>
+  
+
+  
+  
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd>REXML::StreamListener</dd>
+  </dl>
+  
+  
+
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>An XML stream listener to build an array of OodCore::Job::Info from qstat output</p>
+
+<p>Handles parsing ‘qstat -xml -r -j` which provides: :accounting_id :id :job_name :job_owner :procs :queue_name :status :wallclock_limit :wallclock_time</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+
+
+
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#parsed_job-instance_method" title="#parsed_job (instance method)">#<strong>parsed_job</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>[Hash].</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build_tasks-instance_method" title="#build_tasks (instance method)">#<strong>build_tasks</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_CE_name-instance_method" title="#end_CE_name (instance method)">#<strong>end_CE_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_CE_stringval-instance_method" title="#end_CE_stringval (instance method)">#<strong>end_CE_stringval</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JAT_start_time-instance_method" title="#end_JAT_start_time (instance method)">#<strong>end_JAT_start_time</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JAT_task_number-instance_method" title="#end_JAT_task_number (instance method)">#<strong>end_JAT_task_number</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Used to record a running Job Array task.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JB_ja_tasks-instance_method" title="#end_JB_ja_tasks (instance method)">#<strong>end_JB_ja_tasks</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JB_job_name-instance_method" title="#end_JB_job_name (instance method)">#<strong>end_JB_job_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JB_job_number-instance_method" title="#end_JB_job_number (instance method)">#<strong>end_JB_job_number</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Attributes we need.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JB_owner-instance_method" title="#end_JB_owner (instance method)">#<strong>end_JB_owner</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JB_project-instance_method" title="#end_JB_project (instance method)">#<strong>end_JB_project</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_JB_submission_time-instance_method" title="#end_JB_submission_time (instance method)">#<strong>end_JB_submission_time</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_PN_path-instance_method" title="#end_PN_path (instance method)">#<strong>end_PN_path</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_QR_name-instance_method" title="#end_QR_name (instance method)">#<strong>end_QR_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#end_ST_name-instance_method" title="#end_ST_name (instance method)">#<strong>end_ST_name</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#finalize_parsed_job-instance_method" title="#finalize_parsed_job (instance method)">#<strong>finalize_parsed_job</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Used to finalize the parsed job.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>  &#x21d2; QstatXmlJRListener </a>
+    
+
+    
+  </span>
+  
+  
+    <span class="note title constructor">constructor</span>
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>A new instance of QstatXmlJRListener.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#need_to_build_job_array%3F-instance_method" title="#need_to_build_job_array? (instance method)">#<strong>need_to_build_job_array?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The XML output will always contain nodes for task_id_range, even when the job is not an array job.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_job_array_piece-instance_method" title="#set_job_array_piece (instance method)">#<strong>set_job_array_piece</strong>(key)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#set_slots-instance_method" title="#set_slots (instance method)">#<strong>set_slots</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#spec_string-instance_method" title="#spec_string (instance method)">#<strong>spec_string</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tag_end-instance_method" title="#tag_end (instance method)">#<strong>tag_end</strong>(name)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#tag_start-instance_method" title="#tag_start (instance method)">#<strong>tag_start</strong>(name, attrs)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#text-instance_method" title="#text (instance method)">#<strong>text</strong>(text)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Always store text nodes temporarily.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#toggle_adding_slots-instance_method" title="#toggle_adding_slots (instance method)">#<strong>toggle_adding_slots</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#toggle_processing_array_spec-instance_method" title="#toggle_processing_array_spec (instance method)">#<strong>toggle_processing_array_spec</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+    </ul>
+  
+
+
+  <div id="constructor_details" class="method_details_list">
+  <h2>Constructor Details</h2>
+  
+    <div class="method_details first">
+  <h3 class="signature first" id="initialize-instance_method">
+  
+    #<strong>initialize</strong>  &#x21d2; <tt><span class='object_link'><a href="" title="QstatXmlJRListener (class)">QstatXmlJRListener</a></span></tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns a new instance of QstatXmlJRListener.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 26</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
+  <span class='ivar'>@parsed_job</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='symbol'>:tasks</span> <span class='op'>=&gt;</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='symbol'>:status</span> <span class='op'>=&gt;</span> <span class='symbol'>:queued</span><span class='comma'>,</span>
+    <span class='symbol'>:procs</span> <span class='op'>=&gt;</span> <span class='int'>1</span><span class='comma'>,</span>
+    <span class='symbol'>:native</span> <span class='op'>=&gt;</span> <span class='lbrace'>{</span>
+      <span class='symbol'>:ST_name</span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_end'>&#39;</span></span>
+    <span class='rbrace'>}</span> 
+  <span class='rbrace'>}</span>
+  <span class='ivar'>@current_text</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='ivar'>@current_request</span> <span class='op'>=</span> <span class='kw'>nil</span>
+  <span class='ivar'>@processing_JB_stdout_path_list</span> <span class='op'>=</span> <span class='kw'>false</span>
+
+  <span class='ivar'>@processing_job_array_spec</span> <span class='op'>=</span> <span class='kw'>false</span>
+  <span class='ivar'>@adding_slots</span> <span class='op'>=</span> <span class='kw'>false</span>
+
+  <span class='ivar'>@job_array_spec</span> <span class='op'>=</span> <span class='lbrace'>{</span>
+    <span class='label'>start:</span> <span class='kw'>nil</span><span class='comma'>,</span>
+    <span class='label'>stop:</span> <span class='kw'>nil</span><span class='comma'>,</span>
+    <span class='label'>step:</span> <span class='int'>1</span><span class='comma'>,</span>  <span class='comment'># Step can have a default of 1
+</span>  <span class='rbrace'>}</span>
+  <span class='ivar'>@running_tasks</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@native_tags</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_job_number</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_job_name</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_version</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_project</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_exec_file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_script_file</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_script_size</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_submission_time</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_execution_time</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_deadline</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_owner</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_uid</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_group</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_gid</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_account</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_cwd</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_notify</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_type</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_reserve</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_priority</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_jobshare</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_verify</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_checkpoint_attr</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_checkpoint_interval</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_restart</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+  
+</div>
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="parsed_job-instance_method">
+  
+    #<strong>parsed_job</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <dl class="rdoc-list label-list"><dt>Hash
+<dd></dd></dl>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_parsed_job'>parsed_job</span>
+  <span class='ivar'>@parsed_job</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="build_tasks-instance_method">
+  
+    #<strong>build_tasks</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 193</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_build_tasks'>build_tasks</span>
+  <span class='id identifier rubyid_all_task_ids'>all_task_ids</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="OodCore/Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="OodCore/Job/ArrayIds.html" title="OodCore::Job::ArrayIds (class)">ArrayIds</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="OodCore/Job/ArrayIds.html#initialize-instance_method" title="OodCore::Job::ArrayIds#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_spec_string'>spec_string</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ids'><span class='object_link'><a href="OodCore/Job/ArrayIds.html#ids-instance_method" title="OodCore::Job::ArrayIds#ids (method)">ids</a></span></span>
+  <span class='id identifier rubyid_highest_id_running'>highest_id_running</span> <span class='op'>=</span> <span class='ivar'>@running_tasks</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='period'>.</span><span class='id identifier rubyid_last'>last</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  
+  <span class='ivar'>@running_tasks</span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span>
+    <span class='op'>|</span><span class='id identifier rubyid_task_id'>task_id</span><span class='op'>|</span> <span class='lbrace'>{</span> <span class='symbol'>:id</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_task_id'>task_id</span><span class='comma'>,</span> <span class='symbol'>:status</span> <span class='op'>=&gt;</span> <span class='symbol'>:running</span> <span class='rbrace'>}</span>
+  <span class='rbrace'>}</span> <span class='op'>+</span> <span class='id identifier rubyid_all_task_ids'>all_task_ids</span><span class='period'>.</span><span class='id identifier rubyid_select'>select</span><span class='lbrace'>{</span>
+    <span class='op'>|</span><span class='id identifier rubyid_task_id'>task_id</span><span class='op'>|</span> <span class='id identifier rubyid_task_id'>task_id</span> <span class='op'>&gt;</span> <span class='id identifier rubyid_highest_id_running'>highest_id_running</span>
+  <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span>
+    <span class='op'>|</span><span class='id identifier rubyid_task_id'>task_id</span><span class='op'>|</span> <span class='lbrace'>{</span> <span class='symbol'>:id</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_task_id'>task_id</span><span class='comma'>,</span> <span class='symbol'>:status</span> <span class='op'>=&gt;</span> <span class='symbol'>:queued</span> <span class='rbrace'>}</span>
+  <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_CE_name-instance_method">
+  
+    #<strong>end_CE_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+149
+150
+151</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 149</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_CE_name'>end_CE_name</span>
+  <span class='ivar'>@current_request</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_CE_stringval-instance_method">
+  
+    #<strong>end_CE_stringval</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+153
+154
+155
+156
+157
+158
+159
+160</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 153</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_CE_stringval'>end_CE_stringval</span>
+  <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='ivar'>@current_request</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+
+  <span class='kw'>case</span> <span class='ivar'>@current_request</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>h_rt</span><span class='tstring_end'>&#39;</span></span>  <span class='comment'># hard run time limit
+</span>    <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:wallclock_limit</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JAT_start_time-instance_method">
+  
+    #<strong>end_JAT_start_time</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+143
+144
+145
+146
+147</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 143</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JAT_start_time'>end_JAT_start_time</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:status</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='symbol'>:running</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:dispatch_time</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_ms_to_seconds'>ms_to_seconds</span><span class='lparen'>(</span><span class='ivar'>@current_text</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rparen'>)</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:wallclock_time</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>-</span> <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:dispatch_time</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JAT_task_number-instance_method">
+  
+    #<strong>end_JAT_task_number</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Used to record a running Job Array task</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+167
+168
+169</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 167</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JAT_task_number'>end_JAT_task_number</span>
+  <span class='ivar'>@running_tasks</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JB_ja_tasks-instance_method">
+  
+    #<strong>end_JB_ja_tasks</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+139
+140
+141</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 139</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JB_ja_tasks'>end_JB_ja_tasks</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:status</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='symbol'>:running</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JB_job_name-instance_method">
+  
+    #<strong>end_JB_job_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+131
+132
+133</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 131</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JB_job_name'>end_JB_job_name</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:job_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JB_job_number-instance_method">
+  
+    #<strong>end_JB_job_number</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Attributes we need</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+119
+120
+121</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 119</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JB_job_number'>end_JB_job_number</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JB_owner-instance_method">
+  
+    #<strong>end_JB_owner</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+123
+124
+125</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 123</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JB_owner'>end_JB_owner</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:job_owner</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JB_project-instance_method">
+  
+    #<strong>end_JB_project</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+127
+128
+129</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 127</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JB_project'>end_JB_project</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:accounting_id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_JB_submission_time-instance_method">
+  
+    #<strong>end_JB_submission_time</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+135
+136
+137</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 135</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_JB_submission_time'>end_JB_submission_time</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:submission_time</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_ms_to_seconds'>ms_to_seconds</span><span class='lparen'>(</span><span class='ivar'>@current_text</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_PN_path-instance_method">
+  
+    #<strong>end_PN_path</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+171
+172
+173
+174</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 171</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_PN_path'>end_PN_path</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:PN_path</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span> <span class='kw'>if</span> <span class='ivar'>@processing_JB_stdout_path_list</span>
+  <span class='ivar'>@processing_JB_stdout_path_list</span> <span class='op'>=</span> <span class='kw'>false</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_QR_name-instance_method">
+  
+    #<strong>end_QR_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+162
+163
+164</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 162</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_QR_name'>end_QR_name</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:queue_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="end_ST_name-instance_method">
+  
+    #<strong>end_ST_name</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+176
+177
+178</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 176</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_end_ST_name'>end_ST_name</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:ST_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:ST_name</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='ivar'>@current_text</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="finalize_parsed_job-instance_method">
+  
+    #<strong>finalize_parsed_job</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Used to finalize the parsed job</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+207
+208
+209</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 207</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_finalize_parsed_job'>finalize_parsed_job</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:tasks</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_build_tasks'>build_tasks</span> <span class='kw'>if</span> <span class='id identifier rubyid_need_to_build_job_array?'>need_to_build_job_array?</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="need_to_build_job_array?-instance_method">
+  
+    #<strong>need_to_build_job_array?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The XML output will always contain nodes for task_id_range, even when the job is not an array job.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+213
+214
+215</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 213</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_need_to_build_job_array?'>need_to_build_job_array?</span>
+  <span class='id identifier rubyid_spec_string'>spec_string</span> <span class='op'>!=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1-1:1</span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_job_array_piece-instance_method">
+  
+    #<strong>set_job_array_piece</strong>(key)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+180
+181
+182</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 180</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_job_array_piece'>set_job_array_piece</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
+  <span class='ivar'>@job_array_spec</span><span class='lbracket'>[</span><span class='id identifier rubyid_key'>key</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span> <span class='kw'>if</span> <span class='ivar'>@processing_job_array_spec</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="set_slots-instance_method">
+  
+    #<strong>set_slots</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+225
+226
+227</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 225</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_set_slots'>set_slots</span>
+  <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:procs</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="spec_string-instance_method">
+  
+    #<strong>spec_string</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+184
+185
+186
+187
+188
+189
+190
+191</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 184</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_spec_string'>spec_string</span>
+  <span class='comment'># If any of the job_array_spec values are nil then return a default spec_string
+</span>  <span class='kw'>if</span> <span class='ivar'>@job_array_spec</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='rbrace'>}</span> 
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>1-1:1</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>else</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>%{start}-%{stop}:%{step}</span><span class='tstring_end'>&#39;</span></span> <span class='op'>%</span> <span class='ivar'>@job_array_spec</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="tag_end-instance_method">
+  
+    #<strong>tag_end</strong>(name)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_tag_end'>tag_end</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+  <span class='comment'>#Add to native hash if in native_tags
+</span>  <span class='kw'>if</span> <span class='lparen'>(</span><span class='ivar'>@native_tags</span><span class='period'>.</span><span class='id identifier rubyid_include?'>include?</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='ivar'>@parsed_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:&quot;#{</span><span class='id identifier rubyid_name'>name</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>case</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_ja_tasks</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JB_ja_tasks'>end_JB_ja_tasks</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_job_number</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JB_job_number'>end_JB_job_number</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_job_name</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JB_job_name'>end_JB_job_name</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_owner</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JB_owner'>end_JB_owner</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_project</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JB_project'>end_JB_project</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_submission_time</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JB_submission_time'>end_JB_submission_time</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hard_request</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_hard_request'>end_hard_request</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JAT_start_time</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JAT_start_time'>end_JAT_start_time</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CE_name</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_CE_name'>end_CE_name</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>CE_stringval</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_CE_stringval'>end_CE_stringval</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>QR_name</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_QR_name'>end_QR_name</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JAT_task_number</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_JAT_task_number'>end_JAT_task_number</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>djob_info</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_finalize_parsed_job'>finalize_parsed_job</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RN_min</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_set_job_array_piece'>set_job_array_piece</span><span class='lparen'>(</span><span class='symbol'>:start</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@processing_job_array_spec</span>
+    <span class='id identifier rubyid_set_slots'>set_slots</span> <span class='kw'>if</span> <span class='ivar'>@adding_slots</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RN_max</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_set_job_array_piece'>set_job_array_piece</span><span class='lparen'>(</span><span class='symbol'>:stop</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@processing_job_array_spec</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RN_step</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_set_job_array_piece'>set_job_array_piece</span><span class='lparen'>(</span><span class='symbol'>:step</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='ivar'>@processing_job_array_spec</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>task_id_range</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_toggle_processing_array_spec'>toggle_processing_array_spec</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_pe_range</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_toggle_adding_slots'>toggle_adding_slots</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>PN_path</span><span class='tstring_end'>&#39;</span></span> 
+    <span class='id identifier rubyid_end_PN_path'>end_PN_path</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ST_name</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_end_ST_name'>end_ST_name</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="tag_start-instance_method">
+  
+    #<strong>tag_start</strong>(name, attrs)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 51</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_tag_start'>tag_start</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_name'>name</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>task_id_range</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_toggle_processing_array_spec'>toggle_processing_array_spec</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_pe_range</span><span class='tstring_end'>&#39;</span></span>
+    <span class='id identifier rubyid_toggle_adding_slots'>toggle_adding_slots</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JB_stdout_path_list</span><span class='tstring_end'>&#39;</span></span>
+    <span class='ivar'>@processing_JB_stdout_path_list</span> <span class='op'>=</span> <span class='kw'>true</span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="text-instance_method">
+  
+    #<strong>text</strong>(text)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Always store text nodes temporarily</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+114
+115
+116</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 114</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_text'>text</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
+  <span class='ivar'>@current_text</span> <span class='op'>=</span> <span class='id identifier rubyid_text'>text</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="toggle_adding_slots-instance_method">
+  
+    #<strong>toggle_adding_slots</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+221
+222
+223</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 221</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_toggle_adding_slots'>toggle_adding_slots</span>
+  <span class='ivar'>@adding_slots</span> <span class='op'>=</span> <span class='op'>!</span> <span class='ivar'>@adding_slots</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="toggle_processing_array_spec-instance_method">
+  
+    #<strong>toggle_processing_array_spec</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+217
+218
+219</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb', line 217</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_toggle_processing_array_spec'>toggle_processing_array_spec</span>
+  <span class='ivar'>@processing_job_array_spec</span> <span class='op'>=</span> <span class='op'>!</span> <span class='ivar'>@processing_job_array_spec</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Mon Jul 18 14:41:10 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.6).
+</div>
+
+    </div>
+  </body>
+</html>
