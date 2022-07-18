@@ -25,14 +25,17 @@ jobs:
         run: bundle install && gem install yard
 
       - name: generate documentation
-        run: yardoc --output-dir docs/
+        run: yardoc --output-dir /tmp/docs/
 
       - name: save docs and publish
         env:
           GIT_AUTHOR_NAME: "oscwiag"
           GIT_AUTHOR_EMAIL: "oscwiag@gmail.com"
         run: |
+          git clone https://{{ secrets.OSC_WIAG_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
+          cd /tmp/core
           git checkout gh-pages
-          git add docs/
+          mv /tmp/docs .
           git commit -m 'new docs'
-          git push https://{{ secrets.OSC_WIAG_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git
+          git push
+          
