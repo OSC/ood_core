@@ -35,7 +35,7 @@ jobs:
           git clone https://${{ secrets.OSC_WIAG_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
           cd /tmp/core
           git checkout gh-pages
-          mv /tmp/docs .
+          mv --force /tmp/docs .
           git commit -m 'new docs'
           git push
           
