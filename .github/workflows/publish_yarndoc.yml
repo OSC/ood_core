@@ -22,7 +22,7 @@ jobs:
           ruby-version: '3.0'
 
       - name: install gems
-        run: bundle install && gem install yardoc
+        run: bundle install && gem install yard
 
       - name: generate documentation
         run: yardoc --output-dir docs/
