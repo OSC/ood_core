@@ -28,15 +28,15 @@ jobs:
         run: yardoc --output-dir /tmp/docs/
 
       - name: save docs and publish
-        env:
-          GIT_AUTHOR_NAME: "oscwiag"
-          GIT_AUTHOR_EMAIL: "oscwiag@gmail.com"
         run: |
           git clone https://${{ secrets.OSC_WIAG_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
+          git config --global user.name "oscwiag"
+          git config --global user.email "oscwiag@gmail.com"
           cd /tmp/core
           git checkout gh-pages
           rm -rf docs/
           mv /tmp/docs .
+          git add docs/
           git commit -m 'new docs'
           git push
           
