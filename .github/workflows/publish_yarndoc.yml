@@ -32,7 +32,7 @@ jobs:
           GIT_AUTHOR_NAME: "oscwiag"
           GIT_AUTHOR_EMAIL: "oscwiag@gmail.com"
         run: |
-          git clone https://{{ secrets.OSC_WIAG_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
+          git clone https://${{ secrets.OSC_WIAG_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
           cd /tmp/core
           git checkout gh-pages
           mv /tmp/docs .
