@@ -51,3 +51,7 @@ Gemfile.lock
 
 # SSHFS temp files
 ._*
+
+# docs are only held in the gh-pages branch
+/docs/*
+!/docs/.keep
