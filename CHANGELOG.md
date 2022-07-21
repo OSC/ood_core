@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.20.1] - 07-21-2022
+
+- Fixed turbovnc compatability issue with the -nohttpd flag in [767](https://github.com/OSC/ood_core/pull/767).
+
 ## [0.20.0] - 06-03-2022
 
 - Adapters can now respond to `cluster_info` in [752](https://github.com/OSC/ood_core/pull/752). This returns information about the cluster like how many nodes are available and so on. Only Slurm support in this release.
@@ -428,7 +432,9 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.20.1...HEAD
+[0.20.1]: https://github.com/OSC/ood_core/compare/v0.20.0...v0.20.1
+[0.20.0]: https://github.com/OSC/ood_core/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/OSC/ood_core/compare/v0.18.1...v0.19.0
 [0.18.1]: https://github.com/OSC/ood_core/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/OSC/ood_core/compare/v0.17.8...v0.18.0
