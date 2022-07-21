@@ -86,7 +86,7 @@ module OodCore
                 # Clean up any old VNC sessions that weren't cleaned before
                 #{vnc_clean}
 
-                #for turbovnc 3.0 compatability.
+                # for turbovnc 3.0 compatability.
                 if timeout 2 vncserver --help 2>&1 | grep 'nohttpd' >/dev/null 2>&1; then
                   HTTPD_OPT='-nohttpd'
                 fi
