@@ -86,8 +86,13 @@ module OodCore
                 # Clean up any old VNC sessions that weren't cleaned before
                 #{vnc_clean}
 
+                # for turbovnc 3.0 compatability.
+                if timeout 2 vncserver --help 2>&1 | grep 'nohttpd' >/dev/null 2>&1; then
+                  HTTPD_OPT='-nohttpd'
+                fi
+
                 # Attempt to start VNC server
-                VNC_OUT=$(vncserver -log "#{vnc_log}" -rfbauth "#{vnc_passwd}" -nohttpd -noxstartup #{vnc_args} 2>&1)
+                VNC_OUT=$(vncserver -log "#{vnc_log}" -rfbauth "#{vnc_passwd}" $HTTPD_OPT -noxstartup #{vnc_args} 2>&1)
                 VNC_PID=$(pgrep -s 0 Xvnc) # the script above will daemonize the Xvnc process
                 echo "${VNC_OUT}"
 
