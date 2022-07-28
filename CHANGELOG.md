@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.20.2] - 07-28-2022
+
+- Fixed an issue with Slurm's `cluster_info` in [762](https://github.com/OSC/ood_core/pull/762).
+- Relaxed Ruby requirement down to 2.5 in [771](https://github.com/OSC/ood_core/pull/771).
+
 ## [0.20.1] - 07-21-2022
 
 - Fixed turbovnc compatability issue with the -nohttpd flag in [767](https://github.com/OSC/ood_core/pull/767).
@@ -432,7 +437,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.20.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.20.2...HEAD
+[0.20.2]: https://github.com/OSC/ood_core/compare/v0.20.1...v0.20.2
 [0.20.1]: https://github.com/OSC/ood_core/compare/v0.20.0...v0.20.1
 [0.20.0]: https://github.com/OSC/ood_core/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/OSC/ood_core/compare/v0.18.1...v0.19.0
