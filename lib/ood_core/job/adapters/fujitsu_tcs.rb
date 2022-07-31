@@ -88,10 +88,10 @@ module OodCore
               jobs = []
               output.each_line do |line|
                 l = line.split(",")
-                jobs << Hash[:JOB_ID => l[1],  :JOB_NAME   => l[2],  :RSC_GRP    => l[3].split(" ")[0],
-                             :ST     => l[4],  :STD        => l[5],  :STDE       => l[6],
-                             :ACCEPT => l[7],  :START_DATE => l[8],  :NODES      => l[9].split(":")[0],
-                             :USER   => l[10], :ELAPSE_LIM => l[11], :ELAPSE_TIM => l[12].split(" ")[0] ]
+                jobs << {:JOB_ID => l[1],  :JOB_NAME   => l[2],  :RSC_GRP    => l[3].split(" ")[0],
+                         :ST     => l[4],  :STD        => l[5],  :STDE       => l[6],
+                         :ACCEPT => l[7],  :START_DATE => l[8],  :NODES      => l[9].split(":")[0],
+                         :USER   => l[10], :ELAPSE_LIM => l[11], :ELAPSE_TIM => l[12].split(" ")[0] }
               end
               jobs
             end
@@ -134,7 +134,7 @@ module OodCore
           # @param args [Array<#to_s>] arguments passed to `pjsub` command
           # @raise [Error] if `pjsub` command exited unsuccessfully
           # @return [String] the id of the job that was created
-	  def submit_string(str, args: [])
+          def submit_string(str, args: [])
             args = args.map(&:to_s)
             call("pjsub", *args, stdin: str.to_s).split(" ")[5]
           end
