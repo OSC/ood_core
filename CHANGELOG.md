@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.21.0] - 08-01-2022
+
+### Added
+
+- Added the `fujitsu_tcs` adapter in [766](https://github.com/OSC/ood_core/pull/766).
+
 ## [0.20.2] - 07-28-2022
 
 - Fixed an issue with Slurm's `cluster_info` in [762](https://github.com/OSC/ood_core/pull/762).
@@ -437,7 +443,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.20.2...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.21.0...HEAD
+[0.21.0]: https://github.com/OSC/ood_core/compare/v0.20.2...v0.21.0
 [0.20.2]: https://github.com/OSC/ood_core/compare/v0.20.1...v0.20.2
 [0.20.1]: https://github.com/OSC/ood_core/compare/v0.20.0...v0.20.1
 [0.20.0]: https://github.com/OSC/ood_core/compare/v0.19.0...v0.20.0
