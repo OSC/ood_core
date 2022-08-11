@@ -95,7 +95,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/ood_core/job/factory.rb<span class="defines">,<br />
-  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb</span>
+  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb,<br /> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
 </dd>
   </dl>
   
@@ -170,6 +170,30 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>Build the Cloudy Cluster adapter from a configuration.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build_fujitsu_tcs-class_method" title="build_fujitsu_tcs (class method)">.<strong>build_fujitsu_tcs</strong>(config)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Build the Fujitsu TCS (Technical Computing Suite) adapter from a configuration.</p>
 </div></span>
   
 </li>
@@ -705,6 +729,116 @@
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_ccq'>build_ccq</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/CCQ.html" title="OodCore::Job::Adapters::CCQ (class)">CCQ</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/CCQ.html#initialize-instance_method" title="OodCore::Job::Adapters::CCQ#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="build_fujitsu_tcs-class_method">
+  
+    .<strong>build_fujitsu_tcs</strong>(config)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Build the Fujitsu TCS (Technical Computing Suite) adapter from a configuration</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>config</span>
+      
+      
+        <span class='type'>(<tt>#to_h</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>the configuration for job adapter</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    <p class="tag_title">Options Hash (<tt>config</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:bin</span>
+          <span class="type">(<tt>Object</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>nil</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Path to Fujitsu TCS resource manager binaries</p>
+</div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:bin_overrides</span>
+          <span class="type">(<tt>#to_h</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>{}</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Optional overrides to Fujitsu TCS resource manager executables</p>
+</div>
+          
+        </li>
+      
+    </ul>
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+15
+16
+17
+18
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/fujitsu_tcs.rb', line 15</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_fujitsu_tcs'>build_fujitsu_tcs</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+  <span class='id identifier rubyid_bin'>bin</span>           <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bin_overrides'>bin_overrides</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin_overrides</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_fujitsu_tcs'>fujitsu_tcs</span>   <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS/Batch.html" title="OodCore::Job::Adapters::Fujitsu_TCS::Batch (class)">Batch</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Fujitsu_TCS/Batch.html#initialize-instance_method" title="OodCore::Job::Adapters::Fujitsu_TCS::Batch#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>bin:</span> <span class='id identifier rubyid_bin'>bin</span><span class='comma'>,</span> <span class='label'>bin_overrides:</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html#initialize-instance_method" title="OodCore::Job::Adapters::Fujitsu_TCS#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>fujitsu_tcs:</span> <span class='id identifier rubyid_fujitsu_tcs'>fujitsu_tcs</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2061,7 +2195,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Jul 18 19:42:12 2022 by
+  Generated on Thu Aug 11 13:51:57 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.4).
 </div>
