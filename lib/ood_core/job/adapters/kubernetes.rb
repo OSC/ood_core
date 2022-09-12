@@ -13,6 +13,8 @@ module OodCore
     end
 
     module Adapters
+
+      # The adapter class for Kubernetes.
       class Kubernetes < Adapter
 
         using Refinements::ArrayExtensions

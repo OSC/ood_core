@@ -1,3 +1,4 @@
+# Utility class to maintain all the Torque attributes available.
 class OodCore::Job::Adapters::Torque
   # Maintains a constant Hash of defined PBS attribute types
   # Includes:

@@ -23,6 +23,7 @@ module OodCore
 
       class PromptError < StandardError; end
 
+      # The adapter class for the Cloudy Cluster product CCQ.
       class CCQ < Adapter
         using Refinements::ArrayExtensions
 

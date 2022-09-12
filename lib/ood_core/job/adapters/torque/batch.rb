@@ -1,5 +1,7 @@
 require 'open3'
 
+# Utility class for the Torque adapter to communicate with the
+# Torque scheduler.
 class OodCore::Job::Adapters::Torque
   # Object used for simplified communication with a batch server
   class Batch

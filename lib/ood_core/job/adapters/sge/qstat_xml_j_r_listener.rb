@@ -16,7 +16,6 @@ require 'ood_core/job/array_ids'
 # :status
 # :wallclock_limit
 # :wallclock_time
-
 class QstatXmlJRListener
   # [Hash]
   attr_reader :parsed_job

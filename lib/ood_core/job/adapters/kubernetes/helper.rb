@@ -1,3 +1,5 @@
+# Utility class for the Kubernetes adapter to parse
+# json data into Ruby objects.
 class OodCore::Job::Adapters::Kubernetes::Helper
 
   require_relative 'resources'

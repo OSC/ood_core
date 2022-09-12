@@ -1,6 +1,8 @@
 require "ood_core/refinements/hash_extensions"
 require "json"
 
+# Utility class for the Kubernetes adapter to interact
+# with the Kuberenetes APIs.
 class OodCore::Job::Adapters::Kubernetes::Batch
 
   require_relative "helper"

@@ -1,6 +1,6 @@
 require 'ffi'
 
-# An interface to the C-library of Torque
+# An interface to the C-library of Torque.
 class OodCore::Job::Adapters::Torque::FFI
 
   extend ::FFI::Library

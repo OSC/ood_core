@@ -2,7 +2,7 @@ require 'time'
 
 module OodCore
   module Job
-    # An object that describes a submitted job
+    # An object that describes a submitted job.
     class Info
       # The identifier of the job
       # @return [String] job id
