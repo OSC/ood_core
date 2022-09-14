@@ -1,6 +1,6 @@
 module OodCore
   module Job
-    # An object that describes the resources used on a specific node
+    # An object that describes the resources used on a specific node.
     class NodeInfo
       # The name of the host machine
       # @return [String] node name

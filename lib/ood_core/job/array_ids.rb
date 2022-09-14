@@ -1,14 +1,14 @@
-# Builds a sorted array of job ids given a job array spec string
-#
-# Job array spec strings:
-#   1         Single id
-#   1-10      Range
-#   1-10:2    Range with step
-#   1-10,13   Compound (range with single id)
-#
-# Note that Ranges are expected to be inclusive
 module OodCore
   module Job
+    # Builds a sorted array of job ids given a job array spec string
+    #
+    # Job array spec strings:
+    #   1         Single id
+    #   1-10      Range
+    #   1-10:2    Range with step
+    #   1-10,13   Compound (range with single id)
+    #
+    # Note that Ranges are expected to be inclusive
     class ArrayIds
       attr_reader :spec_string
 

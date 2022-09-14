@@ -1,5 +1,5 @@
 module OodCore::Job::Adapters::Kubernetes::Resources
-
+  # Utility class for kubernetes configmap objects.
   class ConfigMap
     attr_accessor :name, :files
 
@@ -20,6 +20,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
     end
   end
 
+  # Utility class for mounting files in kubernetes configmap objects.
   class ConfigMapFile
     attr_accessor :filename, :data, :mount_path, :sub_path, :init_mount_path, :init_sub_path
 
@@ -33,6 +34,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
     end
   end
 
+  # Utility class for kuberenetes probe settings.
   class TCPProbe
     attr_accessor :port, :initial_delay_seconds, :failure_threshold, :period_seconds
 
@@ -54,6 +56,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
     end
   end
 
+  # Utility class for kuberenetes container object.
   class Container
     attr_accessor :name, :image, :command, :port, :env, :working_dir,
                   :memory_limit, :memory_request, :cpu_limit, :cpu_request, 
@@ -106,6 +109,7 @@ module OodCore::Job::Adapters::Kubernetes::Resources
     end
   end
 
+  # Utility class for kuberenetes podspec object.
   class PodSpec
     attr_accessor :container, :init_containers
     def initialize(container, init_containers: nil)

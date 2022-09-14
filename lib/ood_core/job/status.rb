@@ -1,6 +1,6 @@
 module OodCore
   module Job
-    # An object that describes the current state of a submitted job
+    # An object that describes the current state of a submitted job.
     class Status
       class << self
         # Possible states a submitted job can be in:

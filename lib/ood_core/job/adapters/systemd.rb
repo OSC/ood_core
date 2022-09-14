@@ -37,8 +37,7 @@ module OodCore
     end
 
     module Adapters
-      # An adapter object that describes the communication with a remote host
-      # for job management.
+      # The adapter for using systemd timers as the scheduler.
       class LinuxSystemd < Adapter
         using Refinements::ArrayExtensions
 

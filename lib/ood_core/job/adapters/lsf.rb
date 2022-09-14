@@ -22,6 +22,8 @@ module OodCore
     end
 
     module Adapters
+
+      # The adapter class for the LSF scheduler.
       class Lsf < Adapter
         using Refinements::ArrayExtensions
 
