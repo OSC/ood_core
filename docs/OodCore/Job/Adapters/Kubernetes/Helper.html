@@ -99,7 +99,18 @@
   
 </div>
 
-<h2>Defined Under Namespace</h2>
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Utility class for the Kubernetes adapter to parse json data into Ruby objects.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><h2>Defined Under Namespace</h2>
 <p class="children">
   
     
@@ -456,8 +467,6 @@
       <pre class="lines">
 
 
-94
-95
 96
 97
 98
@@ -470,10 +479,12 @@
 105
 106
 107
-108</pre>
+108
+109
+110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 94</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_configmap_from_native'>configmap_from_native</span><span class='lparen'>(</span><span class='id identifier rubyid_native'>native</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='id identifier rubyid_script_content'>script_content</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_configmap'>configmap</span> <span class='op'>=</span> <span class='id identifier rubyid_native'>native</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:configmap</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
@@ -510,12 +521,12 @@
       <pre class="lines">
 
 
-138
-139
-140</pre>
+140
+141
+142</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 138</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 140</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_configmap_name'>configmap_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-configmap</span><span class='tstring_end'>&#39;</span></span>
@@ -600,8 +611,6 @@
       <pre class="lines">
 
 
-46
-47
 48
 49
 50
@@ -620,10 +629,12 @@
 63
 64
 65
-66</pre>
+66
+67
+68</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 46</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 48</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_container_from_native'>container_from_native</span><span class='lparen'>(</span><span class='id identifier rubyid_container'>container</span><span class='comma'>,</span> <span class='id identifier rubyid_default_env'>default_env</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_env'>env</span> <span class='op'>=</span> <span class='id identifier rubyid_container'>container</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:env</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
@@ -768,8 +779,6 @@
       <pre class="lines">
 
 
-27
-28
 29
 30
 31
@@ -778,10 +787,12 @@
 34
 35
 36
-37</pre>
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 29</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_from_json'>info_from_json</span><span class='lparen'>(</span><span class='label'>pod_json:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>service_json:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>secret_json:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>ns_prefix:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_pod_hash'>pod_hash</span> <span class='op'>=</span> <span class='id identifier rubyid_pod_info_from_json'>pod_info_from_json</span><span class='lparen'>(</span><span class='id identifier rubyid_pod_json'>pod_json</span><span class='comma'>,</span> <span class='label'>ns_prefix:</span> <span class='id identifier rubyid_ns_prefix'>ns_prefix</span><span class='rparen'>)</span>
@@ -879,8 +890,6 @@
       <pre class="lines">
 
 
-119
-120
 121
 122
 123
@@ -888,10 +897,12 @@
 125
 126
 127
-128</pre>
+128
+129
+130</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 119</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 121</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_init_ctrs_from_native'>init_ctrs_from_native</span><span class='lparen'>(</span><span class='id identifier rubyid_ctrs'>ctrs</span><span class='comma'>,</span> <span class='id identifier rubyid_default_env'>default_env</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_init_ctrs'>init_ctrs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -972,16 +983,16 @@
       <pre class="lines">
 
 
-75
-76
 77
 78
 79
 80
-81</pre>
+81
+82
+83</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 75</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 77</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_command'>parse_command</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_cmd'>cmd</span><span class='op'>&amp;.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Array</span><span class='rparen'>)</span>
@@ -1077,8 +1088,6 @@
       <pre class="lines">
 
 
-155
-156
 157
 158
 159
@@ -1092,10 +1101,12 @@
 167
 168
 169
-170</pre>
+170
+171
+172</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 155</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 157</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_pod_info_from_json'>pod_info_from_json</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='comma'>,</span> <span class='label'>ns_prefix:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='lbrace'>{</span>
@@ -1133,12 +1144,12 @@
       <pre class="lines">
 
 
-142
-143
-144</pre>
+144
+145
+146</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 142</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 144</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_seconds_to_duration'>seconds_to_duration</span><span class='lparen'>(</span><span class='id identifier rubyid_s'>s</span><span class='rparen'>)</span>
   <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%02dh%02dm%02ds</span><span class='tstring_end'>&quot;</span></span> <span class='op'>%</span> <span class='lbracket'>[</span><span class='id identifier rubyid_s'>s</span> <span class='op'>/</span> <span class='int'>3600</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span> <span class='op'>/</span> <span class='int'>60</span> <span class='op'>%</span> <span class='int'>60</span><span class='comma'>,</span> <span class='id identifier rubyid_s'>s</span> <span class='op'>%</span> <span class='int'>60</span><span class='rbracket'>]</span>
@@ -1163,12 +1174,12 @@
       <pre class="lines">
 
 
-134
-135
-136</pre>
+136
+137
+138</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 134</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 136</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_secret_name'>secret_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-secret</span><span class='tstring_end'>&#39;</span></span>
@@ -1193,12 +1204,12 @@
       <pre class="lines">
 
 
-130
-131
-132</pre>
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 130</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/helper.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_service_name'>service_name</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-service</span><span class='tstring_end'>&#39;</span></span>
@@ -1213,7 +1224,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Aug 11 13:52:02 2022 by
+  Generated on Wed Sep 14 14:59:17 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.4).
 </div>

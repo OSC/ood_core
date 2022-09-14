@@ -99,7 +99,18 @@
   
 </div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Utility helper class for the SGE adapter to parse input and generate submission arguements.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -269,8 +280,6 @@
       <pre class="lines">
 
 
-16
-17
 18
 19
 20
@@ -307,10 +316,12 @@
 51
 52
 53
-54</pre>
+54
+55
+56</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 16</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_batch_submit_args'>batch_submit_args</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise_error_on_unsupported_args'>raise_error_on_unsupported_args</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='id identifier rubyid_after'>after</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='id identifier rubyid_afterok'>afterok</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='id identifier rubyid_afternotok'>afternotok</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='id identifier rubyid_afterany'>afterany</span><span class='rparen'>)</span>
@@ -397,12 +408,12 @@
       <pre class="lines">
 
 
-101
-102
-103</pre>
+103
+104
+105</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 101</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 103</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parse_job_id_from_qsub'>parse_job_id_from_qsub</span><span class='lparen'>(</span><span class='id identifier rubyid_qsub_output'>qsub_output</span><span class='rparen'>)</span>
   <span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>Your job(?:-array)? (?&lt;job_id&gt;[0-9]+)</span><span class='regexp_end'>/</span></span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='id identifier rubyid_qsub_output'>qsub_output</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='symbol'>:job_id</span><span class='rbracket'>]</span>
@@ -456,15 +467,15 @@
       <pre class="lines">
 
 
-90
-91
 92
 93
 94
-95</pre>
+95
+96
+97</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 90</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_raise_error_on_unsupported_args'>raise_error_on_unsupported_args</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span><span class='comma'>,</span> <span class='label'>afterok:</span><span class='comma'>,</span> <span class='label'>afternotok:</span><span class='comma'>,</span> <span class='label'>afterany:</span><span class='rparen'>)</span>
   <span class='comment'># SGE job dependencies only supports one kind of event: completion
@@ -544,8 +555,6 @@
       <pre class="lines">
 
 
-70
-71
 72
 73
 74
@@ -560,10 +569,12 @@
 83
 84
 85
-86</pre>
+86
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 72</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_script_contains_wd_directive?'>script_contains_wd_directive?</span><span class='lparen'>(</span><span class='id identifier rubyid_content'>content</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_slice'>slice</span><span class='lparen'>(</span>
@@ -646,13 +657,13 @@
       <pre class="lines">
 
 
-9
-10
 11
-12</pre>
+12
+13
+14</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 9</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/helper.rb', line 11</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_seconds_to_duration'>seconds_to_duration</span><span class='lparen'>(</span><span class='id identifier rubyid_time'>time</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_time'>time</span> <span class='op'>=</span> <span class='id identifier rubyid_time'>time</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -668,7 +679,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Aug 11 13:52:00 2022 by
+  Generated on Wed Sep 14 14:59:15 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.4).
 </div>

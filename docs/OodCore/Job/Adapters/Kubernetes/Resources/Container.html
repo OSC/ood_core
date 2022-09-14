@@ -99,7 +99,18 @@
   
 </div>
 
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    
+<p>Utility class for kuberenetes container object.</p>
 
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
 
 
 
@@ -644,9 +655,6 @@
       <pre class="lines">
 
 
-63
-64
-65
 66
 67
 68
@@ -668,10 +676,13 @@
 84
 85
 86
-87</pre>
+87
+88
+89
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span>
     <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_image'>image</span><span class='comma'>,</span> <span class='label'>command:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>port:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>env:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span>
@@ -736,12 +747,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_command'>command</span>
   <span class='ivar'>@command</span>
@@ -779,12 +790,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cpu_limit'>cpu_limit</span>
   <span class='ivar'>@cpu_limit</span>
@@ -822,12 +833,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cpu_request'>cpu_request</span>
   <span class='ivar'>@cpu_request</span>
@@ -865,12 +876,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_env'>env</span>
   <span class='ivar'>@env</span>
@@ -908,12 +919,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_image'>image</span>
   <span class='ivar'>@image</span>
@@ -951,12 +962,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_image_pull_policy'>image_pull_policy</span>
   <span class='ivar'>@image_pull_policy</span>
@@ -994,12 +1005,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_image_pull_secret'>image_pull_secret</span>
   <span class='ivar'>@image_pull_secret</span>
@@ -1037,12 +1048,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_labels'>labels</span>
   <span class='ivar'>@labels</span>
@@ -1080,12 +1091,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_memory_limit'>memory_limit</span>
   <span class='ivar'>@memory_limit</span>
@@ -1123,12 +1134,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_memory_request'>memory_request</span>
   <span class='ivar'>@memory_request</span>
@@ -1166,12 +1177,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
   <span class='ivar'>@name</span>
@@ -1209,12 +1220,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_port'>port</span>
   <span class='ivar'>@port</span>
@@ -1252,12 +1263,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_restart_policy'>restart_policy</span>
   <span class='ivar'>@restart_policy</span>
@@ -1295,12 +1306,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_startup_probe'>startup_probe</span>
   <span class='ivar'>@startup_probe</span>
@@ -1338,12 +1349,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supplemental_groups'>supplemental_groups</span>
   <span class='ivar'>@supplemental_groups</span>
@@ -1381,12 +1392,12 @@
       <pre class="lines">
 
 
-58
-59
-60</pre>
+61
+62
+63</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 58</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_working_dir'>working_dir</span>
   <span class='ivar'>@working_dir</span>
@@ -1418,9 +1429,6 @@
       <pre class="lines">
 
 
-89
-90
-91
 92
 93
 94
@@ -1435,10 +1443,13 @@
 103
 104
 105
-106</pre>
+106
+107
+108
+109</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 89</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/kubernetes/resources.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_name'>name</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span> <span class='op'>&amp;&amp;</span>
@@ -1468,7 +1479,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Aug 11 13:52:02 2022 by
+  Generated on Wed Sep 14 14:59:17 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.4).
 </div>

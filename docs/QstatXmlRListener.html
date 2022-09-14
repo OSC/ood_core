@@ -631,6 +631,7 @@
       <pre class="lines">
 
 
+22
 23
 24
 25
@@ -643,11 +644,10 @@
 32
 33
 34
-35
-36</pre>
+35</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
   <span class='ivar'>@parsed_jobs</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -701,12 +701,12 @@
       <pre class="lines">
 
 
+18
 19
-20
-21</pre>
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_parsed_jobs'>parsed_jobs</span>
   <span class='ivar'>@parsed_jobs</span>
@@ -738,14 +738,14 @@
       <pre class="lines">
 
 
+165
 166
 167
 168
-169
-170</pre>
+169</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 166</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_add_child_tasks'>add_child_tasks</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:tasks</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="OodCore/Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="OodCore/Job/ArrayIds.html" title="OodCore::Job::ArrayIds (class)">ArrayIds</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="OodCore/Job/ArrayIds.html#initialize-instance_method" title="OodCore::Job::ArrayIds#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='ivar'>@current_text</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ids'><span class='object_link'><a href="OodCore/Job/ArrayIds.html#ids-instance_method" title="OodCore::Job::ArrayIds#ids (method)">ids</a></span></span><span class='period'>.</span><span class='id identifier rubyid_sort'>sort</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span>
@@ -772,12 +772,12 @@
       <pre class="lines">
 
 
+126
 127
-128
-129</pre>
+128</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_hard_req_queue'>end_hard_req_queue</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:queue_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
@@ -802,17 +802,17 @@
       <pre class="lines">
 
 
+138
 139
 140
 141
 142
 143
 144
-145
-146</pre>
+145</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 139</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 138</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_hard_request'>end_hard_request</span>
   <span class='kw'>return</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='ivar'>@current_request</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -842,12 +842,12 @@
       <pre class="lines">
 
 
+134
 135
-136
-137</pre>
+136</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 135</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 134</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_JAT_start_time'>end_JAT_start_time</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:dispatch_time</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>DateTime</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='ivar'>@current_text</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_time'>to_time</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -883,12 +883,12 @@
       <pre class="lines">
 
 
+101
 102
-103
-104</pre>
+103</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 101</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_JB_job_number'>end_JB_job_number</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
@@ -913,12 +913,12 @@
       <pre class="lines">
 
 
+113
 114
-115
-116</pre>
+115</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 114</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 113</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_JB_name'>end_JB_name</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:job_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
@@ -943,12 +943,12 @@
       <pre class="lines">
 
 
+105
 106
-107
-108</pre>
+107</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 106</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 105</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_JB_owner'>end_JB_owner</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:job_owner</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
@@ -973,12 +973,12 @@
       <pre class="lines">
 
 
+109
 110
-111
-112</pre>
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 110</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 109</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_JB_project'>end_JB_project</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:accounting_id</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
@@ -1003,12 +1003,12 @@
       <pre class="lines">
 
 
+130
 131
-132
-133</pre>
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 131</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 130</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_JB_submission_time'>end_JB_submission_time</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:submission_time</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='const'>DateTime</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='ivar'>@current_text</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_time'>to_time</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -1044,16 +1044,16 @@
       <pre class="lines">
 
 
+157
 158
 159
 160
 161
 162
-163
-164</pre>
+163</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 158</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 157</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_job_list'>end_job_list</span>
   <span class='ivar'>@parsed_jobs</span> <span class='op'>&lt;&lt;</span> <span class='ivar'>@current_job</span>
@@ -1082,13 +1082,13 @@
       <pre class="lines">
 
 
+147
 148
 149
-150
-151</pre>
+150</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 148</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 147</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_PN_path'>end_PN_path</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:PN_path</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span> <span class='kw'>if</span> <span class='ivar'>@processing_JB_stdout_path_list</span>
@@ -1114,12 +1114,12 @@
       <pre class="lines">
 
 
+122
 123
-124
-125</pre>
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 123</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_slots'>end_slots</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:procs</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
@@ -1144,12 +1144,12 @@
       <pre class="lines">
 
 
+152
 153
-154
-155</pre>
+154</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 153</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 152</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_ST_name'>end_ST_name</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:ST_name</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:native</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='symbol'>:ST_name</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='ivar'>@current_text</span> <span class='op'>+</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'> </span><span class='tstring_end'>&#39;</span></span>
@@ -1185,12 +1185,12 @@
       <pre class="lines">
 
 
+118
 119
-120
-121</pre>
+120</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 119</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 118</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_state'>end_state</span>
   <span class='ivar'>@current_job</span><span class='lbracket'>[</span><span class='symbol'>:status</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='ivar'>@current_text</span>
@@ -1228,16 +1228,16 @@
       <pre class="lines">
 
 
+92
 93
 94
 95
 96
 97
-98
-99</pre>
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_start_hard_request'>start_hard_request</span><span class='lparen'>(</span><span class='id identifier rubyid_attributes'>attributes</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='period'>.</span><span class='id identifier rubyid_key?'>key?</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>name</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1266,6 +1266,7 @@
       <pre class="lines">
 
 
+46
 47
 48
 49
@@ -1301,11 +1302,10 @@
 79
 80
 81
-82
-83</pre>
+82</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 46</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tag_end'>tag_end</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
   <span class='comment'>#Add text if in native_tags
@@ -1364,17 +1364,17 @@
       <pre class="lines">
 
 
+37
 38
 39
 40
 41
 42
 43
-44
-45</pre>
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 37</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tag_start'>tag_start</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_attributes'>attributes</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_name'>name</span>
@@ -1415,12 +1415,12 @@
       <pre class="lines">
 
 
+85
 86
-87
-88</pre>
+87</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 86</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb', line 85</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_text'>text</span><span class='lparen'>(</span><span class='id identifier rubyid_text'>text</span><span class='rparen'>)</span>
   <span class='ivar'>@current_text</span> <span class='op'>=</span> <span class='id identifier rubyid_text'>text</span>
@@ -1435,7 +1435,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Aug 11 13:52:02 2022 by
+  Generated on Wed Sep 14 14:59:17 2022 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.4).
 </div>
