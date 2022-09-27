@@ -195,10 +195,14 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   end
 
   def secret_info_from_json(json_data)
-    raw = json_data.dig(:data, :password)
-    { ood_connection_info: { password: Base64.decode64(raw) } }
-  rescue
-    {}
+    data = json_data.to_h[:data] || {}
+
+    info = data.symbolize_keys.each_with_object({}) do |data_kv, hash|
+      hash[data_kv[0]] = Base64.decode64(data_kv[1])
+    rescue
+      next
+    end
+    { ood_connection_info: info }
   end
 
   def dispatch_time(json_data)
