@@ -544,6 +544,73 @@ describe OodCore::Job::Adapters::PBSPro do
         end
       end
     end
+
+    context "when user has a . in the name" do
+      # exact same test as 'when job is running' context, but the user (Job_Owner)
+      # is trzask.lastname@login3.cm.cluster instead of just trzask@login3.cm.cluster
+      let(:job_hash) {
+        {
+          :job_id=>job_id,
+          :Job_Name=>"be_5",
+          :Job_Owner=>"trzask.lastname@login3.cm.cluster",
+          :job_state=>"Q",
+          :queue=>"oc_windfall",
+          :server=>"head1.cm.cluster",
+          :Checkpoint=>"u",
+          :ctime=>"Fri Jun 23 06:31:33 2017",
+          :Error_Path=>"login3.cm.cluster:/home/u30/trzask/ocelote/be_s/5/be_5.e718894",
+          :group_list=>"ludwik",
+          :Hold_Types=>"n",
+          :Join_Path=>"n",
+          :Keep_Files=>"n",
+          :Mail_Points=>"a",
+          :mtime=>"Fri Jun 23 06:31:33 2017",
+          :Output_Path=>"login3.cm.cluster:/home/u30/trzask/ocelote/be_s/5/be_5.o718894",
+          :Priority=>"0",
+          :qtime=>"Fri Jun 23 06:31:33 2017",
+          :Rerunable=>"True",
+          :Resource_List=>{
+            :cput=>"3600:00:00",
+            :mem=>"80gb",
+            :mpiprocs=>"14",
+            :ncpus=>"14",
+            :nodect=>"1",
+            :place=>"free",
+            :pvmem=>"80gb",
+            :select=>"1:ncpus=14:mem=80gb:pcmem=6gb:nodetype=standard:mpiprocs=14",
+            :walltime=>"240:00:00"
+          },
+          :substate=>"10",
+          :Variable_List=>"PBS_O_SYSTEM=Linux,PBS_O_SHELL=/bin/bash,PBS_O_HOME=/home/u30/trzask,PBS_O_LOGNAME=trzask,PBS_O_WORKDIR=/home/u30/trzask/ocelote/be_s/5,PBS_O_LANG=en_US.UTF-8,PBS_O_PATH=/cm/local/apps/gcc/5.2.0/bin:/cm/shared/apps/pbspro/13.0.2.153173/sbin:/cm/shared/apps/pbspro/13.0.2.153173/bin:/cm/shared/uabin:/usr/lib64/qt-3.3/bin:/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin:/sbin:/usr/sbin:/cm/local/apps/environment-modules/3.2.10/bin:/home/u30/trzask/bin,PBS_O_MAIL=/var/spool/mail/trzask,PBS_O_QUEUE=windfall,PBS_O_HOST=login3.cm.cluster",
+          :comment=>"Not Running: Insufficient amount of resource qlist",
+          :etime=>"Fri Jun 23 06:31:33 2017",
+          :Submit_arguments=>"run28",
+          :project=>"_pbs_project_default"
+        }
+      }
+
+      it "returns correct OodCore::Job::Info object" do
+        is_expected.to eq(OodCore::Job::Info.new(
+          :id=>job_id,
+          :status=>:queued,
+          :allocated_nodes=>[
+            {:name=>""},
+          ],
+          :submit_host=>"login3.cm.cluster",
+          :job_name=>"be_5",
+          :job_owner=>"trzask.lastname",
+          :accounting_id=>nil,
+          :procs=>14,
+          :queue_name=>"oc_windfall",
+          :wallclock_time=>nil,
+          :wallclock_limit=>864000,
+          :cpu_time=>nil,
+          :submission_time=>Time.parse("Fri Jun 23 06:31:33 2017"),
+          :dispatch_time=>nil,
+          :native=>job_hash
+        ))
+      end
+    end
   end
 
   describe "#status" do
