@@ -453,7 +453,7 @@ module OodCore
 
           # Parse hash describing PBS Pro job status
           def parse_job_info(v)
-            /^(?<job_owner>[\w-]+)@(?<submit_host>.+)$/ =~ v[:Job_Owner]
+            /^(?<job_owner>[\w\-.]+)@(?<submit_host>.+)$/ =~ v[:Job_Owner]
             allocated_nodes = parse_nodes(v[:exec_host] || "")
             procs = allocated_nodes.inject(0) { |sum, x| sum + x[:procs] }
             if allocated_nodes.empty? # fill in with requested resources
