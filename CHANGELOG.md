@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.22.0] - 10-31-2022
+
+### Added
+
+- Added the `vnc_container` batch connect template in [774](https://github.com/OSC/ood_core/pull/774).
+- https://osc.github.io/ood_core is now updated on every commit to master in [765](https://github.com/OSC/ood_core/pull/765).
+
+### Fixed
+
+- Kubernetes can now read mulitple secrets in [778](https://github.com/OSC/ood_core/pull/778).
+- PBSPro correctly reads usernames with periods in them in [780](https://github.com/OSC/ood_core/pull/780).
+
 ## [0.21.0] - 08-01-2022
 
 ### Added
@@ -443,7 +455,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.21.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.22.0...HEAD
+[0.22.0]: https://github.com/OSC/ood_core/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/OSC/ood_core/compare/v0.20.2...v0.21.0
 [0.20.2]: https://github.com/OSC/ood_core/compare/v0.20.1...v0.20.2
 [0.20.1]: https://github.com/OSC/ood_core/compare/v0.20.0...v0.20.1
