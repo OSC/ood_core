@@ -181,7 +181,7 @@ module OodCore
 
           def accounts
             user = Etc.getlogin
-            args = ['-np', 'show', 'accounts', 'withassoc', 'format=account,user', '-P']
+            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,user', 'where', "user=#{user}"]
 
             [].tap do |accts|
               call('sacctmgr', *args).each_line do |line|
