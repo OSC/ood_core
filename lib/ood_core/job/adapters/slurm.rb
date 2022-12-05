@@ -1,4 +1,5 @@
 require "time"
+require 'etc'
 require "ood_core/refinements/hash_extensions"
 require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
@@ -176,6 +177,18 @@ module OodCore
           rescue SlurmTimeoutError
             # TODO: could use a log entry here
             return [{ id: id, state: 'undetermined' }]
+          end
+
+          def accounts
+            user = Etc.getlogin
+            args = ['-np', 'show', 'accounts', 'withassoc', 'format=account,user', '-P']
+
+            [].tap do |accts|
+              call('sacctmgr', *args).each_line do |line|
+                acct, username = line.split('|')
+                accts << acct if username.to_s.chomp == user
+              end
+            end.uniq.map(&:upcase)
           end
 
           def squeue_fields(attrs)
@@ -481,6 +494,13 @@ module OodCore
         # @return [Hash] information about cluster usage
         def cluster_info
           @slurm.get_cluster_info
+        end
+
+        # Retrieve the accounts available to use  for the current user.
+        #
+        # @return [Array<String>] the accounts available to the user.
+        def accounts
+          @slurm.accounts
         end
 
         # Retrieve info for all jobs from the resource manager

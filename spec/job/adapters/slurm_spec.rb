@@ -1226,4 +1226,33 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe '#accounts' do
+    context 'when sacctmgr returns successfully' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_accounts) {['PAS1604', 'PAS1754', 'PAS1871', 'PAS2051', 'PDE0006', 'PMUS0004', 'PZS0714', 'PZS0715', 'PZS1010', 'PZS1117', 'PZS1118', 'PZS1124']}
+
+      it 'returns the correct accounts' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-np', 'show', 'accounts', 'withassoc', 'format=account,user', '-P', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        expect(subject.accounts).to eq(expected_accounts)
+      end
+    end
+
+    context 'when sacctmgr fails' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+      it 'raises the error' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-np', 'show', 'accounts', 'withassoc', 'format=account,user', '-P', {stdin_data: ''})
+                          .and_return(['', 'the error message',  double("success?" => false)])
+
+        expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
+      end
+    end
+  end
 end
