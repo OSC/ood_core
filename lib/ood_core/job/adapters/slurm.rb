@@ -182,13 +182,16 @@ module OodCore
           def accounts
             user = Etc.getlogin
             args = ['-nP', 'show', 'users', 'withassoc', 'format=account,user', 'where', "user=#{user}"]
+            upcase = ENV['OOD_UPCASE_ACCOUNTS'].nil? ? false : true
 
             [].tap do |accts|
               call('sacctmgr', *args).each_line do |line|
-                acct, username = line.split('|')
-                accts << acct if username.to_s.chomp == user
+                acct, _ = line.split('|')
+                accts << acct unless acct.nil?
               end
-            end.uniq.map(&:upcase)
+            end.uniq.map do |acct|
+              upcase ? acct.upcase : acct
+            end
           end
 
           def squeue_fields(attrs)
