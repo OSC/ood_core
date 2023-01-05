@@ -189,7 +189,7 @@ module OodCore
                 accts << acct unless acct.nil?
               end
             end.uniq.map do |acct|
-              upcase_accounts? ? acct.upcase : acct
+              OodCore::Job::Adapters::Helper.upcase_accounts? ? acct.upcase : acct
             end
           end
 

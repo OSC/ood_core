@@ -205,16 +205,6 @@ module OodCore
       def job_name_illegal_chars
         ENV["OOD_JOB_NAME_ILLEGAL_CHARS"].to_s
       end
-
-      def upcase_accounts?
-        env_var = ENV['OOD_UPCASE_ACCOUNTS']
-
-        if env_var.nil? || env_var.to_s.downcase == 'false'
-          false
-        else
-          true
-        end
-      end
     end
   end
 end

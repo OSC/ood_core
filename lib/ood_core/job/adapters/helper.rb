@@ -31,6 +31,17 @@ module OodCore
 
           return 'ssh', args + [cmd] + cmd_args
         end
+
+        # Determine whether to upcase account strings when returning adapter#accounts
+        def self.upcase_accounts?
+          env_var = ENV['OOD_UPCASE_ACCOUNTS']
+
+          if env_var.nil? || env_var.to_s.downcase == 'false'
+            false
+          else
+            true
+          end
+        end
       end
     end
   end
