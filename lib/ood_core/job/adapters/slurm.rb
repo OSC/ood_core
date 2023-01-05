@@ -182,15 +182,14 @@ module OodCore
           def accounts
             user = Etc.getlogin
             args = ['-nP', 'show', 'users', 'withassoc', 'format=account,user', 'where', "user=#{user}"]
-            upcase = ENV['OOD_UPCASE_ACCOUNTS'].nil? ? false : true
 
             [].tap do |accts|
               call('sacctmgr', *args).each_line do |line|
-                acct, _ = line.split('|')
+                acct, = line.split('|')
                 accts << acct unless acct.nil?
               end
             end.uniq.map do |acct|
-              upcase ? acct.upcase : acct
+              upcase_accounts? ? acct.upcase : acct
             end
           end
 
