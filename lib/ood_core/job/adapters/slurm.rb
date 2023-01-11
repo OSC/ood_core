@@ -179,10 +179,6 @@ module OodCore
             return [{ id: id, state: 'undetermined' }]
           end
 
-          def test_sinfo
-            call('sinfo', '-o', '%V')
-          end
-
           def accounts
             user = Etc.getlogin
             args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', "user=#{user}"]
