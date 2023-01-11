@@ -179,17 +179,23 @@ module OodCore
             return [{ id: id, state: 'undetermined' }]
           end
 
+          def test_sinfo
+            call('sinfo', '-o', '%V')
+          end
+
           def accounts
             user = Etc.getlogin
-            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,user', 'where', "user=#{user}"]
+            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', "user=#{user}"]
 
             [].tap do |accts|
               call('sacctmgr', *args).each_line do |line|
-                acct, = line.split('|')
-                accts << acct unless acct.nil?
+                acct, cluster, qos = line.split('|')
+                next if acct.nil?
+
+                args = { name: acct, qos: qos.to_s.chomp.split(','), cluster: cluster }
+                info = OodCore::Job::AccountInfo.new(args) unless acct.nil?
+                accts << info unless acct.nil?
               end
-            end.uniq.map do |acct|
-              OodCore::Job::Adapters::Helper.upcase_accounts? ? acct.upcase : acct
             end
           end
 
@@ -340,7 +346,7 @@ module OodCore
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
 
               args  = args.map(&:to_s)
-              args.concat ["-M", cluster] if cluster
+              args.concat ["-M", cluster] if cluster && cmd != 'sacctmgr'
 
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
