@@ -300,7 +300,37 @@ module OodCore
             }
           end
 
+          def queue_info
+            info_raw = call('scontrol', 'show', 'part', '-o')
+
+            [].tap do |ret_arr|
+              info_raw.each_line do |line|
+                ret_arr << info_str_to_obj(line)
+              end
+            end
+          end
+
           private
+            def info_str_to_obj(line)
+              hsh = line.split(' ').map do |token|
+                m = token.match(/^(?<key>\w+)=(?<value>.+)$/)
+                [m[:key], m[:value]]
+              end.to_h.symbolize_keys
+
+              hsh[:name] = hsh[:PartitionName]
+              hsh[:qos] =  hsh[:QoS].to_s == 'N/A' ? [] : hsh[:QoS].to_s.split(',')
+              hsh[:allow_accounts] = if hsh[:AllowAccounts].nil? || hsh[:AllowAccounts].to_s == 'ALL'
+                                       nil
+                                     else
+                                       hsh[:AllowAccounts].to_s.split(',')
+                                     end
+
+              
+              hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+
+              OodCore::Job::QueueInfo.new(**hsh)
+            end
+
             # Modify the StringIO instance by advancing past the squeue header
             #
             # The first two "records" should always be discarded. Consider the
@@ -603,6 +633,10 @@ module OodCore
 
         def directive_prefix
           '#SBATCH'
+        end
+
+        def queue_info
+          @slurm.queue_info
         end
 
         private
