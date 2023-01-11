@@ -189,7 +189,7 @@ module OodCore
                 next if acct.nil?
 
                 args = { name: acct, qos: qos.to_s.chomp.split(','), cluster: cluster }
-                info = OodCore::Job::AccountInfo.new(args) unless acct.nil?
+                info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
                 accts << info unless acct.nil?
               end
             end
