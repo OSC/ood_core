@@ -300,18 +300,18 @@ module OodCore
             }
           end
 
-          def queue_info
+          def queues
             info_raw = call('scontrol', 'show', 'part', '-o')
 
             [].tap do |ret_arr|
               info_raw.each_line do |line|
-                ret_arr << info_str_to_obj(line)
+                ret_arr << str_to_acct_info(line)
               end
             end
           end
 
           private
-            def info_str_to_obj(line)
+            def str_to_acct_info(line)
               hsh = line.split(' ').map do |token|
                 m = token.match(/^(?<key>\w+)=(?<value>.+)$/)
                 [m[:key], m[:value]]
@@ -325,7 +325,7 @@ module OodCore
                                        hsh[:AllowAccounts].to_s.split(',')
                                      end
 
-              
+
               hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
 
               OodCore::Job::QueueInfo.new(**hsh)
@@ -635,8 +635,8 @@ module OodCore
           '#SBATCH'
         end
 
-        def queue_info
-          @slurm.queue_info
+        def queues
+          @slurm.queues
         end
 
         private

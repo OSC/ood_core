@@ -197,6 +197,13 @@ module OodCore
       def job_name_illegal_chars
         ENV["OOD_JOB_NAME_ILLEGAL_CHARS"].to_s
       end
+
+      # Return the list of queues for this scheduler.
+      #
+      # @return [Array<QueueInfo>]
+      def queues
+        []
+      end
     end
   end
 end
