@@ -42,14 +42,6 @@ module OodCore
         raise NotImplementedError, "subclass did not define #cluster_stats"
       end
 
-      # Retrieve the accounts available to use  for the current user.
-      #
-      # Subclasses that do not implement this will return empty arrays.
-      # @return [Array<String>] the accounts available to the user.
-      def accounts
-        []
-      end
-
       # Retrieve info for all jobs from the resource manager
       # @abstract Subclass is expected to implement {#info_all}
       # @raise [NotImplementedError] if subclass did not define {#info_all}
@@ -204,6 +196,14 @@ module OodCore
       # @return [String] string of chars
       def job_name_illegal_chars
         ENV["OOD_JOB_NAME_ILLEGAL_CHARS"].to_s
+      end
+
+      # Retrieve the accounts available to use  for the current user.
+      #
+      # Subclasses that do not implement this will return empty arrays.
+      # @return [Array<AccountInfo>] the accounts available to the user.
+      def accounts
+        []
       end
     end
   end
