@@ -4,6 +4,7 @@
 class OodCore::Job::QueueInfo
   # The name of the queue.
   attr_reader :name
+  alias to_s name
 
   # The QoSes associated with this queue
   attr_reader :qos
@@ -20,7 +21,7 @@ class OodCore::Job::QueueInfo
     @name = opts.fetch(:name, 'unknown')
     @qos = opts.fetch(:qos, [])
     @allow_accounts = opts.fetch(:allow_accounts, nil)
-    @deny_accounts = opts.fetch(:denied_accounts, [])
+    @deny_accounts = opts.fetch(:deny_accounts, [])
   end
 
   def to_h

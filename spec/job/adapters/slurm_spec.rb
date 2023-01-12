@@ -1226,4 +1226,54 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe '#queues' do
+    context 'when scontrol returns successfully' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_queue_names) {[
+          'batch', 'debug', 'gpubackfill-parallel', 'gpubackfill-serial', 'gpudebug',
+          'gpuparallel', 'gpuserial', 'hugemem', 'hugemem-parallel', 'longserial',
+          'parallel', 'quick', 'serial', 'systems'
+        ]}
+      let(:quick_deny_accounts) {[
+        'pcon0003','pcon0014','pcon0015','pcon0016','pcon0401','pcon0008','pas1429','pcon0009',
+        'pcon0020','pcon0022','pcon0023','pcon0024','pcon0025','pcon0040','pcon0026','pcon0041',
+        'pcon0080','pcon0100','pcon0101','pcon0120','pcon0140','pcon0160','pcon0180','pcon0200',
+        'pas1901','pcon0220','pcon0240','pcon0260','pcon0280','pcon0300','pcon0320','pcon0340',
+        'pcon0341','pcon0360','pcon0380','pcon0381','pcon0441','pcon0481','pcon0501','pcon0421'
+      ]}
+
+      it 'returns the correct queue info objects' do
+        # allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '',  double("success?" => true)])
+
+        queues = subject.queues
+        expect(queues.map(&:to_s)).to eq(expected_queue_names)
+
+        systems_queue = queues.select { |q| q.name == 'systems' }.first
+        expect(systems_queue.allow_accounts).to eq(['root', 'pzs0708', 'pzs0710', 'pzs0722'])
+        expect(systems_queue.deny_accounts).to eq([])
+        expect(systems_queue.qos).to eq([])
+
+        quick_queue = queues.select { |q| q.name == 'quick' }.first
+        expect(quick_queue.allow_accounts).to eq(nil)
+        expect(quick_queue.deny_accounts).to eq(quick_deny_accounts)
+        expect(quick_queue.qos).to eq(['quick'])
+      end
+    end
+
+    context 'when scontrol fails' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+      it 'raises the error' do
+
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .and_return(['', 'the error message',  double("success?" => false)])
+        expect { subject.queues }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
+      end
+    end
+  end
 end
