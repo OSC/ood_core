@@ -73,7 +73,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     # Get the tmux pane PID for the target session
     pane_pid=$(tmux list-panes -aF '\#{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ')
     # Find the Singularity sinit PID child of the pane process
-    pane_sinit_pid=$(pstree -p -l "$pane_pid" | egrep -o 'sinit[(][[:digit:]]*|shim-init[(][[:digit:]]*' | grep -o '[[:digit:]]*') 
+    pane_sinit_pid=$(pstree -p -l "$pane_pid" | egrep -o 'sinit[(][[:digit:]]*|shim-init[(][[:digit:]]|appinit[(][[:digit:]]' | grep -o '[[:digit:]]*')
     # Kill sinit which stops both Singularity-based processes and the tmux session
     kill "$pane_sinit_pid"
     SCRIPT
