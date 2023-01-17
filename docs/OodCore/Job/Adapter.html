@@ -376,6 +376,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#queues-instance_method" title="#queues (instance method)">#<strong>queues</strong>  &#x21d2; Array&lt;QueueInfo&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return the list of queues for this scheduler.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#release-instance_method" title="#release (instance method)">#<strong>release</strong>(id)  &#x21d2; void </a>
     
 
@@ -1450,6 +1474,60 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="queues-instance_method">
+  
+    #<strong>queues</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="QueueInfo.html" title="OodCore::Job::QueueInfo (class)">QueueInfo</a></span>&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return the list of queues for this scheduler.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="QueueInfo.html" title="OodCore::Job::QueueInfo (class)">QueueInfo</a></span>&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+204
+205
+206</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapter.rb', line 204</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_queues'>queues</span>
+  <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="release-instance_method">
   
     #<strong>release</strong>(id)  &#x21d2; <tt>void</tt> 
@@ -1974,7 +2052,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Jan 17 16:38:35 2023 by
+  Generated on Tue Jan 17 17:35:00 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.5).
 </div>
