@@ -1235,13 +1235,44 @@ describe OodCore::Job::Adapters::Slurm do
       it 'returns the correct accounts names' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
 
         expect(subject.accounts.map(&:to_s).uniq).to eq(expected_accounts)
       end
 
       # TODO test for qos & cluster once the API solidifies
+      it 'parses qos correctly' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        accts = subject.accounts
+        acct_w_qos = accts.select { |a| a.name == 'pzs1124' && a.cluster == 'owens' }.first
+        expect(acct_w_qos.qos).to eq(['owens-default', 'staff', 'phoenix', 'geophys', 'hal', 'gpt'])
+
+        other_accts = accts - [acct_w_qos]
+        other_accts.each do |acct|
+          expect(acct.qos).to eq(["#{acct.cluster}-default"])
+        end
+      end
+
+      it 'parses partition correctly' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        accts = subject.accounts
+        acct_w_partitions = accts.select { |a| a.cluster == 'ascend' }
+        acct_w_no_partitions = accts.select { |a| a.queue.nil? }
+
+        expect(acct_w_partitions.size).to eq(2)
+        expect(accts - acct_w_no_partitions).to eq(acct_w_partitions)
+        expect(acct_w_partitions.select {|a| a.name == 'pzs0715'}.first.queue).to eq('partition_a')
+        expect(acct_w_partitions.select {|a| a.name == 'pzs0714'}.first.queue).to eq('partition_b')
+      end
     end
 
     context 'when sacctmgr fails' do
@@ -1250,7 +1281,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'raises the error' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
                           .and_return(['', 'the error message',  double("success?" => false)])
 
         expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
@@ -1264,7 +1295,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'returns the correct accounts' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
 
         with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do

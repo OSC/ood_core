@@ -13,11 +13,16 @@ module OodCore
       # The cluster this account is associated with.
       attr_reader :cluster
 
+      # The queue this account can use. nil means there is no queue info
+      # for this account.
+      attr_reader :queue
+
       def initialize(**opts)
         orig_name = opts.fetch(:name, 'unknown')
         @name = OodCore::Job::Adapters::Helper.upcase_accounts? ? orig_name.upcase : orig_name
         @qos = opts.fetch(:qos, [])
         @cluster = opts.fetch(:cluster, nil)
+        @queue = opts.fetch(:queue, nil)
       end
 
       def to_h

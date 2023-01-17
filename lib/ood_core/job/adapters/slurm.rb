@@ -181,14 +181,19 @@ module OodCore
 
           def accounts
             user = Etc.getlogin
-            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', "user=#{user}"]
+            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', "user=#{user}"]
 
             [].tap do |accts|
               call('sacctmgr', *args).each_line do |line|
-                acct, cluster, qos = line.split('|')
+                acct, cluster, queue, qos = line.split('|')
                 next if acct.nil?
 
-                args = { name: acct, qos: qos.to_s.chomp.split(','), cluster: cluster }
+                args = {
+                  name: acct,
+                  qos: qos.to_s.chomp.split(','),
+                  cluster: cluster,
+                  queue: queue.empty? ? nil : queue
+                }
                 info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
                 accts << info unless acct.nil?
               end
