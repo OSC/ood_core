@@ -205,6 +205,14 @@ module OodCore
       def accounts
         []
       end
+
+      # Return the list of queues for this scheduler.
+      #
+      # Subclasses that do not implement this will return empty arrays.
+      # @return [Array<QueueInfo>]
+      def queues
+        []
+      end
     end
   end
 end

@@ -13,6 +13,7 @@ module OodCore
     require "ood_core/job/info"
     require "ood_core/job/cluster_info"
     require "ood_core/job/account_info"
+    require "ood_core/job/queue_info"
     require "ood_core/job/status"
     require "ood_core/job/adapter"
     require "ood_core/job/factory"
