@@ -1545,7 +1545,7 @@
 <span class='tstring_content'>  # Get the tmux pane PID for the target session
 </span><span class='tstring_content'>  pane_pid=$(tmux list-panes -aF &#39;\#{session_name} \#{pane_pid}&#39; | grep &#39;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_session_name'>session_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39; | cut -f 2 -d &#39; &#39;)
 </span><span class='tstring_content'>  # Find the Singularity sinit PID child of the pane process
-</span><span class='tstring_content'>  pane_sinit_pid=$(pstree -p -l &quot;$pane_pid&quot; | egrep -o &#39;sinit[(][[:digit:]]*|shim-init[(][[:digit:]]*&#39; | grep -o &#39;[[:digit:]]*&#39;) 
+</span><span class='tstring_content'>  pane_sinit_pid=$(pstree -p -l &quot;$pane_pid&quot; | egrep -o &#39;sinit[(][[:digit:]]*|shim-init[(][[:digit:]]|appinit[(][[:digit:]]&#39; | grep -o &#39;[[:digit:]]*&#39;)
 </span><span class='tstring_content'>  # Kill sinit which stops both Singularity-based processes and the tmux session
 </span><span class='tstring_content'>  kill &quot;$pane_sinit_pid&quot;
 </span><span class='heredoc_end'>  SCRIPT
@@ -1615,9 +1615,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Oct 31 16:30:09 2022 by
+  Generated on Tue Jan 17 16:38:40 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.28 (ruby-3.0.4).
+  0.9.28 (ruby-3.0.5).
 </div>
 
     </div>
