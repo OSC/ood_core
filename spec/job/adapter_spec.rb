@@ -210,7 +210,7 @@ describe OodCore::Job::Adapter do
   end
 
   describe '#queues' do
-    it 'returns and emtpy array' do
+    it 'returns an empty array' do
       expect(adapter.queues).to eq([])
     end
   end
