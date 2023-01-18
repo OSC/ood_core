@@ -1,4 +1,5 @@
 require "time"
+require 'etc'
 require "ood_core/refinements/hash_extensions"
 require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
@@ -178,6 +179,27 @@ module OodCore
             return [{ id: id, state: 'undetermined' }]
           end
 
+          def accounts
+            user = Etc.getlogin
+            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', "user=#{user}"]
+
+            [].tap do |accts|
+              call('sacctmgr', *args).each_line do |line|
+                acct, cluster, queue, qos = line.split('|')
+                next if acct.nil?
+
+                args = {
+                  name: acct,
+                  qos: qos.to_s.chomp.split(','),
+                  cluster: cluster,
+                  queue: queue.empty? ? nil : queue
+                }
+                info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
+                accts << info unless acct.nil?
+              end
+            end
+          end
+
           def squeue_fields(attrs)
             if attrs.nil?
               all_squeue_fields
@@ -355,7 +377,7 @@ module OodCore
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
 
               args  = args.map(&:to_s)
-              args.concat ["-M", cluster] if cluster
+              args.concat ["-M", cluster] if cluster && cmd != 'sacctmgr'
 
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
@@ -511,6 +533,13 @@ module OodCore
         # @return [Hash] information about cluster usage
         def cluster_info
           @slurm.get_cluster_info
+        end
+
+        # Retrieve the accounts available to use  for the current user.
+        #
+        # @return [Array<String>] the accounts available to the user.
+        def accounts
+          @slurm.accounts
         end
 
         # Retrieve info for all jobs from the resource manager
