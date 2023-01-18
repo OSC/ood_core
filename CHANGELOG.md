@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.0] - 01-17-2023
+
+### Added
+
+- [787](https://github.com/OSC/ood_core/pull/787) added the `queues` API to the adapter class with
+  support for Slurm.
+- [783](https://github.com/OSC/ood_core/pull/783) added the `accounts` API to the adapter class with
+  support for Slurm.
+
+### Fixed
+
+- The linux host adapter now supports apptainer in [788](https://github.com/OSC/ood_core/pull/788).
+
+
 ## [0.22.0] - 10-31-2022
 
 ### Added
@@ -455,7 +469,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.22.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.0...HEAD
+[0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/OSC/ood_core/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/OSC/ood_core/compare/v0.20.2...v0.21.0
 [0.20.2]: https://github.com/OSC/ood_core/compare/v0.20.1...v0.20.2
