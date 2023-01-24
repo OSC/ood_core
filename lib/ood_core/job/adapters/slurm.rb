@@ -186,13 +186,13 @@ module OodCore
             [].tap do |accts|
               call('sacctmgr', *args).each_line do |line|
                 acct, cluster, queue, qos = line.split('|')
-                next if acct.nil?
+                next if acct.nil? || acct.chomp.empty?
 
                 args = {
                   name: acct,
                   qos: qos.to_s.chomp.split(','),
                   cluster: cluster,
-                  queue: queue.empty? ? nil : queue
+                  queue: queue.to_s.empty? ? nil : queue
                 }
                 info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
                 accts << info unless acct.nil?
