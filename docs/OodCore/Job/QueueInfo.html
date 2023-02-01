@@ -87,6 +87,11 @@
   
   
   
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="../DataFormatter.html" title="OodCore::DataFormatter (module)">DataFormatter</a></span></dd>
+  </dl>
+  
   
 
   
@@ -299,6 +304,17 @@
     </ul>
   
 
+
+  
+  
+  
+  
+  
+  
+  
+  
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="../DataFormatter.html" title="OodCore::DataFormatter (module)">DataFormatter</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="../DataFormatter.html#upcase_accounts%3F-instance_method" title="OodCore::DataFormatter#upcase_accounts? (method)">#upcase_accounts?</a></span></p>
 <div id="constructor_details" class="method_details_list">
   <h2>Constructor Details</h2>
   
@@ -328,21 +344,39 @@
       <pre class="lines">
 
 
-20
-21
-22
 23
 24
-25</pre>
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 20</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 23</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_opts'>opts</span><span class='rparen'>)</span>
   <span class='ivar'>@name</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>unknown</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='ivar'>@qos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:qos</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
-  <span class='ivar'>@allow_accounts</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:allow_accounts</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='ivar'>@deny_accounts</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:deny_accounts</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_allow_accounts'>allow_accounts</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:allow_accounts</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@allow_accounts</span> <span class='op'>=</span> <span class='kw'>if</span> <span class='id identifier rubyid_allow_accounts'>allow_accounts</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+                      <span class='kw'>nil</span>
+                    <span class='kw'>else</span>
+                      <span class='id identifier rubyid_allow_accounts'>allow_accounts</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_acct'>acct</span><span class='op'>|</span> <span class='id identifier rubyid_upcase_accounts?'>upcase_accounts?</span> <span class='op'>?</span> <span class='id identifier rubyid_acct'>acct</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span> <span class='op'>:</span> <span class='id identifier rubyid_acct'>acct</span> <span class='rbrace'>}</span>
+                    <span class='kw'>end</span>
+
+  <span class='ivar'>@deny_accounts</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:deny_accounts</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_compact'>compact</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_acct'>acct</span><span class='op'>|</span>
+    <span class='id identifier rubyid_upcase_accounts?'>upcase_accounts?</span> <span class='op'>?</span> <span class='id identifier rubyid_acct'>acct</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span> <span class='op'>:</span> <span class='id identifier rubyid_acct'>acct</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -384,12 +418,12 @@
       <pre class="lines">
 
 
-15
-16
-17</pre>
+18
+19
+20</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_allow_accounts'>allow_accounts</span>
   <span class='ivar'>@allow_accounts</span>
@@ -427,12 +461,12 @@
       <pre class="lines">
 
 
-18
-19
-20</pre>
+21
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 21</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_deny_accounts'>deny_accounts</span>
   <span class='ivar'>@deny_accounts</span>
@@ -474,12 +508,12 @@
       <pre class="lines">
 
 
-6
-7
-8</pre>
+9
+10
+11</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 6</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 9</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_name'>name</span>
   <span class='ivar'>@name</span>
@@ -517,12 +551,12 @@
       <pre class="lines">
 
 
-10
-11
-12</pre>
+13
+14
+15</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 10</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 13</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_qos'>qos</span>
   <span class='ivar'>@qos</span>
@@ -554,15 +588,15 @@
       <pre class="lines">
 
 
-27
-28
-29
-30
-31
-32</pre>
+39
+40
+41
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 27</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 39</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
   <span class='id identifier rubyid_instance_variables'>instance_variables</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_var'>var</span><span class='op'>|</span>
@@ -580,7 +614,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Jan 25 16:26:45 2023 by
+  Generated on Wed Feb  1 17:34:01 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.5).
 </div>
