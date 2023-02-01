@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.1] - 02-01-2023
+
+### Fixed
+
+- `QueueInfo` objects also upcase accounts when applicable in [792](https://github.com/OSC/ood_core/pull/792).
+
+### Added
+
+- `queue_name` has the alias `queue` in [790](https://github.com/OSC/ood_core/pull/790).
+
 ## [0.23.0] - 01-17-2023
 
 ### Added
@@ -469,7 +479,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.1...HEAD
+[0.23.1]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/OSC/ood_core/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/OSC/ood_core/compare/v0.20.2...v0.21.0
