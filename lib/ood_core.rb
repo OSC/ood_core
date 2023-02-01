@@ -3,6 +3,7 @@ require "ood_core/errors"
 require "ood_core/cluster"
 require "ood_core/clusters"
 require "ood_core/invalid_cluster"
+require "ood_core/data_formatter"
 
 # The main namespace for ood_core
 module OodCore

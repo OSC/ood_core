@@ -2,6 +2,9 @@
 
 # QueueInfo is information about a given queue on a scheduler.
 class OodCore::Job::QueueInfo
+
+  include OodCore::DataFormatter
+
   # The name of the queue.
   attr_reader :name
   alias to_s name
@@ -20,8 +23,17 @@ class OodCore::Job::QueueInfo
   def initialize(**opts)
     @name = opts.fetch(:name, 'unknown')
     @qos = opts.fetch(:qos, [])
-    @allow_accounts = opts.fetch(:allow_accounts, nil)
-    @deny_accounts = opts.fetch(:deny_accounts, [])
+
+    allow_accounts = opts.fetch(:allow_accounts, nil)
+    @allow_accounts = if allow_accounts.nil?
+                        nil
+                      else
+                        allow_accounts.compact.map { |acct| upcase_accounts? ? acct.to_s.upcase : acct }
+                      end
+
+    @deny_accounts = opts.fetch(:deny_accounts, []).compact.map do |acct|
+      upcase_accounts? ? acct.to_s.upcase : acct
+    end
   end
 
   def to_h

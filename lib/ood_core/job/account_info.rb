@@ -3,6 +3,8 @@ module OodCore
 
     class AccountInfo
 
+    include OodCore::DataFormatter
+
       # The name of the account.
       attr_reader :name
       alias to_s name
@@ -19,7 +21,7 @@ module OodCore
 
       def initialize(**opts)
         orig_name = opts.fetch(:name, 'unknown')
-        @name = OodCore::Job::Adapters::Helper.upcase_accounts? ? orig_name.upcase : orig_name
+        @name = upcase_accounts? ? orig_name.upcase : orig_name
         @qos = opts.fetch(:qos, [])
         @cluster = opts.fetch(:cluster, nil)
         @queue = opts.fetch(:queue, nil)
