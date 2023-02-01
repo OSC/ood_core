@@ -3,7 +3,7 @@ module OodCore
 
     class AccountInfo
 
-    include OodCore::DataFormatter
+      include OodCore::DataFormatter
 
       # The name of the account.
       attr_reader :name
