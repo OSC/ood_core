@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.2] - 02-02-2023
+
+### Fixed
+
+- The linux host adapter should correctly extract the full apptainer pid in [794](https://github.com/OSC/ood_core/pull/794).
+
+
 ## [0.23.1] - 02-01-2023
 
 ### Fixed
@@ -479,7 +486,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.1...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.2...HEAD
+[0.23.2]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.23.1]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/OSC/ood_core/compare/v0.21.0...v0.22.0
