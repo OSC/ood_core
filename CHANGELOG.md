@@ -487,8 +487,8 @@ Functionally the same as [0.17.3] but with some CI updates.
 - Initial release!
 
 [Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.2...HEAD
-[0.23.2]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
-[0.23.1]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
+[0.23.2]: https://github.com/OSC/ood_core/compare/v0.23.1...v0.23.2
+[0.23.1]: https://github.com/OSC/ood_core/compare/v0.23.0...v0.23.1
 [0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
 [0.22.0]: https://github.com/OSC/ood_core/compare/v0.21.0...v0.22.0
 [0.21.0]: https://github.com/OSC/ood_core/compare/v0.20.2...v0.21.0
