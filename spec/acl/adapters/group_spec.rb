@@ -15,11 +15,6 @@ describe OodCore::Acl::Adapters::Group do
     end
   end
 
-  # groups:
-  # - "cluster_users"
-  # - "other_users_of_the_cluster"
-  # type: "whitelist"
-
   describe '#allow' do
     context 'when allowlist is provided' do
       subject { build_group_acl({ groups: ['group-a', 'group-x'], type: 'allowlist' }) }
