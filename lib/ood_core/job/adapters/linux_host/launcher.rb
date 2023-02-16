@@ -58,7 +58,6 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
     cmd = ssh_cmd(submit_host(script), ['/usr/bin/env', 'bash'])
-
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
     hostname = parse_hostname(output)
@@ -122,15 +121,18 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param destination_host [#to_s] the destination host you wish to ssh into
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
+
     if strict_host_checking
       [
         'ssh', '-t',
+        '-p', ENV["OOD_SSH_PORT"].nil? ? 22 : ENV["OOD_SSH_PORT"],
         '-o', 'BatchMode=yes',
         "#{username}@#{destination_host}"
       ].concat(cmd)
     else
       [
         'ssh', '-t',
+        '-p', ENV["OOD_SSH_PORT"].nil? ? 22 : ENV["OOD_SSH_PORT"],
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',
