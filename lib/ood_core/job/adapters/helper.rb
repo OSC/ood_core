@@ -26,7 +26,7 @@ module OodCore
           return cmd, cmd_args if submit_host.to_s.empty?
 
           check_host = strict_host_checking ? "yes" : "no"
-          args = ['-p', ENV["OOD_SSH_PORT"].nil? ? 22 : ENV["OOD_SSH_PORT"], '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
+          args = ['-p', ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}", '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
           env.each{|key, value| args.push("export #{key}=#{value};")}
 
           return 'ssh', args + [cmd] + cmd_args

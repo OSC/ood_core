@@ -51,7 +51,7 @@ describe OodCore::Job::Adapters::Helper do
       let(:submit_host) { "owens.osc.edu" }
 
       it "returns the ssh wrapped command" do 
-        expect(helper.ssh_wrap(submit_host, cmd, cmd_args)).to eq(["ssh", ["-p", ENV["OOD_SSH_PORT"].nil? ? 22 : ENV["OOD_SSH_PORT"], "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch", "-J", "Job Name"]])
+        expect(helper.ssh_wrap(submit_host, cmd, cmd_args)).to eq(["ssh", ["-p", ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}", "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch", "-J", "Job Name"]])
       end
     end
 
@@ -60,7 +60,7 @@ describe OodCore::Job::Adapters::Helper do
       let(:strict_host_checking) { true }
 
       it "defaults host checking to yes" do
-        expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-p", ENV["OOD_SSH_PORT"].nil? ? 22 : ENV["OOD_SSH_PORT"], "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch", "-J", "Job Name"]])
+        expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-p", ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}", "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "sbatch", "-J", "Job Name"]])
       end
     end
 
@@ -69,7 +69,7 @@ describe OodCore::Job::Adapters::Helper do
       let(:strict_host_checking) { false }
 
       it "defaults host checking to no" do
-        expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-p", ENV["OOD_SSH_PORT"].nil? ? 22 : ENV["OOD_SSH_PORT"], "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "owens.osc.edu", "sbatch", "-J", "Job Name"]])
+        expect(helper.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking)).to eq(["ssh", ["-p", ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}", "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=no", "owens.osc.edu", "sbatch", "-J", "Job Name"]])
       end
     end
   end
