@@ -122,19 +122,17 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
 
-    # To set ENV["OOD_SSH_PORT"], add assignment in /etc/ood/config/nginx_stage.yml
-
     if strict_host_checking
       [
         'ssh', '-t',
-        '-p', ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}",
+        '-p', OodCore::Job::Adapters::Helper.ssh_port,
         '-o', 'BatchMode=yes',
         "#{username}@#{destination_host}"
       ].concat(cmd)
     else
       [
         'ssh', '-t',
-        '-p', ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}",
+        '-p', OodCore::Job::Adapters::Helper.ssh_port,
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',

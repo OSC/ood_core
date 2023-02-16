@@ -104,14 +104,14 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
     if strict_host_checking
       [
         'ssh', '-t',
-        '-p', ENV["OOD_SSH_PORT"].nil? "22" : "#{ENV['OOD_SSH_PORT']}",
+        '-p', OodCore::Job::Adapters::Helper.ssh_port,
         '-o', 'BatchMode=yes',
         "#{username}@#{destination_host}"
       ].concat(cmd)
     else
       [
         'ssh', '-t',
-        '-p', ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}",
+        '-p', OodCore::Job::Adapters::Helper.ssh_port,
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',
