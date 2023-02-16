@@ -99,7 +99,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
                 allow(Open3).to receive(:capture3).and_return([alt_submit_host, '', exit_success])
                 # RSpec doesn't seem to have a good way to test a non-first argument in a variadic list
                 allow(subject).to receive(:call)
-                    .with("ssh", "-t", "-p", ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}", "-o", "BatchMode=yes", "#{username}@#{alt_submit_host}", any_args)
+                    .with("ssh", "-t", "-p", "22", "-o", "BatchMode=yes", "#{username}@#{alt_submit_host}", any_args)
                     .and_return('')
                 
                 subject.start_remote_session(build_script(native: {'submit_host_override' => alt_submit_host}))
@@ -264,7 +264,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             let(:ssh_cmd) { subject.send(:ssh_cmd, 'remote_host', ['/bin/bash']) }
 
             it "uses the correct SSH options" do
-                expect(ssh_cmd).to eq(['ssh', '-t', '-p', ENV['OOD_SSH_PORT'].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}", '-o', 'BatchMode=yes', "#{username}@remote_host", '/bin/bash'])
+                expect(ssh_cmd).to eq(['ssh', '-t', '-p', '22', '-o', 'BatchMode=yes', "#{username}@remote_host", '/bin/bash'])
             end
         end
 
@@ -276,7 +276,7 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             it "uses the correct SSH options" do
                 expect(ssh_cmd).to eq([
                     'ssh', '-t',
-                    '-p', ENV['OOD_SSH_PORT'].nil? ? "22" : "#{ENV['OOD_SSH_PORT']}",
+                    '-p', '22',
                     '-o', 'BatchMode=yes',
                     '-o', 'UserKnownHostsFile=/dev/null',
                     '-o', 'StrictHostKeyChecking=no',
