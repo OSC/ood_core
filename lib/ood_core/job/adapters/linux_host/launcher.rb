@@ -122,6 +122,8 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
 
+    # To set ENV["OOD_SSH_PORT"], add assignment in /etc/ood/config/nginx_stage.yml
+
     if strict_host_checking
       [
         'ssh', '-t',
@@ -293,4 +295,5 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       line.match(/^(([\w+]|[a-zA-Z0-9][\w*-]*\.))*$/)
     end.compact.last.to_s
   end
+
 end

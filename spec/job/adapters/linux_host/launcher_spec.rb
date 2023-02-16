@@ -601,4 +601,25 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
             end
         end
     end
+
+    # test ssh_cmd when OOD_SSH_PORT is set
+    context "when OOD_SSH_PORT is set" do
+        let(:username) { Etc.getlogin }
+        let(:ssh_cmd) { subject.send(:ssh_cmd, 'remote_host', ['/bin/bash']) }
+        it "uses the correct SSH options" do
+            with_modified_env({OOD_SSH_PORT: "1022"}) do 
+                expect(ssh_cmd).to eq(['ssh', '-t', '-p', '1022', '-o', 'BatchMode=yes', "#{username}@remote_host", '/bin/bash'])
+            end
+        end
+    end
+
+    # test ssh_cmd when OOD_SSH_PORT is not set
+    context "when OOD_SSH_PORT is not set" do
+        let(:username) { Etc.getlogin }
+        let(:ssh_cmd) { subject.send(:ssh_cmd, 'remote_host', ['/bin/bash']) }
+        it "uses the correct SSH options" do
+            expect(ssh_cmd).to eq(['ssh', '-t', '-p', '22', '-o', 'BatchMode=yes', "#{username}@remote_host", '/bin/bash'])
+        end
+    end
+
 end
