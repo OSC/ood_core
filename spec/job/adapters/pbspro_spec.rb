@@ -867,7 +867,7 @@ describe OodCore::Job::Adapters::PBSPro do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
-        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub', '-j', 'oe', any_args)
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'qsub', '-j', 'oe', any_args)
       end
     end
 
@@ -877,7 +877,7 @@ describe OodCore::Job::Adapters::PBSPro do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::PBSPro.new(pbspro: batch, qstat_factor: nil).submit script
-        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'qsub', '-j', 'oe', any_args)
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'qsub', '-j', 'oe', any_args)
       end
     end
   end
