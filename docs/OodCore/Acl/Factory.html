@@ -419,12 +419,12 @@
           <span class="default">
             
               &mdash; default:
-              <tt>&#39;whitelist&#39;</tt>
+              <tt>&#39;allowlist&#39;</tt>
             
           </span>
           
             &mdash; <div class='inline'>
-<p>The type of ACL (&#39;whitelist&#39; or &#39;blacklist&#39;)</p>
+<p>The type of ACL (&#39;allowlist&#39; or &#39;blocklist&#39;)</p>
 </div>
           
         </li>
@@ -455,7 +455,8 @@
 25
 26
 27
-28</pre>
+28
+29</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/ood_core/acl/adapters/group.rb', line 12</span>
@@ -466,13 +467,14 @@
   <span class='id identifier rubyid_groups'>groups</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:groups</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>No groups specified. Missing argument: groups</span><span class='tstring_end'>&quot;</span></span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_acl'>acl</span> <span class='op'>=</span> <span class='const'>OodSupport</span><span class='op'>::</span><span class='const'>ACL</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>entries:</span> <span class='id identifier rubyid_groups'>groups</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_g'>g</span><span class='op'>|</span> <span class='const'>OodSupport</span><span class='op'>::</span><span class='const'>ACLEntry</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span> <span class='label'>principle:</span> <span class='id identifier rubyid_g'>g</span> <span class='rbrace'>}</span><span class='rparen'>)</span>
 
-  <span class='id identifier rubyid_type'>type</span>   <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:type</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>whitelist</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>whitelist</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_type'>type</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:type</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>allowlist</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
+  <span class='kw'>case</span> <span class='id identifier rubyid_type'>type</span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>allowlist</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>whitelist</span><span class='tstring_end'>&#39;</span></span>
     <span class='id identifier rubyid_allow'>allow</span> <span class='op'>=</span> <span class='kw'>true</span>
-  <span class='kw'>elsif</span> <span class='id identifier rubyid_type'>type</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>blacklist</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>blocklist</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>blacklist</span><span class='tstring_end'>&#39;</span></span>
     <span class='id identifier rubyid_allow'>allow</span> <span class='op'>=</span> <span class='kw'>false</span>
   <span class='kw'>else</span>
-    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Invalid type specified. Valid types: whitelist, blacklist</span><span class='tstring_end'>&quot;</span></span>
+    <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Invalid type specified. Valid types: allowlist, blocklist</span><span class='tstring_end'>&#39;</span></span>
   <span class='kw'>end</span>
 
   <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Acl::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Group.html" title="OodCore::Acl::Adapters::Group (class)">Group</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Group.html#initialize-instance_method" title="OodCore::Acl::Adapters::Group#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>acl:</span> <span class='id identifier rubyid_acl'>acl</span><span class='comma'>,</span> <span class='label'>allow:</span> <span class='id identifier rubyid_allow'>allow</span><span class='rparen'>)</span>
@@ -487,7 +489,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Feb  2 19:46:02 2023 by
+  Generated on Fri Feb 17 14:26:02 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.28 (ruby-3.0.5).
 </div>
