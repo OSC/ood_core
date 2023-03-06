@@ -13,7 +13,6 @@ require 'date'
 # :queue_name
 # :status
 # :wallclock_limit
-
 class QstatXmlRListener
   # [Array<Hash>]
   attr_reader :parsed_jobs

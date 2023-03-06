@@ -1177,7 +1177,7 @@ describe OodCore::Job::Adapters::Slurm do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'sbatch', '--export', 'NONE', '--parsable', '-M', 'owens.osc.edu', any_args)
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'sbatch', '--export', 'NONE', '--parsable', '-M', 'owens.osc.edu', any_args)
       end
     end
 
@@ -1187,7 +1187,7 @@ describe OodCore::Job::Adapters::Slurm do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::Slurm.new(slurm: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'sbatch', '--export', 'NONE', '--parsable', '-M', 'owens.osc.edu', any_args)
+        expect(Open3).to have_received(:capture3).with(anything, 'ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'sbatch', '--export', 'NONE', '--parsable', '-M', 'owens.osc.edu', any_args)
       end
     end
   end
@@ -1201,9 +1201,6 @@ describe OodCore::Job::Adapters::Slurm do
   end
 
   describe "#gpus_from_gres" do
-    batch = OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens.osc.edu", conf: "/etc/slurm/conf/", bin: nil, bin_overrides: {}, submit_host: "owens.osc.edu", strict_host_checking: false)
-    adapter = OodCore::Job::Adapters::Slurm.new(slurm: batch)
-
     context "when called" do
       gres_cases = [
         [nil, 0],
@@ -1223,9 +1220,172 @@ describe OodCore::Job::Adapters::Slurm do
       ]
       gres_cases.each do |gc| 
         it "does not return the correct number of gpus when gres=\"#{gc[0]}\"" do
-          gpus = adapter.gpus_from_gres(gc[0]);
+          gpus = OodCore::Job::Adapters::Slurm.gpus_from_gres(gc[0]);
           expect(gpus).to be(gc[1]);
         end
+      end
+    end
+  end
+
+  describe '#accounts' do
+    context 'when sacctmgr returns successfully' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_accounts) {["pzs0715", "pzs0714", "pzs1124", "pzs1118", "pzs1117", "pzs1010", "pde0006", "pas2051", "pas1871", "pas1754", "pas1604"]}
+
+      it 'returns the correct accounts names' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        expect(subject.accounts.map(&:to_s).uniq).to eq(expected_accounts)
+      end
+
+      # TODO test for qos & cluster once the API solidifies
+      it 'parses qos correctly' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        accts = subject.accounts
+        acct_w_qos = accts.select { |a| a.name == 'pzs1124' && a.cluster == 'owens' }.first
+        expect(acct_w_qos.qos).to eq(['owens-default', 'staff', 'phoenix', 'geophys', 'hal', 'gpt'])
+
+        other_accts = accts - [acct_w_qos]
+        other_accts.each do |acct|
+          expect(acct.qos).to eq(["#{acct.cluster}-default"])
+        end
+      end
+
+      it 'parses partition correctly' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        accts = subject.accounts
+        acct_w_partitions = accts.select { |a| a.cluster == 'ascend' }
+        acct_w_no_partitions = accts.select { |a| a.queue.nil? }
+
+        expect(acct_w_partitions.size).to eq(2)
+        expect(accts - acct_w_no_partitions).to eq(acct_w_partitions)
+        expect(acct_w_partitions.select {|a| a.name == 'pzs0715'}.first.queue).to eq('partition_a')
+        expect(acct_w_partitions.select {|a| a.name == 'pzs0714'}.first.queue).to eq('partition_b')
+      end
+    end
+
+    context 'when sacctmgr fails' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+      it 'raises the error' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return(['', 'the error message',  double("success?" => false)])
+
+        expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
+      end
+    end
+
+    context 'when OOD_UPCASE_ACCOUNTS is set' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_accounts) {["PZS0715", "PZS0714", "PZS1124", "PZS1118", "PZS1117", "PZS1010", "PDE0006", "PAS2051", "PAS1871", "PAS1754", "PAS1604"]}
+
+      it 'returns the correct accounts' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+
+        with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
+          expect(subject.accounts.map(&:to_s).uniq).to eq(expected_accounts)
+        end
+      end
+    end
+  end
+
+  describe '#queues' do
+    context 'when scontrol returns successfully' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_queue_names) {[
+          'batch', 'debug', 'gpubackfill-parallel', 'gpubackfill-serial', 'gpudebug',
+          'gpuparallel', 'gpuserial', 'hugemem', 'hugemem-parallel', 'longserial',
+          'parallel', 'quick', 'serial', 'systems'
+        ]}
+      let(:quick_deny_accounts) {[
+        'pcon0003','pcon0014','pcon0015','pcon0016','pcon0401','pcon0008','pas1429','pcon0009',
+        'pcon0020','pcon0022','pcon0023','pcon0024','pcon0025','pcon0040','pcon0026','pcon0041',
+        'pcon0080','pcon0100','pcon0101','pcon0120','pcon0140','pcon0160','pcon0180','pcon0200',
+        'pas1901','pcon0220','pcon0240','pcon0260','pcon0280','pcon0300','pcon0320','pcon0340',
+        'pcon0341','pcon0360','pcon0380','pcon0381','pcon0441','pcon0481','pcon0501','pcon0421'
+      ]}
+
+      it 'returns the correct queue info objects' do
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '',  double("success?" => true)])
+
+        queues = subject.queues
+        expect(queues.map(&:to_s)).to eq(expected_queue_names)
+
+        systems_queue = queues.select { |q| q.name == 'systems' }.first
+        expect(systems_queue.allow_accounts).to eq(['root', 'pzs0708', 'pzs0710', 'pzs0722'])
+        expect(systems_queue.deny_accounts).to eq([])
+        expect(systems_queue.qos).to eq([])
+
+        quick_queue = queues.select { |q| q.name == 'quick' }.first
+        expect(quick_queue.allow_accounts).to eq(nil)
+        expect(quick_queue.deny_accounts).to eq(quick_deny_accounts)
+        expect(quick_queue.qos).to eq(['quick'])
+      end
+    end
+
+    context 'when OOD_UPCASE_ACCOUNTS is set' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_queue_names) {[
+          'batch', 'debug', 'gpubackfill-parallel', 'gpubackfill-serial', 'gpudebug',
+          'gpuparallel', 'gpuserial', 'hugemem', 'hugemem-parallel', 'longserial',
+          'parallel', 'quick', 'serial', 'systems'
+        ]}
+      let(:quick_deny_accounts) {[
+        'pcon0003','pcon0014','pcon0015','pcon0016','pcon0401','pcon0008','pas1429','pcon0009',
+        'pcon0020','pcon0022','pcon0023','pcon0024','pcon0025','pcon0040','pcon0026','pcon0041',
+        'pcon0080','pcon0100','pcon0101','pcon0120','pcon0140','pcon0160','pcon0180','pcon0200',
+        'pas1901','pcon0220','pcon0240','pcon0260','pcon0280','pcon0300','pcon0320','pcon0340',
+        'pcon0341','pcon0360','pcon0380','pcon0381','pcon0441','pcon0481','pcon0501','pcon0421'
+      ].map { |acct| acct.upcase } }
+
+      it 'returns uppercase account names' do
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '',  double("success?" => true)])
+
+        with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
+          queues = subject.queues
+
+          systems_queue = queues.select { |q| q.name == 'systems' }.first
+          expect(systems_queue.allow_accounts).to eq(['ROOT', 'PZS0708', 'PZS0710', 'PZS0722'])
+          expect(systems_queue.deny_accounts).to eq([])
+          expect(systems_queue.qos).to eq([])
+
+          quick_queue = queues.select { |q| q.name == 'quick' }.first
+          expect(quick_queue.allow_accounts).to eq(nil)
+          expect(quick_queue.deny_accounts).to eq(quick_deny_accounts)
+          expect(quick_queue.qos).to eq(['quick'])
+        end
+      end
+    end
+
+    context 'when scontrol fails' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+      it 'raises the error' do
+
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .and_return(['', 'the error message',  double("success?" => false)])
+        expect { subject.queues }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
       end
     end
   end

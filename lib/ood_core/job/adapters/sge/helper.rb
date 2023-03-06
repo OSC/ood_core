@@ -1,3 +1,5 @@
+# Utility helper class for the SGE adapter to parse
+# input and generate submission arguements.
 class OodCore::Job::Adapters::Sge::Helper
   require 'ood_core/job/adapters/sge'
 

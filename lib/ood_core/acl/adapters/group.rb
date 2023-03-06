@@ -8,20 +8,21 @@ module OodCore
       # Build the group acl adapter from a configuration
       # @param config [#to_h] the configuration for an acl adapter
       # @option config [Array<#to_s>] :groups The list of groups
-      # @option config [#to_s] :type ('whitelist') The type of ACL ('whitelist' or 'blacklist')
+      # @option config [#to_s] :type ('allowlist') The type of ACL ('allowlist' or 'blocklist')
       def self.build_group(config)
         c = config.to_h.symbolize_keys
 
         groups = c.fetch(:groups) { raise ArgumentError, "No groups specified. Missing argument: groups" }.map(&:to_s)
         acl = OodSupport::ACL.new(entries: groups.map { |g| OodSupport::ACLEntry.new principle: g })
 
-        type   = c.fetch(:type, "whitelist").to_s
-        if type == "whitelist"
+        type = c.fetch(:type, 'allowlist').to_s
+        case type
+        when 'allowlist', 'whitelist'
           allow = true
-        elsif type == "blacklist"
+        when 'blocklist', 'blacklist'
           allow = false
         else
-          raise ArgumentError, "Invalid type specified. Valid types: whitelist, blacklist"
+          raise ArgumentError, 'Invalid type specified. Valid types: allowlist, blocklist'
         end
 
         Adapters::Group.new(acl: acl, allow: allow)

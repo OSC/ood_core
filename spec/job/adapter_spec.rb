@@ -208,4 +208,16 @@ describe OodCore::Job::Adapter do
       end
     end
   end
+
+  describe '#accounts' do
+    it 'returns an empty array by default' do
+      expect(subject.accounts).to eq([])
+    end
+  end
+
+  describe '#queues' do
+    it 'returns an empty array by default' do
+      expect(adapter.queues).to eq([])
+    end
+  end
 end

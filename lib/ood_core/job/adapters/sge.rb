@@ -22,6 +22,8 @@ module OodCore
     end
 
     module Adapters
+
+      # The adpater class for Grid Engine (GE) flavors like Sun Grid Engine.
       class Sge < Adapter
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions

@@ -26,11 +26,20 @@ module OodCore
           return cmd, cmd_args if submit_host.to_s.empty?
 
           check_host = strict_host_checking ? "yes" : "no"
-          args = ['-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
+          
+          # Have to OodCore::Job::Adapters::Helper.ssh_port instead of self.ssh_port due to test failure
+          args = ['-p', OodCore::Job::Adapters::Helper.ssh_port, '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
           env.each{|key, value| args.push("export #{key}=#{value};")}
 
           return 'ssh', args + [cmd] + cmd_args
         end
+
+        # Allows for Non-Standard Port usage in ssh commands
+        # To set ENV["OOD_SSH_PORT"], add assignment in /etc/ood/config/nginx_stage.yml
+        def self.ssh_port
+          return ENV["OOD_SSH_PORT"].nil? ? "22" : "#{ENV['OOD_SSH_PORT'].to_i.to_s}"
+        end
+
       end
     end
   end

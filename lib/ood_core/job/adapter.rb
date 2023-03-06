@@ -197,6 +197,22 @@ module OodCore
       def job_name_illegal_chars
         ENV["OOD_JOB_NAME_ILLEGAL_CHARS"].to_s
       end
+
+      # Retrieve the accounts available to use  for the current user.
+      #
+      # Subclasses that do not implement this will return empty arrays.
+      # @return [Array<AccountInfo>] the accounts available to the user.
+      def accounts
+        []
+      end
+
+      # Return the list of queues for this scheduler.
+      #
+      # Subclasses that do not implement this will return empty arrays.
+      # @return [Array<QueueInfo>]
+      def queues
+        []
+      end
     end
   end
 end

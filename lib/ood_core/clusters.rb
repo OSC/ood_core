@@ -90,7 +90,7 @@ module OodCore
                 {
                   adapter: "group",
                   groups: h["data"]["groups"],
-                  type: h["data"]["allow"] ? "whitelist" : "blacklist"
+                  type: h["data"]["allow"] ? 'allowlist' : 'blocklist'
                 }
               end
             end

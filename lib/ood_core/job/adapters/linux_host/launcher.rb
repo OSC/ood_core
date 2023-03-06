@@ -58,7 +58,6 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param script [OodCore::Job::Script] The script object defining the work
   def start_remote_session(script)
     cmd = ssh_cmd(submit_host(script), ['/usr/bin/env', 'bash'])
-
     session_name = unique_session_name
     output = call(*cmd, stdin: wrapped_script(script, session_name))
     hostname = parse_hostname(output)
@@ -73,7 +72,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     # Get the tmux pane PID for the target session
     pane_pid=$(tmux list-panes -aF '\#{session_name} \#{pane_pid}' | grep '#{session_name}' | cut -f 2 -d ' ')
     # Find the Singularity sinit PID child of the pane process
-    pane_sinit_pid=$(pstree -p -l "$pane_pid" | egrep -o 'sinit[(][[:digit:]]*|shim-init[(][[:digit:]]*' | grep -o '[[:digit:]]*') 
+    pane_sinit_pid=$(pstree -p -l "$pane_pid" | egrep -o 'sinit[(][[:digit:]]*|shim-init[(][[:digit:]]|appinit[(][[:digit:]]*' | grep -o '[[:digit:]]*')
     # Kill sinit which stops both Singularity-based processes and the tmux session
     kill "$pane_sinit_pid"
     SCRIPT
@@ -122,15 +121,18 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param destination_host [#to_s] the destination host you wish to ssh into
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
+
     if strict_host_checking
       [
         'ssh', '-t',
+        '-p', OodCore::Job::Adapters::Helper.ssh_port,
         '-o', 'BatchMode=yes',
         "#{username}@#{destination_host}"
       ].concat(cmd)
     else
       [
         'ssh', '-t',
+        '-p', OodCore::Job::Adapters::Helper.ssh_port,
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',
@@ -291,4 +293,5 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
       line.match(/^(([\w+]|[a-zA-Z0-9][\w*-]*\.))*$/)
     end.compact.last.to_s
   end
+
 end

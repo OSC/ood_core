@@ -7,6 +7,64 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.2] - 02-02-2023
+
+### Fixed
+
+- The linux host adapter should correctly extract the full apptainer pid in [794](https://github.com/OSC/ood_core/pull/794).
+
+
+## [0.23.1] - 02-01-2023
+
+### Fixed
+
+- `QueueInfo` objects also upcase accounts when applicable in [792](https://github.com/OSC/ood_core/pull/792).
+
+### Added
+
+- `queue_name` has the alias `queue` in [790](https://github.com/OSC/ood_core/pull/790).
+
+## [0.23.0] - 01-17-2023
+
+### Added
+
+- [787](https://github.com/OSC/ood_core/pull/787) added the `queues` API to the adapter class with
+  support for Slurm.
+- [783](https://github.com/OSC/ood_core/pull/783) added the `accounts` API to the adapter class with
+  support for Slurm.
+
+### Fixed
+
+- The linux host adapter now supports apptainer in [788](https://github.com/OSC/ood_core/pull/788).
+
+
+## [0.22.0] - 10-31-2022
+
+### Added
+
+- Added the `vnc_container` batch connect template in [774](https://github.com/OSC/ood_core/pull/774).
+- https://osc.github.io/ood_core is now updated on every commit to master in [765](https://github.com/OSC/ood_core/pull/765).
+
+### Fixed
+
+- Kubernetes can now read mulitple secrets in [778](https://github.com/OSC/ood_core/pull/778).
+- PBSPro correctly reads usernames with periods in them in [780](https://github.com/OSC/ood_core/pull/780).
+
+## [0.21.0] - 08-01-2022
+
+### Added
+
+- Added the `fujitsu_tcs` adapter in [766](https://github.com/OSC/ood_core/pull/766).
+
+## [0.20.2] - 07-28-2022
+
+- Fixed an issue with Slurm's `cluster_info` in [762](https://github.com/OSC/ood_core/pull/762).
+- Relaxed Ruby requirement down to 2.5 in [771](https://github.com/OSC/ood_core/pull/771).
+
+## [0.20.1] - 07-21-2022
+
+- Fixed turbovnc compatability issue with the -nohttpd flag in [767](https://github.com/OSC/ood_core/pull/767).
+
 ## [0.20.0] - 06-03-2022
 
 - Adapters can now respond to `cluster_info` in [752](https://github.com/OSC/ood_core/pull/752). This returns information about the cluster like how many nodes are available and so on. Only Slurm support in this release.
@@ -428,7 +486,15 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.19.0...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.2...HEAD
+[0.23.2]: https://github.com/OSC/ood_core/compare/v0.23.1...v0.23.2
+[0.23.1]: https://github.com/OSC/ood_core/compare/v0.23.0...v0.23.1
+[0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
+[0.22.0]: https://github.com/OSC/ood_core/compare/v0.21.0...v0.22.0
+[0.21.0]: https://github.com/OSC/ood_core/compare/v0.20.2...v0.21.0
+[0.20.2]: https://github.com/OSC/ood_core/compare/v0.20.1...v0.20.2
+[0.20.1]: https://github.com/OSC/ood_core/compare/v0.20.0...v0.20.1
+[0.20.0]: https://github.com/OSC/ood_core/compare/v0.19.0...v0.20.0
 [0.19.0]: https://github.com/OSC/ood_core/compare/v0.18.1...v0.19.0
 [0.18.1]: https://github.com/OSC/ood_core/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/OSC/ood_core/compare/v0.17.8...v0.18.0

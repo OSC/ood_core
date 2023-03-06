@@ -77,6 +77,7 @@ module OodCore
       # Name of the queue the job should be submitted to
       # @return [String, nil] queue name
       attr_reader :queue_name
+      alias queue queue_name
 
       # The scheduling priority for the job
       # @return [Integer, nil] scheduling priority

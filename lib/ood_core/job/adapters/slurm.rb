@@ -1,4 +1,5 @@
 require "time"
+require 'etc'
 require "ood_core/refinements/hash_extensions"
 require "ood_core/refinements/array_extensions"
 require "ood_core/job/adapters/helper"
@@ -39,7 +40,7 @@ module OodCore
         # Get integer representing the number of gpus used by a node or job,
         # calculated from gres string
         # @return [Integer] the number of gpus in gres
-        def gpus_from_gres(gres)
+        def self.gpus_from_gres(gres)
           gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
         end
 
@@ -116,8 +117,8 @@ module OodCore
                             total_nodes: node_cpu_info[2].to_i,
                             active_processors: node_cpu_info[3].to_i,
                             total_processors: node_cpu_info[6].to_i,
-                            active_gpus: gres_lines.sum { |line| gpus_from_gres(line[2]) },
-                            total_gpus: gres_lines.sum { |line| gpus_from_gres(line[1]) }
+                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) },
+                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }
             )
           end
 
@@ -176,6 +177,27 @@ module OodCore
           rescue SlurmTimeoutError
             # TODO: could use a log entry here
             return [{ id: id, state: 'undetermined' }]
+          end
+
+          def accounts
+            user = Etc.getlogin
+            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', "user=#{user}"]
+
+            [].tap do |accts|
+              call('sacctmgr', *args).each_line do |line|
+                acct, cluster, queue, qos = line.split('|')
+                next if acct.nil? || acct.chomp.empty?
+
+                args = {
+                  name: acct,
+                  qos: qos.to_s.chomp.split(','),
+                  cluster: cluster,
+                  queue: queue.to_s.empty? ? nil : queue
+                }
+                info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
+                accts << info unless acct.nil?
+              end
+            end
           end
 
           def squeue_fields(attrs)
@@ -300,7 +322,37 @@ module OodCore
             }
           end
 
+          def queues
+            info_raw = call('scontrol', 'show', 'part', '-o')
+
+            [].tap do |ret_arr|
+              info_raw.each_line do |line|
+                ret_arr << str_to_acct_info(line)
+              end
+            end
+          end
+
           private
+            def str_to_acct_info(line)
+              hsh = line.split(' ').map do |token|
+                m = token.match(/^(?<key>\w+)=(?<value>.+)$/)
+                [m[:key], m[:value]]
+              end.to_h.symbolize_keys
+
+              hsh[:name] = hsh[:PartitionName]
+              hsh[:qos] =  hsh[:QoS].to_s == 'N/A' ? [] : hsh[:QoS].to_s.split(',')
+              hsh[:allow_accounts] = if hsh[:AllowAccounts].nil? || hsh[:AllowAccounts].to_s == 'ALL'
+                                       nil
+                                     else
+                                       hsh[:AllowAccounts].to_s.split(',')
+                                     end
+
+
+              hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+
+              OodCore::Job::QueueInfo.new(**hsh)
+            end
+
             # Modify the StringIO instance by advancing past the squeue header
             #
             # The first two "records" should always be discarded. Consider the
@@ -325,7 +377,7 @@ module OodCore
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
 
               args  = args.map(&:to_s)
-              args.concat ["-M", cluster] if cluster
+              args.concat ["-M", cluster] if cluster && cmd != 'sacctmgr'
 
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
@@ -483,6 +535,13 @@ module OodCore
           @slurm.get_cluster_info
         end
 
+        # Retrieve the accounts available to use  for the current user.
+        #
+        # @return [Array<String>] the accounts available to the user.
+        def accounts
+          @slurm.accounts
+        end
+
         # Retrieve info for all jobs from the resource manager
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
@@ -605,6 +664,10 @@ module OodCore
           '#SBATCH'
         end
 
+        def queues
+          @slurm.queues
+        end
+
         private
           # Convert duration to seconds
           def duration_in_seconds(time)
@@ -673,7 +736,7 @@ module OodCore
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v,
-              gpus: gpus_from_gres(v[:gres])
+              gpus: self.class.gpus_from_gres(v[:gres])
             )
           end
 

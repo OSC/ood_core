@@ -3,6 +3,7 @@ require "ood_core/errors"
 require "ood_core/cluster"
 require "ood_core/clusters"
 require "ood_core/invalid_cluster"
+require "ood_core/data_formatter"
 
 # The main namespace for ood_core
 module OodCore
@@ -12,6 +13,8 @@ module OodCore
     require "ood_core/job/script"
     require "ood_core/job/info"
     require "ood_core/job/cluster_info"
+    require "ood_core/job/account_info"
+    require "ood_core/job/queue_info"
     require "ood_core/job/status"
     require "ood_core/job/adapter"
     require "ood_core/job/factory"
