@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.4] - 03-06-2023
+
+### Fixed
+
+- [800](https://github.com/OSC/ood_core/pull/800) fixed some Fujitsu bugs.
+
+## [0.23.3] - 02-17-2023
+
+### Added
+
+- ACLs now respond to `allowlist` and `blocklist` in [795](https://github.com/OSC/ood_core/pull/795).
+- Sites can now use `OOD_SSH_PORT` to use a nonstandard port in [797](https://github.com/OSC/ood_core/pull/797).
+
 ## [0.23.2] - 02-02-2023
 
 ### Fixed
@@ -486,7 +499,9 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.2...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.4...HEAD
+[0.23.4]: https://github.com/OSC/ood_core/compare/v0.23.4...v0.23.3
+[0.23.3]: https://github.com/OSC/ood_core/compare/v0.23.3...v0.23.2
 [0.23.2]: https://github.com/OSC/ood_core/compare/v0.23.1...v0.23.2
 [0.23.1]: https://github.com/OSC/ood_core/compare/v0.23.0...v0.23.1
 [0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
