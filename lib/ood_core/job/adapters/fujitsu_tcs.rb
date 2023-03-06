@@ -221,10 +221,12 @@ module OodCore
           else
             args.concat ["-e", script.error_path]
           end
-          args.concat ["--rscgrp", script.queue_name] unless script.queue_name.nil?
+          args.concat ["-L rscgrp=" + script.queue_name] unless script.queue_name.nil?
           args.concat ["-p", script.priority] unless script.priority.nil?
-          args.concat ["--at", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
-          args.concat ["-L \"elapse=" + seconds_to_duration(script.wall_time) + "\""] unless script.wall_time.nil?
+          
+          # start_time: <%= Time.local(2023,11,22,13,4).to_i %> in form.yml.erb
+          args.concat ["--at", script.start_time.localtime.strftime("%C%y%m%d%H%M")] unless script.start_time.nil?
+          args.concat ["-L elapse=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           args.concat ["--bulk", "--sparam", script.job_array_request] unless script.job_array_request.nil?
 
           # Set environment variables
