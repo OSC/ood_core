@@ -377,7 +377,7 @@ module OodCore
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
 
               args  = args.map(&:to_s)
-              args.concat ["-M", cluster] if cluster && cmd != 'sacctmgr'
+              args.concat ["-M", cluster] if cluster && !cmd.to_s.end_with?('sacctmgr')
 
               env = env.to_h
               env["SLURM_CONF"] = conf.to_s if conf
