@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.5] - 04-10-2023
+
+### Fixed
+
+- [804](https://github.com/OSC/ood_core/pull/804) fixed a kubernetes bug in the
+  `info_all` code path.
+- Slurm `-M` flag now correctly accounts for full path `sacctmgr` commands in
+  [807](https://github.com/OSC/ood_core/pull/807).
+
 ## [0.23.4] - 03-06-2023
 
 ### Fixed
@@ -500,8 +509,9 @@ Functionally the same as [0.17.3] but with some CI updates.
 - Initial release!
 
 [Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.4...HEAD
-[0.23.4]: https://github.com/OSC/ood_core/compare/v0.23.4...v0.23.3
-[0.23.3]: https://github.com/OSC/ood_core/compare/v0.23.3...v0.23.2
+[0.23.5]: https://github.com/OSC/ood_core/compare/v0.23.4...v0.23.5
+[0.23.4]: https://github.com/OSC/ood_core/compare/v0.23.3...v0.23.4
+[0.23.3]: https://github.com/OSC/ood_core/compare/v0.23.2...v0.23.3
 [0.23.2]: https://github.com/OSC/ood_core/compare/v0.23.1...v0.23.2
 [0.23.1]: https://github.com/OSC/ood_core/compare/v0.23.0...v0.23.1
 [0.23.0]: https://github.com/OSC/ood_core/compare/v0.22.0...v0.23.0
