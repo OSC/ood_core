@@ -306,10 +306,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   def pod_info_from_json(pod)
     hash = helper.pod_info_from_json(pod)
-    K8sJobInfo.new(hash)
-  rescue Helper::K8sDataError
-    # FIXME: silently eating error, could probably use a logger
-    nil
+    OodCore::Job::Adapters::Kubernetes::K8sJobInfo.new(hash)
   end
 
   def configure_auth(auth)
