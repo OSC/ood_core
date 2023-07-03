@@ -436,7 +436,8 @@ module OodCore
           'SE' => :completed,  # SPECIAL_EXIT
           'ST' => :running,    # STOPPED
           'S'  => :suspended,  # SUSPENDED
-          'TO' => :completed   # TIMEOUT
+          'TO' => :completed,   # TIMEOUT
+          'OOM' => :completed   # OUT_OF_MEMORY
         }
 
         # @api private
