@@ -80,18 +80,18 @@ module OodCore
           # @return [Array<Hash>] list of details for jobs
           def get_jobs(id: "", owner: nil)
             args = ["-s", "--data", "--choose=jid,jnam,rscg,st,std,stde,adt,sdt,nnumr,usr,elpl,elp"]
-            args.concat ["--filter jid=" + id.to_s] unless id.to_s.empty?
-            args.concat ["--filter usr=" + owner.to_s] unless owner.to_s.empty?
+            args.concat ["--filter", "jid=" + id.to_s] unless id.to_s.empty?
+            args.concat ["--filter", "usr=" + owner.to_s] unless owner.to_s.empty?
             
             StringIO.open(call("pjstat", *args)) do |output|
               output.gets() # Skip header
               jobs = []
               output.each_line do |line|
                 l = line.split(",")
-                jobs << {:JOB_ID => l[1],  :JOB_NAME   => l[2],  :RSC_GRP    => l[3].split(" ")[0],
+                jobs << {:JOB_ID => l[1],  :JOB_NAME   => l[2],  :RSC_GRP    => l[3].split[0],
                          :ST     => l[4],  :STD        => l[5],  :STDE       => l[6],
                          :ACCEPT => l[7],  :START_DATE => l[8],  :NODES      => l[9].split(":")[0],
-                         :USER   => l[10], :ELAPSE_LIM => l[11], :ELAPSE_TIM => l[12].split(" ")[0] }
+                         :USER   => l[10], :ELAPSE_LIM => l[11], :ELAPSE_TIM => l[12].split[0] }
               end
               jobs
             end
@@ -136,14 +136,14 @@ module OodCore
           # @return [String] the id of the job that was created
           def submit_string(str, args: [])
             args = args.map(&:to_s)
-            call("pjsub", *args, stdin: str.to_s).split(" ")[5]
+            call("pjsub", *args, stdin: str.to_s).split[5]
           end
           
           private
             # Call a forked Fujitsu TCS command
             def call(cmd, *args, stdin: "")
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              args  = args.map(&:to_s)
+              args = args.map(&:to_s)
               o, e, s = Open3.capture3(cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? o : raise(Error, e)
             end
@@ -221,12 +221,12 @@ module OodCore
           else
             args.concat ["-e", script.error_path]
           end
-          args.concat ["-L rscgrp=" + script.queue_name] unless script.queue_name.nil?
+          args.concat ["-L", "rscgrp=" + script.queue_name] unless script.queue_name.nil?
           args.concat ["-p", script.priority] unless script.priority.nil?
           
           # start_time: <%= Time.local(2023,11,22,13,4).to_i %> in form.yml.erb
           args.concat ["--at", script.start_time.localtime.strftime("%C%y%m%d%H%M")] unless script.start_time.nil?
-          args.concat ["-L elapse=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
+          args.concat ["-L", "elapse=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           args.concat ["--bulk", "--sparam", script.job_array_request] unless script.job_array_request.nil?
 
           # Set environment variables
@@ -235,7 +235,7 @@ module OodCore
           args.concat ["-X"] if script.copy_environment?
 
           # Set native options
-          args.concat script.native if script.native
+          args.concat script.native[0].split if script.native
           
           # Set content
           content = if script.shell_path.nil?
