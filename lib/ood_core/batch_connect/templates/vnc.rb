@@ -137,6 +137,7 @@ module OodCore
               # Launch websockify websocket server
               echo "Starting websocket server..."
               websocket=$(find_port)
+              [ $? -eq 0 ] || clean_up 1 # give up if port not found
               #{websockify_cmd} -D ${websocket} localhost:${port}
 
               # Set up background process that scans the log file for successful
