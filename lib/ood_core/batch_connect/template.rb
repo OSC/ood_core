@@ -162,14 +162,28 @@ module OodCore
                 export -f port_used
 
                 # Find available port in range [$2..$3] for host $1
-                # Default: [#{min_port}..#{max_port}]
+                # Default host: localhost
+                # Default port range: [#{min_port}..#{max_port}]
+                # returns error code (0: success, 1: failed)
+                # On success, the chosen port is echoed on stdout.
                 find_port () {
                   local host="${1:-localhost}"
-                  local port=$(random_number "${2:-#{min_port}}" "${3:-#{max_port}}")
-                  while port_used "${host}:${port}"; do
-                    port=$(random_number "${2:-#{min_port}}" "${3:-#{max_port}}")
+                  local min_port=${2:-#{min_port}}
+                  local max_port=${3:-#{max_port}}
+                  local port_range=($(shuf -i ${min_port}-${max_port}))
+                  local retries=1 # number of retries over the port range if first attempt fails
+                  for ((attempt=0; attempt<=$retries; attempt++)); do
+                    for port in "${port_range[@]}"; do
+                      if port_used "${host}:${port}"; then
+                        continue
+                      fi
+                      echo "${port}"
+                      return 0 # success
+                    done
                   done
-                  echo "${port}"
+
+                  echo "error: failed to find available port in range ${min_port}..${max_port}" >&2
+                  return 1 # failure
                 }
                 export -f find_port
 
