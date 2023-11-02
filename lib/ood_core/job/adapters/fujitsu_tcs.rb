@@ -68,7 +68,7 @@ module OodCore
             elsif working_dir == "HOME"
               @working_dir   = Dir.home
             else
-              raise(Error, "Unknown working_dir")
+              raise(StandardError, "Unknown working_dir")
             end
           end
 
