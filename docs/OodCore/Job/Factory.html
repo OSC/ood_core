@@ -812,6 +812,22 @@
           
         </li>
       
+        <li>
+          <span class="name">:working_dir</span>
+          <span class="type">(<tt>Object</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>nil</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Working directory for submitting a batch script</p>
+</div>
+          
+        </li>
+      
     </ul>
   
 
@@ -822,22 +838,24 @@
       <pre class="lines">
 
 
-15
 16
 17
 18
 19
 20
-21</pre>
+21
+22
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/fujitsu_tcs.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/fujitsu_tcs.rb', line 16</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_fujitsu_tcs'>build_fujitsu_tcs</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
   <span class='id identifier rubyid_bin'>bin</span>           <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_bin_overrides'>bin_overrides</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin_overrides</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_fujitsu_tcs'>fujitsu_tcs</span>   <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS/Batch.html" title="OodCore::Job::Adapters::Fujitsu_TCS::Batch (class)">Batch</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Fujitsu_TCS/Batch.html#initialize-instance_method" title="OodCore::Job::Adapters::Fujitsu_TCS::Batch#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>bin:</span> <span class='id identifier rubyid_bin'>bin</span><span class='comma'>,</span> <span class='label'>bin_overrides:</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_working_dir'>working_dir</span>   <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:working_dir</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_fujitsu_tcs'>fujitsu_tcs</span>   <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS/Batch.html" title="OodCore::Job::Adapters::Fujitsu_TCS::Batch (class)">Batch</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Fujitsu_TCS/Batch.html#initialize-instance_method" title="OodCore::Job::Adapters::Fujitsu_TCS::Batch#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>bin:</span> <span class='id identifier rubyid_bin'>bin</span><span class='comma'>,</span> <span class='label'>bin_overrides:</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='comma'>,</span> <span class='label'>working_dir:</span> <span class='id identifier rubyid_working_dir'>working_dir</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Fujitsu_TCS.html#initialize-instance_method" title="OodCore::Job::Adapters::Fujitsu_TCS#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>fujitsu_tcs:</span> <span class='id identifier rubyid_fujitsu_tcs'>fujitsu_tcs</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -2195,7 +2213,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Aug 28 19:02:08 2023 by
+  Generated on Thu Nov  2 13:26:50 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.0.6).
 </div>
