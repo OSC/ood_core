@@ -134,10 +134,45 @@ module OodCore
             <<-EOT.gsub(/^ {14}/, "")
               #{super}
 
+              # launches websockify in the background; waiting until the process
+              # has started proxying successfully.
+              start_websockify() {
+                local log_file="./websockify.log"
+                # launch websockify in background and redirect all output to a file.
+                #{websockify_cmd} $1 $2 &> $log_file &
+                local ws_pid=$!
+                local counter=0
+
+                # wait till websockify has successfully started
+                echo "[websockify]: pid: $ws_pid (proxying $1 ==> $2)" >&2
+                echo "[websockify]: log file: $log_file" >&2
+                echo "[websockify]: waiting ..." >&2
+                until grep -q -i "proxying from :$1" $log_file
+                do
+                  if ! ps $ws_pid > /dev/null; then
+                    echo "[websockify]: failed to launch!" >&2
+                    return 1
+                  elif [ $counter -ge 5 ]; then
+                    # timeout after ~5 seconds
+                    echo "[websockify]: timed-out :(!" >&2
+                    return 1
+                  else
+                    sleep 1
+                    ((counter=counter+1))
+                  fi
+                done
+                echo "[websockify]: started successfully (proxying $1 ==> $2)" >&2
+                echo $ws_pid
+                return 0
+              }
+
               # Launch websockify websocket server
               echo "Starting websocket server..."
               websocket=$(find_port)
-              #{websockify_cmd} -D ${websocket} localhost:${port}
+              [ $? -eq 0 ] || clean_up 1 # give up if port not found
+
+              ws_pid=$(start_websockify ${websocket} localhost:${port})
+              [ $? -eq 0 ] || clean_up 1 # give up if websockify launch failed
 
               # Set up background process that scans the log file for successful
               # connections by users, and change the password after every

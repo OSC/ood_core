@@ -173,6 +173,7 @@ module OodCore
               module load #{container_module}
               echo "Starting websocket server..."
               websocket=$(find_port)
+              [ $? -eq 0 ] || clean_up 1 # give up if port not found
               #{container_command} exec instance://#{@instance_name} #{websockify_cmd} -D ${websocket} localhost:${port}
 
               # Set up background process that scans the log file for successful
