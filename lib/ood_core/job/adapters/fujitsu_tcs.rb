@@ -252,7 +252,7 @@ module OodCore
           args.concat ["-X"] if script.copy_environment?
 
           # Set native options
-          args.concat script.native[0].split if script.native
+          args.concat script.native if script.native
           
           # Set content
           content = if script.shell_path.nil?
