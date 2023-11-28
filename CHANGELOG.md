@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.23.6] - 11-28-2023
+
+### Changed
+
+- [818](https://github.com/OSC/ood_core/pull/818) Changed `cluster.batch_connect_ssh_allow?` default from `nil` to `true`
+
 ## [0.23.5] - 04-10-2023
 
 ### Fixed
