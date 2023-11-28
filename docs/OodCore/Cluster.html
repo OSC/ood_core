@@ -1653,9 +1653,9 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_batch_connect_ssh_allow?'>batch_connect_ssh_allow?</span>
   <span class='kw'>return</span> <span class='ivar'>@batch_connect_ssh_allow</span> <span class='kw'>if</span> <span class='kw'>defined?</span><span class='lparen'>(</span><span class='ivar'>@batch_connect_ssh_allow</span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='ivar'>@batch_connect_ssh_allow</span> <span class='op'>=</span> <span class='kw'>nil</span> <span class='kw'>if</span> <span class='id identifier rubyid_batch_connect_config'>batch_connect_config</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='kw'>return</span> <span class='ivar'>@batch_connect_ssh_allow</span> <span class='op'>=</span> <span class='kw'>true</span> <span class='kw'>if</span> <span class='id identifier rubyid_batch_connect_config'>batch_connect_config</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
 
-  <span class='ivar'>@batch_connect_ssh_allow</span> <span class='op'>=</span> <span class='id identifier rubyid_batch_connect_config'>batch_connect_config</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:ssh_allow</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='ivar'>@batch_connect_ssh_allow</span> <span class='op'>=</span> <span class='id identifier rubyid_batch_connect_config'>batch_connect_config</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:ssh_allow</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2394,7 +2394,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Nov 28 15:59:58 2023 by
+  Generated on Tue Nov 28 16:06:03 2023 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.0.6).
 </div>
