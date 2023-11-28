@@ -165,9 +165,9 @@ module OodCore
     # @return [Boolean, nil] whether cluster supports SSH to batch connect node
     def batch_connect_ssh_allow?
       return @batch_connect_ssh_allow if defined?(@batch_connect_ssh_allow)
-      return @batch_connect_ssh_allow = nil if batch_connect_config.nil?
+      return @batch_connect_ssh_allow = true if batch_connect_config.nil?
 
-      @batch_connect_ssh_allow = batch_connect_config.fetch(:ssh_allow, nil)
+      @batch_connect_ssh_allow = batch_connect_config.fetch(:ssh_allow, true)
     end
 
     # The comparison operator
