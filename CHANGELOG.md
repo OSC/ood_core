@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.24.1] - 11-29-2023
+
+[820](https://github.com/OSC/ood_core/pull/820) Reverts [818](https://github.com/OSC/ood_core/pull/818)
+
 ## [0.24.0] - 11-28-2023
 
 - Code cleanup and separate arguments with whitespace in Fujitsu TCS adapter by @mnakao in https://github.com/OSC/ood_core/pull/808
