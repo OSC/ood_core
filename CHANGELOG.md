@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.24.1] - 11-29-2023
+
+[820](https://github.com/OSC/ood_core/pull/820) Reverts [818](https://github.com/OSC/ood_core/pull/818)
+
+## [0.24.0] - 11-28-2023
+
+- Code cleanup and separate arguments with whitespace in Fujitsu TCS adapter by @mnakao in https://github.com/OSC/ood_core/pull/808
+- Add OUT_OF_MEMORY state for Slurm by @robinkar in https://github.com/OSC/ood_core/pull/809
+- find_port: avoid infinite loop by @utkarshayachit in https://github.com/OSC/ood_core/pull/811
+- handle find_port error codes by @utkarshayachit in https://github.com/OSC/ood_core/pull/812
+- vnc: run websockify as background process by @utkarshayachit in https://github.com/OSC/ood_core/pull/813
+- Add working_dir option for Fujitsu TCS job scheduler by @mnakao in https://github.com/OSC/ood_core/pull/816
+- Minor fix for Fujitsu TCS by @mnakao in https://github.com/OSC/ood_core/pull/817
+- Update rake requirement from ~> 13.0.1 to ~> 13.1.0 by @dependabot in https://github.com/OSC/ood_core/pull/814
+- Changes default return value for cluster.batch_connect_ssh_allow? by @HazelGrant in https://github.com/OSC/ood_core/pull/818
+
 ## [0.23.5] - 04-10-2023
 
 ### Fixed
