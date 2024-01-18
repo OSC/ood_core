@@ -386,9 +386,8 @@ module OodCore
           # Convert duration to seconds
           def duration_in_seconds(time)
             return 0 if time.nil? or time == "-"
-            time, days = time.split("-").reverse
-            days.to_i * 24 * 3600 +
-              time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
+            matched = time.match(/\((\d+\))/)
+            return matched ? matched[1].to_i : 0
           end
 
           # Convert seconds to duration
