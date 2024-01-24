@@ -530,9 +530,9 @@ Functionally the same as [0.17.3] but with some CI updates.
 - Initial release!
 
 [Unreleased]: https://github.com/OSC/ood_core/compare/v0.24.2...HEAD
-[0.24.2]: https://github.com/OSC/ood_core/compare/v0.24.2...v0.24.1
-[0.24.1]: https://github.com/OSC/ood_core/compare/v0.24.1...v0.24.0
-[0.24.0]: https://github.com/OSC/ood_core/compare/v0.23.5...v0.24.0
+[0.24.2]: https://github.com/OSC/ood_core/compare/v0.24.1...v0.24.2
+[0.24.1]: https://github.com/OSC/ood_core/compare/v0.24.0...v0.24.1
+[0.24.0]: https://github.com/OSC/ood_core/compare/v0.24.0...v0.23.5
 [0.23.5]: https://github.com/OSC/ood_core/compare/v0.23.4...v0.23.5
 [0.23.4]: https://github.com/OSC/ood_core/compare/v0.23.3...v0.23.4
 [0.23.3]: https://github.com/OSC/ood_core/compare/v0.23.2...v0.23.3
