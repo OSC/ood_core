@@ -70,6 +70,8 @@ module OodCore
         #   empty string.
         # @option context [#to_s] :container_command ("singularity") the 
         #   singularity or apptainer execution command
+        # @option context [#to_a] :container_start_args ([]) Additional
+        #   arguements you wish to pass to the container start command.
         # @param instance_name (uuid) a name for the instance
         # @see Template
 
@@ -99,8 +101,8 @@ module OodCore
               export INSTANCE_NAME="#{@instance_name}"
               export instance_name="#{@instance_name}"
               echo "Starting instance..."
-              #{container_command} instance start #{container_path} #{@instance_name}
-              
+              #{container_command} instance start #{container_start_args} #{container_path} #{@instance_name}
+
               # Setup one-time use passwords and initialize the VNC password
               function change_passwd () {
                 echo "Setting VNC password..."
@@ -217,6 +219,10 @@ module OodCore
 
           def container_command 
             context.fetch(:container_command, "singularity").to_s
+          end
+
+          def container_start_args
+            context.fetch(:container_start_args, []).to_a.join(' ')
           end
 
           # Arguments sent to `vncserver` command
