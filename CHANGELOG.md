@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [0.24.2] - 01-24-2024
+
+- [823](https://github.com/OSC/ood_core/pull/823) Corrected a mistake in converting duration to seconds.
+* [821](https://github.com/OSC/ood_core/pull/821) add container_start_args to pass options to the start command.
+
 ## [0.24.1] - 11-29-2023
 
 [820](https://github.com/OSC/ood_core/pull/820) Reverts [818](https://github.com/OSC/ood_core/pull/818)
@@ -524,7 +529,10 @@ Functionally the same as [0.17.3] but with some CI updates.
 ### Added
 - Initial release!
 
-[Unreleased]: https://github.com/OSC/ood_core/compare/v0.23.4...HEAD
+[Unreleased]: https://github.com/OSC/ood_core/compare/v0.24.2...HEAD
+[0.24.2]: https://github.com/OSC/ood_core/compare/v0.24.2...v0.24.1
+[0.24.1]: https://github.com/OSC/ood_core/compare/v0.24.1...v0.24.0
+[0.24.0]: https://github.com/OSC/ood_core/compare/v0.24.0...v0.23.5
 [0.23.5]: https://github.com/OSC/ood_core/compare/v0.23.4...v0.23.5
 [0.23.4]: https://github.com/OSC/ood_core/compare/v0.23.3...v0.23.4
 [0.23.3]: https://github.com/OSC/ood_core/compare/v0.23.2...v0.23.3
