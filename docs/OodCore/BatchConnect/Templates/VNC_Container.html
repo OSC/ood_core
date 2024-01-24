@@ -491,6 +491,22 @@
           
         </li>
       
+        <li>
+          <span class="name">:container_start_args</span>
+          <span class="type">(<tt>#to_a</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>[]</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>Additional arguements you wish to pass to the container start command.</p>
+</div>
+          
+        </li>
+      
     </ul>
   
 
@@ -508,13 +524,13 @@
       <pre class="lines">
 
 
-76
-77
 78
-79</pre>
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/vnc_container.rb', line 76</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/vnc_container.rb', line 78</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_context'>context</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='ivar'>@instance_name</span> <span class='op'>=</span> <span class='const'>SecureRandom</span><span class='period'>.</span><span class='id identifier rubyid_uuid'>uuid</span>
@@ -531,7 +547,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Jan 18 14:36:53 2024 by
+  Generated on Wed Jan 24 16:22:57 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.34 (ruby-3.0.6).
 </div>
