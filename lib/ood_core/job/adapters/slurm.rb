@@ -327,13 +327,13 @@ module OodCore
 
             [].tap do |ret_arr|
               info_raw.each_line do |line|
-                ret_arr << str_to_acct_info(line)
+                ret_arr << str_to_queue_info(line)
               end
             end
           end
 
           private
-            def str_to_acct_info(line)
+            def str_to_queue_info(line)
               hsh = line.split(' ').map do |token|
                 m = token.match(/^(?<key>\w+)=(?<value>.+)$/)
                 [m[:key], m[:value]]
@@ -349,6 +349,7 @@ module OodCore
 
 
               hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+              hsh[:tres] = hsh[:TRES].nil? ? {} : hsh[:TRES].to_s.split(',').map { |str| str.split('=') }.to_h
 
               OodCore::Job::QueueInfo.new(**hsh)
             end

@@ -20,9 +20,13 @@ class OodCore::Job::QueueInfo
   # The accounts that are not allowed to use this queue.
   attr_reader :deny_accounts
 
+  # An Hash of Trackable Resources and their values.
+  attr_reader :tres
+
   def initialize(**opts)
     @name = opts.fetch(:name, 'unknown')
     @qos = opts.fetch(:qos, [])
+    @tres = opts.fetch(:tres, {})
 
     allow_accounts = opts.fetch(:allow_accounts, nil)
     @allow_accounts = if allow_accounts.nil?
@@ -41,5 +45,9 @@ class OodCore::Job::QueueInfo
       name = var.to_s.gsub('@', '').to_sym
       [name, send(name)]
     end.to_h
+  end
+
+  def gpu?
+    tres.keys.any? { |name| name.to_s.match?(/gpu/i) }
   end
 end
