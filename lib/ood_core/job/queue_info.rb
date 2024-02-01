@@ -48,6 +48,6 @@ class OodCore::Job::QueueInfo
   end
 
   def gpu?
-    tres.keys.any? { |name| name.to_s.match?(/gpu/i) }
+    tres.keys.any? { |name| name.to_s.match?(%r{^gres/gpu($|:)}i) }
   end
 end
