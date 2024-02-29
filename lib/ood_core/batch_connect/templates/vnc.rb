@@ -130,7 +130,8 @@ module OodCore
           # successful connections so that the password can be reset
           def after_script
             websockify_cmd = context.fetch(:websockify_cmd, "${WEBSOCKIFY_CMD:-/opt/websockify/run}").to_s
-
+            websockify_hb = context.fetch(:websockify_hb, "${WEBSOCKIFY_HB:-30}").to_s
+            
             <<-EOT.gsub(/^ {14}/, "")
               #{super}
 
@@ -139,7 +140,7 @@ module OodCore
               start_websockify() {
                 local log_file="./websockify.log"
                 # launch websockify in background and redirect all output to a file.
-                #{websockify_cmd} $1 $2 &> $log_file &
+                #{websockify_cmd} $1 --heartbeat=#{websockify_hb} $2 &> $log_file &
                 local ws_pid=$!
                 local counter=0
 
