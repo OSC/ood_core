@@ -255,6 +255,22 @@
         </li>
       
         <li>
+          <span class="name">:websockify_heartbeat_seconds</span>
+          <span class="type">(<tt>#<span class='object_link'><a href="../Template.html#to_s-instance_method" title="OodCore::BatchConnect::Template#to_s (method)">to_s</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>&quot;${WEBSOCKIFY_HEARTBEAT_SECONDS:-30}&quot;</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'>
+<p>the websockify heartbeat duration in seconds. (assumes you don&#39;t modify `:after_script`)</p>
+</div>
+          
+        </li>
+      
+        <li>
           <span class="name">:vnc_log</span>
           <span class="type">(<tt>#<span class='object_link'><a href="../Template.html#to_s-instance_method" title="OodCore::BatchConnect::Template#to_s (method)">to_s</a></span></tt>)</span>
           <span class="default">
@@ -428,12 +444,12 @@
       <pre class="lines">
 
 
-57
-58
-59</pre>
+60
+61
+62</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/vnc.rb', line 57</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/vnc.rb', line 60</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_context'>context</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>super</span>
@@ -449,7 +465,7 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Mar  5 19:29:24 2024 by
+  Generated on Wed Mar  6 15:20:06 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.36 (ruby-3.0.6).
 </div>
