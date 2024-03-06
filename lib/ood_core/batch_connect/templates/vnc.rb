@@ -24,6 +24,9 @@ module OodCore
         # @option context [#to_s] :websockify_cmd
         #   ("${WEBSOCKIFY_CMD:-/opt/websockify/run}") the path to the
         #   websockify script (assumes you don't modify `:after_script`)
+        # @option context [#to_s] :websockify_heartbeat_seconds
+        #   ("${WEBSOCKIFY_HEARTBEAT_SECONDS:-30}") the websockify heartbeat
+        #   duration in seconds. (assumes you don't modify `:after_script`)
         # @option context [#to_s] :vnc_log ("vnc.log") path to vnc server log
         #   file (assumes you don't modify `:before_script` or `:after_script`)
         # @option context [#to_s] :vnc_passwd ("vnc.passwd") path to the file
@@ -130,7 +133,7 @@ module OodCore
           # successful connections so that the password can be reset
           def after_script
             websockify_cmd = context.fetch(:websockify_cmd, "${WEBSOCKIFY_CMD:-/opt/websockify/run}").to_s
-            websockify_hb = context.fetch(:websockify_hb, "${WEBSOCKIFY_HB:-30}").to_s
+            websockify_hb = context.fetch(:websockify_heartbeat_seconds, "${WEBSOCKIFY_HEARTBEAT_SECONDS:-30}").to_s
             
             <<-EOT.gsub(/^ {14}/, "")
               #{super}
