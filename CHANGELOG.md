@@ -7,10 +7,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [0.25.0] - 03-27-2024
+
+- [828](https://github.com/OSC/ood_core/pull/828) and [826](https://github.com/OSC/ood_core/pull/826)
+  add configurable heartbeats to noVNC connections.
+
 # [0.24.2] - 01-24-2024
 
 - [823](https://github.com/OSC/ood_core/pull/823) Corrected a mistake in converting duration to seconds.
-* [821](https://github.com/OSC/ood_core/pull/821) add container_start_args to pass options to the start command.
+- [821](https://github.com/OSC/ood_core/pull/821) add container_start_args to pass options to the start command.
 
 ## [0.24.1] - 11-29-2023
 
