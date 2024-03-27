@@ -1389,4 +1389,27 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe '#nodes' do
+    context 'when sinfo returns successfully' do
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+
+      it 'returns the correct node information' do
+        args = slurm.all_sinfo_node_fields.values.join(OodCore::Job::Adapters::Slurm::Batch::UNIT_SEPARATOR)
+        args = "#{OodCore::Job::Adapters::Slurm::Batch::RECORD_SEPARATOR}#{args}"
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sinfo', '-ho', args, {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/owens_nodes.txt'), '',  double("success?" => true)])
+
+        nodes = subject.nodes
+        expect(nodes.length).to eq(816)
+
+        # select a node at random and make sure it's what you'd expect
+        o0802 = subject.nodes.select { |n| n.name == "o0802" }.first
+        expect(o0802.procs).to eq(28)
+        expect(o0802.name).to eq('o0802')
+        expect(o0802.features).to eq(['r730', 'gpu', 'eth-owens-rack19h1', 'ib-i2l1s03', 'ib-i2', 'eth-owens-rack16h1', '18', 'p100'])
+      end
+    end
+  end
 end

@@ -10,17 +10,26 @@ module OodCore
       # @return [Integer, nil] number of procs
       attr_reader :procs
 
+      # The features associated with this node.
+      # @return [Array<String>, []]
+      attr_reader :features
+
       # @param name [#to_s] node name
       # @param procs [#to_i, nil] number of procs
-      def initialize(name:, procs: nil, **_)
+      # @param features [#to_a, []] list of features
+      def initialize(name:, procs: nil, features: [], **_)
         @name  = name.to_s
         @procs = procs && procs.to_i
+        @features = features.to_a
       end
 
       # Convert object to hash
       # @return [Hash] object as hash
       def to_h
-        { name: name, procs: procs }
+        instance_variables.map do |var|
+          name = var.to_s.gsub('@', '').to_sym
+          [name, send(name)]
+        end.to_h
       end
 
       # The comparison operator

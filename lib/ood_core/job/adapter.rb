@@ -213,6 +213,14 @@ module OodCore
       def queues
         []
       end
+
+      # Return the list of nodes for this scheduler.
+      #
+      # Subclasses that do not implement this will return empty arrays.
+      # @return [Array<NodeInfo>]
+      def nodes
+        []
+      end
     end
   end
 end
