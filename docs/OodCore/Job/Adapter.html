@@ -400,6 +400,30 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#nodes-instance_method" title="#nodes (instance method)">#<strong>nodes</strong>  &#x21d2; Array&lt;NodeInfo&gt; </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Return the list of nodes for this scheduler.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#queues-instance_method" title="#queues (instance method)">#<strong>queues</strong>  &#x21d2; Array&lt;QueueInfo&gt; </a>
     
 
@@ -1559,6 +1583,62 @@
 </div>
     
       <div class="method_details ">
+  <h3 class="signature " id="nodes-instance_method">
+  
+    #<strong>nodes</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="NodeInfo.html" title="OodCore::Job::NodeInfo (class)">NodeInfo</a></span>&gt;</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Return the list of nodes for this scheduler.</p>
+
+<p>Subclasses that do not implement this will return empty arrays.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Array&lt;<span class='object_link'><a href="NodeInfo.html" title="OodCore::Job::NodeInfo (class)">NodeInfo</a></span>&gt;</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+221
+222
+223</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapter.rb', line 221</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_nodes'>nodes</span>
+  <span class='lbracket'>[</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
   <h3 class="signature " id="queues-instance_method">
   
     #<strong>queues</strong>  &#x21d2; <tt>Array&lt;<span class='object_link'><a href="QueueInfo.html" title="OodCore::Job::QueueInfo (class)">QueueInfo</a></span>&gt;</tt> 
@@ -2139,7 +2219,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Mar 27 15:11:27 2024 by
+  Generated on Fri Mar 29 15:09:01 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.36 (ruby-3.0.6).
 </div>
