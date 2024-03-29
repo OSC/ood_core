@@ -332,6 +332,30 @@ module OodCore
             end
           end
 
+          def all_sinfo_node_fields
+            {
+              procs: '%c',
+              name: '%n',
+              features: '%f'
+            }
+          end
+
+          def nodes
+            args = all_sinfo_node_fields.values.join(UNIT_SEPARATOR)
+            output = call('sinfo', '-ho', "#{RECORD_SEPARATOR}#{args}")
+
+            output.each_line(RECORD_SEPARATOR).map do |line|
+              values = line.chomp(RECORD_SEPARATOR).strip.split(UNIT_SEPARATOR)
+
+              next if values.empty?
+
+              data = Hash[all_sinfo_node_fields.keys.zip(values)]
+              data[:name] = data[:name].to_s.split(',').first
+              data[:features] = data[:features].to_s.split(',')
+              NodeInfo.new(**data)
+            end.compact
+          end
+
           private
             def str_to_acct_info(line)
               hsh = line.split(' ').map do |token|
@@ -667,6 +691,10 @@ module OodCore
 
         def queues
           @slurm.queues
+        end
+
+        def nodes
+          @slurm.nodes
         end
 
         private
