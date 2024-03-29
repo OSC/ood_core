@@ -1333,11 +1333,16 @@ describe OodCore::Job::Adapters::Slurm do
         expect(systems_queue.allow_accounts).to eq(['root', 'pzs0708', 'pzs0710', 'pzs0722'])
         expect(systems_queue.deny_accounts).to eq([])
         expect(systems_queue.qos).to eq([])
+        expect(systems_queue.gpu?).to eq(true)
 
         quick_queue = queues.select { |q| q.name == 'quick' }.first
         expect(quick_queue.allow_accounts).to eq(nil)
         expect(quick_queue.deny_accounts).to eq(quick_deny_accounts)
         expect(quick_queue.qos).to eq(['quick'])
+        expect(quick_queue.gpu?).to eq(false)
+
+        gpu_queue = queues.select { |q| q.name == 'gpuserial' }.first
+        expect(gpu_queue.gpu?).to eq(true)
       end
     end
 
