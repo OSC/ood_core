@@ -204,7 +204,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
 
   # List all Systemd sessions on destination_host started by this adapter
   def list_remote_systemd_session(destination_host)
-    cmd = ssh_cmd(destination_host, ['systemctl', '--user', 'show', '-t', 'service', '--state=running', "#{session_name_label}-*"])
+    cmd = ssh_cmd(destination_host, ['systemctl', '--user', 'show', '-t', 'service', '--state=running', "#{session_name_label}-\\*"])
 
     # individual units are separated with an empty line
     call(*cmd).split("\n\n").map do |oneunit|
