@@ -41,7 +41,7 @@ module OodCore
         # calculated from gres string
         # @return [Integer] the number of gpus in gres
         def self.gpus_from_gres(gres)
-          gres.to_s.scan(/gpu:[^,]*(\d+)/).flatten.map(&:to_i).sum
+          gres.to_s.scan(/gpu[^(,]*[:=](\d+)/).flatten.map(&:to_i).sum
         end
 
         # Object used for simplified communication with a Slurm batch server
