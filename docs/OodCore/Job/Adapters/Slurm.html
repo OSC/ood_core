@@ -722,7 +722,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gpus_from_gres'>gpus_from_gres</span><span class='lparen'>(</span><span class='id identifier rubyid_gres'>gres</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_gres'>gres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>gpu:[^,]*(\d+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
+  <span class='id identifier rubyid_gres'>gres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>gpu[^(,]*[:=](\d+)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2005,9 +2005,9 @@
 </div>
 
       <div id="footer">
-  Generated on Tue Apr  2 13:41:09 2024 by
+  Generated on Tue May 21 16:38:20 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.0.6).
+  0.9.36 (ruby-3.0.7).
 </div>
 
     </div>
