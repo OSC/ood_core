@@ -134,7 +134,8 @@ module OodCore
           def after_script
             websockify_cmd = context.fetch(:websockify_cmd, "${WEBSOCKIFY_CMD:-/opt/websockify/run}").to_s
             websockify_hb = context.fetch(:websockify_heartbeat_seconds, "${WEBSOCKIFY_HEARTBEAT_SECONDS:-30}").to_s
-            
+            websockify_timeout_seconds = context.fetch(:websockify_timeout_seconds, '${WEBSOCKIFY_TIMEOUT_SECONDS:-10}').to_s
+
             <<-EOT.gsub(/^ {14}/, "")
               #{super}
 
@@ -146,6 +147,7 @@ module OodCore
                 #{websockify_cmd} $1 --heartbeat=#{websockify_hb} $2 &> $log_file &
                 local ws_pid=$!
                 local counter=0
+                local max_timeout=#{websockify_timeout_seconds}
 
                 # wait till websockify has successfully started
                 echo "[websockify]: pid: $ws_pid (proxying $1 ==> $2)" >&2
@@ -156,9 +158,9 @@ module OodCore
                   if ! ps $ws_pid > /dev/null; then
                     echo "[websockify]: failed to launch!" >&2
                     return 1
-                  elif [ $counter -ge 10 ]; then
-                    # timeout after ~10 seconds
-                    echo "[websockify]: timed-out :(!" >&2
+                  elif [ $counter -ge $max_timeout ]; then
+                    # timeout after max_timeout seconds
+                    echo "[websockify]: timed-out after $max_timeout seconds :(!" >&2
                     return 1
                   else
                     sleep 1
