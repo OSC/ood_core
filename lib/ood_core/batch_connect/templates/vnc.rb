@@ -156,8 +156,8 @@ module OodCore
                   if ! ps $ws_pid > /dev/null; then
                     echo "[websockify]: failed to launch!" >&2
                     return 1
-                  elif [ $counter -ge 5 ]; then
-                    # timeout after ~5 seconds
+                  elif [ $counter -ge 10 ]; then
+                    # timeout after ~10 seconds
                     echo "[websockify]: timed-out :(!" >&2
                     return 1
                   else
