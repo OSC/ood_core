@@ -770,6 +770,29 @@ describe OodCore::Job::Adapters::Slurm do
         is_expected.to eql(job_info)
       end
     end
+
+    context "when job name has non utf8 characters" do
+
+      let(:squeue_args) {[
+        "squeue",
+        "--all",
+        "--states=all",
+        "--noconvert",
+        "-o",
+        "\u001E%a\u001F%A\u001F%B\u001F%c\u001F%C\u001F%d\u001F%D\u001F%e\u001F%E\u001F%f\u001F%F\u001F%g\u001F%G\u001F%h\u001F%H\u001F%i\u001F%I\u001F%j\u001F%J\u001F%k\u001F%K\u001F%l\u001F%L\u001F%m\u001F%M\u001F%n\u001F%N\u001F%o\u001F%O\u001F%q\u001F%P\u001F%Q\u001F%r\u001F%S\u001F%t\u001F%T\u001F%u\u001F%U\u001F%v\u001F%V\u001F%w\u001F%W\u001F%x\u001F%X\u001F%y\u001F%Y\u001F%z\u001F%Z\u001F%b",
+        "-j",
+        "123"
+      ]}
+
+      it "correctly handles non utf8 characters" do
+        stdout = File.read('spec/fixtures/output/slurm/non_utf8_job_name.txt')
+        stdout.force_encoding(Encoding::ASCII)
+        allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([stdout, '', double("success?" => true)])
+        job = OodCore::Job::Factory.build_slurm({}).info('123')
+        expect(job.job_owner).to eq('annie.oakley')
+        expect(job.job_name).to eq('â non-utf8')
+      end
+    end
   end
 
   describe "#status" do
