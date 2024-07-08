@@ -169,7 +169,7 @@ module OodCore
                 # jobs << job
                 #
                 # assuming keys and values are same length! if not we have an error!
-                line = line.force_encoding('UTF-8', invalid: :replace, undef: :replace)
+                line = line.encode('UTF-8', invalid: :replace, undef: :replace)
                 values = line.chomp(RECORD_SEPARATOR).strip.split(UNIT_SEPARATOR)
                 jobs << Hash[fields.keys.zip(values)] unless values.empty?
               end
