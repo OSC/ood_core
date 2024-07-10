@@ -790,7 +790,7 @@ describe OodCore::Job::Adapters::Slurm do
         allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([stdout, '', double("success?" => true)])
         job = OodCore::Job::Factory.build_slurm({}).info('123')
         expect(job.job_owner).to eq('annie.oakley')
-        expect(job.job_name).to eq('â non-utf8')
+        expect(job.job_name).to eq('��� non-utf8')
       end
     end
   end
