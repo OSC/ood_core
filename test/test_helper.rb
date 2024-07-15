@@ -1,4 +1,5 @@
 require 'ood_core'
+require 'mocha/minitest'
 
 module TestHelper
 
@@ -24,5 +25,25 @@ module TestHelper
     end.count
 
     assert_equal(actual_num_of_args, num_of_args)
+  end
+
+  def build_script(opts = {})
+    OodCore::Job::Script.new(
+      **{
+        content: script_content
+      }.merge(opts)
+    )
+  end
+
+  def script_content
+    "my job script"
+  end
+
+  def stub_submit(jobid = '123')
+    Open3.stubs(:capture3).returns([jobid, '', exit_success])
+  end
+
+  def exit_success
+    OpenStruct.new(:success? => true, :exitstatus => 0)
   end
 end

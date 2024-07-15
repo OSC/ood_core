@@ -14,4 +14,11 @@ class TestSlurm < Minitest::Test
     veryify_keywords(slurm, :submit, [:after, :afterok, :afternotok, :afterany])
     verify_args(slurm, :submit, 1)
   end
+
+  def test_submitting_with_hold
+    slurm = slurm_instance
+    stub_submit
+    OodCore::Job::Adapters::Slurm::Batch.any_instance.expects(:submit_string).with(script_content, args: ["-H", "--export", "NONE"], env: {})
+    slurm.submit(build_script(submit_as_hold: true))
+  end
 end

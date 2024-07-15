@@ -32,4 +32,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "timecop", "~> 0.8"
   spec.add_development_dependency "climate_control", "~> 1.2.0"
   spec.add_development_dependency "minitest", "~> 5"
+  spec.add_development_dependency "mocha", "~> 2.4"
 end
