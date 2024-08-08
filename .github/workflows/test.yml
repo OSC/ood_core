@@ -18,6 +18,10 @@ jobs:
         include:
           - ruby: "3.0.2"
             bundler: "2.3.5"
+          - ruby: "3.1"
+            bundler: "2.3.5"
+          - ruby: "3.2"
+            bundler: "2.3.5"
     runs-on: ubuntu-latest
     steps:
       - name: checkout
