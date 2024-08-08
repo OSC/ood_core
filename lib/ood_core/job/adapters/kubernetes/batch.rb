@@ -239,7 +239,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
     node_selector = native_data[:node_selector].nil? ? {} : native_data[:node_selector]
     gpu_type = native_data[:gpu_type].nil? ? "nvidia.com/gpu" : native_data[:gpu_type]
 
-    template = ERB.new(File.read(resource_file), nil, '-')
+    template = ERB.new(File.read(resource_file), trim_mode: '-')
 
     [template.result(binding), id]
   end
