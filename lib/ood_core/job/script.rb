@@ -108,6 +108,10 @@ module OodCore
       # @return [Integer, nil] gpus per node
       attr_reader :gpus_per_node
 
+      # The core request for this job
+      # @return [Integer, nil] cores
+      attr_reader :cores
+
       # Object detailing any native specifications that are implementation specific
       # @note Should not be used at all costs.
       # @return [Object, nil] native specifications
@@ -151,7 +155,8 @@ module OodCore
                      output_path: nil, error_path: nil, reservation_id: nil,
                      queue_name: nil, priority: nil, start_time: nil,
                      wall_time: nil, accounting_id: nil, job_array_request: nil,
-                     qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil, **_)
+                     qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil,
+                     cores: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -179,6 +184,7 @@ module OodCore
         @gpus_per_node      = gpus_per_node     && gpus_per_node.to_i
         @native             = native
         @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
+        @cores              = cores&.to_i
       end
 
       # Convert object to hash
@@ -209,7 +215,8 @@ module OodCore
           qos:                 qos,
           gpus_per_node:       gpus_per_node,
           native:              native,
-          copy_environment:    copy_environment
+          cores:               cores,
+          copy_environment:    copy_environment,
         }
       end
 

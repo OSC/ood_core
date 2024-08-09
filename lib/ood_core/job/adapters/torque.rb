@@ -160,6 +160,7 @@ module OodCore
             args.concat ['-t', script.job_array_request] unless script.job_array_request.nil?
             args.concat ['-l', "qos=#{script.qos}"] unless script.qos.nil?
             args.concat ['-l', "gpus=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
+            args.concat ppn(script)
 
             # Set environment variables
             env = script.job_environment.to_h
@@ -300,6 +301,13 @@ module OodCore
 
         def directive_prefix
           '#QSUB'
+        end
+
+        # place holder for when we support both nodes and cpus.
+        def ppn(script)
+          return [] if script.cores.nil?
+
+          ['-l', "procs=#{script.cpus}"]
         end
 
         private
