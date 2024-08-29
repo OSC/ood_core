@@ -1,5 +1,12 @@
 # File: lib/slug_generator.rb
 
+# Requirements:
+#
+# - always valid for arbitrary strings
+# - no collisions
+
+
+
 require 'digest'
 
 module SlugGenerator
@@ -7,10 +14,15 @@ module SlugGenerator
     ALPHANUM_LOWER = (('a'..'z').to_a + ('0'..'9').to_a).freeze
     LOWER_PLUS_HYPHEN = ALPHANUM_LOWER + ['-']
   
+    #patterns  _do_not_ need to cover the length or start/end conditions,
+    #which are handled separately
     OBJECT_PATTERN = /^[a-z0-9\.-]+$/
     LABEL_PATTERN = /^[a-z0-9\.-_]+$/i
+
+    #match anything that's not lowercase alphanumeric (will be stripped, replace with '-')
     NON_ALPHANUM_PATTERN = /[^a-z0-9]+/
   
+    #length of hash suffix
     HASH_LENGTH = 8
 
     class << self
