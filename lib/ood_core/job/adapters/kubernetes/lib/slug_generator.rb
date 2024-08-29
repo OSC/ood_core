@@ -120,6 +120,42 @@ module SlugGenerator
       end
     end
 
+    def multi_slug(names, max_length: 48)
+
+      #Initialise a new SHA256 hash object 
+      #add the first name to the hash
+      hasher = Digest::SHA256.new
+      hasher.update(names[0])
+
+      #For each subsequent name, add a delimited (/xFF) and the name to the hash
+      #This ensures unique hashes even if names contain the delimiter
+      names[1..-1].each do |name|
+        hasher.update("\xFF")
+        hasher.update(name)
+      end
+
+      # Generate the final hash and truncate it to HASH_LENGTH characters
+      hash = hasher.hexdigest[0...HASH_LENGTH]
+
+      # Subtracting HASH_LENGTH + 1 to account for the hash and its separator
+      #Divide available characters equally among all names
+      available_chars = max_length - (HASH_LENGTH + 1)
+      per_name = available_chars / names.length
+
+      # Subtract 2 from per_name to account '--' separators between names
+      name_max_length = per_name - 2
+
+      raise ArgumentError, "Not enough characters for #{names.length} names: #{max_length}" if name_max_length < 2
+
+      #Generate safe versions of each name, limited to name_max_length
+      name_slugs = names.map { |name| extract_safe_name(name, name_max_length) }
+
+      # Join the safe names with '--', then add '---' and the hash
+      # This format ensures the result can be distinguished from single-name slugs
+      "#{name_slugs.join('--')}---#{hash}"
+    end
+  end
+end
 
 
     
