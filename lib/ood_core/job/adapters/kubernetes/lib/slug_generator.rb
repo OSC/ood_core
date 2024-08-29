@@ -5,8 +5,6 @@
 # - always valid for arbitrary strings
 # - no collisions
 
-
-
 require 'digest'
 
 module SlugGenerator
@@ -69,12 +67,51 @@ module SlugGenerator
       )
     end
 
+    
     def extract_safe_name(name, max_length)
+      #Convert the name to lower case and replace any alpha-numeric characters with a hyphen
       safe_name = name.downcase.gsub(NON_ALPHANUM_PATTERN, '-')
+
+      #remove any leading or trailing hyphens
       safe_name = safe_name.gsub(/\A-+|-+\z/, '')
+
+      #Truncate the name to the specified max_length
       safe_name = safe_name[0...max_length]
+
+      #If the resulting name is empty, set it to 'x'
       safe_name = 'x' if safe_name.empty?
+
+      #Return the safe name
       safe_name
+    end
+
+    def strip_and_hash(name, max_length: 32)
+
+      #Calculate the available length for the name part  
+      name_length = max_length - (HASH_LENGTH + 3)
+
+      #Raise an errir if the resulting name would be too short
+      raise ArgumentError, "Cannot make safe names shorter than #{HASH_LENGTH + 4}" if name_length < 1
+
+      #Generate a hash of the original name and take the first HASH_LENGTH characters
+      #Then createa Safe version of the name. Finally, combine the safe name and hash, separated by '---'
+      name_hash = Digest::SHA256.hexdigest(name)[0...HASH_LENGTH]
+      safe_name = extract_safe_name(name, name_length)
+      "#{safe_name}---#{name_hash}"
+    end
+
+    def safe_slug(name, is_valid: method(:is_valid_default), max_length: nil)
+
+      #If the name contains '--', use strp_and_hash immediately
+      return strip_and_hash(name, max_length: max_length || 32) if name.include?('--')
+
+      #If the name is valid and within max_length, return it as is
+      #Otherwise, use strrp_and_hash to create a safe slug
+      if is_valid.call(name) && (max_length.nil? || name.length <= max_length)
+        name
+      else
+        strip_and_hash(name, max_length: max_length || 32)
+      end
     end
 
 
