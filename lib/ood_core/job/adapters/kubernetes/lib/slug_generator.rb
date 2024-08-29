@@ -8,8 +8,14 @@
 require 'digest'
 
 module SlugGenerator
+
+    #Creates an array of alphanumeric characters ( lowercase,uppercase,digits) ALPHANUM
+    #The .freeze method makes this array immutable (can't be modified after creation)
     ALPHANUM = (('a'..'z').to_a + ('A'..'Z').to_a + ('0'..'9').to_a).freeze
     ALPHANUM_LOWER = (('a'..'z').to_a + ('0'..'9').to_a).freeze
+
+    # LOWER_PLUS_HYPHEN: An array of lowercase alphanumeric characters plus the hyphen
+    #This constant is not frozen, so it could potentially be modified
     LOWER_PLUS_HYPHEN = ALPHANUM_LOWER + ['-']
   
     #patterns  _do_not_ need to cover the length or start/end conditions,
