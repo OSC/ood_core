@@ -69,5 +69,14 @@ module SlugGenerator
       )
     end
 
+    def extract_safe_name(name, max_length)
+      safe_name = name.downcase.gsub(NON_ALPHANUM_PATTERN, '-')
+      safe_name = safe_name.gsub(/\A-+|-+\z/, '')
+      safe_name = safe_name[0...max_length]
+      safe_name = 'x' if safe_name.empty?
+      safe_name
+    end
+
+
 
     
