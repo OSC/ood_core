@@ -158,6 +158,3 @@ module SlugGenerator
     end
   end
 end
-
-
-    
