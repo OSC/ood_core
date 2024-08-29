@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 # File: lib/slug_generator.rb
 
 # Requirements:
