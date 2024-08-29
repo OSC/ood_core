@@ -34,3 +34,40 @@ module SlugGenerator
       return false if pattern && !pattern.match?(s)
       true
     end
+
+    
+    def is_valid_object_name(s)
+      is_valid_general(
+        s,
+        starts_with: ALPHANUM_LOWER,
+        ends_with: ALPHANUM_LOWER,
+        pattern: OBJECT_PATTERN,
+        max_length: 255,
+        min_length: 1
+      )
+    end
+
+    def is_valid_label(s)
+      return true if s.empty?
+      is_valid_general(
+        s,
+        starts_with: ALPHANUM,
+        ends_with: ALPHANUM,
+        pattern: LABEL_PATTERN,
+        max_length: 63
+      )
+    end
+
+    def is_valid_default(s)
+      is_valid_general(
+        s,
+        starts_with: ALPHANUM_LOWER,
+        ends_with: ALPHANUM_LOWER,
+        pattern: OBJECT_PATTERN,
+        min_length: 1,
+        max_length: 63
+      )
+    end
+
+
+    
