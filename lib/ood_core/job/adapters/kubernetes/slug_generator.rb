@@ -22,8 +22,8 @@ module SlugGenerator
   
     #patterns  _do_not_ need to cover the length or start/end conditions,
     #which are handled separately
-    OBJECT_PATTERN = /^[a-z0-9\.-]+$/
-    LABEL_PATTERN = /^[a-z0-9\.-_]+$/i
+    OBJECT_PATTERN = /^[a-z0-9\-]+$/
+    LABEL_PATTERN = /^[a-z0-9\-_]+$/i
 
     #match anything that's not lowercase alphanumeric (will be stripped, replace with '-')
     NON_ALPHANUM_PATTERN = /[^a-z0-9]+/

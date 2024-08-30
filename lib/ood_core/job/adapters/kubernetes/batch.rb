@@ -7,6 +7,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
 
   require_relative "helper"
   require_relative "k8s_job_info"
+  require_relative "slug_generator"
 
   using OodCore::Refinements::HashExtensions
 
@@ -271,7 +272,8 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def namespace
-    "#{namespace_prefix}#{username}"
+    @sanitized_username = SlugGenerator::safe_slug(username)
+    "#{namespace_prefix}#{sanitized_username}"
   end
 
   def formatted_ns_cmd
