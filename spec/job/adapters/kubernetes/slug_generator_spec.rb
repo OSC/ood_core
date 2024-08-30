@@ -1,27 +1,21 @@
 require "ood_core/job/adapters/kubernetes/slug_generator"
 
-class TestSlugGenerator
-    extend SlugGenerator
-end
+RSpec.describe SlugGenerator do
+  describe '#safe_slug' do
+    subject { described_class.safe_slug(input) }
 
-describe TestSlugGenerator do
-
-    describe '#safe_slug' do
-
-        it "preserves names that are already valid" do
-            expect(SlugGenerator::safe_slug("jupyter-alex")).to eq("jupyter-alex")
-        end
-
-        it "converts upper case characters into lower case" do
-            expect(SlugGenerator::safe_slug("jupyter-Alex")).to eq("jupyter-alex---3a1c285c")
-        end
-
-        it "removes unicode characters" do
-            expect(SlugGenerator::safe_slug("jupyter-üni")).to eq("jupyter-ni---a5aaf5dd")
-        end
-
-        it "makes sure slug doesn't end with '-'" do
-
-        end
+    {
+      "preserves valid names" => ["jupyter-alex", "jupyter-alex"],
+      "converts uppercase to lowercase" => ["jupyter-Alex", "jupyter-alex---3a1c285c"],
+      "removes unicode characters" => ["jupyter-üni", "jupyter-ni---a5aaf5dd"]
+    }.each do |description, (input, expected)|
+      it description do
+        expect(subject).to eq(expected)
+      end
     end
+
+    it "ensures slug doesn't end with '-'" do
+      expect(described_class.safe_slug("jupyter-")).not_to end_with('-')
+    end
+  end
 end
