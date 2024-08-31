@@ -22,8 +22,9 @@ module SlugGenerator
   
     #patterns  _do_not_ need to cover the length or start/end conditions,
     #which are handled separately
-    OBJECT_PATTERN = /^[a-z0-9\-]+$/
-    LABEL_PATTERN = /^[a-z0-9\-_]+$/i
+    OBJECT_PATTERN =    /^[a-z0-9\-\.]+$/
+    LABEL_PATTERN =     /^[a-z0-9\-_\.]+$/i
+    NAMESPACE_PATTERN = /^[a-z0-9\-]+$/
 
     #match anything that's not lowercase alphanumeric (will be stripped, replace with '-')
     NON_ALPHANUM_PATTERN = /[^a-z0-9]+/
@@ -32,7 +33,7 @@ module SlugGenerator
     HASH_LENGTH = 8
 
     class << self
-    def is_valid_general(s, starts_with: nil, ends_with: nil, pattern: nil, min_length: nil, max_length: nil)
+    def valid_general?(s, starts_with: nil, ends_with: nil, pattern: nil, min_length: nil, max_length: nil)
       return false if min_length && s.length < min_length
       return false if max_length && s.length > max_length
       return false if starts_with && !starts_with.include?(s[0])
@@ -42,36 +43,47 @@ module SlugGenerator
     end
 
     
-    def is_valid_object_name(s)
-      is_valid_general(
+    def valid_object_name?(s)
+      valid_general?(
         s,
         starts_with: ALPHANUM_LOWER,
-        ends_with: ALPHANUM_LOWER,
-        pattern: OBJECT_PATTERN,
-        max_length: 255,
-        min_length: 1
+        ends_with:   ALPHANUM_LOWER,
+        pattern:     OBJECT_PATTERN,
+        max_length:  255,
+        min_length:  1
       )
     end
 
-    def is_valid_label(s)
+    def valid_label?(s)
       return true if s.empty?
-      is_valid_general(
+      valid_general?(
         s,
         starts_with: ALPHANUM,
-        ends_with: ALPHANUM,
-        pattern: LABEL_PATTERN,
-        max_length: 63
+        ends_with:   ALPHANUM,
+        pattern:     LABEL_PATTERN,
+        max_length:  63
       )
     end
 
-    def is_valid_default(s)
-      is_valid_general(
+    def valid_namespace_name?(s)
+        return true if s.empty?
+        valid_general?(
+          s,
+          starts_with: ALPHANUM_LOWER,
+          ends_with:   ALPHANUM_LOWER,
+          pattern:     NAMESPACE_PATTERN,
+          max_length: 63,
+        )
+    end
+
+    def valid_default?(s)
+      valid_general?(
         s,
         starts_with: ALPHANUM_LOWER,
-        ends_with: ALPHANUM_LOWER,
-        pattern: OBJECT_PATTERN,
-        min_length: 1,
-        max_length: 63
+        ends_with:   ALPHANUM_LOWER,
+        pattern:     OBJECT_PATTERN,
+        min_length:  1,
+        max_length:  63
       )
     end
 
@@ -108,14 +120,17 @@ module SlugGenerator
       "#{safe_name}---#{name_hash}"
     end
 
-    def safe_slug(name, is_valid: method(:is_valid_default), max_length: nil)
+    def safe_slug(name, max_length: nil, &valid)
 
       #If the name contains '--', use strp_and_hash immediately
       return strip_and_hash(name, max_length: max_length || 32) if name.include?('--')
 
       #If the name is valid and within max_length, return it as is
       #Otherwise, use strrp_and_hash to create a safe slug
-      if is_valid.call(name) && (max_length.nil? || name.length <= max_length)
+      if !block_given?
+        valid = proc { |n| valid_default?(n) }
+      end
+      if valid.call(name) && (max_length.nil? || name.length <= max_length)
         name
       else
         strip_and_hash(name, max_length: max_length || 32)

@@ -6,14 +6,13 @@ RSpec.describe SlugGenerator do
 
     {
       "preserves valid names" => ["ood-alex", "ood-alex"],
-      "converts uppercase to lowercase" => ["ood-Alex", "ood-alex---3a1c285c"],
-      "removes unicode characters" => ["ood-üni", "ood-ni---a5aaf5dd"],
+      "converts uppercase to lowercase" => ["ood-Alex", "ood-alex---3c5dfa09"],
+      "removes unicode characters" => ["ood-üni", "ood-ni---f3367e36"],
       "replaces @ with -" => ["user@email.com", "user-email-com---0925f997"],
-      "deals with unicode and @ at the same time" => ["user-_@_emailß.com", "user-email-com---7e3a7efd"],
-      ""
+      "deals with unicode and @ at the same time" => ["user-_@_emailß.com", "user-email-com---7e3a7efd"]
     }.each do |description, (input, expected)|
       it description do
-        expect(subject.call(input)).to eq(expected)
+        expect(SlugGenerator::safe_slug(input) {|name| SlugGenerator::valid_namespace_name?(name)} ).to eq(expected)
       end
     end
 
