@@ -9,10 +9,12 @@ RSpec.describe SlugGenerator do
       "converts uppercase to lowercase" => ["ood-Alex", "ood-alex---3c5dfa09"],
       "removes unicode characters" => ["ood-üni", "ood-ni---f3367e36"],
       "replaces @ with -" => ["user@email.com", "user-email-com---0925f997"],
+      "replaces . with -" => ["firstname.surname", "firstname-surname---7c3ae6ea"],
       "deals with unicode and @ at the same time" => ["user-_@_emailß.com", "user-email-com---7e3a7efd"]
     }.each do |description, (input, expected)|
       it description do
-        expect(SlugGenerator::safe_slug(input) {|name| SlugGenerator::valid_namespace_name?(name)} ).to eq(expected)
+        result = subject.call(input, is_valid: :valid_namespace_name?)
+        expect(result).to eq(expected)
       end
     end
 

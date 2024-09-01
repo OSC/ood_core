@@ -272,7 +272,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def namespace
-    @sanitized_username = SlugGenerator::safe_slug(username)
+    @sanitized_username = SlugGenerator::safe_slug(username, is_valid: :valid_namespace_name?)
     "#{namespace_prefix}#{@sanitized_username}"
   end
 

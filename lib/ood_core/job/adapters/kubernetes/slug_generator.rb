@@ -120,17 +120,15 @@ module SlugGenerator
       "#{safe_name}---#{name_hash}"
     end
 
-    def safe_slug(name, max_length: nil, &valid)
+    def safe_slug(name, max_length: nil, is_valid: :valid_default?)
 
       #If the name contains '--', use strp_and_hash immediately
       return strip_and_hash(name, max_length: max_length || 32) if name.include?('--')
 
       #If the name is valid and within max_length, return it as is
       #Otherwise, use strrp_and_hash to create a safe slug
-      if !block_given?
-        valid = proc { |n| valid_default?(n) }
-      end
-      if valid.call(name) && (max_length.nil? || name.length <= max_length)
+
+      if method(is_valid).call(name) && (max_length.nil? || name.length <= max_length)
         name
       else
         strip_and_hash(name, max_length: max_length || 32)
