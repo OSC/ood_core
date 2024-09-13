@@ -6,7 +6,7 @@
 <title>
   Class: OodCore::Job::Adapters::Torque::Batch
   
-    &mdash; Documentation by YARD 0.9.36
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -972,12 +972,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>For Torque 5.0.0</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_bin'>bin</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/Torque/5.0.0/bin&quot;</span></code></pre>
     
@@ -1045,7 +1045,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qsub</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/local/bin/qsub</span><span class='tstring_end'>&#39;</span></span><span class='rbrace'>}</span></code></pre>
@@ -1096,12 +1096,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>OSC&#39;s Oakley batch server</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_host'>host</span> <span class='comment'>#=&gt; &quot;oak-batch.osc.edu&quot;</span></code></pre>
     
@@ -1169,12 +1169,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>For Torque 5.0.0</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_lib'>lib</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/Torque/5.0.0/lib&quot;</span></code></pre>
     
@@ -1242,7 +1242,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;owens.osc.edu&quot;</span></code></pre>
@@ -1306,12 +1306,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>OSC&#39;s owens login node</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_submit_host'>submit_host</span> <span class='comment'>#=&gt; &quot;owens.osc.edu&quot;</span></code></pre>
     
@@ -1560,12 +1560,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Delete job &#39;10219837.oak-batch.osc.edu&#39; from batch</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -1716,12 +1716,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley&#39;s &#39;10219837.oak-batch.osc.edu&#39; job</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_job'>get_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>102719837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -1831,12 +1831,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley jobs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span>
 <span class='comment'>#=&gt;
@@ -1964,12 +1964,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley&#39;s &#39;n0001&#39; node</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_node'>get_node</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>n0001</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -2078,12 +2078,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley nodes</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_nodes'>get_nodes</span>
 <span class='comment'>#=&gt;
@@ -2209,12 +2209,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley&#39;s parallel queue</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_queue'>get_queue</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>parallel</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -2287,12 +2287,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley queues</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_queues'>get_queues</span>
 <span class='comment'>#=&gt;
@@ -2418,12 +2418,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for OSC Oakley batch server</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_status'>get_status</span>
 <span class='comment'>#=&gt;
@@ -2590,12 +2590,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Put job &#39;10219837.oak-batch.osc.edu&#39; on hold</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -2690,12 +2690,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Release job &#39;10219837.oak-batch.osc.edu&#39; from hold</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -2785,12 +2785,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for jobs owned by Bob</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_select_jobs'>select_jobs</span><span class='lparen'>(</span><span class='label'>attribs:</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>User_List</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>bob</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>op:</span> <span class='symbol'>:eq</span><span class='rbrace'>}</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -3054,12 +3054,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Submit a script with a few PBS directives</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_submit_script'>submit_script</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/path/to/script</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
   <span class='label'>headers:</span> <span class='lbrace'>{</span>
@@ -3478,9 +3478,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Aug 26 17:04:57 2024 by
+  Generated on Fri Sep 13 14:24:05 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.0.7).
+  0.9.37 (ruby-3.0.7).
 </div>
 
     </div>

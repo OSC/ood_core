@@ -6,7 +6,7 @@
 <title>
   Class: OodCore::Job::Adapters::Slurm::Batch
   
-    &mdash; Documentation by YARD 0.9.36
+    &mdash; Documentation by YARD 0.9.37
   
 </title>
 
@@ -919,12 +919,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>For Slurm 10.0.0</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_bin'>bin</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/slurm/10.0.0/bin</span></code></pre>
     
@@ -996,7 +996,7 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
       <pre class="example code"><code><span class='lbrace'>{</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sbatch</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/usr/local/bin/sbatch</span><span class='tstring_end'>&#39;</span></span><span class='rbrace'>}</span></code></pre>
@@ -1051,12 +1051,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>CHPC&#39;s kingspeak cluster</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_cluster'>cluster</span> <span class='comment'>#=&gt; &quot;kingspeak&quot;</span></code></pre>
     
@@ -1128,12 +1128,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>For Slurm 10.0.0</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/slurm/10.0.0/etc/slurm.conf</span></code></pre>
     
@@ -1205,12 +1205,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>false</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code></code></pre>
     
@@ -1282,12 +1282,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>owens.osc.edu</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code></code></pre>
     
@@ -1637,12 +1637,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Delete job “1234”</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1234</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -1815,12 +1815,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Status info for all jobs</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span>
 <span class='comment'>#=&gt;
@@ -2044,12 +2044,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Put job “1234” on hold</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1234</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -2261,12 +2261,12 @@
 <div class="tags">
   
   <div class="examples">
-    <p class="tag_title">Examples:</p>
+    <h4 class="tag_title">Examples:</h4>
     
       
-        <p class="example_title"><div class='inline'>
+        <h5 class="example_title"><div class='inline'>
 <p>Release job “1234” from on hold</p>
-</div></p>
+</div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1234</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -2631,9 +2631,9 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Aug 26 17:04:55 2024 by
+  Generated on Fri Sep 13 14:24:03 2024 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.36 (ruby-3.0.7).
+  0.9.37 (ruby-3.0.7).
 </div>
 
     </div>
