@@ -233,6 +233,7 @@ module OodCore
 
           args.concat ["-N", script.job_name] unless script.job_name.nil?
           args.concat ["-o", script.output_path] unless script.output_path.nil?
+          args.concat ['--mpi', "proc=#{script.cores}"] unless script.cores.nil?
           if script.error_path.nil?
             args.concat ["-j"]
           else
