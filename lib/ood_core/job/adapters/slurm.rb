@@ -323,6 +323,38 @@ module OodCore
             }
           end
 
+          # Metrics fields requested from a formatted `sacct` call
+          def sacct_metrics_fields
+            {
+              # The user name of the user who ran the job.
+              user: 'User',
+              # Job Id for reference
+              job_id: 'JobId',
+              # The job's elapsed time.
+              elapsed: 'Elapsed',
+              # Minimum required memory for the job
+              req_mem: 'ReqMem',
+              # Count of allocated CPUs
+              alloc_cpus: 'AllocCPUS',
+              # Number of requested CPUs.
+              req_cpus: 'ReqCPUS',
+              # What the timelimit was/is for the job
+              time_limit: 'Timelimit',
+              # Displays the job status, or state
+              state: 'State',
+              # The sum of the SystemCPU and UserCPU time used by the job or job step
+              total_cpu: 'TotalCPU',
+              # Maximum resident set size of all tasks in job.
+              max_rss: 'MaxRSS',
+              # The time the job was submitted. In the same format as End.
+              submit: 'Submit',
+              # Initiation time of the job. In the same format as End.
+              start: 'Start',
+              # Trackable resources. These are the minimum resource counts requested by the job/step at submission time.
+              req_tres: 'ReqTRES'
+            }
+          end
+
           def queues
             info_raw = call('scontrol', 'show', 'part', '-o')
 
@@ -355,6 +387,30 @@ module OodCore
               data[:features] = data[:features].to_s.split(',')
               NodeInfo.new(**data)
             end.compact
+          end
+
+          def sacct_metrics(job_ids, states, from, to)
+            #https://slurm.schedmd.com/sacct.html
+            fields = sacct_metrics_fields
+            args = ['-P'] # Output will be delimited
+            args.concat ['--delimiter', UNIT_SEPARATOR]
+            args.concat ['-n'] # No header
+            args.concat ['--units', 'G'] # Memory units in GB
+            args.concat ['-o', fields.values.join(',')] # Required data
+            args.concat ['--state', states.join(',')] unless states.empty? # Filter by these states
+            args.concat ['-j', job_ids.join(',')] unless job_ids.empty? # Filter by these job ids
+            args.concat ['-S', from] if from # Filter from This date
+            args.concat ['-E', to] if to # Filter until this date
+
+            metrics = []
+            StringIO.open(call('sacct', *args)) do |output|
+              output.each_line do |line|
+                # Replace blank values with nil
+                values = line.strip.split(UNIT_SEPARATOR).map{ |value| value.blank? ? nil : value }
+                metrics << Hash[fields.keys.zip(values)] unless values.empty?
+              end
+            end
+            metrics
           end
 
           private
@@ -697,6 +753,10 @@ module OodCore
 
         def nodes
           @slurm.nodes
+        end
+
+        def sacct_metrics(job_ids: [], states: [], from: nil, to: nil)
+          @slurm.sacct_metrics(job_ids, states, from, to)
         end
 
         private
