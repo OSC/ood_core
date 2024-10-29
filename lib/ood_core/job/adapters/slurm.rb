@@ -787,8 +787,8 @@ module OodCore
               wallclock_time: duration_in_seconds(v[:elapsed]),
               wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: duration_in_seconds(v[:total_cpu]),
-              submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
-              dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
+              submission_time: parse_time(v[:submit_time]),
+              dispatch_time: parse_time(v[:start_time]),
               native: v,
               gpus: self.class.gpus_from_gres(v[:gres])
             )
@@ -808,6 +808,13 @@ module OodCore
           def seconds_to_duration(time)
             "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
           end
+
+        # Parse date time string ignoring unknown values returned by Slurm
+        def parse_time(date_time)
+          return nil if date_time.empty? || %w[N/A NONE UNKNOWN].include?(date_time.to_s.upcase)
+
+          Time.parse(date_time)
+        end
 
           # Convert host list string to individual nodes
           # "em082"
