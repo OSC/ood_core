@@ -170,6 +170,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
         'script_timeout' => script_timeout(script),
         'session_name' => session_name,
         'singularity_bin' => singularity_bin,
+        'singularity_options' => singularity_options(script.native),
         'singularity_image' => singularity_image(script.native),
         'ssh_hosts' => ssh_hosts,
         'tmux_bin' => tmux_bin,
@@ -203,6 +204,12 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     return site_singularity_bindpath unless native && native[:singularity_bindpath]
 
     native[:singularity_bindpath]
+  end
+
+  def singularity_options(native)
+    return '' unless native && native[:singularity_options]
+
+    native[:singularity_options]
   end
 
   def script_timeout(script)
