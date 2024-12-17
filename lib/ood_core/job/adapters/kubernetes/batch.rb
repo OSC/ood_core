@@ -271,7 +271,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   end
 
   def namespace
-    "#{namespace_prefix}#{username}"
+    "#{namespace_prefix}#{username.gsub(/[.@]/, '-')}"
   end
 
   def formatted_ns_cmd
