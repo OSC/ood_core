@@ -91,6 +91,7 @@ class OodCore::Job::Adapters::Lsf::Helper
     args.concat ["-b", script.start_time.localtime.strftime("%Y:%m:%d:%H:%M")] unless script.start_time.nil?
     args.concat ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
     args.concat ["-L", script.shell_path.to_s] unless script.shell_path.nil?
+    args.concat ['-n', script.cores] unless script.cores.nil?
 
     # environment
     env = script.job_environment || {}
