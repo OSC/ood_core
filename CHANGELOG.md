@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+# [0.26.1] - 07-31-2024
+
+- 0.26.0 didn't publish correctly. There's no meaningful difference between 0.26.1 and 0.26.0.
+
+# [0.26.0] - 07-26-2024
+
+- Adapter class now has `nodes` API in [830](https://github.com/OSC/ood_core/pull/830).
+- QueueInfo objects are GPU aware in [825](https://github.com/OSC/ood_core/pull/825).
+- Systemd adapter bugfix for zsh in [834](https://github.com/OSC/ood_core/pull/834).
+- Websockify timeout is variable in [840](https://github.com/OSC/ood_core/pull/840).
+- Slurm adapter now forces utf-8 encoding in [842](https://github.com/OSC/ood_core/pull/842).
+
 # [0.25.0] - 03-27-2024
 
 - [828](https://github.com/OSC/ood_core/pull/828) and [826](https://github.com/OSC/ood_core/pull/826)
@@ -535,6 +547,9 @@ Functionally the same as [0.17.3] but with some CI updates.
 - Initial release!
 
 [Unreleased]: https://github.com/OSC/ood_core/compare/v0.24.2...HEAD
+[0.26.1]: https://github.com/OSC/ood_core/compare/v0.26.0...v0.26.1
+[0.26.0]: https://github.com/OSC/ood_core/compare/v0.25.0...v0.26.0
+[0.25.0]: https://github.com/OSC/ood_core/compare/v0.24.2...v0.25.0
 [0.24.2]: https://github.com/OSC/ood_core/compare/v0.24.1...v0.24.2
 [0.24.1]: https://github.com/OSC/ood_core/compare/v0.24.0...v0.24.1
 [0.24.0]: https://github.com/OSC/ood_core/compare/v0.23.5...v0.24.0
