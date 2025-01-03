@@ -323,8 +323,8 @@ module OodCore
             }
           end
 
-          # Metrics fields requested from a formatted `sacct` call
-          def sacct_metrics_fields
+          # Job info fields requested from a formatted `sacct` call
+          def sacct_info_fields
             {
               # The user name of the user who ran the job.
               user: 'User',
@@ -354,8 +354,10 @@ module OodCore
               submit_time: 'Submit',
               # Initiation time of the job. In the same format as End.
               start_time: 'Start',
+              # Termination time of the job.
+              end: 'End',
               # Trackable resources. These are the minimum resource counts requested by the job/step at submission time.
-              req_tres: 'ReqTRES'
+              gres: 'ReqTRES'
             }
           end
 
@@ -393,9 +395,9 @@ module OodCore
             end.compact
           end
 
-          def sacct_metrics(job_ids, states, from, to, show_steps)
+          def sacct_info(job_ids, states, from, to, show_steps)
             # https://slurm.schedmd.com/sacct.html
-            fields = sacct_metrics_fields
+            fields = sacct_info_fields
             args = ['-P'] # Output will be delimited
             args.concat ['--delimiter', UNIT_SEPARATOR]
             args.concat ['-n'] # No header
@@ -407,15 +409,15 @@ module OodCore
             args.concat ['-S', from] if from # Filter from This date
             args.concat ['-E', to] if to # Filter until this date
 
-            metrics = []
+            jobs_info = []
             StringIO.open(call('sacct', *args)) do |output|
               output.each_line do |line|
                 # Replace blank values with nil
-                values = line.strip.split(UNIT_SEPARATOR).map{ |value| value.blank? ? nil : value }
-                metrics << Hash[fields.keys.zip(values)] unless values.empty?
+                values = line.strip.split(UNIT_SEPARATOR).map{ |value| value.to_s.empty? ? nil : value }
+                jobs_info << Hash[fields.keys.zip(values)] unless values.empty?
               end
             end
-            metrics
+            jobs_info
           end
 
           private
@@ -657,6 +659,45 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        # Retrieve historic info for all completed jobs from the resource manager.
+        #
+        # Known options:
+        # job_ids [Array<#to_s>] optional list of job ids to filter the results.
+        # states [Array<#to_s>] optional list of job state codes.
+        # Selects jobs based on their state during the time period given.
+        # from [#to_s] optional date string to filter jobs in any state after the specified time.
+        # If states are provided, filter jobs in these states after this period
+        # to [#to_s] optional date string to filter jobs in any state before the specified time.
+        # If states are provided, filter jobs in these states before this period.
+        # show_steps [#Boolean] optional boolean to filter job steps from the results.
+        #
+        # @return [Array<Info>] information describing submitted jobs
+        # @see Adapter#info_historic
+        def info_historic(opts: {})
+          job_ids    = opts.fetch(:job_ids, [])
+          states     = opts.fetch(:states, [])
+          from       = opts.fetch(:from, nil)
+          to         = opts.fetch(:to, nil)
+          show_steps = opts.fetch(:show_steps, false)
+          @slurm.sacct_info(job_ids, states, from, to, show_steps).map do |v|
+            Info.new(
+              id: v[:job_id],
+              status: get_state(v[:state]),
+              job_name: v[:job_name],
+              job_owner: v[:user],
+              procs: v[:alloc_cpus],
+              queue_name: v[:partition],
+              wallclock_time: duration_in_seconds(v[:elapsed]),
+              wallclock_limit: duration_in_seconds(v[:time_limit]),
+              cpu_time: duration_in_seconds(v[:total_cpu]),
+              submission_time: parse_time(v[:submit_time]),
+              dispatch_time: parse_time(v[:start_time]),
+              native: v,
+              gpus: self.class.gpus_from_gres(v[:gres])
+            )
+          end
+        end
+
         # Retrieve job info from the resource manager
         # @param id [#to_s] the id of the job
         # @raise [JobAdapterError] if something goes wrong getting job info
@@ -773,26 +814,6 @@ module OodCore
 
         def nodes
           @slurm.nodes
-        end
-
-        def sacct_metrics(job_ids: [], states: [], from: nil, to: nil, show_steps: false)
-          @slurm.sacct_metrics(job_ids, states, from, to, show_steps).map do |v|
-            Info.new(
-              id: v[:job_id],
-              status: get_state(v[:state]),
-              job_name: v[:job_name],
-              job_owner: v[:user],
-              procs: v[:alloc_cpus],
-              queue_name: v[:partition],
-              wallclock_time: duration_in_seconds(v[:elapsed]),
-              wallclock_limit: duration_in_seconds(v[:time_limit]),
-              cpu_time: duration_in_seconds(v[:total_cpu]),
-              submission_time: parse_time(v[:submit_time]),
-              dispatch_time: parse_time(v[:start_time]),
-              native: v,
-              gpus: self.class.gpus_from_gres(v[:gres])
-            )
-          end
         end
 
         private

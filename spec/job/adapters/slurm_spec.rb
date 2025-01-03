@@ -10,6 +10,7 @@ describe OodCore::Job::Adapters::Slurm do
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info_all).with(0).arguments.and_keywords(:attrs) }
+  it { is_expected.to respond_to(:info_historic).with(0).arguments.and_keywords(:opts) }
   it { is_expected.to respond_to(:info_where_owner).with(1).argument.and_keywords(:attrs) }
   it { is_expected.to respond_to(:info).with(1).argument }
   it { is_expected.to respond_to(:status).with(1).argument }
@@ -354,6 +355,48 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j2.status).to eq("queued")
         expect(j2.status).to eq(OodCore::Job::Status.new(state: :queued))
         expect(j2.status.to_s).to eq("queued")
+      end
+    end
+  end
+
+  describe "#info_historic" do
+    context "when no jobs" do
+      it "returns an array of all the jobs" do
+        adapter = OodCore::Job::Adapters::Slurm.new(slurm: double(sacct_info: []))
+        expect(adapter.info_historic).to eq([])
+      end
+    end
+
+    context "when jobs" do
+      it "returns an array of all the jobs" do
+        batch = OodCore::Job::Adapters::Slurm::Batch.new(
+          conf: "/etc/slurm/conf/",
+          bin: nil,
+          bin_overrides: { "sacct" => "spec/fixtures/scripts/sacct.rb"}
+        )
+        jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_historic
+
+        expect(jobs.count).to eq(2)
+
+        j1 = jobs.first
+        expect(j1.id).to eq("20251")
+        expect(j1.job_name).to eq("RDesktop")
+        expect(j1.queue_name).to eq("normal")
+        expect(j1.status).to eq("queued")
+        expect(j1.status).to eq(OodCore::Job::Status.new(state: :queued))
+        expect(j1.status.to_s).to eq("queued")
+        expect(j1.gpus).to eq(1)
+        expect(j1.gpu?).to eq(true)
+
+        j2 = jobs.last
+        expect(j2.id).to eq("20252")
+        expect(j2.job_name).to eq("RStudio")
+        expect(j2.queue_name).to eq("normal")
+        expect(j2.status).to eq("running")
+        expect(j2.status).to eq(OodCore::Job::Status.new(state: :running))
+        expect(j2.status.to_s).to eq("running")
+        expect(j2.gpus).to eq(0)
+        expect(j2.gpu?).to eq(false)
       end
     end
   end
