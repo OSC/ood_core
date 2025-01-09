@@ -328,6 +328,8 @@ module OodCore
             {
               # The user name of the user who ran the job.
               user: 'User',
+              # The group name of the user who ran the job.
+              group_name: 'Group',
               # Job Id for reference
               job_id: 'JobId',
               # The name of the job or job step
