@@ -10,7 +10,7 @@ require 'time'
 # @api private
 class OodCore::Job::Adapters::LinuxSystemd::Launcher
   attr_reader :debug, :site_timeout, :session_name_label, :ssh_hosts,
-    :strict_host_checking, :username
+    :strict_host_checking, :username, :ssh_keyfile
   # The root exception class that all LinuxSystemd adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
@@ -26,6 +26,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
     ssh_hosts:,
     strict_host_checking: false,
     submit_host:,
+    ssh_keyfile: "",
     **_
   )
     @debug = !! debug
@@ -35,6 +36,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
     @strict_host_checking = strict_host_checking
     @submit_host = submit_host
     @username = Etc.getlogin
+    @ssh_keyfile = ssh_keyfile
   end
 
   # @param hostname [#to_s] The hostname to submit the work to
@@ -97,27 +99,34 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   # if ! strict_host_checking
   # -o UserKnownHostsFile=/dev/null (do not update the user's known hosts file)
   # -o StrictHostKeyChecking=no (do no check the user's known hosts file)
+  # if ssh_keyfile
+  # -i ssh_keyfile (Use this keyfile location)
   #
   # @param destination_host [#to_s] the destination host you wish to ssh into
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
-    if strict_host_checking
-      [
-        'ssh', '-t',
-        '-p', OodCore::Job::Adapters::Helper.ssh_port,
-        '-o', 'BatchMode=yes',
-        "#{username}@#{destination_host}"
-      ].concat(cmd)
-    else
-      [
-        'ssh', '-t',
-        '-p', OodCore::Job::Adapters::Helper.ssh_port,
-        '-o', 'BatchMode=yes',
-        '-o', 'UserKnownHostsFile=/dev/null',
-        '-o', 'StrictHostKeyChecking=no',
-        "#{username}@#{destination_host}"
-      ].concat(cmd)
+
+    basecmd=[
+      'ssh', '-t',
+      '-p', OodCore::Job::Adapters::Helper.ssh_port,
+      '-o', 'Batchmode=yes',
+      "#{username}@#{destination_host}",
+    ].concat(cmd)
+
+    if !strict_host_checking
+      basecmd.insert(4, '-o')
+      basecmd.insert(5, 'StrictHostKeyChecking=no')
+      basecmd.insert(4, '-o')
+      basecmd.insert(5, 'UserKnownHostsFile=/dev/null')
     end
+
+    if (!ssh_keyfile.to_s.empty?)
+      basecmd.insert(4, '-i')
+      basecmd.insert(5, ssh_keyfile.to_s)
+    end
+
+   return basecmd
+
   end
 
   def shell
