@@ -106,26 +106,33 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
 
-    basecmd=[
+  def ssh_cmd(destination_host, cmd)
+
+    sshcmd=[
       'ssh', '-t',
       '-p', OodCore::Job::Adapters::Helper.ssh_port,
       '-o', 'Batchmode=yes',
-      "#{username}@#{destination_host}",
-    ].concat(cmd)
+    ]
 
     if !strict_host_checking
-      basecmd.insert(4, '-o')
-      basecmd.insert(5, 'StrictHostKeyChecking=no')
-      basecmd.insert(4, '-o')
-      basecmd.insert(5, 'UserKnownHostsFile=/dev/null')
+      sshcmd.concat([
+        '-o','StrictHostKeyChecking=no',
+        '-o','UserKnownHostsFile=/dev/null',
+      ])
     end
 
     if (!ssh_keyfile.to_s.empty?)
-      basecmd.insert(4, '-i')
-      basecmd.insert(5, ssh_keyfile.to_s)
+      sshcmd.concat([
+        '-i',ssh_keyfile.to_s,
+      ])
     end
 
-   return basecmd
+    sshcmd.concat([
+      "#{username}@#{destination_host}"
+    ]).concat(cmd)
+
+  end
+
 
   end
 
