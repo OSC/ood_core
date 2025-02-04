@@ -372,10 +372,14 @@ module OodCore
                                        hsh[:AllowAccounts].to_s.split(',')
                                      end
 
-
               hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
-              hsh[:tres] = hsh[:TRES].nil? ? {} : hsh[:TRES].to_s.split(',').map { |str| str.split('=') }.to_h
 
+              hsh[:tres] = case hsh[:TRES]
+                           when nil, '(null)', ''
+                             {}
+                           else
+                             hsh[:TRES].to_s.split(',').map { |str| str.split('=') }.to_h
+                           end
               OodCore::Job::QueueInfo.new(**hsh)
             end
 
