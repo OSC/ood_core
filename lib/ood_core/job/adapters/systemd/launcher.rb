@@ -106,8 +106,6 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   # @param cmd [Array<#to_s>] the command to be executed on the destination host
   def ssh_cmd(destination_host, cmd)
 
-  def ssh_cmd(destination_host, cmd)
-
     sshcmd=[
       'ssh', '-t',
       '-p', OodCore::Job::Adapters::Helper.ssh_port,
