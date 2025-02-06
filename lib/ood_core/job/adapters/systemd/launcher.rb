@@ -131,9 +131,6 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
 
   end
 
-
-  end
-
   def shell
     ENV['SHELL'] || '/bin/bash'
   end
