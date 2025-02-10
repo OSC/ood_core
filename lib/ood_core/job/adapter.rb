@@ -57,6 +57,18 @@ module OodCore
         raise NotImplementedError, "subclass did not define #info_all"
       end
 
+      # Retrieve historic info for all completed jobs from the resource manager.
+      # This depends on the data retention configuration of the resource manager.
+      # @abstract Subclass is expected to implement {#info_historic}
+      # @raise [NotImplementedError] if subclass did not define {#info_historic}
+      #
+      # @param opts [#to_h] options to filter jobs in the resource manager.
+      #
+      # @return [Array<Info>] information describing the jobs
+      def info_historic(opts: {})
+        raise NotImplementedError, "subclass did not define #info_historic"
+      end
+
       # Retrieve info for all jobs for a given owner or owners from the
       # resource manager
       # @param owner [#to_s, Array<#to_s>] the owner(s) of the jobs

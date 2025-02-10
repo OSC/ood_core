@@ -323,6 +323,46 @@ module OodCore
             }
           end
 
+          # Job info fields requested from a formatted `sacct` call
+          def sacct_info_fields
+            {
+              # The user name of the user who ran the job.
+              user: 'User',
+              # The group name of the user who ran the job.
+              group_name: 'Group',
+              # Job Id for reference
+              job_id: 'JobId',
+              # The name of the job or job step
+              job_name: 'JobName',
+              # The job's elapsed time.
+              elapsed: 'Elapsed',
+              # Minimum required memory for the job
+              req_mem: 'ReqMem',
+              # Count of allocated CPUs
+              alloc_cpus: 'AllocCPUS',
+              # Number of requested CPUs.
+              req_cpus: 'ReqCPUS',
+              # What the timelimit was/is for the job
+              time_limit: 'Timelimit',
+              # Displays the job status, or state
+              state: 'State',
+              # The sum of the SystemCPU and UserCPU time used by the job or job step
+              total_cpu: 'TotalCPU',
+              # Maximum resident set size of all tasks in job.
+              max_rss: 'MaxRSS',
+              # Identifies the partition on which the job ran.
+              partition: 'Partition',
+              # The time the job was submitted. In the same format as End.
+              submit_time: 'Submit',
+              # Initiation time of the job. In the same format as End.
+              start_time: 'Start',
+              # Termination time of the job.
+              end: 'End',
+              # Trackable resources. These are the minimum resource counts requested by the job/step at submission time.
+              gres: 'ReqTRES'
+            }
+          end
+
           def queues
             info_raw = call('scontrol', 'show', 'part', '-o')
 
@@ -355,6 +395,31 @@ module OodCore
               data[:features] = data[:features].to_s.split(',')
               NodeInfo.new(**data)
             end.compact
+          end
+
+          def sacct_info(job_ids, states, from, to, show_steps)
+            # https://slurm.schedmd.com/sacct.html
+            fields = sacct_info_fields
+            args = ['-P'] # Output will be delimited
+            args.concat ['--delimiter', UNIT_SEPARATOR]
+            args.concat ['-n'] # No header
+            args.concat ['--units', 'G'] # Memory units in GB
+            args.concat ['--allocations'] unless show_steps # Show statistics relevant to the job, not taking steps into consideration
+            args.concat ['-o', fields.values.join(',')] # Required data
+            args.concat ['--state', states.join(',')] unless states.empty? # Filter by these states
+            args.concat ['-j', job_ids.join(',')] unless job_ids.empty? # Filter by these job ids
+            args.concat ['-S', from] if from # Filter from This date
+            args.concat ['-E', to] if to # Filter until this date
+
+            jobs_info = []
+            StringIO.open(call('sacct', *args)) do |output|
+              output.each_line do |line|
+                # Replace blank values with nil
+                values = line.strip.split(UNIT_SEPARATOR).map{ |value| value.to_s.empty? ? nil : value }
+                jobs_info << Hash[fields.keys.zip(values)] unless values.empty?
+              end
+            end
+            jobs_info
           end
 
           private
@@ -466,8 +531,23 @@ module OodCore
           'SE' => :completed,  # SPECIAL_EXIT
           'ST' => :running,    # STOPPED
           'S'  => :suspended,  # SUSPENDED
-          'TO' => :completed,   # TIMEOUT
-          'OOM' => :completed   # OUT_OF_MEMORY
+          'TO' => :completed,  # TIMEOUT
+          'OOM' => :completed, # OUT_OF_MEMORY
+
+          'BOOT_FAIL'     => :completed,
+          'CANCELED'      => :completed,
+          'COMPLETED'     => :completed,
+          'DEADLINE'      => :completed,
+          'FAILED'        => :completed,
+          'NODE_FAIL'     => :completed,
+          'OUT_OF_MEMORY' => :completed,
+          'PENDING'       => :queued,
+          'PREEMPTED'     => :completed,
+          'RUNNING'       => :running,
+          'REQUEUED'      => :queued,
+          'REVOKED'       => :completed,
+          'SUSPENDED'     => :suspended,
+          'TIMEOUT'       => :completed,
         }
 
         # @api private
@@ -584,6 +664,45 @@ module OodCore
           end
         rescue Batch::Error => e
           raise JobAdapterError, e.message
+        end
+
+        # Retrieve historic info for all completed jobs from the resource manager.
+        #
+        # Known options:
+        # job_ids [Array<#to_s>] optional list of job ids to filter the results.
+        # states [Array<#to_s>] optional list of job state codes.
+        # Selects jobs based on their state during the time period given.
+        # from [#to_s] optional date string to filter jobs in any state after the specified time.
+        # If states are provided, filter jobs in these states after this period
+        # to [#to_s] optional date string to filter jobs in any state before the specified time.
+        # If states are provided, filter jobs in these states before this period.
+        # show_steps [#Boolean] optional boolean to filter job steps from the results.
+        #
+        # @return [Array<Info>] information describing submitted jobs
+        # @see Adapter#info_historic
+        def info_historic(opts: {})
+          job_ids    = opts.fetch(:job_ids, [])
+          states     = opts.fetch(:states, [])
+          from       = opts.fetch(:from, nil)
+          to         = opts.fetch(:to, nil)
+          show_steps = opts.fetch(:show_steps, false)
+          @slurm.sacct_info(job_ids, states, from, to, show_steps).map do |v|
+            Info.new(
+              id: v[:job_id],
+              status: get_state(v[:state]),
+              job_name: v[:job_name],
+              job_owner: v[:user],
+              procs: v[:alloc_cpus],
+              queue_name: v[:partition],
+              wallclock_time: duration_in_seconds(v[:elapsed]),
+              wallclock_limit: duration_in_seconds(v[:time_limit]),
+              cpu_time: duration_in_seconds(v[:total_cpu]),
+              submission_time: parse_time(v[:submit_time]),
+              dispatch_time: parse_time(v[:start_time]),
+              native: v,
+              gpus: self.class.gpus_from_gres(v[:gres])
+            )
+          end
         end
 
         # Retrieve job info from the resource manager
@@ -717,6 +836,13 @@ module OodCore
           def seconds_to_duration(time)
             "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
           end
+
+        # Parse date time string ignoring unknown values returned by Slurm
+        def parse_time(date_time)
+          return nil if date_time.empty? || %w[N/A NONE UNKNOWN].include?(date_time.to_s.upcase)
+
+          Time.parse(date_time)
+        end
 
           # Convert host list string to individual nodes
           # "em082"
