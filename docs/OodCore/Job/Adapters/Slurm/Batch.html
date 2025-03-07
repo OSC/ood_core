@@ -626,6 +626,52 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#sacct_info-instance_method" title="#sacct_info (instance method)">#<strong>sacct_info</strong>(job_ids, states, from, to, show_steps)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#sacct_info_fields-instance_method" title="#sacct_info_fields (instance method)">#<strong>sacct_info_fields</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  <span class="private note title">private</span>
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Job info fields requested from a formatted `sacct` call.</p>
+</div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#squeue_args-instance_method" title="#squeue_args (instance method)">#<strong>squeue_args</strong>(id: &quot;&quot;, owner: nil, options: [])  &#x21d2; Object </a>
     
 
@@ -1445,16 +1491,16 @@
       <pre class="lines">
 
 
-336
-337
-338
-339
-340
-341
-342</pre>
+376
+377
+378
+379
+380
+381
+382</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 336</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 376</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_all_sinfo_node_fields'>all_sinfo_node_fields</span>
   <span class='lbrace'>{</span>
@@ -2143,24 +2189,24 @@
       <pre class="lines">
 
 
-344
-345
-346
-347
-348
-349
-350
-351
-352
-353
-354
-355
-356
-357
-358</pre>
+384
+385
+386
+387
+388
+389
+390
+391
+392
+393
+394
+395
+396
+397
+398</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 344</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 384</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nodes'>nodes</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_all_sinfo_node_fields'>all_sinfo_node_fields</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UNIT_SEPARATOR-constant" title="OodCore::Job::Adapters::Slurm::Batch::UNIT_SEPARATOR (constant)">UNIT_SEPARATOR</a></span></span><span class='rparen'>)</span>
@@ -2210,18 +2256,18 @@
       <pre class="lines">
 
 
-326
-327
-328
-329
-330
-331
-332
-333
-334</pre>
+366
+367
+368
+369
+370
+371
+372
+373
+374</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 326</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 366</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_queues'>queues</span>
   <span class='id identifier rubyid_info_raw'>info_raw</span> <span class='op'>=</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>scontrol</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>show</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>part</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -2326,6 +2372,206 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scontrol</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>release</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sacct_info-instance_method">
+  
+    #<strong>sacct_info</strong>(job_ids, states, from, to, show_steps)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422
+423</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 400</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sacct_info'>sacct_info</span><span class='lparen'>(</span><span class='id identifier rubyid_job_ids'>job_ids</span><span class='comma'>,</span> <span class='id identifier rubyid_states'>states</span><span class='comma'>,</span> <span class='id identifier rubyid_from'>from</span><span class='comma'>,</span> <span class='id identifier rubyid_to'>to</span><span class='comma'>,</span> <span class='id identifier rubyid_show_steps'>show_steps</span><span class='rparen'>)</span>
+  <span class='comment'># https://slurm.schedmd.com/sacct.html
+</span>  <span class='id identifier rubyid_fields'>fields</span> <span class='op'>=</span> <span class='id identifier rubyid_sacct_info_fields'>sacct_info_fields</span>
+  <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-P</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='comment'># Output will be delimited
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--delimiter</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="#UNIT_SEPARATOR-constant" title="OodCore::Job::Adapters::Slurm::Batch::UNIT_SEPARATOR (constant)">UNIT_SEPARATOR</a></span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-n</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='comment'># No header
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--units</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>G</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='comment'># Memory units in GB
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--allocations</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_show_steps'>show_steps</span> <span class='comment'># Show statistics relevant to the job, not taking steps into consideration
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_fields'>fields</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='comment'># Required data
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--state</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_states'>states</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_states'>states</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='comment'># Filter by these states
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-j</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_job_ids'>job_ids</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_job_ids'>job_ids</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='comment'># Filter by these job ids
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-S</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_from'>from</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_from'>from</span> <span class='comment'># Filter from This date
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-E</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_to'>to</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_to'>to</span> <span class='comment'># Filter until this date
+</span>
+  <span class='id identifier rubyid_jobs_info'>jobs_info</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sacct</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_output'>output</span><span class='op'>|</span>
+    <span class='id identifier rubyid_output'>output</span><span class='period'>.</span><span class='id identifier rubyid_each_line'>each_line</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_line'>line</span><span class='op'>|</span>
+      <span class='comment'># Replace blank values with nil
+</span>      <span class='id identifier rubyid_values'>values</span> <span class='op'>=</span> <span class='id identifier rubyid_line'>line</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UNIT_SEPARATOR-constant" title="OodCore::Job::Adapters::Slurm::Batch::UNIT_SEPARATOR (constant)">UNIT_SEPARATOR</a></span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>?</span> <span class='kw'>nil</span> <span class='op'>:</span> <span class='id identifier rubyid_value'>value</span> <span class='rbrace'>}</span>
+      <span class='id identifier rubyid_jobs_info'>jobs_info</span> <span class='op'>&lt;&lt;</span> <span class='const'>Hash</span><span class='lbracket'>[</span><span class='id identifier rubyid_fields'>fields</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_zip'>zip</span><span class='lparen'>(</span><span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+    <span class='kw'>end</span>
+  <span class='kw'>end</span>
+  <span class='id identifier rubyid_jobs_info'>jobs_info</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="sacct_info_fields-instance_method">
+  
+    #<strong>sacct_info_fields</strong>  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This method is part of a private API.</strong>
+  You should avoid using this method if possible, as it may be removed or be changed in the future.
+</p>
+
+<p>Job info fields requested from a formatted `sacct` call</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+327
+328
+329
+330
+331
+332
+333
+334
+335
+336
+337
+338
+339
+340
+341
+342
+343
+344
+345
+346
+347
+348
+349
+350
+351
+352
+353
+354
+355
+356
+357
+358
+359
+360
+361
+362
+363
+364</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 327</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_sacct_info_fields'>sacct_info_fields</span>
+  <span class='lbrace'>{</span>
+    <span class='comment'># The user name of the user who ran the job.
+</span>    <span class='label'>user:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>User</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># The group name of the user who ran the job.
+</span>    <span class='label'>group_name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Group</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Job Id for reference
+</span>    <span class='label'>job_id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JobId</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># The name of the job or job step
+</span>    <span class='label'>job_name:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>JobName</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># The job&#39;s elapsed time.
+</span>    <span class='label'>elapsed:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Elapsed</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Minimum required memory for the job
+</span>    <span class='label'>req_mem:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ReqMem</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Count of allocated CPUs
+</span>    <span class='label'>alloc_cpus:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>AllocCPUS</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Number of requested CPUs.
+</span>    <span class='label'>req_cpus:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ReqCPUS</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># What the timelimit was/is for the job
+</span>    <span class='label'>time_limit:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Timelimit</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Displays the job status, or state
+</span>    <span class='label'>state:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>State</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># The sum of the SystemCPU and UserCPU time used by the job or job step
+</span>    <span class='label'>total_cpu:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>TotalCPU</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Maximum resident set size of all tasks in job.
+</span>    <span class='label'>max_rss:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>MaxRSS</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Identifies the partition on which the job ran.
+</span>    <span class='label'>partition:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Partition</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># The time the job was submitted. In the same format as End.
+</span>    <span class='label'>submit_time:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Submit</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Initiation time of the job. In the same format as End.
+</span>    <span class='label'>start_time:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Start</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Termination time of the job.
+</span>    <span class='label'>end:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>End</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
+    <span class='comment'># Trackable resources. These are the minimum resource counts requested by the job/step at submission time.
+</span>    <span class='label'>gres:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ReqTRES</span><span class='tstring_end'>&#39;</span></span>
+  <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2631,7 +2877,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Mar  7 16:35:37 2025 by
+  Generated on Fri Mar  7 16:38:22 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>
