@@ -6,6 +6,7 @@ describe OodCore::Job::Adapter do
 
   it { is_expected.to respond_to(:submit).with(1).argument.and_keywords(:after, :afterok, :afternotok, :afterany) }
   it { is_expected.to respond_to(:info_all).with(0).arguments.and_keywords(:attrs) }
+  it { is_expected.to respond_to(:info_historic).with(0).arguments.and_keywords(:opts) }
   it { is_expected.to respond_to(:info_where_owner).with(1).argument.and_keywords(:attrs) }
   it { is_expected.to respond_to(:info).with(1).argument }
   it { is_expected.to respond_to(:status).with(1).argument }
@@ -31,6 +32,12 @@ describe OodCore::Job::Adapter do
   describe "#info_all" do
     it "raises NotImplementedError" do
       expect { subject.info_all }.to raise_error(NotImplementedError)
+    end
+  end
+
+  describe "#info_historic" do
+    it "raises NotImplementedError" do
+      expect { subject.info_historic }.to raise_error(NotImplementedError)
     end
   end
 
