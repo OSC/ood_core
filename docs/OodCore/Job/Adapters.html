@@ -79,7 +79,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/ood_core.rb<span class="defines">,<br />
-  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/helper.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb,<br /> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
+  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/coder.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/helper.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb,<br /> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
 </dd>
   </dl>
   
@@ -110,7 +110,7 @@
     
   
     
-      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Adapters/CCQ.html" title="OodCore::Job::Adapters::CCQ (class)">CCQ</a></span>, <span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span>, <span class='object_link'><a href="Adapters/Helper.html" title="OodCore::Job::Adapters::Helper (class)">Helper</a></span>, <span class='object_link'><a href="Adapters/Kubernetes.html" title="OodCore::Job::Adapters::Kubernetes (class)">Kubernetes</a></span>, <span class='object_link'><a href="Adapters/LinuxHost.html" title="OodCore::Job::Adapters::LinuxHost (class)">LinuxHost</a></span>, <span class='object_link'><a href="Adapters/LinuxSystemd.html" title="OodCore::Job::Adapters::LinuxSystemd (class)">LinuxSystemd</a></span>, <span class='object_link'><a href="Adapters/Lsf.html" title="OodCore::Job::Adapters::Lsf (class)">Lsf</a></span>, <span class='object_link'><a href="Adapters/PBSPro.html" title="OodCore::Job::Adapters::PBSPro (class)">PBSPro</a></span>, <span class='object_link'><a href="Adapters/PromptError.html" title="OodCore::Job::Adapters::PromptError (class)">PromptError</a></span>, <span class='object_link'><a href="Adapters/Sge.html" title="OodCore::Job::Adapters::Sge (class)">Sge</a></span>, <span class='object_link'><a href="Adapters/Slurm.html" title="OodCore::Job::Adapters::Slurm (class)">Slurm</a></span>, <span class='object_link'><a href="Adapters/Torque.html" title="OodCore::Job::Adapters::Torque (class)">Torque</a></span>
+      <strong class="classes">Classes:</strong> <span class='object_link'><a href="Adapters/CCQ.html" title="OodCore::Job::Adapters::CCQ (class)">CCQ</a></span>, <span class='object_link'><a href="Adapters/Coder.html" title="OodCore::Job::Adapters::Coder (class)">Coder</a></span>, <span class='object_link'><a href="Adapters/Fujitsu_TCS.html" title="OodCore::Job::Adapters::Fujitsu_TCS (class)">Fujitsu_TCS</a></span>, <span class='object_link'><a href="Adapters/Helper.html" title="OodCore::Job::Adapters::Helper (class)">Helper</a></span>, <span class='object_link'><a href="Adapters/Kubernetes.html" title="OodCore::Job::Adapters::Kubernetes (class)">Kubernetes</a></span>, <span class='object_link'><a href="Adapters/LinuxHost.html" title="OodCore::Job::Adapters::LinuxHost (class)">LinuxHost</a></span>, <span class='object_link'><a href="Adapters/LinuxSystemd.html" title="OodCore::Job::Adapters::LinuxSystemd (class)">LinuxSystemd</a></span>, <span class='object_link'><a href="Adapters/Lsf.html" title="OodCore::Job::Adapters::Lsf (class)">Lsf</a></span>, <span class='object_link'><a href="Adapters/PBSPro.html" title="OodCore::Job::Adapters::PBSPro (class)">PBSPro</a></span>, <span class='object_link'><a href="Adapters/PromptError.html" title="OodCore::Job::Adapters::PromptError (class)">PromptError</a></span>, <span class='object_link'><a href="Adapters/Sge.html" title="OodCore::Job::Adapters::Sge (class)">Sge</a></span>, <span class='object_link'><a href="Adapters/Slurm.html" title="OodCore::Job::Adapters::Slurm (class)">Slurm</a></span>, <span class='object_link'><a href="Adapters/Torque.html" title="OodCore::Job::Adapters::Torque (class)">Torque</a></span>
     
   
 </p>
@@ -118,15 +118,169 @@
 
 
 
+  <h2>Instance Attribute Summary <small><a href="#" class="summary_toggle">collapse</a></small></h2>
+  <ul class="summary">
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#host-instance_method" title="#host (instance method)">#<strong>host</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute host.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#token-instance_method" title="#token (instance method)">#<strong>token</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute token.</p>
+</div></span>
+  
+</li>
+
+    
+  </ul>
 
 
 
+
+
+  <div id="instance_attr_details" class="attr_details">
+    <h2>Instance Attribute Details</h2>
+    
+      
+      <span id=""></span>
+      <div class="method_details first">
+  <h3 class="signature first" id="host-instance_method">
+  
+    #<strong>host</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute host.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_host'>host</span>
+  <span class='ivar'>@host</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="token-instance_method">
+  
+    #<strong>token</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute token.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+19
+20
+21</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 19</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_token'>token</span>
+  <span class='ivar'>@token</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
 
 
 </div>
 
       <div id="footer">
-  Generated on Mon Feb 10 20:19:27 2025 by
+  Generated on Fri Mar  7 16:35:35 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>

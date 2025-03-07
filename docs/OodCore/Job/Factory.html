@@ -95,7 +95,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/ood_core/job/factory.rb<span class="defines">,<br />
-  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb,<br /> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
+  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/coder.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb,<br /> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
 </dd>
   </dl>
   
@@ -171,6 +171,28 @@
     <span class="summary_desc"><div class='inline'>
 <p>Build the Cloudy Cluster adapter from a configuration.</p>
 </div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build_coder-class_method" title="build_coder (class method)">.<strong>build_coder</strong>(config)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
   
 </li>
 
@@ -729,6 +751,38 @@
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_ccq'>build_ccq</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/CCQ.html" title="OodCore::Job::Adapters::CCQ (class)">CCQ</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/CCQ.html#initialize-instance_method" title="OodCore::Job::Adapters::CCQ#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="build_coder-class_method">
+  
+    .<strong>build_coder</strong>(config)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+12
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 12</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_coder'>build_coder</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_batch'>batch</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Coder.html" title="OodCore::Job::Adapters::Coder (class)">Coder</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Coder/Batch.html" title="OodCore::Job::Adapters::Coder::Batch (class)">Batch</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Coder/Batch.html#initialize-instance_method" title="OodCore::Job::Adapters::Coder::Batch#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Coder.html" title="OodCore::Job::Adapters::Coder (class)">Coder</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Coder.html#initialize-instance_method" title="OodCore::Job::Adapters::Coder#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_batch'>batch</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2230,7 +2284,7 @@
 </div>
 
       <div id="footer">
-  Generated on Mon Feb 10 20:19:28 2025 by
+  Generated on Fri Mar  7 16:35:36 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>
