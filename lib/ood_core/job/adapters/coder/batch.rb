@@ -1,5 +1,6 @@
 require "ood_core/refinements/hash_extensions"
 require "json"
+require 'fog/openstack'
 
 # Utility class for the Coder adapter to interact with the Coders API.
 class OodCore::Job::Adapters::Coder::Batch
@@ -8,12 +9,68 @@ class OodCore::Job::Adapters::Coder::Batch
   def initialize(config)
     @host = config[:host]
     @token = config[:token]
+    @auth_url = config[:auth][:url]
+    @cloud = config[:auth][:cloud] 
   end
 
-  def get_os_app_credentials(username, project_id)
-    credentials_file = File.read("/home/#{username}/application_credentials.json")
-    credentials = JSON.parse(credentials_file)
-    credentials.find { |cred| cred["project_id"] == project_id }
+  def generate_os_app_credentials(username, access_token, project_id)
+    connection = Fog::OpenStack::Identity.new({
+      openstack_auth_url: @auth_url,
+      openstack_management_url: @auth_url,
+      openstack_auth_token: access_token,
+    })
+
+    token_info = connection.tokens.validate(access_token2)
+    user_id = token_info.user["id"]
+
+    auth = {
+      "auth": {
+          "identity": {
+              "methods": [
+                  "token"
+              ],
+              "token": {
+                  "id": access_token
+              }
+          },
+          "scope": {
+              "project": {
+                  "id": project_id
+              }
+          }
+      }
+    }
+
+    scoped_token = connection.tokens.authenticate(auth)
+
+
+    connection = Fog::OpenStack::Identity.new({
+      openstack_auth_url: @auth_url,
+      openstack_management_url: @auth_url,
+      openstack_auth_token: scoped_token,
+    })
+
+
+    app_credentials = {
+        "name": "OOD generated credentials",
+        "description": "Application credential generated via OOD for Coder.",
+        "roles": [
+           {"id": "be47e8625feb46aebff445ce8f95af8f"},
+           {"id": "59f1477385ec4baa8cc4e645c81473a0"}
+        ],
+        "unrestricted": false,
+        "user_id": user_id
+    }
+    res = connection.application_credentials.create app_credentials
+
+    credential_data = {
+      id: res.id,
+      name: res.name
+      user_id: user_id,
+      secret: res.secret
+    }
+
+    credentials_data
   end
 
   def get_rich_parameters(coder_parameters, project_id, os_app_credentials)
@@ -44,7 +101,7 @@ class OodCore::Job::Adapters::Coder::Batch
     project_id = script.native[:project_id]
     coder_parameters = script.native[:coder_parameters]
     endpoint = "https://#{@host}/api/v2/organizations/#{org_id}/members/#{username}/workspaces"
-    os_app_credentials = get_os_app_credentials(username, project_id)
+    os_app_credentials = generate_os_app_credentials(username, project_id)
     headers = get_headers(@token)
     body = {
       template_id: script.native[:template_id],
@@ -54,10 +111,13 @@ class OodCore::Job::Adapters::Coder::Batch
     }
 
     resp = api_call('post', endpoint, headers, body)
+    File.write("/home/#{username}/#{resp[id]}_credentials.json", JSON.generate(os_app_credentials))
     resp["id"]
+
   end
 
   def delete(id)
+
     endpoint = "https://#{@host}/api/v2/workspaces/#{id}/builds"
     headers = get_headers(@token)
     body = {
@@ -65,6 +125,17 @@ class OodCore::Job::Adapters::Coder::Batch
       'transition' => 'delete'
     }
     res = api_call('post', endpoint, headers, body)
+
+    os_app_credentials = JSON.parse(File.read("/home/#{username}/#{resp[id]}_credentials.json"))
+    connection = Fog::OpenStack::Identity.new({
+      openstack_auth_url: @auth_url,
+      openstack_management_url: @auth_url,
+      openstack_application_credential_id: os_app_credentials['id'],
+      openstack_application_credential_secret: os_app_credentials['secret'],
+    })
+    credentials_to_destroy = connection.application_credentials.find_by_id(os_app_credentials['id'], os_app_credentials['user_id'])
+    credentials_to_destroy.destroy
+    File.delete("/home/#{username}/#{resp[id]}_credentials.json")
   end
 
   def info(id)
