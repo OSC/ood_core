@@ -142,7 +142,11 @@ class OodCore::Job::Adapters::Coder::Batch
       openstack_application_credential_secret: os_app_credentials['secret'],
     })
     credentials_to_destroy = connection.application_credentials.find_by_id(os_app_credentials['id'], os_app_credentials['user_id'])
+begin
     credentials_to_destroy.destroy
+rescue Excon::Error::Forbidden => e
+      puts "Error destroying application credentials with id #{os_app_credentials['id']} #{e}"
+    end
     File.delete("/home/#{username}/#{id}_credentials.json")
   end
 
