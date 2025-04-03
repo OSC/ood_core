@@ -60,7 +60,7 @@ class OodCore::Job::Adapters::Coder::Batch
 
 
     app_credentials = {
-        "name": "OOD generated credentials",
+        "name": "OOD_generated_#{rand(16**8).to_s(16)}" ,
         "description": "Application credential generated via OOD for Coder.",
         "roles": [
            {"id": "be47e8625feb46aebff445ce8f95af8f"},
