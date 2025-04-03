@@ -16,7 +16,7 @@ class OodCore::Job::Adapters::Coder::Batch
   def initialize(config)
     @host = config[:host]
     @token = config[:token]
-@service_user = config[:service_user]
+    @service_user = config[:service_user]
     @auth_url = config[:auth]["url"]
     @cloud = config[:auth]["cloud"] 
  end
@@ -142,9 +142,9 @@ class OodCore::Job::Adapters::Coder::Batch
       openstack_application_credential_secret: os_app_credentials['secret'],
     })
     credentials_to_destroy = connection.application_credentials.find_by_id(os_app_credentials['id'], os_app_credentials['user_id'])
-begin
-    credentials_to_destroy.destroy
-rescue Excon::Error::Forbidden => e
+    begin
+      credentials_to_destroy.destroy
+    rescue Excon::Error::Forbidden => e
       puts "Error destroying application credentials with id #{os_app_credentials['id']} #{e}"
     end
     File.delete("/home/#{username}/#{id}_credentials.json")
