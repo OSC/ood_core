@@ -16,6 +16,7 @@ class OodCore::Job::Adapters::Coder::Batch
   def initialize(config)
     @host = config[:host]
     @token = config[:token]
+@service_user = config[:service_user]
     @auth_url = config[:auth]["url"]
     @cloud = config[:auth]["cloud"] 
  end
@@ -107,7 +108,7 @@ class OodCore::Job::Adapters::Coder::Batch
     org_id = script.native[:org_id]
     project_id = script.native[:project_id]
     coder_parameters = script.native[:coder_parameters]
-    endpoint = "https://#{@host}/api/v2/organizations/#{org_id}/members/#{username}/workspaces"
+    endpoint = "#{@host}/api/v2/organizations/#{org_id}/members/#{@service_user}/workspaces"
     os_app_credentials = generate_os_app_credentials(project_id)
     headers = get_headers(@token)
     body = {
@@ -125,7 +126,7 @@ class OodCore::Job::Adapters::Coder::Batch
 
   def delete(id)
 
-    endpoint = "https://#{@host}/api/v2/workspaces/#{id}/builds"
+    endpoint = "#{@host}/api/v2/workspaces/#{id}/builds"
     headers = get_headers(@token)
     body = {
       'orphan' => false,
@@ -146,7 +147,7 @@ class OodCore::Job::Adapters::Coder::Batch
   end
 
   def info(id)
-    endpoint = "https://#{@host}/api/v2/workspaces/#{id}?include_deleted=true"
+    endpoint = "#{@host}/api/v2/workspaces/#{id}?include_deleted=true"
     headers = get_headers(@token)
     workspace_info_from_json(api_call('get', endpoint, headers))
   end
