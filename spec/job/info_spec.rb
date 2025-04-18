@@ -215,4 +215,54 @@ describe OodCore::Job::Info do
       it { is_expected.to eq(OodCore::Job::Status.new(state: :running)) }
     end
   end
+
+  describe "#total_memory" do
+    context "when memory is per node" do
+      subject do
+        build_info(
+          native: {
+            min_memory: 1 * 1024 * 1024 * 1024, # 1 GiB in bytes
+            memory_per: :node
+          },
+          allocated_nodes: [
+            double(to_h: {name: "node1", procs: 2}),
+            double(to_h: {name: "node2", procs: 2})
+          ]
+        )
+      end
+  
+      it "calculates total memory based on node count" do
+        expect(subject.total_memory).to eq(2 * 1024 * 1024 * 1024) # 2 nodes * 1 GiB
+      end
+    end
+  
+    context "when memory is per cpu" do
+      subject do
+        build_info(
+          native: {
+            min_memory: 2 * 1024 * 1024 * 1024, # 2 GiB in bytes
+            memory_per: :cpu
+          },
+          procs: 4
+        )
+      end
+  
+      it "calculates total memory based on procs" do
+        expect(subject.total_memory).to eq(8 * 1024 * 1024 * 1024) # 4 procs * 2 GiB
+      end
+    end
+  
+    context "when memory info is missing" do
+      subject do
+        build_info(
+          native: {},
+          allocated_nodes: [double(to_h: {name: "node1"})]
+        )
+      end
+  
+      it "returns nil" do
+        expect(subject.total_memory).to be_nil
+      end
+    end
+  end  
 end
