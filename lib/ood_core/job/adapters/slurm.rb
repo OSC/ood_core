@@ -871,14 +871,38 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
+          # Helper to parse the memory string returned by Slurm
+          def parse_memory(mem_str)
+            # Convert MB to bytes
+            mem_str.to_i * 1024 * 1024 
+          end
+
           # Parse hash describing Slurm job status
           def parse_job_info(v)
+            min_memory = nil
+            # per cpu or per node
+            memory_per = nil
+
             allocated_nodes = parse_nodes(v[:node_list])
             if allocated_nodes.empty?
               if v[:scheduled_nodes] && v[:scheduled_nodes] != "(null)"
                 allocated_nodes = parse_nodes(v[:scheduled_nodes])
               else
                 allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
+              end
+            end
+
+            if v[:min_memory] && !v[:min_memory].empty?
+              # Slurm uses per CPU memory if --mem-per-cpu
+              # or uses per node if --mem
+              if v[:min_memory].end_with?('c')
+                min_memory = parse_memory(v[:min_memory].chomp('c'))
+                # memory per CPU
+                memory_per = :cpu
+              else
+                min_memory = parse_memory(v[:min_memory])
+                # memory per node
+                memory_per = :node
               end
             end
 
@@ -897,7 +921,7 @@ module OodCore
               cpu_time: nil,
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
-              native: v,
+              native: v.merge(min_memory: min_memory, memory_per: memory_per),
               gpus: self.class.gpus_from_gres(v[:gres])
             )
           end
