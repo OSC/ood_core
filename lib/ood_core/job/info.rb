@@ -162,6 +162,23 @@ module OodCore
         gpus.positive?
       end
 
+      # Compute the total memory being used by a job
+      # @return [Integer] total memory in use
+      def total_memory
+        # Ensure the scheduler has needed fields for computation
+        return nil unless native[:min_memory] && allocated_nodes&.any?
+
+        # Using the adapter, key off whether the job is CPU or node calculated
+        case native[:memory_per]
+        when :cpu
+          native[:min_memory] * procs
+        when :node
+          native[:min_memory] * allocated_nodes.count
+        else
+          nil
+        end
+      end
+
       # The comparison operator
       # @param other [#to_h] object to compare against
       # @return [Boolean] whether objects are equivalent
