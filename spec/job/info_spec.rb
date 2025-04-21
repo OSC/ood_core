@@ -243,7 +243,8 @@ describe OodCore::Job::Info do
             min_memory: 2 * 1024 * 1024 * 1024, # 2 GiB in bytes
             memory_per: :cpu
           },
-          procs: 4
+          procs: 4,
+          allocated_nodes: [double(to_h: { name: "node1", procs: 4 })]
         )
       end
   
