@@ -879,7 +879,6 @@ module OodCore
 
           # Parse hash describing Slurm job status
           def parse_job_info(v)
-            min_memory = nil
             # per cpu or per node
             memory_per = nil
 
@@ -893,17 +892,17 @@ module OodCore
             end
 
             if v[:min_memory] && !v[:min_memory].empty?
-              # Slurm uses per CPU memory if --mem-per-cpu
-              # or uses per node if --mem
+              # Slurm uses per CPU memory if --mem-per-cpu with 'Mc' output
+              # or uses per node if --mem with 'M' output
               if v[:min_memory].end_with?('c')
-                min_memory = parse_memory(v[:min_memory].chomp('c'))
                 # memory per CPU
                 memory_per = :cpu
               else
-                min_memory = parse_memory(v[:min_memory])
                 # memory per node
                 memory_per = :node
               end
+
+              v[:memory_per] = memory_per
             end
 
             Info.new(
@@ -922,8 +921,29 @@ module OodCore
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v.merge(min_memory: min_memory, memory_per: memory_per),
-              gpus: self.class.gpus_from_gres(v[:gres])
+              gpus: self.class.gpus_from_gres(v[:gres]),
+              total_memory: compute_total_memory(v, allocated_nodes)
             )
+          end
+
+          # Compute the total memory being used by a job
+          # @return [Integer] total memory in bytes
+          def compute_total_memory(v, allocated_nodes)
+            #return nil unless v[:min_memory]
+
+            # Retrieve the memory_per created in parse_job
+            memory_per = v[:memory_per]&.to_sym
+            min_memory = v[:min_memory].to_i
+
+            # Compute per-cpu or per-node
+            case memory_per
+            when :cpu
+              min_memory * v[:cpus]
+            when :node
+              min_memory * allocated_nodes.count
+            else
+              nil
+            end
           end
 
           # Replace '(null)' with nil
