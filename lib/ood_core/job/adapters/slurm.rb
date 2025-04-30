@@ -871,10 +871,20 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
-          # Helper to parse the memory string returned by Slurm
+          # Parse the memory string returned by Slurm and return bytes
           def parse_memory(mem_str)
-            # Convert MB to bytes
-            mem_str.to_i * 1024 * 1024 
+            unit = mem_str.match(/[KMGTP])/).to_s
+            value = mem_str.match(/\d+/).to_s
+
+            factor = {
+              "K" => 1024,
+              "M" => 1024**2,
+              "G" => 1024**3,
+              "T" => 1024**4,
+              "P" => 1024**5
+            }
+
+            value.to_i * factor[unit]
           end
 
           # Parse hash describing Slurm job status
@@ -933,7 +943,7 @@ module OodCore
 
             # Retrieve the memory_per created in parse_job
             memory_per = v[:memory_per]&.to_sym
-            min_memory = v[:min_memory].to_i
+            min_memory = parse_memory(v[:min_memory])
 
             # Compute per-cpu or per-node
             case memory_per
