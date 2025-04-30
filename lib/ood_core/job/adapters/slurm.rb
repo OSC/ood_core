@@ -939,7 +939,7 @@ module OodCore
           # Compute the total memory being used by a job
           # @return [Integer] total memory in bytes
           def compute_total_memory(v, allocated_nodes)
-            #return nil unless v[:min_memory]
+            return nil unless v[:min_memory]
 
             # Retrieve the memory_per created in parse_job
             memory_per = v[:memory_per]&.to_sym
