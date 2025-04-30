@@ -873,7 +873,7 @@ module OodCore
 
           # Parse the memory string returned by Slurm and return bytes
           def parse_memory(mem_str)
-            unit = mem_str.match(/[KMGTP])/).to_s
+            unit = mem_str.match(/[KMGTP]/).to_s
             value = mem_str.match(/\d+/).to_s
 
             factor = {
