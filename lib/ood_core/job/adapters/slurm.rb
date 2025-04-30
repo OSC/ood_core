@@ -930,6 +930,7 @@ module OodCore
               cpu_time: nil,
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
+              native: v,
               gpus: self.class.gpus_from_gres(v[:gres]),
               total_memory: compute_total_memory(v, allocated_nodes)
             )
