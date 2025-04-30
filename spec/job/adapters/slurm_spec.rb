@@ -1487,4 +1487,45 @@ describe OodCore::Job::Adapters::Slurm do
       end
     end
   end
+
+  describe "#info" do
+    context "when computing total memory" do
+      let(:job_id) { "123" }
+      let(:job_hash) {
+        {
+          job_id: job_id,
+          state_compact: "R",
+          job_name: "test",
+          user: "user1",
+          cpus: 4,
+          partition: "normal",
+          time_used: "00:10:00",
+          time_limit: "01:00:00",
+          submit_time: "2025-04-18T10:00:00",
+          start_time: "2025-04-18T10:05:00",
+          node_list: "node[01-02]",
+          min_memory: min_memory
+        }
+      }
+
+      let(:slurm) { double(get_jobs: [job_hash]) }
+      subject(:job) { described_class.new(slurm: slurm).info(job_id) }
+
+      context "and memory is per node" do
+        let(:min_memory) { "1024M" }
+
+        it "computes total memory in bytes" do
+          expect(job.total_memory).to eq(2 * 1024 * 1024 * 1024)
+        end
+      end
+
+      context "and memory is per cpu" do
+        let(:min_memory) { "1024Mc" }
+
+        it "computes total memory in bytes" do
+          expect(job.total_memory).to eq(4 * 1024 * 1024 * 1024)
+        end
+      end
+    end
+  end
 end
