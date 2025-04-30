@@ -873,6 +873,8 @@ module OodCore
 
           # Parse the memory string returned by Slurm and return bytes
           def parse_memory(mem_str)
+            raise ArgumentError, 'mem_str is nil' if mem_str.nil?
+
             unit = mem_str.match(/[KMGTP]/).to_s
             value = mem_str.match(/\d+/).to_s
 
@@ -883,6 +885,8 @@ module OodCore
               "T" => 1024**4,
               "P" => 1024**5
             }
+
+            raise ArgumentError, 'Invalid unit in string: #{mem_str}' unless value && unit && factor[unit]
 
             value.to_i * factor[unit]
           end
@@ -939,11 +943,15 @@ module OodCore
           # Compute the total memory being used by a job
           # @return [Integer] total memory in bytes
           def compute_total_memory(v, allocated_nodes)
-            return nil unless v[:min_memory]
+            return nil unless v[:min_memory] && v[:memory_per]
 
-            # Retrieve the memory_per created in parse_job
-            memory_per = v[:memory_per]&.to_sym
-            min_memory = parse_memory(v[:min_memory])
+            begin
+              # Retrieve the memory_per created in parse_job
+              memory_per = v[:memory_per]&.to_sym
+              min_memory = parse_memory(v[:min_memory])
+            rescue ArgumentError
+              nil
+            end
 
             # Compute per-cpu or per-node
             case memory_per
