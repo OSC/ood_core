@@ -208,6 +208,9 @@ module OodCore
                         cpu_cores_per_process: script.cores}
           }
 
+          if params[:attributes][:queue_name].nil?
+            params[:attributes][:queue_name] = @psij.queue_name
+          end
           if params[:stdout_path].nil?
             params[:stdout_path] = File.join(Dir.pwd, "stdout.txt")
           end

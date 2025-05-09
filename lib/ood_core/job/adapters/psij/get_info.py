@@ -37,15 +37,18 @@ for job in job_data:
     # we need to flatten them.
     attr = d["attributes"]
     del d["attributes"]
+    d.update(attr)
     # convert deltatime or string to integer
     d["duration"] = job.spec.attributes.duration.total_seconds()
     d["wall_time"] = int(d["wall_time"])
-    d.update(attr)
     resources = d["resources"]
     del d["resources"]
     d.update(resources)
     d["submission_time"] = d["submission_time"].strftime("%Y-%m-%d %H:%M:%S")
-    d["dispatch_time"] = d["dispatch_time"].strftime("%Y-%m-%d %H:%M:%S")
+    if d["dispatch_time"] is not None:
+      d["dispatch_time"] = d["dispatch_time"].strftime("%Y-%m-%d %H:%M:%S")
+    else:
+      d["dispatch_time"] = None
 
     data.append(d)
 
