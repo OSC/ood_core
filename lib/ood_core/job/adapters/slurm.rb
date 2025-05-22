@@ -895,8 +895,6 @@ module OodCore
 
           # Parse hash describing Slurm job status
           def parse_job_info(v)
-            # per cpu or per node
-            memory_per = nil
 
             allocated_nodes = parse_nodes(v[:node_list])
             if allocated_nodes.empty?
@@ -905,20 +903,6 @@ module OodCore
               else
                 allocated_nodes = [ { name: nil } ] * v[:nodes].to_i
               end
-            end
-
-            if v[:min_memory] && !v[:min_memory].empty?
-              # Slurm uses per CPU memory if --mem-per-cpu with 'Mc' output
-              # or uses per node if --mem with 'M' output
-              if v[:min_memory].end_with?('c')
-                # memory per CPU
-                memory_per = :cpu
-              else
-                # memory per node
-                memory_per = :node
-              end
-
-              v[:memory_per] = memory_per
             end
 
             Info.new(
@@ -945,23 +929,13 @@ module OodCore
           # Compute the total memory being used by a job
           # @return [Integer] total memory in bytes
           def compute_total_memory(v, allocated_nodes)
-            return nil unless v[:min_memory].to_s.match?(/\d+/) && v[:memory_per]
+            return nil unless v[:min_memory].to_s.match?(/\d+/)
 
-            # Retrieve the memory_per created in parse_job
-            memory_per = v[:memory_per]&.to_sym
             min_memory = parse_memory(v[:min_memory])
             
             return nil if min_memory.nil?
 
-            # Compute per-cpu or per-node
-            case memory_per
-            when :cpu
-              min_memory * v[:cpus]
-            when :node
-              min_memory * allocated_nodes.count
-            else
-              nil
-            end
+            min_memory * allocated_nodes.count
           end
 
           # Replace '(null)' with nil
