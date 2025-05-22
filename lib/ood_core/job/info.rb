@@ -121,7 +121,7 @@ module OodCore
         @status = job_array_aggregate_status unless @tasks.empty?
 
         @native          = native
-        @total_memory    = total_memory
+        @total_memory    = total_memory    && total_memory.to_i
         @gpus            = gpus            && gpus.to_i
       end
 
