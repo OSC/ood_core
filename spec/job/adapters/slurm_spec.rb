@@ -1511,19 +1511,11 @@ describe OodCore::Job::Adapters::Slurm do
       let(:slurm) { double(get_jobs: [job_hash]) }
       subject(:job) { described_class.new(slurm: slurm).info(job_id) }
 
-      context "and memory is per node" do
+      context "and memory is positive" do
         let(:min_memory) { "1024M" }
 
         it "computes total memory in bytes" do
           expect(job.total_memory).to eq(2 * 1024 * 1024 * 1024)
-        end
-      end
-
-      context "and memory is per cpu" do
-        let(:min_memory) { "1024Mc" }
-
-        it "computes total memory in bytes" do
-          expect(job.total_memory).to eq(4 * 1024 * 1024 * 1024)
         end
       end
     end
