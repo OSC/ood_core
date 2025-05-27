@@ -1,14 +1,15 @@
 require "ood_core/refinements/hash_extensions"
 require "json"
-
 Dir.glob('/var/lib/gems/3.1.0/gems/*').each do |dir|
   if File.directory?(dir) && dir.end_with?('-lib') == false
     $LOAD_PATH.unshift("#{dir}/lib")
   end
 end
 
+require "async/http/internet/instance"
 require "fog/openstack"
   
+
 # Utility class for the Coder adapter to interact with the Coders API.
 class OodCore::Job::Adapters::Coder::Batch
   require_relative "coder_job_info"
@@ -19,7 +20,7 @@ class OodCore::Job::Adapters::Coder::Batch
     @service_user = config[:service_user]
     @auth_url = config[:auth]["url"]
     @cloud = config[:auth]["cloud"] 
- end
+  end
 
   def generate_os_app_credentials(project_id)
     token_json = JSON.parse(File.read("/home/#{username}/token.json"))
@@ -63,10 +64,8 @@ class OodCore::Job::Adapters::Coder::Batch
         "name": "OOD_generated_#{rand(16**8).to_s(16)}" ,
         "description": "Application credential generated via OOD for Coder.",
         "roles": [
-           {"id": "be47e8625feb46aebff445ce8f95af8f"},
-           {"id": "59f1477385ec4baa8cc4e645c81473a0"}
         ],
-        "unrestricted": false,
+        "unrestricted": true,
         "user_id": user_id
     }
     res = connection.application_credentials.create app_credentials
@@ -80,7 +79,7 @@ class OodCore::Job::Adapters::Coder::Batch
 
     credential_data
   end
-
+  
   def get_rich_parameters(coder_parameters, project_id, os_app_credentials)
     rich_parameter_values = [
       { name: "application_credential_name", value: os_app_credentials[:name] },
@@ -111,10 +110,10 @@ class OodCore::Job::Adapters::Coder::Batch
     endpoint = "#{@host}/api/v2/organizations/#{org_id}/members/#{@service_user}/workspaces"
     os_app_credentials = generate_os_app_credentials(project_id)
     headers = get_headers(@token)
+    workspace_name = "#{username}-#{script.native[:workspace_name]}-#{rand(2_821_109_907_456).to_s(36)}"
     body = {
-      template_id: script.native[:template_id],
-      template_version_name: script.native[:template_version_name],
-      name: "#{username}-#{script.native[:workspace_name]}-#{rand(2_821_109_907_456).to_s(36)}",
+      template_version_id: script.native[:template_version_id],
+      name: workspace_name,
       rich_parameter_values: get_rich_parameters(coder_parameters, project_id, os_app_credentials),
     }
 
@@ -141,19 +140,34 @@ class OodCore::Job::Adapters::Coder::Batch
       openstack_application_credential_id: os_app_credentials['id'],
       openstack_application_credential_secret: os_app_credentials['secret'],
     })
+
+    sleep 2 
+    5.times do |attempt|
+        break unless workspace_json(id) && workspace_json(id).dig("latest_build", "status") == "deleting"
+        puts "#{Time.now.inspect}deleting workspace (attempt #{attempt + 1}/#{5})"
+        sleep 10
+    end 
     credentials_to_destroy = connection.application_credentials.find_by_id(os_app_credentials['id'], os_app_credentials['user_id'])
+    if workspace_json(id) and workspace_json(id).dig("latest_build", "status") != "deleted"
+        File.delete("/home/#{username}/#{id}_credentials.json")
+        puts "Workspace deletion timed out, credentials with id #{os_app_credentials['id']} of user #{os_app_credentials['user_id']} were not destroyed"
+        return
+    end
     begin
       credentials_to_destroy.destroy
     rescue Excon::Error::Forbidden => e
       puts "Error destroying application credentials with id #{os_app_credentials['id']} #{e}"
     end
-    File.delete("/home/#{username}/#{id}_credentials.json")
+  end
+
+  def workspace_json(id)
+    endpoint = "#{@host}/api/v2/workspaces/#{id}?include_deleted=true"
+    headers = get_headers(@token)
+    api_call('get', endpoint, headers)
   end
 
   def info(id)
-    endpoint = "#{@host}/api/v2/workspaces/#{id}?include_deleted=true"
-    headers = get_headers(@token)
-    workspace_info_from_json(api_call('get', endpoint, headers))
+    workspace_info_from_json(workspace_json(id))
   end
 
   def coder_state_to_ood_status(coder_state)
@@ -220,29 +234,26 @@ class OodCore::Job::Adapters::Coder::Batch
 
   def api_call(method, endpoint, headers, body = nil)
     uri = URI(endpoint)
+    Sync do
+      case method.downcase
+      when 'get'
+        function =Async::HTTP::Internet::method(:get)
+      when 'post'
+        function = Async::HTTP::Internet::method(:post)
+      when 'delete'
+        function = Async::HTTP::Internet::method(:delete)
+      else
+        raise ArgumentError, "Invalid HTTP method: #{method}"
+      end
 
-    case method.downcase
-    when 'get'
-      request = Net::HTTP::Get.new(uri, headers)
-    when 'post'
-      request = Net::HTTP::Post.new(uri, headers)
-    when 'delete'
-      request = Net::HTTP::Delete.new(uri, headers)
-    else
-      raise ArgumentError, "Invalid HTTP method: #{method}"
-    end
+      body = body.to_json if body
+      response = function.call(uri, headers, body)
 
-    request.body = body.to_json if body
-
-    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
-      http.request(request)
-    end
-
-    case response
-    when Net::HTTPSuccess
-      JSON.parse(response.body)
-    else
-      raise Error, "HTTP Error: #{response.code} #{response.message}  for request #{endpoint} and body #{body}"
+      if response.success?
+        JSON.parse(response.read)
+      else
+        raise Error, "HTTP Error: #{response.status} #{response.read}  for request #{endpoint} and body #{body}"
+      end
     end
   end
 
