@@ -209,9 +209,10 @@ module OodCore
                 export -f wait_until_port_used
 
                 # Generate random alphanumeric password with $1 (default: #{password_size}) characters
-                create_passwd () {
+                create_passwd () (
+                  set +o pipefail # ensure pipefail disabled, `head` closing stdin causes SIGPIPE
                   tr -cd 'a-zA-Z0-9' < /dev/urandom 2> /dev/null | head -c${1:-#{password_size}}
-                }
+                )
                 export -f create_passwd
               }
               export -f source_helpers
