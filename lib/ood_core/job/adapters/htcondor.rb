@@ -21,7 +21,15 @@ module OodCore
                 bin_overrides        = c.fetch(:bin_overrides, {})
                 submit_host          = c.fetch(:submit_host, "")
                 strict_host_checking = c.fetch(:strict_host_checking, true)
-                htcondor = Adapters::HTCondor::Batch.new(bin: bin, bin_overrides: bin_overrides, submit_host: submit_host, strict_host_checking: strict_host_checking)
+                max_walltime          = c.fetch(:max_walltime, 3600)
+                default_universe = c.fetch(:default_universe, "vanilla")
+                default_docker_image = c.fetch(:default_docker_image, "ubuntu:latest")
+                additional_attributes = c.fetch(:additional_attributes, {})
+                htcondor = Adapters::HTCondor::Batch.new(bin: bin, bin_overrides: bin_overrides,
+                    submit_host: submit_host, strict_host_checking: strict_host_checking,
+                    max_walltime: max_walltime, default_universe: default_universe,
+                    default_docker_image: default_docker_image, additional_attributes: additional_attributes,
+                    )
                 Adapters::HTCondor.new(htcondor: htcondor)
             end
         end
@@ -53,6 +61,22 @@ module OodCore
                     # @return [Bool]; true if empty
                     attr_reader :strict_host_checking
 
+                    # Max walltime in seconds for jobs submitted to HTCondor
+                    # @return [Integer] the maximum walltime in seconds
+                    attr_reader :max_walltime
+
+                    # Default universe for jobs submitted to HTCondor
+                    # @return [String] the default universe for jobs
+                    attr_reader :default_universe
+
+                    # Default docker image for jobs submitted to HTCondor
+                    # @return [String] the default docker image for jobs
+                    attr_reader :default_docker_image
+
+                    # Additional attributes to be added to the job submission
+                    # @return [Hash{#to_s => #to_s}] additional attributes to be added to the job submission
+                    attr_reader :additional_attributes
+
                     # The root exception class that all HTCondor-specific exceptions inherit
                     # from
                     class Error < StandardError; end
@@ -60,11 +84,15 @@ module OodCore
                     # @param bin [#to_s] path to HTCondor installation binaries
                     # @param submit_host [#to_s] Submits the job on a login node via ssh
                     # @param strict_host_checking [Bool] Whether to use strict host checking when ssh to submit_host
-                    def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: false)
+                    def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: false, max_walltime: 3600, default_universe: "vanilla", default_docker_image: "ubuntu:latest", additional_attributes: {})
                         @bin                  = Pathname.new(bin.to_s)
                         @bin_overrides        = bin_overrides
                         @submit_host          = submit_host.to_s
                         @strict_host_checking = strict_host_checking
+                        @max_walltime         = max_walltime
+                        @default_universe     = default_universe.to_s
+                        @default_docker_image = default_docker_image.to_s
+                        @additional_attributes = additional_attributes
                     end
 
                     # Submit a script to the batch server
@@ -147,6 +175,7 @@ module OodCore
                         parse_condor_status_output(output)
                     end
 
+
                     private
 
                     # Parse the output of `condor_q` into a list of job hashes
@@ -225,31 +254,33 @@ module OodCore
                     args.concat ["-batch-name", "#{script.job_name}"] unless script.job_name.nil?
                     args.concat ["-name", "#{script.queue_name}"] unless script.queue_name.nil?
                     args.concat ["-a", "priority=#{script.priority}"] unless script.priority.nil?
+                    args.concat ["-a", "+WantWallTime=#{[script.wall_time,@htcondor.max_walltime].min}"] unless script.wall_time.nil?
+                    args.concat ["-a", "+WantWallTime=#{@htcondor.max_walltime}"] unless !script.wall_time.nil?
 
-                    args.concat ["-a", "Request_Cpus=#{script.cores}"] unless script.cores.nil?
-                    # Todo, make configurable:
-                    args.concat ["-a", "Request_Memory=10240"]# unless script.memory.nil?
-                    args.concat ["-a", "Request_GPUs=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
+                    args.concat ["-a", "request_cpus=#{script.cores}"] unless script.cores.nil?
+                    # requesting 1GB of memory per core seems reasonable
+                    args.concat ["-a", "request_memory=#{script.cores * 1024}"] unless script.native.include?(:request_memory) && !script.native[:request_memory].nil?
+                    args.concat ["-a", "request_gpus=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
 
-                    # Todo, make configurable:
-                    args.concat ["-a", "universe=docker"]
-                    # Todo, make configurable:
-                    args.concat ["-a", "docker_image=ubuntu:latest"]
+                    args.concat ["-a", "universe=#{@htcondor.default_universe}"]
+                    args.concat ["-a", "docker_image=#{@htcondor.default_docker_image}"] unless script.native.include?(:docker_image) && !script.native[:docker_image].nil?
 
                     args.concat ["-a", "input=#{script.input_path}"] unless script.input_path.nil?
-                    args.concat ["-a", "output=output.txt"] 
-                    args.concat ["-a", "output=#{script.output_path}"] unless script.output_path.nil?
-                    args.concat ["-a", "error=error.txt"]
-                    args.concat ["-a", "error=#{script.error_path}"] unless script.error_path.nil?
-                    args.concat ["-a", "log=#{script.workdir}/job.log"] unless script.workdir.nil?
+                    if script.output_path.nil? then args.concat ["-a", "output=output.txt"] else args.concat ["-a", "output=#{script.output_path}"] end
+                    if script.error_path.nil? then args.concat ["-a", "error=error.txt"] else args.concat ["-a", "error=#{script.error_path}"] end
+                    if script.workdir.nil? then args.concat ["-a", "log=job.log"] else args.concat ["-a", "log=#{script.workdir}/job.log"] end
 
                     args.concat ["-a", "initialdir=#{script.workdir}"] unless script.workdir.nil?
                     args.concat ["-a", "environment=#{script.job_environment.to_a.map { |k, v| "#{k}=#{v}" }.join(',')}"] unless script.job_environment.nil? || script.job_environment.empty?
                     args.concat ["-a", "should_transfer_files=true"]
+                    args.concat ["-a", "+OpenOnDemand=true"]
+
+                    args.concat @htcondor.additional_attributes.to_a.map { |k, v| "-a #{k}=#{v}" } unless @htcondor.additional_attributes.nil? || @htcondor.additional_attributes.empty?
+                    args.concat script.native.to_a.map { |k, v| "-a #{k}=#{v}" } unless script.native.nil? || script.native.empty?
 
                     content = script.content
 
-                    # Set executable    
+                    # Set executable to some shell to execute the script
                     if script.shell_path.nil?
                         args.concat ["-a", "executable=/bin/bash"]
                     else
@@ -339,7 +370,6 @@ module OodCore
                 rescue Batch::Error => e
                     raise JobAdapterError, e.message
                 end
-               
                 # Delete a job
                 # @param id [#to_s] the id of the job
                 # @raise [JobAdapterError] if something goes wrong deleting the job
@@ -348,10 +378,10 @@ module OodCore
                 rescue Batch::Error => e
                     raise JobAdapterError, e.message
                 end
+
+
                 private
 
-                # Map HTCondor job status to a symbol
-                # @param st [#to_s] the status string from HTCondor
                 def get_state(st)
                     STATUS_MAP.fetch(st.to_s, :undetermined)
                 end
