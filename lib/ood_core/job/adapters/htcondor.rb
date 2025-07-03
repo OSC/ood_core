@@ -21,14 +21,18 @@ module OodCore
                 bin_overrides        = c.fetch(:bin_overrides, {})
                 submit_host          = c.fetch(:submit_host, "")
                 strict_host_checking = c.fetch(:strict_host_checking, true)
-                max_walltime          = c.fetch(:max_walltime, 3600)
                 default_universe = c.fetch(:default_universe, "vanilla")
                 default_docker_image = c.fetch(:default_docker_image, "ubuntu:latest")
+                user_group_map = c.fetch(:user_group_map, nil)
+                cluster = c.fetch(:cluster, "")
                 additional_attributes = c.fetch(:additional_attributes, {})
                 htcondor = Adapters::HTCondor::Batch.new(bin: bin, bin_overrides: bin_overrides,
                     submit_host: submit_host, strict_host_checking: strict_host_checking,
-                    max_walltime: max_walltime, default_universe: default_universe,
-                    default_docker_image: default_docker_image, additional_attributes: additional_attributes,
+                    default_universe: default_universe,
+                    default_docker_image: default_docker_image, 
+                    user_group_map: user_group_map,
+                    cluster: cluster,
+                    additional_attributes: additional_attributes,
                     )
                 Adapters::HTCondor.new(htcondor: htcondor)
             end
@@ -61,10 +65,6 @@ module OodCore
                     # @return [Bool]; true if empty
                     attr_reader :strict_host_checking
 
-                    # Max walltime in seconds for jobs submitted to HTCondor
-                    # @return [Integer] the maximum walltime in seconds
-                    attr_reader :max_walltime
-
                     # Default universe for jobs submitted to HTCondor
                     # @return [String] the default universe for jobs
                     attr_reader :default_universe
@@ -72,6 +72,15 @@ module OodCore
                     # Default docker image for jobs submitted to HTCondor
                     # @return [String] the default docker image for jobs
                     attr_reader :default_docker_image
+
+                    # A path to the user/group map for HTCondor jobs
+                    # The format in the file should adhere to the format used by [AssignAccountingGroup](https://htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP)
+                    # @return [String,nil] the path to the user/group map file
+                    attr_reader :user_group_map
+
+                    # The cluster name for this HTCondor instance
+                    # @return [String] the cluster name
+                    attr_reader :cluster
 
                     # Additional attributes to be added to the job submission
                     # @return [Hash{#to_s => #to_s}] additional attributes to be added to the job submission
@@ -84,14 +93,15 @@ module OodCore
                     # @param bin [#to_s] path to HTCondor installation binaries
                     # @param submit_host [#to_s] Submits the job on a login node via ssh
                     # @param strict_host_checking [Bool] Whether to use strict host checking when ssh to submit_host
-                    def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: false, max_walltime: 3600, default_universe: "vanilla", default_docker_image: "ubuntu:latest", additional_attributes: {})
+                    def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: false, default_universe: "vanilla", default_docker_image: "ubuntu:latest", user_group_map: nil, cluster: "", additional_attributes: {})
                         @bin                  = Pathname.new(bin.to_s)
                         @bin_overrides        = bin_overrides
                         @submit_host          = submit_host.to_s
                         @strict_host_checking = strict_host_checking
-                        @max_walltime         = max_walltime
                         @default_universe     = default_universe.to_s
                         @default_docker_image = default_docker_image.to_s
+                        @user_group_map       = user_group_map.to_s unless user_group_map.nil?
+                        @cluster              = cluster.to_s
                         @additional_attributes = additional_attributes
                     end
 
@@ -176,6 +186,24 @@ module OodCore
                     end
 
 
+                    # Retrieve accounts using user_group_map on @submit_host
+                    # @return [Hash{String => Array<String>}] mapping of usernames to their groups
+                    def get_accounts
+                        raise Error, "user_group_map is not defined" if user_group_map.nil? || user_group_map.empty?
+                        
+                        # Retrieve accounts and cache them
+                        output = call("cat", user_group_map)
+                        accounts = {}
+                        output.each_line do |line|
+                            next if line.strip.empty? || line.start_with?("#") # Skip empty lines and comments
+                            _, username, groups = line.strip.split(/\s+/, 3)
+                            accounts[username] = groups.split(",") if username && groups
+                        end
+                        accounts
+                    rescue Error => e
+                        raise Error, "Failed to retrieve accounts: #{e.message}"
+                    end
+
                     private
 
                     # Parse the output of `condor_q` into a list of job hashes
@@ -254,8 +282,8 @@ module OodCore
                     args.concat ["-batch-name", "#{script.job_name}"] unless script.job_name.nil?
                     args.concat ["-name", "#{script.queue_name}"] unless script.queue_name.nil?
                     args.concat ["-a", "priority=#{script.priority}"] unless script.priority.nil?
-                    args.concat ["-a", "+WantWallTime=#{[script.wall_time,@htcondor.max_walltime].min}"] unless script.wall_time.nil?
-                    args.concat ["-a", "+WantWallTime=#{@htcondor.max_walltime}"] unless !script.wall_time.nil?
+                    args.concat ["-a", "accounting_group=#{script.accounting_id}"] unless script.accounting_id.nil?
+                    args.concat ["-a", "+WantWallTime=#{script.wall_time}"] unless script.wall_time.nil?
 
                     args.concat ["-a", "request_cpus=#{script.cores}"] unless script.cores.nil?
                     # requesting 1GB of memory per core seems reasonable
@@ -353,6 +381,11 @@ module OodCore
                     raise JobAdapterError, e.message
                 end
 
+                # Well, HTCondor does support them, but we dont so far
+                def supports_job_arrays?
+                    false
+                end
+
                 # Place a job on hold
                 # @param id [#to_s] the id of the job
                 # @raise [JobAdapterError] if something goes wrong placing the job on hold
@@ -379,6 +412,15 @@ module OodCore
                     raise JobAdapterError, e.message
                 end
 
+                # Retrieve the relevant groups for the current user
+                # @return [Array<AccountInfo>] list of groups for the current user
+                def accounts
+                    username = Etc.getlogin
+                    groups = @htcondor.get_accounts[username]
+                    parse_group_into_account_info(groups)
+                rescue Batch::Error => e
+                    raise JobAdapterError, e.message
+                end
 
                 private
 
@@ -404,6 +446,13 @@ module OodCore
                         native: job[:native],
 
                     )
+                end
+
+                # Parse group information into AccountInfo objects
+                # @param groups [Array<String>] list of group names
+                # @return [Array<AccountInfo>] list of AccountInfo objects
+                def parse_group_into_account_info(groups)
+                    groups.map { |group| AccountInfo.new(name: group, cluster: @htcondor.cluster) }
                 end
 
             end
