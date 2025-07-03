@@ -111,8 +111,9 @@ module OodCore
                     # @param script [String] the script to submit
                     # @raise [Error] if `condor_submit` command exited unsuccessfully
                     # @return [String] the id of the job that was created
-                    def submit_string(args: [], env: {}, script: "")
+                    def submit_string(args: [], script_args: [], env: {}, script: "")
                         args = args.map(&:to_s)
+                        script_args = script_args.map(&:to_s).map { |s| s.to_s.gsub('"', "'") } # cannot do double 
                         env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
 
                         tempfile = Tempfile.new("htcondor_submit")
@@ -121,11 +122,11 @@ module OodCore
                         tempfile.unlink # unlink the tempfile so it can be used by condor_submit
 
                         call("bash", "-c", "cat > #{path}", stdin: script)
-                        output = call("condor_submit", *args, env: env, stdin: "#{path.split("/").last},#{path}").strip
-                        
-                        match = output.match(/cluster (\d+)/)
+                        output = call("condor_submit", *args, env: env, stdin: "arguments=#{path.split("/").last} #{script_args.join(" ")}\ntransfer_input_files=#{path}").strip
+
+                        match = output.match(/(cluster )?(\d+)/)
                         raise Error, "Failed to parse job ID from output: #{output}" unless match
-                        match[1]
+                        match[2]
 
                     end
 
@@ -283,7 +284,12 @@ module OodCore
                     args.concat ["-name", "#{script.queue_name}"] unless script.queue_name.nil?
                     args.concat ["-a", "priority=#{script.priority}"] unless script.priority.nil?
                     args.concat ["-a", "accounting_group=#{script.accounting_id}"] unless script.accounting_id.nil?
-                    args.concat ["-a", "+WantWallTime=#{script.wall_time}"] unless script.wall_time.nil?
+                    
+                    args.concat ["-a", "submit_as_hold=#{script.hold}"] unless script.submit_as_hold.nil?
+                    args.concat ["-a", "max_retries=0"] unless !script.rerunnable.nil? && script.rerunnable
+
+                    args.concat ["-a", "allowed_execute_duration=#{script.wall_time}"] unless script.wall_time.nil?
+                    args.concat ["-a", "deferral_time=#{script.start_time.tv_sec}"] unless script.start_time.nil?
 
                     args.concat ["-a", "request_cpus=#{script.cores}"] unless script.cores.nil?
                     # requesting 1GB of memory per core seems reasonable
@@ -300,6 +306,8 @@ module OodCore
 
                     args.concat ["-a", "initialdir=#{script.workdir}"] unless script.workdir.nil?
                     args.concat ["-a", "environment=#{script.job_environment.to_a.map { |k, v| "#{k}=#{v}" }.join(',')}"] unless script.job_environment.nil? || script.job_environment.empty?
+                    args.concat ["-a", "getenv=#{script.copy_environment}"] unless script.copy_environment.nil?
+                    
                     args.concat ["-a", "should_transfer_files=true"]
                     args.concat ["-a", "+OpenOnDemand=true"]
 
@@ -314,9 +322,11 @@ module OodCore
                     else
                         args.concat ["-a", "executable=#{script.shell_path}"]
                     end
-                    args.concat ["-queue", "arguments,transfer_input_files", "from", "-"]
+                    # terse to shut up the output, - to get the script arguments from stdin.
+                    args.concat ["-terse", "-", "-queue", "1"]
+                    script_args = script.args || []
 
-                    @htcondor.submit_string(args: args, script: content)
+                    @htcondor.submit_string(args: args, script_args: script_args, script: content)
                 rescue Batch::Error => e
                     raise JobAdapterError, e.message
                 end
