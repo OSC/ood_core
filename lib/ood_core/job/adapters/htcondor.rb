@@ -299,7 +299,7 @@ module OodCore
                     if universe == "docker" then
                         args.concat ["-a", "docker_image=#{@htcondor.default_docker_image}"] unless script.native.include?(:docker_image) && !script.native[:docker_image].nil?
                     elsif universe == "container" then
-                        script.native.delete(:docker_image)
+                        script.native.delete(:docker_image) unless !script.native.include?(:docker_image)
                         script.native[:container_image] = container_image
                     end
 
