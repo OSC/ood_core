@@ -285,6 +285,7 @@ module OodCore
                     args.concat ["-a", "max_retries=0"] unless !script.rerunnable.nil? && script.rerunnable
 
                     args.concat ["-a", "allowed_execute_duration=#{script.wall_time}"] unless script.wall_time.nil?
+                    args.concat ["-a", "periodic_remove='HoldReasonCode == 47'"] unless script.wall_time.nil?
                     args.concat ["-a", "deferral_time=#{script.start_time.tv_sec}"] unless script.start_time.nil?
 
                     args.concat ["-a", "request_cpus=#{script.cores}"] unless script.cores.nil?
