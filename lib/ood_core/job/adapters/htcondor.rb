@@ -241,10 +241,6 @@ module OodCore
                         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
                         args = args.map(&:to_s)
                         
-                        puts "Command: #{cmd}"
-                        puts "Arguments: #{(args.map(&:to_s)).join(' ')}"
-                        puts "Stdin: #{stdin}"
-
                         cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
                         o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
                         s.success? ? o : raise(Error, e)
@@ -347,7 +343,6 @@ module OodCore
                 # @raise [JobAdapterError] if something goes wrong retrieving job info
                 # @return [Array<Info>] list of information describing submitted jobs
                 def info_all(attrs: nil)
-                    puts "Retrieving all jobs from HTCondor"
                     jobs = @htcondor.get_jobs
                     jobs.map { |job| parse_job_info(job) }
                 rescue Batch::Error => e
@@ -370,7 +365,6 @@ module OodCore
                 # @raise [JobAdapterError] if something goes wrong retrieving cluster status
                 # @return [Hash] summary of cluster status including active and total nodes, processors, GPUs, etc.
                 def cluster_info
-                    puts "Retrieving cluster status from HTCondor"
                     slots = @htcondor.get_slots
                     active_nodes = slots.count { |slot| slot[:num_dynamic_slots] > 0 }
                     total_nodes = slots.map { |slot| slot[:machine] }.uniq.count
