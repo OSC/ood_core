@@ -293,8 +293,15 @@ module OodCore
                     args.concat ["-a", "request_memory=#{script.cores * 1024}"] unless script.native.include?(:request_memory) && !script.native[:request_memory].nil?
                     args.concat ["-a", "request_gpus=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
 
-                    args.concat ["-a", "universe=#{@htcondor.default_universe}"]
-                    args.concat ["-a", "docker_image=#{@htcondor.default_docker_image}"] unless script.native.include?(:docker_image) && !script.native[:docker_image].nil?
+                    universe = script.native[:universe] || @htcondor.default_universe
+                    args.concat ["-a", "universe=#{universe}"]
+                    container_image = script.native[:docker_image] || @htcondor.default_docker_image
+                    if universe == "docker" then
+                        args.concat ["-a", "docker_image=#{@htcondor.default_docker_image}"] unless script.native.include?(:docker_image) && !script.native[:docker_image].nil?
+                    elsif universe == "container" then
+                        script.native.delete(:docker_image)
+                        script.native[:container_image] = container_image
+                    end
 
                     args.concat ["-a", "input=#{script.input_path}"] unless script.input_path.nil?
                     if script.output_path.nil? then args.concat ["-a", "output=output.txt"] else args.concat ["-a", "output=#{script.output_path}"] end
