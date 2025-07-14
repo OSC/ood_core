@@ -185,7 +185,7 @@ module OodCore
               # connection
               echo "Scanning VNC log file for user authentications..."
               while read -r line; do
-                if [[ ${line} =~ "Full-control authentication enabled for" ]]; then
+                if [[ ${line} =~ "Full-control authentication enabled" ]]; then
                   change_passwd
                   create_yml
                 fi
