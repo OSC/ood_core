@@ -28,7 +28,7 @@ class OodCore::Job::QueueInfo
     @name = opts.fetch(:name, 'unknown')
     @qos = opts.fetch(:qos, [])
     @allow_qos = opts.fetch(:allow_qos, nil)
-    @deny_qos = opts.fetch(:deny_qos, nil)
+    @deny_qos = opts.fetch(:deny_qos, [])
     @tres = opts.fetch(:tres, {})
 
     allow_accounts = opts.fetch(:allow_accounts, nil)
