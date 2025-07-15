@@ -437,7 +437,11 @@ module OodCore
                                        hsh[:AllowAccounts].to_s.split(',')
                                      end
 
-              hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+              hsh[:deny_accounts] = if !hsh[:allow_accounts].nil?
+                                      nil # manpage says AllowAccounts negates DenyAccounts
+                                    else
+                                      hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+                                    end
 
               hsh[:tres] = case hsh[:TRES]
                            when nil, '(null)', ''
