@@ -448,10 +448,10 @@ module OodCore
                                     end
 
               hsh[:allow_qos] = if hsh[:AllowQos].nil? || hsh[:AllowQos].to_s == 'ALL'
-                                       nil
-                                     else
-                                       hsh[:AllowQos].to_s.split(',')
-                                     end
+                                  nil
+                                else
+                                  hsh[:AllowQos].to_s.split(',')
+                                end
               hsh[:deny_qos] = if !hsh[:allow_qos].nil?
                                  nil # manpage says that AllowQos negates DenyQos
                                else
