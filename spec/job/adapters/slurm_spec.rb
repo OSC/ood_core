@@ -1336,12 +1336,12 @@ describe OodCore::Job::Adapters::Slurm do
 
         accts = subject.accounts
         acct_w_partitions = accts.select { |a| a.cluster == 'ascend' }
-        acct_w_no_partitions = accts.select { |a| a.queue.nil? }
+        acct_w_no_partitions = accts.select { |a| a.queues.empty? }
 
         expect(acct_w_partitions.size).to eq(2)
         expect(accts - acct_w_no_partitions).to eq(acct_w_partitions)
-        expect(acct_w_partitions.select {|a| a.name == 'pzs0715'}.first.queue).to eq('partition_a')
-        expect(acct_w_partitions.select {|a| a.name == 'pzs0714'}.first.queue).to eq('partition_b')
+        expect(acct_w_partitions.select { |a| a.name == 'pzs0715' }.first.queues).to include('partition_a')
+        expect(acct_w_partitions.select { |a| a.name == 'pzs0714' }.first.queues).to include('partition_b')
       end
     end
 
