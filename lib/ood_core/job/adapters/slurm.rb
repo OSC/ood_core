@@ -202,8 +202,8 @@ module OodCore
               OodCore::Job::AccountInfo.new(
                 name: name,
                 cluster: cluster,
-                queues: assocs.map({ |x| x[:queue] }).compact.uniq,
-                qos: assocs.flat_map({ |x| x[:qos] }).uniq,
+                queues: (assocs.map { |x| x[:queue] }).compact.uniq,
+                qos: (assocs.flat_map { |x| x[:qos] }).uniq,
               )
             end
           end
