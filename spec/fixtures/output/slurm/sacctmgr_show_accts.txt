@@ -1,5 +1,3 @@
-pzs0715|ascend|partition_a|ascend-default
-pzs0714|ascend|partition_b|ascend-default
 pzs1124|owens||owens-default,staff,phoenix,geophys,hal,gpt
 pzs1118|owens||owens-default
 pzs1117|owens||owens-default
@@ -22,6 +20,3 @@ pas2051|pitzer||pitzer-default
 pas1871|pitzer||pitzer-default
 pas1754|pitzer||pitzer-default
 pas1604|pitzer||pitzer-default
-
-
-
