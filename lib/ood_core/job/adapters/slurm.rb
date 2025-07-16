@@ -193,7 +193,8 @@ module OodCore
                   name: acct,
                   qos: qos.to_s.chomp.split(','),
                   cluster: cluster,
-                  queue: queue.to_s.empty? ? nil : queue
+                  # ignore queue because it doesn't imply access, only resource limits
+                  # queue: queue.to_s.empty? ? nil : queue
                 }
                 info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
                 accts << info unless acct.nil?

@@ -1327,22 +1327,6 @@ describe OodCore::Job::Adapters::Slurm do
           expect(acct.qos).to eq(["#{acct.cluster}-default"])
         end
       end
-
-      it 'parses partition correctly' do
-        allow(Etc).to receive(:getlogin).and_return('me')
-        allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', 'user=me', {stdin_data: ''})
-                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
-
-        accts = subject.accounts
-        acct_w_partitions = accts.select { |a| a.cluster == 'ascend' }
-        acct_w_no_partitions = accts.select { |a| a.queue.nil? }
-
-        expect(acct_w_partitions.size).to eq(2)
-        expect(accts - acct_w_no_partitions).to eq(acct_w_partitions)
-        expect(acct_w_partitions.select {|a| a.name == 'pzs0715'}.first.queue).to eq('partition_a')
-        expect(acct_w_partitions.select {|a| a.name == 'pzs0714'}.first.queue).to eq('partition_b')
-      end
     end
 
     context 'when sacctmgr fails' do
