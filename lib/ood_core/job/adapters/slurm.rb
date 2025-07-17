@@ -184,21 +184,25 @@ module OodCore
             user = Etc.getlogin
             args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,partition,qos', 'where', "user=#{user}"]
 
-            [].tap do |accts|
+            [].tap do |associations|
               call('sacctmgr', *args).each_line do |line|
                 acct, cluster, queue, qos = line.split('|')
                 next if acct.nil? || acct.chomp.empty?
 
-                args = {
+                associations << {
                   name: acct,
                   qos: qos.to_s.chomp.split(','),
                   cluster: cluster,
-                  # ignore queue because it doesn't imply access, only resource limits
-                  # queue: queue.to_s.empty? ? nil : queue
                 }
-                info = OodCore::Job::AccountInfo.new(**args) unless acct.nil?
-                accts << info unless acct.nil?
               end
+            end.group_by do |x|
+              [x[:name], x[:cluster]]
+            end.map do |(name, cluster), assocs|
+              OodCore::Job::AccountInfo.new(
+                name: name,
+                cluster: cluster,
+                qos: (assocs.flat_map { |x| x[:qos] }).uniq,
+              )
             end
           end
 
@@ -438,7 +442,11 @@ module OodCore
                                        hsh[:AllowAccounts].to_s.split(',')
                                      end
 
-              hsh[:deny_accounts] = hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+              hsh[:deny_accounts] = if !hsh[:allow_accounts].nil?
+                                      [] # manpage says AllowAccounts negates DenyAccounts
+                                    else
+                                      hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
+                                    end
 
               hsh[:tres] = case hsh[:TRES]
                            when nil, '(null)', ''
