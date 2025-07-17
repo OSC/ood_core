@@ -20,6 +20,3 @@ pas2051|pitzer|pitzer-default
 pas1871|pitzer|pitzer-default
 pas1754|pitzer|pitzer-default
 pas1604|pitzer|pitzer-default
-qostestaccount1|owens|owens-default,qos1
-qostestaccount2|owens|owens-default
-qostestaccount3|owens|owens-default
