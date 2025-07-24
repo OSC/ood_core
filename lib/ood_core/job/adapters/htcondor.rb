@@ -116,10 +116,7 @@ module OodCore
                         script_args = script_args.map(&:to_s).map { |s| s.to_s.gsub('"', "'") } # cannot do double 
                         env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
 
-                        tempfile = Tempfile.new("htcondor_submit")
-                        tempfile.close
-                        path = tempfile.path
-                        tempfile.unlink # unlink the tempfile so it can be used by condor_submit
+                        path = "#{Dir.tmpdir}/htcondor_submit_#{SecureRandom.uuid}"
 
                         call("bash", "-c", "cat > #{path}", stdin: script)
                         output = call("condor_submit", *args, env: env, stdin: "arguments=#{path.split("/").last} #{script_args.join(" ")}\ntransfer_input_files=#{path}").strip
