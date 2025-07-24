@@ -247,7 +247,7 @@ module OodCore
                         output.each_line do |line|
                             # Parse each line into a hash (custom parsing logic for HTCondor)
                             job_data = line.split
-                            job = fields.keys.zip(job_data)
+                            job = Hash[fields.keys.zip(job_data)]
                             job[:submit_host] = @submit_host # Add submit host to job data
                             job[:native] = job_data # Add native attributes to job data
                             jobs << job
