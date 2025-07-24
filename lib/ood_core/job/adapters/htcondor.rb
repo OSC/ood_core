@@ -340,8 +340,26 @@ module OodCore
                     else
                         args.concat ["-a", "executable=#{script.shell_path}"]
                     end
+
                     # terse to shut up the output, - to get the script arguments from stdin.
-                    args.concat ["-terse", "-", "-queue", "1"]
+                    args.concat ["-terse", "-"]
+
+                    if script.job_array_request.nil?
+                        # If no job array request is specified, we submit a single job
+                        args.concat ["-queue", "1"]
+                    else
+                        # If a job array request is specified, we submit a job array
+                        # The job array request is expected to be a string like "1-10" or "1,2,3"
+                        # we must convert 1-3 to 1,2,3.
+                        if script.job_array_request.include?("-")
+                            start, finish = script.job_array_request.split("-").map(&:to_i)
+                            job_ids = (start..finish).to_a.join(",")
+                        else
+                            job_ids = script.job_array_request
+                        end
+                        args.concat ["-queue", "1", "+OODArrayId", "in", job_ids.to_s]
+                    end
+
                     script_args = script.args || []
 
                     @htcondor.submit_string(args: args, script_args: script_args, script: content)
@@ -407,9 +425,9 @@ module OodCore
                     raise JobAdapterError, e.message
                 end
 
-                # Well, HTCondor does support them, but we dont so far
+                # Indicate that the job adapter supports job arrays
                 def supports_job_arrays?
-                    false
+                    true
                 end
 
                 # Place a job on hold
