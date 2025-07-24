@@ -214,12 +214,6 @@ module OodCore
                     def get_accounts
                         raise Error, "user_group_map is not defined" if user_group_map.nil? || user_group_map.empty?
                         
-                        # Cache accounts for 30 minutes
-                        @accounts_cache ||= {}
-                        if @accounts_cache[:timestamp] && (Time.now - @accounts_cache[:timestamp] < 1800)
-                            return @accounts_cache[:data]
-                        end
-
                         # Retrieve accounts, use local file, if exists. Otherwise use from submit_host
                         if File.exist?(user_group_map) && File.readable?(user_group_map)
                             output = File.read(user_group_map)
@@ -233,9 +227,6 @@ module OodCore
                             accounts[username] = groups.split(",") if username && groups
                         end
 
-                        # Update cache
-                        @accounts_cache[:data] = accounts
-                        @accounts_cache[:timestamp] = Time.now
                         accounts
                     rescue Error => e
                         raise Error, "Failed to retrieve accounts: #{e.message}"
