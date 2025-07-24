@@ -189,12 +189,12 @@ module OodCore
                         unless id.to_s.empty?
                             if id.to_s.include?(".") # if id is a job array, we need to use the ClusterId and ProcId
                                 cluster_id, proc_id = id.to_s.split(".")
-                                args.concat ["-constraint", "ClusterId == #{cluster_id} && ProcId == #{proc_id}"]
+                                args.concat ["-constraint", "\"ClusterId == #{cluster_id} && ProcId == #{proc_id}\""]
                             else # if id is a single job, we can just use the ClusterId
-                                args.concat ["-constraint", "ClusterId == #{id}"]
+                                args.concat ["-constraint", "\"ClusterId == #{id}\""]
                             end
                         end
-                        args.concat ["-constraint", "Owner == \"#{owner}\""] unless owner.to_s.empty?
+                        args.concat ["-constraint", "\"Owner == #{owner}\""] unless owner.to_s.empty?
                         args.concat ["-af", *condor_q_attrs.values]
 
                         output = call("condor_q", *args)
@@ -243,9 +243,8 @@ module OodCore
                     def parse_condor_q_output(output)
                         jobs = []
                         fields = condor_q_attrs
-
                         output.each_line do |line|
-                            # Parse each line into a hash (custom parsing logic for HTCondor)
+                            # Parse each line into a hash
                             job_data = line.split
                             job = Hash[fields.keys.zip(job_data)]
                             job[:submit_host] = @submit_host # Add submit host to job data
