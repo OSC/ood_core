@@ -86,6 +86,10 @@ module OodCore
                     # @return [Hash{#to_s => #to_s}] additional attributes to be added to the job submission
                     attr_reader :additional_attributes
 
+                    # The version of HTCondor on the submit_host
+                    # @return [Gem::Version] the version of HTCondor
+                    attr_reader :version
+
                     # The root exception class that all HTCondor-specific exceptions inherit
                     # from
                     class Error < StandardError; end
@@ -103,6 +107,7 @@ module OodCore
                         @user_group_map       = user_group_map.to_s unless user_group_map.nil?
                         @cluster              = cluster.to_s
                         @additional_attributes = additional_attributes
+                        @version = get_htcondor_version
                     end
 
                     # Submit a script to the batch server
@@ -243,8 +248,8 @@ module OodCore
                             # Parse each line into a hash (custom parsing logic for HTCondor)
                             job_data = line.split
                             job = fields.keys.zip(job_data)
-                            job[submit_host: @submit_host] # Add submit host to job data
-                            job[native: job_data] # Add native attributes to job data
+                            job[:submit_host] = @submit_host # Add submit host to job data
+                            job[:native] = job_data # Add native attributes to job data
                             jobs << job
                         end
                         jobs
@@ -271,6 +276,13 @@ module OodCore
                         cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
                         o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
                         s.success? ? o : raise(Error, e)
+                    end
+
+                    def get_htcondor_version
+                        output = call("condor_version")
+                        match = output.match(/CondorVersion: (\d+\.\d+\.\d+)/)
+                        raise Error, "Failed to parse HTCondor version from output: #{output}" unless match
+                        Gem::Version.new(match[1])
                     end
                 end
 
@@ -342,6 +354,23 @@ module OodCore
                     args.concat ["-a", "should_transfer_files=true"]
                     args.concat ["-a", "+OpenOnDemand=true"]
 
+                    # send email when started / terminated
+                    if script.email_on_started && script.email_on_terminated then
+                        raise JobAdapterError, "Cannot handle both email_on_started and email_on_terminated set to true" if script.email_on_started && script.email_on_terminated
+                        # args.concat ["-a", "notification=Always"] # might be supported in the future?
+                    elsif script.email_on_started then
+                        if @htcondor.version >= Gem::Version.new("24.10.0") then
+                            args.concat ["-a", "notification=Start"]
+                        else
+                            raise JobAdapterError, "Email notification on job start is not supported by this HTCondor version. Please upgrade to 24.10.0 or later."
+                        end
+                    elsif script.email_on_terminated then
+                        args.concat ["-a", "notification=Complete"]
+                    else
+                        args.concat ["-a", "notification=Never"]
+                    end
+                    args.concat ["-a", "notify_user=#{script.email}"] unless script.email.nil?
+                    
                     args.concat @htcondor.additional_attributes.to_a.map { |k, v| "-a #{k}=#{v}" } unless @htcondor.additional_attributes.nil? || @htcondor.additional_attributes.empty?
                     args.concat script.native.to_a.map { |k, v| "-a #{k}=#{v}" } unless script.native.nil? || script.native.empty?
 
