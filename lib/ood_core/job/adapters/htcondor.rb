@@ -159,6 +159,24 @@ module OodCore
                         raise Error, "Failed to release job #{id}: #{e.message}"
                     end
 
+                    def condor_q_attrs
+                        {
+                            id: "ClusterId",
+                            sub_id: "ProcId",
+                            status: "JobStatus",
+                            owner: "Owner",
+                            acct_group: "AcctGroup",
+                            job_name: "JobBatchName",
+                            procs: "CpusProvisioned",
+                            gpus: "GpusProvisioned",
+                            submission_time: "QDate",
+                            dispatch_time: "JobCurrentStartDate",
+                            sys_cpu_time: "RemoteSysCpu",
+                            user_cpu_time: "RemoteUserCpu",
+                            wallclock_time: "RemoteWallClockTime"
+                        }
+                    end
+
                     # Retrieve job information using `condor_q`
                     # @param id [#to_s] the id of the job
                     # @param owner [String] the owner(s) of the job
@@ -166,9 +184,16 @@ module OodCore
                     # @return [Array<Hash>] list of details for jobs
                     def get_jobs(id: "", owner: nil)
                         args = []
-                        args.concat ["-constraint", "ClusterId == #{id}"] unless id.to_s.empty?
+                        unless id.to_s.empty?
+                            if id.to_s.include?(".") # if id is a job array, we need to use the ClusterId and ProcId
+                                cluster_id, proc_id = id.to_s.split(".")
+                                args.concat ["-constraint", "ClusterId == #{cluster_id} && ProcId == #{proc_id}"]
+                            else # if id is a single job, we can just use the ClusterId
+                                args.concat ["-constraint", "ClusterId == #{id}"]
+                            end
+                        end
                         args.concat ["-constraint", "Owner == \"#{owner}\""] unless owner.to_s.empty?
-                        args.concat ["-af", "ClusterId", "JobStatus", "Owner", "AcctGroup", "JobBatchName", "GlobalJobId", "CpusProvisioned", "GpusProvisioned", "QDate", "JobCurrentStartDate", "RemoteSysCpu", "RemoteUserCpu", "RemoteWallClockTime"]
+                        args.concat ["-af", *condor_q_attrs.values]
 
                         output = call("condor_q", *args)
                         parse_condor_q_output(output)
@@ -224,15 +249,15 @@ module OodCore
                     # Parse the output of `condor_q` into a list of job hashes
                     def parse_condor_q_output(output)
                         jobs = []
+                        fields = condor_q_attrs
+
                         output.each_line do |line|
                             # Parse each line into a hash (custom parsing logic for HTCondor)
                             job_data = line.split
-                            jobs << { id: job_data[0], status: job_data[1], owner: job_data[2], acct_group: job_data[3], job_name: job_data[4],
-                                      submit_host: @submit_host,
-                                      procs: job_data[5].to_i, gpus: job_data[6].to_i,
-                                      submission_time: Time.at(job_data[7].to_i), dispatch_time: Time.at(job_data[8].to_i),
-                                      cpu_time: job_data[9].to_i,
-                                      wallclock_time: job_data[10].to_i, native: job_data }
+                            job = fields.keys.zip(job_data)
+                            job[submit_host: @submit_host] # Add submit host to job data
+                            job[native: job_data] # Add native attributes to job data
+                            jobs << job
                         end
                         jobs
                     end
@@ -357,6 +382,9 @@ module OodCore
                         else
                             job_ids = script.job_array_request
                         end
+                        # Generate multiple jobs in the job array by setting OODArrayId to the requested array ids
+                        # While -queue 10 would generate 10 jobs, the ProcId would always be 0-9, not 1-10 - or whatever the request is.
+                        # So we set the OODArrayId to the requested job ids.
                         args.concat ["-queue", "1", "+OODArrayId", "in", job_ids.to_s]
                     end
 
@@ -475,18 +503,18 @@ module OodCore
                 # Parse hash describing HTCondor job status
                 def parse_job_info(job)
                     Info.new(
-                        id: job[:id],
+                        id: job[:id].to_s + (job[:sub_id].to_s.empty? ? "" : ".#{job[:sub_id]}"),
                         status: get_state(job[:status]),
                         job_name: job[:job_name],
                         job_owner: job[:owner],
                         accounting_id: job[:acct_group],
                         submit_host: job[:submit_host],
-                        procs: job[:procs],
-                        gpus: job[:gpus],
-                        submission_time: job[:submission_time],
-                        dispatch_time: job[:dispatch_time],
-                        cpu_time: job[:cpu_time],
-                        wallclock_time: job[:wallclock_time],
+                        procs: job[:procs].to_i,
+                        gpus: job[:gpus].to_i,
+                        submission_time: Time.at(job[:submission_time].to_i),
+                        dispatch_time: Time.at(job[:dispatch_time].to_i),
+                        cpu_time: job[:sys_cpu_time].to_i + job[:user_cpu_time].to_i,
+                        wallclock_time: job[:wallclock_time].to_i,
                         native: job[:native],
 
                     )
