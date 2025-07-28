@@ -347,7 +347,7 @@ module OodCore
                     if script.workdir.nil? then args.concat ["-a", "log=job.log"] else args.concat ["-a", "log=#{script.workdir}/job.log"] end
 
                     args.concat ["-a", "initialdir=#{script.workdir}"] unless script.workdir.nil?
-                    args.concat ["-a", "environment=#{script.job_environment.to_a.map { |k, v| "#{k}=#{v}" }.join(',')}"] unless script.job_environment.nil? || script.job_environment.empty?
+                    args.concat ["-a", "environment=\"#{script.job_environment.to_a.map { |k, v| "#{k}=\"\"#{v}\"\"" }.join(' ')}\""] unless script.job_environment.nil? || script.job_environment.empty?
                     args.concat ["-a", "getenv=#{script.copy_environment}"] unless script.copy_environment.nil?
                     
                     args.concat ["-a", "should_transfer_files=true"]
