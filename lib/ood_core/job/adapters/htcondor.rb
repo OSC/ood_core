@@ -29,7 +29,7 @@ module OodCore
                 htcondor = Adapters::HTCondor::Batch.new(bin: bin, bin_overrides: bin_overrides,
                     submit_host: submit_host, strict_host_checking: strict_host_checking,
                     default_universe: default_universe,
-                    default_docker_image: default_docker_image, 
+                    default_docker_image: default_docker_image,
                     user_group_map: user_group_map,
                     cluster: cluster,
                     additional_attributes: additional_attributes,
@@ -118,7 +118,7 @@ module OodCore
                     # @return [String] the id of the job that was created
                     def submit_string(args: [], script_args: [], env: {}, script: "")
                         args = args.map(&:to_s)
-                        script_args = script_args.map(&:to_s).map { |s| s.to_s.gsub('"', "'") } # cannot do double 
+                        script_args = script_args.map(&:to_s).map { |s| s.to_s.gsub('"', "'") } # cannot do double
                         env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
 
                         path = "#{Dir.tmpdir}/htcondor_submit_#{SecureRandom.uuid}"
@@ -218,7 +218,7 @@ module OodCore
                     # @return [Hash{String => Array<String>}] mapping of usernames to their groups
                     def get_accounts
                         raise Error, "user_group_map is not defined" if user_group_map.nil? || user_group_map.empty?
-                        
+
                         # Retrieve accounts, use local file, if exists. Otherwise use from submit_host
                         if File.exist?(user_group_map) && File.readable?(user_group_map)
                             output = File.read(user_group_map)
@@ -271,7 +271,7 @@ module OodCore
                     def call(cmd, *args, env: {}, stdin: "")
                         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
                         args = args.map(&:to_s)
-                        
+
                         cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
                         o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
                         s.success? ? o : raise(Error, e)
@@ -318,7 +318,7 @@ module OodCore
                     args.concat ["-name", "#{script.queue_name}"] unless script.queue_name.nil?
                     args.concat ["-a", "priority=#{script.priority}"] unless script.priority.nil?
                     args.concat ["-a", "accounting_group=#{script.accounting_id}"] unless script.accounting_id.nil?
-                    
+
                     args.concat ["-a", "submit_as_hold=#{script.hold}"] unless script.submit_as_hold.nil?
                     args.concat ["-a", "max_retries=0"] unless !script.rerunnable.nil? && script.rerunnable
 
@@ -347,9 +347,9 @@ module OodCore
                     if script.workdir.nil? then args.concat ["-a", "log=job.log"] else args.concat ["-a", "log=#{script.workdir}/job.log"] end
 
                     args.concat ["-a", "initialdir=#{script.workdir}"] unless script.workdir.nil?
-                    args.concat ["-a", "environment=\"#{script.job_environment.to_a.map { |k, v| "#{k}=\"\"#{v}\"\"" }.join(' ')}\""] unless script.job_environment.nil? || script.job_environment.empty?
+                    args.concat ["-a", "\"environment=\\\"#{script.job_environment.to_a.map { |k, v| "#{k}='#{v.gsub("'", "''").gsub('"', "\\\"\\\"")}'" }.join(' ')}\\\"\""] unless script.job_environment.nil? || script.job_environment.empty?
                     args.concat ["-a", "getenv=#{script.copy_environment}"] unless script.copy_environment.nil?
-                    
+
                     args.concat ["-a", "should_transfer_files=true"]
                     args.concat ["-a", "+OpenOnDemand=true"]
 
@@ -369,7 +369,7 @@ module OodCore
                         args.concat ["-a", "notification=Never"]
                     end
                     args.concat ["-a", "notify_user=#{script.email}"] unless script.email.nil?
-                    
+
                     args.concat @htcondor.additional_attributes.to_a.map { |k, v| "-a #{k}=#{v}" } unless @htcondor.additional_attributes.nil? || @htcondor.additional_attributes.empty?
                     args.concat script.native.to_a.map { |k, v| "-a #{k}=#{v}" } unless script.native.nil? || script.native.empty?
 
