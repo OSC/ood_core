@@ -44,6 +44,19 @@ describe OodCore::Job::Adapters::PSIJ do
 
     let(:psij)  { double(submit_job_path: "job.123", executor: "slurm", queue_name:"debug") }
     let(:content) { "my batch script" }
+    let(:base_dir) { Dir.pwd }
+    let(:stdout_path) { File.join(base_dir, "stdout.txt") }
+    let(:stderr_path) { File.join(base_dir, "stderr.txt") }
+    let(:stdin_json) {
+      {
+        executable: "~/ood_tmp/run.sh",
+        stdout_path: stdout_path,
+        stderr_path: stderr_path,
+        attributes: { queue_name: "debug" },
+        resources: { __version: 1 }
+      }.to_json
+    }
+
 
     context "when script not defined" do
       it "raises ArgumentError" do
@@ -55,32 +68,47 @@ describe OodCore::Job::Adapters::PSIJ do
 
     it "returns job id" do
       is_expected.to eq("job.123")
-      expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}")
+      expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json)
     end
+
+    let(:stdin_que) {
+      json = JSON.parse(stdin_json)
+      json["attributes"]["queue_name"] = "queue"
+      json.to_json
+    }
 
     context "with :queue_name" do
       before { adapter.submit(build_script(queue_name: "queue")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{\"queue_name\":\"queue\"},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_que) }
     end
+
+    let(:stdin_arg) {
+      json = JSON.parse(stdin_json)
+      json["attributes"]["custom_attributes"] = {
+        arg1: "",
+        arg2: ""
+      }
+      json.to_json
+    }
 
     context "with :args" do
       before { adapter.submit(build_script(args: ["arg1", "arg2"])) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{\"custom_attributes\":{\"arg1\":\"\",\"arg2\":\"\"}},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_arg) }
     end
 
     context "with :submit_as_hold" do
       context "as true" do
         before { adapter.submit(build_script(submit_as_hold: true)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(submit_as_hold: false)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
     end
 
@@ -88,51 +116,85 @@ describe OodCore::Job::Adapters::PSIJ do
       context "as true" do
         before { adapter.submit(build_script(rerunnable: true)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(rerunnable: false)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
     end
+
+    let(:stdin_env) {
+      {
+        environment: { key: "value"},
+        executable: "~/ood_tmp/run.sh",
+        stdout_path: stdout_path,
+        stderr_path: stderr_path,
+        attributes: { queue_name: "debug" },
+        resources: { __version: 1 }
+      }.to_json
+    }
 
     context "with :job_environment" do
       before { adapter.submit(build_script(job_environment: {"key" => "value"})) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"environment\":{\"key\":\"value\"},\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_env ) }
     end
+
+    let(:stdin_env_inherit) {
+      {
+        environment: { key: "value"},
+        executable: "~/ood_tmp/run.sh",
+        stdout_path: stdout_path,
+        stderr_path: stderr_path,
+        inherit_environment: true,
+        attributes: { queue_name: "debug" },
+        resources: { __version: 1 }
+      }.to_json
+    }
 
     context "with :job_environment and Script#copy_environment is true" do
       before { adapter.submit(build_script(copy_environment: true, job_environment: {"key" => "value"})) }
  
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"environment\":{\"key\":\"value\"},\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"inherit_environment\":true,\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_env_inherit) }
     end
+
+    let(:stdin_workdir) {
+      {
+        directory: "/path/to/workdir",
+        executable: "~/ood_tmp/run.sh",
+        stdout_path: stdout_path,
+        stderr_path: stderr_path,
+        attributes: { queue_name: "debug" },
+        resources: { __version: 1 }
+      }.to_json
+    }
 
     context "with :workdir" do
       before { adapter.submit(build_script(workdir: "/path/to/workdir")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: Pathname.new("/path/to/workdir"), stdin: "{\"directory\":\"/path/to/workdir\",\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: Pathname.new("/path/to/workdir"), stdin: stdin_workdir) }
     end
 
     context "with :email" do
       before { adapter.submit(build_script(email: ["email1", "email2"])) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
     end
 
     context "with :email_on_started" do
       context "as true" do
         before { adapter.submit(build_script(email_on_started: true)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(email_on_started: false)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
     end
 
@@ -140,99 +202,159 @@ describe OodCore::Job::Adapters::PSIJ do
       context "as true" do
         before { adapter.submit(build_script(email_on_terminated: true)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
 
       context "as false" do
         before { adapter.submit(build_script(email_on_terminated: false)) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
     end
 
     context "with :email_on_started and :email_on_terminated" do
       before { adapter.submit(build_script(email_on_started: true, email_on_terminated: true)) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
     end
+
+    let(:stdin_job_name) {
+      {
+        name: "my_job",
+        executable: "~/ood_tmp/run.sh",
+        stdout_path: stdout_path,
+        stderr_path: stderr_path,
+        attributes: { queue_name: "debug" },
+        resources: { __version: 1 }
+      }.to_json
+    }
 
     context "with :job_name" do
       before { adapter.submit(build_script(job_name: "my_job")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"name\":\"my_job\",\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_job_name) }
     end
 
     context "with :shell_path" do
       before { adapter.submit(build_script(shell_path: "/path/to/shell")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
     end
+
+    let(:stdin) {
+      {
+        executable: "~/ood_tmp/run.sh",
+        stdin_path: "/path/to/input",
+        stdout_path: stdout_path,
+        stderr_path: stderr_path,
+        attributes: { queue_name: "debug" },
+        resources: { __version: 1 }
+      }.to_json
+    }
 
     context "with :input_path" do
       before { adapter.submit(build_script(input_path: "/path/to/input")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdin_path\":\"/path/to/input\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin) }
     end
+
+    let(:stdin_out) {
+      json = JSON.parse(stdin_json)
+      json["stdout_path"] = "/path/to/output"
+      json.to_json
+    }
 
     context "with :output_path" do
       before { adapter.submit(build_script(output_path: "/path/to/output")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/path/to/output\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_out) }
     end
+
+    let(:stdin_err) {
+      json = JSON.parse(stdin_json)
+      json["stderr_path"] = "/path/to/error"
+      json.to_json
+    }
 
     context "with :error_path" do
       before { adapter.submit(build_script(error_path: "/path/to/error")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/path/to/error\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_err) }
     end
+
+    let(:stdin_resv) {
+      json = JSON.parse(stdin_json)
+      json["attributes"]["reservation_id"] = "my_rsv"
+      json.to_json
+    }
 
     context "with :reservation_id" do
       before { adapter.submit(build_script(reservation_id: "my_rsv")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{\"reservation_id\":\"my_rsv\"},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_resv) }
     end
 
     context "with :priority" do
       before { adapter.submit(build_script(priority: 123)) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
     end
 
     context "with :start_time" do
       before { adapter.submit(build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
     end
+
+    let(:stdin_acct) {
+      json = JSON.parse(stdin_json)
+      json["attributes"]["account"] = "my_account"
+      json.to_json
+    }
 
     context "with :accounting_id" do
       before { adapter.submit(build_script(accounting_id: "my_account")) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{\"account\":\"my_account\"},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_acct) }
     end
+
+    let(:stdin_walltime) {
+      json = JSON.parse(stdin_json)
+      json["attributes"]["duration"] = 94534
+      json.to_json
+    }
 
     context "with :wall_time" do
       before { adapter.submit(build_script(wall_time: 94534)) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{\"duration\":94534},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_walltime) }
     end
+
+    let(:stdin_native) {
+      json = JSON.parse(stdin_json)
+      json["attributes"]["custom_attributes"] =  {
+        AAA: "B", C:"DDD", EEE:"", FFF:""
+      }
+      json.to_json
+    }
 
     context "with :native" do
       before { adapter.submit(build_script(native: ["--AAA", "B", "-C", "DDD", "--EEE", "--FFF"])) }
 
-      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{\"custom_attributes\":{\"AAA\":\"B\",\"C\":\"DDD\",\"EEE\":\"\",\"FFF\":\"\"}},\"resources\":{\"__version\":1}}") }
+      it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_native) }
     end
 
     %i(after afterok afternotok afterany).each do |after|
       context "and :#{after} is defined as a single job id" do
         before { adapter.submit(build_script, after => "job_id") }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
 
       context "and :#{after} is defined as multiple job ids" do
         before { adapter.submit(build_script, after => ["job1", "job2"]) }
 
-        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: "{\"executable\":\"~/ood_tmp/run.sh\",\"stdout_path\":\"/home/ohmura/src/ood_core/stdout.txt\",\"stderr_path\":\"/home/ohmura/src/ood_core/stderr.txt\",\"attributes\":{},\"resources\":{\"__version\":1}}") }
+        it { expect(psij).to have_received(:submit_job_path).with(args: ["slurm"], chdir: nil, stdin: stdin_json) }
       end
     end
 
