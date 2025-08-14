@@ -875,8 +875,31 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
+          # Parse the memory string returned by Slurm and return bytes
+          def parse_memory(mem_str)
+            return nil if mem_str.nil? || mem_str.strip.empty? || !mem_str.match(/[KMGTP]/)
+
+            unit = mem_str.match(/[KMGTP]/).to_s
+            value = mem_str.match(/\d+/).to_s
+
+            return nil unless unit && value
+
+            factor = {
+              "K" => 1024,
+              "M" => 1024**2,
+              "G" => 1024**3,
+              "T" => 1024**4,
+              "P" => 1024**5
+            }
+
+            return nil unless factor[unit]
+
+            value.to_i * factor[unit]
+          end
+
           # Parse hash describing Slurm job status
           def parse_job_info(v)
+
             allocated_nodes = parse_nodes(v[:node_list])
             if allocated_nodes.empty?
               if v[:scheduled_nodes] && v[:scheduled_nodes] != "(null)"
@@ -902,8 +925,21 @@ module OodCore
               submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
               dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
               native: v,
-              gpus: self.class.gpus_from_gres(v[:gres])
+              gpus: self.class.gpus_from_gres(v[:gres]),
+              total_memory: compute_total_memory(v, allocated_nodes)
             )
+          end
+
+          # Compute the total memory being used by a job
+          # @return [Integer] total memory in bytes
+          def compute_total_memory(v, allocated_nodes)
+            return nil unless v[:min_memory].to_s.match?(/\d+/)
+
+            min_memory = parse_memory(v[:min_memory])
+            
+            return nil if min_memory.nil?
+
+            min_memory * allocated_nodes.count
           end
 
           # Replace '(null)' with nil
