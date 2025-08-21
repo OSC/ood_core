@@ -430,7 +430,6 @@ module OodCore
               end.to_h.symbolize_keys
 
               hsh[:name] = hsh[:PartitionName]
-              hsh[:qos] =  hsh[:QoS].to_s == 'N/A' ? [] : hsh[:QoS].to_s.split(',')
               hsh[:allow_accounts] = if hsh[:AllowAccounts].nil? || hsh[:AllowAccounts].to_s == 'ALL'
                                        nil
                                      else
