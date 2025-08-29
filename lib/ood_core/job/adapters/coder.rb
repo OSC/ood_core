@@ -3,6 +3,11 @@ require "ood_core/refinements/array_extensions"
 require 'net/http'
 require 'json'
 require 'etc'
+Dir.glob('/var/lib/gems/3.1.0/gems/*').each do |dir|
+  if File.directory?(dir) && dir.end_with?('-lib') == false
+    $LOAD_PATH.unshift("#{dir}/lib")
+  end
+end
 
 module OodCore
   module Job
@@ -10,7 +15,13 @@ module OodCore
       using Refinements::HashExtensions
 
       def self.build_coder(config)
-        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys)
+        config = config.to_h.symbolize_keys
+        if config[:auth]["cloud"] == "openstack"
+          credential_class = OpenStackCredentials
+        else
+          raise ArgumentError, "Unsupported credentials for cloud type: #{config[:auth]['cloud']}"
+        end
+        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys, credential_class)
         Adapters::Coder.new(batch)
       end
     end
