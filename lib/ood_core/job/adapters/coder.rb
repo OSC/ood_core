@@ -19,11 +19,11 @@ module OodCore
       def self.build_coder(config)
         config = config.to_h.symbolize_keys
         if config[:auth]["cloud"] == "openstack"
-          credential_class = OpenStackCredentials
+          credentials = OpenStackCredentials.new(config[:auth]["url"]) 
         else
           raise ArgumentError, "Unsupported credentials for cloud type: #{config[:auth]['cloud']}"
         end
-        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys, credential_class)
+        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys, credentials)
         Adapters::Coder.new(batch)
       end
     end

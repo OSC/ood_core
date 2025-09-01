@@ -7,14 +7,14 @@ require "async/http/internet/instance"
 class OodCore::Job::Adapters::Coder::Batch
   require_relative "coder_job_info"
   class Error < StandardError; end
-  def initialize(config, credential_class)
+  def initialize(config, credentials)
     @host = config[:host]
     @token = config[:token]
     @service_user = config[:service_user]
     @cloud = config[:auth]["cloud"]
     @deletion_max_attempts = config[:deletion_max_attempts] || 5
     @deletion_timeout_interval_seconds = config[:deletion_timeout_interval] || 10
-    @credentials = credential_class.new(config[:auth]["url"])  
+    @credentials = credentials 
   end
 
   def get_rich_parameters(coder_parameters, project_id, app_credentials)
