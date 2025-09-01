@@ -31,7 +31,7 @@ module OodCore
     module Adapters
       attr_reader :host, :token
 
-      # The adapter class for Kubernetes.
+      # The adapter class for Coder.
       class Coder < Adapter
 
         using Refinements::ArrayExtensions
