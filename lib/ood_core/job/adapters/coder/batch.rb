@@ -45,7 +45,7 @@ class OodCore::Job::Adapters::Coder::Batch
     project_id = script.native[:project_id]
     coder_parameters = script.native[:coder_parameters]
     endpoint = "#{@host}/api/v2/organizations/#{org_id}/members/#{@service_user}/workspaces"
-    app_credentials = @credentials.generate_app_credentials(project_id)
+    app_credentials = @credentials.generate_credentials(project_id, username)
     headers = get_headers(@token)
     workspace_name = "#{username}-#{script.native[:workspace_name]}-#{rand(2_821_109_907_456).to_s(36)}"
     body = {
@@ -75,7 +75,7 @@ class OodCore::Job::Adapters::Coder::Batch
       puts "#{Time.now.inspect} Deleting workspace (attempt #{attempt + 1}/#{5})"
     end
   
-    @credentials.destroy_app_credentials(credentials)
+    @credentials.destroy_credentials(credentials, workspace_json(id).dig("latest_build", "status"), id, username)
   end
   
   def wait_for_workspace_deletion(id)

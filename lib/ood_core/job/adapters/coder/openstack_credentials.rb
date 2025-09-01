@@ -1,6 +1,6 @@
 require "fog/openstack"
 require "json"
-
+require "ood_core/job/adapters/coder/credentials"
 
 class OpenStackCredentials < CredentialsInterface
   def initialize(auth_url)
@@ -78,6 +78,29 @@ class OpenStackCredentials < CredentialsInterface
     file_path = "/home/#{username}/#{id}_credentials.json"
     File.write(file_path, JSON.generate(app_credentials))
   end
+
+
+  def destroy_credentials(os_app_credentials, deletion_status, job_id, username)
+    return if os_app_credentials.nil?
+    
+  
+    connection = create_fog_connection(os_app_credentials)
+    credentials_to_destroy = find_os_application_credentials(connection, os_app_credentials)
+  
+    if deletion_status != "deleted"
+      File.delete("/home/#{username}/#{id}_credentials.json")
+      puts "Workspace deletion timed out, credentials with id #{os_app_credentials['id']} of user #{os_app_credentials['user_id']} were not destroyed"
+      return
+    end
+
+    begin
+      credentials_to_destroy.destroy
+    rescue Excon::Error::Forbidden => e
+      puts "Error destroying application credentials with id #{os_app_credentials['id']} #{e}"
+    end
+  end
+
+
   private
   def create_fog_connection(os_app_credentials)
     Fog::OpenStack::Identity.new({
@@ -91,25 +114,5 @@ class OpenStackCredentials < CredentialsInterface
   private
   def find_os_application_credentials(connection, os_app_credentials)
     connection.application_credentials.find_by_id(os_app_credentials['id'], os_app_credentials['user_id'])
-  end
-
-  def destroy_credentials(os_app_credentials)
-    return if os_app_credentials.nil?
-    
-  
-    connection = create_fog_connection(os_app_credentials)
-    credentials_to_destroy = find_os_application_credentials(connection, os_app_credentials)
-  
-    if workspace_json(id) && workspace_json(id).dig("latest_build", "status") != "deleted"
-      File.delete("/home/#{username}/#{id}_credentials.json")
-      puts "Workspace deletion timed out, credentials with id #{os_app_credentials['id']} of user #{os_app_credentials['user_id']} were not destroyed"
-      return
-    end
-
-    begin
-      credentials_to_destroy.destroy
-    rescue Excon::Error::Forbidden => e
-      puts "Error destroying application credentials with id #{os_app_credentials['id']} #{e}"
-    end
   end
 end

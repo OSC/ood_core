@@ -7,12 +7,14 @@ Dir.glob('/var/lib/gems/3.1.0/gems/*').each do |dir|
   if File.directory?(dir) && dir.end_with?('-lib') == false
     $LOAD_PATH.unshift("#{dir}/lib")
   end
-end
+end #required for async and fog/openstack to work
 
 module OodCore
   module Job
     class Factory
       using Refinements::HashExtensions
+
+      require "ood_core/job/adapters/coder/openstack_credentials"
 
       def self.build_coder(config)
         config = config.to_h.symbolize_keys
