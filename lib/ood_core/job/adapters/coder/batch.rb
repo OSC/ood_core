@@ -1,6 +1,5 @@
 require "ood_core/refinements/hash_extensions"
 require "json"
-require "async/http/internet/instance"
   
 
 # Utility class for the Coder adapter to interact with the Coders API.
@@ -163,26 +162,26 @@ class OodCore::Job::Adapters::Coder::Batch
 
   def api_call(method, endpoint, headers, body = nil)
     uri = URI(endpoint)
-    Sync do
-      case method.downcase
-      when 'get'
-        function = Async::HTTP::Internet::method(:get)
-      when 'post'
-        function = Async::HTTP::Internet::method(:post)
-      when 'delete'
-        function = Async::HTTP::Internet::method(:delete)
-      else
-        raise ArgumentError, "Invalid HTTP method: #{method}"
-      end
+    case method.downcase
+    when 'get'
+      request = Net::HTTP::Get.new(uri, headers)
+    when 'post'
+      request = Net::HTTP::Post.new(uri, headers)
+    when 'delete'
+      request = Net::HTTP::Delete.new(uri, headers)
+    else
+      raise ArgumentError, "Invalid HTTP method: #{method}"
+    end
 
-      body = body.to_json if body
-      response = function.call(uri, headers, body)
-
-      if response.success?
-        JSON.parse(response.read)
-      else
-        raise Error, "HTTP Error: #{response.status} #{response.read}  for request #{endpoint} and body #{body}"
-      end
+    request.body = body.to_json if body
+    response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
+      http.request(request)
+    end
+    case response
+    when Net::HTTPSuccess
+      JSON.parse(response.body)
+    else
+      raise Error, "HTTP Error: #{response.code} #{response.message}  for request #{endpoint} and body #{body}"
     end
   end
 
