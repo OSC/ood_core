@@ -80,7 +80,7 @@ class OpenStackCredentials < CredentialsInterface
   end
 
 
-  def destroy_credentials(os_app_credentials, deletion_status, job_id, username)
+  def destroy_credentials(os_app_credentials, deletion_status, id, username)
     return if os_app_credentials.nil?
     
   
