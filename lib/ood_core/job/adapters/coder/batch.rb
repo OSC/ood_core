@@ -10,9 +10,8 @@ class OodCore::Job::Adapters::Coder::Batch
     @host = config[:host]
     @token = config[:token]
     @service_user = config[:service_user]
-    @cloud = config[:auth]["cloud"]
-    @deletion_max_attempts = config[:deletion_max_attempts] || 5
-    @deletion_timeout_interval_seconds = config[:deletion_timeout_interval] || 10
+    @credential_deletion_max_attempts = config[:credential_deletion_max_attempts] || 5
+    @credential_deletion_timeout_interval = config[:credential_deletion_timeout_interval] || 10
     @credentials = credentials 
   end
 
@@ -78,8 +77,8 @@ class OodCore::Job::Adapters::Coder::Batch
   end
   
   def wait_for_workspace_deletion(id)
-    max_attempts = @deletion_max_attempts
-    timeout_interval = @deletion_timeout_interval_seconds
+    max_attempts = @credential_deletion_max_attempts
+    timeout_interval = @credential_deletion_timeout_interval
   
     max_attempts.times do |attempt|
       break unless workspace_json(id) && workspace_json(id).dig("latest_build", "status") == "deleting"
