@@ -3,11 +3,6 @@ require "ood_core/refinements/array_extensions"
 require 'net/http'
 require 'json'
 require 'etc'
-Dir.glob('/var/lib/gems/3.1.0/gems/*').each do |dir|
-  if File.directory?(dir) && dir.end_with?('-lib') == false
-    $LOAD_PATH.unshift("#{dir}/lib")
-  end
-end #required for async and fog/openstack to work
 
 module OodCore
   module Job
