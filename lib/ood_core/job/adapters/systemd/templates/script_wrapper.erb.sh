@@ -1,6 +1,6 @@
 #!/bin/bash
 SSH_HOSTS=(<%= ssh_hosts.join(' ').to_s %>)
-hostnames=`hostname -A`
+hostnames=`hostname -A 2>/dev/null || hostname`
 for host in ${SSH_HOSTS[@]}
 do
     if [[ " ${hostnames[@]} " =~ " ${host} " ]]; then
