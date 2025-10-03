@@ -62,16 +62,19 @@ class OodCore::Job::Adapters::Sge::Batch
   # @param owner [#to_s] the owner or owner list
   # @return [Array<OodCore::Job::Info>]
   def get_all(owner: nil)
-    listener = QstatXmlRListener.new
-    argv = ['qstat', '-r', '-xml']
-    argv.concat ['-u', owner] unless owner.nil?
-    REXML::Parsers::StreamParser.new(call(*argv), listener).parse
+    begin
+      listener = QstatXmlRListener.new
+      argv = ['qstat', '-r', '-xml']
+      argv.concat ['-u', owner] unless owner.nil?
+      REXML::Parsers::StreamParser.new(call(*argv), listener).parse
 
-    listener.parsed_jobs.map{
-      |job_hash| OodCore::Job::Info.new(
-        **post_process_qstat_job_hash(job_hash)
-      )
-    }
+      listener.parsed_jobs.map do |job_hash| 
+        OodCore::Job::Info.new(**post_process_qstat_job_hash(job_hash))
+      end
+    rescue REXML::ParseException => e
+      warn("Error parsing response: #{e}")
+      []
+    end
   end
 
   # Get OodCore::Job::Info for a job_id that may still be in the queue
