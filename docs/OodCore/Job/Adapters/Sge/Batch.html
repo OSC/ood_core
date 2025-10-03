@@ -1242,17 +1242,17 @@
       <pre class="lines">
 
 
-169
-170
-171
 172
 173
 174
 175
-176</pre>
+176
+177
+178
+179</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 169</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 172</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='label'>env:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>stdin:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>chdir:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_cmd'>cmd</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Helper.html" title="OodCore::Job::Adapters::Helper (class)">Helper</a></span></span><span class='period'>.</span><span class='id identifier rubyid_bin_path'><span class='object_link'><a href="../Helper.html#bin_path-class_method" title="OodCore::Job::Adapters::Helper.bin_path (method)">bin_path</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='id identifier rubyid_bin'>bin</span><span class='comma'>,</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='rparen'>)</span>
@@ -1308,12 +1308,12 @@
       <pre class="lines">
 
 
-136
-137
-138</pre>
+139
+140
+141</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 136</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 139</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_can_use_drmaa?'>can_use_drmaa?</span>
   <span class='ivar'>@can_use_drmaa</span>
@@ -1368,12 +1368,12 @@
       <pre class="lines">
 
 
-157
-158
-159</pre>
+160
+161
+162</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 157</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 160</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qdel</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
@@ -1459,22 +1459,28 @@
 72
 73
 74
-75</pre>
+75
+76
+77
+78</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 64</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_all'>get_all</span><span class='lparen'>(</span><span class='label'>owner:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_listener'>listener</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../../QstatXmlRListener.html" title="QstatXmlRListener (class)">QstatXmlRListener</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../../../QstatXmlRListener.html#initialize-instance_method" title="QstatXmlRListener#initialize (method)">new</a></span></span>
-  <span class='id identifier rubyid_argv'>argv</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qstat</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-r</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-xml</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_argv'>argv</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-u</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_owner'>owner</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_owner'>owner</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-  <span class='const'>REXML</span><span class='op'>::</span><span class='const'>Parsers</span><span class='op'>::</span><span class='const'>StreamParser</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_argv'>argv</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_listener'>listener</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span>
+  <span class='kw'>begin</span>
+    <span class='id identifier rubyid_listener'>listener</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../../QstatXmlRListener.html" title="QstatXmlRListener (class)">QstatXmlRListener</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../../../QstatXmlRListener.html#initialize-instance_method" title="QstatXmlRListener#initialize (method)">new</a></span></span>
+    <span class='id identifier rubyid_argv'>argv</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qstat</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-r</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-xml</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+    <span class='id identifier rubyid_argv'>argv</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-u</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_owner'>owner</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_owner'>owner</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='const'>REXML</span><span class='op'>::</span><span class='const'>Parsers</span><span class='op'>::</span><span class='const'>StreamParser</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='op'>*</span><span class='id identifier rubyid_argv'>argv</span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_listener'>listener</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span>
 
-  <span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_parsed_jobs'>parsed_jobs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lbrace'>{</span>
-    <span class='op'>|</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../Info.html#initialize-instance_method" title="OodCore::Job::Info#initialize (method)">new</a></span></span><span class='lparen'>(</span>
-      <span class='op'>**</span><span class='id identifier rubyid_post_process_qstat_job_hash'>post_process_qstat_job_hash</span><span class='lparen'>(</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='rparen'>)</span>
-    <span class='rparen'>)</span>
-  <span class='rbrace'>}</span>
+    <span class='id identifier rubyid_listener'>listener</span><span class='period'>.</span><span class='id identifier rubyid_parsed_jobs'>parsed_jobs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='op'>|</span> 
+      <span class='const'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../Info.html#initialize-instance_method" title="OodCore::Job::Info#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_post_process_qstat_job_hash'>post_process_qstat_job_hash</span><span class='lparen'>(</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='rparen'>)</span><span class='rparen'>)</span>
+    <span class='kw'>end</span>
+  <span class='kw'>rescue</span> <span class='const'>REXML</span><span class='op'>::</span><span class='const'>ParseException</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_e'>e</span>
+    <span class='id identifier rubyid_warn'>warn</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Error parsing response: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_e'>e</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+    <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1543,9 +1549,6 @@
       <pre class="lines">
 
 
-88
-89
-90
 91
 92
 93
@@ -1573,10 +1576,13 @@
 115
 116
 117
-118</pre>
+118
+119
+120
+121</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 91</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_info_enqueued_job'>get_info_enqueued_job</span><span class='lparen'>(</span><span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_job_info'>job_info</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Info.html" title="OodCore::Job::Info (class)">Info</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="../../Info.html#initialize-instance_method" title="OodCore::Job::Info#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>id:</span> <span class='id identifier rubyid_job_id'>job_id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='comma'>,</span> <span class='label'>status:</span> <span class='symbol'>:completed</span><span class='rparen'>)</span>
@@ -1655,14 +1661,14 @@
       <pre class="lines">
 
 
-130
-131
-132
 133
-134</pre>
+134
+135
+136
+137</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 130</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 133</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_status_from_drmaa?'>get_status_from_drmaa?</span><span class='lparen'>(</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='rparen'>)</span>
   <span class='comment'># DRMAA does not recognize the parent task in job arrays
@@ -1704,12 +1710,12 @@
       <pre class="lines">
 
 
-235
-236
-237</pre>
+238
+239
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 235</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 238</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_status_from_drmma'>get_status_from_drmma</span><span class='lparen'>(</span><span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_translate_drmaa_state'>translate_drmaa_state</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="../../../../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../../DRMAA/SessionSingleton.html" title="DRMAA::SessionSingleton (class)">SessionSingleton</a></span></span><span class='period'>.</span><span class='id identifier rubyid_instance'>instance</span><span class='period'>.</span><span class='id identifier rubyid_job_ps'>job_ps</span><span class='lparen'>(</span><span class='id identifier rubyid_job_id'>job_id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -1764,12 +1770,12 @@
       <pre class="lines">
 
 
-143
-144
-145</pre>
+146
+147
+148</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 143</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 146</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qhold</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
@@ -1854,9 +1860,6 @@
       <pre class="lines">
 
 
-222
-223
-224
 225
 226
 227
@@ -1864,10 +1867,13 @@
 229
 230
 231
-232</pre>
+232
+233
+234
+235</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 222</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 225</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_post_process_qstat_job_hash'>post_process_qstat_job_hash</span><span class='lparen'>(</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='rparen'>)</span>
   <span class='comment'># dispatch is not set if the job is not running
@@ -1930,12 +1936,12 @@
       <pre class="lines">
 
 
-150
-151
-152</pre>
+153
+154
+155</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 150</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 153</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qrls</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_job_id'>job_id</span><span class='rparen'>)</span>
@@ -1990,12 +1996,12 @@
       <pre class="lines">
 
 
-164
-165
-166</pre>
+167
+168
+169</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 164</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 167</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_content'>content</span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
     <span class='ivar'>@helper</span><span class='period'>.</span><span class='id identifier rubyid_parse_job_id_from_qsub'>parse_job_id_from_qsub</span><span class='lparen'>(</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>qsub</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='comma'>,</span> <span class='symbol'>:stdin</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_content'>content</span><span class='rparen'>)</span><span class='rparen'>)</span>
@@ -2033,12 +2039,12 @@
       <pre class="lines">
 
 
-218
-219
-220</pre>
+221
+222
+223</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 218</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 221</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_translate_drmaa_state'>translate_drmaa_state</span><span class='lparen'>(</span><span class='id identifier rubyid_drmaa_state_code'>drmaa_state_code</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="../../../../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../../../DRMAA.html#DRMMA_TO_OOD_STATE_MAP-constant" title="DRMAA::DRMMA_TO_OOD_STATE_MAP (constant)">DRMMA_TO_OOD_STATE_MAP</a></span></span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_drmaa_state_code'>drmaa_state_code</span><span class='comma'>,</span> <span class='symbol'>:undetermined</span><span class='rparen'>)</span>
@@ -2076,12 +2082,12 @@
       <pre class="lines">
 
 
-214
-215
-216</pre>
+217
+218
+219</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 214</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 217</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_translate_sge_state'>translate_sge_state</span><span class='lparen'>(</span><span class='id identifier rubyid_sge_state_code'>sge_state_code</span><span class='rparen'>)</span>
   <span class='const'><span class='object_link'><a href="#STATE_MAP-constant" title="OodCore::Job::Adapters::Sge::Batch::STATE_MAP (constant)">STATE_MAP</a></span></span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_sge_state_code'>sge_state_code</span><span class='comma'>,</span> <span class='symbol'>:undetermined</span><span class='rparen'>)</span>
@@ -2119,18 +2125,18 @@
       <pre class="lines">
 
 
-120
-121
-122
 123
 124
 125
 126
 127
-128</pre>
+128
+129
+130
+131</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 120</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge/batch.rb', line 123</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_update_job_hash_status!'>update_job_hash_status!</span><span class='lparen'>(</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_get_status_from_drmaa?'>get_status_from_drmaa?</span><span class='lparen'>(</span><span class='id identifier rubyid_job_hash'>job_hash</span><span class='rparen'>)</span>
@@ -2151,7 +2157,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Aug  8 19:29:45 2025 by
+  Generated on Fri Oct  3 17:58:01 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>
