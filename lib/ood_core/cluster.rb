@@ -78,7 +78,13 @@ module OodCore
     end
 
     def title
-      metadata.title || id.to_s&.titleize || id.to_s
+      if !metadata.title.nil?
+        metadata.title
+      elsif id.to_s.respond_to?(:titleize)
+        id.to_s.titleize
+      else
+        id.to_s
+      end
     end
 
     # Metadata that provides extra information about this cluster
