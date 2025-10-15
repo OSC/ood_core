@@ -77,6 +77,16 @@ module OodCore
       end
     end
 
+    def title
+      if !metadata.title.nil?
+        metadata.title
+      elsif id.to_s.respond_to?(:titleize)
+        id.to_s.titleize
+      else
+        id.to_s
+      end
+    end
+
     # Metadata that provides extra information about this cluster
     # @return [OpenStruct] the metadata
     def metadata
