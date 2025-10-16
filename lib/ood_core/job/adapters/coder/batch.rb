@@ -1,26 +1,25 @@
 require "ood_core/refinements/hash_extensions"
 require "json"
+  
 
 # Utility class for the Coder adapter to interact with the Coders API.
 class OodCore::Job::Adapters::Coder::Batch
   require_relative "coder_job_info"
   class Error < StandardError; end
-  def initialize(config)
+  def initialize(config, credentials)
     @host = config[:host]
     @token = config[:token]
+    @service_user = config[:service_user]
+    @credential_deletion_max_attempts = config[:credential_deletion_max_attempts] || 5
+    @credential_deletion_timeout_interval = config[:credential_deletion_timeout_interval] || 10
+    @credentials = credentials 
   end
 
-  def get_os_app_credentials(username, project_id)
-    credentials_file = File.read("/home/#{username}/application_credentials.json")
-    credentials = JSON.parse(credentials_file)
-    credentials.find { |cred| cred["project_id"] == project_id }
-  end
-
-  def get_rich_parameters(coder_parameters, project_id, os_app_credentials)
+  def get_rich_parameters(coder_parameters, project_id, app_credentials)
     rich_parameter_values = [
-      { name: "application_credential_name", value: os_app_credentials["name"] },
-      { name: "application_credential_id", value: os_app_credentials["id"] },
-      { name: "application_credential_secret", value: os_app_credentials["secret"] },
+      { name: "application_credential_name", value: app_credentials[:name] },
+      { name: "application_credential_id", value: app_credentials[:id] },
+      { name: "application_credential_secret", value: app_credentials[:secret] },
       {name: "project_id", value: project_id }
     ]
     if coder_parameters
@@ -43,34 +42,59 @@ class OodCore::Job::Adapters::Coder::Batch
     org_id = script.native[:org_id]
     project_id = script.native[:project_id]
     coder_parameters = script.native[:coder_parameters]
-    endpoint = "https://#{@host}/api/v2/organizations/#{org_id}/members/#{username}/workspaces"
-    os_app_credentials = get_os_app_credentials(username, project_id)
+    endpoint = "#{@host}/api/v2/organizations/#{org_id}/members/#{@service_user}/workspaces"
+    app_credentials = @credentials.generate_credentials(project_id, username)
     headers = get_headers(@token)
+    workspace_name = "#{username}-#{script.native[:workspace_name]}-#{rand(2_821_109_907_456).to_s(36)}"
     body = {
-      template_id: script.native[:template_id],
-      template_version_name: script.native[:template_version_name],
-      name: "#{username}-#{script.native[:workspace_name]}-#{rand(2_821_109_907_456).to_s(36)}",
-      rich_parameter_values: get_rich_parameters(coder_parameters, project_id, os_app_credentials),
+      template_version_id: script.native[:template_version_id],
+      name: workspace_name,
+      rich_parameter_values: get_rich_parameters(coder_parameters, project_id, app_credentials),
     }
 
     resp = api_call('post', endpoint, headers, body)
+    @credentials.save_credentials(resp["id"], username, app_credentials)
     resp["id"]
+
   end
 
   def delete(id)
-    endpoint = "https://#{@host}/api/v2/workspaces/#{id}/builds"
+    endpoint = "#{@host}/api/v2/workspaces/#{id}/builds"
     headers = get_headers(@token)
     body = {
       'orphan' => false,
       'transition' => 'delete'
     }
-    res = api_call('post', endpoint, headers, body)
+    api_call('post', endpoint, headers, body)
+  
+    credentials = @credentials.load_credentials(id, username)
+  
+    wait_for_workspace_deletion(id) do |attempt|
+      puts "#{Time.now.inspect} Deleting workspace (attempt #{attempt + 1}/#{5})"
+    end
+  
+    @credentials.destroy_credentials(credentials, workspace_json(id).dig("latest_build", "status"), id, username)
+  end
+  
+  def wait_for_workspace_deletion(id)
+    max_attempts = @credential_deletion_max_attempts
+    timeout_interval = @credential_deletion_timeout_interval
+  
+    max_attempts.times do |attempt|
+      break unless workspace_json(id) && workspace_json(id).dig("latest_build", "status") == "deleting"
+      yield(attempt + 1)
+      sleep(timeout_interval)
+    end
+  end
+
+  def workspace_json(id)
+    endpoint = "#{@host}/api/v2/workspaces/#{id}?include_deleted=true"
+    headers = get_headers(@token)
+    api_call('get', endpoint, headers)
   end
 
   def info(id)
-    endpoint = "https://#{@host}/api/v2/workspaces/#{id}?include_deleted=true"
-    headers = get_headers(@token)
-    workspace_info_from_json(api_call('get', endpoint, headers))
+    workspace_info_from_json(workspace_json(id))
   end
 
   def coder_state_to_ood_status(coder_state)
@@ -137,7 +161,6 @@ class OodCore::Job::Adapters::Coder::Batch
 
   def api_call(method, endpoint, headers, body = nil)
     uri = URI(endpoint)
-
     case method.downcase
     when 'get'
       request = Net::HTTP::Get.new(uri, headers)
@@ -150,11 +173,9 @@ class OodCore::Job::Adapters::Coder::Batch
     end
 
     request.body = body.to_json if body
-
     response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: uri.scheme == 'https') do |http|
       http.request(request)
     end
-
     case response
     when Net::HTTPSuccess
       JSON.parse(response.body)

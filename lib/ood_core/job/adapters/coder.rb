@@ -9,8 +9,16 @@ module OodCore
     class Factory
       using Refinements::HashExtensions
 
+      require "ood_core/job/adapters/coder/openstack_credentials"
+
       def self.build_coder(config)
-        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys)
+        config = config.to_h.symbolize_keys
+        if config[:auth]["cloud"] == "openstack"
+          credentials = OpenStackCredentials.new(config[:auth]["url"]) 
+        else
+          raise ArgumentError, "Unsupported credentials for cloud type: #{config[:auth]['cloud']}"
+        end
+        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys, credentials)
         Adapters::Coder.new(batch)
       end
     end
@@ -18,7 +26,7 @@ module OodCore
     module Adapters
       attr_reader :host, :token
 
-      # The adapter class for Kubernetes.
+      # The adapter class for Coder.
       class Coder < Adapter
 
         using Refinements::ArrayExtensions
