@@ -25,9 +25,9 @@ jobs:
 
       - name: save docs and publish
         run: |
-          git clone https://${{ secrets.OSC_ROBOT_GH_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
           git config --global user.name "${{ secrets.OSC_ROBOT_GH_USER }}"
           git config --global user.email "${{ secrets.OSC_ROBOT_GH_USER_EMAIL }}"
+          git clone https://${{ secrets.OSC_ROBOT_GH_PUB_REPO_TOKEN }}@github.com/osc/ood_core.git /tmp/core
           cd /tmp/core
           git checkout gh-pages
           rm -rf docs/
