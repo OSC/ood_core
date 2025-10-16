@@ -270,29 +270,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#get_os_app_credentials-instance_method" title="#get_os_app_credentials (instance method)">#<strong>get_os_app_credentials</strong>(username, project_id)  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#get_rich_parameters-instance_method" title="#get_rich_parameters (instance method)">#<strong>get_rich_parameters</strong>(coder_parameters, project_id, os_app_credentials)  &#x21d2; Object </a>
+      <a href="#get_rich_parameters-instance_method" title="#get_rich_parameters (instance method)">#<strong>get_rich_parameters</strong>(coder_parameters, project_id, app_credentials)  &#x21d2; Object </a>
     
 
     
@@ -336,7 +314,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(config)  &#x21d2; Batch </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(config, credentials)  &#x21d2; Batch </a>
     
 
     
@@ -428,6 +406,28 @@
         <li class="public ">
   <span class="summary_signature">
     
+      <a href="#wait_for_workspace_deletion-instance_method" title="#wait_for_workspace_deletion (instance method)">#<strong>wait_for_workspace_deletion</strong>(id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#wallclock_time-instance_method" title="#wallclock_time (instance method)">#<strong>wallclock_time</strong>(json_data, status)  &#x21d2; Object </a>
     
 
@@ -469,6 +469,28 @@
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#workspace_json-instance_method" title="#workspace_json (instance method)">#<strong>workspace_json</strong>(id)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
     </ul>
   
 
@@ -478,7 +500,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(config)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::Coder::Batch (class)">Batch</a></span></tt> 
+    #<strong>initialize</strong>(config, credentials)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Adapters::Coder::Batch (class)">Batch</a></span></tt> 
   
 
   
@@ -501,17 +523,25 @@
       <pre class="lines">
 
 
-8
 9
 10
-11</pre>
+11
+12
+13
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 8</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 9</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='comma'>,</span> <span class='id identifier rubyid_credentials'>credentials</span><span class='rparen'>)</span>
   <span class='ivar'>@host</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='lbracket'>[</span><span class='symbol'>:host</span><span class='rbracket'>]</span>
   <span class='ivar'>@token</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='lbracket'>[</span><span class='symbol'>:token</span><span class='rbracket'>]</span>
+  <span class='ivar'>@service_user</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='lbracket'>[</span><span class='symbol'>:service_user</span><span class='rbracket'>]</span>
+  <span class='ivar'>@credential_deletion_max_attempts</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='lbracket'>[</span><span class='symbol'>:credential_deletion_max_attempts</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='int'>5</span>
+  <span class='ivar'>@credential_deletion_timeout_interval</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='lbracket'>[</span><span class='symbol'>:credential_deletion_timeout_interval</span><span class='rbracket'>]</span> <span class='op'>||</span> <span class='int'>10</span>
+  <span class='ivar'>@credentials</span> <span class='op'>=</span> <span class='id identifier rubyid_credentials'>credentials</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -540,40 +570,36 @@
       <pre class="lines">
 
 
-138
-139
-140
-141
-142
-143
-144
-145
-146
-147
-148
-149
-150
-151
-152
-153
-154
-155
-156
-157
-158
-159
-160
-161
 162
 163
-164</pre>
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 138</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 162</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_api_call'>api_call</span><span class='lparen'>(</span><span class='id identifier rubyid_method'>method</span><span class='comma'>,</span> <span class='id identifier rubyid_endpoint'>endpoint</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='comma'>,</span> <span class='id identifier rubyid_body'>body</span> <span class='op'>=</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_uri'>uri</span> <span class='op'>=</span> <span class='const'>URI</span><span class='lparen'>(</span><span class='id identifier rubyid_endpoint'>endpoint</span><span class='rparen'>)</span>
-
   <span class='kw'>case</span> <span class='id identifier rubyid_method'>method</span><span class='period'>.</span><span class='id identifier rubyid_downcase'>downcase</span>
   <span class='kw'>when</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>get</span><span class='tstring_end'>&#39;</span></span>
     <span class='id identifier rubyid_request'>request</span> <span class='op'>=</span> <span class='const'>Net</span><span class='op'>::</span><span class='const'>HTTP</span><span class='op'>::</span><span class='const'>Get</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='rparen'>)</span>
@@ -586,11 +612,9 @@
   <span class='kw'>end</span>
 
   <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_body'>body</span> <span class='op'>=</span> <span class='id identifier rubyid_body'>body</span><span class='period'>.</span><span class='id identifier rubyid_to_json'>to_json</span> <span class='kw'>if</span> <span class='id identifier rubyid_body'>body</span>
-
   <span class='id identifier rubyid_response'>response</span> <span class='op'>=</span> <span class='const'>Net</span><span class='op'>::</span><span class='const'>HTTP</span><span class='period'>.</span><span class='id identifier rubyid_start'>start</span><span class='lparen'>(</span><span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_hostname'>hostname</span><span class='comma'>,</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_port'>port</span><span class='comma'>,</span> <span class='label'>use_ssl:</span> <span class='id identifier rubyid_uri'>uri</span><span class='period'>.</span><span class='id identifier rubyid_scheme'>scheme</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>https</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_http'>http</span><span class='op'>|</span>
     <span class='id identifier rubyid_http'>http</span><span class='period'>.</span><span class='id identifier rubyid_request'>request</span><span class='lparen'>(</span><span class='id identifier rubyid_request'>request</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-
   <span class='kw'>case</span> <span class='id identifier rubyid_response'>response</span>
   <span class='kw'>when</span> <span class='const'>Net</span><span class='op'>::</span><span class='const'>HTTPSuccess</span>
     <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_response'>response</span><span class='period'>.</span><span class='id identifier rubyid_body'>body</span><span class='rparen'>)</span>
@@ -618,26 +642,26 @@
       <pre class="lines">
 
 
-93
-94
-95
-96
-97
-98
-99
-100
-101
-102
-103
-104
-105
-106
-107
-108
-109</pre>
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 117</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_build_coder_job_info'>build_coder_job_info</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='comma'>,</span> <span class='id identifier rubyid_status'>status</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_coder_output_metadata'>coder_output_metadata</span> <span class='op'>=</span> <span class='id identifier rubyid_json_data'>json_data</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>latest_build</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>resources</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -676,25 +700,25 @@
       <pre class="lines">
 
 
-76
-77
-78
-79
-80
-81
-82
-83
-84
-85
-86
-87
-88
-89
-90
-91</pre>
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 76</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 100</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_coder_state_to_ood_status'>coder_state_to_ood_status</span><span class='lparen'>(</span><span class='id identifier rubyid_coder_state'>coder_state</span><span class='rparen'>)</span>
   <span class='kw'>case</span> <span class='id identifier rubyid_coder_state'>coder_state</span>
@@ -732,7 +756,6 @@
       <pre class="lines">
 
 
-60
 61
 62
 63
@@ -740,19 +763,36 @@
 65
 66
 67
-68</pre>
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 61</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_endpoint'>endpoint</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://</span><span class='embexpr_beg'>#{</span><span class='ivar'>@host</span><span class='embexpr_end'>}</span><span class='tstring_content'>/api/v2/workspaces/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>/builds</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_endpoint'>endpoint</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@host</span><span class='embexpr_end'>}</span><span class='tstring_content'>/api/v2/workspaces/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>/builds</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='id identifier rubyid_get_headers'>get_headers</span><span class='lparen'>(</span><span class='ivar'>@token</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_body'>body</span> <span class='op'>=</span> <span class='lbrace'>{</span>
     <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>orphan</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='kw'>false</span><span class='comma'>,</span>
     <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>transition</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>delete</span><span class='tstring_end'>&#39;</span></span>
   <span class='rbrace'>}</span>
-  <span class='id identifier rubyid_res'>res</span> <span class='op'>=</span> <span class='id identifier rubyid_api_call'>api_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>post</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_endpoint'>endpoint</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='comma'>,</span> <span class='id identifier rubyid_body'>body</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_api_call'>api_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>post</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_endpoint'>endpoint</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='comma'>,</span> <span class='id identifier rubyid_body'>body</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_credentials'>credentials</span> <span class='op'>=</span> <span class='ivar'>@credentials</span><span class='period'>.</span><span class='id identifier rubyid_load_credentials'>load_credentials</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='id identifier rubyid_username'>username</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_wait_for_workspace_deletion'>wait_for_workspace_deletion</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_attempt'>attempt</span><span class='op'>|</span>
+    <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_content'> Deleting workspace (attempt </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_attempt'>attempt</span> <span class='op'>+</span> <span class='int'>1</span><span class='embexpr_end'>}</span><span class='tstring_content'>/</span><span class='embexpr_beg'>#{</span><span class='int'>5</span><span class='embexpr_end'>}</span><span class='tstring_content'>)</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='ivar'>@credentials</span><span class='period'>.</span><span class='id identifier rubyid_destroy_credentials'>destroy_credentials</span><span class='lparen'>(</span><span class='id identifier rubyid_credentials'>credentials</span><span class='comma'>,</span> <span class='id identifier rubyid_workspace_json'>workspace_json</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_dig'>dig</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>latest_build</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>status</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='comma'>,</span> <span class='id identifier rubyid_username'>username</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -774,18 +814,18 @@
       <pre class="lines">
 
 
-122
-123
-124
-125
-126
-127
-128
-129
-130</pre>
+146
+147
+148
+149
+150
+151
+152
+153
+154</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 146</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_end_time'>end_time</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='comma'>,</span> <span class='id identifier rubyid_status'>status</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_status'>status</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>deleted</span><span class='tstring_end'>&#39;</span></span>
@@ -816,16 +856,16 @@
       <pre class="lines">
 
 
+33
 34
 35
 36
 37
 38
-39
-40</pre>
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 34</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 33</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_headers'>get_headers</span><span class='lparen'>(</span><span class='id identifier rubyid_coder_token'>coder_token</span><span class='rparen'>)</span>
   <span class='lbrace'>{</span>
@@ -840,43 +880,9 @@
 </div>
     
       <div class="method_details ">
-  <h3 class="signature " id="get_os_app_credentials-instance_method">
-  
-    #<strong>get_os_app_credentials</strong>(username, project_id)  &#x21d2; <tt>Object</tt> 
-  
-
-  
-
-  
-</h3><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-13
-14
-15
-16
-17</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 13</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_get_os_app_credentials'>get_os_app_credentials</span><span class='lparen'>(</span><span class='id identifier rubyid_username'>username</span><span class='comma'>,</span> <span class='id identifier rubyid_project_id'>project_id</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_credentials_file'>credentials_file</span> <span class='op'>=</span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/home/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_username'>username</span><span class='embexpr_end'>}</span><span class='tstring_content'>/application_credentials.json</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_credentials'>credentials</span> <span class='op'>=</span> <span class='const'>JSON</span><span class='period'>.</span><span class='id identifier rubyid_parse'>parse</span><span class='lparen'>(</span><span class='id identifier rubyid_credentials_file'>credentials_file</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_credentials'>credentials</span><span class='period'>.</span><span class='id identifier rubyid_find'>find</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_cred'>cred</span><span class='op'>|</span> <span class='id identifier rubyid_cred'>cred</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>project_id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='op'>==</span> <span class='id identifier rubyid_project_id'>project_id</span> <span class='rbrace'>}</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
   <h3 class="signature " id="get_rich_parameters-instance_method">
   
-    #<strong>get_rich_parameters</strong>(coder_parameters, project_id, os_app_credentials)  &#x21d2; <tt>Object</tt> 
+    #<strong>get_rich_parameters</strong>(coder_parameters, project_id, app_credentials)  &#x21d2; <tt>Object</tt> 
   
 
   
@@ -888,6 +894,7 @@
       <pre class="lines">
 
 
+18
 19
 20
 21
@@ -900,17 +907,16 @@
 28
 29
 30
-31
-32</pre>
+31</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 19</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 18</span>
 
-<span class='kw'>def</span> <span class='id identifier rubyid_get_rich_parameters'>get_rich_parameters</span><span class='lparen'>(</span><span class='id identifier rubyid_coder_parameters'>coder_parameters</span><span class='comma'>,</span> <span class='id identifier rubyid_project_id'>project_id</span><span class='comma'>,</span> <span class='id identifier rubyid_os_app_credentials'>os_app_credentials</span><span class='rparen'>)</span>
+<span class='kw'>def</span> <span class='id identifier rubyid_get_rich_parameters'>get_rich_parameters</span><span class='lparen'>(</span><span class='id identifier rubyid_coder_parameters'>coder_parameters</span><span class='comma'>,</span> <span class='id identifier rubyid_project_id'>project_id</span><span class='comma'>,</span> <span class='id identifier rubyid_app_credentials'>app_credentials</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_rich_parameter_values'>rich_parameter_values</span> <span class='op'>=</span> <span class='lbracket'>[</span>
-    <span class='lbrace'>{</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application_credential_name</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_os_app_credentials'>os_app_credentials</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>name</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='comma'>,</span>
-    <span class='lbrace'>{</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application_credential_id</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_os_app_credentials'>os_app_credentials</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='comma'>,</span>
-    <span class='lbrace'>{</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application_credential_secret</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_os_app_credentials'>os_app_credentials</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>secret</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application_credential_name</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_app_credentials'>app_credentials</span><span class='lbracket'>[</span><span class='symbol'>:name</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application_credential_id</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_app_credentials'>app_credentials</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='comma'>,</span>
+    <span class='lbrace'>{</span> <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>application_credential_secret</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_app_credentials'>app_credentials</span><span class='lbracket'>[</span><span class='symbol'>:secret</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='comma'>,</span>
     <span class='lbrace'>{</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>project_id</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='id identifier rubyid_project_id'>project_id</span> <span class='rbrace'>}</span>
   <span class='rbracket'>]</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_coder_parameters'>coder_parameters</span>
@@ -940,19 +946,15 @@
       <pre class="lines">
 
 
-70
-71
-72
-73
-74</pre>
+96
+97
+98</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 70</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_endpoint'>endpoint</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://</span><span class='embexpr_beg'>#{</span><span class='ivar'>@host</span><span class='embexpr_end'>}</span><span class='tstring_content'>/api/v2/workspaces/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>?include_deleted=true</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='id identifier rubyid_get_headers'>get_headers</span><span class='lparen'>(</span><span class='ivar'>@token</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_workspace_info_from_json'>workspace_info_from_json</span><span class='lparen'>(</span><span class='id identifier rubyid_api_call'>api_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>get</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_endpoint'>endpoint</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='rparen'>)</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_workspace_info_from_json'>workspace_info_from_json</span><span class='lparen'>(</span><span class='id identifier rubyid_workspace_json'>workspace_json</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -974,13 +976,13 @@
       <pre class="lines">
 
 
-117
-118
-119
-120</pre>
+141
+142
+143
+144</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 141</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_start_time'>start_time</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_start_time_string'>start_time_string</span> <span class='op'>=</span> <span class='id identifier rubyid_json_data'>json_data</span><span class='period'>.</span><span class='id identifier rubyid_dig'>dig</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>updated_at</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -1006,6 +1008,7 @@
       <pre class="lines">
 
 
+41
 42
 43
 44
@@ -1022,27 +1025,30 @@
 55
 56
 57
-58</pre>
+58
+59</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 42</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 41</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_org_id'>org_id</span> <span class='op'>=</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:org_id</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_project_id'>project_id</span> <span class='op'>=</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:project_id</span><span class='rbracket'>]</span>
   <span class='id identifier rubyid_coder_parameters'>coder_parameters</span> <span class='op'>=</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:coder_parameters</span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_endpoint'>endpoint</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>https://</span><span class='embexpr_beg'>#{</span><span class='ivar'>@host</span><span class='embexpr_end'>}</span><span class='tstring_content'>/api/v2/organizations/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_org_id'>org_id</span><span class='embexpr_end'>}</span><span class='tstring_content'>/members/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_username'>username</span><span class='embexpr_end'>}</span><span class='tstring_content'>/workspaces</span><span class='tstring_end'>&quot;</span></span>
-  <span class='id identifier rubyid_os_app_credentials'>os_app_credentials</span> <span class='op'>=</span> <span class='id identifier rubyid_get_os_app_credentials'>get_os_app_credentials</span><span class='lparen'>(</span><span class='id identifier rubyid_username'>username</span><span class='comma'>,</span> <span class='id identifier rubyid_project_id'>project_id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_endpoint'>endpoint</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@host</span><span class='embexpr_end'>}</span><span class='tstring_content'>/api/v2/organizations/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_org_id'>org_id</span><span class='embexpr_end'>}</span><span class='tstring_content'>/members/</span><span class='embexpr_beg'>#{</span><span class='ivar'>@service_user</span><span class='embexpr_end'>}</span><span class='tstring_content'>/workspaces</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_app_credentials'>app_credentials</span> <span class='op'>=</span> <span class='ivar'>@credentials</span><span class='period'>.</span><span class='id identifier rubyid_generate_credentials'>generate_credentials</span><span class='lparen'>(</span><span class='id identifier rubyid_project_id'>project_id</span><span class='comma'>,</span> <span class='id identifier rubyid_username'>username</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='id identifier rubyid_get_headers'>get_headers</span><span class='lparen'>(</span><span class='ivar'>@token</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_workspace_name'>workspace_name</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_username'>username</span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:workspace_name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_rand'>rand</span><span class='lparen'>(</span><span class='int'>2_821_109_907_456</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='int'>36</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_body'>body</span> <span class='op'>=</span> <span class='lbrace'>{</span>
-    <span class='label'>template_id:</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:template_id</span><span class='rbracket'>]</span><span class='comma'>,</span>
-    <span class='label'>template_version_name:</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:template_version_name</span><span class='rbracket'>]</span><span class='comma'>,</span>
-    <span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_username'>username</span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:workspace_name</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_content'>-</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_rand'>rand</span><span class='lparen'>(</span><span class='int'>2_821_109_907_456</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='lparen'>(</span><span class='int'>36</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-    <span class='label'>rich_parameter_values:</span> <span class='id identifier rubyid_get_rich_parameters'>get_rich_parameters</span><span class='lparen'>(</span><span class='id identifier rubyid_coder_parameters'>coder_parameters</span><span class='comma'>,</span> <span class='id identifier rubyid_project_id'>project_id</span><span class='comma'>,</span> <span class='id identifier rubyid_os_app_credentials'>os_app_credentials</span><span class='rparen'>)</span><span class='comma'>,</span>
+    <span class='label'>template_version_id:</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_native'>native</span><span class='lbracket'>[</span><span class='symbol'>:template_version_id</span><span class='rbracket'>]</span><span class='comma'>,</span>
+    <span class='label'>name:</span> <span class='id identifier rubyid_workspace_name'>workspace_name</span><span class='comma'>,</span>
+    <span class='label'>rich_parameter_values:</span> <span class='id identifier rubyid_get_rich_parameters'>get_rich_parameters</span><span class='lparen'>(</span><span class='id identifier rubyid_coder_parameters'>coder_parameters</span><span class='comma'>,</span> <span class='id identifier rubyid_project_id'>project_id</span><span class='comma'>,</span> <span class='id identifier rubyid_app_credentials'>app_credentials</span><span class='rparen'>)</span><span class='comma'>,</span>
   <span class='rbrace'>}</span>
 
   <span class='id identifier rubyid_resp'>resp</span> <span class='op'>=</span> <span class='id identifier rubyid_api_call'>api_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>post</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_endpoint'>endpoint</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='comma'>,</span> <span class='id identifier rubyid_body'>body</span><span class='rparen'>)</span>
+  <span class='ivar'>@credentials</span><span class='period'>.</span><span class='id identifier rubyid_save_credentials'>save_credentials</span><span class='lparen'>(</span><span class='id identifier rubyid_resp'>resp</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='id identifier rubyid_username'>username</span><span class='comma'>,</span> <span class='id identifier rubyid_app_credentials'>app_credentials</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_resp'>resp</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>id</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1064,15 +1070,59 @@
       <pre class="lines">
 
 
-166
-167
-168</pre>
+187
+188
+189</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 166</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 187</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_username'>username</span>
   <span class='ivar'>@username</span> <span class='op'>||=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getlogin'>getlogin</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="wait_for_workspace_deletion-instance_method">
+  
+    #<strong>wait_for_workspace_deletion</strong>(id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 79</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_wait_for_workspace_deletion'>wait_for_workspace_deletion</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_max_attempts'>max_attempts</span> <span class='op'>=</span> <span class='ivar'>@credential_deletion_max_attempts</span>
+  <span class='id identifier rubyid_timeout_interval'>timeout_interval</span> <span class='op'>=</span> <span class='ivar'>@credential_deletion_timeout_interval</span>
+
+  <span class='id identifier rubyid_max_attempts'>max_attempts</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_attempt'>attempt</span><span class='op'>|</span>
+    <span class='kw'>break</span> <span class='kw'>unless</span> <span class='id identifier rubyid_workspace_json'>workspace_json</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_workspace_json'>workspace_json</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_dig'>dig</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>latest_build</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>status</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='op'>==</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>deleting</span><span class='tstring_end'>&quot;</span></span>
+    <span class='kw'>yield</span><span class='lparen'>(</span><span class='id identifier rubyid_attempt'>attempt</span> <span class='op'>+</span> <span class='int'>1</span><span class='rparen'>)</span>
+    <span class='id identifier rubyid_sleep'>sleep</span><span class='lparen'>(</span><span class='id identifier rubyid_timeout_interval'>timeout_interval</span><span class='rparen'>)</span>
+  <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1094,14 +1144,14 @@
       <pre class="lines">
 
 
-111
-112
-113
-114
-115</pre>
+135
+136
+137
+138
+139</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 111</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 135</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wallclock_time'>wallclock_time</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='comma'>,</span> <span class='id identifier rubyid_status'>status</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_start_time'>start_time</span> <span class='op'>=</span> <span class='id identifier rubyid_start_time'>start_time</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='rparen'>)</span> 
@@ -1128,14 +1178,14 @@
       <pre class="lines">
 
 
-132
-133
-134
-135
-136</pre>
+156
+157
+158
+159
+160</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 132</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 156</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_workspace_info_from_json'>workspace_info_from_json</span><span class='lparen'>(</span><span class='id identifier rubyid_json_data'>json_data</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_state'>state</span> <span class='op'>=</span> <span class='id identifier rubyid_json_data'>json_data</span><span class='period'>.</span><span class='id identifier rubyid_dig'>dig</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>latest_build</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>status</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='op'>||</span> <span class='id identifier rubyid_json_data'>json_data</span><span class='period'>.</span><span class='id identifier rubyid_dig'>dig</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>latest_build</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>job</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>status</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
@@ -1147,12 +1197,46 @@
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="workspace_json-instance_method">
+  
+    #<strong>workspace_json</strong>(id)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+90
+91
+92
+93
+94</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder/batch.rb', line 90</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_workspace_json'>workspace_json</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_endpoint'>endpoint</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='ivar'>@host</span><span class='embexpr_end'>}</span><span class='tstring_content'>/api/v2/workspaces/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_id'>id</span><span class='embexpr_end'>}</span><span class='tstring_content'>?include_deleted=true</span><span class='tstring_end'>&quot;</span></span>
+  <span class='id identifier rubyid_headers'>headers</span> <span class='op'>=</span> <span class='id identifier rubyid_get_headers'>get_headers</span><span class='lparen'>(</span><span class='ivar'>@token</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_api_call'>api_call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>get</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_endpoint'>endpoint</span><span class='comma'>,</span> <span class='id identifier rubyid_headers'>headers</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Fri Oct  3 17:58:01 2025 by
+  Generated on Thu Oct 16 17:21:26 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>
