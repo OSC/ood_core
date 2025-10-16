@@ -9,9 +9,6 @@ class OodCore::Job::QueueInfo
   attr_reader :name
   alias to_s name
 
-  # The QoSes associated with this queue
-  attr_reader :qos
-
   # The accounts that are allowed to use this queue.
   #
   # nil means ALL accounts are allowed.
