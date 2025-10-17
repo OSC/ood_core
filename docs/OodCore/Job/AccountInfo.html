@@ -200,35 +200,6 @@
 </li>
 
     
-      <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#queue-instance_method" title="#queue (instance method)">#<strong>queue</strong>  &#x21d2; Object </a>
-    
-
-    
-  </span>
-  
-  
-  
-    
-      <span class="note title readonly">readonly</span>
-    
-    
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'>
-<p>The queue this account can use.</p>
-</div></span>
-  
-</li>
-
-    
   </ul>
 
 
@@ -333,23 +304,21 @@
       <pre class="lines">
 
 
+18
+19
+20
+21
 22
-23
-24
-25
-26
-27
-28</pre>
+23</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/account_info.rb', line 22</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/account_info.rb', line 18</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_opts'>opts</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_orig_name'>orig_name</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>unknown</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='ivar'>@name</span> <span class='op'>=</span> <span class='id identifier rubyid_upcase_accounts?'>upcase_accounts?</span> <span class='op'>?</span> <span class='id identifier rubyid_orig_name'>orig_name</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span> <span class='op'>:</span> <span class='id identifier rubyid_orig_name'>orig_name</span>
   <span class='ivar'>@qos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:qos</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='ivar'>@cluster</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:cluster</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
-  <span class='ivar'>@queue</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:queue</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -494,49 +463,6 @@
 </table>
 </div>
     
-      
-      <span id=""></span>
-      <div class="method_details ">
-  <h3 class="signature " id="queue-instance_method">
-  
-    #<strong>queue</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    
-<p>The queue this account can use. nil means there is no queue info for this account.</p>
-
-
-  </div>
-</div>
-<div class="tags">
-  
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-20
-21
-22</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/account_info.rb', line 20</span>
-
-<span class='kw'>def</span> <span class='id identifier rubyid_queue'>queue</span>
-  <span class='ivar'>@queue</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
   </div>
 
 
@@ -559,15 +485,15 @@
       <pre class="lines">
 
 
-30
-31
-32
-33
-34
-35</pre>
+25
+26
+27
+28
+29
+30</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/account_info.rb', line 30</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/account_info.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
   <span class='id identifier rubyid_instance_variables'>instance_variables</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_var'>var</span><span class='op'>|</span>
@@ -585,7 +511,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Oct 16 19:41:32 2025 by
+  Generated on Fri Oct 17 16:11:41 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>
