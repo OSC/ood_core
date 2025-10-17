@@ -1299,9 +1299,9 @@ describe OodCore::Job::Adapters::Slurm do
 
   describe '#accounts' do
     context 'when sacctmgr returns successfully' do
+      # cluster=owens
       let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens") }
       let(:expected_accounts) {["pzs0715", "pzs0714", "pzs1124", "pzs1118", "pzs1117", "pzs1010", "pde0006", "pas2051", "pas1871", "pas1754", "pas1604"]}
-
       it 'returns the correct accounts names' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
@@ -1309,7 +1309,6 @@ describe OodCore::Job::Adapters::Slurm do
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '',  double("success?" => true)])
         expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
       end
-
       # TODO test for qos & cluster once the API solidifies
       it 'parses qos correctly' do
         allow(Etc).to receive(:getlogin).and_return('me')
@@ -1319,36 +1318,82 @@ describe OodCore::Job::Adapters::Slurm do
         accts = subject.accounts
         acct_w_qos = accts.select { |a| a.name == 'pzs1124' }.first
         expect(acct_w_qos.qos).to eq(['owens-default', 'staff', 'phoenix', 'geophys', 'hal', 'gpt'])
-
         other_accts = accts - [acct_w_qos]
         other_accts.each do |acct|
           expect(acct.qos).to eq(["owens-default"])
         end
       end
+
+      # cluster unset
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_accounts) {["pzs0715", "pzs0714", "pzs1124", "pzs1118", "pzs1117", "pzs1010", "pde0006", "pas2051", "pas1871", "pas1754", "pas1604"]}
+      it 'returns the correct accounts names' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+        expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
+      end
+      # TODO test for qos & cluster once the API solidifies
+      it 'parses qos correctly' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
+        accts = subject.accounts
+        acct_w_qos = accts.select { |a| a.name == 'pzs1124' && a.cluster == 'owens' }.first
+        expect(acct_w_qos.qos).to eq(['owens-default', 'staff', 'phoenix', 'geophys', 'hal', 'gpt'])
+        other_accts = accts - [acct_w_qos]
+        other_accts.each do |acct|
+          expect(acct.qos).to eq(["#{acct.cluster}-default"])
+        end
+      end
     end
 
     context 'when sacctmgr fails' do
+      # cluster=ownens
       let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: 'owens') }
-
       it 'raises the error' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
                           .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return(['', 'the error message',  double("success?" => false)])
+        expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
+      end
 
+      # cluster unset
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      it 'raises the error' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return(['', 'the error message',  double("success?" => false)])
         expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
       end
     end
 
     context 'when OOD_UPCASE_ACCOUNTS is set' do
+      # cluster=ownens
       let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: 'owens') }
       let(:expected_accounts) {["PZS0715", "PZS0714", "PZS1124", "PZS1118", "PZS1117", "PZS1010", "PDE0006", "PAS2051", "PAS1871", "PAS1754", "PAS1604"]}
-
       it 'returns the correct accounts' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
                           .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '',  double("success?" => true)])
+        with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
+          expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
+        end
+      end
+
+      # cluster unset
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
+      let(:expected_accounts) {["PZS0715", "PZS0714", "PZS1124", "PZS1118", "PZS1117", "PZS1010", "PDE0006", "PAS2051", "PAS1871", "PAS1754", "PAS1604"]}
+      it 'returns the correct accounts' do
+        allow(Etc).to receive(:getlogin).and_return('me')
+        allow(Open3).to receive(:capture3)
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', {stdin_data: ''})
+                          .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts.txt'), '',  double("success?" => true)])
         with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
           expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
         end
