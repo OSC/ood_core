@@ -182,17 +182,18 @@ module OodCore
 
           def accounts
             user = Etc.getlogin
-            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', "user=#{user}"]
+            args = ['-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', "user=#{user}"]
             args.append("cluster=#{@cluster}") if @cluster
 
             [].tap do |associations|
               call('sacctmgr', *args).each_line do |line|
-                acct, qos = line.split('|')
+                acct, cluster, qos = line.split('|')
                 next if acct.nil? || acct.chomp.empty?
 
                 associations << {
                   name: acct,
                   qos: qos.to_s.chomp.split(','),
+                  cluster: cluster,
                 }
               end
             end.group_by do |x|

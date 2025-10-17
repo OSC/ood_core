@@ -1305,7 +1305,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'returns the correct accounts names' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '',  double("success?" => true)])
         expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
       end
@@ -1314,7 +1314,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'parses qos correctly' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read("spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt"), '',  double("success?" => true)])
         accts = subject.accounts
         acct_w_qos = accts.select { |a| a.name == 'pzs1124' }.first
@@ -1333,7 +1333,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'raises the error' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return(['', 'the error message',  double("success?" => false)])
 
         expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
@@ -1347,7 +1347,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'returns the correct accounts' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,cluster,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '',  double("success?" => true)])
         with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
           expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
