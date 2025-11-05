@@ -108,13 +108,14 @@ module OodCore
           # @param bin_overrides [#to_h] a hash of bin ovverides to be used in job
           # @param submit_host [#to_s] Submits the job on a login node via ssh
           # @param strict_host_checking [Bool] Whether to use strict host checking when ssh to submit_host
-          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, id: nil)
+          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, id: 'unknown')
             @cluster              = cluster && cluster.to_s
             @conf                 = conf    && Pathname.new(conf.to_s)
             @bin                  = Pathname.new(bin.to_s)
             @bin_overrides        = bin_overrides
             @submit_host          = submit_host.to_s
             @strict_host_checking = strict_host_checking
+            @id                   = id.to_s
           end
 
           # Get a ClusterInfo object containing information about the given cluster
