@@ -25,7 +25,13 @@ module OodCore
         bin_overrides        = c.fetch(:bin_overrides, {})
         submit_host          = c.fetch(:submit_host, "")
         strict_host_checking = c.fetch(:strict_host_checking, true)
-        slurm = Adapters::Slurm::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides, submit_host: submit_host, strict_host_checking: strict_host_checking)
+        id                   = c.fetch(:id, 'unknown')
+
+        slurm = Adapters::Slurm::Batch.new(
+          cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides,
+          submit_host: submit_host, strict_host_checking: strict_host_checking,
+          id: id
+        )
         Adapters::Slurm.new(slurm: slurm)
       end
     end
@@ -84,6 +90,11 @@ module OodCore
           # @return [Bool]; true if empty
           attr_reader :strict_host_checking
 
+          # The ID of the cluster.
+          # @example oakley
+          # @return [String]; The ID of the cluster.
+          attr_reader :id
+
           # The root exception class that all Slurm-specific exceptions inherit
           # from
           class Error < StandardError; end
@@ -97,13 +108,14 @@ module OodCore
           # @param bin_overrides [#to_h] a hash of bin ovverides to be used in job
           # @param submit_host [#to_s] Submits the job on a login node via ssh
           # @param strict_host_checking [Bool] Whether to use strict host checking when ssh to submit_host
-          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true)
+          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, id: 'unknown')
             @cluster              = cluster && cluster.to_s
             @conf                 = conf    && Pathname.new(conf.to_s)
             @bin                  = Pathname.new(bin.to_s)
             @bin_overrides        = bin_overrides
             @submit_host          = submit_host.to_s
             @strict_host_checking = strict_host_checking
+            @id                   = id.to_s
           end
 
           # Get a ClusterInfo object containing information about the given cluster

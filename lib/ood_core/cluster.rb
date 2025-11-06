@@ -110,7 +110,7 @@ module OodCore
     # Build a job adapter from the job configuration
     # @return [Job::Adapter] the job adapter
     def job_adapter
-      Job::Factory.build(job_config)
+      Job::Factory.build(job_config.merge({ id: id }))
     end
 
     # Whether the job feature is allowed based on the ACLs

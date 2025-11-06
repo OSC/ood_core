@@ -132,7 +132,7 @@ describe OodCore::Cluster do
     end
 
     it "responds to slurm?" do
-      expect(clusters.select { |cluster| cluster.slurm? }.size).to eql(0)
+      expect(clusters.select { |cluster| cluster.slurm? }.size).to eql(1)
       expect(OodCore::Cluster.new({id: 'owens', job: { adapter: 'slurm' }}).slurm?).to eq(true)
     end
 
