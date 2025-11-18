@@ -1299,7 +1299,7 @@ describe OodCore::Job::Adapters::Slurm do
 
   describe '#accounts' do
     context 'when sacctmgr returns successfully' do
-      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens") }
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: "owens", id: 'owens') }
       let(:expected_accounts) {["pzs0715", "pzs0714", "pzs1124", "pzs1118", "pzs1117", "pzs1010", "pde0006", "pas2051", "pas1871", "pas1754", "pas1604"]}
 
       it 'returns the correct accounts names' do
@@ -1328,7 +1328,7 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context 'when sacctmgr fails' do
-      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: 'owens') }
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: 'owens', id: 'owens') }
 
       it 'raises the error' do
         allow(Etc).to receive(:getlogin).and_return('me')
@@ -1341,7 +1341,7 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context 'when OOD_UPCASE_ACCOUNTS is set' do
-      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: 'owens') }
+      let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(cluster: 'owens', id: 'owens') }
       let(:expected_accounts) {["PZS0715", "PZS0714", "PZS1124", "PZS1118", "PZS1117", "PZS1010", "PDE0006", "PAS2051", "PAS1871", "PAS1754", "PAS1604"]}
 
       it 'returns the correct accounts' do
