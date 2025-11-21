@@ -9,6 +9,10 @@ class OodCore::Job::QueueInfo
   attr_reader :name
   alias to_s name
 
+  # The QoSes associated with this queue
+  attr_reader :allow_qos
+  attr_reader :deny_qos
+
   # The accounts that are allowed to use this queue.
   #
   # nil means ALL accounts are allowed.
@@ -22,7 +26,8 @@ class OodCore::Job::QueueInfo
 
   def initialize(**opts)
     @name = opts.fetch(:name, 'unknown')
-    @qos = opts.fetch(:qos, [])
+    @allow_qos = opts.fetch(:allow_qos, [])
+    @deny_qos = opts.fetch(:deny_qos, [])
     @tres = opts.fetch(:tres, {})
 
     allow_accounts = opts.fetch(:allow_accounts, nil)
@@ -46,5 +51,9 @@ class OodCore::Job::QueueInfo
 
   def gpu?
     tres.keys.any? { |name| name.to_s.match?(%r{^gres/gpu($|:)}i) }
+  end
+
+  def allow_all_qos?
+    allow_qos.empty? && deny_qos.empty?
   end
 end

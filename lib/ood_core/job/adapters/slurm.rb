@@ -461,6 +461,16 @@ module OodCore
                                       hsh[:DenyAccounts].nil? ? [] : hsh[:DenyAccounts].to_s.split(',')
                                     end
 
+              hsh[:allow_qos] = if hsh[:AllowQos].nil? || hsh[:AllowQos].to_s == 'ALL'
+                                  []
+                                else
+                                  hsh[:AllowQos].to_s.split(',')
+                                end
+              hsh[:deny_qos] = if !hsh[:allow_qos].empty?
+                                 [] # manpage says that AllowQos negates DenyQos
+                               else
+                                 hsh[:DenyQos].nil? ? [] : hsh[:DenyQos].to_s.split(',')
+                               end
               hsh[:tres] = case hsh[:TRES]
                            when nil, '(null)', ''
                              {}
