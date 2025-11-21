@@ -26,7 +26,6 @@ class OodCore::Job::QueueInfo
 
   def initialize(**opts)
     @name = opts.fetch(:name, 'unknown')
-    @qos = opts.fetch(:qos, [])
     @allow_qos = opts.fetch(:allow_qos, [])
     @deny_qos = opts.fetch(:deny_qos, [])
     @tres = opts.fetch(:tres, {})
