@@ -154,6 +154,35 @@
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#allow_qos-instance_method" title="#allow_qos (instance method)">#<strong>allow_qos</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>The QoSes associated with this queue.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#deny_accounts-instance_method" title="#deny_accounts (instance method)">#<strong>deny_accounts</strong>  &#x21d2; Object </a>
     
 
@@ -175,6 +204,35 @@
   
     <span class="summary_desc"><div class='inline'>
 <p>The accounts that are not allowed to use this queue.</p>
+</div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#deny_qos-instance_method" title="#deny_qos (instance method)">#<strong>deny_qos</strong>  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'>
+<p>Returns the value of attribute deny_qos.</p>
 </div></span>
   
 </li>
@@ -252,6 +310,28 @@
     </h2>
 
     <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#allow_all_qos%3F-instance_method" title="#allow_all_qos? (instance method)">#<strong>allow_all_qos?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
       
         <li class="public ">
   <span class="summary_signature">
@@ -366,10 +446,6 @@
       <pre class="lines">
 
 
-23
-24
-25
-26
 27
 28
 29
@@ -381,14 +457,20 @@
 35
 36
 37
-38</pre>
+38
+39
+40
+41
+42
+43</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 23</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_opts'>opts</span><span class='rparen'>)</span>
   <span class='ivar'>@name</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:name</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>unknown</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
-  <span class='ivar'>@qos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:qos</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='ivar'>@allow_qos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:allow_qos</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='ivar'>@deny_qos</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:deny_qos</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='ivar'>@tres</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:tres</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
 
   <span class='id identifier rubyid_allow_accounts'>allow_accounts</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:allow_accounts</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
@@ -442,15 +524,58 @@
       <pre class="lines">
 
 
-15
-16
-17</pre>
+19
+20
+21</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 15</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_allow_accounts'>allow_accounts</span>
   <span class='ivar'>@allow_accounts</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="allow_qos-instance_method">
+  
+    #<strong>allow_qos</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>The QoSes associated with this queue</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+13
+14
+15</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 13</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_allow_qos'>allow_qos</span>
+  <span class='ivar'>@allow_qos</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -485,15 +610,58 @@
       <pre class="lines">
 
 
-18
-19
-20</pre>
+22
+23
+24</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 18</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 22</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_deny_accounts'>deny_accounts</span>
   <span class='ivar'>@deny_accounts</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="deny_qos-instance_method">
+  
+    #<strong>deny_qos</strong>  &#x21d2; <tt>Object</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+<p>Returns the value of attribute deny_qos.</p>
+
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+14
+15
+16</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 14</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_deny_qos'>deny_qos</span>
+  <span class='ivar'>@deny_qos</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -575,12 +743,12 @@
       <pre class="lines">
 
 
-21
-22
-23</pre>
+25
+26
+27</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 21</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 25</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tres'>tres</span>
   <span class='ivar'>@tres</span>
@@ -598,7 +766,59 @@
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="gpu?-instance_method">
+  <h3 class="signature first" id="allow_all_qos?-instance_method">
+  
+    #<strong>allow_all_qos?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+56
+57
+58</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 56</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_allow_all_qos?'>allow_all_qos?</span>
+  <span class='id identifier rubyid_allow_qos'>allow_qos</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_deny_qos'>deny_qos</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="gpu?-instance_method">
   
     #<strong>gpu?</strong>  &#x21d2; <tt>Boolean</tt> 
   
@@ -634,12 +854,12 @@
       <pre class="lines">
 
 
-47
-48
-49</pre>
+52
+53
+54</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 47</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 52</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_gpu?'>gpu?</span>
   <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_keys'>keys</span><span class='period'>.</span><span class='id identifier rubyid_any?'>any?</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_name'>name</span><span class='op'>|</span> <span class='id identifier rubyid_name'>name</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match?'>match?</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>^gres/gpu($|:)</span><span class='regexp_end'>}i</span></span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -664,15 +884,15 @@
       <pre class="lines">
 
 
-40
-41
-42
-43
-44
-45</pre>
+45
+46
+47
+48
+49
+50</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 40</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/queue_info.rb', line 45</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
   <span class='id identifier rubyid_instance_variables'>instance_variables</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_var'>var</span><span class='op'>|</span>
@@ -690,7 +910,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Nov 21 17:00:31 2025 by
+  Generated on Fri Nov 21 19:29:23 2025 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.37 (ruby-3.0.7).
 </div>
