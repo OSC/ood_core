@@ -52,4 +52,8 @@ class OodCore::Job::QueueInfo
   def gpu?
     tres.keys.any? { |name| name.to_s.match?(%r{^gres/gpu($|:)}i) }
   end
+
+  def allow_all_qos?
+    allow_qos.empty? && deny_qos.empty?
+  end
 end
