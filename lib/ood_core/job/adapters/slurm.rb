@@ -453,7 +453,7 @@ module OodCore
                                   hsh[:AllowQos].to_s.split(',')
                                 end
               hsh[:deny_qos] = if !hsh[:allow_qos].nil?
-                                 nil # manpage says that AllowQos negates DenyQos
+                                 [] # manpage says that AllowQos negates DenyQos
                                else
                                  hsh[:DenyQos].nil? ? [] : hsh[:DenyQos].to_s.split(',')
                                end
