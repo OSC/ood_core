@@ -12,10 +12,14 @@ module OodCore
       # The QoS values this account can use.
       attr_reader :qos
 
+      # the cluser this account comes from.
+      attr_reader :cluster
+
       def initialize(**opts)
         orig_name = opts.fetch(:name, 'unknown')
         @name = upcase_accounts? ? orig_name.upcase : orig_name
         @qos = opts.fetch(:qos, [])
+        @cluster = opts.fetch(:cluster, nil)
       end
 
       def to_h
