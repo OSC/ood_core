@@ -207,6 +207,7 @@ module OodCore
                 associations << {
                   name: acct,
                   qos: qos.to_s.chomp.split(','),
+                  cluster: id
                 }
               end
             end.group_by do |x|
