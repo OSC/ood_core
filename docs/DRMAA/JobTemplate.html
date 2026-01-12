@@ -6,7 +6,7 @@
 <title>
   Class: DRMAA::JobTemplate
   
-    &mdash; Documentation by YARD 0.9.37
+    &mdash; Documentation by YARD 0.9.38
   
 </title>
 
@@ -960,7 +960,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 851</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span>
-    <span class='ivar'>@ptr</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_allocate_job_template'>allocate_job_template</span>
+    <span class='ivar'>@ptr</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_allocate_job_template'><span class='object_link'><a href="../DRMAA.html#allocate_job_template-class_method" title="DRMAA.allocate_job_template (method)">allocate_job_template</a></span></span>
     <span class='const'>ObjectSpace</span><span class='period'>.</span><span class='id identifier rubyid_define_finalizer'>define_finalizer</span><span class='lparen'>(</span><span class='kw'>self</span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_method'>method</span><span class='lparen'>(</span><span class='symbol'>:finalize</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_proc'>to_proc</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1340,7 +1340,7 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_finalize'>finalize</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='comment'># STDERR.puts &quot;... releasing job template&quot;
-</span>    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_delete_job_template'>delete_job_template</span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='rparen'>)</span>
+</span>    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_delete_job_template'><span class='object_link'><a href="../DRMAA.html#delete_job_template-class_method" title="DRMAA.delete_job_template (method)">delete_job_template</a></span></span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1370,7 +1370,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 862</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get'>get</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_attribute'>get_attribute</span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_attribute'><span class='object_link'><a href="../DRMAA.html#get_attribute-class_method" title="DRMAA.get_attribute (method)">get_attribute</a></span></span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1795,7 +1795,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 859</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_set'>set</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_set_attribute'>set_attribute</span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_set_attribute'><span class='object_link'><a href="../DRMAA.html#set_attribute-class_method" title="DRMAA.set_attribute (method)">set_attribute</a></span></span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2120,7 +2120,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 868</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_vget'>vget</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_vector_attribute'>get_vector_attribute</span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_vector_attribute'><span class='object_link'><a href="../DRMAA.html#get_vector_attribute-class_method" title="DRMAA.get_vector_attribute (method)">get_vector_attribute</a></span></span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2150,7 +2150,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 865</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_vset'>vset</span><span class='lparen'>(</span><span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_set_vector_attribute'>set_vector_attribute</span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_set_vector_attribute'><span class='object_link'><a href="../DRMAA.html#set_vector_attribute-class_method" title="DRMAA.set_vector_attribute (method)">set_vector_attribute</a></span></span><span class='lparen'>(</span><span class='ivar'>@ptr</span><span class='comma'>,</span> <span class='id identifier rubyid_name'>name</span><span class='comma'>,</span> <span class='id identifier rubyid_values'>values</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2233,9 +2233,9 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Dec  3 20:24:38 2025 by
+  Generated on Mon Jan 12 18:52:05 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.37 (ruby-3.0.7).
+  0.9.38 (ruby-3.0.7).
 </div>
 
     </div>
