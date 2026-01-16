@@ -97,6 +97,7 @@ class OpenStackCredentials < CredentialsInterface
       credentials_to_destroy.destroy
     rescue Excon::Error::Forbidden => e
       puts "Error destroying application credentials with id #{os_app_credentials['id']} #{e}"
+      raise JobAdapterError, e.message
     end
   end
 
