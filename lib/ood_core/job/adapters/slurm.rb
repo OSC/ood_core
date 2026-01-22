@@ -124,7 +124,7 @@ module OodCore
             node_cpu_info = call("sinfo", "-aho %F/%D/%C").strip.split('/')
             gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
             gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
-                         .lines.uniq.reject { |line| line.match?(/maint|drain|down/ig) }.map(&:split)
+                         .lines.uniq.reject { |line| line.match?(/maint|drain|down/i) }.map(&:split)
             ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
                             total_nodes: (node_cpu_info[3].to_i - node_cpu_info[2].to_i),
                             active_processors: node_cpu_info[5].to_i,
