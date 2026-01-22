@@ -121,16 +121,16 @@ module OodCore
           # Get a ClusterInfo object containing information about the given cluster
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
-            node_cpu_info = call("sinfo", "-aho %A/%D/%C").strip.split('/')
+            node_cpu_info = call("sinfo", "-aho %F/%D/%C").strip.split('/')
             gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
             gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
-                         .lines.uniq.reject { |line| line.match?(/maint|drain/i) }.map(&:split)
+                         .lines.uniq.reject { |line| line.match?(/maint|drain|down/i) }.map(&:split)
             ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
-                            total_nodes: node_cpu_info[2].to_i,
-                            active_processors: node_cpu_info[3].to_i,
-                            total_processors: node_cpu_info[6].to_i,
-                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) },
-                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }
+                            total_nodes: (node_cpu_info[3].to_i - node_cpu_info[2].to_i),
+                            active_processors: node_cpu_info[5].to_i,
+                            total_processors: (node_cpu_info[8].to_i - node_cpu_info[7].to_i),
+                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) }.to_i,
+                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }.to_i
             )
           end
 
