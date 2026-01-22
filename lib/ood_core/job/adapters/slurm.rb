@@ -129,8 +129,8 @@ module OodCore
                             total_nodes: (node_cpu_info[3].to_i - node_cpu_info[2].to_i),
                             active_processors: node_cpu_info[5].to_i,
                             total_processors: (node_cpu_info[8].to_i - node_cpu_info[7].to_i),
-                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) },
-                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }
+                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) }.to_i,
+                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }.to_i
             )
           end
 
