@@ -121,17 +121,26 @@ module OodCore
           # Get a ClusterInfo object containing information about the given cluster
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
-            node_cpu_info = call("sinfo", "-aho %F/%D/%C").strip.split('/')
+            node_cpu_info = call("sinfo", "-aho %F/%C").strip.split('/').map(&:to_i)
             gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
-            gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
+            gres_lines = call("sinfo", "-ahNO nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
                          .lines.uniq.reject { |line| line.match?(/maint|drain|down/i) }.map(&:split)
-            ClusterInfo.new(active_nodes: node_cpu_info[0].to_i,
-                            total_nodes: (node_cpu_info[3].to_i - node_cpu_info[2].to_i),
-                            active_processors: node_cpu_info[5].to_i,
-                            total_processors: (node_cpu_info[8].to_i - node_cpu_info[7].to_i),
-                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) }.to_i,
-                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }.to_i
+
+            node_info = sinfo_headers.zip(node_cpu_info).to_h
+            ClusterInfo.new(active_nodes: node_info['nodes_allocated'],
+                            total_nodes: node_info['nodes_total'],
+                            active_processors: node_info['cpus_allocated'],
+                            total_processors: node_info['cpus_total'],
+                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) },
+                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }
             )
+          end
+
+          def sinfo_headers
+            [
+              'nodes_allocated', 'nodes_idle', 'nodes_other', 'nodes_total',
+              'cpus_allocated', 'cpus_idle', 'cpus_other', 'cpus_total'
+            ]
           end
 
           # Get a list of hashes detailing each of the jobs on the batch server
