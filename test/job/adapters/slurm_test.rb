@@ -47,4 +47,22 @@ class TestSlurm < Minitest::Test
     assert_equal(accounts.map(&:name), ["pzs1124", "pzs1118", "pzs1117", "pzs1010", "pzs0715", "pzs0714", "pde0006", "pas2051", "pas1871", "pas1754", "pas1604"])
     accounts.each { |account| assert_equal(account.cluster, 'owens') }
   end
+
+  def test_cluster_info
+    adapter = slurm_instance
+    Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_fc.txt'), '', exit_success])
+    Open3.stubs(:capture3).with({}, 'sinfo', '-o %G', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_g.txt'), '', exit_success])
+    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost,gres:240,gresused:240,statelong', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_gres.txt'), '', exit_success])
+
+    info = adapter.cluster_info
+    assert_equal(info.active_nodes, 281)
+    assert_equal(info.total_nodes, 298)
+    assert_equal(info.active_processors, 25_608)
+    assert_equal(info.total_processors, 37_376)
+    assert_equal(info.active_gpus, 621)
+    assert_equal(info.total_gpus, 656)
+  end
 end

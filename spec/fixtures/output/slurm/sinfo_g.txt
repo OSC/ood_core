@@ -1,0 +1,5 @@
+GRES
+gpu:a100:3(S:2,4,7),nsight:no_consume:1,pfsdir:scratch:no_consume:1,gpfs:scratch:no_consume:1,gpfs:ess:no_consume:1,vis:no_consume:1,overlay:apps:no_consume:1,overlay:apps_src:no_consume:1,bind:apps:no_consume:1,bind:apps_src:no_consume:1
+gpu:a100:2(S:2,7),nsight:no_consume:1,pfsdir:scratch:no_consume:1,gpfs:scratch:no_consume:1,gpfs:ess:no_consume:1,vis:no_consume:1,overlay:apps:no_consume:1,overlay:apps_src:no_consume:1,bind:apps:no_consume:1,bind:apps_src:no_consume:1
+gpu:a100:4(S:0-3),nsight:no_consume:1,pfsdir:scratch:no_consume:1,gpfs:scratch:no_consume:1,gpfs:ess:no_consume:1,vis:no_consume:1,overlay:apps:no_consume:1,overlay:apps_src:no_consume:1,bind:apps:no_consume:1,bind:apps_src:no_consume:1
+pfsdir:scratch:no_consume:1,gpfs:scratch:no_consume:1,gpfs:ess:no_consume:1,overlay:apps:no_consume:1,overlay:apps_src:no_consume:1,bind:apps:no_consume:1,bind:apps_src:no_consume:1
