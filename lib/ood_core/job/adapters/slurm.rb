@@ -123,7 +123,7 @@ module OodCore
           def get_cluster_info
             node_cpu_info = call("sinfo", "-aho %F/%C").strip.split('/').map(&:to_i)
             gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
-            gres_lines = call("sinfo", "-ahNO nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
+            gres_lines = call("sinfo", "-ahNO ,nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
                          .lines.uniq.reject { |line| line.match?(/maint|drain|down/i) }.map(&:split)
 
             node_info = sinfo_headers.zip(node_cpu_info).to_h

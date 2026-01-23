@@ -51,12 +51,11 @@ class TestSlurm < Minitest::Test
   def test_cluster_info
     adapter = slurm_instance
     Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
-        .returns([File.read('spec/fixtures/output/slurm/sinfo_fc.txt'), '', exit_success])
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_fc.txt'), '', exit_success])
     Open3.stubs(:capture3).with({}, 'sinfo', '-o %G', stdin_data: '')
-        .returns([File.read('spec/fixtures/output/slurm/sinfo_g.txt'), '', exit_success])
-    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO nodehost,gres:240,gresused:240,statelong', stdin_data: '')
-        .returns([File.read('spec/fixtures/output/slurm/sinfo_gres.txt'), '', exit_success])
-
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_g.txt'), '', exit_success])
+    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO ,nodehost,gres:240,gresused:240,statelong', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_gres.txt'), '', exit_success])
 
     info = adapter.cluster_info
     assert_equal(info.active_nodes, 281)
