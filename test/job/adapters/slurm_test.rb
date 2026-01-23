@@ -54,7 +54,7 @@ class TestSlurm < Minitest::Test
          .returns([File.read('spec/fixtures/output/slurm/sinfo_fc.txt'), '', exit_success])
     Open3.stubs(:capture3).with({}, 'sinfo', '-o %G', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_g.txt'), '', exit_success])
-    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO ,nodehost,gres:240,gresused:240,statelong', stdin_data: '')
+    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost,gres:240,gresused:240,statelong', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_gres.txt'), '', exit_success])
 
     info = adapter.cluster_info
