@@ -577,7 +577,7 @@ module OodCore
           'OOM' => :completed, # OUT_OF_MEMORY
 
           'BOOT_FAIL'     => :completed,
-          'CANCELED'      => :completed,
+          'CANCELLED'     => :completed,
           'COMPLETED'     => :completed,
           'DEADLINE'      => :completed,
           'FAILED'        => :completed,
@@ -910,7 +910,7 @@ module OodCore
 
           # Determine state from Slurm state code
           def get_state(st)
-            STATE_MAP.fetch(st, :undetermined)
+            STATE_MAP.fetch(st.split.first, :undetermined)
           end
 
           # Parse hash describing Slurm job status

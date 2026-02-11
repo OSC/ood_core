@@ -376,7 +376,7 @@ describe OodCore::Job::Adapters::Slurm do
         )
         jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_historic
 
-        expect(jobs.count).to eq(2)
+        expect(jobs.count).to eq(3)
 
         j1 = jobs.first
         expect(j1.id).to eq("20251")
@@ -388,7 +388,7 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j1.gpus).to eq(1)
         expect(j1.gpu?).to eq(true)
 
-        j2 = jobs.last
+        j2 = jobs[1]
         expect(j2.id).to eq("20252")
         expect(j2.job_name).to eq("RStudio")
         expect(j2.queue_name).to eq("normal")
@@ -397,6 +397,14 @@ describe OodCore::Job::Adapters::Slurm do
         expect(j2.status.to_s).to eq("running")
         expect(j2.gpus).to eq(0)
         expect(j2.gpu?).to eq(false)
+
+        j3 = jobs.last
+        expect(j3.id).to eq("5963565")
+        expect(j3.job_name).to eq("RStudio")
+        expect(j3.queue_name).to eq("interactive")
+        expect(j3.status).to eq("completed")
+        expect(j3.status).to eq(OodCore::Job::Status.new(state: :completed))
+        expect(j3.status.to_s).to eq("completed")
       end
     end
   end
