@@ -1,0 +1,4 @@
+gput072 gpu:2(S:1) gpu:(null):2(IDX:0-1) mixed
+gput073 gpu:2(S:1) gpu:(null):2(IDX:0-1) mixed
+gput074 gpu:4(S:0-3) gpu:(null):1(IDX:0) mixed
+gput075 gpu:4(S:0-3) gpu:(null):4(IDX:0-3) mixed
