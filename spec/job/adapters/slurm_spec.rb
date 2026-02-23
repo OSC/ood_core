@@ -1295,6 +1295,10 @@ describe OodCore::Job::Adapters::Slurm do
         ["gpu:p100:1(IDX:0),mps:0", 1],
         ["gpu:a100:4(S:0-15)", 4],
         ["gpu:a100:3(IDX:0,2-3),mps:0", 3],
+        ["gpu:(null):4(IDX:0-3)", 4],
+        ["gpu:(null):1(IDX:0)", 1],
+        ["gpu:4(S:0-3)", 4],
+        ["gpu:2(S:1)", 2],
       ]
       gres_cases.each do |gc| 
         it "does not return the correct number of gpus when gres=\"#{gc[0]}\"" do

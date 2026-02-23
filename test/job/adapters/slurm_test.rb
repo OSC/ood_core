@@ -65,15 +65,4 @@ class TestSlurm < Minitest::Test
     assert_equal(info.active_gpus, 621)
     assert_equal(info.total_gpus, 656)
   end
-
-  def test_gpus_w_null
-    adapter = slurm_instance
-    gres_lines = File.read('spec/fixtures/output/slurm/gpus_null.txt').each_line.map(&:split)
-
-    active_gpus = gres_lines.sum { |line| adapter.class.gpus_from_gres(line[2]) }
-    total_gpus = gres_lines.sum { |line| adapter.class.gpus_from_gres(line[1]) }
-
-    assert_equal(9, active_gpus)
-    assert_equal(12, total_gpus)
-  end
 end
