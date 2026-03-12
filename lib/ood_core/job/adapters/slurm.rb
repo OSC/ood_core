@@ -879,11 +879,11 @@ module OodCore
             "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
           end
 
-        # Parse date time string ignoring unknown values returned by Slurm
+        # safely parse date time string, return nil when there are errors.
         def parse_time(date_time)
-          return nil if date_time.empty? || %w[N/A NONE UNKNOWN].include?(date_time.to_s.upcase)
-
           Time.parse(date_time)
+        rescue ArgumentError
+          nil
         end
 
           # Convert host list string to individual nodes
@@ -937,8 +937,8 @@ module OodCore
               wallclock_time: duration_in_seconds(v[:time_used]),
               wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
-              submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
-              dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
+              submission_time: parse_time(v[:submit_time]),
+              dispatch_time: parse_time(v[:start_time]),
               native: v,
               gpus: self.class.gpus_from_gres(v[:gres])
             )
