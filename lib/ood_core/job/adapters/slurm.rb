@@ -460,7 +460,7 @@ module OodCore
 
               hsh[:name] = hsh[:PartitionName]
               hsh[:allow_accounts] = if hsh[:AllowAccounts].nil? || hsh[:AllowAccounts].to_s == 'ALL'
-                                       nil
+                                       []
                                      else
                                        hsh[:AllowAccounts].to_s.split(',')
                                      end
