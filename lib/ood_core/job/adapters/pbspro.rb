@@ -86,42 +86,40 @@ module OodCore
             @bin_overrides        = bin_overrides
           end
 
-	  def get_resource(resources, key)
-	    val = resources.fetch(key, 0)
-	    val.to_i
-	  end
-
+          # Get a ClusterInfo object containing information about the given cluster
+          # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
             args = ["-a", "-F", "json"]
             stdout = call("pbsnodes", *args)
             node_info = JSON.parse(stdout)
+    
+            # Initialize cluster info values
+            total_nodes     = 0
+            allocated_nodes = 0
+            total_cpus      = 0
+            allocated_cpus  = 0
+            total_gpus      = 0
+            allocated_gpus  = 0 
 
             nodes = node_info.fetch('nodes', {})
-
-            total_nodes = 0
-            allocated_nodes = 0
-            total_cpus = 0
-            allocated_cpus = 0
-            total_gpus = 0
-            allocated_gpus = 0 
 
             nodes.each do |_node_name, node|
               total_nodes += 1
               resources_avail = node.fetch('resources_available', {})
-              total_cpus += get_resource(resources_avail, 'ncpus')
-	      total_gpus      += get_resource(resources_avail, 'ngpus')
+              total_cpus += get_node_resource(resources_avail, 'ncpus')
+              total_gpus += get_node_resource(resources_avail, 'ngpus')
 
-	      # Resources assigned (currently allocated to jobs)
-	      resources_assigned = node.fetch('resources_assigned', {})
-	      ncpus_assigned     = get_resource(resources_assigned, 'ncpus')
-	      ngpus_assigned     = get_resource(resources_assigned, 'ngpus')
+              # Resources assigned (currently allocated to jobs)
+              resources_assigned = node.fetch('resources_assigned', {})
+              ncpus_assigned     = get_node_resource(resources_assigned, 'ncpus')
+              ngpus_assigned     = get_node_resource(resources_assigned, 'ngpus')
 
-	      allocated_cpus += ncpus_assigned
-	      allocated_gpus += ngpus_assigned
+              allocated_cpus += ncpus_assigned
+              allocated_gpus += ngpus_assigned
 
-	      # A node is allocated if at least one CPU has been assigned to a job
-	      allocated_nodes += 1 if ncpus_assigned > 0
-	    end
+              # A node is allocated if at least one CPU has been assigned to a job
+              allocated_nodes += 1 if ncpus_assigned > 0
+            end
 
             ClusterInfo.new(active_nodes: allocated_nodes,
                             total_nodes: total_nodes,
@@ -221,6 +219,13 @@ module OodCore
           end
 
           private
+            # Get a resource value from a node's resources hash, returning 0 if the
+            # resource is not present
+            def get_node_resource(resources, key)
+             val = resources.fetch(key, 0)
+             val.to_i
+            end
+ 
             # Call a forked PBS Pro command for a given batch server
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
