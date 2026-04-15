@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Sge::Helper
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Sge::Helper";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,16 +95,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/sge/helper.rb</dd>
+    <dd>lib/ood_core/job/adapters/sge/helper.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Utility helper class for the SGE adapter to parse input and generate submission arguements.</p>
-
+    <p>Utility helper class for the SGE adapter to parse
+input and generate submission arguements.</p>
 
   </div>
 </div>
@@ -142,9 +143,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert script and job dependencies to qsub argument vector.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert script and job dependencies to qsub argument vector.</p></div></span>
   
 </li>
 
@@ -166,9 +165,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Extract the job id from qsub&#39;s output e.g.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Extract the job id from qsub's output e.g.</p></div></span>
   
 </li>
 
@@ -190,9 +187,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Raise exceptions when adapter is asked to perform an action that SGE does not support.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Raise exceptions when adapter is asked to perform an action that SGE does not support.</p></div></span>
   
 </li>
 
@@ -214,9 +209,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Examples:     #$-wd /home/ood/ondemand  # should match     #$  -wd /home/ood/ondemand  # should match     #$  -cwd /home/ood/ondemand  # should match     #$ -j yes -wd /home/ood/ondemand  # should match     #$ -j yes -o this-wd /home/ood/ondemand  # should NOT match       #$ -t 1-10:5 -wd /home/ood/ondemand  # should NOT match.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Examples:     #$-wd /home/ood/ondemand  # should match     #$  -wd /home/ood/ondemand  # should match     #$  -cwd /home/ood/ondemand  # should match     #$ -j yes -wd /home/ood/ondemand  # should match     #$ -j yes -o this-wd /home/ood/ondemand  # should NOT match       #$ -t 1-10:5 -wd /home/ood/ondemand  # should NOT match.</p></div></span>
   
 </li>
 
@@ -238,14 +231,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert seconds to duration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert seconds to duration.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -265,9 +257,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert script and job dependencies to qsub argument vector</p>
-
+    <p>Convert script and job dependencies to qsub argument vector</p>
 
   </div>
 </div>
@@ -378,9 +368,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Extract the job id from qsub&#39;s output e.g. Your job 1043 (“job_16”) has been submitted</p>
-
+    <p>Extract the job id from qsub's output
+e.g. Your job 1043 (&quot;job_16&quot;) has been submitted</p>
 
   </div>
 </div>
@@ -434,9 +423,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Raise exceptions when adapter is asked to perform an action that SGE does not support</p>
-
+    <p>Raise exceptions when adapter is asked to perform an action that SGE does not support</p>
 
   </div>
 </div>
@@ -453,9 +440,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>when an incompatible action is requested</p>
-</div>
+        <div class='inline'><p>when an incompatible action is requested</p></div>
       
     </li>
   
@@ -499,17 +484,13 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Examples:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='comment'>#$-wd /home/ood/ondemand  # should match
-</span><span class='comment'>#$  -wd /home/ood/ondemand  # should match
-</span><span class='comment'>#$  -cwd /home/ood/ondemand  # should match
-</span><span class='comment'>#$ -j yes -wd /home/ood/ondemand  # should match
-</span><span class='comment'>#$ -j yes -o this-wd /home/ood/ondemand  # should NOT match
-</span>  <span class='comment'>#$ -t 1-10:5 -wd /home/ood/ondemand  # should NOT match
-</span></code></pre>
-
+    <p>Examples:
+#$-wd /home/ood/ondemand  # should match
+#$  -wd /home/ood/ondemand  # should match
+#$  -cwd /home/ood/ondemand  # should match
+#$ -j yes -wd /home/ood/ondemand  # should match
+#$ -j yes -o this-wd /home/ood/ondemand  # should NOT match
+#$ -t 1-10:5 -wd /home/ood/ondemand  # should NOT match</p>
 
   </div>
 </div>
@@ -527,9 +508,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>The script content</p>
-</div>
+        <div class='inline'><p>The script content</p></div>
       
     </li>
   
@@ -609,9 +588,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert seconds to duration</p>
-
+    <p>Convert seconds to duration</p>
 
   </div>
 </div>
@@ -643,9 +620,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>an SGE qsub compatible wallclock limit</p>
-</div>
+        <div class='inline'><p>an SGE qsub compatible wallclock limit</p></div>
       
     </li>
   
@@ -679,9 +654,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:34 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

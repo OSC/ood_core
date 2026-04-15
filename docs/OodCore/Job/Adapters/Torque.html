@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Torque
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Torque";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -96,8 +97,9 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/torque.rb<span class="defines">,<br />
-  lib/ood_core/job/adapters/torque/batch.rb,<br /> lib/ood_core/job/adapters/torque/attributes.rb</span>
+    <dd>lib/ood_core/job/adapters/torque.rb<span class="defines">,<br>
+  lib/ood_core/job/adapters/torque/batch.rb,<br> lib/ood_core/job/adapters/torque/attributes.rb</span>
+
 </dd>
   </dl>
   
@@ -105,9 +107,7 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Utility class to maintain all the Torque attributes available.</p>
-
+    <p>Utility class to maintain all the Torque attributes available.</p>
 
   </div>
 </div>
@@ -136,9 +136,7 @@
         <dt id="STATE_MAP-constant" class="">STATE_MAP =
           <div class="docstring">
   <div class="discussion">
-    
-<p>Mapping of state characters for PBS</p>
-
+    <p>Mapping of state characters for PBS</p>
 
   </div>
 </div>
@@ -161,16 +159,13 @@
         <dt id="ATTR-constant" class="">ATTR =
           <div class="docstring">
   <div class="discussion">
-    
-<p>Maintains a constant Hash of defined PBS attribute types Includes:</p>
-
+    <p>Maintains a constant Hash of defined PBS attribute types
+Includes:</p>
 <pre class="code ruby"><code class="ruby"><span class='const'>Attribute</span> <span class='id identifier rubyid_names'>names</span> <span class='id identifier rubyid_used'>used</span> <span class='id identifier rubyid_by'>by</span> <span class='id identifier rubyid_user'>user</span> <span class='id identifier rubyid_commands'>commands</span>
 <span class='const'>Additional</span> <span class='id identifier rubyid_job'>job</span> <span class='kw'>and</span> <span class='id identifier rubyid_general'>general</span> <span class='id identifier rubyid_attribute'>attribute</span> <span class='id identifier rubyid_names'>names</span>
 <span class='const'>Additional</span> <span class='id identifier rubyid_queue'>queue</span> <span class='id identifier rubyid_attribute'>attribute</span> <span class='id identifier rubyid_names'>names</span>
 <span class='const'>Additional</span> <span class='id identifier rubyid_server'>server</span> <span class='id identifier rubyid_attribute'>attribute</span> <span class='id identifier rubyid_names'>names</span>
-<span class='const'>Additional</span> <span class='id identifier rubyid_node'>node</span> <span class='id identifier rubyid_attribute'>attribute</span> <span class='id identifier rubyid_names'>names</span>
-</code></pre>
-
+<span class='const'>Additional</span> <span class='id identifier rubyid_node'>node</span> <span class='id identifier rubyid_attribute'>attribute</span> <span class='id identifier rubyid_names'>names</span></code></pre>
 
   </div>
 </div>
@@ -314,9 +309,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete the submitted job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete the submitted job.</p></div></span>
   
 </li>
 
@@ -360,9 +353,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put the submitted job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put the submitted job on hold.</p></div></span>
   
 </li>
 
@@ -384,9 +375,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job info from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job info from the resource manager.</p></div></span>
   
 </li>
 
@@ -408,9 +397,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -432,9 +419,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p></div></span>
   
 </li>
 
@@ -458,9 +443,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Torque.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Torque.</p></div></span>
   
 </li>
 
@@ -482,9 +465,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>place holder for when we support both nodes and cpus.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>place holder for when we support both nodes and cpus.</p></div></span>
   
 </li>
 
@@ -506,9 +487,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release the job that is on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release the job that is on hold.</p></div></span>
   
 </li>
 
@@ -530,9 +509,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job status from resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job status from resource manager.</p></div></span>
   
 </li>
 
@@ -554,17 +531,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a job with the attributes defined in the job template instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a job with the attributes defined in the job template instance.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -593,9 +570,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Returns a new instance of Torque.</p>
-
 
   </div>
 </div>
@@ -615,9 +590,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the options defining this adapter</p>
-</div>
+        <div class='inline'><p>the options defining this adapter</p></div>
       
     </li>
   
@@ -636,9 +609,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The PBS batch object</p>
-</div>
+            &mdash; <div class='inline'><p>The PBS batch object</p></div>
           
         </li>
       
@@ -696,9 +667,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete the submitted job</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Delete the submitted job</p>
 
   </div>
 </div>
@@ -716,9 +685,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -735,9 +702,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong deleting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong deleting a job</p></div>
       
     </li>
   
@@ -824,9 +789,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Put the submitted job on hold</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Put the submitted job on hold</p>
 
   </div>
 </div>
@@ -844,9 +807,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -863,9 +824,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong holding a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong holding a job</p></div>
       
     </li>
   
@@ -920,9 +879,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job info from the resource manager</p>
-
+    <p>Retrieve job info from the resource manager</p>
 
   </div>
 </div>
@@ -940,9 +897,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -959,9 +914,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted job</p>
-</div>
+        <div class='inline'><p>information describing submitted job</p></div>
       
     </li>
   
@@ -977,9 +930,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1054,9 +1005,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs from the resource manager</p>
-
+    <p>Retrieve info for all jobs from the resource manager</p>
 
   </div>
 </div>
@@ -1073,9 +1022,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1091,9 +1038,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1146,9 +1091,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager</p>
-
+    <p>Retrieve info for all jobs for a given owner or owners from the
+resource manager</p>
 
   </div>
 </div>
@@ -1166,9 +1110,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the jobs</p>
-</div>
+        <div class='inline'><p>the owner(s) of the jobs</p></div>
       
     </li>
   
@@ -1185,9 +1127,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1203,9 +1143,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1261,9 +1199,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>place holder for when we support both nodes and cpus.</p>
-
+    <p>place holder for when we support both nodes and cpus.</p>
 
   </div>
 </div>
@@ -1306,9 +1242,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Release the job that is on hold</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Release the job that is on hold</p>
 
   </div>
 </div>
@@ -1326,9 +1260,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1345,9 +1277,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong releasing a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong releasing a job</p></div>
       
     </li>
   
@@ -1402,9 +1332,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job status from resource manager</p>
-
+    <p>Retrieve job status from resource manager</p>
 
   </div>
 </div>
@@ -1422,9 +1350,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1441,9 +1367,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -1459,9 +1383,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job status</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job status</p></div>
       
     </li>
   
@@ -1530,9 +1452,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Submit a job with the attributes defined in the job template instance</p>
-
+    <p>Submit a job with the attributes defined in the job template instance</p>
 
   </div>
 </div>
@@ -1550,9 +1470,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script object that describes the script and attributes for the submitted job</p>
-</div>
+        <div class='inline'><p>script object that describes the
+script and attributes for the submitted job</p></div>
       
     </li>
   
@@ -1568,9 +1487,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution at any point after dependent jobs have started execution</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for execution
+at any point after dependent jobs have started execution</p></div>
       
     </li>
   
@@ -1586,9 +1504,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with no errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with no errors</p></div>
       
     </li>
   
@@ -1604,9 +1521,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with errors</p></div>
       
     </li>
   
@@ -1622,9 +1538,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution after dependent jobs have terminated</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution after dependent jobs have terminated</p></div>
       
     </li>
   
@@ -1641,9 +1556,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job id returned after successfully submitting a job</p>
-</div>
+        <div class='inline'><p>the job id returned after successfully submitting a job</p></div>
       
     </li>
   
@@ -1659,9 +1572,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong submitting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong submitting a job</p></div>
       
     </li>
   
@@ -1906,9 +1817,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:22 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

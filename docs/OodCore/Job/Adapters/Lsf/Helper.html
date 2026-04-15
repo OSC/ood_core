@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Lsf::Helper
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Lsf::Helper";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,7 +95,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/lsf/helper.rb</dd>
+    <dd>lib/ood_core/job/adapters/lsf/helper.rb
+</dd>
   </dl>
   
 </div>
@@ -105,9 +107,7 @@
   <strong>This class is part of a private API.</strong>
   You should avoid using this class if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Object used for simplified communication with a LSF batch server</p>
-
 
   </div>
 </div>
@@ -168,9 +168,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>given current time, dispatch time, and finish time values, estimate the runtime for a job; this estimate will be accurate if the job never enters a suspended state during its execution.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>given current time, dispatch time, and finish time values, estimate the runtime for a job; this estimate will be accurate if the job never enters a suspended state during its execution.</p></div></span>
   
 </li>
 
@@ -214,9 +212,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert CPU_USED string to seconds.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert CPU_USED string to seconds.</p></div></span>
   
 </li>
 
@@ -238,9 +234,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>convert exec_host string format from bjobs to a hash i.e.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>convert exec_host string format from bjobs to a hash i.e.</p></div></span>
   
 </li>
 
@@ -262,14 +256,13 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>convert string in format “03/31-14:46:42” to Time object assumes time being parsed is a time that ocurred in the past not to be used for parsing times in the future (like estimated FINISH_TIME).</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>convert string in format &quot;03/31-14:46:42&quot; to Time object assumes time being parsed is a time that ocurred in the past not to be used for parsing times in the future (like estimated FINISH_TIME).</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -412,9 +405,9 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>given current time, dispatch time, and finish time values, estimate the runtime for a job; this estimate will be accurate if the job never enters a suspended state during its execution</p>
-
+<p>given current time, dispatch time, and finish time values, estimate the
+runtime for a job; this estimate will be accurate if the job never enters a
+suspended state during its execution</p>
 
   </div>
 </div>
@@ -504,15 +497,18 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Convert CPU_USED string to seconds</p>
-
 <p>example strings of cpu_used in LSF 8.3:</p>
-
-<p>060:24:00.00 046:19:37.00 1118:59:09.00 000:00:00.00 000:48:18.39 003:11:36.67 003:24:40.95 50769:48:00.-48 50835:48:48.-48</p>
-
+<p>060:24:00.00
+046:19:37.00
+1118:59:09.00
+000:00:00.00
+000:48:18.39
+003:11:36.67
+003:24:40.95
+50769:48:00.-48
+50835:48:48.-48</p>
 <p>my guess is: hours:minutes:seconds.????</p>
-
 
   </div>
 </div>
@@ -529,9 +525,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>cpu used as seconds</p>
-</div>
+        <div class='inline'><p>cpu used as seconds</p></div>
       
     </li>
   
@@ -577,9 +571,10 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>convert exec_host string format from bjobs to a hash i.e. “c012” =&gt; [“c012”, slots: 1] i.e. “4*c012:8*c013” =&gt; [“c012”, slots: 4, “c013”, slots: 8] i.e. “c012:c012” =&gt; [“c012”, slots: 2]</p>
-
+<p>convert exec_host string format from bjobs to a hash
+i.e. &quot;c012&quot; =&gt; ["c012", slots: 1]
+i.e. &quot;4<em>c012:8</em>c013&quot; =&gt; ["c012", slots: 4, "c013", slots: 8]
+i.e. &quot;c012:c012&quot; =&gt; ["c012", slots: 2]</p>
 
   </div>
 </div>
@@ -636,9 +631,9 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>convert string in format “03/31-14:46:42” to Time object assumes time being parsed is a time that ocurred in the past not to be used for parsing times in the future (like estimated FINISH_TIME)</p>
-
+<p>convert string in format &quot;03/31-14:46:42&quot; to Time object
+assumes time being parsed is a time that ocurred in the past
+not to be used for parsing times in the future (like estimated FINISH_TIME)</p>
 
   </div>
 </div>
@@ -699,9 +694,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:34 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

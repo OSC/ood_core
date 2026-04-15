@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Torque::Batch
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Torque::Batch";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,16 +95,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/torque/batch.rb</dd>
+    <dd>lib/ood_core/job/adapters/torque/batch.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>Object used for simplified communication with a batch server</p>
-
+    <p>Object used for simplified communication with a batch server</p>
 
   </div>
 </div>
@@ -149,9 +149,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The path to the Torque client installation binaries.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The path to the Torque client installation binaries.</p></div></span>
   
 </li>
 
@@ -178,9 +176,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Optional overrides for Torque client executables.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Optional overrides for Torque client executables.</p></div></span>
   
 </li>
 
@@ -207,9 +203,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The host of the Torque batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The host of the Torque batch server.</p></div></span>
   
 </li>
 
@@ -236,9 +230,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The path to the Torque client installation libraries.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The path to the Torque client installation libraries.</p></div></span>
   
 </li>
 
@@ -265,9 +257,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Determines whether to use strict_host_checking for ssh.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Determines whether to use strict_host_checking for ssh.</p></div></span>
   
 </li>
 
@@ -294,9 +284,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The login node where job is submitted via ssh.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The login node where job is submitted via ssh.</p></div></span>
   
 </li>
 
@@ -331,9 +319,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The comparison operator.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The comparison operator.</p></div></span>
   
 </li>
 
@@ -355,9 +341,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Creates a connection to batch server and calls block in context of this connection.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Creates a connection to batch server and calls block in context of this connection.</p></div></span>
   
 </li>
 
@@ -379,9 +363,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete a specified job from batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete a specified job from batch server.</p></div></span>
   
 </li>
 
@@ -403,9 +385,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Checks whether two batch server objects are completely identical to each other.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Checks whether two batch server objects are completely identical to each other.</p></div></span>
   
 </li>
 
@@ -427,9 +407,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get info for given batch server&#39;s job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get info for given batch server's job.</p></div></span>
   
 </li>
 
@@ -451,9 +429,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a list of hashes of the jobs on the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a list of hashes of the jobs on the batch server.</p></div></span>
   
 </li>
 
@@ -475,9 +451,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get info for given batch server&#39;s node.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get info for given batch server's node.</p></div></span>
   
 </li>
 
@@ -499,9 +473,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a list of hashes of the nodes on the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a list of hashes of the nodes on the batch server.</p></div></span>
   
 </li>
 
@@ -523,9 +495,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get info for given batch server&#39;s queue.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get info for given batch server's queue.</p></div></span>
   
 </li>
 
@@ -547,9 +517,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a list of hashes of the queues on the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a list of hashes of the queues on the batch server.</p></div></span>
   
 </li>
 
@@ -571,9 +539,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a hash with status info for this batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a hash with status info for this batch server.</p></div></span>
   
 </li>
 
@@ -595,9 +561,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Generates a hash value for this object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Generates a hash value for this object.</p></div></span>
   
 </li>
 
@@ -619,9 +583,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put specified job on hold Possible hold types:   :u =&gt; Available to the owner of the job, the batch operator and the batch administrator   :o =&gt; Available to the batch operator and the batch administrator   :s =&gt; Available to the batch administrator.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put specified job on hold Possible hold types:   :u =&gt; Available to the owner of the job, the batch operator and the batch administrator   :o =&gt; Available to the batch operator and the batch administrator   :s =&gt; Available to the batch administrator.</p></div></span>
   
 </li>
 
@@ -645,9 +607,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Batch.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Batch.</p></div></span>
   
 </li>
 
@@ -669,9 +629,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release a specified job that is on hold Possible hold types:   :u =&gt; Available to the owner of the job, the batch operator and the batch administrator   :o =&gt; Available to the batch operator and the batch administrator   :s =&gt; Available to the batch administrator.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release a specified job that is on hold Possible hold types:   :u =&gt; Available to the owner of the job, the batch operator and the batch administrator   :o =&gt; Available to the batch operator and the batch administrator   :s =&gt; Available to the batch administrator.</p></div></span>
   
 </li>
 
@@ -693,9 +651,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a list of hashes of the selected jobs on the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a list of hashes of the selected jobs on the batch server.</p></div></span>
   
 </li>
 
@@ -717,9 +673,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a script expanded as a string to the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a script expanded as a string to the batch server.</p></div></span>
   
 </li>
 
@@ -741,9 +695,7 @@
   
 
   
-    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
-<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
-</div></span>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'><p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p></div></span>
   
 </li>
 
@@ -765,9 +717,7 @@
   
 
   
-    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'>
-<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
-</div></span>
+    <span class="summary_desc"><strong>Deprecated.</strong> <div class='inline'><p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p></div></span>
   
 </li>
 
@@ -789,14 +739,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert object to hash.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert object to hash.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -813,9 +762,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Batch.</p>
-
+    <p>Returns a new instance of Batch.</p>
 
   </div>
 </div>
@@ -833,9 +780,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the batch server host</p>
-</div>
+        <div class='inline'><p>the batch server host</p></div>
       
     </li>
   
@@ -851,9 +796,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the login node</p>
-</div>
+        <div class='inline'><p>the login node</p></div>
       
     </li>
   
@@ -869,9 +812,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>use strict host checking when ssh to submit_host</p>
-</div>
+        <div class='inline'><p>use strict host checking when ssh to submit_host</p></div>
       
     </li>
   
@@ -887,9 +828,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to FFI installation libraries</p>
-</div>
+        <div class='inline'><p>path to FFI installation libraries</p></div>
       
     </li>
   
@@ -905,9 +844,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to FFI installation binaries</p>
-</div>
+        <div class='inline'><p>path to FFI installation binaries</p></div>
       
     </li>
   
@@ -963,9 +900,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The path to the Torque client installation binaries</p>
-
+    <p>The path to the Torque client installation binaries</p>
 
   </div>
 </div>
@@ -975,9 +910,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>For Torque 5.0.0</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>For Torque 5.0.0</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_bin'>bin</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/Torque/5.0.0/bin&quot;</span></code></pre>
     
@@ -994,9 +927,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to Torque binaries</p>
-</div>
+        <div class='inline'><p>path to Torque binaries</p></div>
       
     </li>
   
@@ -1036,9 +967,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Optional overrides for Torque client executables</p>
-
+    <p>Optional overrides for Torque client executables</p>
 
   </div>
 </div>
@@ -1087,9 +1016,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The host of the Torque batch server</p>
-
+    <p>The host of the Torque batch server</p>
 
   </div>
 </div>
@@ -1099,9 +1026,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>OSC&#39;s Oakley batch server</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>OSC's Oakley batch server</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_host'>host</span> <span class='comment'>#=&gt; &quot;oak-batch.osc.edu&quot;</span></code></pre>
     
@@ -1118,9 +1043,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the batch server host</p>
-</div>
+        <div class='inline'><p>the batch server host</p></div>
       
     </li>
   
@@ -1160,9 +1083,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The path to the Torque client installation libraries</p>
-
+    <p>The path to the Torque client installation libraries</p>
 
   </div>
 </div>
@@ -1172,9 +1093,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>For Torque 5.0.0</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>For Torque 5.0.0</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_lib'>lib</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/usr/local/Torque/5.0.0/lib&quot;</span></code></pre>
     
@@ -1191,9 +1110,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to Torque libraries</p>
-</div>
+        <div class='inline'><p>path to Torque libraries</p></div>
       
     </li>
   
@@ -1233,9 +1150,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Determines whether to use strict_host_checking for ssh</p>
-
+    <p>Determines whether to use strict_host_checking for ssh</p>
 
   </div>
 </div>
@@ -1297,9 +1212,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The login node where job is submitted via ssh</p>
-
+    <p>The login node where job is submitted via ssh</p>
 
   </div>
 </div>
@@ -1309,9 +1222,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>OSC&#39;s owens login node</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>OSC's owens login node</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_submit_host'>submit_host</span> <span class='comment'>#=&gt; &quot;owens.osc.edu&quot;</span></code></pre>
     
@@ -1328,9 +1239,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the login node</p>
-</div>
+        <div class='inline'><p>the login node</p></div>
       
     </li>
   
@@ -1375,9 +1284,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The comparison operator</p>
-
+    <p>The comparison operator</p>
 
   </div>
 </div>
@@ -1395,9 +1302,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>batch server to compare against</p>
-</div>
+        <div class='inline'><p>batch server to compare against</p></div>
       
     </li>
   
@@ -1414,9 +1319,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>how batch servers compare</p>
-</div>
+        <div class='inline'><p>how batch servers compare</p></div>
       
     </li>
   
@@ -1454,9 +1357,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Creates a connection to batch server and calls block in context of this connection</p>
-
+    <p>Creates a connection to batch server and calls block in context of this
+connection</p>
 
   </div>
 </div>
@@ -1475,9 +1377,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>connection id from established batch server connection</p>
-</div>
+        <div class='inline'><p>connection id from established batch server connection</p></div>
       
     </li>
   
@@ -1493,9 +1393,7 @@
       
       
         
-        <div class='inline'>
-<p>the final value of the block</p>
-</div>
+        <div class='inline'><p>the final value of the block</p></div>
       
     </li>
   
@@ -1551,9 +1449,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete a specified job from batch server</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Delete a specified job from batch server</p>
 
   </div>
 </div>
@@ -1563,9 +1459,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Delete job &#39;10219837.oak-batch.osc.edu&#39; from batch</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Delete job '10219837.oak-batch.osc.edu' from batch</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -1583,9 +1477,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1628,9 +1520,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Checks whether two batch server objects are completely identical to each other</p>
-
+    <p>Checks whether two batch server objects are completely identical to each
+other</p>
 
   </div>
 </div>
@@ -1648,9 +1539,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>batch server to compare against</p>
-</div>
+        <div class='inline'><p>batch server to compare against</p></div>
       
     </li>
   
@@ -1667,9 +1556,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether same objects</p>
-</div>
+        <div class='inline'><p>whether same objects</p></div>
       
     </li>
   
@@ -1707,9 +1594,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get info for given batch server&#39;s job</p>
-
+    <p>Get info for given batch server's job</p>
 
   </div>
 </div>
@@ -1719,9 +1604,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley&#39;s &#39;10219837.oak-batch.osc.edu&#39; job</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley's '10219837.oak-batch.osc.edu' job</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_job'>get_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>102719837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -1747,9 +1630,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of requested information</p>
-</div>
+        <div class='inline'><p>the id of requested information</p></div>
       
     </li>
   
@@ -1763,9 +1644,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of attribs to filter on</p>
-</div>
+        <div class='inline'><p>list of attribs to filter on</p></div>
       
     </li>
   
@@ -1782,9 +1661,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash with details of job</p>
-</div>
+        <div class='inline'><p>hash with details of job</p></div>
       
     </li>
   
@@ -1822,9 +1699,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get a list of hashes of the jobs on the batch server</p>
-
+    <p>Get a list of hashes of the jobs on the batch server</p>
 
   </div>
 </div>
@@ -1834,9 +1709,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley jobs</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley jobs</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span>
 <span class='comment'>#=&gt;
@@ -1870,9 +1743,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of requested information</p>
-</div>
+        <div class='inline'><p>the id of requested information</p></div>
       
     </li>
   
@@ -1888,9 +1759,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of attribs to filter on</p>
-</div>
+        <div class='inline'><p>list of attribs to filter on</p></div>
       
     </li>
   
@@ -1907,9 +1776,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash of details for jobs</p>
-</div>
+        <div class='inline'><p>hash of details for jobs</p></div>
       
     </li>
   
@@ -1955,9 +1822,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get info for given batch server&#39;s node</p>
-
+    <p>Get info for given batch server's node</p>
 
   </div>
 </div>
@@ -1967,9 +1832,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley&#39;s &#39;n0001&#39; node</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley's 'n0001' node</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_node'>get_node</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>n0001</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -1994,9 +1857,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of requested information</p>
-</div>
+        <div class='inline'><p>the id of requested information</p></div>
       
     </li>
   
@@ -2010,9 +1871,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of attribs to filter on</p>
-</div>
+        <div class='inline'><p>list of attribs to filter on</p></div>
       
     </li>
   
@@ -2029,9 +1888,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status info for the node</p>
-</div>
+        <div class='inline'><p>status info for the node</p></div>
       
     </li>
   
@@ -2069,9 +1926,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get a list of hashes of the nodes on the batch server</p>
-
+    <p>Get a list of hashes of the nodes on the batch server</p>
 
   </div>
 </div>
@@ -2081,9 +1936,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley nodes</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley nodes</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_nodes'>get_nodes</span>
 <span class='comment'>#=&gt;
@@ -2115,9 +1968,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of requested information</p>
-</div>
+        <div class='inline'><p>the id of requested information</p></div>
       
     </li>
   
@@ -2133,9 +1984,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of attribs to filter on</p>
-</div>
+        <div class='inline'><p>list of attribs to filter on</p></div>
       
     </li>
   
@@ -2152,9 +2001,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash of details for nodes</p>
-</div>
+        <div class='inline'><p>hash of details for nodes</p></div>
       
     </li>
   
@@ -2200,9 +2047,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get info for given batch server&#39;s queue</p>
-
+    <p>Get info for given batch server's queue</p>
 
   </div>
 </div>
@@ -2212,9 +2057,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley&#39;s parallel queue</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley's parallel queue</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_queue'>get_queue</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>parallel</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -2238,9 +2081,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status info for the queue</p>
-</div>
+        <div class='inline'><p>status info for the queue</p></div>
       
     </li>
   
@@ -2278,9 +2119,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get a list of hashes of the queues on the batch server</p>
-
+    <p>Get a list of hashes of the queues on the batch server</p>
 
   </div>
 </div>
@@ -2290,9 +2129,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley queues</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley queues</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_queues'>get_queues</span>
 <span class='comment'>#=&gt;
@@ -2324,9 +2161,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of requested information</p>
-</div>
+        <div class='inline'><p>the id of requested information</p></div>
       
     </li>
   
@@ -2342,9 +2177,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of attribs to filter on</p>
-</div>
+        <div class='inline'><p>list of attribs to filter on</p></div>
       
     </li>
   
@@ -2361,9 +2194,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash of details for the queues</p>
-</div>
+        <div class='inline'><p>hash of details for the queues</p></div>
       
     </li>
   
@@ -2409,9 +2240,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get a hash with status info for this batch server</p>
-
+    <p>Get a hash with status info for this batch server</p>
 
   </div>
 </div>
@@ -2421,9 +2250,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for OSC Oakley batch server</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for OSC Oakley batch server</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_get_status'>get_status</span>
 <span class='comment'>#=&gt;
@@ -2450,9 +2277,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of attribs to filter on</p>
-</div>
+        <div class='inline'><p>list of attribs to filter on</p></div>
       
     </li>
   
@@ -2469,9 +2294,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status info for batch server</p>
-</div>
+        <div class='inline'><p>status info for batch server</p></div>
       
     </li>
   
@@ -2517,9 +2340,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Generates a hash value for this object</p>
-
+    <p>Generates a hash value for this object</p>
 
   </div>
 </div>
@@ -2536,9 +2357,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash value of object</p>
-</div>
+        <div class='inline'><p>hash value of object</p></div>
       
     </li>
   
@@ -2576,14 +2395,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Put specified job on hold Possible hold types:</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Put specified job on hold
+Possible hold types:</p>
 <pre class="code ruby"><code class="ruby">:u =&gt; Available to the owner of the job, the batch operator and the batch administrator
 :o =&gt; Available to the batch operator and the batch administrator
-:s =&gt; Available to the batch administrator
-</code></pre>
-
+:s =&gt; Available to the batch administrator</code></pre>
 
   </div>
 </div>
@@ -2593,9 +2409,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Put job &#39;10219837.oak-batch.osc.edu&#39; on hold</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Put job '10219837.oak-batch.osc.edu' on hold</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -2613,9 +2427,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -2631,9 +2443,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>type of hold to be applied</p>
-</div>
+        <div class='inline'><p>type of hold to be applied</p></div>
       
     </li>
   
@@ -2676,14 +2486,11 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Release a specified job that is on hold Possible hold types:</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Release a specified job that is on hold
+Possible hold types:</p>
 <pre class="code ruby"><code class="ruby">:u =&gt; Available to the owner of the job, the batch operator and the batch administrator
 :o =&gt; Available to the batch operator and the batch administrator
-:s =&gt; Available to the batch administrator
-</code></pre>
-
+:s =&gt; Available to the batch administrator</code></pre>
 
   </div>
 </div>
@@ -2693,9 +2500,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Release job &#39;10219837.oak-batch.osc.edu&#39; from hold</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Release job '10219837.oak-batch.osc.edu' from hold</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>10219837.oak-batch.osc.edu</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -2713,9 +2518,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -2731,9 +2534,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>type of hold to be removed</p>
-</div>
+        <div class='inline'><p>type of hold to be removed</p></div>
       
     </li>
   
@@ -2776,9 +2577,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get a list of hashes of the selected jobs on the batch server</p>
-
+    <p>Get a list of hashes of the selected jobs on the batch server</p>
 
   </div>
 </div>
@@ -2788,9 +2587,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Status info for jobs owned by Bob</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Status info for jobs owned by Bob</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_select_jobs'>select_jobs</span><span class='lparen'>(</span><span class='label'>attribs:</span> <span class='lbracket'>[</span><span class='lbrace'>{</span><span class='label'>name:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>User_List</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>value:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>bob</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>op:</span> <span class='symbol'>:eq</span><span class='rbrace'>}</span><span class='rbracket'>]</span><span class='rparen'>)</span>
 <span class='comment'>#=&gt;
@@ -2824,9 +2621,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of hashes describing attributes to select on</p>
-</div>
+        <div class='inline'><p>list of hashes describing attributes to
+select on</p></div>
       
     </li>
   
@@ -2843,9 +2639,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash of details of selected jobs</p>
-</div>
+        <div class='inline'><p>hash of details of selected jobs</p></div>
       
     </li>
   
@@ -2891,9 +2685,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Submit a script expanded as a string to the batch server</p>
-
+    <p>Submit a script expanded as a string to the batch server</p>
 
   </div>
 </div>
@@ -2911,9 +2703,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script as a string</p>
-</div>
+        <div class='inline'><p>script as a string</p></div>
       
     </li>
   
@@ -2929,9 +2719,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>arguments passed to `qsub` command</p>
-</div>
+        <div class='inline'><p>arguments passed to <code>qsub</code> command</p></div>
       
     </li>
   
@@ -2947,9 +2735,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>environment variables set</p>
-</div>
+        <div class='inline'><p>environment variables set</p></div>
       
     </li>
   
@@ -2965,9 +2751,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>working directory where `qsub` is called from</p>
-</div>
+        <div class='inline'><p>working directory where <code>qsub</code> is called from</p></div>
       
     </li>
   
@@ -2984,9 +2768,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job that was created</p>
-</div>
+        <div class='inline'><p>the id of the job that was created</p></div>
       
     </li>
   
@@ -3002,9 +2784,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `qsub` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>qsub</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -3042,12 +2822,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
-<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
-</div></div>
-
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'><p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p></div></div>
 <p>Submit a script to the batch server</p>
-
 
   </div>
 </div>
@@ -3057,9 +2833,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Submit a script with a few PBS directives</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Submit a script with a few PBS directives</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_conn'>my_conn</span><span class='period'>.</span><span class='id identifier rubyid_submit_script'>submit_script</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>/path/to/script</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
   <span class='label'>headers:</span> <span class='lbrace'>{</span>
@@ -3090,9 +2864,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to the script</p>
-</div>
+        <div class='inline'><p>path to the script</p></div>
       
     </li>
   
@@ -3108,9 +2880,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>queue to submit script to</p>
-</div>
+        <div class='inline'><p>queue to submit script to</p></div>
       
     </li>
   
@@ -3126,9 +2896,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>pbs headers</p>
-</div>
+        <div class='inline'><p>pbs headers</p></div>
       
     </li>
   
@@ -3144,9 +2912,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>pbs resources</p>
-</div>
+        <div class='inline'><p>pbs resources</p></div>
       
     </li>
   
@@ -3162,9 +2928,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>pbs environment variables</p>
-</div>
+        <div class='inline'><p>pbs environment variables</p></div>
       
     </li>
   
@@ -3180,9 +2944,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether use library or binary for submission</p>
-</div>
+        <div class='inline'><p>whether use library or binary for submission</p></div>
       
     </li>
   
@@ -3199,9 +2961,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job that was created</p>
-</div>
+        <div class='inline'><p>the id of the job that was created</p></div>
       
     </li>
   
@@ -3239,12 +2999,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'>
-<p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p>
-</div></div>
-
+    <div class="note deprecated"><strong>Deprecated.</strong> <div class='inline'><p>Use <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapters::Torque::Batch#submit (method)">#submit</a></span> instead.</p></div></div>
 <p>Submit a script expanded into a string to the batch server</p>
-
 
   </div>
 </div>
@@ -3262,9 +3018,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script as a string</p>
-</div>
+        <div class='inline'><p>script as a string</p></div>
       
     </li>
   
@@ -3278,9 +3032,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to the script</p>
-</div>
+        <div class='inline'><p>path to the script</p></div>
       
     </li>
   
@@ -3294,9 +3046,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>queue to submit script to</p>
-</div>
+        <div class='inline'><p>queue to submit script to</p></div>
       
     </li>
   
@@ -3310,9 +3060,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>pbs headers</p>
-</div>
+        <div class='inline'><p>pbs headers</p></div>
       
     </li>
   
@@ -3326,9 +3074,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>pbs resources</p>
-</div>
+        <div class='inline'><p>pbs resources</p></div>
       
     </li>
   
@@ -3342,9 +3088,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>pbs environment variables</p>
-</div>
+        <div class='inline'><p>pbs environment variables</p></div>
       
     </li>
   
@@ -3358,9 +3102,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether use library or binary for submission</p>
-</div>
+        <div class='inline'><p>whether use library or binary for submission</p></div>
       
     </li>
   
@@ -3377,9 +3119,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job that was created</p>
-</div>
+        <div class='inline'><p>the id of the job that was created</p></div>
       
     </li>
   
@@ -3425,9 +3165,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert object to hash</p>
-
+    <p>Convert object to hash</p>
 
   </div>
 </div>
@@ -3444,9 +3182,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the hash describing this object</p>
-</div>
+        <div class='inline'><p>the hash describing this object</p></div>
       
     </li>
   
@@ -3478,9 +3214,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:34 2026 by
+  Generated on Wed Apr 15 14:08:24 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Status
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Status";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,16 +95,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/status.rb</dd>
+    <dd>lib/ood_core/job/status.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An object that describes the current state of a submitted job.</p>
-
+    <p>An object that describes the current state of a submitted job.</p>
 
   </div>
 </div>
@@ -139,9 +139,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Current status of submitted job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Current status of submitted job.</p></div></span>
   
 </li>
 
@@ -176,14 +174,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Possible states a submitted job can be in:   # Job status cannot be determined   :undetermined.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Possible states a submitted job can be in:   # Job status cannot be determined   :undetermined.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -209,9 +206,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The comparison operator for sorting values.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The comparison operator for sorting values.</p></div></span>
   
 </li>
 
@@ -233,9 +228,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The comparison operator.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The comparison operator.</p></div></span>
   
 </li>
 
@@ -257,9 +250,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the status is completed.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the status is completed.</p></div></span>
   
 </li>
 
@@ -281,9 +272,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether objects are identical to each other.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether objects are identical to each other.</p></div></span>
   
 </li>
 
@@ -305,9 +294,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Generate a hash value for this object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Generate a hash value for this object.</p></div></span>
   
 </li>
 
@@ -331,9 +318,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Status.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Status.</p></div></span>
   
 </li>
 
@@ -377,9 +362,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the status is queued.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the status is queued.</p></div></span>
   
 </li>
 
@@ -401,9 +384,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the status is queued_held.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the status is queued_held.</p></div></span>
   
 </li>
 
@@ -425,9 +406,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the status is running.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the status is running.</p></div></span>
   
 </li>
 
@@ -449,9 +428,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the status is suspended.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the status is suspended.</p></div></span>
   
 </li>
 
@@ -473,9 +450,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert object to string.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert object to string.</p></div></span>
   
 </li>
 
@@ -497,9 +472,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert object to symbol.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert object to symbol.</p></div></span>
   
 </li>
 
@@ -521,14 +494,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the status is undetermined.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the status is undetermined.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -545,9 +517,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Status.</p>
-
+    <p>Returns a new instance of Status.</p>
 
   </div>
 </div>
@@ -565,9 +535,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -584,9 +552,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if supplied state does not exist</p>
-</div>
+        <div class='inline'><p>if supplied state does not exist</p></div>
       
     </li>
   
@@ -633,9 +599,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Current status of submitted job</p>
-
+    <p>Current status of submitted job</p>
 
   </div>
 </div>
@@ -652,9 +616,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -699,9 +661,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Possible states a submitted job can be in:</p>
-
+    <p>Possible states a submitted job can be in:</p>
 <pre class="code ruby"><code class="ruby"># Job status cannot be determined
 :undetermined
 
@@ -721,9 +681,7 @@
 # Job is completed and not running on an execution host
 :completed
 
-@note that this list&#39;s order is meaningful and should not be sorted lexigraphically
-</code></pre>
-
+@note that this list&#39;s order is meaningful and should not be sorted lexigraphically</code></pre>
 
   </div>
 </div>
@@ -782,9 +740,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The comparison operator for sorting values.</p>
-
+    <p>The comparison operator for sorting values.</p>
 
   </div>
 </div>
@@ -801,9 +757,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Comparison value based on precedence</p>
-</div>
+        <div class='inline'><p>Comparison value based on precedence</p></div>
       
     </li>
   
@@ -841,9 +795,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The comparison operator</p>
-
+    <p>The comparison operator</p>
 
   </div>
 </div>
@@ -861,9 +813,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object to compare against</p>
-</div>
+        <div class='inline'><p>object to compare against</p></div>
       
     </li>
   
@@ -880,9 +830,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether objects are equivalent</p>
-</div>
+        <div class='inline'><p>whether objects are equivalent</p></div>
       
     </li>
   
@@ -920,9 +868,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the status is completed</p>
-
+    <p>Whether the status is completed</p>
 
   </div>
 </div>
@@ -939,9 +885,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether completed</p>
-</div>
+        <div class='inline'><p>whether completed</p></div>
       
     </li>
   
@@ -983,9 +927,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether objects are identical to each other</p>
-
+    <p>Whether objects are identical to each other</p>
 
   </div>
 </div>
@@ -1003,9 +945,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object to compare against</p>
-</div>
+        <div class='inline'><p>object to compare against</p></div>
       
     </li>
   
@@ -1022,9 +962,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether objects are identical</p>
-</div>
+        <div class='inline'><p>whether objects are identical</p></div>
       
     </li>
   
@@ -1062,9 +1000,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Generate a hash value for this object</p>
-
+    <p>Generate a hash value for this object</p>
 
   </div>
 </div>
@@ -1081,9 +1017,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash value of object</p>
-</div>
+        <div class='inline'><p>hash value of object</p></div>
       
     </li>
   
@@ -1151,9 +1085,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the status is queued</p>
-
+    <p>Whether the status is queued</p>
 
   </div>
 </div>
@@ -1170,9 +1102,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether queued</p>
-</div>
+        <div class='inline'><p>whether queued</p></div>
       
     </li>
   
@@ -1214,9 +1144,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the status is queued_held</p>
-
+    <p>Whether the status is queued_held</p>
 
   </div>
 </div>
@@ -1233,9 +1161,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether queued_held</p>
-</div>
+        <div class='inline'><p>whether queued_held</p></div>
       
     </li>
   
@@ -1277,9 +1203,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the status is running</p>
-
+    <p>Whether the status is running</p>
 
   </div>
 </div>
@@ -1296,9 +1220,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether running</p>
-</div>
+        <div class='inline'><p>whether running</p></div>
       
     </li>
   
@@ -1340,9 +1262,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the status is suspended</p>
-
+    <p>Whether the status is suspended</p>
 
   </div>
 </div>
@@ -1359,9 +1279,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether suspended</p>
-</div>
+        <div class='inline'><p>whether suspended</p></div>
       
     </li>
   
@@ -1403,9 +1321,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert object to string</p>
-
+    <p>Convert object to string</p>
 
   </div>
 </div>
@@ -1422,9 +1338,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object as string</p>
-</div>
+        <div class='inline'><p>object as string</p></div>
       
     </li>
   
@@ -1462,9 +1376,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert object to symbol</p>
-
+    <p>Convert object to symbol</p>
 
   </div>
 </div>
@@ -1481,9 +1393,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object as symbol</p>
-</div>
+        <div class='inline'><p>object as symbol</p></div>
       
     </li>
   
@@ -1521,9 +1431,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the status is undetermined</p>
-
+    <p>Whether the status is undetermined</p>
 
   </div>
 </div>
@@ -1540,9 +1448,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether undetermined</p>
-</div>
+        <div class='inline'><p>whether undetermined</p></div>
       
     </li>
   
@@ -1578,9 +1484,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:31 2026 by
+  Generated on Wed Apr 15 14:08:21 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

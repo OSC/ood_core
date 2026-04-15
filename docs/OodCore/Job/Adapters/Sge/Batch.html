@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Sge::Batch
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Sge::Batch";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,7 +95,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/sge/batch.rb</dd>
+    <dd>lib/ood_core/job/adapters/sge/batch.rb
+</dd>
   </dl>
   
 </div>
@@ -105,9 +107,7 @@
   <strong>This class is part of a private API.</strong>
   You should avoid using this class if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Object used for simplified communication with a SGE batch server</p>
-
 
   </div>
 </div>
@@ -140,9 +140,7 @@
   <strong>This constant is part of a private API.</strong>
   You should avoid using this constant if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Adapted from <a href="http://www.softpanorama.org/HPC/Grid_engine/Queues/queue_states.shtml">www.softpanorama.org/HPC/Grid_engine/Queues/queue_states.shtml</a></p>
-
+<p>Adapted from <a href="http://www.softpanorama.org/HPC/Grid_engine/Queues/queue_states.shtml">http://www.softpanorama.org/HPC/Grid_engine/Queues/queue_states.shtml</a></p>
 
   </div>
 </div>
@@ -414,9 +412,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Call a forked SGE command for a given batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Call a forked SGE command for a given batch server.</p></div></span>
   
 </li>
 
@@ -460,9 +456,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Call qdel.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Call qdel.</p></div></span>
   
 </li>
 
@@ -484,9 +478,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get OodCore::Job::Info for every enqueued job, optionally filtering on owner.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get OodCore::Job::Info for every enqueued job, optionally filtering on owner.</p></div></span>
   
 </li>
 
@@ -508,9 +500,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get OodCore::Job::Info for a job_id that may still be in the queue.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get OodCore::Job::Info for a job_id that may still be in the queue.</p></div></span>
   
 </li>
 
@@ -554,9 +544,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get the job status using DRMAA.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get the job status using DRMAA.</p></div></span>
   
 </li>
 
@@ -578,9 +566,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Call qhold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Call qhold.</p></div></span>
   
 </li>
 
@@ -604,9 +590,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Batch.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Batch.</p></div></span>
   
 </li>
 
@@ -672,9 +656,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Call qrls.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Call qrls.</p></div></span>
   
 </li>
 
@@ -696,9 +678,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Call qsub with arguments and the scripts content.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Call qsub with arguments and the scripts content.</p></div></span>
   
 </li>
 
@@ -770,6 +750,7 @@
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -790,9 +771,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Returns a new instance of Batch.</p>
-
 
   </div>
 </div>
@@ -810,9 +789,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the options defining this adapter</p>
-</div>
+        <div class='inline'><p>the options defining this adapter</p></div>
       
     </li>
   
@@ -1227,9 +1204,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Call a forked SGE command for a given batch server</p>
-
 
   </div>
 </div>
@@ -1338,9 +1313,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Call qdel</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Call qdel</p>
 
   </div>
 </div>
@@ -1398,9 +1371,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Get OodCore::Job::Info for every enqueued job, optionally filtering on owner</p>
-
 
   </div>
 </div>
@@ -1420,9 +1391,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner or owner list</p>
-</div>
+        <div class='inline'><p>the owner or owner list</p></div>
       
     </li>
   
@@ -1502,13 +1471,12 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Get OodCore::Job::Info for a job_id that may still be in the queue</p>
-
-<p>If libdrmaa is not loaded then we cannot use DRMAA. Using DRMAA provides better job status and should always be chosen if it is possible.</p>
-
-<p>When qstat is called in XML mode for a job id that is not in the queue invalid XML is returned. The second line of the invalid XML contains the string &#39;&lt;unknown_jobs&#39; which will be used to recognize this case.</p>
-
+<p>If libdrmaa is not loaded then we cannot use DRMAA. Using DRMAA provides
+better job status and should always be chosen if it is possible.</p>
+<p>When qstat is called in XML mode for a job id that is not in the queue
+invalid XML is returned. The second line of the invalid XML contains the
+string '&lt;unknown_jobs' which will be used to recognize this case.</p>
 
   </div>
 </div>
@@ -1695,9 +1663,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Get the job status using DRMAA</p>
-
 
   </div>
 </div>
@@ -1740,9 +1706,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Call qhold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Call qhold</p>
 
   </div>
 </div>
@@ -1906,9 +1870,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Call qrls</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Call qrls</p>
 
   </div>
 </div>
@@ -1966,9 +1928,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Call qsub with arguments and the scripts content</p>
-
 
   </div>
 </div>
@@ -2157,9 +2117,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:34 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

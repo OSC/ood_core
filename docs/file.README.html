@@ -6,13 +6,13 @@
 <title>
   File: README
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "README";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -57,64 +58,50 @@
         <div class="clear"></div>
       </div>
 
-      <div id="content"><div id='filecontents'>
-<h1 id="label-OodCore">OodCore</h1>
-
-<p><a href="https://github.com/OSC/ood_core/actions?query=workflow%3A%22Unit+Tests%22"><img src="https://github.com/osc/ood_core/workflows/Unit%20Tests/badge.svg"></a> <img src="https://img.shields.io/github/release/osc/ood_core.svg"> <img src="https://img.shields.io/github/license/osc/ood_core.svg"></p>
-<ul><li>
-<p>Website: <a href="http://openondemand.org">openondemand.org</a>/</p>
-</li><li>
-<p>Website repo with JOSS publication: <a href="https://github.com/OSC/Open-OnDemand">github.com/OSC/Open-OnDemand</a></p>
-</li><li>
-<p>Documentation: <a href="https://osc.github.io/ood-documentation/latest">osc.github.io/ood-documentation/latest</a>/</p>
-</li><li>
-<p>Main code repo: <a href="https://github.com/OSC/ondemand">github.com/OSC/ondemand</a></p>
-</li><li>
-<p>Core library repo: <a href="https://github.com/OSC/ood_core">github.com/OSC/ood_core</a></p>
-</li></ul>
-
+      <div id="content"><div id='filecontents'><h1 id="OodCore">OodCore</h1>
+<p><a href="https://github.com/OSC/ood_core/actions?query=workflow%3A%22Unit+Tests%22"><img src="https://github.com/osc/ood_core/workflows/Unit%20Tests/badge.svg" alt="Build Status" /></a>
+<img src="https://img.shields.io/github/release/osc/ood_core.svg" alt="GitHub Release" />
+<img src="https://img.shields.io/github/license/osc/ood_core.svg" alt="GitHub License" /></p>
+<ul>
+<li>Website: <a href="http://openondemand.org/">http://openondemand.org/</a></li>
+<li>Website repo with JOSS publication: <a href="https://github.com/OSC/Open-OnDemand">https://github.com/OSC/Open-OnDemand</a></li>
+<li>Documentation: <a href="https://osc.github.io/ood-documentation/latest/">https://osc.github.io/ood-documentation/latest/</a></li>
+<li>Main code repo: <a href="https://github.com/OSC/ondemand">https://github.com/OSC/ondemand</a></li>
+<li>Core library repo: <a href="https://github.com/OSC/ood_core">https://github.com/OSC/ood_core</a></li>
+</ul>
 <p>OnDemand core library with adapters for each batch scheduler.</p>
-
-<h2 id="label-Installation">Installation</h2>
-
-<p>Add this line to your application&#39;s Gemfile:</p>
-
+<h2 id="Installation">Installation</h2>
+<p>Add this line to your application's Gemfile:</p>
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ood_core</span><span class='tstring_end'>&#39;</span></span>
 </code></pre>
-
 <p>And then execute:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_bundle'>bundle</span>
+<pre class="code sh"><code class="sh">bundle
 </code></pre>
-
 <p>Or install it yourself as:</p>
-
-<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='id identifier rubyid_install'>install</span> <span class='id identifier rubyid_ood_core'>ood_core</span>
+<pre class="code sh"><code class="sh">gem install ood_core
 </code></pre>
-
-<h2 id="label-Usage">Usage</h2>
-
+<h2 id="Usage">Usage</h2>
 <p>TODO: Write usage instructions here</p>
-
-<h2 id="label-Development">Development</h2>
-
-<p>After checking out the repo, run <code>bin/setup</code> to install dependencies. Then, run <code>bundle exec rspec spec</code> to run the tests. You can also run <code>bin/console</code> for an interactive prompt that will allow you to experiment.</p>
-
-<p>To install this gem onto your local machine, run <code>bundle exec rake install</code>. To release a new version, update and commit the version number in <code>version.rb</code>, and then run <code>bundle exec rake release</code>, which will create a git tag for the version, push git commits and tags, and push the <code>.gem</code> file to <a href="https://rubygems.org">rubygems.org</a>.</p>
-
-<h2 id="label-Contributing">Contributing</h2>
-
-<p>Bug reports and pull requests are welcome on GitHub at <a href="https://github.com/OSC/ood_core">github.com/OSC/ood_core</a>.</p>
-
-<h2 id="label-License">License</h2>
-
-<p>The gem is available as open source under the terms of the <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
-</div></div>
+<h2 id="Development">Development</h2>
+<p>After checking out the repo, run <code>bin/setup</code> to install dependencies. Then, run
+<code>bundle exec rspec spec</code> to run the tests. You can also run <code>bin/console</code> for
+an interactive prompt that will allow you to experiment.</p>
+<p>To install this gem onto your local machine, run <code>bundle exec rake install</code>. To
+release a new version, update and commit the version number in <code>version.rb</code>,
+and then run <code>bundle exec rake release</code>, which will create a git tag for the
+version, push git commits and tags, and push the <code>.gem</code> file to
+<a href="https://rubygems.org">rubygems.org</a>.</p>
+<h2 id="Contributing">Contributing</h2>
+<p>Bug reports and pull requests are welcome on GitHub at
+<a href="https://github.com/OSC/ood_core">https://github.com/OSC/ood_core</a>.</p>
+<h2 id="License">License</h2>
+<p>The gem is available as open source under the terms of the <a href="http://opensource.org/licenses/MIT">MIT
+License</a>.</p></div></div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:31 2026 by
+  Generated on Wed Apr 15 14:08:20 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: DRMAA::JobInfo
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "DRMAA::JobInfo";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,16 +95,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/drmaa.rb</dd>
+    <dd>lib/ood_core/job/adapters/drmaa.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>const char *drmaa_strerror(int drmaa_errno) DRMAA job info as returned by drmaa_wait()</p>
-
+    <p>const char *drmaa_strerror(int drmaa_errno)
+DRMAA job info as returned by drmaa_wait()</p>
 
   </div>
 </div>
@@ -139,9 +140,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Returns the value of attribute job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Returns the value of attribute job.</p></div></span>
   
 </li>
 
@@ -178,9 +177,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of JobInfo.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of JobInfo.</p></div></span>
   
 </li>
 
@@ -202,9 +199,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>returns resource utilization as string array (&#39;name=value&#39;).</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>returns resource utilization as string array ('name=value').</p></div></span>
   
 </li>
 
@@ -226,9 +221,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>true if job core dumped.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>true if job core dumped.</p></div></span>
   
 </li>
 
@@ -250,9 +243,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>returns job exit status.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>returns job exit status.</p></div></span>
   
 </li>
 
@@ -296,9 +287,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>true if job finished and exit status available.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>true if job finished and exit status available.</p></div></span>
   
 </li>
 
@@ -320,9 +309,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>true if job was signaled and termination signal available.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>true if job was signaled and termination signal available.</p></div></span>
   
 </li>
 
@@ -344,14 +331,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>returns termination signal as string.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>returns termination signal as string.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -368,9 +354,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of JobInfo.</p>
-
+    <p>Returns a new instance of JobInfo.</p>
 
   </div>
 </div>
@@ -405,7 +389,7 @@
     <span class='ivar'>@rusage</span> <span class='op'>=</span> <span class='const'>Hash</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
 
     <span class='kw'>if</span> <span class='op'>!</span> <span class='id identifier rubyid_rusage'>rusage</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-        <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_attr_values'><span class='object_link'><a href="../DRMAA.html#get_attr_values-class_method" title="DRMAA.get_attr_values (method)">get_attr_values</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rusage'>rusage</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_u'>u</span><span class='op'>|</span>
+        <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_get_attr_values'><span class='object_link'><a href="DRMAA.html#get_attr_values-class_method" title="DRMAA.get_attr_values (method)">get_attr_values</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_rusage'>rusage</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_u'>u</span><span class='op'>|</span>
             <span class='id identifier rubyid_nv'>nv</span> <span class='op'>=</span> <span class='id identifier rubyid_u'>u</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>[^=][^=]*</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
             <span class='ivar'>@rusage</span><span class='lbracket'>[</span><span class='id identifier rubyid_nv'>nv</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='rbracket'>]</span> <span class='op'>=</span> <span class='id identifier rubyid_nv'>nv</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span>
         <span class='rbrace'>}</span>
@@ -434,9 +418,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns the value of attribute job.</p>
-
+    <p>Returns the value of attribute job.</p>
 
   </div>
 </div>
@@ -482,9 +464,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>returns resource utilization as string array (&#39;name=value&#39;)</p>
-
+    <p>returns resource utilization as string array ('name=value')</p>
 
   </div>
 </div>
@@ -523,9 +503,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>true if job core dumped</p>
-
+    <p>true if job core dumped</p>
 
   </div>
 </div>
@@ -559,7 +537,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 699</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wcoredump?'>wcoredump?</span>  
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wcoredump'><span class='object_link'><a href="../DRMAA.html#wcoredump-class_method" title="DRMAA.wcoredump (method)">wcoredump</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wcoredump'><span class='object_link'><a href="DRMAA.html#wcoredump-class_method" title="DRMAA.wcoredump (method)">wcoredump</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -577,9 +555,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>returns job exit status</p>
-
+    <p>returns job exit status</p>
 
   </div>
 </div>
@@ -600,7 +576,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 703</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wexitstatus'>wexitstatus</span> 
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wexitstatus'><span class='object_link'><a href="../DRMAA.html#wexitstatus-class_method" title="DRMAA.wexitstatus (method)">wexitstatus</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wexitstatus'><span class='object_link'><a href="DRMAA.html#wexitstatus-class_method" title="DRMAA.wexitstatus (method)">wexitstatus</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -652,7 +628,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 687</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wifaborted?'>wifaborted?</span>  
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wifaborted'><span class='object_link'><a href="../DRMAA.html#wifaborted-class_method" title="DRMAA.wifaborted (method)">wifaborted</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wifaborted'><span class='object_link'><a href="DRMAA.html#wifaborted-class_method" title="DRMAA.wifaborted (method)">wifaborted</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -670,9 +646,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>true if job finished and exit status available</p>
-
+    <p>true if job finished and exit status available</p>
 
   </div>
 </div>
@@ -706,7 +680,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 691</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wifexited?'>wifexited?</span>  
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wifexited'><span class='object_link'><a href="../DRMAA.html#wifexited-class_method" title="DRMAA.wifexited (method)">wifexited</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wifexited'><span class='object_link'><a href="DRMAA.html#wifexited-class_method" title="DRMAA.wifexited (method)">wifexited</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -724,9 +698,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>true if job was signaled and termination signal available</p>
-
+    <p>true if job was signaled and termination signal available</p>
 
   </div>
 </div>
@@ -760,7 +732,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 695</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wifsignaled?'>wifsignaled?</span>  
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wifsignaled'><span class='object_link'><a href="../DRMAA.html#wifsignaled-class_method" title="DRMAA.wifsignaled (method)">wifsignaled</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wifsignaled'><span class='object_link'><a href="DRMAA.html#wifsignaled-class_method" title="DRMAA.wifsignaled (method)">wifsignaled</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -778,9 +750,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>returns termination signal as string</p>
-
+    <p>returns termination signal as string</p>
 
   </div>
 </div>
@@ -801,7 +771,7 @@
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/drmaa.rb', line 707</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_wtermsig'>wtermsig</span> 
-    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wtermsig'><span class='object_link'><a href="../DRMAA.html#wtermsig-class_method" title="DRMAA.wtermsig (method)">wtermsig</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
+    <span class='const'><span class='object_link'><a href="../DRMAA.html" title="DRMAA (module)">DRMAA</a></span></span><span class='period'>.</span><span class='id identifier rubyid_wtermsig'><span class='object_link'><a href="DRMAA.html#wtermsig-class_method" title="DRMAA.wtermsig (method)">wtermsig</a></span></span><span class='lparen'>(</span><span class='ivar'>@stat</span><span class='rparen'>)</span> 
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -813,9 +783,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:32 2026 by
+  Generated on Wed Apr 15 14:08:26 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::LinuxSystemd
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::LinuxSystemd";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -96,16 +97,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/systemd.rb</dd>
+    <dd>lib/ood_core/job/adapters/systemd.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>The adapter for using systemd timers as the scheduler.</p>
-
+    <p>The adapter for using systemd timers as the scheduler.</p>
 
   </div>
 </div>
@@ -154,9 +154,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete the submitted job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete the submitted job.</p></div></span>
   
 </li>
 
@@ -200,9 +198,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put the submitted job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put the submitted job on hold.</p></div></span>
   
 </li>
 
@@ -224,9 +220,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job info from the SSH host.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job info from the SSH host.</p></div></span>
   
 </li>
 
@@ -248,9 +242,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -272,9 +264,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Iterate over each job Info object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Iterate over each job Info object.</p></div></span>
   
 </li>
 
@@ -296,9 +286,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager Note: owner and attrs are present only to complete the interface and are ignored Note: since this API is used in production no errors or warnings are thrown / issued.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs for a given owner or owners from the resource manager Note: owner and attrs are present only to complete the interface and are ignored Note: since this API is used in production no errors or warnings are thrown / issued.</p></div></span>
   
 </li>
 
@@ -320,9 +308,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Iterate over each job Info object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Iterate over each job Info object.</p></div></span>
   
 </li>
 
@@ -346,9 +332,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of LinuxSystemd.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of LinuxSystemd.</p></div></span>
   
 </li>
 
@@ -370,9 +354,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release the job that is on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release the job that is on hold.</p></div></span>
   
 </li>
 
@@ -394,9 +376,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job status from resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job status from resource manager.</p></div></span>
   
 </li>
 
@@ -418,9 +398,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a job with the attributes defined in the job template instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a job with the attributes defined in the job template instance.</p></div></span>
   
 </li>
 
@@ -442,17 +420,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the adapter supports job arrays.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the adapter supports job arrays.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -477,9 +455,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of LinuxSystemd.</p>
-
+    <p>Returns a new instance of LinuxSystemd.</p>
 
   </div>
 </div>
@@ -529,13 +505,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#delete (method)">#delete</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#delete (method)">#delete</a></span></p></div>
 </div>
-</div>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete the submitted job</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Delete the submitted job</p>
 
   </div>
 </div>
@@ -553,9 +525,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -572,9 +542,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#delete (method)">#delete</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#delete (method)">#delete</a></span></p></div>
       
     </li>
   
@@ -650,13 +618,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#hold (method)">#hold</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#hold (method)">#hold</a></span></p></div>
 </div>
-</div>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Put the submitted job on hold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Put the submitted job on hold</p>
 
   </div>
 </div>
@@ -674,9 +638,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -693,9 +655,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#hold (method)">#hold</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#hold (method)">#hold</a></span></p></div>
       
     </li>
   
@@ -735,9 +695,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job info from the SSH host</p>
-
+    <p>Retrieve job info from the SSH host</p>
 
   </div>
 </div>
@@ -755,9 +713,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -774,9 +730,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted job</p>
-</div>
+        <div class='inline'><p>information describing submitted job</p></div>
       
     </li>
   
@@ -792,9 +746,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -847,9 +799,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs from the resource manager</p>
-
+    <p>Retrieve info for all jobs from the resource manager</p>
 
   </div>
 </div>
@@ -866,9 +816,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -884,9 +832,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -943,9 +889,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Iterate over each job Info object</p>
-
+    <p>Iterate over each job Info object</p>
 
   </div>
 </div>
@@ -965,9 +909,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>attrs is present only to complete the interface and is ignored</p>
-</div>
+        <div class='inline'><p>attrs is present only to complete the interface and is ignored</p></div>
       
     </li>
   
@@ -984,9 +926,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>of each job to block</p>
-</div>
+        <div class='inline'><p>of each job to block</p></div>
       
     </li>
   
@@ -1002,9 +942,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if no block given</p>
-</div>
+        <div class='inline'><p>if no block given</p></div>
       
     </li>
   
@@ -1050,9 +988,10 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager Note: owner and attrs are present only to complete the interface and are ignored Note: since this API is used in production no errors or warnings are thrown / issued</p>
-
+    <p>Retrieve info for all jobs for a given owner or owners from the
+resource manager
+Note: owner and attrs are present only to complete the interface and are ignored
+Note: since this API is used in production no errors or warnings are thrown / issued</p>
 
   </div>
 </div>
@@ -1070,9 +1009,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the jobs</p>
-</div>
+        <div class='inline'><p>the owner(s) of the jobs</p></div>
       
     </li>
   
@@ -1089,9 +1026,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1107,9 +1042,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1147,9 +1080,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Iterate over each job Info object</p>
-
+    <p>Iterate over each job Info object</p>
 
   </div>
 </div>
@@ -1167,9 +1098,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>owner is present only to complete the interface and is ignored</p>
-</div>
+        <div class='inline'><p>owner is present only to complete the interface and is ignored</p></div>
       
     </li>
   
@@ -1185,9 +1114,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>attrs is present only to complete the interface and is ignored</p>
-</div>
+        <div class='inline'><p>attrs is present only to complete the interface and is ignored</p></div>
       
     </li>
   
@@ -1204,9 +1131,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>of each job to block</p>
-</div>
+        <div class='inline'><p>of each job to block</p></div>
       
     </li>
   
@@ -1222,9 +1147,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if no block given</p>
-</div>
+        <div class='inline'><p>if no block given</p></div>
       
     </li>
   
@@ -1272,13 +1195,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#release (method)">#release</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#release (method)">#release</a></span></p></div>
 </div>
-</div>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Release the job that is on hold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Release the job that is on hold</p>
 
   </div>
 </div>
@@ -1296,9 +1215,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1315,9 +1232,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#release (method)">#release</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#release (method)">#release</a></span></p></div>
       
     </li>
   
@@ -1359,21 +1274,15 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#status (method)">#status</a></span></p>
-</div>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#status (method)">#status</a></span></p></div>
 </div>
 
   <div class="note notetag">
     <strong>Note:</strong>
-    <div class='inline'>
-<p>Optimized slightly over retrieving complete job information from server</p>
-</div>
+    <div class='inline'><p>Optimized slightly over retrieving complete job information from server</p></div>
   </div>
 
-
 <p>Retrieve job status from resource manager</p>
-
 
   </div>
 </div>
@@ -1391,9 +1300,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1410,9 +1317,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -1428,9 +1333,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#status (method)">#status</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapters::LinuxSystemd#status (method)">#status</a></span></p></div>
       
     </li>
   
@@ -1478,9 +1381,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Submit a job with the attributes defined in the job template instance</p>
-
+    <p>Submit a job with the attributes defined in the job template instance</p>
 
   </div>
 </div>
@@ -1498,9 +1399,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script object that describes the script and attributes for the submitted job</p>
-</div>
+        <div class='inline'><p>script object that describes the script and
+attributes for the submitted job</p></div>
       
     </li>
   
@@ -1516,9 +1416,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>No scheduling is available is used; setting raises JobAdapterError</p>
-</div>
+        <div class='inline'><p>No scheduling is available is used; setting raises JobAdapterError</p></div>
       
     </li>
   
@@ -1534,9 +1432,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>No scheduling is available is used; setting raises JobAdapterError</p>
-</div>
+        <div class='inline'><p>No scheduling is available is used; setting raises JobAdapterError</p></div>
       
     </li>
   
@@ -1552,9 +1448,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>No scheduling is available is used; setting raises JobAdapterError</p>
-</div>
+        <div class='inline'><p>No scheduling is available is used; setting raises JobAdapterError</p></div>
       
     </li>
   
@@ -1570,9 +1464,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>No scheduling is available is used; setting raises JobAdapterError</p>
-</div>
+        <div class='inline'><p>No scheduling is available is used; setting raises JobAdapterError</p></div>
       
     </li>
   
@@ -1589,9 +1481,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job id returned after successfully submitting a job</p>
-</div>
+        <div class='inline'><p>the job id returned after successfully submitting a
+job</p></div>
       
     </li>
   
@@ -1607,9 +1498,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong submitting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong submitting a job</p></div>
       
     </li>
   
@@ -1666,9 +1555,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the adapter supports job arrays</p>
-
+    <p>Whether the adapter supports job arrays</p>
 
   </div>
 </div>
@@ -1685,10 +1572,9 @@
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>false</p>
-</li></ul>
-</div>
+        <div class='inline'><ul>
+<li>false</li>
+</ul></div>
       
     </li>
   
@@ -1720,9 +1606,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

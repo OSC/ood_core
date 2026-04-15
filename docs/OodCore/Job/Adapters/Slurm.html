@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Slurm
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Slurm";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -96,16 +97,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/slurm.rb</dd>
+    <dd>lib/ood_core/job/adapters/slurm.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An adapter object that describes the communication with a Slurm resource manager for job management.</p>
-
+    <p>An adapter object that describes the communication with a Slurm
+resource manager for job management.</p>
 
   </div>
 </div>
@@ -134,9 +135,7 @@
         <dt id="STATE_MAP-constant" class="">STATE_MAP =
           <div class="docstring">
   <div class="discussion">
-    
-<p>Mapping of state codes for Slurm</p>
-
+    <p>Mapping of state codes for Slurm</p>
 
   </div>
 </div>
@@ -213,14 +212,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get integer representing the number of gpus used by a node or job, calculated from gres string.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get integer representing the number of gpus used by a node or job, calculated from gres string.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
     <h2>
       Instance Method Summary
@@ -246,9 +244,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve the accounts available to use  for the current user.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve the accounts available to use  for the current user.</p></div></span>
   
 </li>
 
@@ -270,9 +266,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info about active and total cpus, gpus, and nodes.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info about active and total cpus, gpus, and nodes.</p></div></span>
   
 </li>
 
@@ -294,9 +288,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete the submitted job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete the submitted job.</p></div></span>
   
 </li>
 
@@ -340,9 +332,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put the submitted job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put the submitted job on hold.</p></div></span>
   
 </li>
 
@@ -364,9 +354,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job info from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job info from the resource manager.</p></div></span>
   
 </li>
 
@@ -388,9 +376,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -412,9 +398,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve historic info for all completed jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve historic info for all completed jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -436,9 +420,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p></div></span>
   
 </li>
 
@@ -462,9 +444,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Slurm.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Slurm.</p></div></span>
   
 </li>
 
@@ -530,9 +510,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release the job that is on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release the job that is on hold.</p></div></span>
   
 </li>
 
@@ -554,9 +532,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job status from resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job status from resource manager.</p></div></span>
   
 </li>
 
@@ -578,17 +554,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a job with the attributes defined in the job template instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a job with the attributes defined in the job template instance.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -617,9 +593,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Returns a new instance of Slurm.</p>
-
 
   </div>
 </div>
@@ -639,9 +613,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the options defining this adapter</p>
-</div>
+        <div class='inline'><p>the options defining this adapter</p></div>
       
     </li>
   
@@ -660,9 +632,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The Slurm batch object</p>
-</div>
+            &mdash; <div class='inline'><p>The Slurm batch object</p></div>
           
         </li>
       
@@ -720,9 +690,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Get integer representing the number of gpus used by a node or job, calculated from gres string</p>
-
+    <p>Get integer representing the number of gpus used by a node or job,
+calculated from gres string</p>
 
   </div>
 </div>
@@ -739,9 +708,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the number of gpus in gres</p>
-</div>
+        <div class='inline'><p>the number of gpus in gres</p></div>
       
     </li>
   
@@ -785,9 +752,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve the accounts available to use  for the current user.</p>
-
+    <p>Retrieve the accounts available to use  for the current user.</p>
 
   </div>
 </div>
@@ -804,9 +769,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the accounts available to the user.</p>
-</div>
+        <div class='inline'><p>the accounts available to the user.</p></div>
       
     </li>
   
@@ -844,9 +807,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info about active and total cpus, gpus, and nodes</p>
-
+    <p>Retrieve info about active and total cpus, gpus, and nodes</p>
 
   </div>
 </div>
@@ -863,9 +824,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information about cluster usage</p>
-</div>
+        <div class='inline'><p>information about cluster usage</p></div>
       
     </li>
   
@@ -903,9 +862,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete the submitted job</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Delete the submitted job</p>
 
   </div>
 </div>
@@ -923,9 +880,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -942,9 +897,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong deleting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong deleting a job</p></div>
       
     </li>
   
@@ -1025,9 +978,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Put the submitted job on hold</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Put the submitted job on hold</p>
 
   </div>
 </div>
@@ -1045,9 +996,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1064,9 +1013,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong holding a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong holding a job</p></div>
       
     </li>
   
@@ -1117,9 +1064,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job info from the resource manager</p>
-
+    <p>Retrieve job info from the resource manager</p>
 
   </div>
 </div>
@@ -1137,9 +1082,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1156,9 +1099,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted job</p>
-</div>
+        <div class='inline'><p>information describing submitted job</p></div>
       
     </li>
   
@@ -1174,9 +1115,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1253,9 +1192,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs from the resource manager</p>
-
+    <p>Retrieve info for all jobs from the resource manager</p>
 
   </div>
 </div>
@@ -1272,9 +1209,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1290,9 +1225,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1345,11 +1278,16 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve historic info for all completed jobs from the resource manager.</p>
-
-<p>Known options: job_ids [Array&lt;#to_s&gt;] optional list of job ids to filter the results. states [Array&lt;#to_s&gt;] optional list of job state codes. Selects jobs based on their state during the time period given. from [#to_s] optional date string to filter jobs in any state after the specified time. If states are provided, filter jobs in these states after this period to [#to_s] optional date string to filter jobs in any state before the specified time. If states are provided, filter jobs in these states before this period. show_steps [#Boolean] optional boolean to filter job steps from the results.</p>
-
+    <p>Retrieve historic info for all completed jobs from the resource manager.</p>
+<p>Known options:
+job_ids [Array&lt;#to_s&gt;] optional list of job ids to filter the results.
+states [Array&lt;#to_s&gt;] optional list of job state codes.
+Selects jobs based on their state during the time period given.
+from [#to_s] optional date string to filter jobs in any state after the specified time.
+If states are provided, filter jobs in these states after this period
+to [#to_s] optional date string to filter jobs in any state before the specified time.
+If states are provided, filter jobs in these states before this period.
+show_steps [#Boolean] optional boolean to filter job steps from the results.</p>
 
   </div>
 </div>
@@ -1366,9 +1304,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1455,9 +1391,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager</p>
-
+    <p>Retrieve info for all jobs for a given owner or owners from the
+resource manager</p>
 
   </div>
 </div>
@@ -1475,9 +1410,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the jobs</p>
-</div>
+        <div class='inline'><p>the owner(s) of the jobs</p></div>
       
     </li>
   
@@ -1494,9 +1427,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1512,9 +1443,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1622,9 +1551,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Release the job that is on hold</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Release the job that is on hold</p>
 
   </div>
 </div>
@@ -1642,9 +1569,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1661,9 +1586,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong releasing a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong releasing a job</p></div>
       
     </li>
   
@@ -1714,9 +1637,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job status from resource manager</p>
-
+    <p>Retrieve job status from resource manager</p>
 
   </div>
 </div>
@@ -1734,9 +1655,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1753,9 +1672,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -1771,9 +1688,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job status</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job status</p></div>
       
     </li>
   
@@ -1862,9 +1777,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Submit a job with the attributes defined in the job template instance</p>
-
+    <p>Submit a job with the attributes defined in the job template instance</p>
 
   </div>
 </div>
@@ -1882,9 +1795,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script object that describes the script and attributes for the submitted job</p>
-</div>
+        <div class='inline'><p>script object that describes the script and
+attributes for the submitted job</p></div>
       
     </li>
   
@@ -1900,9 +1812,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution at any point after dependent jobs have started execution</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution at any point after dependent jobs have started execution</p></div>
       
     </li>
   
@@ -1918,9 +1829,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with no errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with no errors</p></div>
       
     </li>
   
@@ -1936,9 +1846,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with errors</p></div>
       
     </li>
   
@@ -1954,9 +1863,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution after dependent jobs have terminated</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution after dependent jobs have terminated</p></div>
       
     </li>
   
@@ -1973,9 +1881,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job id returned after successfully submitting a job</p>
-</div>
+        <div class='inline'><p>the job id returned after successfully submitting a
+job</p></div>
       
     </li>
   
@@ -1991,9 +1898,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong submitting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong submitting a job</p></div>
       
     </li>
   
@@ -2156,9 +2061,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:22 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

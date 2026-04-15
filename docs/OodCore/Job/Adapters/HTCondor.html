@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::HTCondor
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::HTCondor";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -96,16 +97,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/htcondor.rb</dd>
+    <dd>lib/ood_core/job/adapters/htcondor.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An adapter object that describes the communication with an HTCondor resource manager for job management.</p>
-
+    <p>An adapter object that describes the communication with an HTCondor
+resource manager for job management.</p>
 
   </div>
 </div>
@@ -134,9 +135,7 @@
         <dt id="STATUS_MAP-constant" class="">STATUS_MAP =
           <div class="docstring">
   <div class="discussion">
-    
-<p>Map HTCondor job statuses to symbols</p>
-
+    <p>Map HTCondor job statuses to symbols</p>
 
   </div>
 </div>
@@ -189,9 +188,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve the relevant groups for the current user.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve the relevant groups for the current user.</p></div></span>
   
 </li>
 
@@ -213,9 +210,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve cluster status information.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve cluster status information.</p></div></span>
   
 </li>
 
@@ -237,9 +232,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete a job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete a job.</p></div></span>
   
 </li>
 
@@ -261,9 +254,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Place a job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Place a job on hold.</p></div></span>
   
 </li>
 
@@ -285,9 +276,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job info from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job info from the resource manager.</p></div></span>
   
 </li>
 
@@ -309,9 +298,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve information for all jobs.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve information for all jobs.</p></div></span>
   
 </li>
 
@@ -335,9 +322,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of HTCondor.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of HTCondor.</p></div></span>
   
 </li>
 
@@ -359,9 +344,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release a job from hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release a job from hold.</p></div></span>
   
 </li>
 
@@ -383,9 +366,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve the status of a job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve the status of a job.</p></div></span>
   
 </li>
 
@@ -407,9 +388,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a job with the attributes defined in the job template instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a job with the attributes defined in the job template instance.</p></div></span>
   
 </li>
 
@@ -431,17 +410,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Indicate that the job adapter supports job arrays.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Indicate that the job adapter supports job arrays.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -470,9 +449,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Returns a new instance of HTCondor.</p>
-
 
   </div>
 </div>
@@ -492,9 +469,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the options defining this adapter</p>
-</div>
+        <div class='inline'><p>the options defining this adapter</p></div>
       
     </li>
   
@@ -513,9 +488,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The HTCondor batch object</p>
-</div>
+            &mdash; <div class='inline'><p>The HTCondor batch object</p></div>
           
         </li>
       
@@ -573,9 +546,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve the relevant groups for the current user</p>
-
+    <p>Retrieve the relevant groups for the current user</p>
 
   </div>
 </div>
@@ -592,9 +563,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of groups for the current user</p>
-</div>
+        <div class='inline'><p>list of groups for the current user</p></div>
       
     </li>
   
@@ -640,9 +609,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve cluster status information</p>
-
+    <p>Retrieve cluster status information</p>
 
   </div>
 </div>
@@ -659,9 +626,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>summary of cluster status including active and total nodes, processors, GPUs, etc.</p>
-</div>
+        <div class='inline'><p>summary of cluster status including active and total nodes, processors, GPUs, etc.</p></div>
       
     </li>
   
@@ -677,9 +642,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong retrieving cluster status</p>
-</div>
+        <div class='inline'><p>if something goes wrong retrieving cluster status</p></div>
       
     </li>
   
@@ -751,9 +714,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Delete a job</p>
-
+    <p>Delete a job</p>
 
   </div>
 </div>
@@ -771,9 +732,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -790,9 +749,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong deleting the job</p>
-</div>
+        <div class='inline'><p>if something goes wrong deleting the job</p></div>
       
     </li>
   
@@ -834,9 +791,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Place a job on hold</p>
-
+    <p>Place a job on hold</p>
 
   </div>
 </div>
@@ -854,9 +809,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -873,9 +826,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong placing the job on hold</p>
-</div>
+        <div class='inline'><p>if something goes wrong placing the job on hold</p></div>
       
     </li>
   
@@ -917,9 +868,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job info from the resource manager</p>
-
+    <p>Retrieve job info from the resource manager</p>
 
   </div>
 </div>
@@ -937,9 +886,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -956,9 +903,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted job</p>
-</div>
+        <div class='inline'><p>information describing submitted job</p></div>
       
     </li>
   
@@ -974,9 +919,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1022,9 +965,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve information for all jobs</p>
-
+    <p>Retrieve information for all jobs</p>
 
   </div>
 </div>
@@ -1041,9 +982,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>list of information describing submitted jobs</p></div>
       
     </li>
   
@@ -1059,9 +998,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong retrieving job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong retrieving job info</p></div>
       
     </li>
   
@@ -1105,9 +1042,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Release a job from hold</p>
-
+    <p>Release a job from hold</p>
 
   </div>
 </div>
@@ -1125,9 +1060,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1144,9 +1077,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong releasing the job</p>
-</div>
+        <div class='inline'><p>if something goes wrong releasing the job</p></div>
       
     </li>
   
@@ -1188,9 +1119,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve the status of a job</p>
-
+    <p>Retrieve the status of a job</p>
 
   </div>
 </div>
@@ -1208,9 +1137,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1227,9 +1154,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the status of the job</p>
-</div>
+        <div class='inline'><p>the status of the job</p></div>
       
     </li>
   
@@ -1245,9 +1170,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong retrieving the job status</p>
-</div>
+        <div class='inline'><p>if something goes wrong retrieving the job status</p></div>
       
     </li>
   
@@ -1293,9 +1216,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Submit a job with the attributes defined in the job template instance</p>
-
+    <p>Submit a job with the attributes defined in the job template instance</p>
 
   </div>
 </div>
@@ -1313,9 +1234,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script object that describes the script and attributes for the submitted job</p>
-</div>
+        <div class='inline'><p>script object that describes the script and
+attributes for the submitted job</p></div>
       
     </li>
   
@@ -1332,9 +1252,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job id returned after successfully submitting a job</p>
-</div>
+        <div class='inline'><p>the job id returned after successfully submitting a
+job</p></div>
       
     </li>
   
@@ -1350,9 +1269,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong submitting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong submitting a job</p></div>
       
     </li>
   
@@ -1580,9 +1497,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Indicate that the job adapter supports job arrays</p>
-
+    <p>Indicate that the job adapter supports job arrays</p>
 
   </div>
 </div>
@@ -1628,9 +1543,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

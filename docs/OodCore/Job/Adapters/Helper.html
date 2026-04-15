@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Helper
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Helper";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,7 +95,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/helper.rb</dd>
+    <dd>lib/ood_core/job/adapters/helper.rb
+</dd>
   </dl>
   
 </div>
@@ -144,9 +146,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get the configured path to a command allowing overrides from bin_overrides.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get the configured path to a command allowing overrides from bin_overrides.</p></div></span>
   
 </li>
 
@@ -168,9 +168,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Allows for Non-Standard Port usage in ssh commands To set <a href=""OOD_SSH_PORT"">ENV</a>, add assignment in /etc/ood/config/nginx_stage.yml.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Allows for Non-Standard Port usage in ssh commands To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/nginx_stage.yml.</p></div></span>
   
 </li>
 
@@ -192,14 +190,13 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Gets a command that submits command on another host via ssh.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Gets a command that submits command on another host via ssh.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -223,9 +220,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Get the configured path to a command allowing overrides from bin_overrides</p>
-
 
   </div>
 </div>
@@ -243,9 +238,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the desired command</p>
-</div>
+        <div class='inline'><p>the desired command</p></div>
       
     </li>
   
@@ -259,9 +252,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the default place to find cmd on the file system</p>
-</div>
+        <div class='inline'><p>the default place to find cmd on the file system</p></div>
       
     </li>
   
@@ -275,9 +266,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>commands associated with the full path to their replacement e.g. =&gt; &#39;/usr/local/slurm/bin/squeue&#39;</p>
-</div>
+        <div class='inline'><p>commands associated with the full path to their replacement
+e.g. => '/usr/local/slurm/bin/squeue'</p></div>
       
     </li>
   
@@ -294,9 +284,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to the configured command</p>
-</div>
+        <div class='inline'><p>path to the configured command</p></div>
       
     </li>
   
@@ -338,9 +326,8 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Allows for Non-Standard Port usage in ssh commands To set <a href=""OOD_SSH_PORT"">ENV</a>, add assignment in /etc/ood/config/nginx_stage.yml</p>
-
+<p>Allows for Non-Standard Port usage in ssh commands
+To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/nginx_stage.yml</p>
 
   </div>
 </div>
@@ -383,9 +370,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Gets a command that submits command on another host via ssh</p>
-
 
   </div>
 </div>
@@ -403,9 +388,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>where to submit the command</p>
-</div>
+        <div class='inline'><p>where to submit the command</p></div>
       
     </li>
   
@@ -419,9 +402,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the desired command to execute on another host</p>
-</div>
+        <div class='inline'><p>the desired command to execute on another host</p></div>
       
     </li>
   
@@ -435,9 +416,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>arguments to the command specified above</p>
-</div>
+        <div class='inline'><p>arguments to the command specified above</p></div>
       
     </li>
   
@@ -453,9 +432,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether to use strict_host_checking</p>
-</div>
+        <div class='inline'><p>whether to use strict_host_checking</p></div>
       
     </li>
   
@@ -471,9 +448,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>env variables to be set w/ssh</p>
-</div>
+        <div class='inline'><p>env variables to be set w/ssh</p></div>
       
     </li>
   
@@ -522,9 +497,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:22 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

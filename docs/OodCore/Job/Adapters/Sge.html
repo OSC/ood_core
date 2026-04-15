@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Sge
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Sge";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -96,16 +97,15 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/sge.rb</dd>
+    <dd>lib/ood_core/job/adapters/sge.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>The adpater class for Grid Engine (GE) flavors like Sun Grid Engine.</p>
-
+    <p>The adpater class for Grid Engine (GE) flavors like Sun Grid Engine.</p>
 
   </div>
 </div>
@@ -151,9 +151,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The path to the Sun Grid Engine client installation binaries.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The path to the Sun Grid Engine client installation binaries.</p></div></span>
   
 </li>
 
@@ -180,9 +178,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The cluster of the Sun Grid Engine batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The cluster of the Sun Grid Engine batch server.</p></div></span>
   
 </li>
 
@@ -209,9 +205,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The path to the Sun Grid Engine configuration file.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The path to the Sun Grid Engine configuration file.</p></div></span>
   
 </li>
 
@@ -246,9 +240,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete the submitted job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete the submitted job.</p></div></span>
   
 </li>
 
@@ -292,9 +284,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put the submitted job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put the submitted job on hold.</p></div></span>
   
 </li>
 
@@ -316,9 +306,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job info from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job info from the resource manager.</p></div></span>
   
 </li>
 
@@ -340,9 +328,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -364,9 +350,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p></div></span>
   
 </li>
 
@@ -390,9 +374,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Sge.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Sge.</p></div></span>
   
 </li>
 
@@ -414,9 +396,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release the job that is on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release the job that is on hold.</p></div></span>
   
 </li>
 
@@ -438,9 +418,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job status from resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job status from resource manager.</p></div></span>
   
 </li>
 
@@ -462,17 +440,17 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a job with the attributes defined in the job template instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a job with the attributes defined in the job template instance.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
+  
   
   
   
@@ -497,9 +475,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Sge.</p>
-
+    <p>Returns a new instance of Sge.</p>
 
   </div>
 </div>
@@ -562,9 +538,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The path to the Sun Grid Engine client installation binaries</p>
-
+    <p>The path to the Sun Grid Engine client installation binaries</p>
 
   </div>
 </div>
@@ -574,9 +548,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>For Sun Grid Engine 8.0.1</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>For Sun Grid Engine 8.0.1</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_bin'>bin</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/u/systems/UGE8.0.1vm/bin/lx-amd64/</span></code></pre>
     
@@ -593,9 +565,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to SGE binaries</p>
-</div>
+        <div class='inline'><p>path to SGE binaries</p></div>
       
     </li>
   
@@ -635,9 +605,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The cluster of the Sun Grid Engine batch server</p>
-
+    <p>The cluster of the Sun Grid Engine batch server</p>
 
   </div>
 </div>
@@ -647,9 +615,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>UCLA&#39;s hoffman2 cluster</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>UCLA's hoffman2 cluster</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_cluster'>cluster</span> <span class='comment'>#=&gt; &quot;hoffman2&quot;</span></code></pre>
     
@@ -666,9 +632,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the cluster name</p>
-</div>
+        <div class='inline'><p>the cluster name</p></div>
       
     </li>
   
@@ -708,9 +672,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The path to the Sun Grid Engine configuration file</p>
-
+    <p>The path to the Sun Grid Engine configuration file</p>
 
   </div>
 </div>
@@ -720,9 +682,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>For Sun Grid Engine 8.0.1</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>For Sun Grid Engine 8.0.1</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_conf'>conf</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='comment'>#=&gt; &quot;/u/systems/UGE8.0.1vm/h2.conf</span></code></pre>
     
@@ -739,9 +699,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to gridengine conf</p>
-</div>
+        <div class='inline'><p>path to gridengine conf</p></div>
       
     </li>
   
@@ -786,9 +744,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete the submitted job</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Delete the submitted job</p>
 
   </div>
 </div>
@@ -806,9 +762,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -825,9 +779,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong deleting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong deleting a job</p></div>
       
     </li>
   
@@ -899,9 +851,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Put the submitted job on hold</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Put the submitted job on hold</p>
 
   </div>
 </div>
@@ -919,9 +869,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -938,9 +886,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong holding a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong holding a job</p></div>
       
     </li>
   
@@ -982,9 +928,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job info from the resource manager</p>
-
+    <p>Retrieve job info from the resource manager</p>
 
   </div>
 </div>
@@ -1002,9 +946,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1021,9 +963,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted job</p>
-</div>
+        <div class='inline'><p>information describing submitted job</p></div>
       
     </li>
   
@@ -1039,9 +979,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1083,9 +1021,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs from the resource manager</p>
-
+    <p>Retrieve info for all jobs from the resource manager</p>
 
   </div>
 </div>
@@ -1102,9 +1038,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1146,9 +1080,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager</p>
-
+    <p>Retrieve info for all jobs for a given owner or owners from the
+resource manager</p>
 
   </div>
 </div>
@@ -1166,9 +1099,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the jobs</p>
-</div>
+        <div class='inline'><p>the owner(s) of the jobs</p></div>
       
     </li>
   
@@ -1185,9 +1116,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1203,9 +1132,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting job info</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting job info</p></div>
       
     </li>
   
@@ -1249,9 +1176,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <p class="note returns_void">This method returns an undefined value.</p>
-<p>Release the job that is on hold</p>
-
+    <p class="note returns_void">This method returns an undefined value.</p><p>Release the job that is on hold</p>
 
   </div>
 </div>
@@ -1269,9 +1194,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1288,9 +1211,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong releasing a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong releasing a job</p></div>
       
     </li>
   
@@ -1332,9 +1253,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve job status from resource manager</p>
-
+    <p>Retrieve job status from resource manager</p>
 
   </div>
 </div>
@@ -1352,9 +1271,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1371,9 +1288,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -1389,9 +1304,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong getting the status of a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong getting the status of a job</p></div>
       
     </li>
   
@@ -1433,9 +1346,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Submit a job with the attributes defined in the job template instance</p>
-
+    <p>Submit a job with the attributes defined in the job template instance</p>
 
   </div>
 </div>
@@ -1445,17 +1356,13 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Submit job template to cluster</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Submit job template to cluster</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solver_id'>solver_id</span> <span class='op'>=</span> <span class='id identifier rubyid_job_adapter'>job_adapter</span><span class='period'>.</span><span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_solver_script'>solver_script</span><span class='rparen'>)</span>
 <span class='comment'>#=&gt; &quot;1234.server&quot;</span></code></pre>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Submit job that depends on previous job</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Submit job that depends on previous job</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_post_id'>post_id</span> <span class='op'>=</span> <span class='id identifier rubyid_job_adapter'>job_adapter</span><span class='period'>.</span><span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span>
   <span class='id identifier rubyid_post_script'>post_script</span><span class='comma'>,</span>
@@ -1477,9 +1384,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script object that describes the script and attributes for the submitted job</p>
-</div>
+        <div class='inline'><p>script object that describes the
+script and attributes for the submitted job</p></div>
       
     </li>
   
@@ -1495,9 +1401,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution at any point after dependent jobs have started execution</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for execution
+at any point after dependent jobs have started execution</p></div>
       
     </li>
   
@@ -1513,9 +1418,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with no errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with no errors</p></div>
       
     </li>
   
@@ -1531,9 +1435,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with errors</p></div>
       
     </li>
   
@@ -1549,9 +1452,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution after dependent jobs have terminated</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution after dependent jobs have terminated</p></div>
       
     </li>
   
@@ -1568,9 +1470,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job id returned after successfully submitting a job</p>
-</div>
+        <div class='inline'><p>the job id returned after successfully submitting a job</p></div>
       
     </li>
   
@@ -1586,9 +1486,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if something goes wrong submitting a job</p>
-</div>
+        <div class='inline'><p>if something goes wrong submitting a job</p></div>
       
     </li>
   
@@ -1630,9 +1528,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:32 2026 by
+  Generated on Wed Apr 15 14:08:21 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

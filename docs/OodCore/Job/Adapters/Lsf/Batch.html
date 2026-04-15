@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::Lsf::Batch
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::Lsf::Batch";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,7 +95,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/lsf/batch.rb</dd>
+    <dd>lib/ood_core/job/adapters/lsf/batch.rb
+</dd>
   </dl>
   
 </div>
@@ -105,9 +107,7 @@
   <strong>This class is part of a private API.</strong>
   You should avoid using this class if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Object used for simplified communication with a LSF batch server</p>
-
 
   </div>
 </div>
@@ -421,9 +421,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete a specified job from batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete a specified job from batch server.</p></div></span>
   
 </li>
 
@@ -445,9 +443,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>status fields available from bjobs.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>status fields available from bjobs.</p></div></span>
   
 </li>
 
@@ -469,9 +465,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get hash detailing the specified job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get hash detailing the specified job.</p></div></span>
   
 </li>
 
@@ -493,9 +487,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Get a list of hashes detailing each of the jobs on the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Get a list of hashes detailing each of the jobs on the batch server.</p></div></span>
   
 </li>
 
@@ -539,9 +531,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put a specified job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put a specified job on hold.</p></div></span>
   
 </li>
 
@@ -565,9 +555,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Batch.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Batch.</p></div></span>
   
 </li>
 
@@ -589,9 +577,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>helper method.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>helper method.</p></div></span>
   
 </li>
 
@@ -613,9 +599,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>helper method.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>helper method.</p></div></span>
   
 </li>
 
@@ -637,9 +621,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release a specified job that is on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release a specified job that is on hold.</p></div></span>
   
 </li>
 
@@ -661,14 +643,13 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a script expanded as a string to the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a script expanded as a string to the batch server.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -689,9 +670,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Returns a new instance of Batch.</p>
-
 
   </div>
 </div>
@@ -709,9 +688,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to LSF installation binaries</p>
-</div>
+        <div class='inline'><p>path to LSF installation binaries</p></div>
       
     </li>
   
@@ -1244,9 +1221,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete a specified job from batch server</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Delete a specified job from batch server</p>
 
   </div>
 </div>
@@ -1256,9 +1231,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Delete job “1234”</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Delete job &quot;1234&quot;</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1234</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -1276,9 +1249,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1295,9 +1266,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `bkill` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>bkill</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1339,9 +1308,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>status fields available from bjobs</p>
-
 
   </div>
 </div>
@@ -1386,9 +1353,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Get hash detailing the specified job</p>
-
 
   </div>
 </div>
@@ -1406,9 +1371,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job to check</p>
-</div>
+        <div class='inline'><p>the id of the job to check</p></div>
       
     </li>
   
@@ -1425,9 +1388,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>details of specified job</p>
-</div>
+        <div class='inline'><p>details of specified job</p></div>
       
     </li>
   
@@ -1443,9 +1404,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `bjobs` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>bjobs</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1489,9 +1448,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Get a list of hashes detailing each of the jobs on the batch server</p>
-
 
   </div>
 </div>
@@ -1508,9 +1465,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of details for jobs</p>
-</div>
+        <div class='inline'><p>list of details for jobs</p></div>
       
     </li>
   
@@ -1526,9 +1481,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `bjobs` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>bjobs</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1615,9 +1568,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Put a specified job on hold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Put a specified job on hold</p>
 
   </div>
 </div>
@@ -1627,9 +1578,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Put job “1234” on hold</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Put job &quot;1234&quot; on hold</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1234</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -1647,9 +1596,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1666,9 +1613,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `bstop` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>bstop</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1710,9 +1655,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>helper method</p>
-
 
   </div>
 </div>
@@ -1804,9 +1747,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>helper method</p>
-
 
   </div>
 </div>
@@ -1857,9 +1798,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Release a specified job that is on hold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Release a specified job that is on hold</p>
 
   </div>
 </div>
@@ -1869,9 +1808,7 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Release job “1234” from on hold</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Release job &quot;1234&quot; from on hold</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_my_batch'>my_batch</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>1234</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span></code></pre>
     
@@ -1889,9 +1826,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1908,9 +1843,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `bresume` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>bresume</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1952,9 +1885,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Submit a script expanded as a string to the batch server</p>
-
 
   </div>
 </div>
@@ -1972,9 +1903,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script as a string</p>
-</div>
+        <div class='inline'><p>script as a string</p></div>
       
     </li>
   
@@ -1990,9 +1919,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>arguments passed to `sbatch` command</p>
-</div>
+        <div class='inline'><p>arguments passed to <code>sbatch</code> command</p></div>
       
     </li>
   
@@ -2008,9 +1935,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>environment variables set</p>
-</div>
+        <div class='inline'><p>environment variables set</p></div>
       
     </li>
   
@@ -2027,9 +1952,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job that was created</p>
-</div>
+        <div class='inline'><p>the id of the job that was created</p></div>
       
     </li>
   
@@ -2045,9 +1968,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `bsub` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>bsub</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -2081,9 +2002,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:34 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

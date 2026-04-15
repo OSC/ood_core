@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapter
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapter";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,7 +95,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapter.rb</dd>
+    <dd>lib/ood_core/job/adapter.rb
+</dd>
   </dl>
   
 </div>
@@ -105,9 +107,8 @@
   <strong>This class is abstract.</strong>
   <div class='inline'></div>
 </div>
-
-<p>A class that handles the communication with a resource manager for submitting/statusing/holding/deleting jobs</p>
-
+<p>A class that handles the communication with a resource manager for
+submitting/statusing/holding/deleting jobs</p>
 
   </div>
 </div>
@@ -150,9 +151,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve the accounts available to use for the current user.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve the accounts available to use for the current user.</p></div></span>
   
 </li>
 
@@ -174,9 +173,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve the number of active and total cpus, nodes, and gpus.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve the number of active and total cpus, nodes, and gpus.</p></div></span>
   
 </li>
 
@@ -198,9 +195,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Delete the submitted job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Delete the submitted job.</p></div></span>
   
 </li>
 
@@ -222,9 +217,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Return the scheduler-specific directive prefix.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Return the scheduler-specific directive prefix.</p></div></span>
   
 </li>
 
@@ -246,9 +239,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Put the submitted job on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Put the submitted job on hold.</p></div></span>
   
 </li>
 
@@ -270,9 +261,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job info from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job info from the resource manager.</p></div></span>
   
 </li>
 
@@ -294,9 +283,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -318,9 +305,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Iterate over each job Info object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Iterate over each job Info object.</p></div></span>
   
 </li>
 
@@ -342,9 +327,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve historic info for all completed jobs from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve historic info for all completed jobs from the resource manager.</p></div></span>
   
 </li>
 
@@ -366,9 +349,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve info for all jobs for a given owner or owners from the resource manager.</p></div></span>
   
 </li>
 
@@ -390,9 +371,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Iterate over each job Info object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Iterate over each job Info object.</p></div></span>
   
 </li>
 
@@ -414,9 +393,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Illegal chars that should not be used in a job name A dash is assumed to be legal in job names in all batch schedulers.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Illegal chars that should not be used in a job name A dash is assumed to be legal in job names in all batch schedulers.</p></div></span>
   
 </li>
 
@@ -438,9 +415,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Return the list of nodes for this scheduler.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Return the list of nodes for this scheduler.</p></div></span>
   
 </li>
 
@@ -462,9 +437,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Return the list of queues for this scheduler.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Return the list of queues for this scheduler.</p></div></span>
   
 </li>
 
@@ -486,9 +459,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release the job that is on hold.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release the job that is on hold.</p></div></span>
   
 </li>
 
@@ -510,9 +481,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Replace illegal chars in job name with a dash.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Replace illegal chars in job name with a dash.</p></div></span>
   
 </li>
 
@@ -534,9 +503,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job status from resource manager.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job status from resource manager.</p></div></span>
   
 </li>
 
@@ -558,9 +525,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a job with the attributes defined in the job template instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a job with the attributes defined in the job template instance.</p></div></span>
   
 </li>
 
@@ -582,14 +547,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether the adapter supports job arrays.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether the adapter supports job arrays.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -609,11 +573,9 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve the accounts available to use for the current user. The same account might appear muiltiple times if it has access to multiple clusters.</p>
-
+    <p>Retrieve the accounts available to use for the current user.
+The same account might appear muiltiple times if it has access to multiple clusters.</p>
 <p>Subclasses that do not implement this will return empty arrays.</p>
-
 
   </div>
 </div>
@@ -630,9 +592,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the accounts available to the user.</p>
-</div>
+        <div class='inline'><p>the accounts available to the user.</p></div>
       
     </li>
   
@@ -672,13 +632,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement #cluster_stats</p>
+  <div class='inline'><p>Subclass is expected to implement #cluster_stats</p></div>
 </div>
-</div>
-
 <p>Retrieve the number of active and total cpus, nodes, and gpus</p>
-
 
   </div>
 </div>
@@ -695,9 +651,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Object containing quantified statistics about the cluster&#39;s active/total cpus, nodes, and gpus</p>
-</div>
+        <div class='inline'><p>Object containing quantified statistics about the
+cluster's active/total cpus, nodes, and gpus</p></div>
       
     </li>
   
@@ -713,9 +668,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define #cluster_stats</p>
-</div>
+        <div class='inline'><p>if subclass did not define #cluster_stats</p></div>
       
     </li>
   
@@ -755,13 +708,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapter#delete (method)">#delete</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapter#delete (method)">#delete</a></span></p></div>
 </div>
-</div>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Delete the submitted job</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Delete the submitted job</p>
 
   </div>
 </div>
@@ -779,9 +728,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -798,9 +745,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapter#delete (method)">#delete</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#delete-instance_method" title="OodCore::Job::Adapter#delete (method)">#delete</a></span></p></div>
       
     </li>
   
@@ -840,17 +785,12 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#directive_prefix-instance_method" title="OodCore::Job::Adapter#directive_prefix (method)">#directive_prefix</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#directive_prefix-instance_method" title="OodCore::Job::Adapter#directive_prefix (method)">#directive_prefix</a></span></p></div>
 </div>
-</div>
-
 <p>Return the scheduler-specific directive prefix</p>
-
-<p>Examples of directive prefixes include #QSUB, #BSUB and allow placing what would otherwise be command line options inside the job launch script.</p>
-
+<p>Examples of directive prefixes include #QSUB, #BSUB and allow placing what would
+otherwise be command line options inside the job launch script.</p>
 <p>The method should return nil if the adapter does not support prefixes</p>
-
 
   </div>
 </div>
@@ -880,9 +820,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not defined <span class='object_link'><a href="#directive_prefix-instance_method" title="OodCore::Job::Adapter#directive_prefix (method)">#directive_prefix</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not defined <span class='object_link'><a href="#directive_prefix-instance_method" title="OodCore::Job::Adapter#directive_prefix (method)">#directive_prefix</a></span></p></div>
       
     </li>
   
@@ -922,13 +860,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapter#hold (method)">#hold</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapter#hold (method)">#hold</a></span></p></div>
 </div>
-</div>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Put the submitted job on hold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Put the submitted job on hold</p>
 
   </div>
 </div>
@@ -946,9 +880,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -965,9 +897,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapter#hold (method)">#hold</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#hold-instance_method" title="OodCore::Job::Adapter#hold (method)">#hold</a></span></p></div>
       
     </li>
   
@@ -1007,13 +937,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#info-instance_method" title="OodCore::Job::Adapter#info (method)">#info</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#info-instance_method" title="OodCore::Job::Adapter#info (method)">#info</a></span></p></div>
 </div>
-</div>
-
 <p>Retrieve job info from the resource manager</p>
-
 
   </div>
 </div>
@@ -1031,9 +957,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1050,9 +974,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted job</p>
-</div>
+        <div class='inline'><p>information describing submitted job</p></div>
       
     </li>
   
@@ -1068,9 +990,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#info-instance_method" title="OodCore::Job::Adapter#info (method)">#info</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#info-instance_method" title="OodCore::Job::Adapter#info (method)">#info</a></span></p></div>
       
     </li>
   
@@ -1110,13 +1030,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#info_all-instance_method" title="OodCore::Job::Adapter#info_all (method)">#info_all</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#info_all-instance_method" title="OodCore::Job::Adapter#info_all (method)">#info_all</a></span></p></div>
 </div>
-</div>
-
 <p>Retrieve info for all jobs from the resource manager</p>
-
 
   </div>
 </div>
@@ -1136,11 +1052,12 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>defaults to nil (and all attrs are provided) This array specifies only attrs you want, in addition to id and status. If an array, the Info object that is returned to you is not guarenteed to have a value for any attr besides the ones specified and id and status.</p>
-
-<p>For certain adapters this may speed up the response since adapters can get by without populating the entire Info object</p>
-</div>
+        <div class='inline'><p>defaults to nil (and all attrs are provided)
+This array specifies only attrs you want, in addition to id and status.
+If an array, the Info object that is returned to you is not guarenteed
+to have a value for any attr besides the ones specified and id and status.</p>
+<p>For certain adapters this may speed up the response since
+adapters can get by without populating the entire Info object</p></div>
       
     </li>
   
@@ -1157,9 +1074,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1175,9 +1090,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#info_all-instance_method" title="OodCore::Job::Adapter#info_all (method)">#info_all</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#info_all-instance_method" title="OodCore::Job::Adapter#info_all (method)">#info_all</a></span></p></div>
       
     </li>
   
@@ -1215,9 +1128,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Iterate over each job Info object</p>
-
+    <p>Iterate over each job Info object</p>
 
   </div>
 </div>
@@ -1237,11 +1148,12 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>defaults to nil (and all attrs are provided) This array specifies only attrs you want, in addition to id and status. If an array, the Info object that is returned to you is not guarenteed to have a value for any attr besides the ones specified and id and status.</p>
-
-<p>For certain adapters this may speed up the response since adapters can get by without populating the entire Info object</p>
-</div>
+        <div class='inline'><p>defaults to nil (and all attrs are provided)
+This array specifies only attrs you want, in addition to id and status.
+If an array, the Info object that is returned to you is not guarenteed
+to have a value for any attr besides the ones specified and id and status.</p>
+<p>For certain adapters this may speed up the response since
+adapters can get by without populating the entire Info object</p></div>
       
     </li>
   
@@ -1258,9 +1170,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>of each job to block</p>
-</div>
+        <div class='inline'><p>of each job to block</p></div>
       
     </li>
   
@@ -1276,9 +1186,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if no block given</p>
-</div>
+        <div class='inline'><p>if no block given</p></div>
       
     </li>
   
@@ -1326,13 +1234,10 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#info_historic-instance_method" title="OodCore::Job::Adapter#info_historic (method)">#info_historic</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#info_historic-instance_method" title="OodCore::Job::Adapter#info_historic (method)">#info_historic</a></span></p></div>
 </div>
-</div>
-
-<p>Retrieve historic info for all completed jobs from the resource manager. This depends on the data retention configuration of the resource manager.</p>
-
+<p>Retrieve historic info for all completed jobs from the resource manager.
+This depends on the data retention configuration of the resource manager.</p>
 
   </div>
 </div>
@@ -1352,9 +1257,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>options to filter jobs in the resource manager.</p>
-</div>
+        <div class='inline'><p>options to filter jobs in the resource manager.</p></div>
       
     </li>
   
@@ -1371,9 +1274,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing the jobs</p>
-</div>
+        <div class='inline'><p>information describing the jobs</p></div>
       
     </li>
   
@@ -1389,9 +1290,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#info_historic-instance_method" title="OodCore::Job::Adapter#info_historic (method)">#info_historic</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#info_historic-instance_method" title="OodCore::Job::Adapter#info_historic (method)">#info_historic</a></span></p></div>
       
     </li>
   
@@ -1429,9 +1328,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Retrieve info for all jobs for a given owner or owners from the resource manager</p>
-
+    <p>Retrieve info for all jobs for a given owner or owners from the
+resource manager</p>
 
   </div>
 </div>
@@ -1449,9 +1347,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the jobs</p>
-</div>
+        <div class='inline'><p>the owner(s) of the jobs</p></div>
       
     </li>
   
@@ -1467,11 +1363,12 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>defaults to nil (and all attrs are provided) This array specifies only attrs you want, in addition to id and status. If an array, the Info object that is returned to you is not guarenteed to have a value for any attr besides the ones specified and id and status.</p>
-
-<p>For certain adapters this may speed up the response since adapters can get by without populating the entire Info object</p>
-</div>
+        <div class='inline'><p>defaults to nil (and all attrs are provided)
+This array specifies only attrs you want, in addition to id and status.
+If an array, the Info object that is returned to you is not guarenteed
+to have a value for any attr besides the ones specified and id and status.</p>
+<p>For certain adapters this may speed up the response since
+adapters can get by without populating the entire Info object</p></div>
       
     </li>
   
@@ -1488,9 +1385,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>information describing submitted jobs</p>
-</div>
+        <div class='inline'><p>information describing submitted jobs</p></div>
       
     </li>
   
@@ -1538,9 +1433,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Iterate over each job Info object</p>
-
+    <p>Iterate over each job Info object</p>
 
   </div>
 </div>
@@ -1558,9 +1451,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the jobs</p>
-</div>
+        <div class='inline'><p>the owner(s) of the jobs</p></div>
       
     </li>
   
@@ -1576,11 +1467,12 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>defaults to nil (and all attrs are provided) This array specifies only attrs you want, in addition to id and status. If an array, the Info object that is returned to you is not guarenteed to have a value for any attr besides the ones specified and id and status.</p>
-
-<p>For certain adapters this may speed up the response since adapters can get by without populating the entire Info object</p>
-</div>
+        <div class='inline'><p>defaults to nil (and all attrs are provided)
+This array specifies only attrs you want, in addition to id and status.
+If an array, the Info object that is returned to you is not guarenteed
+to have a value for any attr besides the ones specified and id and status.</p>
+<p>For certain adapters this may speed up the response since
+adapters can get by without populating the entire Info object</p></div>
       
     </li>
   
@@ -1597,9 +1489,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>of each job to block</p>
-</div>
+        <div class='inline'><p>of each job to block</p></div>
       
     </li>
   
@@ -1615,9 +1505,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if no block given</p>
-</div>
+        <div class='inline'><p>if no block given</p></div>
       
     </li>
   
@@ -1663,9 +1551,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Illegal chars that should not be used in a job name A dash is assumed to be legal in job names in all batch schedulers</p>
-
+    <p>Illegal chars that should not be used in a job name
+A dash is assumed to be legal in job names in all batch schedulers</p>
 
   </div>
 </div>
@@ -1682,9 +1569,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>string of chars</p>
-</div>
+        <div class='inline'><p>string of chars</p></div>
       
     </li>
   
@@ -1722,11 +1607,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Return the list of nodes for this scheduler.</p>
-
+    <p>Return the list of nodes for this scheduler.</p>
 <p>Subclasses that do not implement this will return empty arrays.</p>
-
 
   </div>
 </div>
@@ -1778,11 +1660,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Return the list of queues for this scheduler.</p>
-
+    <p>Return the list of queues for this scheduler.</p>
 <p>Subclasses that do not implement this will return empty arrays.</p>
-
 
   </div>
 </div>
@@ -1836,13 +1715,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapter#release (method)">#release</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapter#release (method)">#release</a></span></p></div>
 </div>
-</div>
-<p class="note returns_void">This method returns an undefined value.</p>
-<p>Release the job that is on hold</p>
-
+<p class="note returns_void">This method returns an undefined value.</p><p>Release the job that is on hold</p>
 
   </div>
 </div>
@@ -1860,9 +1735,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1879,9 +1752,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapter#release (method)">#release</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#release-instance_method" title="OodCore::Job::Adapter#release (method)">#release</a></span></p></div>
       
     </li>
   
@@ -1919,9 +1790,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Replace illegal chars in job name with a dash</p>
-
+    <p>Replace illegal chars in job name with a dash</p>
 
   </div>
 </div>
@@ -1938,9 +1807,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>job name with dashes replacing illegal chars</p>
-</div>
+        <div class='inline'><p>job name with dashes replacing illegal chars</p></div>
       
     </li>
   
@@ -1984,21 +1851,15 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapter#status (method)">#status</a></span></p>
-</div>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapter#status (method)">#status</a></span></p></div>
 </div>
 
   <div class="note notetag">
     <strong>Note:</strong>
-    <div class='inline'>
-<p>Optimized slightly over retrieving complete job information from server</p>
-</div>
+    <div class='inline'><p>Optimized slightly over retrieving complete job information from server</p></div>
   </div>
 
-
 <p>Retrieve job status from resource manager</p>
-
 
   </div>
 </div>
@@ -2016,9 +1877,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -2035,9 +1894,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>status of job</p>
-</div>
+        <div class='inline'><p>status of job</p></div>
       
     </li>
   
@@ -2053,9 +1910,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapter#status (method)">#status</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#status-instance_method" title="OodCore::Job::Adapter#status (method)">#status</a></span></p></div>
       
     </li>
   
@@ -2095,13 +1950,9 @@
   <div class="discussion">
     <div class="note abstract">
   <strong>This method is abstract.</strong>
-  <div class='inline'>
-<p>Subclass is expected to implement <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapter#submit (method)">#submit</a></span></p>
+  <div class='inline'><p>Subclass is expected to implement <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapter#submit (method)">#submit</a></span></p></div>
 </div>
-</div>
-
 <p>Submit a job with the attributes defined in the job template instance</p>
-
 
   </div>
 </div>
@@ -2111,17 +1962,13 @@
     <h4 class="tag_title">Examples:</h4>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Submit job template to cluster</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Submit job template to cluster</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_solver_id'>solver_id</span> <span class='op'>=</span> <span class='id identifier rubyid_job_adapter'>job_adapter</span><span class='period'>.</span><span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_solver_script'>solver_script</span><span class='rparen'>)</span>
 <span class='comment'>#=&gt; &quot;1234.server&quot;</span></code></pre>
     
       
-        <h5 class="example_title"><div class='inline'>
-<p>Submit job that depends on previous job</p>
-</div></h5>
+        <h5 class="example_title"><div class='inline'><p>Submit job that depends on previous job</p></div></h5>
       
       <pre class="example code"><code><span class='id identifier rubyid_post_id'>post_id</span> <span class='op'>=</span> <span class='id identifier rubyid_job_adapter'>job_adapter</span><span class='period'>.</span><span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span>
   <span class='id identifier rubyid_post_script'>post_script</span><span class='comma'>,</span>
@@ -2143,9 +1990,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>script object that describes the script and attributes for the submitted job</p>
-</div>
+        <div class='inline'><p>script object that describes the
+script and attributes for the submitted job</p></div>
       
     </li>
   
@@ -2161,9 +2007,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution at any point after dependent jobs have started execution</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for execution
+at any point after dependent jobs have started execution</p></div>
       
     </li>
   
@@ -2179,9 +2024,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with no errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with no errors</p></div>
       
     </li>
   
@@ -2197,9 +2041,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution only after dependent jobs have terminated with errors</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution only after dependent jobs have terminated with errors</p></div>
       
     </li>
   
@@ -2215,9 +2058,8 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>this job may be scheduled for execution after dependent jobs have terminated</p>
-</div>
+        <div class='inline'><p>this job may be scheduled for
+execution after dependent jobs have terminated</p></div>
       
     </li>
   
@@ -2234,9 +2076,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job id returned after successfully submitting a job</p>
-</div>
+        <div class='inline'><p>the job id returned after successfully submitting a job</p></div>
       
     </li>
   
@@ -2252,9 +2092,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if subclass did not define <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapter#submit (method)">#submit</a></span></p>
-</div>
+        <div class='inline'><p>if subclass did not define <span class='object_link'><a href="#submit-instance_method" title="OodCore::Job::Adapter#submit (method)">#submit</a></span></p></div>
       
     </li>
   
@@ -2292,9 +2130,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether the adapter supports job arrays</p>
-
+    <p>Whether the adapter supports job arrays</p>
 
   </div>
 </div>
@@ -2311,12 +2147,10 @@
       
       
         &mdash;
-        <div class='inline'><ul><li>
-<p>assumes true; but can be overridden by adapters that</p>
-</li></ul>
-
-<p>explicitly do not</p>
-</div>
+        <div class='inline'><ul>
+<li>assumes true; but can be overridden by adapters that
+explicitly do not</li>
+</ul></div>
       
     </li>
   
@@ -2348,9 +2182,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:32 2026 by
+  Generated on Wed Apr 15 14:08:21 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

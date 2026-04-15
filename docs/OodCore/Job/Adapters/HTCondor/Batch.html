@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Adapters::HTCondor::Batch
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Adapters::HTCondor::Batch";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,7 +95,8 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/htcondor.rb</dd>
+    <dd>lib/ood_core/job/adapters/htcondor.rb
+</dd>
   </dl>
   
 </div>
@@ -105,9 +107,7 @@
   <strong>This class is part of a private API.</strong>
   You should avoid using this class if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Object used for simplified communication with an HTCondor batch server</p>
-
 
   </div>
 </div>
@@ -153,9 +153,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Additional attributes to be added to the job submission.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Additional attributes to be added to the job submission.</p></div></span>
   
 </li>
 
@@ -182,9 +180,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The path to the HTCondor client installation binaries.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The path to the HTCondor client installation binaries.</p></div></span>
   
 </li>
 
@@ -211,9 +207,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The path to the HTCondor client installation binaries that override the default binaries.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The path to the HTCondor client installation binaries that override the default binaries.</p></div></span>
   
 </li>
 
@@ -240,9 +234,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The cluster name for this HTCondor instance.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The cluster name for this HTCondor instance.</p></div></span>
   
 </li>
 
@@ -269,9 +261,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Default docker image for jobs submitted to HTCondor.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Default docker image for jobs submitted to HTCondor.</p></div></span>
   
 </li>
 
@@ -298,9 +288,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Default universe for jobs submitted to HTCondor.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Default universe for jobs submitted to HTCondor.</p></div></span>
   
 </li>
 
@@ -327,9 +315,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether to use strict host checking when ssh to submit_host.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether to use strict host checking when ssh to submit_host.</p></div></span>
   
 </li>
 
@@ -356,9 +342,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The login node where the job is submitted via ssh.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The login node where the job is submitted via ssh.</p></div></span>
   
 </li>
 
@@ -385,9 +369,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A path to the user/group map for HTCondor jobs The format in the file should adhere to the format used by [AssignAccountingGroup](<a href="https://htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP">htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP</a>).</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A path to the user/group map for HTCondor jobs The format in the file should adhere to the format used by <a href="https://htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP">AssignAccountingGroup</a>.</p></div></span>
   
 </li>
 
@@ -414,9 +396,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The version of HTCondor on the submit_host.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The version of HTCondor on the submit_host.</p></div></span>
   
 </li>
 
@@ -473,9 +453,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve accounts using user_group_map on @submit_host.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve accounts using user_group_map on @submit_host.</p></div></span>
   
 </li>
 
@@ -497,9 +475,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve job information using `condor_q`.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve job information using <code>condor_q</code>.</p></div></span>
   
 </li>
 
@@ -521,9 +497,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Retrieve slot information using `condor_status`.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Retrieve slot information using <code>condor_status</code>.</p></div></span>
   
 </li>
 
@@ -545,9 +519,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Place a job on hold using `condor_hold`.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Place a job on hold using <code>condor_hold</code>.</p></div></span>
   
 </li>
 
@@ -571,9 +543,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Batch.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Batch.</p></div></span>
   
 </li>
 
@@ -595,9 +565,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Release a job from hold using `condor_release`.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Release a job from hold using <code>condor_release</code>.</p></div></span>
   
 </li>
 
@@ -619,9 +587,7 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Run the `condor_rm` command to remove a job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Run the <code>condor_rm</code> command to remove a job.</p></div></span>
   
 </li>
 
@@ -643,14 +609,13 @@
   <span class="private note title">private</span>
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Submit a script to the batch server.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Submit a script to the batch server.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -671,9 +636,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Returns a new instance of Batch.</p>
-
 
   </div>
 </div>
@@ -693,9 +656,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to HTCondor installation binaries</p>
-</div>
+        <div class='inline'><p>path to HTCondor installation binaries</p></div>
       
     </li>
   
@@ -711,9 +672,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Submits the job on a login node via ssh</p>
-</div>
+        <div class='inline'><p>Submits the job on a login node via ssh</p></div>
       
     </li>
   
@@ -729,9 +688,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>Whether to use strict host checking when ssh to submit_host</p>
-</div>
+        <div class='inline'><p>Whether to use strict host checking when ssh to submit_host</p></div>
       
     </li>
   
@@ -799,9 +756,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Additional attributes to be added to the job submission</p>
-
 
   </div>
 </div>
@@ -818,9 +773,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>additional attributes to be added to the job submission</p>
-</div>
+        <div class='inline'><p>additional attributes to be added to the job submission</p></div>
       
     </li>
   
@@ -864,9 +817,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>The path to the HTCondor client installation binaries</p>
-
 
   </div>
 </div>
@@ -883,9 +834,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to HTCondor binaries</p>
-</div>
+        <div class='inline'><p>path to HTCondor binaries</p></div>
       
     </li>
   
@@ -929,9 +878,8 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>The path to the HTCondor client installation binaries that override the default binaries</p>
-
+<p>The path to the HTCondor client installation binaries that override
+the default binaries</p>
 
   </div>
 </div>
@@ -948,9 +896,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>path to HTCondor binaries overrides</p>
-</div>
+        <div class='inline'><p>path to HTCondor binaries overrides</p></div>
       
     </li>
   
@@ -994,9 +940,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>The cluster name for this HTCondor instance</p>
-
 
   </div>
 </div>
@@ -1013,9 +957,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the cluster name</p>
-</div>
+        <div class='inline'><p>the cluster name</p></div>
       
     </li>
   
@@ -1059,9 +1001,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Default docker image for jobs submitted to HTCondor</p>
-
 
   </div>
 </div>
@@ -1078,9 +1018,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the default docker image for jobs</p>
-</div>
+        <div class='inline'><p>the default docker image for jobs</p></div>
       
     </li>
   
@@ -1124,9 +1062,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Default universe for jobs submitted to HTCondor</p>
-
 
   </div>
 </div>
@@ -1143,9 +1079,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the default universe for jobs</p>
-</div>
+        <div class='inline'><p>the default universe for jobs</p></div>
       
     </li>
   
@@ -1189,9 +1123,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Whether to use strict host checking when ssh to submit_host</p>
-
 
   </div>
 </div>
@@ -1208,9 +1140,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>; true if empty</p>
-</div>
+        <div class='inline'><p>; true if empty</p></div>
       
     </li>
   
@@ -1254,9 +1184,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>The login node where the job is submitted via ssh</p>
-
 
   </div>
 </div>
@@ -1273,9 +1201,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>The login node</p>
-</div>
+        <div class='inline'><p>The login node</p></div>
       
     </li>
   
@@ -1319,9 +1245,8 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>A path to the user/group map for HTCondor jobs The format in the file should adhere to the format used by [AssignAccountingGroup](<a href="https://htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP">htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP</a>)</p>
-
+<p>A path to the user/group map for HTCondor jobs
+The format in the file should adhere to the format used by <a href="https://htcondor.readthedocs.io/en/latest/admin-manual/introduction-to-configuration.html#FEATURE:ASSIGNACCOUNTINGGROUP">AssignAccountingGroup</a></p>
 
   </div>
 </div>
@@ -1338,9 +1263,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the path to the user/group map file</p>
-</div>
+        <div class='inline'><p>the path to the user/group map file</p></div>
       
     </li>
   
@@ -1384,9 +1307,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>The version of HTCondor on the submit_host</p>
-
 
   </div>
 </div>
@@ -1403,9 +1324,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the version of HTCondor</p>
-</div>
+        <div class='inline'><p>the version of HTCondor</p></div>
       
     </li>
   
@@ -1525,9 +1444,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Retrieve accounts using user_group_map on @submit_host</p>
-
 
   </div>
 </div>
@@ -1544,9 +1461,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>mapping of usernames to their groups</p>
-</div>
+        <div class='inline'><p>mapping of usernames to their groups</p></div>
       
     </li>
   
@@ -1622,9 +1537,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Retrieve job information using `condor_q`</p>
-
+<p>Retrieve job information using <code>condor_q</code></p>
 
   </div>
 </div>
@@ -1644,9 +1557,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job</p>
-</div>
+        <div class='inline'><p>the id of the job</p></div>
       
     </li>
   
@@ -1662,9 +1573,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the job</p>
-</div>
+        <div class='inline'><p>the owner(s) of the job</p></div>
       
     </li>
   
@@ -1681,9 +1590,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of details for jobs</p>
-</div>
+        <div class='inline'><p>list of details for jobs</p></div>
       
     </li>
   
@@ -1699,9 +1606,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `condor_q` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>condor_q</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1769,9 +1674,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Retrieve slot information using `condor_status`</p>
-
+<p>Retrieve slot information using <code>condor_status</code></p>
 
   </div>
 </div>
@@ -1789,9 +1692,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the owner(s) of the slots</p>
-</div>
+        <div class='inline'><p>the owner(s) of the slots</p></div>
       
     </li>
   
@@ -1808,9 +1709,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of details for slots</p>
-</div>
+        <div class='inline'><p>list of details for slots</p></div>
       
     </li>
   
@@ -1826,9 +1725,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `condor_status` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>condor_status</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1878,9 +1775,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Place a job on hold using `condor_hold`</p>
-
+<p>Place a job on hold using <code>condor_hold</code></p>
 
   </div>
 </div>
@@ -1898,9 +1793,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job to hold</p>
-</div>
+        <div class='inline'><p>the id of the job to hold</p></div>
       
     </li>
   
@@ -1917,9 +1810,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `condor_hold` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>condor_hold</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -1967,9 +1858,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Release a job from hold using `condor_release`</p>
-
+<p>Release a job from hold using <code>condor_release</code></p>
 
   </div>
 </div>
@@ -1987,9 +1876,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job to release</p>
-</div>
+        <div class='inline'><p>the id of the job to release</p></div>
       
     </li>
   
@@ -2006,9 +1893,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `condor_release` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>condor_release</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -2056,9 +1941,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
-<p>Run the `condor_rm` command to remove a job</p>
-
+<p>Run the <code>condor_rm</code> command to remove a job</p>
 
   </div>
 </div>
@@ -2076,9 +1959,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job to remove</p>
-</div>
+        <div class='inline'><p>the id of the job to remove</p></div>
       
     </li>
   
@@ -2095,9 +1976,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `condor_rm` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>condor_rm</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -2143,9 +2022,7 @@
   <strong>This method is part of a private API.</strong>
   You should avoid using this method if possible, as it may be removed or be changed in the future.
 </p>
-
 <p>Submit a script to the batch server</p>
-
 
   </div>
 </div>
@@ -2165,9 +2042,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>arguments passed to `condor_submit` command</p>
-</div>
+        <div class='inline'><p>arguments passed to <code>condor_submit</code> command</p></div>
       
     </li>
   
@@ -2183,9 +2058,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>environment variables set</p>
-</div>
+        <div class='inline'><p>environment variables set</p></div>
       
     </li>
   
@@ -2201,9 +2074,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the script to submit</p>
-</div>
+        <div class='inline'><p>the script to submit</p></div>
       
     </li>
   
@@ -2220,9 +2091,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the id of the job that was created</p>
-</div>
+        <div class='inline'><p>the id of the job that was created</p></div>
       
     </li>
   
@@ -2238,9 +2107,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if `condor_submit` command exited unsuccessfully</p>
-</div>
+        <div class='inline'><p>if <code>condor_submit</code> command exited unsuccessfully</p></div>
       
     </li>
   
@@ -2296,9 +2163,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

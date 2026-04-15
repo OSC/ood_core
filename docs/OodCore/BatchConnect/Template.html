@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::BatchConnect::Template
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::BatchConnect::Template";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,16 +95,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/batch_connect/template.rb</dd>
+    <dd>lib/ood_core/batch_connect/template.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>A template class that renders a batch script designed to facilitate external connections to the running job</p>
-
+    <p>A template class that renders a batch script designed to facilitate
+external connections to the running job</p>
 
   </div>
 </div>
@@ -143,9 +144,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The context used to render this template.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The context used to render this template.</p></div></span>
   
 </li>
 
@@ -182,9 +181,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Template.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Template.</p></div></span>
   
 </li>
 
@@ -206,14 +203,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Render this template as string.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Render this template as string.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -230,9 +226,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Template.</p>
-
+    <p>Returns a new instance of Template.</p>
 
   </div>
 </div>
@@ -252,9 +246,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the context used to render the template</p>
-</div>
+        <div class='inline'><p>the context used to render the template</p></div>
       
     </li>
   
@@ -273,9 +265,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Working directory for batch script</p>
-</div>
+            &mdash; <div class='inline'><p>Working directory for batch script</p></div>
           
         </li>
       
@@ -289,9 +279,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The file that holds connection information</p>
-</div>
+            &mdash; <div class='inline'><p>The file that
+holds connection information</p></div>
           
         </li>
       
@@ -305,9 +294,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>A list of connection parameters added to the connection file (`:host`, `:port`, and `:password` will always exist)</p>
-</div>
+            &mdash; <div class='inline'><p>A list of
+connection parameters added to the connection file (<code>:host</code>, <code>:port</code>,
+and <code>:password</code> will always exist)</p></div>
           
         </li>
       
@@ -321,9 +310,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Bash helper methods</p>
-</div>
+            &mdash; <div class='inline'><p>Bash helper methods</p></div>
           
         </li>
       
@@ -337,9 +324,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Minimum port used when looking for available port</p>
-</div>
+            &mdash; <div class='inline'><p>Minimum port used when looking
+for available port</p></div>
           
         </li>
       
@@ -353,9 +339,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Maximum port used when looking for available port</p>
-</div>
+            &mdash; <div class='inline'><p>Maximum port used when
+looking for available port</p></div>
           
         </li>
       
@@ -369,9 +354,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Length of randomly generated password</p>
-</div>
+            &mdash; <div class='inline'><p>Length of randomly generated
+password</p></div>
           
         </li>
       
@@ -385,9 +369,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Shell code prepended at the top of the script body</p>
-</div>
+            &mdash; <div class='inline'><p>Shell code prepended at the top of
+the script body</p></div>
           
         </li>
       
@@ -401,9 +384,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Shell code appended at the bottom of the script body</p>
-</div>
+            &mdash; <div class='inline'><p>Shell code appended at the bottom
+of the script body</p></div>
           
         </li>
       
@@ -417,9 +399,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Bash code that wraps around the body of the template script (use `%s` to interpolate the body)</p>
-</div>
+            &mdash; <div class='inline'><p>Bash code that wraps
+around the body of the template script (use <code>%s</code> to interpolate the
+body)</p></div>
           
         </li>
       
@@ -433,9 +415,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Bash code used to set the `host` environment variable used for connection information</p>
-</div>
+            &mdash; <div class='inline'><p>Bash code used
+to set the <code>host</code> environment variable used for connection
+information</p></div>
           
         </li>
       
@@ -449,9 +431,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Bash code run before the main script is forked off</p>
-</div>
+            &mdash; <div class='inline'><p>Bash code run before the
+main script is forked off</p></div>
           
         </li>
       
@@ -465,9 +446,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to script that is sourced before main script is forked (assumes you don&#39;t modify `:before_script`)</p>
-</div>
+            &mdash; <div class='inline'><p>Path to script that
+is sourced before main script is forked (assumes you don't modify
+<code>:before_script</code>)</p></div>
           
         </li>
       
@@ -481,9 +462,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Bash code that is forked off and treated as the main script</p>
-</div>
+            &mdash; <div class='inline'><p>Bash code that is forked
+off and treated as the main script</p></div>
           
         </li>
       
@@ -497,9 +477,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to script that is forked as the main scripta (assumes you don&#39;t modify `:run_script`)</p>
-</div>
+            &mdash; <div class='inline'><p>Path to script
+that is forked as the main scripta (assumes you don't modify
+<code>:run_script</code>)</p></div>
           
         </li>
       
@@ -513,9 +493,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Timeout the main script in seconds, if empty then let script run for full walltime (assumes you don&#39;t modify `:run_script`)</p>
-</div>
+            &mdash; <div class='inline'><p>Timeout the main script in
+seconds, if empty then let script run for full walltime (assumes you
+don't modify <code>:run_script</code>)</p></div>
           
         </li>
       
@@ -529,9 +509,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Bash code run during clean up after job finishes</p>
-</div>
+            &mdash; <div class='inline'><p>Bash code run during
+clean up after job finishes</p></div>
           
         </li>
       
@@ -545,9 +524,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to script that is sourced during clean up (assumes you don&#39;t modify `:clean_script`)</p>
-</div>
+            &mdash; <div class='inline'><p>Path to script that is
+sourced during clean up (assumes you don't modify <code>:clean_script</code>)</p></div>
           
         </li>
       
@@ -609,9 +587,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The context used to render this template</p>
-
+    <p>The context used to render this template</p>
 
   </div>
 </div>
@@ -628,9 +604,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>context hash</p>
-</div>
+        <div class='inline'><p>context hash</p></div>
       
     </li>
   
@@ -675,9 +649,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Render this template as string</p>
-
+    <p>Render this template as string</p>
 
   </div>
 </div>
@@ -694,9 +666,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>rendered template</p>
-</div>
+        <div class='inline'><p>rendered template</p></div>
       
     </li>
   
@@ -736,9 +706,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:33 2026 by
+  Generated on Wed Apr 15 14:08:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Script
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Script";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,16 +95,16 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/script.rb</dd>
+    <dd>lib/ood_core/job/script.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An object that describes a batch job before it is submitted. This includes the resources this batch job will require of the resource manager.</p>
-
+    <p>An object that describes a batch job before it is submitted. This includes
+the resources this batch job will require of the resource manager.</p>
 
   </div>
 </div>
@@ -139,9 +140,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The attribute used for job accounting purposes.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The attribute used for job accounting purposes.</p></div></span>
   
 </li>
 
@@ -168,9 +167,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Arguments supplied to script to be executed.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Arguments supplied to script to be executed.</p></div></span>
   
 </li>
 
@@ -197,9 +194,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Content of the script to be executed on the remote host.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Content of the script to be executed on the remote host.</p></div></span>
   
 </li>
 
@@ -228,9 +223,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Flag whether the job should contain a copy of its calling environment.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Flag whether the job should contain a copy of its calling environment.</p></div></span>
   
 </li>
 
@@ -257,9 +250,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The core request for this job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The core request for this job.</p></div></span>
   
 </li>
 
@@ -286,9 +277,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>List of email addresses that should be used when resource manager sends status notifications.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>List of email addresses that should be used when resource manager sends status notifications.</p></div></span>
   
 </li>
 
@@ -315,9 +304,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether given email addresses should be notified when job starts.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether given email addresses should be notified when job starts.</p></div></span>
   
 </li>
 
@@ -344,9 +331,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether given email addresses should be notified when job ends.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether given email addresses should be notified when job ends.</p></div></span>
   
 </li>
 
@@ -373,9 +358,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Path to file specifying the error stream of the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Path to file specifying the error stream of the job.</p></div></span>
   
 </li>
 
@@ -402,9 +385,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The GPUs per node for the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The GPUs per node for the job.</p></div></span>
   
 </li>
 
@@ -431,9 +412,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Path to file specifying the input stream of the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Path to file specifying the input stream of the job.</p></div></span>
   
 </li>
 
@@ -460,9 +439,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The job array request, commonly in the format &#39;$START-$STOP&#39;.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The job array request, commonly in the format '$START-$STOP'.</p></div></span>
   
 </li>
 
@@ -489,9 +466,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Environment variables to be set on remote host when running job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Environment variables to be set on remote host when running job.</p></div></span>
   
 </li>
 
@@ -518,9 +493,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The name of the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The name of the job.</p></div></span>
   
 </li>
 
@@ -547,9 +520,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Object detailing any native specifications that are implementation specific.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Object detailing any native specifications that are implementation specific.</p></div></span>
   
 </li>
 
@@ -576,9 +547,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Path to file specifying the output stream of the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Path to file specifying the output stream of the job.</p></div></span>
   
 </li>
 
@@ -605,9 +574,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The scheduling priority for the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The scheduling priority for the job.</p></div></span>
   
 </li>
 
@@ -634,9 +601,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The qos selected for the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The qos selected for the job.</p></div></span>
   
 </li>
 
@@ -665,9 +630,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Name of the queue the job should be submitted to.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Name of the queue the job should be submitted to.</p></div></span>
   
 </li>
 
@@ -694,9 +657,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether job can safely be restarted by the resource manager, for example on node failure or some other re-scheduling event.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether job can safely be restarted by the resource manager, for example on node failure or some other re-scheduling event.</p></div></span>
   
 </li>
 
@@ -723,9 +684,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Identifier of existing reservation to be associated with the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Identifier of existing reservation to be associated with the job.</p></div></span>
   
 </li>
 
@@ -752,9 +711,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Path to file specifying the login shell of the job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Path to file specifying the login shell of the job.</p></div></span>
   
 </li>
 
@@ -781,9 +738,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The earliest time when the job may be eligible to run.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The earliest time when the job may be eligible to run.</p></div></span>
   
 </li>
 
@@ -810,9 +765,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether job is held after submitted.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether job is held after submitted.</p></div></span>
   
 </li>
 
@@ -839,9 +792,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The maximum amount of real time during which the job can be running in seconds.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The maximum amount of real time during which the job can be running in seconds.</p></div></span>
   
 </li>
 
@@ -868,9 +819,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Directory where the job is executed from.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Directory where the job is executed from.</p></div></span>
   
 </li>
 
@@ -905,9 +854,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The comparison operator.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The comparison operator.</p></div></span>
   
 </li>
 
@@ -929,9 +876,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Whether objects are identical to each other.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Whether objects are identical to each other.</p></div></span>
   
 </li>
 
@@ -953,9 +898,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Generate a hash value for this object.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Generate a hash value for this object.</p></div></span>
   
 </li>
 
@@ -979,9 +922,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of Script.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of Script.</p></div></span>
   
 </li>
 
@@ -1003,14 +944,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Convert object to hash.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Convert object to hash.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 <div id="constructor_details" class="method_details_list">
@@ -1027,9 +967,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of Script.</p>
-
+    <p>Returns a new instance of Script.</p>
 
   </div>
 </div>
@@ -1047,9 +985,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the script content</p>
-</div>
+        <div class='inline'><p>the script content</p></div>
       
     </li>
   
@@ -1065,9 +1001,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>arguments supplied to script</p>
-</div>
+        <div class='inline'><p>arguments supplied to script</p></div>
       
     </li>
   
@@ -1083,9 +1017,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether job is held after submit</p>
-</div>
+        <div class='inline'><p>whether job is held after submit</p></div>
       
     </li>
   
@@ -1101,9 +1033,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether job can be restarted</p>
-</div>
+        <div class='inline'><p>whether job can be restarted</p></div>
       
     </li>
   
@@ -1119,9 +1049,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>environment variables</p>
-</div>
+        <div class='inline'><p>environment variables</p></div>
       
     </li>
   
@@ -1137,9 +1065,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>working directory</p>
-</div>
+        <div class='inline'><p>working directory</p></div>
       
     </li>
   
@@ -1155,9 +1081,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of emails</p>
-</div>
+        <div class='inline'><p>list of emails</p></div>
       
     </li>
   
@@ -1173,9 +1097,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether email when job starts</p>
-</div>
+        <div class='inline'><p>whether email when job starts</p></div>
       
     </li>
   
@@ -1191,9 +1113,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether email when job ends</p>
-</div>
+        <div class='inline'><p>whether email when job ends</p></div>
       
     </li>
   
@@ -1209,9 +1129,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>name of job</p>
-</div>
+        <div class='inline'><p>name of job</p></div>
       
     </li>
   
@@ -1227,9 +1145,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying login shell</p>
-</div>
+        <div class='inline'><p>file path specifying login shell</p></div>
       
     </li>
   
@@ -1245,9 +1161,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying error stream</p>
-</div>
+        <div class='inline'><p>file path specifying error stream</p></div>
       
     </li>
   
@@ -1263,9 +1177,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying input stream</p>
-</div>
+        <div class='inline'><p>file path specifying input stream</p></div>
       
     </li>
   
@@ -1281,9 +1193,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying output stream</p>
-</div>
+        <div class='inline'><p>file path specifying output stream</p></div>
       
     </li>
   
@@ -1299,9 +1209,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying error stream</p>
-</div>
+        <div class='inline'><p>file path specifying error stream</p></div>
       
     </li>
   
@@ -1317,9 +1225,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>reservation id</p>
-</div>
+        <div class='inline'><p>reservation id</p></div>
       
     </li>
   
@@ -1335,9 +1241,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>queue name</p>
-</div>
+        <div class='inline'><p>queue name</p></div>
       
     </li>
   
@@ -1353,9 +1257,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>scheduling priority</p>
-</div>
+        <div class='inline'><p>scheduling priority</p></div>
       
     </li>
   
@@ -1371,9 +1273,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>eligible start time</p>
-</div>
+        <div class='inline'><p>eligible start time</p></div>
       
     </li>
   
@@ -1389,9 +1289,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>max real time</p>
-</div>
+        <div class='inline'><p>max real time</p></div>
       
     </li>
   
@@ -1407,9 +1305,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>accounting id</p>
-</div>
+        <div class='inline'><p>accounting id</p></div>
       
     </li>
   
@@ -1425,9 +1321,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>job array request</p>
-</div>
+        <div class='inline'><p>job array request</p></div>
       
     </li>
   
@@ -1443,9 +1337,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>qos</p>
-</div>
+        <div class='inline'><p>qos</p></div>
       
     </li>
   
@@ -1461,9 +1353,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>gpus per node</p>
-</div>
+        <div class='inline'><p>gpus per node</p></div>
       
     </li>
   
@@ -1479,9 +1369,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>native specifications</p>
-</div>
+        <div class='inline'><p>native specifications</p></div>
       
     </li>
   
@@ -1497,9 +1385,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>copy the environment</p>
-</div>
+        <div class='inline'><p>copy the environment</p></div>
       
     </li>
   
@@ -1615,9 +1501,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The attribute used for job accounting purposes</p>
-
+    <p>The attribute used for job accounting purposes</p>
 
   </div>
 </div>
@@ -1634,9 +1518,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>accounting id</p>
-</div>
+        <div class='inline'><p>accounting id</p></div>
       
     </li>
   
@@ -1676,9 +1558,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Arguments supplied to script to be executed</p>
-
+    <p>Arguments supplied to script to be executed</p>
 
   </div>
 </div>
@@ -1695,9 +1575,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>arguments supplied to script</p>
-</div>
+        <div class='inline'><p>arguments supplied to script</p></div>
       
     </li>
   
@@ -1737,9 +1615,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Content of the script to be executed on the remote host</p>
-
+    <p>Content of the script to be executed on the remote host</p>
 
   </div>
 </div>
@@ -1756,9 +1632,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the script content</p>
-</div>
+        <div class='inline'><p>the script content</p></div>
       
     </li>
   
@@ -1802,9 +1676,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Flag whether the job should contain a copy of its calling environment</p>
-
+    <p>Flag whether the job should contain a copy of its calling environment</p>
 
   </div>
 </div>
@@ -1821,9 +1693,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>copy environment</p>
-</div>
+        <div class='inline'><p>copy environment</p></div>
       
     </li>
   
@@ -1863,9 +1733,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The core request for this job</p>
-
+    <p>The core request for this job</p>
 
   </div>
 </div>
@@ -1882,9 +1750,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>cores</p>
-</div>
+        <div class='inline'><p>cores</p></div>
       
     </li>
   
@@ -1924,9 +1790,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>List of email addresses that should be used when resource manager sends status notifications</p>
-
+    <p>List of email addresses that should be used when resource manager sends
+status notifications</p>
 
   </div>
 </div>
@@ -1943,9 +1808,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>list of emails</p>
-</div>
+        <div class='inline'><p>list of emails</p></div>
       
     </li>
   
@@ -1985,9 +1848,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether given email addresses should be notified when job starts</p>
-
+    <p>Whether given email addresses should be notified when job starts</p>
 
   </div>
 </div>
@@ -2004,9 +1865,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether email when job starts</p>
-</div>
+        <div class='inline'><p>whether email when job starts</p></div>
       
     </li>
   
@@ -2046,9 +1905,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether given email addresses should be notified when job ends</p>
-
+    <p>Whether given email addresses should be notified when job ends</p>
 
   </div>
 </div>
@@ -2065,9 +1922,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether email when job ends</p>
-</div>
+        <div class='inline'><p>whether email when job ends</p></div>
       
     </li>
   
@@ -2107,9 +1962,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Path to file specifying the error stream of the job</p>
-
+    <p>Path to file specifying the error stream of the job</p>
 
   </div>
 </div>
@@ -2126,9 +1979,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying error stream</p>
-</div>
+        <div class='inline'><p>file path specifying error stream</p></div>
       
     </li>
   
@@ -2168,9 +2019,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The GPUs per node for the job</p>
-
+    <p>The GPUs per node for the job</p>
 
   </div>
 </div>
@@ -2187,9 +2036,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>gpus per node</p>
-</div>
+        <div class='inline'><p>gpus per node</p></div>
       
     </li>
   
@@ -2229,9 +2076,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Path to file specifying the input stream of the job</p>
-
+    <p>Path to file specifying the input stream of the job</p>
 
   </div>
 </div>
@@ -2248,9 +2093,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying input stream</p>
-</div>
+        <div class='inline'><p>file path specifying input stream</p></div>
       
     </li>
   
@@ -2290,9 +2133,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The job array request, commonly in the format &#39;$START-$STOP&#39;</p>
-
+    <p>The job array request, commonly in the format '$START-$STOP'</p>
 
   </div>
 </div>
@@ -2309,9 +2150,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>job array request</p>
-</div>
+        <div class='inline'><p>job array request</p></div>
       
     </li>
   
@@ -2354,14 +2193,10 @@
     
   <div class="note notetag">
     <strong>Note:</strong>
-    <div class='inline'>
-<p>These will override the remote host environment settings</p>
-</div>
+    <div class='inline'><p>These will override the remote host environment settings</p></div>
   </div>
 
-
 <p>Environment variables to be set on remote host when running job</p>
-
 
   </div>
 </div>
@@ -2378,9 +2213,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>environment variables</p>
-</div>
+        <div class='inline'><p>environment variables</p></div>
       
     </li>
   
@@ -2420,9 +2253,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The name of the job</p>
-
+    <p>The name of the job</p>
 
   </div>
 </div>
@@ -2439,9 +2270,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>name of job</p>
-</div>
+        <div class='inline'><p>name of job</p></div>
       
     </li>
   
@@ -2484,14 +2313,10 @@
     
   <div class="note notetag">
     <strong>Note:</strong>
-    <div class='inline'>
-<p>Should not be used at all costs.</p>
-</div>
+    <div class='inline'><p>Should not be used at all costs.</p></div>
   </div>
 
-
 <p>Object detailing any native specifications that are implementation specific</p>
-
 
   </div>
 </div>
@@ -2508,9 +2333,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>native specifications</p>
-</div>
+        <div class='inline'><p>native specifications</p></div>
       
     </li>
   
@@ -2550,9 +2373,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Path to file specifying the output stream of the job</p>
-
+    <p>Path to file specifying the output stream of the job</p>
 
   </div>
 </div>
@@ -2569,9 +2390,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying output stream</p>
-</div>
+        <div class='inline'><p>file path specifying output stream</p></div>
       
     </li>
   
@@ -2611,9 +2430,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The scheduling priority for the job</p>
-
+    <p>The scheduling priority for the job</p>
 
   </div>
 </div>
@@ -2630,9 +2447,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>scheduling priority</p>
-</div>
+        <div class='inline'><p>scheduling priority</p></div>
       
     </li>
   
@@ -2672,9 +2487,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The qos selected for the job</p>
-
+    <p>The qos selected for the job</p>
 
   </div>
 </div>
@@ -2691,9 +2504,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>qos</p>
-</div>
+        <div class='inline'><p>qos</p></div>
       
     </li>
   
@@ -2737,9 +2548,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Name of the queue the job should be submitted to</p>
-
+    <p>Name of the queue the job should be submitted to</p>
 
   </div>
 </div>
@@ -2756,9 +2565,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>queue name</p>
-</div>
+        <div class='inline'><p>queue name</p></div>
       
     </li>
   
@@ -2801,14 +2608,12 @@
     
   <div class="note notetag">
     <strong>Note:</strong>
-    <div class='inline'>
-<p>This SHOULD NOT be used to let the application denote the checkpointability of a job</p>
-</div>
+    <div class='inline'><p>This SHOULD NOT be used to let the application denote the
+checkpointability of a job</p></div>
   </div>
 
-
-<p>Whether job can safely be restarted by the resource manager, for example on node failure or some other re-scheduling event</p>
-
+<p>Whether job can safely be restarted by the resource manager, for example on
+node failure or some other re-scheduling event</p>
 
   </div>
 </div>
@@ -2825,9 +2630,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether job can be restarted</p>
-</div>
+        <div class='inline'><p>whether job can be restarted</p></div>
       
     </li>
   
@@ -2867,9 +2670,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Identifier of existing reservation to be associated with the job</p>
-
+    <p>Identifier of existing reservation to be associated with the job</p>
 
   </div>
 </div>
@@ -2886,9 +2687,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>reservation id</p>
-</div>
+        <div class='inline'><p>reservation id</p></div>
       
     </li>
   
@@ -2928,9 +2727,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Path to file specifying the login shell of the job</p>
-
+    <p>Path to file specifying the login shell of the job</p>
 
   </div>
 </div>
@@ -2947,9 +2744,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>file path specifying login shell</p>
-</div>
+        <div class='inline'><p>file path specifying login shell</p></div>
       
     </li>
   
@@ -2989,9 +2784,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The earliest time when the job may be eligible to run</p>
-
+    <p>The earliest time when the job may be eligible to run</p>
 
   </div>
 </div>
@@ -3008,9 +2801,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>eligible start time</p>
-</div>
+        <div class='inline'><p>eligible start time</p></div>
       
     </li>
   
@@ -3050,9 +2841,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether job is held after submitted</p>
-
+    <p>Whether job is held after submitted</p>
 
   </div>
 </div>
@@ -3069,9 +2858,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether job is held after submit</p>
-</div>
+        <div class='inline'><p>whether job is held after submit</p></div>
       
     </li>
   
@@ -3111,9 +2898,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The maximum amount of real time during which the job can be running in seconds</p>
-
+    <p>The maximum amount of real time during which the job can be running in
+seconds</p>
 
   </div>
 </div>
@@ -3130,9 +2916,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>max real time</p>
-</div>
+        <div class='inline'><p>max real time</p></div>
       
     </li>
   
@@ -3172,9 +2956,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Directory where the job is executed from</p>
-
+    <p>Directory where the job is executed from</p>
 
   </div>
 </div>
@@ -3191,9 +2973,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>working directory</p>
-</div>
+        <div class='inline'><p>working directory</p></div>
       
     </li>
   
@@ -3238,9 +3018,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The comparison operator</p>
-
+    <p>The comparison operator</p>
 
   </div>
 </div>
@@ -3258,9 +3036,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object to compare against</p>
-</div>
+        <div class='inline'><p>object to compare against</p></div>
       
     </li>
   
@@ -3277,9 +3053,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether objects are equivalent</p>
-</div>
+        <div class='inline'><p>whether objects are equivalent</p></div>
       
     </li>
   
@@ -3317,9 +3091,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Whether objects are identical to each other</p>
-
+    <p>Whether objects are identical to each other</p>
 
   </div>
 </div>
@@ -3337,9 +3109,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object to compare against</p>
-</div>
+        <div class='inline'><p>object to compare against</p></div>
       
     </li>
   
@@ -3356,9 +3126,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>whether objects are identical</p>
-</div>
+        <div class='inline'><p>whether objects are identical</p></div>
       
     </li>
   
@@ -3396,9 +3164,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Generate a hash value for this object</p>
-
+    <p>Generate a hash value for this object</p>
 
   </div>
 </div>
@@ -3415,9 +3181,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>hash value of object</p>
-</div>
+        <div class='inline'><p>hash value of object</p></div>
       
     </li>
   
@@ -3455,9 +3219,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Convert object to hash</p>
-
+    <p>Convert object to hash</p>
 
   </div>
 </div>
@@ -3474,9 +3236,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>object as hash</p>
-</div>
+        <div class='inline'><p>object as hash</p></div>
       
     </li>
   
@@ -3562,9 +3322,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:31 2026 by
+  Generated on Wed Apr 15 14:08:21 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

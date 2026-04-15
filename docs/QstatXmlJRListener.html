@@ -6,13 +6,13 @@
 <title>
   Class: QstatXmlJRListener
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "QstatXmlJRListener";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -99,18 +100,25 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb</dd>
+    <dd>lib/ood_core/job/adapters/sge/qstat_xml_j_r_listener.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An XML stream listener to build an array of OodCore::Job::Info from qstat output</p>
-
-<p>Handles parsing `qstat -xml -r -j` which provides: :accounting_id :id :job_name :job_owner :procs :queue_name :status :wallclock_limit :wallclock_time</p>
-
+    <p>An XML stream listener to build an array of OodCore::Job::Info from qstat output</p>
+<p>Handles parsing <code>qstat -xml -r -j</code> which provides:
+:accounting_id
+:id
+:job_name
+:job_owner
+:procs
+:queue_name
+:status
+:wallclock_limit
+:wallclock_time</p>
 
   </div>
 </div>
@@ -146,9 +154,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>[Hash].</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>[Hash].</p></div></span>
   
 </li>
 
@@ -271,9 +277,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Used to record a running Job Array task.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Used to record a running Job Array task.</p></div></span>
   
 </li>
 
@@ -339,9 +343,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Attributes we need.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Attributes we need.</p></div></span>
   
 </li>
 
@@ -495,9 +497,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Used to finalize the parsed job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Used to finalize the parsed job.</p></div></span>
   
 </li>
 
@@ -521,9 +521,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of QstatXmlJRListener.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of QstatXmlJRListener.</p></div></span>
   
 </li>
 
@@ -545,9 +543,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>The XML output will always contain nodes for task_id_range, even when the job is not an array job.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>The XML output will always contain nodes for task_id_range, even when the job is not an array job.</p></div></span>
   
 </li>
 
@@ -679,9 +675,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Always store text nodes temporarily.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Always store text nodes temporarily.</p></div></span>
   
 </li>
 
@@ -731,6 +725,7 @@
 
       
     </ul>
+    
   
 
 
@@ -748,9 +743,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of QstatXmlJRListener.</p>
-
+    <p>Returns a new instance of QstatXmlJRListener.</p>
 
   </div>
 </div>
@@ -838,9 +831,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <dl class="rdoc-list label-list"><dt>Hash
-<dd></dd></dl>
-
+    <p>[Hash]</p>
 
   </div>
 </div>
@@ -1038,9 +1029,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Used to record a running Job Array task</p>
-
+    <p>Used to record a running Job Array task</p>
 
   </div>
 </div>
@@ -1139,9 +1128,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Attributes we need</p>
-
+    <p>Attributes we need</p>
 
   </div>
 </div>
@@ -1362,9 +1349,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Used to finalize the parsed job</p>
-
+    <p>Used to finalize the parsed job</p>
 
   </div>
 </div>
@@ -1403,9 +1388,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>The XML output will always contain nodes for task_id_range, even when the job is not an array job.</p>
-
+    <p>The XML output will always contain nodes for task_id_range, even when the
+job is not an array job.</p>
 
   </div>
 </div>
@@ -1725,9 +1709,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Always store text nodes temporarily</p>
-
+    <p>Always store text nodes temporarily</p>
 
   </div>
 </div>
@@ -1820,9 +1802,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:36 2026 by
+  Generated on Wed Apr 15 14:08:26 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

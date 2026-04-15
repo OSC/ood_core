@@ -6,13 +6,13 @@
 <title>
   Class: OodCore::Job::Factory
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="../../css/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="../../css/common.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "OodCore::Job::Factory";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -94,8 +95,9 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/factory.rb<span class="defines">,<br />
-  lib/ood_core/job/adapters/ccq.rb,<br /> lib/ood_core/job/adapters/lsf.rb,<br /> lib/ood_core/job/adapters/sge.rb,<br /> lib/ood_core/job/adapters/psij.rb,<br /> lib/ood_core/job/adapters/coder.rb,<br /> lib/ood_core/job/adapters/slurm.rb,<br /> lib/ood_core/job/adapters/pbspro.rb,<br /> lib/ood_core/job/adapters/torque.rb,<br /> lib/ood_core/job/adapters/systemd.rb,<br /> lib/ood_core/job/adapters/htcondor.rb,<br /> lib/ood_core/job/adapters/kubernetes.rb,<br /> lib/ood_core/job/adapters/linux_host.rb,<br /> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
+    <dd>lib/ood_core/job/factory.rb<span class="defines">,<br>
+  lib/ood_core/job/adapters/ccq.rb,<br> lib/ood_core/job/adapters/lsf.rb,<br> lib/ood_core/job/adapters/sge.rb,<br> lib/ood_core/job/adapters/psij.rb,<br> lib/ood_core/job/adapters/coder.rb,<br> lib/ood_core/job/adapters/slurm.rb,<br> lib/ood_core/job/adapters/pbspro.rb,<br> lib/ood_core/job/adapters/torque.rb,<br> lib/ood_core/job/adapters/systemd.rb,<br> lib/ood_core/job/adapters/htcondor.rb,<br> lib/ood_core/job/adapters/kubernetes.rb,<br> lib/ood_core/job/adapters/linux_host.rb,<br> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
+
 </dd>
   </dl>
   
@@ -103,9 +105,7 @@
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>A factory that builds job adapter objects from a configuration.</p>
-
+    <p>A factory that builds job adapter objects from a configuration.</p>
 
   </div>
 </div>
@@ -144,9 +144,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build a job adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build a job adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -168,9 +166,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the Cloudy Cluster adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the Cloudy Cluster adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -214,9 +210,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the Fujitsu TCS (Technical Computing Suite) adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the Fujitsu TCS (Technical Computing Suite) adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -238,9 +232,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the HTCondor adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the HTCondor adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -284,9 +276,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the LinuxHost adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the LinuxHost adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -308,9 +298,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the Lsf adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the Lsf adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -332,9 +320,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the PBS Pro adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the PBS Pro adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -378,9 +364,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the Sun Grid Engine adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the Sun Grid Engine adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -402,9 +386,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the Slurm adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the Slurm adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -426,9 +408,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the LinuxSystemd adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the LinuxSystemd adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -450,14 +430,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Build the Torque adapter from a configuration.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Build the Torque adapter from a configuration.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -477,9 +456,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build a job adapter from a configuration</p>
-
+    <p>Build a job adapter from a configuration</p>
 
   </div>
 </div>
@@ -497,9 +474,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>configuration describing job adapter</p>
-</div>
+        <div class='inline'><p>configuration describing job adapter</p></div>
       
     </li>
   
@@ -518,9 +493,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The job adapter to use</p>
-</div>
+            &mdash; <div class='inline'><p>The job adapter to use</p></div>
           
         </li>
       
@@ -538,9 +511,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the job adapter object</p>
-</div>
+        <div class='inline'><p>the job adapter object</p></div>
       
     </li>
   
@@ -556,9 +527,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if no adapter is specified</p>
-</div>
+        <div class='inline'><p>if no adapter is specified</p></div>
       
     </li>
   
@@ -570,9 +539,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>if the specified adapter does not exist</p>
-</div>
+        <div class='inline'><p>if the specified adapter does not exist</p></div>
       
     </li>
   
@@ -648,9 +615,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the Cloudy Cluster adapter from a configuration</p>
-
+    <p>Build the Cloudy Cluster adapter from a configuration</p>
 
   </div>
 </div>
@@ -668,9 +633,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -692,9 +655,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The default VM image to use</p>
-</div>
+            &mdash; <div class='inline'><p>The default VM image to use</p></div>
           
         </li>
       
@@ -708,9 +669,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The cloud provider being used [gcp,aws]</p>
-</div>
+            &mdash; <div class='inline'><p>The cloud provider being used [gcp,aws]</p></div>
           
         </li>
       
@@ -724,9 +683,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The name of the scheduler to use</p>
-</div>
+            &mdash; <div class='inline'><p>The name of the scheduler to use</p></div>
           
         </li>
       
@@ -740,9 +697,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to SGE root, note that</p>
-</div>
+            &mdash; <div class='inline'><p>Path to SGE root, note that</p></div>
           
         </li>
       
@@ -756,9 +711,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to CC client binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to CC client binaries</p></div>
           
         </li>
       
@@ -772,9 +725,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to CC client executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to CC client executables</p></div>
           
         </li>
       
@@ -858,9 +809,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the Fujitsu TCS (Technical Computing Suite) adapter from a configuration</p>
-
+    <p>Build the Fujitsu TCS (Technical Computing Suite) adapter from a configuration</p>
 
   </div>
 </div>
@@ -878,9 +827,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -902,9 +849,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to Fujitsu TCS resource manager binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to Fujitsu TCS resource manager binaries</p></div>
           
         </li>
       
@@ -918,9 +863,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to Fujitsu TCS resource manager executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to Fujitsu TCS resource manager executables</p></div>
           
         </li>
       
@@ -934,9 +877,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Working directory for submitting a batch script</p>
-</div>
+            &mdash; <div class='inline'><p>Working directory for submitting a batch script</p></div>
           
         </li>
       
@@ -986,9 +927,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the HTCondor adapter from a configuration</p>
-
+    <p>Build the HTCondor adapter from a configuration</p>
 
   </div>
 </div>
@@ -1006,9 +945,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -1030,9 +967,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to HTCondor client binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to HTCondor client binaries</p></div>
           
         </li>
       
@@ -1046,9 +981,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Submit job on login node via ssh</p>
-</div>
+            &mdash; <div class='inline'><p>Submit job on login node via ssh</p></div>
           
         </li>
       
@@ -1062,9 +995,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Whether to use strict host checking when ssh to submit_host</p>
-</div>
+            &mdash; <div class='inline'><p>Whether to use strict host checking when ssh to submit_host</p></div>
           
         </li>
       
@@ -1172,9 +1103,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the LinuxHost adapter from a configuration</p>
-
+    <p>Build the LinuxHost adapter from a configuration</p>
 
   </div>
 </div>
@@ -1192,9 +1121,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -1216,9 +1143,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Pass `–contain` flag to Singularity; allows overriding bind mounts in singularity.conf</p>
-</div>
+            &mdash; <div class='inline'><p>Pass <code>--contain</code> flag to Singularity; allows overriding bind mounts in singularity.conf</p></div>
           
         </li>
       
@@ -1232,9 +1157,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Use the adapter in a debug mode</p>
-</div>
+            &mdash; <div class='inline'><p>Use the adapter in a debug mode</p></div>
           
         </li>
       
@@ -1248,9 +1171,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The longest &#39;wall_clock&#39; permissible</p>
-</div>
+            &mdash; <div class='inline'><p>The longest 'wall_clock' permissible</p></div>
           
         </li>
       
@@ -1264,9 +1185,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The path to the Singularity executable</p>
-</div>
+            &mdash; <div class='inline'><p>The path to the Singularity executable</p></div>
           
         </li>
       
@@ -1280,9 +1199,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>A comma delimited list of paths to bind between the host and the guest</p>
-</div>
+            &mdash; <div class='inline'><p>A comma delimited list of paths to bind between the host and the guest</p></div>
           
         </li>
       
@@ -1293,9 +1210,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The path to the Singularity image to use</p>
-</div>
+            &mdash; <div class='inline'><p>The path to the Singularity image to use</p></div>
           
         </li>
       
@@ -1309,9 +1224,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The list of permissable hosts, defaults to :submit_host</p>
-</div>
+            &mdash; <div class='inline'><p>The list of permissable hosts, defaults to :submit_host</p></div>
           
         </li>
       
@@ -1325,9 +1238,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Set to false to disable strict host checking and updating the known_hosts file</p>
-</div>
+            &mdash; <div class='inline'><p>Set to false to disable strict host checking and updating the known_hosts file</p></div>
           
         </li>
       
@@ -1338,9 +1249,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The SSH target to connect to, may be the head of a round-robin</p>
-</div>
+            &mdash; <div class='inline'><p>The SSH target to connect to, may be the head of a round-robin</p></div>
           
         </li>
       
@@ -1354,9 +1263,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The path to the Tmux executable</p>
-</div>
+            &mdash; <div class='inline'><p>The path to the Tmux executable</p></div>
           
         </li>
       
@@ -1448,9 +1355,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the Lsf adapter from a configuration</p>
-
+    <p>Build the Lsf adapter from a configuration</p>
 
   </div>
 </div>
@@ -1468,9 +1373,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -1492,9 +1395,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to lsf client bin dir</p>
-</div>
+            &mdash; <div class='inline'><p>Path to lsf client bin dir</p></div>
           
         </li>
       
@@ -1508,9 +1409,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to lsf client lib dir</p>
-</div>
+            &mdash; <div class='inline'><p>Path to lsf client lib dir</p></div>
           
         </li>
       
@@ -1524,9 +1423,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to lsf client conf dir</p>
-</div>
+            &mdash; <div class='inline'><p>Path to lsf client conf dir</p></div>
           
         </li>
       
@@ -1540,9 +1437,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to lsf client etc dir</p>
-</div>
+            &mdash; <div class='inline'><p>Path to lsf client etc dir</p></div>
           
         </li>
       
@@ -1556,9 +1451,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>name of cluster, if in multi-cluster mode</p>
-</div>
+            &mdash; <div class='inline'><p>name of cluster, if in multi-cluster mode</p></div>
           
         </li>
       
@@ -1572,9 +1465,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to LSF client executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to LSF client executables</p></div>
           
         </li>
       
@@ -1588,9 +1479,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Host to submit commands to</p>
-</div>
+            &mdash; <div class='inline'><p>Host to submit commands to</p></div>
           
         </li>
       
@@ -1632,9 +1521,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the PBS Pro adapter from a configuration</p>
-
+    <p>Build the PBS Pro adapter from a configuration</p>
 
   </div>
 </div>
@@ -1652,9 +1539,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -1676,9 +1561,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The batch server host</p>
-</div>
+            &mdash; <div class='inline'><p>The batch server host</p></div>
           
         </li>
       
@@ -1692,9 +1575,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The login node where the job is submitted</p>
-</div>
+            &mdash; <div class='inline'><p>The login node where the job is submitted</p></div>
           
         </li>
       
@@ -1708,9 +1589,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Whether to use strict host checking when ssh to submit_host</p>
-</div>
+            &mdash; <div class='inline'><p>Whether to use strict host checking when ssh to submit_host</p></div>
           
         </li>
       
@@ -1724,9 +1603,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to PBS Pro executables</p>
-</div>
+            &mdash; <div class='inline'><p>Path to PBS Pro executables</p></div>
           
         </li>
       
@@ -1740,9 +1617,8 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Deciding factor on how to call qstat for a user</p>
-</div>
+            &mdash; <div class='inline'><p>Deciding factor on how to
+call qstat for a user</p></div>
           
         </li>
       
@@ -1756,9 +1632,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to PBS Pro client executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to PBS Pro client executables</p></div>
           
         </li>
       
@@ -1832,9 +1706,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -1856,9 +1728,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to PSIJ binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to PSIJ binaries</p></div>
           
         </li>
       
@@ -1872,9 +1742,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to PSIJ executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to PSIJ executables</p></div>
           
         </li>
       
@@ -1934,9 +1802,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the Sun Grid Engine adapter from a configuration</p>
-
+    <p>Build the Sun Grid Engine adapter from a configuration</p>
 
   </div>
 </div>
@@ -1954,9 +1820,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -1978,9 +1842,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The cluster to communicate with</p>
-</div>
+            &mdash; <div class='inline'><p>The cluster to communicate with</p></div>
           
         </li>
       
@@ -1994,9 +1856,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to the SGE conf</p>
-</div>
+            &mdash; <div class='inline'><p>Path to the SGE conf</p></div>
           
         </li>
       
@@ -2010,9 +1870,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to SGE client binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to SGE client binaries</p></div>
           
         </li>
       
@@ -2026,9 +1884,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to SGE root, note that</p>
-</div>
+            &mdash; <div class='inline'><p>Path to SGE root, note that</p></div>
           
         </li>
       
@@ -2042,9 +1898,9 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to SGE client executables this may be nil, but must be set to use the DRMAA API, and there is a severe performance penalty calling Sge#info without using DRMAA.</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to SGE client executables
+this may be nil, but must be set to use the DRMAA API, and there is a
+severe performance penalty calling Sge#info without using DRMAA.</p></div>
           
         </li>
       
@@ -2086,9 +1942,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the Slurm adapter from a configuration</p>
-
+    <p>Build the Slurm adapter from a configuration</p>
 
   </div>
 </div>
@@ -2106,9 +1960,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -2130,9 +1982,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The cluster to communicate with</p>
-</div>
+            &mdash; <div class='inline'><p>The cluster to communicate with</p></div>
           
         </li>
       
@@ -2146,9 +1996,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to the slurm conf</p>
-</div>
+            &mdash; <div class='inline'><p>Path to the slurm conf</p></div>
           
         </li>
       
@@ -2162,9 +2010,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to slurm client binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to slurm client binaries</p></div>
           
         </li>
       
@@ -2178,9 +2024,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to Slurm client executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to Slurm client executables</p></div>
           
         </li>
       
@@ -2194,9 +2038,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Submit job on login node via ssh</p>
-</div>
+            &mdash; <div class='inline'><p>Submit job on login node via ssh</p></div>
           
         </li>
       
@@ -2210,9 +2052,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Whether to use strict host checking when ssh to submit_host</p>
-</div>
+            &mdash; <div class='inline'><p>Whether to use strict host checking when ssh to submit_host</p></div>
           
         </li>
       
@@ -2280,9 +2120,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the LinuxSystemd adapter from a configuration</p>
-
+    <p>Build the LinuxSystemd adapter from a configuration</p>
 
   </div>
 </div>
@@ -2300,9 +2138,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -2324,9 +2160,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Use the adapter in a debug mode</p>
-</div>
+            &mdash; <div class='inline'><p>Use the adapter in a debug mode</p></div>
           
         </li>
       
@@ -2340,9 +2174,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The longest &#39;wall_clock&#39; permissible</p>
-</div>
+            &mdash; <div class='inline'><p>The longest 'wall_clock' permissible</p></div>
           
         </li>
       
@@ -2356,9 +2188,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The list of permissable hosts, defaults to :submit_host</p>
-</div>
+            &mdash; <div class='inline'><p>The list of permissable hosts, defaults to :submit_host</p></div>
           
         </li>
       
@@ -2372,9 +2202,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Set to false to disable strict host checking and updating the known_hosts file</p>
-</div>
+            &mdash; <div class='inline'><p>Set to false to disable strict host checking and updating the known_hosts file</p></div>
           
         </li>
       
@@ -2385,9 +2213,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The SSH target to connect to, may be the head of a round-robin</p>
-</div>
+            &mdash; <div class='inline'><p>The SSH target to connect to, may be the head of a round-robin</p></div>
           
         </li>
       
@@ -2398,9 +2224,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The SSH Key file to use as identity.</p>
-</div>
+            &mdash; <div class='inline'><p>The SSH Key file to use as identity.</p></div>
           
         </li>
       
@@ -2476,9 +2300,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Build the Torque adapter from a configuration</p>
-
+    <p>Build the Torque adapter from a configuration</p>
 
   </div>
 </div>
@@ -2496,9 +2318,7 @@
       
       
         &mdash;
-        <div class='inline'>
-<p>the configuration for job adapter</p>
-</div>
+        <div class='inline'><p>the configuration for job adapter</p></div>
       
     </li>
   
@@ -2517,9 +2337,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The batch server host</p>
-</div>
+            &mdash; <div class='inline'><p>The batch server host</p></div>
           
         </li>
       
@@ -2530,9 +2348,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>The login node to submit the job via ssh</p>
-</div>
+            &mdash; <div class='inline'><p>The login node to submit the job via ssh</p></div>
           
         </li>
       
@@ -2546,9 +2362,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to torque client libraries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to torque client libraries</p></div>
           
         </li>
       
@@ -2562,9 +2376,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Path to torque client binaries</p>
-</div>
+            &mdash; <div class='inline'><p>Path to torque client binaries</p></div>
           
         </li>
       
@@ -2578,9 +2390,7 @@
             
           </span>
           
-            &mdash; <div class='inline'>
-<p>Optional overrides to Torque client executables</p>
-</div>
+            &mdash; <div class='inline'><p>Optional overrides to Torque client executables</p></div>
           
         </li>
       
@@ -2628,9 +2438,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:32 2026 by
+  Generated on Wed Apr 15 14:08:21 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>

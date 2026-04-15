@@ -6,13 +6,13 @@
 <title>
   Class: QstatXmlRListener
   
-    &mdash; Documentation by YARD 0.9.39
+    &mdash; Documentation by YARD 0.9.41
   
 </title>
 
-  <link rel="stylesheet" href="css/style.css" type="text/css" />
+  <link rel="stylesheet" href="css/style.css" type="text/css">
 
-  <link rel="stylesheet" href="css/common.css" type="text/css" />
+  <link rel="stylesheet" href="css/common.css" type="text/css">
 
 <script type="text/javascript">
   pathId = "QstatXmlRListener";
@@ -33,6 +33,7 @@
     </div>
 
     <div id="main" tabindex="-1">
+      <div id="main_progress" aria-hidden="true"></div>
       <div id="header">
         <div id="menu">
   
@@ -99,18 +100,24 @@
   
   <dl>
     <dt>Defined in:</dt>
-    <dd>lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb</dd>
+    <dd>lib/ood_core/job/adapters/sge/qstat_xml_r_listener.rb
+</dd>
   </dl>
   
 </div>
 
 <h2>Overview</h2><div class="docstring">
   <div class="discussion">
-    
-<p>An XML stream listener to build an array of OodCore::Job::Info from qstat output</p>
-
-<p>Handles parsing `qstat -xml -r` which provides: :accounting_id :id :job_name :job_owner :procs :queue_name :status :wallclock_limit</p>
-
+    <p>An XML stream listener to build an array of OodCore::Job::Info from qstat output</p>
+<p>Handles parsing <code>qstat -xml -r</code> which provides:
+:accounting_id
+:id
+:job_name
+:job_owner
+:procs
+:queue_name
+:status
+:wallclock_limit</p>
 
   </div>
 </div>
@@ -146,9 +153,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>[Array&lt;Hash&gt;].</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>[Array<Hash>].</p></div></span>
   
 </li>
 
@@ -271,9 +276,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Attributes we need.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Attributes we need.</p></div></span>
   
 </li>
 
@@ -383,9 +386,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Store a completed job and reset current_job for the next pass.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Store a completed job and reset current_job for the next pass.</p></div></span>
   
 </li>
 
@@ -473,9 +474,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Note that this is the native SGE type.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Note that this is the native SGE type.</p></div></span>
   
 </li>
 
@@ -499,9 +498,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>A new instance of QstatXmlRListener.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>A new instance of QstatXmlRListener.</p></div></span>
   
 </li>
 
@@ -523,9 +520,7 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Handle hard_request tags.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Handle hard_request tags.</p></div></span>
   
 </li>
 
@@ -591,14 +586,13 @@
   
 
   
-    <span class="summary_desc"><div class='inline'>
-<p>Always store text nodes temporarily.</p>
-</div></span>
+    <span class="summary_desc"><div class='inline'><p>Always store text nodes temporarily.</p></div></span>
   
 </li>
 
       
     </ul>
+    
   
 
 
@@ -616,9 +610,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Returns a new instance of QstatXmlRListener.</p>
-
+    <p>Returns a new instance of QstatXmlRListener.</p>
 
   </div>
 </div>
@@ -686,9 +678,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    <dl class="rdoc-list label-list"><dt>Array&lt;Hash&gt;
-<dd></dd></dl>
-
+    <p>[Array<Hash>]</p>
 
   </div>
 </div>
@@ -868,9 +858,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Attributes we need</p>
-
+    <p>Attributes we need</p>
 
   </div>
 </div>
@@ -1029,9 +1017,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Store a completed job and reset current_job for the next pass</p>
-
+    <p>Store a completed job and reset current_job for the next pass</p>
 
   </div>
 </div>
@@ -1170,9 +1156,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Note that this is the native SGE type</p>
-
+    <p>Note that this is the native SGE type</p>
 
   </div>
 </div>
@@ -1211,11 +1195,8 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Handle hard_request tags</p>
-
+    <p>Handle hard_request tags</p>
 <p>Multiple hard_request tags may be present and will be differentiated using their name attribute</p>
-
 
   </div>
 </div>
@@ -1400,9 +1381,7 @@
   
 </h3><div class="docstring">
   <div class="discussion">
-    
-<p>Always store text nodes temporarily</p>
-
+    <p>Always store text nodes temporarily</p>
 
   </div>
 </div>
@@ -1435,9 +1414,9 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Apr 10 17:16:36 2026 by
+  Generated on Wed Apr 15 14:08:26 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
-  0.9.39 (ruby-3.0.7).
+  0.9.41 (ruby-3.0.7).
 </div>
 
     </div>
