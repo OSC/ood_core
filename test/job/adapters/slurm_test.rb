@@ -78,4 +78,9 @@ class TestSlurm < Minitest::Test
     assert_nil(bad_job.submission_time)
     assert_equal(4, jobs.size)
   end
+
+  def test_nil_parse_time
+    adapter = slurm_instance
+    assert_nil(adapter.send(:parse_time, nil))
+  end
 end

@@ -881,8 +881,8 @@ module OodCore
 
         # safely parse date time string, return nil when there are errors.
         def parse_time(date_time)
-          Time.parse(date_time)
-        rescue ArgumentError
+          Time.parse(date_time.to_s)
+        rescue StandardError
           nil
         end
 
