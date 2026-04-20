@@ -1,8 +1,8 @@
 require "ood_core/refinements/hash_extensions"
 require "ood_core/refinements/array_extensions"
 require 'net/http'
-require 'json'
 require 'etc'
+
 
 module OodCore
   module Job
@@ -14,7 +14,7 @@ module OodCore
       def self.build_coder(config)
         config = config.to_h.symbolize_keys
         if config[:auth]["cloud"] == "openstack"
-          credentials = OpenStackCredentials.new(config[:auth]["url"]) 
+          credentials = OpenStackCredentials.new(config[:auth]["url"], config[:auth]["credentials_dir"]) 
         else
           raise ArgumentError, "Unsupported credentials for cloud type: #{config[:auth]['cloud']}"
         end
@@ -79,7 +79,7 @@ module OodCore
         #   adapters can get by without populating the entire Info object
         # @return [Array<Info>] information describing submitted jobs
         def info_all(attrs: nil)
-          raise NotImplementedError, 'subclass did not define #info_all'
+          []
         end
     
         # Whether the adapter supports job arrays
