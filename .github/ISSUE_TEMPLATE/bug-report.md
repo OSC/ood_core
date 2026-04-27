@@ -19,7 +19,7 @@ A clear and concise description of what you expected to happen.
 
 **Environment:**
  - OS: [RHEL 10]
- - Browser: [Firefox 149]
+ - Scheduler: [Slurm]
  - Version: [OOD version 4.2.2]
 
 **Anything else?**
