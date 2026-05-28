@@ -1,0 +1,3 @@
+gpu-node-01.cluster.example.org   gpu:tesla:8(S:0-7)   gpu:tesla:8(IDX:0-7)   mixed
+gpu-node-02.cluster.example.org   gpu:tesla:8(S:0-7)   gpu:tesla:4(IDX:0-3)   mixed
+gpu-node-03.cluster.example.org   gpu:tesla:8(S:0-7)   gpu:tesla:0(IDX:N/A)   drained

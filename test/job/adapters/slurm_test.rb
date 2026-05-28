@@ -52,9 +52,7 @@ class TestSlurm < Minitest::Test
     adapter = slurm_instance
     Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_fc.txt'), '', exit_success])
-    Open3.stubs(:capture3).with({}, 'sinfo', '-o %G', stdin_data: '')
-         .returns([File.read('spec/fixtures/output/slurm/sinfo_g.txt'), '', exit_success])
-    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost,gres:240,gresused:240,statelong', stdin_data: '')
+    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost:100,gres:512,gresused:512,statelong', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_gres.txt'), '', exit_success])
 
     info = adapter.cluster_info
@@ -64,6 +62,28 @@ class TestSlurm < Minitest::Test
     assert_equal(info.total_processors, 37_376)
     assert_equal(info.active_gpus, 621)
     assert_equal(info.total_gpus, 656)
+  end
+
+  # Regression test: sinfo -O nodehost defaults to a 20-char column. When the
+  # actual hostname is longer than 20 chars, sinfo truncates without inserting
+  # a separating space and the gres/gresused columns get shifted, causing
+  # total_gpus to be parsed from GresUsed and active_gpus to evaluate to 0.
+  def test_cluster_info_long_hostnames
+    adapter = slurm_instance
+    Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_fc_long_hostnames.txt'), '', exit_success])
+    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost:100,gres:512,gresused:512,statelong', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/sinfo_gres_long_hostnames.txt'), '', exit_success])
+
+    info = adapter.cluster_info
+    assert_equal(info.active_nodes, 3)
+    assert_equal(info.total_nodes, 3)
+    assert_equal(info.active_processors, 24)
+    assert_equal(info.total_processors, 24)
+    # 8 + 4 from the two non-drained nodes; the drained node is filtered out.
+    assert_equal(info.active_gpus, 12)
+    # 8 + 8 from the two non-drained nodes.
+    assert_equal(info.total_gpus, 16)
   end
 
   def test_null_submission_time
