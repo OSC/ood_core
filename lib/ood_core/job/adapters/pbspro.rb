@@ -93,11 +93,6 @@ module OodCore
             data = JSON.parse(call("pbsnodes", "-aSj", "-F", "json"))
             nodes_h = data.fetch("nodes", {})
 
-            parse_ft = lambda do |s|
-              m = s.to_s.strip.match(/\A(\d+)\s*\/\s*(\d+)\z/)
-              m ? [m[1].to_i, m[2].to_i] : [0, 0]
-            end
-
             busy_nodes = Set.new
             available_nodes = Set.new
 
@@ -108,8 +103,8 @@ module OodCore
               state = info.fetch("state", "").to_s.downcase
               next if state.match?(/\b(down|offline|drain|drained|maint|maintenance|unknown)\b/)
 
-              f_c, t_c = parse_ft.call(info["ncpus f/t"])
-              f_g, t_g = parse_ft.call(info["ngpus f/t"])
+              f_c, t_c = parse_free_total(info["ncpus f/t"])
+              f_g, t_g = parse_free_total(info["ngpus f/t"])
 
               available_nodes << name.to_s
               busy_nodes << name.to_s if f_c == 0 || (f_g == 0 && t_g > 0)
@@ -219,6 +214,14 @@ module OodCore
           end
 
           private
+            # Parse a PBS Pro "free/total" field (e.g. "3/8") into a pair of integers
+            # @param str [#to_s] the "free/total" field to parse
+            # @return [Array(Integer, Integer)] the free and total counts, or [0, 0] if unparseable
+            def parse_free_total(str)
+              m = str.to_s.strip.match(/\A(\d+)\s*\/\s*(\d+)\z/)
+              m ? [m[1].to_i, m[2].to_i] : [0, 0]
+            end
+
             # Call a forked PBS Pro command for a given batch server
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
