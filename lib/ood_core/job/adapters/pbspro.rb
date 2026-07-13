@@ -41,6 +41,13 @@ module OodCore
         # Object used for simplified communication with a PBS Pro batch server
         # @api private
         class Batch
+          # Node state tokens that mark a node as unavailable for scheduling.
+          # PBS Pro may report compound states (e.g. "offline,down",
+          # "state-unknown"), so states are tokenized before lookup.
+          UNAVAILABLE_NODE_STATES = Set.new(
+            %w[down offline drain drained maint maintenance unknown]
+          ).freeze
+
           # The host of the PBS Pro batch server
           # @example
           #   my_batch.host #=> "my_batch.server.edu"
@@ -101,7 +108,7 @@ module OodCore
 
             nodes_h.each do |name, info|
               state = info.fetch("state", "").to_s.downcase
-              next if state.match?(/\b(down|offline|drain|drained|maint|maintenance|unknown)\b/)
+              next if state.split(/\W+/).any? { |token| UNAVAILABLE_NODE_STATES.include?(token) }
 
               f_c, t_c = parse_free_total(info["ncpus f/t"])
               f_g, t_g = parse_free_total(info["ngpus f/t"])
