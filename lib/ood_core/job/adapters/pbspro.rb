@@ -100,35 +100,29 @@ module OodCore
             data = JSON.parse(call("pbsnodes", "-aSj", "-F", "json"))
             nodes_h = data.fetch("nodes", {})
 
-            busy_nodes = Set.new
-            available_nodes = Set.new
-
-            free_ncpus = total_ncpus = 0
-            free_gpus = total_gpus = 0
-
-            nodes_h.each do |name, info|
+            stats = nodes_h.values.each_with_object(Hash.new(0)) do |info, acc|
               state = info.fetch("state", "").to_s.downcase
               next if state.split(/\W+/).any? { |token| UNAVAILABLE_NODE_STATES.include?(token) }
 
               f_c, t_c = parse_free_total(info["ncpus f/t"])
               f_g, t_g = parse_free_total(info["ngpus f/t"])
 
-              available_nodes << name.to_s
-              busy_nodes << name.to_s if f_c == 0 || (f_g == 0 && t_g > 0)
+              acc[:available_nodes] += 1
+              acc[:busy_nodes] += 1 if f_c == 0 || (f_g == 0 && t_g > 0)
 
-              free_ncpus += f_c
-              total_ncpus += t_c
-              free_gpus += f_g
-              total_gpus += t_g
+              acc[:free_ncpus] += f_c
+              acc[:total_ncpus] += t_c
+              acc[:free_gpus] += f_g
+              acc[:total_gpus] += t_g
             end
 
             ClusterInfo.new(
-              active_nodes: busy_nodes.size,
-              total_nodes: available_nodes.size,
-              active_processors: total_ncpus - free_ncpus,
-              total_processors: total_ncpus,
-              active_gpus: total_gpus - free_gpus,
-              total_gpus: total_gpus
+              active_nodes: stats[:busy_nodes],
+              total_nodes: stats[:available_nodes],
+              active_processors: stats[:total_ncpus] - stats[:free_ncpus],
+              total_processors: stats[:total_ncpus],
+              active_gpus: stats[:total_gpus] - stats[:free_gpus],
+              total_gpus: stats[:total_gpus]
             )
           end
 
