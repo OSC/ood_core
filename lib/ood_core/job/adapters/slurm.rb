@@ -47,7 +47,7 @@ module OodCore
         # calculated from gres string
         # @return [Integer] the number of gpus in gres
         def self.gpus_from_gres(gres)
-          gres.to_s.scan(/gpu[^(,]*[:=](\d+)/).flatten.map(&:to_i).sum
+          gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
         end
 
         # Object used for simplified communication with a Slurm batch server
@@ -122,8 +122,7 @@ module OodCore
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
             node_cpu_info = call("sinfo", "-aho %F/%C").strip.split('/').map(&:to_i)
-            gres_length = call("sinfo", "-o %G").lines.map(&:strip).map(&:length).max + 2
-            gres_lines = call("sinfo", "-ahNO", "nodehost,gres:#{gres_length},gresused:#{gres_length},statelong")
+            gres_lines = call("sinfo", "-ahNO", "nodehost:100,gres:512,gresused:512,statelong")
                          .lines.uniq.reject { |line| line.match?(/maint|drain|down/i) }.map(&:split)
 
             node_info = sinfo_headers.zip(node_cpu_info).to_h
@@ -577,7 +576,7 @@ module OodCore
           'OOM' => :completed, # OUT_OF_MEMORY
 
           'BOOT_FAIL'     => :completed,
-          'CANCELED'      => :completed,
+          'CANCELLED'     => :completed,
           'COMPLETED'     => :completed,
           'DEADLINE'      => :completed,
           'FAILED'        => :completed,
@@ -879,11 +878,11 @@ module OodCore
             "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
           end
 
-        # Parse date time string ignoring unknown values returned by Slurm
+        # safely parse date time string, return nil when there are errors.
         def parse_time(date_time)
-          return nil if date_time.empty? || %w[N/A NONE UNKNOWN].include?(date_time.to_s.upcase)
-
-          Time.parse(date_time)
+          Time.parse(date_time.to_s)
+        rescue StandardError
+          nil
         end
 
           # Convert host list string to individual nodes
@@ -910,7 +909,7 @@ module OodCore
 
           # Determine state from Slurm state code
           def get_state(st)
-            STATE_MAP.fetch(st, :undetermined)
+            STATE_MAP.fetch(st.split.first, :undetermined)
           end
 
           # Parse hash describing Slurm job status
@@ -937,8 +936,8 @@ module OodCore
               wallclock_time: duration_in_seconds(v[:time_used]),
               wallclock_limit: duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
-              submission_time: v[:submit_time] ? Time.parse(v[:submit_time]) : nil,
-              dispatch_time: (v[:start_time].nil? || v[:start_time] == "N/A") ? nil : Time.parse(v[:start_time]),
+              submission_time: parse_time(v[:submit_time]),
+              dispatch_time: parse_time(v[:start_time]),
               native: v,
               gpus: self.class.gpus_from_gres(v[:gres])
             )

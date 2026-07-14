@@ -4,6 +4,7 @@ require "ood_core/cluster"
 require "ood_core/clusters"
 require "ood_core/invalid_cluster"
 require "ood_core/data_formatter"
+require "ood_core/helpers/openstack"
 
 # The main namespace for ood_core
 module OodCore
@@ -41,5 +42,9 @@ module OodCore
   module BatchConnect
     require "ood_core/batch_connect/template"
     require "ood_core/batch_connect/factory"
+  end
+  
+  module Helpers
+    require "ood_core/helpers/openstack"
   end
 end
