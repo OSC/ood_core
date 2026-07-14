@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- Add `cluster_info` support to the PBS Pro adapter, reporting active/total processors, gpus, and nodes.
+
 # [0.26.1] - 07-31-2024
 
 - 0.26.0 didn't publish correctly. There's no meaningful difference between 0.26.1 and 0.26.0.

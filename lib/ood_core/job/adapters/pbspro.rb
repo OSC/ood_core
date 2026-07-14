@@ -1,5 +1,6 @@
-require "time"
 require "json"
+require "set"
+require "time"
 require "ood_core/refinements/hash_extensions"
 require "ood_core/job/adapters/helper"
 
@@ -40,6 +41,13 @@ module OodCore
         # Object used for simplified communication with a PBS Pro batch server
         # @api private
         class Batch
+          # Node state tokens that mark a node as unavailable for scheduling.
+          # PBS Pro may report compound states (e.g. "offline,down",
+          # "state-unknown"), so states are tokenized before lookup.
+          UNAVAILABLE_NODE_STATES = Set.new(
+            %w[down offline drain drained maint maintenance unknown]
+          ).freeze
+
           # The host of the PBS Pro batch server
           # @example
           #   my_batch.host #=> "my_batch.server.edu"
@@ -89,44 +97,32 @@ module OodCore
           # Get a ClusterInfo object containing information about the given cluster
           # @return [ClusterInfo] object containing cluster details
           def get_cluster_info
-            args = ["-a", "-F", "json"]
-            stdout = call("pbsnodes", *args)
-            node_info = JSON.parse(stdout)
-    
-            # Initialize cluster info values
-            total_nodes     = 0
-            allocated_nodes = 0
-            total_cpus      = 0
-            allocated_cpus  = 0
-            total_gpus      = 0
-            allocated_gpus  = 0 
+            data = JSON.parse(call("pbsnodes", "-aSj", "-F", "json"))
+            nodes_h = data.fetch("nodes", {})
 
-            nodes = node_info.fetch('nodes', {})
+            stats = nodes_h.values.each_with_object(Hash.new(0)) do |info, acc|
+              state = info.fetch("state", "").to_s.downcase
+              next if state.split(/\W+/).any? { |token| UNAVAILABLE_NODE_STATES.include?(token) }
 
-            nodes.each do |_node_name, node|
-              total_nodes += 1
-              resources_avail = node.fetch('resources_available', {})
-              total_cpus += get_node_resource(resources_avail, 'ncpus')
-              total_gpus += get_node_resource(resources_avail, 'ngpus')
+              f_c, t_c = parse_free_total(info["ncpus f/t"])
+              f_g, t_g = parse_free_total(info["ngpus f/t"])
 
-              # Resources assigned (currently allocated to jobs)
-              resources_assigned = node.fetch('resources_assigned', {})
-              ncpus_assigned     = get_node_resource(resources_assigned, 'ncpus')
-              ngpus_assigned     = get_node_resource(resources_assigned, 'ngpus')
+              acc[:available_nodes] += 1
+              acc[:busy_nodes] += 1 if f_c == 0 || (f_g == 0 && t_g > 0)
 
-              allocated_cpus += ncpus_assigned
-              allocated_gpus += ngpus_assigned
-
-              # A node is allocated if at least one CPU has been assigned to a job
-              allocated_nodes += 1 if ncpus_assigned > 0
+              acc[:free_ncpus] += f_c
+              acc[:total_ncpus] += t_c
+              acc[:free_gpus] += f_g
+              acc[:total_gpus] += t_g
             end
 
-            ClusterInfo.new(active_nodes: allocated_nodes,
-                            total_nodes: total_nodes,
-                            active_processors: allocated_cpus,
-                            total_processors: total_cpus,
-                            active_gpus: allocated_gpus,
-                            total_gpus: total_gpus
+            ClusterInfo.new(
+              active_nodes: stats[:busy_nodes],
+              total_nodes: stats[:available_nodes],
+              active_processors: stats[:total_ncpus] - stats[:free_ncpus],
+              total_processors: stats[:total_ncpus],
+              active_gpus: stats[:total_gpus] - stats[:free_gpus],
+              total_gpus: stats[:total_gpus]
             )
           end
 
@@ -219,13 +215,14 @@ module OodCore
           end
 
           private
-            # Get a resource value from a node's resources hash, returning 0 if the
-            # resource is not present
-            def get_node_resource(resources, key)
-             val = resources.fetch(key, 0)
-             val.to_i
+            # Parse a PBS Pro "free/total" field (e.g. "3/8") into a pair of integers
+            # @param str [#to_s] the "free/total" field to parse
+            # @return [Array(Integer, Integer)] the free and total counts, or [0, 0] if unparseable
+            def parse_free_total(str)
+              m = str.to_s.strip.match(/\A(\d+)\s*\/\s*(\d+)\z/)
+              m ? [m[1].to_i, m[2].to_i] : [0, 0]
             end
- 
+
             # Call a forked PBS Pro command for a given batch server
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = cmd.to_s
@@ -351,6 +348,8 @@ module OodCore
           raise JobAdapterError, e.message
         end
 
+        # Retrieve info about active and total cpus, gpus, and nodes
+        # @return [Hash] information about cluster usage
         def cluster_info
           @pbspro.get_cluster_info
         end

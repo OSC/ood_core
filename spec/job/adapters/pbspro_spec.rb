@@ -33,6 +33,51 @@ describe OodCore::Job::Adapters::PBSPro do
     end
   end
 
+  describe OodCore::Job::Adapters::PBSPro::Batch do
+    subject(:batch) { described_class.new }
+
+    describe "#get_cluster_info" do
+      let(:payload) do
+        <<~JSON
+          {
+            "nodes": {
+              "node1": {
+                "state": "free",
+                "ncpus f/t": "4/4",
+                "ngpus f/t": "0/0"
+              },
+              "node2": {
+                "state": "job-busy",
+                "ncpus f/t": "0/8",
+                "ngpus f/t": "0/2"
+              },
+              "node3": {
+                "state": "down",
+                "ncpus f/t": "0/8",
+                "ngpus f/t": "0/2"
+              }
+            }
+          }
+        JSON
+      end
+
+      before do
+        allow(batch).to receive(:call).with("pbsnodes", "-aSj", "-F", "json").and_return(payload)
+      end
+
+      it "returns active and total node, processor, and gpu totals" do
+        info = batch.get_cluster_info
+
+        expect(info.active_nodes).to eq(1)
+        expect(info.total_nodes).to eq(2)
+        expect(info.active_processors).to eq(8)
+        expect(info.total_processors).to eq(12)
+        expect(info.active_gpus).to eq(2)
+        expect(info.total_gpus).to eq(2)
+      end
+    end
+  end
+
   describe "#submit" do
     def build_script(opts = {})
       OodCore::Job::Script.new(

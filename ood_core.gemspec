@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "ffi", "~> 1.16.3"
   spec.add_runtime_dependency "fog-openstack", "~> 1.1.5"
   spec.add_runtime_dependency "rexml", "~> 3.2"
+  spec.add_runtime_dependency "ostruct"
   spec.add_development_dependency "bundler", "~> 2.1"
   spec.add_development_dependency "rake", "~> 13.4.1"
   spec.add_development_dependency "rspec", "~> 3.0"
