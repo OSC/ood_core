@@ -69,12 +69,12 @@ module OodCore
               echo "Writing wayvnc config..."
               (
                 umask 077
-                cat > "#{wayvnc_config}" <<WAYVNC_CONF
-enable_auth=true
-password=${password}
-relax_encryption=true
-allow_broken_crypto=true
-WAYVNC_CONF
+                cat > "#{wayvnc_config}" <<-WAYVNC_CONF
+              	enable_auth=true
+              	password=${password}
+              	relax_encryption=true
+              	allow_broken_crypto=true
+              	WAYVNC_CONF
               )
 
               # Find an available port for wayvnc to listen on. wayvnc serves
@@ -87,12 +87,12 @@ WAYVNC_CONF
               #
               # On compute nodes there's typically no login session, so
               # /run/user/$(id -u) may not exist. Fall back to a private dir
-              # under /tmp. 
+              # under $TMPDIR if set, otherwise /tmp.
               if [[ -z "${XDG_RUNTIME_DIR}" || ! -d "${XDG_RUNTIME_DIR}" ]]; then
                 if [[ -d "/run/user/$(id -u)" && -w "/run/user/$(id -u)" ]]; then
                   export XDG_RUNTIME_DIR="/run/user/$(id -u)"
                 else
-                  export XDG_RUNTIME_DIR="/tmp/ood-runtime-$(id -u)"
+                  export XDG_RUNTIME_DIR="${TMPDIR:-/tmp}/ood-runtime-$(id -u)"
                   mkdir -p "${XDG_RUNTIME_DIR}"
                   chmod 700 "${XDG_RUNTIME_DIR}"
                 fi
