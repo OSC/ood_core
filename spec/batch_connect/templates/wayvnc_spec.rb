@@ -31,19 +31,19 @@ describe OodCore::BatchConnect::Templates::WayVNC do
     end
 
     it "contains the config block with password auth enabled" do
-      expect(rendered).to include(<<~BASH.chomp)
-        # Write a wayvnc config file that enables password auth
-        echo "Writing wayvnc config..."
-        (
-          umask 077
-          cat > "$PWD/wayvnc.conf" <<WAYVNC_CONF
-        enable_auth=true
-        password=${password}
-        relax_encryption=true
-        allow_broken_crypto=true
-        WAYVNC_CONF
-        )
-      BASH
+      expect(rendered).to include(
+        "# Write a wayvnc config file that enables password auth\n" \
+        "echo \"Writing wayvnc config...\"\n" \
+        "(\n" \
+        "  umask 077\n" \
+        "  cat > \"$PWD/wayvnc.conf\" <<WAYVNC_CONF\n" \
+        "  enable_auth=true\n" \
+        "  password=${password}\n" \
+        "  relax_encryption=true\n" \
+        "  allow_broken_crypto=true\n" \
+        "WAYVNC_CONF\n" \
+        ")"
+      )
     end
 
     it "contains the wayland attach block in after_script" do

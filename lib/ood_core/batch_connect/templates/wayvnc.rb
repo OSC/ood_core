@@ -69,12 +69,12 @@ module OodCore
               echo "Writing wayvnc config..."
               (
                 umask 077
-                cat > "#{wayvnc_config}" <<-WAYVNC_CONF
-              	enable_auth=true
-              	password=${password}
-              	relax_encryption=true
-              	allow_broken_crypto=true
-              	WAYVNC_CONF
+                cat > "#{wayvnc_config}" <<WAYVNC_CONF
+                enable_auth=true
+                password=${password}
+                relax_encryption=true
+                allow_broken_crypto=true
+              WAYVNC_CONF
               )
 
               # Find an available port for wayvnc to listen on. wayvnc serves
