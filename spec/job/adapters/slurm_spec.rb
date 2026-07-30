@@ -1374,7 +1374,7 @@ describe OodCore::Job::Adapters::Slurm do
       let(:expected_queue_names) {[
           'batch', 'debug', 'gpubackfill-parallel', 'gpubackfill-serial', 'gpudebug',
           'gpuparallel', 'gpuserial', 'hugemem', 'hugemem-parallel', 'longserial',
-          'parallel', 'quick', 'serial', 'systems'
+          'parallel', 'quick', 'serial', 'systems', 'dynamic'
         ]}
       let(:quick_deny_accounts) {[
         'pcon0003','pcon0014','pcon0015','pcon0016','pcon0401','pcon0008','pas1429','pcon0009',
