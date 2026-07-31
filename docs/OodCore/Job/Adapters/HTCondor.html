@@ -510,14 +510,14 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-303
-304
 305
 306
-307</pre>
+307
+308
+309</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 303</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 305</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
@@ -576,16 +576,16 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-505
-506
 507
 508
 509
 510
-511</pre>
+511
+512
+513</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 505</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 507</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accounts'>accounts</span>
     <span class='id identifier rubyid_username'>username</span> <span class='op'>=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getlogin'>getlogin</span>
@@ -655,8 +655,6 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-451
-452
 453
 454
 455
@@ -674,10 +672,12 @@ resource manager for job management.</p>
 467
 468
 469
-470</pre>
+470
+471
+472</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 451</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 453</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cluster_info'>cluster_info</span>
     <span class='id identifier rubyid_slots'>slots</span> <span class='op'>=</span> <span class='ivar'>@htcondor</span><span class='period'>.</span><span class='id identifier rubyid_get_slots'>get_slots</span>
@@ -762,14 +762,14 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-497
-498
 499
 500
-501</pre>
+501
+502
+503</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 497</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 499</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='ivar'>@htcondor</span><span class='period'>.</span><span class='id identifier rubyid_remove_job'>remove_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -839,14 +839,14 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-480
-481
 482
 483
-484</pre>
+484
+485
+486</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 480</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 482</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='ivar'>@htcondor</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -932,16 +932,16 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-418
-419
 420
 421
 422
 423
-424</pre>
+424
+425
+426</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 418</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 420</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1011,15 +1011,15 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-429
-430
 431
 432
 433
-434</pre>
+434
+435
+436</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 429</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 431</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_jobs'>jobs</span> <span class='op'>=</span> <span class='ivar'>@htcondor</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span>
@@ -1090,14 +1090,14 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-489
-490
 491
 492
-493</pre>
+493
+494
+495</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 489</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 491</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='ivar'>@htcondor</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -1183,16 +1183,16 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-440
-441
 442
 443
 444
 445
-446</pre>
+446
+447
+448</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 440</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 442</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1282,8 +1282,6 @@ job</p></div>
       <pre class="lines">
 
 
-315
-316
 317
 318
 319
@@ -1379,10 +1377,12 @@ job</p></div>
 409
 410
 411
-412</pre>
+412
+413
+414</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 315</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 317</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1524,12 +1524,12 @@ job</p></div>
       <pre class="lines">
 
 
-473
-474
-475</pre>
+475
+476
+477</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 473</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 475</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_arrays?'>supports_job_arrays?</span>
     <span class='kw'>true</span>
@@ -1544,7 +1544,7 @@ job</p></div>
 </div>
 
       <div id="footer">
-  Generated on Fri Jul 31 12:59:06 2026 by
+  Generated on Fri Jul 31 15:27:40 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>

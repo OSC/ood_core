@@ -1403,7 +1403,9 @@ The format in the file should adhere to the format used by <a href="https://htco
 177
 178
 179
-180</pre>
+180
+181
+182</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 164</span>
@@ -1422,7 +1424,9 @@ The format in the file should adhere to the format used by <a href="https://htco
         <span class='label'>dispatch_time:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>JobCurrentStartDate</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
         <span class='label'>sys_cpu_time:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RemoteSysCpu</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
         <span class='label'>user_cpu_time:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RemoteUserCpu</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
-        <span class='label'>wallclock_time:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RemoteWallClockTime</span><span class='tstring_end'>&quot;</span></span>
+        <span class='label'>wallclock_time:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RemoteWallClockTime</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+        <span class='label'>wallclock_limit:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>AllowedExecuteDuration</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span>
+        <span class='label'>server_time:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>ServerTime</span><span class='tstring_end'>&quot;</span></span>
     <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -1474,8 +1478,6 @@ The format in the file should adhere to the format used by <a href="https://htco
       <pre class="lines">
 
 
-219
-220
 221
 222
 223
@@ -1493,10 +1495,12 @@ The format in the file should adhere to the format used by <a href="https://htco
 235
 236
 237
-238</pre>
+238
+239
+240</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 219</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 221</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_accounts'>get_accounts</span>
     <span class='id identifier rubyid_raise'>raise</span> <span class='const'><span class='object_link'><a href="Batch/Error.html" title="OodCore::Job::Adapters::HTCondor::Batch::Error (class)">Error</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>user_group_map is not defined</span><span class='tstring_end'>&quot;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_user_group_map'>user_group_map</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>||</span> <span class='id identifier rubyid_user_group_map'>user_group_map</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -1619,8 +1623,6 @@ The format in the file should adhere to the format used by <a href="https://htco
       <pre class="lines">
 
 
-187
-188
 189
 190
 191
@@ -1634,10 +1636,12 @@ The format in the file should adhere to the format used by <a href="https://htco
 199
 200
 201
-202</pre>
+202
+203
+204</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 187</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 189</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>owner:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -1738,16 +1742,16 @@ The format in the file should adhere to the format used by <a href="https://htco
       <pre class="lines">
 
 
-208
-209
 210
 211
 212
 213
-214</pre>
+214
+215
+216</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 208</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/htcondor.rb', line 210</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_slots'>get_slots</span>
     <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-af</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Machine</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TotalSlotCPUs</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TotalSlotGPUs</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TotalSlotMemory</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>CPUs</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>GPUs</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Memory</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>NumDynamicSlots</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -2164,7 +2168,7 @@ The format in the file should adhere to the format used by <a href="https://htco
 </div>
 
       <div id="footer">
-  Generated on Fri Jul 31 12:59:06 2026 by
+  Generated on Fri Jul 31 15:27:41 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
