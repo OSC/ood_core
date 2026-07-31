@@ -175,7 +175,9 @@ module OodCore
                             dispatch_time: "JobCurrentStartDate",
                             sys_cpu_time: "RemoteSysCpu",
                             user_cpu_time: "RemoteUserCpu",
-                            wallclock_time: "RemoteWallClockTime"
+                            wallclock_time: "RemoteWallClockTime",
+                            wallclock_limit: "AllowedExecuteDuration",
+                            server_time: "ServerTime"
                         }
                     end
 
@@ -530,10 +532,42 @@ module OodCore
                         submission_time: Time.at(job[:submission_time].to_i),
                         dispatch_time: Time.at(job[:dispatch_time].to_i),
                         cpu_time: job[:sys_cpu_time].to_i + job[:user_cpu_time].to_i,
-                        wallclock_time: job[:wallclock_time].to_i,
+                        wallclock_time: wallclock_time(job),
+                        wallclock_limit: wallclock_limit(job),
                         native: job[:native],
 
                     )
+                end
+
+                # Compute the elapsed wall clock time for a job in seconds.
+                #
+                # RemoteWallClockTime only accumulates time from *completed* runs; it is
+                # not updated while a job is currently executing. So for a running job we
+                # add the time elapsed since it started running, otherwise the remaining
+                # time (wallclock_limit - wallclock_time) never counts down.
+                def wallclock_time(job)
+                    wallclock = job[:wallclock_time].to_i
+                    if get_state(job[:status]) == :running
+                        start = job[:dispatch_time].to_i
+                        if start > 0
+                            # Prefer the schedd's clock (ServerTime) to avoid skew between hosts
+                            now = job[:server_time].to_i
+                            now = Time.now.to_i if now <= 0
+                            current_run = now - start
+                            wallclock += current_run if current_run > 0
+                        end
+                    end
+                    wallclock
+                end
+
+                # Parse the wall clock time limit (AllowedExecuteDuration) in seconds.
+                #
+                # Returns nil when the attribute is undefined (job submitted without a
+                # wall time) so the remaining time is treated as unlimited rather than
+                # incorrectly computed against a zero limit.
+                def wallclock_limit(job)
+                    limit = job[:wallclock_limit].to_s
+                    limit.match?(/\A\d+\z/) ? limit.to_i : nil
                 end
 
                 # Parse group information into AccountInfo objects
