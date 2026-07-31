@@ -103,4 +103,16 @@ class TestSlurm < Minitest::Test
     adapter = slurm_instance
     assert_nil(adapter.send(:parse_time, nil))
   end
+
+  def test_queues_with_tres_null
+    adapter = slurm_instance
+    Open3.stubs(:capture3).with({}, 'scontrol', 'show', 'part', '-o', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '', exit_success])
+
+    queues = adapter.queues
+    queue = queues.find { |q| q.name == 'dynamic' }
+
+    refute_nil(queue)
+    assert_equal({}, queue.tres)
+  end
 end
