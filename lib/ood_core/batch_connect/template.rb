@@ -251,9 +251,9 @@ module OodCore
           context.fetch(:run_script) do
             script_file = context.fetch(:script_file,  "./script.sh").to_s
             timeout     = context.fetch(:timeout, "").to_s
-            command     = timeout.empty? ? 'exec "$1"' : %(exec timeout #{timeout} "$1")
+            command     = timeout.empty? ? 'exec "$1"' : "exec timeout #{timeout} \"$1\""
 
-            %(bash -c '[[ -x "$1" ]] || chmod +x "$1"; #{command}' -- "#{script_file}")
+            "bash -c '[[ -x \"$1\" ]] || chmod +x \"$1\"; #{command}' -- \"#{script_file}\""
           end.to_s
         end
 
