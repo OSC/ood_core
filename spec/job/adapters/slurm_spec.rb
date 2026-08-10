@@ -829,8 +829,8 @@ describe OodCore::Job::Adapters::Slurm do
         "--all",
         "--states=all",
         "--noconvert",
-        "-o",
-        "\u001E%a\u001F%A\u001F%B\u001F%c\u001F%C\u001F%d\u001F%D\u001F%e\u001F%E\u001F%f\u001F%F\u001F%g\u001F%G\u001F%h\u001F%H\u001F%i\u001F%I\u001F%j\u001F%J\u001F%k\u001F%K\u001F%l\u001F%L\u001F%m\u001F%M\u001F%n\u001F%N\u001F%o\u001F%O\u001F%q\u001F%P\u001F%Q\u001F%r\u001F%S\u001F%t\u001F%T\u001F%u\u001F%U\u001F%v\u001F%V\u001F%w\u001F%W\u001F%x\u001F%X\u001F%y\u001F%Y\u001F%z\u001F%Z\u001F%b",
+        "-O",
+        "Account:\u001F,JobID:\u001F,BatchHost:\u001F,MinCpus:\u001F,NumCPUs:\u001F,MinTmpDisk:\u001F,NumNodes:\u001F,EndTime:\u001F,Dependency:\u001F,Feature:\u001F,ArrayJobID:\u001F,GroupName:\u001F,GroupID:\u001F,OverSubscribe:\u001F,Sockets:\u001F,JobArrayID:\u001F,Cores:\u001F,Name:\u001F,Threads:\u001F,Comment:\u001F,ArrayTaskID:\u001F,TimeLimit:\u001F,TimeLeft:\u001F,MinMemory:\u001F,TimeUsed:\u001F,ReqNodes:\u001F,NodeList:\u001F,Command:\u001F,Contiguous:\u001F,QOS:\u001F,Partition:\u001F,PriorityLong:\u001F,Reason:\u001F,StartTime:\u001F,StateCompact:\u001F,State:\u001F,UserName:\u001F,UserID:\u001F,Reservation:\u001F,SubmitTime:\u001F,WCKey:\u001F,Licenses:\u001F,ExcNodes:\u001F,CoreSpec:\u001F,Nice:\u001F,SchedNodes:\u001F,SCT:\u001F,WorkDir:\u001F,tres-per-node:\u001F,",
         "-j",
         "123"
       ]}
@@ -1121,10 +1121,6 @@ describe OodCore::Job::Adapters::Slurm do
   describe "OodCore::Job::Adapters::Slurm::Batch" do
     subject(:batch) { OodCore::Job::Adapters::Slurm::Batch.new }
 
-    it "has its fields in the correct order to work with Slurm 18" do
-      expect(batch.send(:all_squeue_fields).values.last).to eq("%b")
-    end
-
     describe "#squeue_fields" do
       # 1. nil arg: all attrs
       # 2. [] arg: only required attrs
@@ -1152,14 +1148,6 @@ describe OodCore::Job::Adapters::Slurm do
         # expect(batch.squeue_fields([:allocated_nodes]).keys.sort).to eq([:job_id, :node_list, :scheduled_nodes :state_compact])
       end
 
-      it "uses the record separator character once at the start of the format string" do
-        expect(
-          batch.squeue_args(options: batch.squeue_fields(nil).values).one? do |arg|
-            arg.start_with?(OodCore::Job::Adapters::Slurm::Batch::RECORD_SEPARATOR)
-          end
-        ).to be_truthy
-      end
-
       # TODO: what Active Jobs would query
       # it "handles ActiveJobs query" do
       #   expect(batch.squeue_fields([:accounting_id, :allocated_nodes, :job_name, :job_owner, :queue_name, :wallclock_time ]).keys.sort).to eq(
@@ -1173,8 +1161,8 @@ describe OodCore::Job::Adapters::Slurm do
         "--all",
         "--states=all",
         "--noconvert",
-        "-o",
-        "\u001E%a\u001F%A\u001F%B\u001F%c\u001F%C\u001F%d\u001F%D\u001F%e\u001F%E\u001F%f\u001F%F\u001F%g\u001F%G\u001F%h\u001F%H\u001F%i\u001F%I\u001F%j\u001F%J\u001F%k\u001F%K\u001F%l\u001F%L\u001F%m\u001F%M\u001F%n\u001F%N\u001F%o\u001F%O\u001F%q\u001F%P\u001F%Q\u001F%r\u001F%S\u001F%t\u001F%T\u001F%u\u001F%U\u001F%v\u001F%V\u001F%w\u001F%W\u001F%x\u001F%X\u001F%y\u001F%Y\u001F%z\u001F%Z\u001F%b",
+        "-O",
+        "Account:\u001F,JobID:\u001F,BatchHost:\u001F,MinCpus:\u001F,NumCPUs:\u001F,MinTmpDisk:\u001F,NumNodes:\u001F,EndTime:\u001F,Dependency:\u001F,Feature:\u001F,ArrayJobID:\u001F,GroupName:\u001F,GroupID:\u001F,OverSubscribe:\u001F,Sockets:\u001F,JobArrayID:\u001F,Cores:\u001F,Name:\u001F,Threads:\u001F,Comment:\u001F,ArrayTaskID:\u001F,TimeLimit:\u001F,TimeLeft:\u001F,MinMemory:\u001F,TimeUsed:\u001F,ReqNodes:\u001F,NodeList:\u001F,Command:\u001F,Contiguous:\u001F,QOS:\u001F,Partition:\u001F,PriorityLong:\u001F,Reason:\u001F,StartTime:\u001F,StateCompact:\u001F,State:\u001F,UserName:\u001F,UserID:\u001F,Reservation:\u001F,SubmitTime:\u001F,WCKey:\u001F,Licenses:\u001F,ExcNodes:\u001F,CoreSpec:\u001F,Nice:\u001F,SchedNodes:\u001F,SCT:\u001F,WorkDir:\u001F,tres-per-node:\u001F,",
         "-j",
         "123"
       ]}
