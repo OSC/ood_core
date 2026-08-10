@@ -174,7 +174,7 @@ module OodCore
               advance_past_squeue_header!(output)
 
               jobs = []
-              output.each_line(RECORD_SEPARATOR) do |line|
+              output.each_line do |line|
                 # TODO: once you can do performance metrics you can test zip against some other tools
                 # or just small optimizations
                 # for example, fields is ALREADY A HASH and we are setting the VALUES to
@@ -190,7 +190,7 @@ module OodCore
                 #
                 # assuming keys and values are same length! if not we have an error!
                 line = line.encode('UTF-8', invalid: :replace, undef: :replace)
-                values = line.chomp(RECORD_SEPARATOR).strip.split(UNIT_SEPARATOR)
+                values = line.chomp("/n").split(UNIT_SEPARATOR).map(&:strip)
                 jobs << Hash[fields.keys.zip(values)] unless values.empty?
               end
               jobs
@@ -247,7 +247,7 @@ module OodCore
           #TODO: write some barebones test for this? like 2 options and id or no id
           def squeue_args(id: "", owner: nil, options: [])
             args  = ["--all", "--states=all", "--noconvert"]
-            args.concat ["-o", "#{RECORD_SEPARATOR}#{options.join(UNIT_SEPARATOR)}"]
+            args.concat ["-O", "#{options.push(nil).join(":#{UNIT_SEPARATOR},")}"]
             args.concat ["-u", owner.to_s] unless owner.to_s.empty?
             args.concat ["-j", id.to_s] unless id.to_s.empty?
             args
@@ -299,55 +299,55 @@ module OodCore
           # Note that the order of these fields is important
           def all_squeue_fields
             {
-              account: "%a",
-              job_id: "%A",
-              exec_host: "%B",
-              min_cpus: "%c",
-              cpus: "%C",
-              min_tmp_disk: "%d",
-              nodes: "%D",
-              end_time: "%e",
-              dependency: "%E",
-              features: "%f",
-              array_job_id: "%F",
-              group_name: "%g",
-              group_id: "%G",
-              over_subscribe: "%h",
-              sockets_per_node: "%H",
-              array_job_task_id: "%i",
-              cores_per_socket: "%I",
-              job_name: "%j",
-              threads_per_core: "%J",
-              comment: "%k",
-              array_task_id: "%K",
-              time_limit: "%l",
-              time_left: "%L",
-              min_memory: "%m",
-              time_used: "%M",
-              req_node: "%n",
-              node_list: "%N",
-              command: "%o",
-              contiguous: "%O",
-              qos: "%q",
-              partition: "%P",
-              priority: "%Q",
-              reason: "%r",
-              start_time: "%S",
-              state_compact: "%t",
-              state: "%T",
-              user: "%u",
-              user_id: "%U",
-              reservation: "%v",
-              submit_time: "%V",
-              wckey: "%w",
-              licenses: "%W",
-              excluded_nodes: "%x",
-              core_specialization: "%X",
-              nice: "%y",
-              scheduled_nodes: "%Y",
-              sockets_cores_threads: "%z",
-              work_dir: "%Z",
-              gres: "%b",  # must come at the end to fix a bug with Slurm 18
+              account: 'Account',
+              job_id: 'JobID',
+              exec_host: 'BatchHost',
+              min_cpus: 'MinCpus',
+              cpus: 'NumCPUs',
+              min_tmp_disk: 'MinTmpDisk',
+              nodes: 'NumNodes',
+              end_time: 'EndTime',
+              dependency: 'Dependency',
+              features: 'Feature',
+              array_job_id: 'ArrayJobID',
+              group_name: 'GroupName',
+              group_id: 'GroupID',
+              over_subscribe: 'OverSubscribe',
+              sockets_per_node: 'Sockets',
+              array_job_task_id: 'JobArrayID',
+              cores_per_socket: 'Cores',
+              job_name: 'Name',
+              threads_per_core: 'Threads',
+              comment: 'Comment',
+              array_task_id: 'ArrayTaskID',
+              time_limit: 'TimeLimit',
+              time_left: 'TimeLeft',
+              min_memory: 'MinMemory',
+              time_used: 'TimeUsed',
+              req_node: 'ReqNodes',
+              node_list: 'NodeList',
+              command: 'Command',
+              contiguous: 'Contiguous',
+              qos: 'QOS',
+              partition: 'Partition',
+              priority: 'PriorityLong',
+              reason: 'Reason',
+              start_time: 'StartTime',
+              state_compact: 'StateCompact',
+              state: 'State',
+              user: 'UserName',
+              user_id: 'UserID',
+              reservation: 'Reservation',
+              submit_time: 'SubmitTime',
+              wckey: 'WCKey',
+              licenses: 'Licenses',
+              excluded_nodes: 'ExcNodes',
+              core_specialization: 'CoreSpec',
+              nice: 'Nice',
+              scheduled_nodes: 'SchedNodes',
+              sockets_cores_threads: 'SCT',
+              work_dir: 'WorkDir',
+              gres: 'tres-per-node',  # must come at the end to fix a bug with Slurm 18
             }
           end
 
@@ -505,7 +505,7 @@ module OodCore
             # start of the format string, so the first "record" would simply be
             # empty.
             def advance_past_squeue_header!(squeue_output)
-              2.times { squeue_output.gets(RECORD_SEPARATOR) }
+              squeue_output.gets("\n")
             end
 
             # Call a forked Slurm command for a given cluster
