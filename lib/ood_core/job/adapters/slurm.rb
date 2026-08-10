@@ -491,21 +491,19 @@ module OodCore
 
             # Modify the StringIO instance by advancing past the squeue header
             #
-            # The first two "records" should always be discarded. Consider the
-            # following squeue with -M output (invisible characters shown):
+            # Discard everything before the end of the first formatted line (the header). 
+            # Consider the following squeue with -M output (invisible characters shown):
             #
             #   CLUSTER: slurm_cluster_name\n
-            #   \x1EJOBID\x1F\x1FSTATE\n
-            #   \x1E1\x1F\x1FR\n
-            #   \x1E2\x1F\x1FPD\n
+            #   JOBID\x1FSTATE\x1F\n
+            #   1\x1FR\x1F\n
+            #   2\x1FPD\x1F\n
             #
-            # Splitting on the record separator first gives the Cluster header,
-            # and then the regular header. If -M or --cluster is not specified
-            # the effect is the same because the record separator is at the
-            # start of the format string, so the first "record" would simply be
-            # empty.
+            # Whether the cluster line is present or not doesn't matter, since it doesn't
+            # get the unit separator applied. So this always takes us to the end of the 
+            # header, or the start of the job data
             def advance_past_squeue_header!(squeue_output)
-              squeue_output.gets("\n")
+              squeue_output.gets("#{UNIT_SEPARATOR}\n")
             end
 
             # Call a forked Slurm command for a given cluster
