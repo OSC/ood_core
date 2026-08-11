@@ -97,7 +97,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/ood_core/batch_connect/factory.rb<span class="defines">,<br>
-  lib/ood_core/batch_connect/templates/vnc.rb,<br> lib/ood_core/batch_connect/templates/basic.rb,<br> lib/ood_core/batch_connect/templates/vnc_container.rb</span>
+  lib/ood_core/batch_connect/templates/vnc.rb,<br> lib/ood_core/batch_connect/templates/basic.rb,<br> lib/ood_core/batch_connect/templates/wayvnc.rb,<br> lib/ood_core/batch_connect/templates/vnc_container.rb</span>
 
 </dd>
   </dl>
@@ -213,6 +213,28 @@ configuration.</p>
 
   
     <span class="summary_desc"><div class='inline'><p>Build the VNC template from a configuration.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build_wayvnc-class_method" title="build_wayvnc (class method)">.<strong>build_wayvnc</strong>(config)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Build the wayvnc template from a configuration.</p></div></span>
   
 </li>
 
@@ -573,12 +595,71 @@ configuration.</p>
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="build_wayvnc-class_method">
+  
+    .<strong>build_wayvnc</strong>(config)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Build the wayvnc template from a configuration</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>config</span>
+      
+      
+        <span class='type'>(<tt>#to_h</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the configuration for the batch connect template</p></div>
+      
+    </li>
+  
+</ul>
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+10
+11
+12
+13</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/wayvnc.rb', line 10</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_wayvnc'>build_wayvnc</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_context'>context</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span><span class='period'>.</span><span class='id identifier rubyid_reject'>reject</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_k'>k</span><span class='comma'>,</span> <span class='id identifier rubyid__'>_</span><span class='op'>|</span> <span class='id identifier rubyid_k'>k</span> <span class='op'>==</span> <span class='symbol'>:template</span> <span class='rbrace'>}</span>
+  <span class='const'><span class='object_link'><a href="Templates.html" title="OodCore::BatchConnect::Templates (module)">Templates</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Templates/WayVNC.html" title="OodCore::BatchConnect::Templates::WayVNC (class)">WayVNC</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Templates/WayVNC.html#initialize-instance_method" title="OodCore::BatchConnect::Templates::WayVNC#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_context'>context</span><span class='rparen'>)</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Fri Jul 31 15:27:40 2026 by
+  Generated on Tue Aug 11 18:58:08 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
