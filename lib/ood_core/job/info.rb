@@ -69,6 +69,11 @@ module OodCore
       # @return [Integer, nil] allocated total number of gpus
       attr_reader :gpus
 
+      # Total memory used by job in bytes
+      # @note computed from the adapter, if supported
+      # @return [Integer, nil] total bytes used for job
+      attr_reader :total_memory
+
       # List of job array child task statuses
       # @note only relevant for job arrays
       # @return [Array<Task>] tasks
@@ -96,7 +101,7 @@ module OodCore
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
                      dispatch_time: nil, native: nil, gpus: 0, tasks: [],
-                     **_)
+                     total_memory: nil, **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
         @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(**n.to_h) }
@@ -116,6 +121,7 @@ module OodCore
         @status = job_array_aggregate_status unless @tasks.empty?
 
         @native          = native
+        @total_memory    = total_memory    && total_memory.to_i
         @gpus            = gpus            && gpus.to_i
       end
 

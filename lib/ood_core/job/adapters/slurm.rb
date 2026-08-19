@@ -43,11 +43,27 @@ module OodCore
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions
 
+        UNIT_FACTORS = {
+          "K" => 1024,
+          "M" => 1024**2,
+          "G" => 1024**3,
+          "T" => 1024**4,
+          "P" => 1024**5
+        }
+
         # Get integer representing the number of gpus used by a node or job,
         # calculated from gres string
         # @return [Integer] the number of gpus in gres
         def self.gpus_from_gres(gres)
           gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
+        end
+
+        def self.memory_from_tres(tres)
+          match = tres.match(/(?:^|,)mem=(\w+)(?:,|$)/)
+          return unless match
+
+          factor = UNIT_FACTORS[match[1][-1]]
+          mem_value = factor*(match[1][...-1].to_i)
         end
 
         # Object used for simplified communication with a Slurm batch server
@@ -347,6 +363,7 @@ module OodCore
               scheduled_nodes: 'SchedNodes',
               sockets_cores_threads: 'SCT',
               work_dir: 'WorkDir',
+              tres_alloc: 'tres-alloc',
               gres: 'tres-per-node',  # must come at the end to fix a bug with Slurm 18
             }
           end
@@ -937,6 +954,7 @@ module OodCore
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
+              total_memory: self.class.memory_from_tres(v[:tres_alloc]),
               gpus: self.class.gpus_from_gres(v[:gres])
             )
           end
