@@ -143,7 +143,7 @@ class OodCore::Job::Adapters::Coder::Batch
       submission_time: workspace_info["created_at"],
       dispatch_time: workspace_info.dig("updated_at"),
       wallclock_time: wallclock_time(workspace_info, ood_status),
-      ood_connection_info: { host: coder_output_hash[:floating_ip], port: 80, error_logs: error_logs},
+      ood_connection_info: { host: coder_output_hash[:floating_ip], port: (coder_output_hash[:port] || 80).to_i, error_logs: error_logs},
       native: coder_output_hash
   })
   end
