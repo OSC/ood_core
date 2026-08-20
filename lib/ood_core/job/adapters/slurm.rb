@@ -247,7 +247,7 @@ module OodCore
           #TODO: write some barebones test for this? like 2 options and id or no id
           def squeue_args(id: "", owner: nil, options: [])
             args  = ["--all", "--states=all", "--noconvert"]
-            args.concat ["-O", "#{options.push(nil).join(":#{UNIT_SEPARATOR},")}"]
+            args.concat ["-O", options.push(nil).join(":#{UNIT_SEPARATOR},")]
             args.concat ["-u", owner.to_s] unless owner.to_s.empty?
             args.concat ["-j", id.to_s] unless id.to_s.empty?
             args
