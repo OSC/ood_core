@@ -43,11 +43,30 @@ module OodCore
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions
 
+        UNIT_FACTORS = {
+          'K' =>                 1_024, 
+          'M' =>             1_048_576, 
+          'G' =>         1_073_741_824, 
+          'T' =>     1_099_511_627_776, 
+          'P' => 1_125_899_906_842_624
+        }
+
         # Get integer representing the number of gpus used by a node or job,
         # calculated from gres string
         # @return [Integer] the number of gpus in gres
         def self.gpus_from_gres(gres)
           gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
+        end
+
+        # Get integer representing memory in bytes, computed from tres-alloc string
+        # @return [Integer] the number of bytes of allocated memory
+        def self.memory_from_tres(tres)
+          match = tres.to_s.match(/(?:^|,)mem=(\w+)(?:,|$)/)
+          return unless match
+
+          match_str = match[1]
+          memory = UNIT_FACTORS[match_str[-1]].to_i * match_str.to_i 
+          memory unless memory == 0
         end
 
         # Object used for simplified communication with a Slurm batch server
@@ -347,6 +366,7 @@ module OodCore
               scheduled_nodes: 'SchedNodes',
               sockets_cores_threads: 'SCT',
               work_dir: 'WorkDir',
+              tres_alloc: 'tres-alloc',
               gres: 'tres-per-node',  # must come at the end to fix a bug with Slurm 18
             }
           end
@@ -937,6 +957,7 @@ module OodCore
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
+              total_memory: self.class.memory_from_tres(v[:tres_alloc]),
               gpus: self.class.gpus_from_gres(v[:gres])
             )
           end
