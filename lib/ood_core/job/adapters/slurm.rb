@@ -58,6 +58,8 @@ module OodCore
           gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
         end
 
+        # Get integer representing memory in bytes, computed from tres-alloc string
+        # @return [Integer] the number of bytes of allocated memory
         def self.memory_from_tres(tres)
           match = tres.match(/(?:^|,)mem=(\w+)(?:,|$)/)
           return unless match
