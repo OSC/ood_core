@@ -62,10 +62,9 @@ module OodCore
           match = tres.match(/(?:^|,)mem=(\w+)(?:,|$)/)
           return unless match
 
-          (number, unit) = match[1].scan(/\d+|\D+/)
-          factor = UNIT_FACTORS[unit]
-          mem_value = factor.to_i * number.to_i 
-          return mem_value == 0 ? nil : mem_value
+          match_str = match[1]
+          memory = UNIT_FACTORS[match_str[-1]].to_i * match_str.to_i 
+          memory unless memory == 0
         end
 
         # Object used for simplified communication with a Slurm batch server
