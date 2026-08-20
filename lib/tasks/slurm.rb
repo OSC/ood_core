@@ -14,4 +14,11 @@ namespace :slurm do
 
     puts single_job
   end
+
+  desc 'Print an OodCore::Info job'
+  task :info do
+    require 'json'
+    adapter = OodCore::Job::Factory.build({ adapter: 'slurm' })
+    puts JSON.pretty_generate(adapter.info_all.first.to_h)
+  end
 end
