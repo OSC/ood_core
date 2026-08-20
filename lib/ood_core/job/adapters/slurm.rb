@@ -44,11 +44,11 @@ module OodCore
         using Refinements::ArrayExtensions
 
         UNIT_FACTORS = {
-          "K" => 1024,
-          "M" => 1024**2,
-          "G" => 1024**3,
-          "T" => 1024**4,
-          "P" => 1024**5
+          'K' =>                 1_024, 
+          'M' =>             1_048_576, 
+          'G' =>         1_073_741_824, 
+          'T' =>     1_099_511_627_776, 
+          'P' => 1_125_899_906_842_624
         }
 
         # Get integer representing the number of gpus used by a node or job,
@@ -62,8 +62,10 @@ module OodCore
           match = tres.match(/(?:^|,)mem=(\w+)(?:,|$)/)
           return unless match
 
-          factor = UNIT_FACTORS[match[1][-1]]
-          mem_value = factor*(match[1][...-1].to_i)
+          (number, unit) = match[1].scan(/\d+|\D+/)
+          factor = UNIT_FACTORS[unit]
+          mem_value = factor.to_i * number.to_i 
+          return mem_value == 0 ? nil : mem_value
         end
 
         # Object used for simplified communication with a Slurm batch server
