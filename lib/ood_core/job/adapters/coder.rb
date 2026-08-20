@@ -10,15 +10,20 @@ module OodCore
       using Refinements::HashExtensions
 
       require "ood_core/job/adapters/coder/openstack_credentials"
+      require "ood_core/job/adapters/coder/no_credentials"
 
       def self.build_coder(config)
         config = config.to_h.symbolize_keys
-        if config[:auth]["cloud"] == "openstack"
+        cloud = config.dig(:auth, "cloud")
+        case cloud
+        when "openstack"
           credentials = OpenStackCredentials.new(config[:auth]["url"], config[:auth]["credentials_dir"]) 
+        when nil, "none"
+          credentials = NoCredentials.new
         else
-          raise ArgumentError, "Unsupported credentials for cloud type: #{config[:auth]['cloud']}"
+          raise ArgumentError, "Unsupported credentials for cloud type: #{cloud}"
         end
-        batch = Adapters::Coder::Batch.new(config.to_h.symbolize_keys, credentials)
+        batch = Adapters::Coder::Batch.new(config, credentials)
         Adapters::Coder.new(batch)
       end
     end
