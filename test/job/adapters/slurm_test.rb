@@ -115,4 +115,31 @@ class TestSlurm < Minitest::Test
     refute_nil(queue)
     assert_equal({}, queue.tres)
   end
+
+  def test_queue_info
+    adapter = slurm_instance
+    Open3.stubs(:capture3).with({}, 'scontrol', 'show', 'part', '-o', stdin_data: '')
+         .returns([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '', exit_success])
+
+    queues = adapter.queues
+    batch = queues.find { |q| q.name == 'batch' }
+    hugemem = queues.find { |q| q.name == 'hugemem' }
+    parallel = queues.find { |q| q.name == 'parallel' }
+
+    assert_nil(batch.max_cpus)
+    assert_equal(48, hugemem.max_cpus)
+    assert_equal(28, parallel.max_cpus)
+
+    assert_nil(batch.max_nodes)
+    assert_equal(1, hugemem.max_nodes)
+    assert_equal(81, parallel.max_nodes)
+
+    assert_equal(0, batch.min_nodes)
+    assert_equal(0, hugemem.min_nodes)
+    assert_equal(2, parallel.min_nodes)
+
+    assert_equal(604_800, batch.max_time)
+    assert_equal(604_800, hugemem.max_time)
+    assert_equal(345_600, parallel.max_time)
+  end
 end

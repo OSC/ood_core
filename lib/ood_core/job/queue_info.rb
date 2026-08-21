@@ -24,11 +24,38 @@ class OodCore::Job::QueueInfo
   # An Hash of Trackable Resources and their values.
   attr_reader :tres
 
+  # The minimum nodes a job can request for this queue.
+  # Defaults to nil.
+  # @return [Integer]
+  attr_reader :min_nodes
+
+  # The maximum nodes a job can request for this queue.
+  # Returns nil if unlimited.
+  # @return [Integer]
+  attr_reader :max_nodes
+
+  # The maximum CPUs the job can request. Note these are
+  # minimum per node. Returns nil if unlimited.
+  # @return [Integer]
+  attr_reader :max_cpus
+
+  # The maximum number of time in seconds the job can request.
+  # nil values mean unlimited time or no value was found.
+  # @return [Integer]
+  attr_reader :max_time
+
   def initialize(**opts)
     @name = opts.fetch(:name, 'unknown')
     @allow_qos = opts.fetch(:allow_qos, [])
     @deny_qos = opts.fetch(:deny_qos, [])
     @tres = opts.fetch(:tres, {})
+
+    @max_nodes = parse_max(opts.fetch(:max_nodes, 1))
+    @max_cpus = parse_max(opts.fetch(:max_cpus, 1))
+
+    # these options preserve nil
+    @min_nodes = opts[:min_nodes].to_i if opts[:min_nodes]
+    @max_time = opts[:max_time].to_i if opts[:max_time]
 
     allow_accounts = opts.fetch(:allow_accounts, nil)
     @allow_accounts = if allow_accounts.nil?
@@ -55,5 +82,14 @@ class OodCore::Job::QueueInfo
 
   def allow_all_qos?
     allow_qos.empty? && deny_qos.empty?
+  end
+
+  private
+
+  def parse_max(max)
+    return 1 if max.nil?
+    return nil if max.to_s == 'UNLIMITED'
+
+    max.to_i
   end
 end
