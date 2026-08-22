@@ -10,7 +10,7 @@ module OodCore
       using Refinements::HashExtensions
 
       require "ood_core/job/adapters/coder/openstack_credentials"
-      require "ood_core/job/adapters/coder/no_credentials"
+      require "ood_core/job/adapters/coder/none_credentials"
 
       def self.build_coder(config)
         config = config.to_h.symbolize_keys
@@ -19,7 +19,7 @@ module OodCore
         when "openstack"
           credentials = OpenStackCredentials.new(config[:auth]["url"], config[:auth]["credentials_dir"]) 
         when nil, "none"
-          credentials = NoCredentials.new
+          credentials = NoneCredentials.new
         else
           raise ArgumentError, "Unsupported credentials for cloud type: #{cloud}"
         end

@@ -6,7 +6,7 @@ require "ood_core/job/adapters/coder/credentials"
 # The adapter always sends the application credential rich parameters when
 # creating a workspace, and Coder rejects a build if a declared parameter is
 # not supplied, so empty values are returned rather than omitting them.
-class NoCredentials < CredentialsInterface
+class NoneCredentials < CredentialsInterface
   def generate_credentials(project_id = nil)
     { id: "", name: "", secret: "", user_id: "" }
   end
