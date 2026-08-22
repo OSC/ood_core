@@ -66,4 +66,40 @@ class CoderTest < Minitest::Test
 
     assert_equal(80, coder.info('abc-123').ood_connection_info[:port])
   end
+  def test_build_coder_with_cloud_none
+    adapter = OodCore::Job::Factory.build(
+      'adapter' => 'coder',
+      'host' => 'https://coder.example.com',
+      'token' => 'fake-token',
+      'service_user' => 'ood',
+      'auth' => { 'cloud' => 'none' }
+    )
+
+    assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
+  end
+
+  def test_build_coder_without_auth_block
+    adapter = OodCore::Job::Factory.build(
+      'adapter' => 'coder',
+      'host' => 'https://coder.example.com',
+      'token' => 'fake-token',
+      'service_user' => 'ood'
+    )
+
+    assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
+  end
+
+  def test_build_coder_rejects_unknown_cloud
+    error = assert_raises(ArgumentError) do
+      OodCore::Job::Factory.build(
+        'adapter' => 'coder',
+        'host' => 'https://coder.example.com',
+        'token' => 'fake-token',
+        'service_user' => 'ood',
+        'auth' => { 'cloud' => 'not-a-cloud' }
+      )
+    end
+
+    assert_match(/not-a-cloud/, error.message)
+  end
 end
