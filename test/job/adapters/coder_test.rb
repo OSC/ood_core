@@ -66,6 +66,7 @@ class CoderTest < Minitest::Test
 
     assert_equal(80, coder.info('abc-123').ood_connection_info[:port])
   end
+
   def test_build_coder_with_cloud_none
     adapter = OodCore::Job::Factory.build(
       'adapter' => 'coder',
@@ -101,5 +102,58 @@ class CoderTest < Minitest::Test
     end
 
     assert_match(/not-a-cloud/, error.message)
+  end
+
+  def test_openstack_creds_from_config
+    Dir.mktmpdir do |dir|
+      cfg = <<~HEREDOC
+        ---
+        v2:
+          job:
+            adapter: coder
+            auth:
+              cloud: openstack
+              dir: /some/fake/directory
+              auth_url: http://some.auth.url/test
+      HEREDOC
+
+      Pathname.new("#{dir}/coder.yml").write(cfg)
+
+      adapter = OodCore::Clusters.load_file(dir)['coder'].job_adapter
+      batch = adapter.instance_variable_get(:@batch)
+      creds = batch.instance_variable_get(:@credentials)
+
+      assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
+      assert_instance_of(OpenStackCredentials, creds)
+
+      creds_auth_url = creds.instance_variable_get(:@auth_url)
+      creds_dir = creds.instance_variable_get(:@dir)
+
+      assert_equal('http://some.auth.url/test', creds_auth_url)
+      assert_equal('/some/fake/directory', creds_dir)
+    end
+  end
+
+  def test_none_creds_from_config
+    Dir.mktmpdir do |dir|
+      cfg = <<~HEREDOC
+        ---
+        v2:
+          job:
+            adapter: coder
+            auth:
+              cloud: none
+      HEREDOC
+
+      Pathname.new("#{dir}/coder.yml").write(cfg)
+
+      adapter = OodCore::Clusters.load_file(dir)['coder'].job_adapter
+      batch = adapter.instance_variable_get(:@batch)
+      creds = batch.instance_variable_get(:@credentials)
+
+      assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
+      assert_instance_of(NoneCredentials, creds)
+
+    end
   end
 end

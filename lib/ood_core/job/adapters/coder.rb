@@ -17,7 +17,7 @@ module OodCore
         cloud = config.dig(:auth, "cloud")
         case cloud
         when "openstack"
-          credentials = OpenStackCredentials.new(config[:auth]["url"], config[:auth]["credentials_dir"]) 
+          credentials = OpenStackCredentials.new(**config[:auth].to_h.symbolize_keys)
         when nil, "none"
           credentials = NoneCredentials.new
         else
