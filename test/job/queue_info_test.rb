@@ -13,8 +13,8 @@ class QueueInfoTest < Minitest::Test
     assert_equal([], queue.deny_accounts)
     assert_equal({}, queue.tres)
     assert_nil(queue.min_nodes)
-    assert_equal(1, queue.max_nodes)
-    assert_equal(1, queue.max_cpus)
+    assert_nil(queue.max_nodes)
+    assert_nil(queue.max_cpus)
     assert_nil(queue.max_time)
   end
 end

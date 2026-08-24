@@ -30,17 +30,18 @@ class OodCore::Job::QueueInfo
   attr_reader :min_nodes
 
   # The maximum nodes a job can request for this queue.
-  # Returns nil if unlimited.
+  # Defaults to nil. Can return nil if unlimited.
   # @return [Integer]
   attr_reader :max_nodes
 
   # The maximum CPUs the job can request. Note these are
-  # minimum per node. Returns nil if unlimited.
+  # minimum per node.
+  # Defaults to nil. Can returns nil if unlimited.
   # @return [Integer]
   attr_reader :max_cpus
 
   # The maximum number of time in seconds the job can request.
-  # nil values mean unlimited time or no value was found.
+  # Defaults to nil. Can returns nil if unlimited.
   # @return [Integer]
   attr_reader :max_time
 
@@ -50,12 +51,12 @@ class OodCore::Job::QueueInfo
     @deny_qos = opts.fetch(:deny_qos, [])
     @tres = opts.fetch(:tres, {})
 
-    @max_nodes = parse_max(opts.fetch(:max_nodes, 1))
-    @max_cpus = parse_max(opts.fetch(:max_cpus, 1))
+    @max_nodes = parse_max(opts[:max_nodes])
+    @max_cpus = parse_max(opts[:max_cpus])
+    @max_time = parse_max(opts[:max_time])
 
     # these options preserve nil
     @min_nodes = opts[:min_nodes].to_i if opts[:min_nodes]
-    @max_time = opts[:max_time].to_i if opts[:max_time]
 
     allow_accounts = opts.fetch(:allow_accounts, nil)
     @allow_accounts = if allow_accounts.nil?
@@ -87,8 +88,7 @@ class OodCore::Job::QueueInfo
   private
 
   def parse_max(max)
-    return 1 if max.nil?
-    return nil if max.to_s == 'UNLIMITED'
+    return nil if max.nil? || max.to_s == 'UNLIMITED'
 
     max.to_i
   end
