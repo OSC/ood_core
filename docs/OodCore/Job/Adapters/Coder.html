@@ -369,12 +369,12 @@
       <pre class="lines">
 
 
-38
-39
-40</pre>
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 38</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_batch'>batch</span><span class='rparen'>)</span>
   <span class='ivar'>@batch</span> <span class='op'>=</span> <span class='id identifier rubyid_batch'>batch</span>
@@ -415,12 +415,12 @@
       <pre class="lines">
 
 
-37
-38
-39</pre>
+42
+43
+44</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 37</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 42</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_batch'>batch</span>
   <span class='ivar'>@batch</span>
@@ -479,14 +479,14 @@
       <pre class="lines">
 
 
-117
-118
-119
-120
-121</pre>
+122
+123
+124
+125
+126</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_res'>res</span> <span class='op'>=</span> <span class='id identifier rubyid_batch'>batch</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -576,14 +576,14 @@
       <pre class="lines">
 
 
-97
-98
-99
-100
-101</pre>
+102
+103
+104
+105
+106</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 97</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_batch'>batch</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -680,12 +680,12 @@ adapters can get by without populating the entire Info object</p></div>
       <pre class="lines">
 
 
-81
-82
-83</pre>
+86
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 81</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 86</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='lbracket'>[</span><span class='rbracket'>]</span>
@@ -779,12 +779,12 @@ adapters can get by without populating the entire Info object</p></div>
       <pre class="lines">
 
 
-109
-110
-111</pre>
+114
+115
+116</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 109</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 114</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>job</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>status</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -941,15 +941,15 @@ execution after dependent jobs have terminated</p></div>
       <pre class="lines">
 
 
-63
-64
-65
-66
-67
-68</pre>
+68
+69
+70
+71
+72
+73</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 63</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 68</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_raise'>raise</span> <span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Must specify the script</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>if</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -1005,12 +1005,12 @@ explicitly do not</li>
       <pre class="lines">
 
 
-88
-89
-90</pre>
+93
+94
+95</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 88</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/coder.rb', line 93</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_arrays?'>supports_job_arrays?</span>
   <span class='kw'>false</span>
@@ -1025,7 +1025,7 @@ explicitly do not</li>
 </div>
 
       <div id="footer">
-  Generated on Thu Aug 20 21:11:21 2026 by
+  Generated on Mon Aug 24 13:28:37 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
