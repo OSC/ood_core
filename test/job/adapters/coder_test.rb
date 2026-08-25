@@ -165,6 +165,7 @@ class CoderTest < Minitest::Test
             adapter: coder
             auth:
               cloud: user_defined_test
+              test_parameter: 'some new config to test'
       HEREDOC
 
       auth = <<~HEREDOC
@@ -172,7 +173,9 @@ class CoderTest < Minitest::Test
 
           # only need to define the initializer bc that's the only bit being
           # called in this test
-          def initialize(**kwargs) end
+          def initialize(**kwargs) 
+            @test_parameter = kwargs[:test_parameter]
+          end
         end
       HEREDOC
 
@@ -185,9 +188,11 @@ class CoderTest < Minitest::Test
       adapter = OodCore::Clusters.load_file(dir)['coder'].job_adapter
       batch = adapter.instance_variable_get(:@batch)
       creds = batch.instance_variable_get(:@credentials)
+      test_cfg = creds.instance_variable_get(:@test_parameter)
 
       assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
       assert_instance_of(UserDefinedTestCredentials, creds)
+      assert_equal('some new config to test', test_cfg)
     end
   end
 end
