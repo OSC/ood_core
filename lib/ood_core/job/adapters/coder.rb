@@ -28,7 +28,7 @@ module OodCore
           klass = Object.const_get("#{class_name}Credentials")
           klass.new(**auth.to_h.symbolize_keys)
         rescue NameError
-          raise(ArgumentError, "Unsupported credentials for cloud type: #{auth_type.inspect}")
+          raise(ArgumentError, "Unsupported credentials for cloud type: #{auth_type}")
         end
       end
     end
