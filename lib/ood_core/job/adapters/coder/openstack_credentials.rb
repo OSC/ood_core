@@ -4,7 +4,7 @@ require "ood_core/job/adapters/coder/credentials"
 require "tempfile"
 require 'excon'
 
-class OpenStackCredentials < CredentialsInterface
+class OpenstackCredentials < CredentialsInterface
   def initialize(**kwargs)
     @auth_url = kwargs[:auth_url]
     @dir = kwargs[:dir]

@@ -124,7 +124,7 @@ class CoderTest < Minitest::Test
       creds = batch.instance_variable_get(:@credentials)
 
       assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
-      assert_instance_of(OpenStackCredentials, creds)
+      assert_instance_of(OpenstackCredentials, creds)
 
       creds_auth_url = creds.instance_variable_get(:@auth_url)
       creds_dir = creds.instance_variable_get(:@dir)
@@ -153,7 +153,41 @@ class CoderTest < Minitest::Test
 
       assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
       assert_instance_of(NoneCredentials, creds)
+    end
+  end
 
+  def test_new_creds_from_config
+    Dir.mktmpdir do |dir|
+      cfg = <<~HEREDOC
+        ---
+        v2:
+          job:
+            adapter: coder
+            auth:
+              cloud: user_defined_test
+      HEREDOC
+
+      auth = <<~HEREDOC
+        class UserDefinedTestCredentials < CredentialsInterface
+
+          # only need to define the initializer bc that's the only bit being
+          # called in this test
+          def initialize(**kwargs) end
+        end
+      HEREDOC
+
+      Pathname.new("#{dir}/coder.yml").write(cfg)
+      Pathname.new("#{dir}/user_defined_test_credentials.rb").write(auth)
+
+      # credential authors will have to require & load the ruby file in question
+      require "#{dir}/user_defined_test_credentials.rb"
+
+      adapter = OodCore::Clusters.load_file(dir)['coder'].job_adapter
+      batch = adapter.instance_variable_get(:@batch)
+      creds = batch.instance_variable_get(:@credentials)
+
+      assert_instance_of(OodCore::Job::Adapters::Coder, adapter)
+      assert_instance_of(UserDefinedTestCredentials, creds)
     end
   end
 end
