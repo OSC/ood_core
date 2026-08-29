@@ -144,26 +144,10 @@ module OodCore
       # Convert object to hash
       # @return [Hash] object as hash
       def to_h
-        {
-          id:              id,
-          status:          status,
-          allocated_nodes: allocated_nodes,
-          submit_host:     submit_host,
-          job_name:        job_name,
-          job_owner:       job_owner,
-          accounting_id:   accounting_id,
-          procs:           procs,
-          queue_name:      queue_name,
-          wallclock_time:  wallclock_time,
-          wallclock_limit: wallclock_limit,
-          cpu_time:        cpu_time,
-          submission_time: submission_time,
-          dispatch_time:   dispatch_time,
-          native:          native,
-          total_memory:    total_memory,
-          gpus:            gpus,
-          tasks: tasks
-        }
+        instance_variables.map do |ivar|
+          name = ivar.to_s.gsub('@', '').to_sym
+          [name, send(name)]
+        end.to_h
       end
 
       def gpu?
