@@ -49,7 +49,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1626897251,
     wallclock_time: nil,
-    ood_connection_info: { host: "10.20.0.40" },
+    ood_connection_info: { host: "192.148.247.170" },
     procs: "1"
   }}
 
