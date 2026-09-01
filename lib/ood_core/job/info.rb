@@ -69,6 +69,10 @@ module OodCore
       # @return [Integer, nil] allocated total number of gpus
       attr_reader :gpus
 
+      # Number of gpus allocated per gpu type
+      # @return [Hash] gpu type to count, e.g. { 'a100' => 2 }
+      attr_reader :gpu_type
+
       # Total memory used by job in bytes
       # @note computed from the adapter, if supported
       # @return [Integer, nil] total bytes used for job
@@ -101,8 +105,8 @@ module OodCore
                      job_name: nil, job_owner: nil, accounting_id: nil,
                      procs: nil, queue_name: nil, wallclock_time: nil,
                      wallclock_limit: nil, cpu_time: nil, submission_time: nil,
-                     dispatch_time: nil, native: nil, gpus: 0, tasks: [],
-                     total_memory: nil, **_)
+                     dispatch_time: nil, native: nil, gpus: 0, gpu_type: {}, 
+                     tasks: [], total_memory: nil, **_)
         @id              = id.to_s
         @status          = Status.new(state: status.to_sym)
         @allocated_nodes = allocated_nodes.map { |n| NodeInfo.new(**n.to_h) }
@@ -124,6 +128,7 @@ module OodCore
         @native          = native
         @total_memory    = total_memory    && total_memory.to_i
         @gpus            = gpus            && gpus.to_i
+        @gpu_type        = gpu_type.to_h
       end
 
       # Create a new Info for a child task
