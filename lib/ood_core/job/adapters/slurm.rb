@@ -407,7 +407,9 @@ module OodCore
               # Termination time of the job.
               end: 'End',
               # Trackable resources. These are the minimum resource counts requested by the job/step at submission time.
-              gres: 'ReqTRES'
+              gres: 'ReqTRES',
+              # Trackable resources actually allocated to the job/step.
+              tres_alloc: 'AllocTRES'
             }
           end
 
@@ -759,7 +761,8 @@ module OodCore
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
-              gpus: self.class.gpus_from_gres(v[:gres])
+              gpus: self.class.gpus_from_gres(v[:tres_alloc]),
+              total_memory: self.class.memory_from_tres(v[:tres_alloc])
             )
           end
         end

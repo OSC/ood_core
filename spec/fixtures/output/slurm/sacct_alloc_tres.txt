@@ -1,0 +1,2 @@
+mepzs0714123456gpu_job01:00:0016G4402:00:00COMPLETED00:30:002Ggpu2026-08-20T09:00:002026-08-20T09:01:002026-08-20T10:01:00billing=4,cpu=4,gres/gpu=1,mem=16G,node=1billing=8,cpu=8,gres/gpu=2,mem=32G,node=1
+mepzs0714123457cpu_job00:10:004G2201:00:00COMPLETED00:05:001Gserial2026-08-20T11:00:002026-08-20T11:01:002026-08-20T11:11:00billing=2,cpu=2,mem=4G,node=1billing=2,cpu=2,mem=4G,node=1
