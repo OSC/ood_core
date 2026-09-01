@@ -69,6 +69,19 @@ module OodCore
           memory unless memory == 0
         end
 
+        # Get integer representing the number of gpus, computed from a tres string.
+        # TRES may report GPUs twice - a typed entry and an untyped rollup, e.g.
+        # 'gres/gpu:a100=16,gres/gpu=16' - so summing every match double counts.
+        # The rollup is authoritative; typed entries are a fallback for the case
+        # where no rollup is present.
+        # @return [Integer] the number of gpus in tres
+        def self.gpus_from_tres(tres)
+          rollup = tres.to_s.match(%r{(?:^|,)(?:gres/)?gpu=(\d+)(?:,|$)})
+          return rollup[1].to_i if rollup
+
+          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?:,|$)}).flatten.map(&:to_i).sum
+        end
+
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
@@ -761,7 +774,7 @@ module OodCore
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
-              gpus: self.class.gpus_from_gres(v[:tres_alloc]),
+              gpus: self.class.gpus_from_tres(v[:tres_alloc]),
               total_memory: self.class.memory_from_tres(v[:tres_alloc])
             )
           end
