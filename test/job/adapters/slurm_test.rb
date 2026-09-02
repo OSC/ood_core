@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'ood_core/job/adapters/slurm'
 
 class TestSlurm < Minitest::Test
   include TestHelper
