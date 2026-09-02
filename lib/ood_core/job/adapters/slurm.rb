@@ -64,8 +64,8 @@ module OodCore
         # so untyped ones are excluded.
         # @return [Hash] gpu types and counts, e.g. { 'a100' => 2 }
         def self.gpu_type_from_tres(tres)
-          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?:,|$)})
-              .to_h { |type, count| [type, count.to_i] }
+          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?=,|$)})
+              .map { |type, count| [type, count.to_i] }.to_h
         end
 
         # Get integer representing memory in bytes, computed from tres-alloc string
