@@ -133,4 +133,10 @@ class TestSlurm < Minitest::Test
     # AllocTRES says mem=32G; previously info_historic set no memory at all
     assert_equal(32 * 1024**3, gpu_job.total_memory)
   end
+
+  def test_gpus_from_tres_sums_multiple_types_without_rollup
+    tres = 'cpu=8,gres/gpu:a100=2,gres/gpu:v100=1,node=1'
+
+    assert_equal(3, OodCore::Job::Adapters::Slurm.gpus_from_tres(tres))
+  end
 end

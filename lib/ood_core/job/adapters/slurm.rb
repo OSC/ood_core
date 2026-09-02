@@ -79,7 +79,7 @@ module OodCore
           rollup = tres.to_s.match(%r{(?:^|,)(?:gres/)?gpu=(\d+)(?:,|$)})
           return rollup[1].to_i if rollup
 
-          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?:,|$)}).flatten.map(&:to_i).sum
+          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)}).flatten.map(&:to_i).sum
         end
 
         # Object used for simplified communication with a Slurm batch server
