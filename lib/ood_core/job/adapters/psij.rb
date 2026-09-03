@@ -373,6 +373,8 @@ module OodCore
             STATE_MAP.fetch(st, :undetermined)
           end
 
+		  # Converts the MiB value from a script object to
+		  # an integer number of bytes required by ResourceSpecV1
 		  def bytes_from_memory(memory)
 			return nil if memory.nil?
 
