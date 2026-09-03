@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'ood_core/job/adapters/slurm'
 
 class TestSlurm < Minitest::Test
   include TestHelper
@@ -114,5 +115,66 @@ class TestSlurm < Minitest::Test
 
     refute_nil(queue)
     assert_equal({}, queue.tres)
+  end
+
+  # unit tests for the parser
+
+  def test_gpu_types_from_tres_typed_entry
+    tres = 'cpu=17,mem=64G,node=1,billing=17,gres/gpu=1,gres/gpu:a100=1'
+
+    assert_equal({ 'a100' => 1 }, OodCore::Job::Adapters::Slurm.gpu_types_from_tres(tres))
+  end
+
+  def test_gpu_types_from_tres_untyped_entry_has_no_type
+    tres = 'cpu=21,mem=84567M,node=1,billing=21,gres/gpu=2'
+
+    assert_equal({}, OodCore::Job::Adapters::Slurm.gpu_types_from_tres(tres))
+  end
+
+  def test_gpu_types_from_tres_multiple_types
+    tres = 'cpu=8,gres/gpu=3,gres/gpu:a100=2,gres/gpu:v100=1,node=1'
+
+    assert_equal({ 'a100' => 2, 'v100' => 1 },
+                  OodCore::Job::Adapters::Slurm.gpu_types_from_tres(tres))
+  end
+
+  def test_gpu_types_from_tres_without_gres_prefix
+    assert_equal({ 'a100' => 4 },
+                  OodCore::Job::Adapters::Slurm.gpu_types_from_tres('cpu=8,gpu:a100=4,node=1'))
+  end
+
+  def test_gpu_types_from_tres_no_gpus
+    assert_equal({}, OodCore::Job::Adapters::Slurm.gpu_types_from_tres('cpu=33,mem=128G,node=1'))
+  end
+
+  def test_gpu_types_from_tres_handles_nil_and_null
+    assert_equal({}, OodCore::Job::Adapters::Slurm.gpu_types_from_tres(nil))
+    assert_equal({}, OodCore::Job::Adapters::Slurm.gpu_types_from_tres('(null)'))
+    assert_equal({}, OodCore::Job::Adapters::Slurm.gpu_types_from_tres(''))
+  end
+
+  # integration test through the squeue path
+
+  def test_info_all_populates_gpu_types
+    adapter = slurm_instance
+    squeue_fields_arg = "Account:\u001F,JobID:\u001F,BatchHost:\u001F,MinCpus:\u001F,NumCPUs:\u001F,MinTmpDisk:\u001F,NumNodes:\u001F,EndTime:\u001F,Dependency:\u001F,Feature:\u001F,ArrayJobID:\u001F,GroupName:\u001F,GroupID:\u001F,OverSubscribe:\u001F,Sockets:\u001F,JobArrayID:\u001F,Cores:\u001F,Name:\u001F,Threads:\u001F,Comment:\u001F,ArrayTaskID:\u001F,TimeLimit:\u001F,TimeLeft:\u001F,MinMemory:\u001F,TimeUsed:\u001F,ReqNodes:\u001F,NodeList:\u001F,Command:\u001F,Contiguous:\u001F,QOS:\u001F,Partition:\u001F,PriorityLong:\u001F,Reason:\u001F,StartTime:\u001F,StateCompact:\u001F,State:\u001F,UserName:\u001F,UserID:\u001F,Reservation:\u001F,SubmitTime:\u001F,WCKey:\u001F,Licenses:\u001F,ExcNodes:\u001F,CoreSpec:\u001F,Nice:\u001F,SchedNodes:\u001F,SCT:\u001F,WorkDir:\u001F,tres-alloc:\u001F,tres-per-node:\u001F,"
+    Open3.stubs(:capture3).with(
+      {}, 'squeue', '--all', '--states=all', '--noconvert', '-O', squeue_fields_arg, stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/squeue_gpu_types.txt'), '', exit_success])
+
+    jobs = adapter.info_all
+
+    typed   = jobs.find { |job| job.id == '7126159' }
+    untyped = jobs.find { |job| job.id == '7126996' }
+    no_gpu  = jobs.find { |job| job.id == '7126023' }
+
+    # typed entry in tres-alloc gives us the model
+    assert_equal({ 'a100' => 1 }, typed.gpu_types)
+    # rollup only: a gpu count, but no type information
+    assert_equal({}, untyped.gpu_types)
+    # gpus comes from tres-per-node on this path, which is N/A for this job
+    assert_equal(0, untyped.gpus)
+    # no gpus at all
+    assert_equal({}, no_gpu.gpu_types)
   end
 end
