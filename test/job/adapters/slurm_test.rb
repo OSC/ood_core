@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'ood_core/job/adapters/slurm'
 
 class TestSlurm < Minitest::Test
   include TestHelper
@@ -114,5 +115,29 @@ class TestSlurm < Minitest::Test
 
     refute_nil(queue)
     assert_equal({}, queue.tres)
+  end
+
+  def test_info_historic_uses_alloc_tres
+    adapter = slurm_instance
+    fields = 'User,Group,JobId,JobName,Elapsed,ReqMem,AllocCPUS,ReqCPUS,Timelimit,' \
+             'State,TotalCPU,MaxRSS,Partition,Submit,Start,End,ReqTRES,AllocTRES'
+    Open3.stubs(:capture3).with(
+      {}, 'sacct', '-P', '--delimiter', "\u001F", '-n', '--units', 'G',
+      '--allocations', '-o', fields, stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/sacct_alloc_tres.txt'), '', exit_success])
+  
+    jobs = adapter.info_historic
+    gpu_job = jobs.find { |job| job.id == '123456' }
+  
+    # AllocTRES says gres/gpu=2 while ReqTRES says gres/gpu=1
+    assert_equal(2, gpu_job.gpus)
+    # AllocTRES says mem=32G; previously info_historic set no memory at all
+    assert_equal(32 * 1024**3, gpu_job.total_memory)
+  end
+
+  def test_gpus_from_tres_sums_multiple_types_without_rollup
+    tres = 'cpu=8,gres/gpu:a100=2,gres/gpu:v100=1,node=1'
+
+    assert_equal(3, OodCore::Job::Adapters::Slurm.gpus_from_tres(tres))
   end
 end
