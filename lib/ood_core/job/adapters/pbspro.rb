@@ -318,6 +318,7 @@ module OodCore
           args.concat ["-a", script.start_time.localtime.strftime("%C%y%m%d%H%M.%S")] unless script.start_time.nil?
           args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
           args.concat ["-l", "walltime=#{seconds_to_duration(script.wall_time)}"] unless script.wall_time.nil?
+          args.concat ['-l', "mem=#{script.memory}"] unless script.memory.nil?
           args.concat ppn(script)
 
           # Set dependencies
