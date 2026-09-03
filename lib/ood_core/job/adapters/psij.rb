@@ -204,6 +204,7 @@ module OodCore
                          duration: script.wall_time,
                          custom_attributes: script.args},
             resources: {__version: 1,
+				        memory: bytes_from_memory(script.memory),
                         gpu_cores_per_process: script.gpus_per_node,
                         cpu_cores_per_process: script.cores}
           }
@@ -371,6 +372,12 @@ module OodCore
           def get_state(st)
             STATE_MAP.fetch(st, :undetermined)
           end
+
+		  def bytes_from_memory(memory)
+			return nil if memory.nil?
+
+			(1_048_576 * memory).to_i
+		  end
 
           def parse_job_info(v)
             # parse input hash to Info object
