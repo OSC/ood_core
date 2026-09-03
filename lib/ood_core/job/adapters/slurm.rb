@@ -58,12 +58,12 @@ module OodCore
           gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
         end
 
-        # Get a hash of gpu type to allocated count, computed from a tres string.
+        # Get a hash of gpu types to allocated count, computed from a tres string.
         # TRES may report GPUs as an untyped rollup ('gres/gpu=2'), as typed
         # entries ('gres/gpu:a100=2'), or both. Only typed entries carry a type,
         # so untyped ones are excluded.
         # @return [Hash] gpu types and counts, e.g. { 'a100' => 2 }
-        def self.gpu_type_from_tres(tres)
+        def self.gpu_types_from_tres(tres)
           tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?=,|$)})
               .map { |type, count| [type, count.to_i] }.to_h
         end
@@ -968,7 +968,7 @@ module OodCore
               dispatch_time: parse_time(v[:start_time]),
               native: v,
               total_memory: self.class.memory_from_tres(v[:tres_alloc]),
-              gpu_type: self.class.gpu_type_from_tres(v[:tres_alloc]),
+              gpu_types: self.class.gpu_types_from_tres(v[:tres_alloc]),
               gpus: self.class.gpus_from_gres(v[:gres])
             )
           end
