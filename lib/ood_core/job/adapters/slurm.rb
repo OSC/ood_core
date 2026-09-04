@@ -506,6 +506,12 @@ module OodCore
                            else
                              hsh[:TRES].to_s.split(',').map { |str| str.split('=') }.to_h
                            end
+
+              hsh[:max_cpus] = parse_max(hsh[:MaxCPUsPerNode])
+              hsh[:max_nodes] = parse_max(hsh[:MaxNodes])
+              hsh[:min_nodes] = parse_max(hsh[:MinNodes])
+              hsh[:max_time] = duration_in_seconds(hsh[:MaxTime])
+
               OodCore::Job::QueueInfo.new(**hsh)
             end
 
@@ -572,6 +578,20 @@ module OodCore
                 }.fetch(a, a)
               }.flatten
             end
+
+          # FIXME: duplicate of the outer class
+          def duration_in_seconds(time)
+            return 0 if time.nil?
+            time, days = time.split("-").reverse
+            days.to_i * 24 * 3600 +
+              time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
+          end
+
+          def parse_max(max)
+            return nil if max.nil? || max.to_s == 'UNLIMITED'
+
+            max.to_i
+          end
         end
 
         # Mapping of state codes for Slurm
