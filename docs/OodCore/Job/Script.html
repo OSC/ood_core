@@ -502,6 +502,33 @@ the resources this batch job will require of the resource manager.</p>
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#memory-instance_method" title="#memory (instance method)">#<strong>memory</strong>  &#x21d2; Integer<sup>?</sup> </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>The memory request per node, in Mebibytes.</p></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#native-instance_method" title="#native (instance method)">#<strong>native</strong>  &#x21d2; Object<sup>?</sup> </a>
     
 
@@ -907,7 +934,7 @@ the resources this batch job will require of the resource manager.</p>
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(content:, args: nil, submit_as_hold: nil, rerunnable: nil, job_environment: nil, workdir: nil, email: nil, email_on_started: nil, email_on_terminated: nil, job_name: nil, shell_path: nil, input_path: nil, output_path: nil, error_path: nil, reservation_id: nil, queue_name: nil, priority: nil, start_time: nil, wall_time: nil, accounting_id: nil, job_array_request: nil, qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil, cores: nil, **_)  &#x21d2; Script </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(content:, args: nil, submit_as_hold: nil, rerunnable: nil, job_environment: nil, workdir: nil, email: nil, email_on_started: nil, email_on_terminated: nil, job_name: nil, shell_path: nil, input_path: nil, output_path: nil, error_path: nil, reservation_id: nil, queue_name: nil, priority: nil, start_time: nil, wall_time: nil, accounting_id: nil, job_array_request: nil, qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil, cores: nil, memory: nil, **_)  &#x21d2; Script </a>
     
 
     
@@ -960,7 +987,7 @@ the resources this batch job will require of the resource manager.</p>
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(content:, args: nil, submit_as_hold: nil, rerunnable: nil, job_environment: nil, workdir: nil, email: nil, email_on_started: nil, email_on_terminated: nil, job_name: nil, shell_path: nil, input_path: nil, output_path: nil, error_path: nil, reservation_id: nil, queue_name: nil, priority: nil, start_time: nil, wall_time: nil, accounting_id: nil, job_array_request: nil, qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil, cores: nil, **_)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Script (class)">Script</a></span></tt> 
+    #<strong>initialize</strong>(content:, args: nil, submit_as_hold: nil, rerunnable: nil, job_environment: nil, workdir: nil, email: nil, email_on_started: nil, email_on_terminated: nil, job_name: nil, shell_path: nil, input_path: nil, output_path: nil, error_path: nil, reservation_id: nil, queue_name: nil, priority: nil, start_time: nil, wall_time: nil, accounting_id: nil, job_array_request: nil, qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil, cores: nil, memory: nil, **_)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Script (class)">Script</a></span></tt> 
   
 
   
@@ -1399,10 +1426,6 @@ the resources this batch job will require of the resource manager.</p>
       <pre class="lines">
 
 
-151
-152
-153
-154
 155
 156
 157
@@ -1436,10 +1459,15 @@ the resources this batch job will require of the resource manager.</p>
 185
 186
 187
-188</pre>
+188
+189
+190
+191
+192
+193</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 151</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 155</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>content:</span><span class='comma'>,</span> <span class='label'>args:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>submit_as_hold:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>rerunnable:</span> <span class='kw'>nil</span><span class='comma'>,</span>
                <span class='label'>job_environment:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>workdir:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>email:</span> <span class='kw'>nil</span><span class='comma'>,</span>
@@ -1449,7 +1477,7 @@ the resources this batch job will require of the resource manager.</p>
                <span class='label'>queue_name:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>priority:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>start_time:</span> <span class='kw'>nil</span><span class='comma'>,</span>
                <span class='label'>wall_time:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>accounting_id:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>job_array_request:</span> <span class='kw'>nil</span><span class='comma'>,</span>
                <span class='label'>qos:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>gpus_per_node:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>native:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>copy_environment:</span> <span class='kw'>nil</span><span class='comma'>,</span>
-               <span class='label'>cores:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid__'>_</span><span class='rparen'>)</span>
+               <span class='label'>cores:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>memory:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid__'>_</span><span class='rparen'>)</span>
   <span class='ivar'>@content</span> <span class='op'>=</span> <span class='id identifier rubyid_content'>content</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
 
   <span class='ivar'>@submit_as_hold</span>      <span class='op'>=</span> <span class='id identifier rubyid_submit_as_hold'>submit_as_hold</span>
@@ -1478,6 +1506,7 @@ the resources this batch job will require of the resource manager.</p>
   <span class='ivar'>@native</span>             <span class='op'>=</span> <span class='id identifier rubyid_native'>native</span>
   <span class='ivar'>@copy_environment</span>   <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_copy_environment'>copy_environment</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span><span class='rparen'>)</span> <span class='op'>?</span> <span class='kw'>nil</span> <span class='op'>:</span> <span class='op'>!</span><span class='op'>!</span> <span class='id identifier rubyid_copy_environment'>copy_environment</span>
   <span class='ivar'>@cores</span>              <span class='op'>=</span> <span class='id identifier rubyid_cores'>cores</span><span class='op'>&amp;.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='ivar'>@memory</span>             <span class='op'>=</span> <span class='id identifier rubyid_memory'>memory</span><span class='op'>&amp;.</span><span class='id identifier rubyid_to_i'>to_i</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1706,12 +1735,12 @@ the resources this batch job will require of the resource manager.</p>
       <pre class="lines">
 
 
-122
-123
-124</pre>
+126
+127
+128</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_copy_environment'>copy_environment</span>
   <span class='ivar'>@copy_environment</span>
@@ -2301,6 +2330,63 @@ status notifications</p>
       
       <span id=""></span>
       <div class="method_details ">
+  <h3 class="signature " id="memory-instance_method">
+  
+    #<strong>memory</strong>  &#x21d2; <tt>Integer</tt><sup>?</sup>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>The memory request per node, in Mebibytes</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>, <tt>nil</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>Mebibytes</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+117
+118
+119</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 117</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_memory'>memory</span>
+  <span class='ivar'>@memory</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
   <h3 class="signature " id="native-instance_method">
   
     #<strong>native</strong>  &#x21d2; <tt>Object</tt><sup>?</sup>  <span class="extras">(readonly)</span>
@@ -2346,12 +2432,12 @@ status notifications</p>
       <pre class="lines">
 
 
-118
-119
-120</pre>
+122
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 118</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 122</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_native'>native</span>
   <span class='ivar'>@native</span>
@@ -3066,12 +3152,12 @@ seconds</p>
       <pre class="lines">
 
 
-226
-227
-228</pre>
+232
+233
+234</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 226</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 232</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_to_h'>to_h</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
@@ -3139,12 +3225,12 @@ seconds</p>
       <pre class="lines">
 
 
-233
-234
-235</pre>
+239
+240
+241</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 233</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 239</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>&amp;&amp;</span> <span class='kw'>self</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span>
@@ -3194,12 +3280,12 @@ seconds</p>
       <pre class="lines">
 
 
-239
-240
-241</pre>
+245
+246
+247</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 239</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 245</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash'>hash</span>
   <span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='comma'>,</span> <span class='id identifier rubyid_to_h'>to_h</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span>
@@ -3249,11 +3335,6 @@ seconds</p>
       <pre class="lines">
 
 
-192
-193
-194
-195
-196
 197
 198
 199
@@ -3278,10 +3359,16 @@ seconds</p>
 218
 219
 220
-221</pre>
+221
+222
+223
+224
+225
+226
+227</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 192</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/script.rb', line 197</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
   <span class='lbrace'>{</span>
@@ -3310,6 +3397,7 @@ seconds</p>
     <span class='label'>gpus_per_node:</span>       <span class='id identifier rubyid_gpus_per_node'>gpus_per_node</span><span class='comma'>,</span>
     <span class='label'>native:</span>              <span class='id identifier rubyid_native'>native</span><span class='comma'>,</span>
     <span class='label'>cores:</span>               <span class='id identifier rubyid_cores'>cores</span><span class='comma'>,</span>
+    <span class='label'>memory:</span>              <span class='id identifier rubyid_memory'>memory</span><span class='comma'>,</span>
     <span class='label'>copy_environment:</span>    <span class='id identifier rubyid_copy_environment'>copy_environment</span><span class='comma'>,</span>
   <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
@@ -3323,7 +3411,7 @@ seconds</p>
 </div>
 
       <div id="footer">
-  Generated on Thu Sep  3 12:45:26 2026 by
+  Generated on Fri Sep  4 14:20:04 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
