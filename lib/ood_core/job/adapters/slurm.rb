@@ -670,6 +670,7 @@ module OodCore
           args.concat ['--qos', script.qos] unless script.qos.nil?
           args.concat ['--gpus-per-node', script.gpus_per_node] unless script.gpus_per_node.nil?
           args.concat ['-n', script.cores] unless script.cores.nil?
+          args.concat ['--mem', script.memory] unless script.memory.nil?
           # ignore nodes, don't know how to do this for slurm
 
           # Set dependencies
