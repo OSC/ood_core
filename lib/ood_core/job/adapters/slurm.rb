@@ -737,10 +737,12 @@ module OodCore
         def accounts(include_parents: false)
           @slurm.accounts.tap do |accounts|
             input_accts = accounts
-            until accounts.map(&:name).include?('root') || !include_parents
+            complete = false
+            until complete || !include_parents
               parents = @slurm.parent_accounts(input_accts.map(&:name))
               accounts += parents
               input_accts = parents
+              complete = true if parents.length == 0
             end
             return accounts
           end

@@ -68,6 +68,10 @@ class TestSlurm < Minitest::Test
       {}, 'sacctmgr', '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos', 'where', "account='overhead','alternate'", 'cluster=owens', stdin_data: ''
     ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_parents_owens_lv3.txt'), '', exit_success])
 
+    Open3.stubs(:capture3).with(
+      {}, 'sacctmgr', '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos', 'where', "account='root'", 'cluster=owens', stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_parents_owens_lv4.txt'), '', exit_success])
+
     all_accounts = adapter.accounts(include_parents: true)
     assert_equal(all_accounts.map(&:name), ['pas2051','pas1871','pas1754','pas1604','overhead - ohio supercomputer center','alternate - other ancestry account','other: shares-parent-with-alternate','overhead','alternate','root'])
     all_accounts.each { |account|  }
