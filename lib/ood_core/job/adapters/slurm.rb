@@ -251,13 +251,13 @@ module OodCore
           # Fetches direct parents of a given set of accounts
           def parent_accounts(accounts)
             args = [
-                    '-nP', 'show', 'users', 'withassoc', 'format=parentname,qos', 
+                    '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos',
                     'where', "account=#{accounts.join(',')}", "cluster=#{id}"
                    ]
             [].tap do |parents|
               call('sacctmgr', *args).each_line do |line|
                 parent, qos = line.split('|')
-                unless parent.strip.empty?
+                unless parent.strip.empty? || parents.map{ |p| p[:name] }.include?(parent)
                   parents << {
                     name: parent,
                     qos: qos.to_s.chomp.split(','),
@@ -266,9 +266,9 @@ module OodCore
               end
             end.map do |parent|
               OodCore::Job::AccountInfo.new(
-                name: parent[:name]
-                cluster: id
-                qos: parent[:qos].uniq
+                name: parent[:name],
+                cluster: id,
+                qos: parent[:qos].uniq,
               )
             end
           end
@@ -739,9 +739,10 @@ module OodCore
             input_accts = accounts
             until accounts.map(&:name).include?('root') || !include_parents
               parents = @slurm.parent_accounts(input_accts.map(&:name))
-              accounts << parents
+              accounts += parents
               input_accts = parents
             end
+            return accounts
           end
         end
 
