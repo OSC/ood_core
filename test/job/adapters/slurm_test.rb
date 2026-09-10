@@ -48,6 +48,43 @@ class TestSlurm < Minitest::Test
     accounts.each { |account| assert_equal(account.cluster, 'owens') }
   end
 
+  def test_parent_accounts
+    adapter = slurm_instance
+    stub_etc
+
+    Open3.stubs(:capture3).with(
+      {}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_accounts_owens_lv0.txt'), '', exit_success])
+
+    Open3.stubs(:capture3).with(
+      {}, 'sacctmgr', '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos', 'where', "account='pas2051','pas1871','pas1754','pas1604'", 'cluster=owens', stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_parents_owens_lv1.txt'), '', exit_success])
+
+    Open3.stubs(:capture3).with(
+      {}, 'sacctmgr', '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos', 'where', "account='overhead - ohio supercomputer center','alternate - other ancestry account','other: shares-parent-with-alternate'", 'cluster=owens', stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_parents_owens_lv2.txt'), '', exit_success])
+
+    Open3.stubs(:capture3).with(
+      {}, 'sacctmgr', '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos', 'where', "account='overhead','alternate'", 'cluster=owens', stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_parents_owens_lv3.txt'), '', exit_success])
+
+    Open3.stubs(:capture3).with(
+      {}, 'sacctmgr', '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos', 'where', "account='root'", 'cluster=owens', stdin_data: ''
+    ).returns([File.read('spec/fixtures/output/slurm/nested_accts/sacctmgr_show_parents_owens_lv4.txt'), '', exit_success])
+
+    all_accounts = adapter.accounts(include_parents: true)
+    assert_equal(all_accounts.map(&:name), ['pas2051','pas1871','pas1754','pas1604','overhead - ohio supercomputer center','alternate - other ancestry account','other: shares-parent-with-alternate','overhead','alternate','root'])
+    all_accounts.each { |account|  }
+    all_accounts.each do |acct|
+      assert_equal(acct.cluster, 'owens')
+      if ['pas1604','other: shares-parent-with-alternate'].include?(acct.name)
+        assert_equal(['owens-default','debug-other'], acct.qos, "Account #{acct.name} has incorrect qos")
+      else
+        assert_equal(['owens-default'], acct.qos, "Account #{acct.name} has incorrect qos")
+      end
+    end
+  end
+
   def test_cluster_info
     adapter = slurm_instance
     Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
