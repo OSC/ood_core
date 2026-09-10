@@ -252,7 +252,7 @@ module OodCore
           def parent_accounts(accounts)
             args = [
                     '-nP', 'show', 'accounts', 'withassoc', 'format=parentname,qos',
-                    'where', "account=#{accounts.join(',')}", "cluster=#{id}"
+                    'where', "account='#{accounts.join("','")}'", "cluster=#{id}"
                    ]
             [].tap do |parents|
               call('sacctmgr', *args).each_line do |line|
