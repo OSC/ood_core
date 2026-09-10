@@ -248,6 +248,31 @@ module OodCore
             end
           end
 
+          # Fetches direct parents of a given set of accounts
+          def parent_accounts(accounts)
+            args = [
+                    '-nP', 'show', 'users', 'withassoc', 'format=parentname,qos', 
+                    'where', "account=#{accounts.join(',')}", "cluster=#{id}"
+                   ]
+            [].tap do |parents|
+              call('sacctmgr', *args).each_line do |line|
+                parent, qos = line.split('|')
+                unless parent.strip.empty?
+                  parents << {
+                    name: parent,
+                    qos: qos.to_s.chomp.split(','),
+                  }
+                end
+              end
+            end.map do |parent|
+              OodCore::Job::AccountInfo.new(
+                name: parent[:name]
+                cluster: id
+                qos: parent[:qos].uniq
+              )
+            end
+          end
+
           def squeue_fields(attrs)
             if attrs.nil?
               all_squeue_fields
@@ -709,8 +734,15 @@ module OodCore
         # Retrieve the accounts available to use  for the current user.
         #
         # @return [Array<String>] the accounts available to the user.
-        def accounts
-          @slurm.accounts
+        def accounts(include_parents: false)
+          @slurm.accounts.tap do |accounts|
+            input_accts = accounts
+            until accounts.map(&:name).include?('root') || !include_parents
+              parents = @slurm.parent_accounts(input_accts.map(&:name))
+              accounts << parents
+              input_accts = parents
+            end
+          end
         end
 
         # Retrieve info for all jobs from the resource manager
