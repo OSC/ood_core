@@ -475,7 +475,13 @@ module OodCore
                 def supports_job_arrays?
                     true
                 end
-
+                
+                # Whether the adapter supports job dependencies
+                # @return [Boolean] - false
+                def supports_job_dependencies?
+                    false
+                end
+                
                 # Place a job on hold
                 # @param id [#to_s] the id of the job
                 # @raise [JobAdapterError] if something goes wrong placing the job on hold

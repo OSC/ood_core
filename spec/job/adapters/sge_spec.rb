@@ -20,6 +20,9 @@ describe OodCore::Job::Adapters::Sge do
     expect(subject.supports_job_arrays?).to be_truthy
   end
 
+  it "claims to support job dependencies" do
+    expect(subject.supports_job_dependencies?).to be_truthy
+  end
 
 describe "#submit" do
     def build_script(opts = {})

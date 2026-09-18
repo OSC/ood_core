@@ -18,6 +18,10 @@ describe OodCore::Job::Adapters::Kubernetes do
     expect(adapter.supports_job_arrays?).to be_falsy
   end
 
+  it "does not support job dependencies" do
+    expect(adapter.supports_job_dependencies?).to be_falsy
+  end
+  
   it "does not support hold" do
     expect { adapter.hold('123') }.to raise_error(NotImplementedError, 'subclass did not define #hold')
   end

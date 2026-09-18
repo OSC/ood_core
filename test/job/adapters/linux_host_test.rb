@@ -12,4 +12,8 @@ class LinuxHostTest < Minitest::Test
 
     refute_nil(lha)
   end
+
+  def test_does_not_support_job_dependencies
+    refute(linux_host_instance.supports_job_dependencies?)
+  end
 end

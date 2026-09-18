@@ -12,4 +12,8 @@ class SystemdTest < Minitest::Test
 
     refute_nil(sysd)
   end
+
+  def test_does_not_support_job_dependencies
+    refute(systemd_instance.supports_job_dependencies?)
+  end
 end

@@ -365,6 +365,12 @@ module OodCore
           info(id.to_s).status
         end
 
+        # Whether the adapter supports job dependencies
+        # @return [Boolean] - false
+        def supports_job_dependencies?
+          false
+        end
+        
         def directive_prefix
         end
 

@@ -23,6 +23,10 @@ describe OodCore::Job::Adapters::Slurm do
     expect(subject.supports_job_arrays?).to be_truthy
   end
 
+  it "claims to support job dependencies" do
+    expect(subject.supports_job_dependencies?).to be_truthy
+  end
+  
   describe ".new" do
     context "when :slurm not defined" do
       subject { described_class.new }

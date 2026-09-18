@@ -227,4 +227,10 @@ describe OodCore::Job::Adapter do
       expect(adapter.queues).to eq([])
     end
   end
+
+  describe '#supports_job_dependencies?' do
+    it 'returns true by default' do
+      expect(subject.supports_job_dependencies?).to be true
+    end
+  end
 end
