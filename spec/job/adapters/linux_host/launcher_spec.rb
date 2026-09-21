@@ -64,6 +64,17 @@ describe OodCore::Job::Adapters::LinuxHost::Launcher do
         described_class.new(**opts)
     }
 
+    describe "#initialize" do
+        it "uses the process user instead of the login-session user" do
+            user = double(name: "actual-user")
+
+            allow(Etc).to receive(:getlogin).and_return("root")
+            allow(Etc).to receive(:getpwuid).and_return(user)
+
+            expect(adapter.username).to eq("actual-user")
+        end
+    end
+
     describe "#start_remote_session" do
         context "when submission is successful" do
             it "returns a composite of job_id and hostname" do
