@@ -810,7 +810,7 @@
   <span class='ivar'>@strict_host_checking</span> <span class='op'>=</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span>
   <span class='ivar'>@submit_host</span> <span class='op'>=</span> <span class='id identifier rubyid_submit_host'>submit_host</span>
   <span class='ivar'>@tmux_bin</span> <span class='op'>=</span> <span class='id identifier rubyid_tmux_bin'>tmux_bin</span>
-  <span class='ivar'>@username</span> <span class='op'>=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getlogin'>getlogin</span>
+  <span class='ivar'>@username</span> <span class='op'>=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getpwuid'>getpwuid</span><span class='period'>.</span><span class='id identifier rubyid_name'>name</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1589,7 +1589,7 @@
 </div>
 
       <div id="footer">
-  Generated on Fri Sep  4 15:23:13 2026 by
+  Generated on Mon Sep 21 13:24:16 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
