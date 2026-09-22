@@ -895,6 +895,12 @@ module OodCore
           '#SBATCH'
         end
 
+        # Whether the adapter supports job dependencies
+        # @return [Boolean] - true
+        def supports_job_dependencies?
+          true
+        end
+
         def queues
           @slurm.queues
         end

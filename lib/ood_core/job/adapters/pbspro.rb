@@ -479,6 +479,12 @@ module OodCore
           '#PBS'
         end
 
+        # Whether the adapter supports job dependencies
+        # @return [Boolean] - true
+        def supports_job_dependencies?
+          true
+        end
+        
         # place holder for when we support both nodes and cpus.
         def ppn(script)
           return [] if script.cores.nil?
