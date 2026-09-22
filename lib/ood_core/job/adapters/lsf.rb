@@ -174,6 +174,12 @@ module OodCore
           '#BSUB'
         end
 
+        # Whether the adapter supports job dependencies
+        # @return [Boolean] - true
+        def supports_job_dependencies?
+          true
+        end
+        
         private
           # Determine state from LSF state code
           def get_state(st)

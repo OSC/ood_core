@@ -140,12 +140,6 @@ module OodCore
         def supports_job_arrays?
           false
         end
-
-        # Whether the adapter supports job dependencies
-        # @return [Boolean] - false
-        def supports_job_dependencies?
-          false
-        end
         
         # Retrieve job info from the resource manager
         # @abstract Subclass is expected to implement {#info}

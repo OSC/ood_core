@@ -135,10 +135,10 @@ module OodCore
 
       # Whether the adapter supports job dependencies via +after+, +afterok+,
       # +afternotok+, and +afterany+
-      # @return [Boolean] - assumes true; but can be overridden by adapters that
-      #   explicitly do not
+      # @return [Boolean] - assumes false; adapters that support dependencies
+      #   should override this
       def supports_job_dependencies?
-        true
+        false
       end
       
       # Retrieve job info from the resource manager

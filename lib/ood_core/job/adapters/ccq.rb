@@ -68,12 +68,6 @@ module OodCore
         ensure
           script_file.close
         end
-
-        # Whether the adapter supports job dependencies
-        # @return [Boolean] - false
-        def supports_job_dependencies?
-          false
-        end
         
         # Retrieve info for all jobs from the resource manager
         # @return [Array<Info>] information describing submitted jobs

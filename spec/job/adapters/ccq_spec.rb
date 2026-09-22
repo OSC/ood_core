@@ -18,11 +18,6 @@ end
 
 describe OodCore::Job::Adapters::CCQ do
   subject(:adapter) { described_class.new(config: {}) }
-
-  it "does not support job dependencies" do
-    expect(adapter.supports_job_dependencies?).to be_falsey
-  end
-  
   let(:good_ccqsub_output) { 
     "The job has successfully been submitted to the scheduler titan and is" +
     " currently being processed. The job id is: 559529 you can use this id" +

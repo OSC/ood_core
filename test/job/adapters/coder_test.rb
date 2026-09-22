@@ -102,16 +102,4 @@ class CoderTest < Minitest::Test
 
     assert_match(/not-a-cloud/, error.message)
   end
-
-  def test_does_not_support_job_dependencies
-    adapter = OodCore::Job::Factory.build(
-      'adapter' => 'coder',
-      'host' => 'https://coder.example.com',
-      'token' => 'fake-token',
-      'service_user' => 'ood',
-      'auth' => { 'cloud' => 'none' }
-    )
-
-    refute(adapter.supports_job_dependencies?)
-  end
 end

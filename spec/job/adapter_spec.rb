@@ -229,8 +229,8 @@ describe OodCore::Job::Adapter do
   end
 
   describe '#supports_job_dependencies?' do
-    it 'returns true by default' do
-      expect(subject.supports_job_dependencies?).to be true
+    it 'returns false by default' do
+      expect(subject.supports_job_dependencies?).to be false
     end
   end
 end

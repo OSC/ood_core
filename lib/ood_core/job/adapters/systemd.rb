@@ -127,12 +127,6 @@ module OodCore
         def supports_job_arrays?
           false
         end
-
-        # Whether the adapter supports job dependencies
-        # @return [Boolean] - false
-        def supports_job_dependencies?
-          false
-        end
         
         # Retrieve job info from the SSH host
         # @param id [#to_s] the id of the job

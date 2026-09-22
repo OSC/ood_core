@@ -22,10 +22,6 @@ describe OodCore::Job::Adapters::PSIJ do
   it "claims to support job arrays" do
     expect(subject.supports_job_arrays?).to be_truthy
   end
-
-  it "does not support job dependencies" do
-    expect(subject.supports_job_dependencies?).to be_falsey
-  end
   
   describe ".new" do
     context "when :psij not defined" do

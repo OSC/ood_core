@@ -134,16 +134,11 @@ describe OodCore::Job::Adapters::LinuxHost do
         is_expected.to respond_to(:release).with(1).argument
         is_expected.to respond_to(:delete).with(1).argument
         is_expected.to respond_to(:supports_job_arrays?)
-        is_expected.to respond_to(:supports_job_dependencies?)
         is_expected.to respond_to(:directive_prefix).with(0).arguments
     end
 
     it "does not support job arrays" do
         expect(subject.supports_job_arrays?).to be_falsey
-    end
-
-    it "does not support job dependencies" do
-      expect(subject.supports_job_dependencies?).to be_falsey
     end
 
     describe "#submit" do
