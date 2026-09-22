@@ -68,7 +68,7 @@ module OodCore
         ensure
           script_file.close
         end
-        
+
         # Retrieve info for all jobs from the resource manager
         # @return [Array<Info>] information describing submitted jobs
         def info_all(attrs: nil)
