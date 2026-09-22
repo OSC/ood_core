@@ -140,7 +140,7 @@ module OodCore
         def supports_job_arrays?
           false
         end
-        
+
         # Retrieve job info from the resource manager
         # @abstract Subclass is expected to implement {#info}
         # @raise [NotImplementedError] if subclass did not define {#info}
