@@ -593,6 +593,28 @@ resource manager for job management.</p>
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#supports_job_dependencies%3F-instance_method" title="#supports_job_dependencies? (instance method)">#<strong>supports_job_dependencies?</strong>  &#x21d2; Boolean </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Whether the adapter supports job dependencies.</p></div></span>
+  
+</li>
+
+      
     </ul>
     
   
@@ -1594,12 +1616,12 @@ resource manager</p>
       <pre class="lines">
 
 
-902
-903
-904</pre>
+908
+909
+910</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 902</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 908</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nodes'>nodes</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_nodes'>nodes</span>
@@ -1624,12 +1646,12 @@ resource manager</p>
       <pre class="lines">
 
 
-898
-899
-900</pre>
+904
+905
+906</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 898</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 904</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_queues'>queues</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_queues'>queues</span>
@@ -2157,12 +2179,69 @@ job</p></div>
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="supports_job_dependencies?-instance_method">
+  
+    #<strong>supports_job_dependencies?</strong>  &#x21d2; <tt>Boolean</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Whether the adapter supports job dependencies</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Boolean</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><ul>
+<li>true</li>
+</ul></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+900
+901
+902</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 900</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_supports_job_dependencies?'>supports_job_dependencies?</span>
+  <span class='kw'>true</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
 </div>
 
       <div id="footer">
-  Generated on Mon Sep 21 13:24:12 2026 by
+  Generated on Tue Sep 22 14:27:38 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
