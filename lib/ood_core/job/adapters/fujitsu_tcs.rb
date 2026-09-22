@@ -267,7 +267,7 @@ module OodCore
         rescue Batch::Error => e
           raise JobAdapterError, e.message
         end
-        
+
         # Retrieve info for all jobs from the resource manager
         # @raise [JobAdapterError] if something goes wrong getting job info
         # @return [Array<Info>] information describing submitted jobs
