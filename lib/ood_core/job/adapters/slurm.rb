@@ -61,11 +61,10 @@ module OodCore
         # Get integer representing memory in bytes, computed from tres-alloc string
         # @return [Integer] the number of bytes of allocated memory
         def self.memory_from_tres(tres)
-          match = tres.to_s.match(/(?:^|,)mem=(\w+)(?:,|$)/)
+          match = tres.to_s.match(/(?:^|,)mem=([\d.]+)([KMGTP]?)(?:,|$)/)
           return unless match
 
-          match_str = match[1]
-          memory = UNIT_FACTORS[match_str[-1]].to_i * match_str.to_i 
+          memory = (UNIT_FACTORS.fetch(match[2], 1) * match[1].to_f).to_i 
           memory unless memory == 0
         end
 

@@ -167,4 +167,22 @@ class TestSlurm < Minitest::Test
     assert_equal(604_800, hugemem.max_time)
     assert_equal(345_600, parallel.max_time)
   end
+
+  def test_memory_from_tres_handles_decimal_values
+    assert_equal(4_219_805_368,
+      OodCore::Job::Adapters::Slurm.memory_from_tres('billing=1,cpu=1,mem=3.93G,node=1'))
+  end
+
+  def test_memory_from_tres_handles_integer_values
+    assert_equal(68_719_476_736,
+      OodCore::Job::Adapters::Slurm.memory_from_tres('cpu=17,mem=64G,node=1'))
+  end
+
+  def test_memory_from_tres_without_a_unit_is_bytes
+    assert_equal(512, OodCore::Job::Adapters::Slurm.memory_from_tres('cpu=8,mem=512,node=1'))
+  end
+
+  def test_memory_from_tres_returns_nil_without_memory
+    assert_nil(OodCore::Job::Adapters::Slurm.memory_from_tres('billing=1,cpu=1,node=1'))
+  end
 end
