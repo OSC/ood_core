@@ -51,7 +51,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     @strict_host_checking = strict_host_checking
     @submit_host = submit_host
     @tmux_bin = tmux_bin
-    @username = Etc.getlogin
+    @username = Etc.getpwuid.name
   end
 
   # @param hostname [#to_s] The hostname to submit the work to
