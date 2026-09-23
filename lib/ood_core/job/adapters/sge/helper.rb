@@ -50,6 +50,7 @@ class OodCore::Job::Adapters::Sge::Helper
     args.concat ['-l', "h_rt=" + seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
     args.concat ['-P', script.accounting_id] unless script.accounting_id.nil?
     args.concat ['-t', script.job_array_request] unless script.job_array_request.nil?
+    args.concat ['-l', "mem_free=#{script.memory}M"] unless script.memory.nil?
     args.concat Array.wrap(script.native) if script.native
 
     args

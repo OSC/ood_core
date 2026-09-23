@@ -160,6 +160,7 @@ module OodCore
             args.concat ['-t', script.job_array_request] unless script.job_array_request.nil?
             args.concat ['-l', "qos=#{script.qos}"] unless script.qos.nil?
             args.concat ['-l', "gpus=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
+            args.concat ['-l', "mem=#{script.memory}"] unless script.memory.nil? 
             args.concat ppn(script)
 
             # Set environment variables
@@ -303,6 +304,12 @@ module OodCore
           '#QSUB'
         end
 
+        # Whether the adapter supports job dependencies
+        # @return [Boolean] - true
+        def supports_job_dependencies?
+          true
+        end
+        
         # place holder for when we support both nodes and cpus.
         def ppn(script)
           return [] if script.cores.nil?

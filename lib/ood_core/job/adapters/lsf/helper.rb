@@ -92,7 +92,8 @@ class OodCore::Job::Adapters::Lsf::Helper
     args.concat ["-W", (script.wall_time / 60).to_i] unless script.wall_time.nil?
     args.concat ["-L", script.shell_path.to_s] unless script.shell_path.nil?
     args.concat ['-n', script.cores] unless script.cores.nil?
-
+    args.concat ['-M', script.memory] unless script.memory.nil?
+    
     # environment
     env = script.job_environment || {}
     # To preserve pre-existing behavior we only act when true or false, when nil we do nothing

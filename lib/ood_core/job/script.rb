@@ -112,6 +112,10 @@ module OodCore
       # @return [Integer, nil] cores
       attr_reader :cores
 
+      # The memory request per node, in Mebibytes
+      # @return [Integer, nil] Mebibytes
+      attr_reader :memory
+
       # Object detailing any native specifications that are implementation specific
       # @note Should not be used at all costs.
       # @return [Object, nil] native specifications
@@ -156,7 +160,7 @@ module OodCore
                      queue_name: nil, priority: nil, start_time: nil,
                      wall_time: nil, accounting_id: nil, job_array_request: nil,
                      qos: nil, gpus_per_node: nil, native: nil, copy_environment: nil,
-                     cores: nil, **_)
+                     cores: nil, memory: nil, **_)
         @content = content.to_s
 
         @submit_as_hold      = submit_as_hold
@@ -185,6 +189,7 @@ module OodCore
         @native             = native
         @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
         @cores              = cores&.to_i
+        @memory             = memory&.to_i
       end
 
       # Convert object to hash
@@ -216,6 +221,7 @@ module OodCore
           gpus_per_node:       gpus_per_node,
           native:              native,
           cores:               cores,
+          memory:              memory,
           copy_environment:    copy_environment,
         }
       end

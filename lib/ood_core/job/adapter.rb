@@ -133,6 +133,14 @@ module OodCore
         true
       end
 
+      # Whether the adapter supports job dependencies via +after+, +afterok+,
+      # +afternotok+, and +afterany+
+      # @return [Boolean] - assumes false; adapters that support dependencies
+      #   should override this
+      def supports_job_dependencies?
+        false
+      end
+      
       # Retrieve job info from the resource manager
       # @abstract Subclass is expected to implement {#info}
       # @raise [NotImplementedError] if subclass did not define {#info}
