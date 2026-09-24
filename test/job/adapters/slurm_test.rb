@@ -41,7 +41,7 @@ class TestSlurm < Minitest::Test
     adapter = slurm_instance
     stub_etc
     Open3.stubs(:capture3).with(
-      {}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', stdin_data: ''
+      { 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', stdin_data: ''
     ).returns([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '', exit_success])
 
     accounts = adapter.accounts
@@ -51,9 +51,9 @@ class TestSlurm < Minitest::Test
 
   def test_cluster_info
     adapter = slurm_instance
-    Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
+    Open3.stubs(:capture3).with({ 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'sinfo', '-aho %F/%C', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_fc.txt'), '', exit_success])
-    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost:100,gres:512,gresused:512,statelong', stdin_data: '')
+    Open3.stubs(:capture3).with({ 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'sinfo', '-ahNO', 'nodehost:100,gres:512,gresused:512,statelong', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_gres.txt'), '', exit_success])
 
     info = adapter.cluster_info
@@ -71,9 +71,9 @@ class TestSlurm < Minitest::Test
   # total_gpus to be parsed from GresUsed and active_gpus to evaluate to 0.
   def test_cluster_info_long_hostnames
     adapter = slurm_instance
-    Open3.stubs(:capture3).with({}, 'sinfo', '-aho %F/%C', stdin_data: '')
+    Open3.stubs(:capture3).with({ 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'sinfo', '-aho %F/%C', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_fc_long_hostnames.txt'), '', exit_success])
-    Open3.stubs(:capture3).with({}, 'sinfo', '-ahNO', 'nodehost:100,gres:512,gresused:512,statelong', stdin_data: '')
+    Open3.stubs(:capture3).with({ 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'sinfo', '-ahNO', 'nodehost:100,gres:512,gresused:512,statelong', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/sinfo_gres_long_hostnames.txt'), '', exit_success])
 
     info = adapter.cluster_info
@@ -90,7 +90,7 @@ class TestSlurm < Minitest::Test
   def test_null_submission_time
     adapter = slurm_instance
     Open3.stubs(:capture3).with(
-      {}, 'squeue', '--all', '--states=all', '--noconvert', '-O', "Account:\u001F,JobID:\u001F,BatchHost:\u001F,MinCpus:\u001F,NumCPUs:\u001F,MinTmpDisk:\u001F,NumNodes:\u001F,EndTime:\u001F,Dependency:\u001F,Feature:\u001F,ArrayJobID:\u001F,GroupName:\u001F,GroupID:\u001F,OverSubscribe:\u001F,Sockets:\u001F,JobArrayID:\u001F,Cores:\u001F,Name:\u001F,Threads:\u001F,Comment:\u001F,ArrayTaskID:\u001F,TimeLimit:\u001F,TimeLeft:\u001F,MinMemory:\u001F,TimeUsed:\u001F,ReqNodes:\u001F,NodeList:\u001F,Command:\u001F,Contiguous:\u001F,QOS:\u001F,Partition:\u001F,PriorityLong:\u001F,Reason:\u001F,StartTime:\u001F,StateCompact:\u001F,State:\u001F,UserName:\u001F,UserID:\u001F,Reservation:\u001F,SubmitTime:\u001F,WCKey:\u001F,Licenses:\u001F,ExcNodes:\u001F,CoreSpec:\u001F,Nice:\u001F,SchedNodes:\u001F,SCT:\u001F,WorkDir:\u001F,tres-alloc:\u001F,tres-per-node:\u001F,", stdin_data: ''
+      { 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'squeue', '--all', '--states=all', '--noconvert', '-O', "Account:\u001F,JobID:\u001F,BatchHost:\u001F,MinCpus:\u001F,NumCPUs:\u001F,MinTmpDisk:\u001F,NumNodes:\u001F,EndTime:\u001F,Dependency:\u001F,Feature:\u001F,ArrayJobID:\u001F,GroupName:\u001F,GroupID:\u001F,OverSubscribe:\u001F,Sockets:\u001F,JobArrayID:\u001F,Cores:\u001F,Name:\u001F,Threads:\u001F,Comment:\u001F,ArrayTaskID:\u001F,TimeLimit:\u001F,TimeLeft:\u001F,MinMemory:\u001F,TimeUsed:\u001F,ReqNodes:\u001F,NodeList:\u001F,Command:\u001F,Contiguous:\u001F,QOS:\u001F,Partition:\u001F,PriorityLong:\u001F,Reason:\u001F,StartTime:\u001F,StateCompact:\u001F,State:\u001F,UserName:\u001F,UserID:\u001F,Reservation:\u001F,SubmitTime:\u001F,WCKey:\u001F,Licenses:\u001F,ExcNodes:\u001F,CoreSpec:\u001F,Nice:\u001F,SchedNodes:\u001F,SCT:\u001F,WorkDir:\u001F,tres-alloc:\u001F,tres-per-node:\u001F,", stdin_data: ''
     ).returns([File.read('spec/fixtures/output/slurm/null_submit_time.txt'), '', exit_success])
 
     jobs = adapter.info_all
@@ -107,7 +107,7 @@ class TestSlurm < Minitest::Test
 
   def test_queues_with_tres_null
     adapter = slurm_instance
-    Open3.stubs(:capture3).with({}, 'scontrol', 'show', 'part', '-o', stdin_data: '')
+    Open3.stubs(:capture3).with({ 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'scontrol', 'show', 'part', '-o', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '', exit_success])
 
     queues = adapter.queues
@@ -139,7 +139,7 @@ class TestSlurm < Minitest::Test
 
   def test_queue_info
     adapter = slurm_instance
-    Open3.stubs(:capture3).with({}, 'scontrol', 'show', 'part', '-o', stdin_data: '')
+    Open3.stubs(:capture3).with({ 'SLURM_TIME_FORMAT' => '%Y-%m-%dT%H:%M:%S%z' }, 'scontrol', 'show', 'part', '-o', stdin_data: '')
          .returns([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '', exit_success])
 
     queues = adapter.queues

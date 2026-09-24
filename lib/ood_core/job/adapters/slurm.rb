@@ -81,11 +81,39 @@ module OodCore
           tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)}).flatten.map(&:to_i).sum
         end
 
+        # Slurm interprets absolute timestamps in the cluster's timezone, so
+        # express a time relative to "now" to stay correct when OnDemand runs
+        # in a different timezone than the cluster.
+        # @example
+        #   relative_time(Time.now + 3600) #=> "now+3600"
+        # @param time [#to_time] the time to convert
+        # @param now [Time] the current time
+        # @return [String] the time in Slurm's relative time format
+        def self.relative_time(time, now: Time.now)
+          offset = (time.to_time - now).round
+          if offset.zero?
+            "now"
+          elsif offset.positive?
+            "now+#{offset}"
+          else
+            "now#{offset}"
+          end
+        end
+
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
           UNIT_SEPARATOR = "\x1F"
           RECORD_SEPARATOR = "\x1E"
+
+          # Format Slurm uses to print timestamps (set through SLURM_TIME_FORMAT).
+          # Includes the UTC offset so times are unambiguous when the cluster and
+          # the OnDemand host run in different timezones.
+          TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
+          # Commands that don't get SLURM_TIME_FORMAT because their environment
+          # is propagated to the job (e.g. sbatch --export=ALL)
+          NO_TIME_FORMAT_COMMANDS = ["sbatch", "salloc", "srun"].freeze
 
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
@@ -470,8 +498,8 @@ module OodCore
             args.concat ['-o', fields.values.join(',')] # Required data
             args.concat ['--state', states.join(',')] unless states.empty? # Filter by these states
             args.concat ['-j', job_ids.join(',')] unless job_ids.empty? # Filter by these job ids
-            args.concat ['-S', from] if from # Filter from This date
-            args.concat ['-E', to] if to # Filter until this date
+            args.concat ['-S', sacct_time(from)] if from # Filter from This date
+            args.concat ['-E', sacct_time(to)] if to # Filter until this date
 
             jobs_info = []
             StringIO.open(call('sacct', *args)) do |output|
@@ -485,6 +513,13 @@ module OodCore
           end
 
           private
+            # Times are converted to a relative time so they are timezone
+            # independent. Strings are passed through as is and are interpreted
+            # by Slurm in the cluster's timezone.
+            def sacct_time(time)
+              time.is_a?(Time) || time.is_a?(DateTime) ? Slurm.relative_time(time) : time.to_s
+            end
+
             def str_to_queue_info(line)
               hsh = line.split(' ').map do |token|
                 m = token.match(/^(?<key>\w+)=(?<value>.+)$/)
@@ -548,15 +583,17 @@ module OodCore
 
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
+              # Don't set the time format for job submission commands, so it doesn't leak into job environments.
+              time_env = NO_TIME_FORMAT_COMMANDS.include?(cmd.to_s) ? {} : { "SLURM_TIME_FORMAT" => TIME_FORMAT }
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
 
               args  = args.map(&:to_s)
               args.concat ["-M", cluster] if cluster && !cmd.to_s.end_with?('sacctmgr')
 
-              env = env.to_h
+              env = env.to_h.merge(time_env)
               env["SLURM_CONF"] = conf.to_s if conf
 
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, time_env)
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? interpret_and_raise(o, e) : raise(Error, e)
             end
@@ -697,7 +734,11 @@ module OodCore
           args.concat ["--reservation", script.reservation_id] unless script.reservation_id.nil?
           args.concat ["-p", script.queue_name] unless script.queue_name.nil?
           args.concat ["--priority", script.priority] unless script.priority.nil?
-          args.concat ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
+          unless script.start_time.nil?
+            # sbatch only accepts a positive offset from now
+            now = Time.now
+            args.concat ["--begin", self.class.relative_time([script.start_time, now].max, now: now)]
+          end
           args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
           args.concat ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           args.concat ['-a', script.job_array_request] unless script.job_array_request.nil?
@@ -766,9 +807,11 @@ module OodCore
         # job_ids [Array<#to_s>] optional list of job ids to filter the results.
         # states [Array<#to_s>] optional list of job state codes.
         # Selects jobs based on their state during the time period given.
-        # from [#to_s] optional date string to filter jobs in any state after the specified time.
+        # from [Time, DateTime, #to_s] optional time to filter jobs in any state after the specified time.
         # If states are provided, filter jobs in these states after this period
-        # to [#to_s] optional date string to filter jobs in any state before the specified time.
+        # to [Time, DateTime, #to_s] optional time to filter jobs in any state before the specified time.
+        # Pass Time or DateTime objects to be timezone independent; strings are
+        # passed to sacct as is and interpreted in the cluster's timezone.
         # If states are provided, filter jobs in these states before this period.
         # show_steps [#Boolean] optional boolean to filter job steps from the results.
         #
