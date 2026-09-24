@@ -181,4 +181,20 @@ class TestSlurm < Minitest::Test
   def test_memory_from_tres_returns_nil_without_memory
     assert_nil(OodCore::Job::Adapters::Slurm.memory_from_tres('billing=1,cpu=1,node=1'))
   end
+
+  def test_duration_in_seconds_with_days
+    assert_equal(131_400, OodCore::Job::Adapters::Slurm.duration_in_seconds('1-12:30:00'))
+  end
+
+  def test_duration_in_seconds_hours_minutes_seconds
+    assert_equal(45_000, OodCore::Job::Adapters::Slurm.duration_in_seconds('12:30:00'))
+  end
+
+  def test_duration_in_seconds_minutes_seconds
+    assert_equal(1800, OodCore::Job::Adapters::Slurm.duration_in_seconds('30:00'))
+  end
+
+  def test_duration_in_seconds_with_nil
+    assert_equal(0, OodCore::Job::Adapters::Slurm.duration_in_seconds(nil))
+  end
 end
