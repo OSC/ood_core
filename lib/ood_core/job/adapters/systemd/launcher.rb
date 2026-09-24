@@ -249,8 +249,12 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   end
 
   def parse_hostname(output)
-    output.split($/).map do |line|
+    hostname = output.split($/).map do |line|
       line[/^HOSTNAME:(.*)$/, 1]
     end.compact.last.to_s
+
+    raise Error, "No HOSTNAME reported in output from #{submit_host}." if hostname.empty?
+
+    hostname
   end
 end
