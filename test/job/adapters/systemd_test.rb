@@ -24,4 +24,32 @@ class SystemdTest < Minitest::Test
 
     assert_match(/hostname/i, error.message)
   end
+
+  def test_site_timeout_config_reaches_launcher
+    adapter = systemd_instance(submit_host: 'localhost', site_timeout: 5678)
+    launcher = adapter.instance_variable_get(:@launcher)
+
+    assert_equal(5678, launcher.site_timeout)
+  end
+
+  def test_max_timeout_config_still_accepted
+    adapter = systemd_instance(submit_host: 'localhost', max_timeout: 1234)
+    launcher = adapter.instance_variable_get(:@launcher)
+
+    assert_equal(1234, launcher.site_timeout)
+  end
+
+  def test_site_timeout_wins_over_max_timeout
+    adapter = systemd_instance(submit_host: 'localhost', site_timeout: 5678, max_timeout: 1234)
+    launcher = adapter.instance_variable_get(:@launcher)
+
+    assert_equal(5678, launcher.site_timeout)
+  end
+
+  def test_timeout_defaults_to_zero_when_unset
+    adapter = systemd_instance(submit_host: 'localhost')
+    launcher = adapter.instance_variable_get(:@launcher)
+
+    assert_equal(0, launcher.site_timeout)
+  end
 end
