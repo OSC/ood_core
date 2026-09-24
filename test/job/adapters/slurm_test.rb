@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'ood_core/job/adapters/slurm'
 
 class TestSlurm < Minitest::Test
   include TestHelper
@@ -116,6 +117,26 @@ class TestSlurm < Minitest::Test
     assert_equal({}, queue.tres)
   end
 
+  def test_info_historic_uses_alloc_tres
+    batch = OodCore::Job::Adapters::Slurm::Batch.new(
+      conf: '/etc/slurm/conf/',
+      bin: nil,
+      bin_overrides: { 'sacct' => 'spec/fixtures/scripts/sacct.rb' }
+    )
+    jobs = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_historic
+    job = jobs.find { |j| j.id == '20251' }
+
+    # ReqTRES says mem=0.98G but AllocTRES says mem=1.96G
+    assert_equal(2_104_533_975, job.total_memory)
+    assert_equal(1, job.gpus)
+  end
+
+  def test_gpus_from_tres_sums_multiple_types_without_rollup
+    tres = 'cpu=8,gres/gpu:a100=2,gres/gpu:v100=1,node=1'
+
+    assert_equal(3, OodCore::Job::Adapters::Slurm.gpus_from_tres(tres))
+  end
+
   def test_queue_info
     adapter = slurm_instance
     Open3.stubs(:capture3).with({}, 'scontrol', 'show', 'part', '-o', stdin_data: '')
@@ -141,5 +162,23 @@ class TestSlurm < Minitest::Test
     assert_equal(604_800, batch.max_time)
     assert_equal(604_800, hugemem.max_time)
     assert_equal(345_600, parallel.max_time)
+  end
+
+  def test_memory_from_tres_handles_decimal_values
+    assert_equal(4_219_805_368,
+      OodCore::Job::Adapters::Slurm.memory_from_tres('billing=1,cpu=1,mem=3.93G,node=1'))
+  end
+
+  def test_memory_from_tres_handles_integer_values
+    assert_equal(68_719_476_736,
+      OodCore::Job::Adapters::Slurm.memory_from_tres('cpu=17,mem=64G,node=1'))
+  end
+
+  def test_memory_from_tres_without_a_unit_is_bytes
+    assert_equal(512, OodCore::Job::Adapters::Slurm.memory_from_tres('cpu=8,mem=512,node=1'))
+  end
+
+  def test_memory_from_tres_returns_nil_without_memory
+    assert_nil(OodCore::Job::Adapters::Slurm.memory_from_tres('billing=1,cpu=1,node=1'))
   end
 end
