@@ -4,8 +4,8 @@ module OodCore
     class ClusterInfo
       using Refinements::HashExtensions
 
-      attr_reader :active_nodes, :total_nodes, :active_processors, :total_processors, :active_gpu_nodes,
-                  :total_gpu_nodes, :active_gpus, :total_gpus
+      attr_reader :active_nodes, :total_nodes, :active_processors, :total_processors,
+                  :active_gpus, :total_gpus
 
       def initialize(opts = {})
         opts = opts.transform_keys(&:to_sym)
