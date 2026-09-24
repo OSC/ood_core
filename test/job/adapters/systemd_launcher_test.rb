@@ -87,7 +87,7 @@ class SystemdLauncherTest < Minitest::Test
     assert_equal(200, launcher.send(:script_timeout, build_script))
   end
 
-  # #parse_hostname
+  #parse_hostname
 
   def test_parse_hostname_reads_hostname_line
     launcher = launcher_instance
@@ -107,17 +107,21 @@ class SystemdLauncherTest < Minitest::Test
     launcher = launcher_instance
     output = "blah\nHOSTNAME:\nblah"
 
-    assert_equal('', launcher.send(:parse_hostname, output))
+    assert_raises(OodCore::Job::Adapters::LinuxSystemd::Launcher::Error) do
+      launcher.send(:parse_hostname, output)
+    end
   end
 
   def test_parse_hostname_empty_when_hostname_absent
     launcher = launcher_instance
     output = "blah\nblah\nblah"
 
-    assert_equal('', launcher.send(:parse_hostname, output))
+    assert_raises(OodCore::Job::Adapters::LinuxSystemd::Launcher::Error) do
+      launcher.send(:parse_hostname, output)
+    end
   end
 
-  # #user_script_has_shebang?
+  #user_script_has_shebang?
 
   def test_user_script_has_shebang_true_for_shebang
     launcher = launcher_instance
@@ -140,7 +144,7 @@ class SystemdLauncherTest < Minitest::Test
     assert_equal(false, launcher.send(:user_script_has_shebang?, script))
   end
 
-  # #script_arguments
+  #script_arguments
 
   def test_script_arguments_empty_when_args_nil
     launcher = launcher_instance
@@ -168,7 +172,7 @@ class SystemdLauncherTest < Minitest::Test
     assert_equal('my\ file.txt', launcher.send(:script_arguments, script))
   end
 
-  # #export_env
+  #export_env
 
   def test_export_env_empty_when_environment_nil
     launcher = launcher_instance
@@ -197,7 +201,7 @@ class SystemdLauncherTest < Minitest::Test
     assert_equal('export MSG=hello\ world', launcher.send(:export_env, script))
   end
 
-  # #error_path
+  #error_path
 
   def test_error_path_uses_error_path
     launcher = launcher_instance
@@ -233,7 +237,7 @@ class SystemdLauncherTest < Minitest::Test
     assert_instance_of(String, launcher.send(:error_path, script))
   end
 
-  # #unique_session_name
+  #unique_session_name
 
   def test_unique_session_name_uses_label_prefix
     launcher = launcher_instance
@@ -253,7 +257,7 @@ class SystemdLauncherTest < Minitest::Test
     refute_equal(launcher.send(:unique_session_name), launcher.send(:unique_session_name))
   end
 
-  # #submit_host
+  #submit_host
 
   def test_submit_host_without_script
     launcher = launcher_instance
