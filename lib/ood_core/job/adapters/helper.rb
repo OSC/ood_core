@@ -1,3 +1,5 @@
+require 'shellwords'
+
 module OodCore
   module Job
     module Adapters
@@ -28,10 +30,12 @@ module OodCore
           check_host = strict_host_checking ? "yes" : "no"
           
           # Have to OodCore::Job::Adapters::Helper.ssh_port instead of self.ssh_port due to test failure
-          args = ['-p', OodCore::Job::Adapters::Helper.ssh_port, '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", "#{submit_host}"]
-          env.each{|key, value| args.push("export #{key}=#{value};")}
+          args = ['-p', OodCore::Job::Adapters::Helper.ssh_port, '-o', 'BatchMode=yes', 
+                  '-o', 'UserKnownHostsFile=/dev/null', '-o', "StrictHostKeyChecking=#{check_host}", 
+                  "#{submit_host}"]
+          env.each { |key, value| args.push("export #{key}=#{Shellwords.escape(value.to_s)};") }
 
-          return 'ssh', args + [cmd] + cmd_args
+          return 'ssh', args + [cmd] + cmd_args.map { |arg| Shellwords.escape(arg.to_s) }
         end
 
         # Allows for Non-Standard Port usage in ssh commands
