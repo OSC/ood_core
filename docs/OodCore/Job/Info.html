@@ -233,6 +233,33 @@
       <li class="public ">
   <span class="summary_signature">
     
+      <a href="#gpu_types-instance_method" title="#gpu_types (instance method)">#<strong>gpu_types</strong>  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+    
+      <span class="note title readonly">readonly</span>
+    
+    
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Number of gpus allocated per gpu type.</p></div></span>
+  
+</li>
+
+    
+      <li class="public ">
+  <span class="summary_signature">
+    
       <a href="#gpus-instance_method" title="#gpus (instance method)">#<strong>gpus</strong>  &#x21d2; Integer<sup>?</sup> </a>
     
 
@@ -734,7 +761,7 @@
         <li class="public ">
   <span class="summary_signature">
     
-      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(id:, status:, allocated_nodes: [], submit_host: nil, job_name: nil, job_owner: nil, accounting_id: nil, procs: nil, queue_name: nil, wallclock_time: nil, wallclock_limit: nil, cpu_time: nil, submission_time: nil, dispatch_time: nil, native: nil, gpus: 0, tasks: [], total_memory: nil, **_)  &#x21d2; Info </a>
+      <a href="#initialize-instance_method" title="#initialize (instance method)">#<strong>initialize</strong>(id:, status:, allocated_nodes: [], submit_host: nil, job_name: nil, job_owner: nil, accounting_id: nil, procs: nil, queue_name: nil, wallclock_time: nil, wallclock_limit: nil, cpu_time: nil, submission_time: nil, dispatch_time: nil, native: nil, gpus: 0, gpu_types: {}, tasks: [], total_memory: nil, **_)  &#x21d2; Info </a>
     
 
     
@@ -787,7 +814,7 @@
     <div class="method_details first">
   <h3 class="signature first" id="initialize-instance_method">
   
-    #<strong>initialize</strong>(id:, status:, allocated_nodes: [], submit_host: nil, job_name: nil, job_owner: nil, accounting_id: nil, procs: nil, queue_name: nil, wallclock_time: nil, wallclock_limit: nil, cpu_time: nil, submission_time: nil, dispatch_time: nil, native: nil, gpus: 0, tasks: [], total_memory: nil, **_)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Info (class)">Info</a></span></tt> 
+    #<strong>initialize</strong>(id:, status:, allocated_nodes: [], submit_host: nil, job_name: nil, job_owner: nil, accounting_id: nil, procs: nil, queue_name: nil, wallclock_time: nil, wallclock_limit: nil, cpu_time: nil, submission_time: nil, dispatch_time: nil, native: nil, gpus: 0, gpu_types: {}, tasks: [], total_memory: nil, **_)  &#x21d2; <tt><span class='object_link'><a href="" title="OodCore::Job::Info (class)">Info</a></span></tt> 
   
 
   
@@ -1096,10 +1123,6 @@
       <pre class="lines">
 
 
-100
-101
-102
-103
 104
 105
 106
@@ -1123,17 +1146,22 @@
 124
 125
 126
-127</pre>
+127
+128
+129
+130
+131
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 100</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 104</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>id:</span><span class='comma'>,</span> <span class='label'>status:</span><span class='comma'>,</span> <span class='label'>allocated_nodes:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>submit_host:</span> <span class='kw'>nil</span><span class='comma'>,</span>
                <span class='label'>job_name:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>job_owner:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>accounting_id:</span> <span class='kw'>nil</span><span class='comma'>,</span>
                <span class='label'>procs:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>queue_name:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>wallclock_time:</span> <span class='kw'>nil</span><span class='comma'>,</span>
                <span class='label'>wallclock_limit:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>cpu_time:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>submission_time:</span> <span class='kw'>nil</span><span class='comma'>,</span>
-               <span class='label'>dispatch_time:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>native:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>gpus:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>tasks:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span>
-               <span class='label'>total_memory:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid__'>_</span><span class='rparen'>)</span>
+               <span class='label'>dispatch_time:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>native:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>gpus:</span> <span class='int'>0</span><span class='comma'>,</span> <span class='label'>gpu_types:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> 
+               <span class='label'>tasks:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>total_memory:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='op'>**</span><span class='id identifier rubyid__'>_</span><span class='rparen'>)</span>
   <span class='ivar'>@id</span>              <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
   <span class='ivar'>@status</span>          <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Status.html" title="OodCore::Job::Status (class)">Status</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Status.html#initialize-instance_method" title="OodCore::Job::Status#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>state:</span> <span class='id identifier rubyid_status'>status</span><span class='period'>.</span><span class='id identifier rubyid_to_sym'>to_sym</span><span class='rparen'>)</span>
   <span class='ivar'>@allocated_nodes</span> <span class='op'>=</span> <span class='id identifier rubyid_allocated_nodes'>allocated_nodes</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_n'>n</span><span class='op'>|</span> <span class='const'><span class='object_link'><a href="NodeInfo.html" title="OodCore::Job::NodeInfo (class)">NodeInfo</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="NodeInfo.html#initialize-instance_method" title="OodCore::Job::NodeInfo#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='op'>**</span><span class='id identifier rubyid_n'>n</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
@@ -1155,6 +1183,7 @@
   <span class='ivar'>@native</span>          <span class='op'>=</span> <span class='id identifier rubyid_native'>native</span>
   <span class='ivar'>@total_memory</span>    <span class='op'>=</span> <span class='id identifier rubyid_total_memory'>total_memory</span>    <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_total_memory'>total_memory</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
   <span class='ivar'>@gpus</span>            <span class='op'>=</span> <span class='id identifier rubyid_gpus'>gpus</span>            <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_gpus'>gpus</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='ivar'>@gpu_types</span>        <span class='op'>=</span> <span class='id identifier rubyid_gpu_types'>gpu_types</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -1388,6 +1417,63 @@
 
 <span class='kw'>def</span> <span class='id identifier rubyid_dispatch_time'>dispatch_time</span>
   <span class='ivar'>@dispatch_time</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      
+      <span id=""></span>
+      <div class="method_details ">
+  <h3 class="signature " id="gpu_types-instance_method">
+  
+    #<strong>gpu_types</strong>  &#x21d2; <tt>Hash</tt>  <span class="extras">(readonly)</span>
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Number of gpus allocated per gpu type</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>gpu type to count, e.g. { 'a100' =&gt; 2 }</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+74
+75
+76</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 74</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_gpu_types'>gpu_types</span>
+  <span class='ivar'>@gpu_types</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2018,12 +2104,12 @@
       <pre class="lines">
 
 
-80
-81
-82</pre>
+84
+85
+86</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 80</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 84</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_tasks'>tasks</span>
   <span class='ivar'>@tasks</span>
@@ -2081,12 +2167,12 @@
       <pre class="lines">
 
 
-75
-76
-77</pre>
+79
+80
+81</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 75</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 79</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_total_memory'>total_memory</span>
   <span class='ivar'>@total_memory</span>
@@ -2275,12 +2361,12 @@
       <pre class="lines">
 
 
-160
-161
-162</pre>
+165
+166
+167</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 160</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='op'>==</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_to_h'>to_h</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
@@ -2330,21 +2416,21 @@
       <pre class="lines">
 
 
-131
-132
-133
-134
-135
 136
 137
 138
 139
 140
 141
-142</pre>
+142
+143
+144
+145
+146
+147</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 131</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 136</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_build_child_info'>build_child_info</span><span class='lparen'>(</span><span class='id identifier rubyid_task'>task</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_parent_only_keys'>parent_only_keys</span> <span class='op'>=</span> <span class='lbracket'>[</span>
@@ -2421,12 +2507,12 @@
       <pre class="lines">
 
 
-167
-168
-169</pre>
+172
+173
+174</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 167</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 172</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_eql?'>eql?</span><span class='lparen'>(</span><span class='id identifier rubyid_other'>other</span><span class='rparen'>)</span>
   <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span> <span class='op'>&amp;&amp;</span> <span class='kw'>self</span> <span class='op'>==</span> <span class='id identifier rubyid_other'>other</span>
@@ -2473,12 +2559,12 @@
       <pre class="lines">
 
 
-153
-154
-155</pre>
+158
+159
+160</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 153</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 158</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_gpu?'>gpu?</span>
   <span class='id identifier rubyid_gpus'>gpus</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
@@ -2528,12 +2614,12 @@
       <pre class="lines">
 
 
-173
-174
-175</pre>
+178
+179
+180</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 173</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 178</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash'>hash</span>
   <span class='lbracket'>[</span><span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='comma'>,</span> <span class='id identifier rubyid_to_h'>to_h</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_hash'>hash</span>
@@ -2583,15 +2669,15 @@
       <pre class="lines">
 
 
-146
-147
-148
-149
-150
-151</pre>
+151
+152
+153
+154
+155
+156</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 146</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/info.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_to_h'>to_h</span>
   <span class='id identifier rubyid_instance_variables'>instance_variables</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_ivar'>ivar</span><span class='op'>|</span>
@@ -2609,7 +2695,7 @@
 </div>
 
       <div id="footer">
-  Generated on Thu Sep 24 19:57:06 2026 by
+  Generated on Fri Sep 25 16:24:06 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
