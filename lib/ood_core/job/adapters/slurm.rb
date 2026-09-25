@@ -91,6 +91,16 @@ module OodCore
           tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)}).flatten.map(&:to_i).sum
         end
 
+        # Convert a Slurm duration string to seconds.
+        # Handles both "HH:MM:SS" and "D-HH:MM:SS" forms.
+        # @return [Integer] the duration in seconds
+        def self.duration_in_seconds(time)
+          return 0 if time.nil?
+          time, days = time.split("-").reverse
+          days.to_i * 24 * 3600 +
+            time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
+        end
+
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
@@ -534,7 +544,7 @@ module OodCore
               hsh[:max_cpus] = parse_max(hsh[:MaxCPUsPerNode])
               hsh[:max_nodes] = parse_max(hsh[:MaxNodes])
               hsh[:min_nodes] = parse_max(hsh[:MinNodes])
-              hsh[:max_time] = duration_in_seconds(hsh[:MaxTime])
+              hsh[:max_time] = Slurm.duration_in_seconds(hsh[:MaxTime])
 
               OodCore::Job::QueueInfo.new(**hsh)
             end
@@ -602,14 +612,6 @@ module OodCore
                 }.fetch(a, a)
               }.flatten
             end
-
-          # FIXME: duplicate of the outer class
-          def duration_in_seconds(time)
-            return 0 if time.nil?
-            time, days = time.split("-").reverse
-            days.to_i * 24 * 3600 +
-              time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
-          end
 
           def parse_max(max)
             return nil if max.nil? || max.to_s == 'UNLIMITED'
@@ -798,9 +800,9 @@ module OodCore
               job_owner: v[:user],
               procs: v[:alloc_cpus],
               queue_name: v[:partition],
-              wallclock_time: duration_in_seconds(v[:elapsed]),
-              wallclock_limit: duration_in_seconds(v[:time_limit]),
-              cpu_time: duration_in_seconds(v[:total_cpu]),
+              wallclock_time: self.class.duration_in_seconds(v[:elapsed]),
+              wallclock_limit: self.class.duration_in_seconds(v[:time_limit]),
+              cpu_time: self.class.duration_in_seconds(v[:total_cpu]),
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
@@ -935,14 +937,6 @@ module OodCore
         end
 
         private
-          # Convert duration to seconds
-          def duration_in_seconds(time)
-            return 0 if time.nil?
-            time, days = time.split("-").reverse
-            days.to_i * 24 * 3600 +
-              time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
-          end
-
           # Convert seconds to duration
           def seconds_to_duration(time)
             "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
@@ -1003,8 +997,8 @@ module OodCore
               accounting_id: handle_null_account(v[:account]),
               procs: v[:cpus],
               queue_name: v[:partition],
-              wallclock_time: duration_in_seconds(v[:time_used]),
-              wallclock_limit: duration_in_seconds(v[:time_limit]),
+              wallclock_time: self.class.duration_in_seconds(v[:time_used]),
+              wallclock_limit: self.class.duration_in_seconds(v[:time_limit]),
               cpu_time: nil,
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
