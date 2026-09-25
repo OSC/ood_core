@@ -284,4 +284,42 @@ class SystemdLauncherTest < Minitest::Test
 
     assert_equal('other.osc.edu', launcher.submit_host(script))
   end
+
+  # resource properties
+  def test_resource_properties_empty_when_unset
+    assert_equal('', launcher_instance.send(:resource_properties, build_script))
+  end
+  
+  def test_resource_properties_with_memory
+    script = build_script(memory: 4096)
+    assert_equal('-p MemoryMax=4096M', launcher_instance.send(:resource_properties, script))
+  end
+  
+  def test_resource_properties_with_cores
+    script = build_script(cores: 4)
+    assert_equal('-p CPUQuota=400%', launcher_instance.send(:resource_properties, script))
+  end
+  
+  def test_resource_properties_with_both
+    script = build_script(cores: 2, memory: 8192)
+    assert_equal('-p MemoryMax=8192M -p CPUQuota=200%', launcher_instance.send(:resource_properties, script))
+  end
+
+  # wrapped script
+  def test_wrapped_script_includes_resource_properties
+    launcher = launcher_instance
+    script = build_script(cores: 4, memory: 4096)
+    wrapped = launcher.send(:wrapped_script, script, 'ondemand-test')
+  
+    assert_includes(wrapped, '-p MemoryMax=4096M')
+    assert_includes(wrapped, '-p CPUQuota=400%')
+  end
+  
+  def test_wrapped_script_omits_resource_properties_when_unset
+    launcher = launcher_instance
+    wrapped = launcher.send(:wrapped_script, build_script, 'ondemand-test')
+  
+    refute_includes(wrapped, 'MemoryMax')
+    refute_includes(wrapped, 'CPUQuota')
+  end
 end
