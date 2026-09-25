@@ -209,9 +209,21 @@ describe OodCore::Job::Adapters::Slurm do
     end
 
     context "with :start_time" do
-      before { adapter.submit(build_script(start_time: Time.new(2016, 11, 8, 13, 53, 54).to_i)) }
+      before do
+        allow(Time).to receive(:now).and_return(Time.utc(2016, 11, 8, 12, 53, 54))
+        adapter.submit(build_script(start_time: Time.utc(2016, 11, 8, 13, 53, 54).to_i))
+      end
 
-      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--begin", "2016-11-08T13:53:54", "--export", "NONE"], env: {}) }
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--begin", "now+3600", "--export", "NONE"], env: {}) }
+    end
+
+    context "with :start_time in the past" do
+      before do
+        allow(Time).to receive(:now).and_return(Time.utc(2016, 11, 8, 14, 53, 54))
+        adapter.submit(build_script(start_time: Time.utc(2016, 11, 8, 13, 53, 54).to_i))
+      end
+
+      it { expect(slurm).to have_received(:submit_string).with(content, args: ["--begin", "now", "--export", "NONE"], env: {}) }
     end
 
     context "with :accounting_id" do
@@ -844,7 +856,7 @@ describe OodCore::Job::Adapters::Slurm do
       it "correctly handles non utf8 characters" do
         stdout = File.read('spec/fixtures/output/slurm/non_utf8_job_name.txt')
         stdout.force_encoding(Encoding::ASCII)
-        allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([stdout, '', double("success?" => true)])
+        allow(Open3).to receive(:capture3).with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, *squeue_args, stdin_data: "").and_return([stdout, '', double("success?" => true)])
         job = OodCore::Job::Factory.build_slurm({}).info('123')
         expect(job.job_owner).to eq('annie.oakley')
         expect(job.job_name).to eq('��� non-utf8')
@@ -1177,7 +1189,7 @@ describe OodCore::Job::Adapters::Slurm do
         slurm_stderr = "slurm_load_jobs error: Socket timed out on send/recv operation"
         slurm_stdout = "CLUSTER: saturn"
 
-        allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => true)])
+        allow(Open3).to receive(:capture3).with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => true)])
         expect(batch.get_jobs(id: '123')).to eq([{ id: '123', state: 'undetermined'}])
       end
 
@@ -1185,7 +1197,7 @@ describe OodCore::Job::Adapters::Slurm do
         slurm_stderr = "Some unhandled error"
         slurm_stdout = ""
 
-        allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => false)])
+        allow(Open3).to receive(:capture3).with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => false)])
         expect { batch.get_jobs(id: '123') }.to raise_error(Slurm::Batch::Error)
       end
     end
@@ -1311,7 +1323,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'returns the correct accounts names' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '',  double("success?" => true)])
         expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
       end
@@ -1320,7 +1332,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'parses qos correctly' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read("spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt"), '',  double("success?" => true)])
         accts = subject.accounts
         acct_w_qos = accts.select { |a| a.name == 'pzs1124' }.first
@@ -1339,7 +1351,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'raises the error' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return(['', 'the error message',  double("success?" => false)])
 
         expect { subject.accounts }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
@@ -1353,7 +1365,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'returns the correct accounts' do
         allow(Etc).to receive(:getlogin).and_return('me')
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'sacctmgr', '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 'where', 'user=me', 'cluster=owens', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/sacctmgr_show_accts_owens.txt'), '',  double("success?" => true)])
         with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
           expect(subject.accounts.map(&:to_s).uniq.to_set).to eq(expected_accounts.to_set)
@@ -1380,7 +1392,7 @@ describe OodCore::Job::Adapters::Slurm do
 
       it 'returns the correct queue info objects' do
         allow(Open3).to receive(:capture3)
-                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '',  double("success?" => true)])
 
         queues = subject.queues
@@ -1427,7 +1439,7 @@ describe OodCore::Job::Adapters::Slurm do
 
       it 'returns uppercase account names' do
         allow(Open3).to receive(:capture3)
-                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/owens_partitions.txt'), '',  double("success?" => true)])
 
         with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true'}) do
@@ -1450,7 +1462,7 @@ describe OodCore::Job::Adapters::Slurm do
       it 'raises the error' do
 
         allow(Open3).to receive(:capture3)
-                          .with({}, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'scontrol', 'show', 'part', '-o', {stdin_data: ''})
                           .and_return(['', 'the error message',  double("success?" => false)])
         expect { subject.queues }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
       end
@@ -1465,7 +1477,7 @@ describe OodCore::Job::Adapters::Slurm do
         args = slurm.all_sinfo_node_fields.values.join(OodCore::Job::Adapters::Slurm::Batch::UNIT_SEPARATOR)
         args = "#{OodCore::Job::Adapters::Slurm::Batch::RECORD_SEPARATOR}#{args}"
         allow(Open3).to receive(:capture3)
-                          .with({}, 'sinfo', '-ho', args, {stdin_data: ''})
+                          .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'sinfo', '-ho', args, {stdin_data: ''})
                           .and_return([File.read('spec/fixtures/output/slurm/owens_nodes.txt'), '',  double("success?" => true)])
 
         nodes = subject.nodes
