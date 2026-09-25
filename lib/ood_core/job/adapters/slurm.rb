@@ -1011,7 +1011,7 @@ module OodCore
               native: v,
               total_memory: self.class.memory_from_tres(v[:tres_alloc]),
               gpu_types: self.class.gpu_types_from_tres(v[:tres_alloc]),
-              gpus: self.class.gpus_from_gres(v[:gres])
+              gpus: self.class.gpus_from_tres(v[:tres_alloc])
             )
           end
 
