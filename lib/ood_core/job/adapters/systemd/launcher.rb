@@ -151,6 +151,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
         'session_name' => session_name,
         'ssh_hosts' => ssh_hosts,
         'workdir' => (script.workdir) ? script.workdir.to_s : '/tmp',
+        'resource_properties' => resource_properties(script),
       }.each{
         |key, value| bnd.local_variable_set(key, value)
       }
@@ -176,6 +177,15 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
     else
       wall_time
     end
+  end
+
+  # systemd resource control properties for the script's cores and memory
+  # requests. Empty when neither is set.
+  def resource_properties(script)
+    props = []
+    props << "-p MemoryMax=#{script.memory}M" unless script.memory.nil?
+    props << "-p CPUQuota=#{script.cores.to_i * 100}%" unless script.cores.nil?
+    props.join(' ')
   end
 
   def script_arguments(script)
