@@ -7,6 +7,9 @@ require "ood_core/job/adapters/coder/credentials"
 # creating a workspace, and Coder rejects a build if a declared parameter is
 # not supplied, so empty values are returned rather than omitting them.
 class NoneCredentials < CredentialsInterface
+
+  def initialize(**kwargs) end
+
   def generate_credentials(project_id = nil)
     { id: "", name: "", secret: "", user_id: "" }
   end
