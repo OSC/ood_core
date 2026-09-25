@@ -198,7 +198,7 @@ module OodCore
               module load #{container_module}
 
               #{vnc_clean}
-              [[ -n ${display} ]] && vncserver -kill :${display}
+              [[ -n ${display} ]] && #{container_command} exec instance://#{@instance_name} vncserver -kill :${display}
               #{container_command} instance stop #{@instance_name}
             EOT
           end
