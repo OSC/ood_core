@@ -1,7 +1,6 @@
 require 'ood_core/job/adapters/helper'
 
 class HelperTest < Minitest::Test
-  include TestHelper
 
   def helper
     OodCore::Job::Adapters::Helper
