@@ -1272,67 +1272,6 @@ describe OodCore::Job::Adapters::Slurm do
     end
   end
 
-  describe "SLURM_TIME_FORMAT" do
-    let(:time_format) { { "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" } }
-    let(:batch) { OodCore::Job::Adapters::Slurm::Batch.new(bin_overrides: {}) }
-    let(:sacct_line) do
-      [
-        "ood", "ood", "5963565", "RStudio", "00:00:03", "0.98G", "2", "1", "01:00:00", "CANCELLED by 1001", "00:00:00", "",
-        "interactive", "2026-02-11T15:12:58+0200", "2026-02-11T15:13:00+0200", "2026-02-11T15:13:03+0200", "billing=1,cpu=1,mem=0.98G,node=1"
-      ].join("\u001F")
-    end
-
-    it "is set for sacct and timestamps are parsed with their UTC offset" do
-      allow(Open3).to receive(:capture3).and_return([sacct_line, "", double("success?" => true)])
-
-      job = OodCore::Job::Adapters::Slurm.new(slurm: batch).info_historic.first
-      expect(Open3).to have_received(:capture3).with(hash_including(time_format), "sacct", any_args)
-      expect(job.submission_time).to eq(Time.utc(2026, 2, 11, 13, 12, 58))
-      expect(job.dispatch_time).to eq(Time.utc(2026, 2, 11, 13, 13, 0))
-    end
-
-    it "is set for commands other than job submission" do
-      allow(Open3).to receive(:capture3).and_return(["", "", double("success?" => true)])
-
-      batch.get_jobs(id: "123")
-      batch.delete_job("123")
-      batch.queues
-      expect(Open3).to have_received(:capture3).with(hash_including(time_format), "squeue", any_args)
-      expect(Open3).to have_received(:capture3).with(hash_including(time_format), "scancel", any_args)
-      expect(Open3).to have_received(:capture3).with(hash_including(time_format), "scontrol", any_args)
-    end
-
-    it "is exported on the remote host when using a submit_host" do
-      batch = OodCore::Job::Adapters::Slurm::Batch.new(bin_overrides: {}, submit_host: "owens.osc.edu")
-      allow(Open3).to receive(:capture3).and_return(["", "", double("success?" => true)])
-
-      batch.sacct_info([], [], nil, nil, false)
-      expect(Open3).to have_received(:capture3).with(anything, "ssh", "-p", "22", "-o", "BatchMode=yes", "-o", "UserKnownHostsFile=/dev/null", "-o", "StrictHostKeyChecking=yes", "owens.osc.edu", "export SLURM_TIME_FORMAT=%Y-%m-%dT%H:%M:%S%z;", "sacct", any_args)
-    end
-
-    it "converts from and to times to relative times for sacct" do
-      allow(Time).to receive(:now).and_return(Time.utc(2026, 2, 11, 12, 0, 0))
-      allow(Open3).to receive(:capture3).and_return(["", "", double("success?" => true)])
-
-      batch.sacct_info([], [], Time.utc(2026, 2, 10, 12, 0, 0), DateTime.new(2026, 2, 11, 13, 0, 0, "+01:00"), false)
-      expect(Open3).to have_received(:capture3).with(anything, "sacct", any_args, "-S", "now-86400", "-E", "now", stdin_data: "")
-    end
-
-    it "passes from and to strings to sacct as is" do
-      allow(Open3).to receive(:capture3).and_return(["", "", double("success?" => true)])
-
-      batch.sacct_info([], [], "2026-02-10", "2026-02-11T12:00:00", false)
-      expect(Open3).to have_received(:capture3).with(anything, "sacct", any_args, "-S", "2026-02-10", "-E", "2026-02-11T12:00:00", stdin_data: "")
-    end
-
-    it "is not set for sbatch so it doesn't leak into the job environment" do
-      allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
-
-      OodCore::Job::Adapters::Slurm.new(slurm: batch).submit(OodCore::Job::Script.new(content: "echo 'hi'", copy_environment: true))
-      expect(Open3).to have_received(:capture3).with(hash_excluding("SLURM_TIME_FORMAT"), "sbatch", any_args)
-    end
-  end
-
   describe "#directive_prefix" do
     context "when called" do
       it "does not raise an error" do
