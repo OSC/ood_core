@@ -172,8 +172,10 @@ class TestSlurm < Minitest::Test
     assert_equal({ 'a100' => 1 }, typed.gpu_types)
     # rollup only: a gpu count, but no type information
     assert_equal({}, untyped.gpu_types)
-    # gpus comes from tres-per-node on this path, which is N/A for this job
-    assert_equal(0, untyped.gpus)
+    # gpus comes from tres-alloc now
+    assert_equal(2, untyped.gpus)
+    # # tres-alloc lists job twice (gres/gpu=1 and gres/gpu:a100=1) ensure != 2
+    assert_equal(1, typed.gpus)
     # no gpus at all
     assert_equal({}, no_gpu.gpu_types)
   end
