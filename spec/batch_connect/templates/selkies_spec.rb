@@ -102,7 +102,7 @@ describe OodCore::BatchConnect::Templates::Selkies do
     end
 
     it "starts that desktop in the home" do
-      expect(rendered).to include('cd "${HOME}" || exit 1')
+      expect(rendered).to include("cd ~ || exit 1\n")
     end
   end
 

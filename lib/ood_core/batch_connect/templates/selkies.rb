@@ -93,7 +93,7 @@ module OodCore
                 if [[ $# -gt 0 ]]; then
                   args+=(--session="bash -c $(printf '%q' "$1; kill -TERM ${launcher_pid}")")
                 else
-                  cd "${HOME}" || exit 1
+                  cd ~ || exit 1
                 fi
                 exec #{[selkies_cmd, '"${args[@]}"', selkies_args].reject(&:empty?).join(" ")}
               }
