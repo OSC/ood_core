@@ -117,36 +117,45 @@ module OodCore
                 }
                 export -f random_number
 
-                port_used_python() {
-                  python -c "import socket; socket.socket().connect(('$1',$2))" >/dev/null 2>&1
+                # Port strategies take (host, port) and return 0 if the port is in use,
+                # 1 if it is free, and 127 if the strategy can't run here. All of them
+                # read the local socket table, so the host argument is ignored.
+                # Connect-based checks (nc, bash /dev/tcp, python) were removed because
+                # they miss ports held by outgoing connections and can hang on a
+                # saturated listener (ood_core#926).
+
+                # Read the kernel's socket table directly. Present on any Linux host,
+                # sees sockets from every user, in every state.
+                port_used_proc(){
+                  local hex f files=()
+                  hex=$(printf ':%04X' "$2")
+                  for f in /proc/net/tcp /proc/net/tcp6; do
+                    [[ -r "$f" ]] && files+=("$f")
+                  done
+                  (( ${#files[@]} )) || return 127
+                  awk -v p="$hex" 'FNR>1 && substr($2, length($2)-4) == p {found=1; exit} END{exit !found}' "${files[@]}"
                 }
 
-                port_used_python3() {
-                  python3 -c "import socket; socket.socket().connect(('$1',$2))" >/dev/null 2>&1
+                # Same kernel table via iproute2. ss exits 0 whether or not anything
+                # matched, so test for rows past the header instead of the exit status.
+                port_used_ss(){
+                  command -v ss >/dev/null 2>&1 || return 127
+                  local out
+                  out=$(ss -ant "sport = :$2" 2>/dev/null) || return 127
+                  [[ $(printf '%s\\n' "$out" | wc -l) -gt 1 ]]
                 }
 
-                port_used_nc(){
-                  nc -w 2 "$1" "$2" < /dev/null > /dev/null 2>&1
-                }
-
+                # Only sees the calling user's sockets.
                 port_used_lsof(){
+                  command -v lsof >/dev/null 2>&1 || return 127
                   lsof -i :"$2" >/dev/null 2>&1
-                }
-
-                port_used_bash(){
-                  local bash_supported=$(strings /bin/bash 2>/dev/null | grep tcp)
-                  if [ "$bash_supported" == "/dev/tcp/*/*" ]; then
-                    (: < /dev/tcp/$1/$2) >/dev/null 2>&1
-                  else
-                    return 127
-                  fi
                 }
 
                 # Check if port $1 is in use
                 port_used () {
                   local port="${1#*:}"
                   local host=$((expr "${1}" : '\\(.*\\):' || echo "localhost") | awk 'END{print $NF}')
-                  local port_strategies=(port_used_nc port_used_lsof port_used_bash port_used_python port_used_python3)
+                  local port_strategies=(port_used_proc port_used_ss port_used_lsof)
 
                   for strategy in ${port_strategies[@]};
                   do
@@ -199,7 +208,7 @@ module OodCore
                       return 0
                     elif [ "$port_status" == "127" ]; then
                        echo "commands to find port were either not found or inaccessible."
-                       echo "command options are lsof, nc, bash's /dev/tcp, or python (or python3) with socket lib."
+                       echo "command options are /proc/net/tcp, ss, or lsof."
                        return 127
                     fi
                     sleep 0.5
