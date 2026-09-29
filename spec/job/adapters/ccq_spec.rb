@@ -126,7 +126,7 @@ describe OodCore::Job::Adapters::CCQ do
         `exit 1` # get a bad exit status
         allow(Open3).to receive(:capture3).with({}, '/opt/CloudyCluster/srv/CCQ/ccqstat', '-ji', '896090', stdin_data: "").and_return(['', error_data, $?])
 
-        expect{ adapter.info('896090') }.to raise_error(PromptError)
+        expect{ adapter.info('896090') }.to raise_error(OodCore::Job::Adapters::PromptError)
       end
     end
   end

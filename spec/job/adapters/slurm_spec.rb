@@ -1186,7 +1186,7 @@ describe OodCore::Job::Adapters::Slurm do
         slurm_stdout = ""
 
         allow(Open3).to receive(:capture3).with({}, *squeue_args, stdin_data: "").and_return([slurm_stdout, slurm_stderr, double("success?" => false)])
-        expect { batch.get_jobs(id: '123') }.to raise_error(Slurm::Batch::Error)
+        expect { batch.get_jobs(id: '123') }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error)
       end
     end
 
