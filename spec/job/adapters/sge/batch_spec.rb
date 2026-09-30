@@ -249,12 +249,35 @@ describe OodCore::Job::Adapters::Sge::Batch do
 
     context "when owner is set to vagrant" do
       before {
-        allow(batch).to receive(:call) {''}
+        # what qstat -xml prints when the user has no jobs
+        allow(batch).to receive(:call) {
+          <<~XML
+            <?xml version='1.0'?>
+            <job_info>
+              <queue_info>
+              </queue_info>
+              <job_info>
+              </job_info>
+            </job_info>
+          XML
+        }
       }
 
       it "expects to have qstat called with -u vagrant" do
-        batch.get_all(owner: 'vagrant')
+        expect(batch.get_all(owner: 'vagrant')).to eq([])
         expect(batch).to have_received(:call).with('qstat',  '-r', '-xml', '-u', 'vagrant')
+      end
+    end
+
+    context "when qstat output is not valid XML" do
+      before {
+        allow(batch).to receive(:call) { "<job_info><queue_info>" }
+      }
+
+      it "warns and returns no jobs" do
+        jobs = nil
+        expect { jobs = batch.get_all }.to output(/Error parsing response/).to_stderr
+        expect(jobs).to eq([])
       end
     end
   end
