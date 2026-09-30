@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'ood_core'
 require 'mocha/minitest'
 
