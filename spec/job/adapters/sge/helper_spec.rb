@@ -1,4 +1,5 @@
 require "spec_helper"
+require "ood_core/job/adapters/sge"
 require "ood_core/job/adapters/sge/helper"
 
 describe OodCore::Job::Adapters::Sge::Helper do
