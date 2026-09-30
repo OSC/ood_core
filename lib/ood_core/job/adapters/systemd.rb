@@ -11,7 +11,8 @@ module OodCore
       # Build the LinuxSystemd adapter from a configuration
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :debug (false) Use the adapter in a debug mode
-      # @option config [Object] :max_timeout (nil) The longest 'wall_clock' permissible
+      # @option config [Object] :site_timeout (nil) The longest 'wall_clock' permissible
+      # @option config [Object] :max_timeout (nil) Deprecated alias for :site_timeout
       # @option config [Object] :ssh_hosts (nil) The list of permissable hosts, defaults to :submit_host
       # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking and updating the known_hosts file
       # @option config [Object] :submit_host The SSH target to connect to, may be the head of a round-robin
@@ -19,7 +20,7 @@ module OodCore
       def self.build_systemd(config)
         c = config.to_h.symbolize_keys
         debug = c.fetch(:debug, false)
-        max_timeout = c.fetch(:max_timeout, nil)
+        site_timeout = c.fetch(:site_timeout, c.fetch(:max_timeout, nil))
         ssh_hosts = c.fetch(:ssh_hosts, [c[:submit_host]])
         strict_host_checking = c.fetch(:strict_host_checking, true)
         submit_host = c[:submit_host]
@@ -29,7 +30,7 @@ module OodCore
           ssh_hosts: ssh_hosts,
           launcher: Adapters::LinuxSystemd::Launcher.new(
             debug: debug,
-            max_timeout: max_timeout,
+            site_timeout: site_timeout,
             ssh_hosts: ssh_hosts,
             strict_host_checking: strict_host_checking,
             submit_host: submit_host,
