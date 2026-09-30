@@ -145,6 +145,36 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     "%02dh%02dm%02ds" % [s / 3600, s / 60 % 60, s % 60]
   end
 
+  # Units of a Go duration string, in seconds. Rationals keep fractions like
+  # "0.7h" exact.
+  DURATION_UNITS = {
+    'ns' => Rational(1, 1_000_000_000),
+    'us' => Rational(1, 1_000_000),
+    'µs' => Rational(1, 1_000_000),
+    'ms' => Rational(1, 1_000),
+    's' => 1,
+    'm' => 60,
+    'h' => 3600
+  }.freeze
+
+  # Convert a Go duration string ("24h", "1h30m", "01h00m00s") to whole
+  # seconds; the inverse of seconds_to_duration. The pod lifetime annotation
+  # holds one of these, and anything that reads it (job-pod-reaper uses Go's
+  # time.ParseDuration) accepts the general format, not just ours.
+  #
+  # @return [Integer, nil] seconds, or nil if the text isn't a duration
+  def duration_to_seconds(duration)
+    text = duration.to_s.strip.delete_prefix('+')
+    return nil if text.empty?
+    return 0 if text == '0'
+
+    parts = text.scan(/(\d+(?:\.\d*)?|\.\d+)(ns|us|µs|ms|s|m|h)/)
+    return nil unless parts.map(&:join).join == text
+
+    seconds = parts.sum { |number, unit| number.to_r * DURATION_UNITS.fetch(unit) }
+    seconds.floor
+  end
+
   # Extract pod info from json data. The data is expected to be from the kubectl
   # command and conform to kubernetes' datatype structures.
   #
@@ -163,6 +193,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
       submission_time: submission_time(json_data),
       dispatch_time: dispatch_time(json_data),
       wallclock_time: wallclock_time(json_data),
+      wallclock_limit: wallclock_limit(json_data),
       ood_connection_info: { host: get_host(json_data.dig(:status, :hostIP)) },
       procs: procs_from_json(json_data)
     }
@@ -234,6 +265,13 @@ class OodCore::Job::Adapters::Kubernetes::Helper
     et = end_time(status, state_data)
 
     et.nil? ? nil : et - start_time
+  end
+
+  # The wall time the pod was submitted with, which the pod template records
+  # in the pod.kubernetes.io/lifetime annotation.
+  def wallclock_limit(json_data)
+    lifetime = json_data.dig(:metadata, :annotations, :'pod.kubernetes.io/lifetime')
+    duration_to_seconds(lifetime)
   end
 
   def end_time(status, state_data)
