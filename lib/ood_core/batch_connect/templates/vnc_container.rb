@@ -59,6 +59,9 @@ module OodCore
         # @option context [#to_s] :vnc_clean ("...") script used to clean up
         #   any active vnc sessions (assumes you don't modify `:before_script`
         #   or `:clean_script`)
+        # @option context [#to_i] :min_port, :max_port if either is set, the
+        #   vnc server listens on a free port in that range instead of on
+        #   5900 + its display number
         # @option context [#to_s] :container_path ("vnc_container.sif") the path
         #   to the container with VNC
         # @option context [#to_s] :container_bindpath ("") paths to bind into
@@ -127,8 +130,9 @@ module OodCore
                   HTTPD_OPT='-nohttpd'
                 fi
 
+                #{vnc_port_pick}
                 # Attempt to start VNC server
-                VNC_OUT=$(#{container_command} exec instance://#{@instance_name} vncserver -log "#{vnc_log}" -rfbauth "#{vnc_passwd}" $HTTPD_OPT -noxstartup #{vnc_args} 2>&1)
+                VNC_OUT=$(#{container_command} exec instance://#{@instance_name} vncserver -log "#{vnc_log}" -rfbauth "#{vnc_passwd}" $HTTPD_OPT -noxstartup #{vnc_port_arg} #{vnc_args} 2>&1)
                 VNC_PID=$(pgrep -s 0 Xvnc) # the script above will daemonize the Xvnc process
                 echo "${VNC_PID}"
                 echo "${VNC_OUT}"
@@ -150,7 +154,7 @@ module OodCore
 
               # Parse output for ports used
               display=$(echo "${VNC_OUT}" | awk -F':' '/^Desktop/{print $NF}')
-              port=$((5900+display))
+              #{vnc_default_port}
 
               echo "Successfully started VNC server on ${host}:${port}..."
 
@@ -223,6 +227,26 @@ module OodCore
 
           def container_start_args
             context.fetch(:container_start_args, []).to_a.join(' ')
+          end
+
+          # The VNC server listens on 5900 + its display number, unless the
+          # site sets a port range with :min_port or :max_port.
+          def vnc_port_range?
+            context.key?(:min_port) || context.key?(:max_port)
+          end
+
+          # With a port range, pick a free port in it before starting vncserver
+          def vnc_port_pick
+            vnc_port_range? ? "port=$(find_port localhost #{min_port} #{max_port}) || clean_up 1" : ""
+          end
+
+          def vnc_port_arg
+            vnc_port_range? ? "-rfbport ${port}" : ""
+          end
+
+          # Without a port range, vncserver chose the port from the display
+          def vnc_default_port
+            vnc_port_range? ? "" : "port=$((5900+display))"
           end
 
           # Arguments sent to `vncserver` command
