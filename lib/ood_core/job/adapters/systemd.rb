@@ -63,6 +63,7 @@ module OodCore
         #   job
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
+          validate_native(script, Hash)
           unless (after.empty? && afterok.empty? && afternotok.empty? && afterany.empty?)
             raise JobAdapterError, 'Scheduling subsequent jobs is not available.'
           end

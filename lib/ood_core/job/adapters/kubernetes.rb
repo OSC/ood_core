@@ -53,6 +53,7 @@ module OodCore
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           raise ArgumentError, 'Must specify the script' if script.nil?
+          validate_native(script, Hash, required: true)
 
           batch.submit(script)
         rescue Batch::Error => e

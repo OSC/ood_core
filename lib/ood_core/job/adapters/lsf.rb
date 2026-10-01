@@ -74,6 +74,7 @@ module OodCore
         #   job
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
+          validate_native(script, Array)
           # ensure dependencies are array of ids
           after      = Array(after).map(&:to_s)
           afterok    = Array(afterok).map(&:to_s)
