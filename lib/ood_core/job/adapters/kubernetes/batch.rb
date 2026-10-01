@@ -1,5 +1,7 @@
 require "ood_core/refinements/hash_extensions"
+require "ood_core/refinements/array_extensions"
 require "json"
+require "erb"
 
 # Utility class for the Kubernetes adapter to interact
 # with the Kuberenetes APIs.
@@ -9,6 +11,7 @@ class OodCore::Job::Adapters::Kubernetes::Batch
   require_relative "k8s_job_info"
 
   using OodCore::Refinements::HashExtensions
+  using OodCore::Refinements::ArrayExtensions
 
   class Error < StandardError; end
   class NotFoundError < StandardError; end
