@@ -170,6 +170,45 @@
         </dt>
         <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>\x1E</span><span class='tstring_end'>&quot;</span></span></pre></dd>
       
+        <dt id="TIME_FORMAT-constant" class="">TIME_FORMAT =
+          <div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+<p>Format Slurm uses to print timestamps (set through SLURM_TIME_FORMAT).
+Includes the UTC offset so times are unambiguous when the cluster and
+the OnDemand host run in different timezones.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%Y-%m-%dT%H:%M:%S%z</span><span class='tstring_end'>&quot;</span></span></pre></dd>
+      
+        <dt id="NO_TIME_FORMAT_COMMANDS-constant" class="">NO_TIME_FORMAT_COMMANDS =
+          <div class="docstring">
+  <div class="discussion">
+    <p class="note private">
+  <strong>This constant is part of a private API.</strong>
+  You should avoid using this constant if possible, as it may be removed or be changed in the future.
+</p>
+<p>Commands that don't get SLURM_TIME_FORMAT because their environment
+is propagated to the job (e.g. sbatch --export=ALL)</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+        </dt>
+        <dd><pre class="code"><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sbatch</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>salloc</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>srun</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
+      
     </dl>
   
 
@@ -914,18 +953,18 @@
       <pre class="lines">
 
 
-152
-153
-154
-155
-156
-157
-158
-159
-160</pre>
+180
+181
+182
+183
+184
+185
+186
+187
+188</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 152</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 180</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>cluster:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>bin:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>conf:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>bin_overrides:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='comma'>,</span> <span class='label'>submit_host:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>strict_host_checking:</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>unknown</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='ivar'>@cluster</span>              <span class='op'>=</span> <span class='id identifier rubyid_cluster'>cluster</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_cluster'>cluster</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1002,12 +1041,12 @@
       <pre class="lines">
 
 
-116
-117
-118</pre>
+144
+145
+146</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 116</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 144</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bin'>bin</span>
   <span class='ivar'>@bin</span>
@@ -1055,12 +1094,12 @@
       <pre class="lines">
 
 
-122
-123
-124</pre>
+150
+151
+152</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 122</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 150</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span>
   <span class='ivar'>@bin_overrides</span>
@@ -1126,12 +1165,12 @@
       <pre class="lines">
 
 
-104
-105
-106</pre>
+132
+133
+134</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 104</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 132</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cluster'>cluster</span>
   <span class='ivar'>@cluster</span>
@@ -1197,12 +1236,12 @@
       <pre class="lines">
 
 
-110
-111
-112</pre>
+138
+139
+140</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 110</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 138</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_conf'>conf</span>
   <span class='ivar'>@conf</span>
@@ -1268,12 +1307,12 @@
       <pre class="lines">
 
 
-137
-138
-139</pre>
+165
+166
+167</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 137</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_id'>id</span>
   <span class='ivar'>@id</span>
@@ -1339,12 +1378,12 @@
       <pre class="lines">
 
 
-132
-133
-134</pre>
+160
+161
+162</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 132</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 160</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span>
   <span class='ivar'>@strict_host_checking</span>
@@ -1410,12 +1449,12 @@
       <pre class="lines">
 
 
-127
-128
-129</pre>
+155
+156
+157</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 155</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit_host'>submit_host</span>
   <span class='ivar'>@submit_host</span>
@@ -1460,37 +1499,37 @@
       <pre class="lines">
 
 
-244
-245
-246
-247
-248
-249
-250
-251
-252
-253
-254
-255
-256
-257
-258
-259
-260
-261
-262
-263
-264
-265
-266
-267
-268
-269
-270
-271</pre>
+272
+273
+274
+275
+276
+277
+278
+279
+280
+281
+282
+283
+284
+285
+286
+287
+288
+289
+290
+291
+292
+293
+294
+295
+296
+297
+298
+299</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 244</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 272</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accounts'>accounts</span>
   <span class='id identifier rubyid_user'>user</span> <span class='op'>=</span> <span class='const'>Etc</span><span class='period'>.</span><span class='id identifier rubyid_getlogin'>getlogin</span>
@@ -1553,16 +1592,16 @@
       <pre class="lines">
 
 
-448
-449
-450
-451
-452
-453
-454</pre>
+476
+477
+478
+479
+480
+481
+482</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 448</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 476</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_all_sinfo_node_fields'>all_sinfo_node_fields</span>
   <span class='lbrace'>{</span>
@@ -1605,34 +1644,6 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-341
-342
-343
-344
-345
-346
-347
-348
-349
-350
-351
-352
-353
-354
-355
-356
-357
-358
-359
-360
-361
-362
-363
-364
-365
-366
-367
-368
 369
 370
 371
@@ -1658,10 +1669,38 @@ Note that the order of these fields is important</p>
 391
 392
 393
-394</pre>
+394
+395
+396
+397
+398
+399
+400
+401
+402
+403
+404
+405
+406
+407
+408
+409
+410
+411
+412
+413
+414
+415
+416
+417
+418
+419
+420
+421
+422</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 341</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 369</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_all_squeue_fields'>all_squeue_fields</span>
   <span class='lbrace'>{</span>
@@ -1794,12 +1833,12 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-323
-324
-325</pre>
+351
+352
+353</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 323</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 351</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scancel</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1853,23 +1892,23 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-164
-165
-166
-167
-168
-169
-170
-171
-172
-173
-174
-175
-176
-177</pre>
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 164</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 192</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_cluster_info'>get_cluster_info</span>
   <span class='id identifier rubyid_node_cpu_info'>node_cpu_info</span> <span class='op'>=</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>sinfo</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-aho %F/%C</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_strip'>strip</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span>
@@ -2026,44 +2065,44 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-208
-209
-210
-211
-212
-213
-214
-215
-216
-217
-218
-219
-220
-221
-222
-223
-224
-225
-226
-227
-228
-229
-230
-231
-232
-233
-234
-235
 236
 237
 238
 239
 240
 241
-242</pre>
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265
+266
+267
+268
+269
+270</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 208</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 236</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>owner:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_fields'>fields</span> <span class='op'>=</span> <span class='id identifier rubyid_squeue_fields'>squeue_fields</span><span class='lparen'>(</span><span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span>
@@ -2177,12 +2216,12 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-303
-304
-305</pre>
+331
+332
+333</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 303</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 331</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scontrol</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>hold</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -2220,24 +2259,24 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-456
-457
-458
-459
-460
-461
-462
-463
-464
-465
-466
-467
-468
-469
-470</pre>
+484
+485
+486
+487
+488
+489
+490
+491
+492
+493
+494
+495
+496
+497
+498</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 456</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 484</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nodes'>nodes</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_all_sinfo_node_fields'>all_sinfo_node_fields</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UNIT_SEPARATOR-constant" title="OodCore::Job::Adapters::Slurm::Batch::UNIT_SEPARATOR (constant)">UNIT_SEPARATOR</a></span></span><span class='rparen'>)</span>
@@ -2287,18 +2326,18 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-438
-439
-440
-441
-442
-443
-444
-445
-446</pre>
+466
+467
+468
+469
+470
+471
+472
+473
+474</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 438</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 466</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_queues'>queues</span>
   <span class='id identifier rubyid_info_raw'>info_raw</span> <span class='op'>=</span> <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>scontrol</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>show</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>part</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -2386,12 +2425,12 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-313
-314
-315</pre>
+341
+342
+343</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 313</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 341</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>scontrol</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>release</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -2429,33 +2468,33 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-472
-473
-474
-475
-476
-477
-478
-479
-480
-481
-482
-483
-484
-485
-486
-487
-488
-489
-490
-491
-492
-493
-494
-495</pre>
+500
+501
+502
+503
+504
+505
+506
+507
+508
+509
+510
+511
+512
+513
+514
+515
+516
+517
+518
+519
+520
+521
+522
+523</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 472</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 500</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sacct_info'>sacct_info</span><span class='lparen'>(</span><span class='id identifier rubyid_job_ids'>job_ids</span><span class='comma'>,</span> <span class='id identifier rubyid_states'>states</span><span class='comma'>,</span> <span class='id identifier rubyid_from'>from</span><span class='comma'>,</span> <span class='id identifier rubyid_to'>to</span><span class='comma'>,</span> <span class='id identifier rubyid_show_steps'>show_steps</span><span class='rparen'>)</span>
   <span class='comment'># https://slurm.schedmd.com/sacct.html
@@ -2468,8 +2507,8 @@ Note that the order of these fields is important</p>
 </span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_fields'>fields</span><span class='period'>.</span><span class='id identifier rubyid_values'>values</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='comment'># Required data
 </span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>--state</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_states'>states</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_states'>states</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='comment'># Filter by these states
 </span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-j</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_job_ids'>job_ids</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_job_ids'>job_ids</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='comment'># Filter by these job ids
-</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-S</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_from'>from</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_from'>from</span> <span class='comment'># Filter from This date
-</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-E</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_to'>to</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_to'>to</span> <span class='comment'># Filter until this date
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-S</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacct_time'>sacct_time</span><span class='lparen'>(</span><span class='id identifier rubyid_from'>from</span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_from'>from</span> <span class='comment'># Filter from This date
+</span>  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-E</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_sacct_time'>sacct_time</span><span class='lparen'>(</span><span class='id identifier rubyid_to'>to</span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_to'>to</span> <span class='comment'># Filter until this date
 </span>
   <span class='id identifier rubyid_jobs_info'>jobs_info</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
   <span class='const'>StringIO</span><span class='period'>.</span><span class='id identifier rubyid_open'>open</span><span class='lparen'>(</span><span class='id identifier rubyid_call'>call</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>sacct</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='op'>*</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_output'>output</span><span class='op'>|</span>
@@ -2514,34 +2553,6 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-397
-398
-399
-400
-401
-402
-403
-404
-405
-406
-407
-408
-409
-410
-411
-412
-413
-414
-415
-416
-417
-418
-419
-420
-421
-422
-423
-424
 425
 426
 427
@@ -2553,10 +2564,38 @@ Note that the order of these fields is important</p>
 433
 434
 435
-436</pre>
+436
+437
+438
+439
+440
+441
+442
+443
+444
+445
+446
+447
+448
+449
+450
+451
+452
+453
+454
+455
+456
+457
+458
+459
+460
+461
+462
+463
+464</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 397</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 425</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sacct_info_fields'>sacct_info_fields</span>
   <span class='lbrace'>{</span>
@@ -2631,15 +2670,15 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-179
-180
-181
-182
-183
-184</pre>
+207
+208
+209
+210
+211
+212</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 179</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 207</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_sinfo_headers'>sinfo_headers</span>
   <span class='lbracket'>[</span>
@@ -2680,16 +2719,16 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-289
-290
-291
-292
-293
-294
-295</pre>
+317
+318
+319
+320
+321
+322
+323</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 289</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 317</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_squeue_args'>squeue_args</span><span class='lparen'>(</span><span class='label'>id:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='label'>owner:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>options:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_args'>args</span>  <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--all</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--states=all</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--noconvert</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -2731,16 +2770,16 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-273
-274
-275
-276
-277
-278
-279</pre>
+301
+302
+303
+304
+305
+306
+307</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 273</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 301</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_squeue_fields'>squeue_fields</span><span class='lparen'>(</span><span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -2782,15 +2821,15 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-281
-282
-283
-284
-285
-286</pre>
+309
+310
+311
+312
+313
+314</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 281</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 309</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_squeue_required_fields'>squeue_required_fields</span>
   <span class='comment'>#TODO: does this need to include ::array_job_task_id?
@@ -2913,14 +2952,14 @@ Note that the order of these fields is important</p>
       <pre class="lines">
 
 
-333
-334
-335
-336
-337</pre>
+361
+362
+363
+364
+365</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 333</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 361</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit_string'>submit_string</span><span class='lparen'>(</span><span class='id identifier rubyid_str'>str</span><span class='comma'>,</span> <span class='label'>args:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>env:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span> <span class='op'>+</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--parsable</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
@@ -2937,7 +2976,7 @@ Note that the order of these fields is important</p>
 </div>
 
       <div id="footer">
-  Generated on Thu Oct  1 19:49:40 2026 by
+  Generated on Fri Oct  2 19:52:59 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>

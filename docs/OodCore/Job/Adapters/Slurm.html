@@ -295,6 +295,28 @@ resource manager for job management.</p>
 </li>
 
       
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#relative_time-class_method" title="relative_time (class method)">.<strong>relative_time</strong>(time, now: Time.now)  &#x21d2; String </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Slurm interprets absolute timestamps in the cluster's timezone, so express a time relative to &quot;now&quot; to stay correct when OnDemand runs in a different timezone than the cluster.</p></div></span>
+  
+</li>
+
+      
     </ul>
     
   
@@ -753,14 +775,14 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-660
-661
-662
-663
-664</pre>
+698
+699
+700
+701
+702</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 660</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 698</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
@@ -1023,6 +1045,119 @@ where no rollup is present.</p>
 </table>
 </div>
     
+      <div class="method_details ">
+  <h3 class="signature " id="relative_time-class_method">
+  
+    .<strong>relative_time</strong>(time, now: Time.now)  &#x21d2; <tt>String</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Slurm interprets absolute timestamps in the cluster's timezone, so
+express a time relative to &quot;now&quot; to stay correct when OnDemand runs
+in a different timezone than the cluster.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <h4 class="tag_title">Examples:</h4>
+    
+      
+      <pre class="example code"><code><span class='id identifier rubyid_relative_time'>relative_time</span><span class='lparen'>(</span><span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span> <span class='op'>+</span> <span class='int'>3600</span><span class='rparen'>)</span> <span class='comment'>#=&gt; &quot;now+3600&quot;</span></code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>time</span>
+      
+      
+        <span class='type'>(<tt>#to_time</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the time to convert</p></div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>now</span>
+      
+      
+        <span class='type'>(<tt>Time</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>Time.now</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'><p>the current time</p></div>
+      
+    </li>
+  
+</ul>
+
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the time in Slurm's relative time format</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 102</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_relative_time'>relative_time</span><span class='lparen'>(</span><span class='id identifier rubyid_time'>time</span><span class='comma'>,</span> <span class='label'>now:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_offset'>offset</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_time'>time</span><span class='period'>.</span><span class='id identifier rubyid_to_time'>to_time</span> <span class='op'>-</span> <span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>now</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_offset'>offset</span><span class='period'>.</span><span class='id identifier rubyid_positive?'>positive?</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>now+</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_offset'>offset</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>else</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>now</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_offset'>offset</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
   </div>
 
   <div id="instance_method_details" class="method_details_list">
@@ -1069,12 +1204,12 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-757
-758
-759</pre>
+799
+800
+801</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 757</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 799</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accounts'>accounts</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span>
@@ -1124,12 +1259,12 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-750
-751
-752</pre>
+792
+793
+794</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 750</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 792</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cluster_info'>cluster_info</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_get_cluster_info'>get_cluster_info</span>
@@ -1204,15 +1339,15 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-912
-913
-914
-915
-916
-917</pre>
+956
+957
+958
+959
+960
+961</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 912</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 956</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1240,12 +1375,12 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-919
-920
-921</pre>
+963
+964
+965</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 919</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 963</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_directive_prefix'>directive_prefix</span>
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#SBATCH</span><span class='tstring_end'>&#39;</span></span>
@@ -1320,15 +1455,15 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-888
-889
-890
-891
-892
-893</pre>
+932
+933
+934
+935
+936
+937</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 888</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 932</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1422,28 +1557,28 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-818
-819
-820
-821
-822
-823
-824
-825
-826
-827
-828
-829
-830
-831
-832
-833
-834
-835
-836</pre>
+862
+863
+864
+865
+866
+867
+868
+869
+870
+871
+872
+873
+874
+875
+876
+877
+878
+879
+880</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 818</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 862</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1532,16 +1667,16 @@ where no rollup is present.</p>
       <pre class="lines">
 
 
-765
-766
-767
-768
-769
-770
-771</pre>
+807
+808
+809
+810
+811
+812
+813</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 765</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 807</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -1571,9 +1706,11 @@ where no rollup is present.</p>
 job_ids [Array&lt;#to_s&gt;] optional list of job ids to filter the results.
 states [Array&lt;#to_s&gt;] optional list of job state codes.
 Selects jobs based on their state during the time period given.
-from [#to_s] optional date string to filter jobs in any state after the specified time.
+from [Time, DateTime, #to_s] optional time to filter jobs in any state after the specified time.
 If states are provided, filter jobs in these states after this period
-to [#to_s] optional date string to filter jobs in any state before the specified time.
+to [Time, DateTime, #to_s] optional time to filter jobs in any state before the specified time.
+Pass Time or DateTime objects to be timezone independent; strings are
+passed to sacct as is and interpreted in the cluster's timezone.
 If states are provided, filter jobs in these states before this period.
 show_steps [#Boolean] optional boolean to filter job steps from the results.</p>
 
@@ -1611,34 +1748,34 @@ show_steps [#Boolean] optional boolean to filter job steps from the results.</p>
       <pre class="lines">
 
 
-787
-788
-789
-790
-791
-792
-793
-794
-795
-796
-797
-798
-799
-800
-801
-802
-803
-804
-805
-806
-807
-808
-809
-810
-811</pre>
+831
+832
+833
+834
+835
+836
+837
+838
+839
+840
+841
+842
+843
+844
+845
+846
+847
+848
+849
+850
+851
+852
+853
+854
+855</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 787</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 831</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_historic'>info_historic</span><span class='lparen'>(</span><span class='label'>opts:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_job_ids'>job_ids</span>    <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:job_ids</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -1745,17 +1882,17 @@ resource manager</p>
       <pre class="lines">
 
 
-843
-844
-845
-846
-847
-848
-849
-850</pre>
+887
+888
+889
+890
+891
+892
+893
+894</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 843</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 887</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_owner'>owner</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1785,12 +1922,12 @@ resource manager</p>
       <pre class="lines">
 
 
-933
-934
-935</pre>
+977
+978
+979</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 933</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 977</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nodes'>nodes</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_nodes'>nodes</span>
@@ -1815,12 +1952,12 @@ resource manager</p>
       <pre class="lines">
 
 
-929
-930
-931</pre>
+973
+974
+975</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 929</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 973</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_queues'>queues</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_queues'>queues</span>
@@ -1895,15 +2032,15 @@ resource manager</p>
       <pre class="lines">
 
 
-900
-901
-902
-903
-904
-905</pre>
+944
+945
+946
+947
+948
+949</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 900</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 944</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1997,34 +2134,34 @@ resource manager</p>
       <pre class="lines">
 
 
-857
-858
-859
-860
-861
-862
-863
-864
-865
-866
-867
-868
-869
-870
-871
-872
-873
-874
-875
-876
-877
-878
-879
-880
-881</pre>
+901
+902
+903
+904
+905
+906
+907
+908
+909
+910
+911
+912
+913
+914
+915
+916
+917
+918
+919
+920
+921
+922
+923
+924
+925</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 857</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 901</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -2207,44 +2344,6 @@ job</p></div>
       <pre class="lines">
 
 
-681
-682
-683
-684
-685
-686
-687
-688
-689
-690
-691
-692
-693
-694
-695
-696
-697
-698
-699
-700
-701
-702
-703
-704
-705
-706
-707
-708
-709
-710
-711
-712
-713
-714
-715
-716
-717
-718
 719
 720
 721
@@ -2272,10 +2371,52 @@ job</p></div>
 743
 744
 745
-746</pre>
+746
+747
+748
+749
+750
+751
+752
+753
+754
+755
+756
+757
+758
+759
+760
+761
+762
+763
+764
+765
+766
+767
+768
+769
+770
+771
+772
+773
+774
+775
+776
+777
+778
+779
+780
+781
+782
+783
+784
+785
+786
+787
+788</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 681</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 719</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_after'>after</span>      <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_after'>after</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
@@ -2306,7 +2447,11 @@ job</p></div>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--reservation</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_reservation_id'>reservation_id</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_reservation_id'>reservation_id</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-p</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_queue_name'>queue_name</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_queue_name'>queue_name</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--priority</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_priority'>priority</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_priority'>priority</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
-  <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--begin</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_start_time'>start_time</span><span class='period'>.</span><span class='id identifier rubyid_localtime'>localtime</span><span class='period'>.</span><span class='id identifier rubyid_strftime'>strftime</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%C%y-%m-%dT%H:%M:%S</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_start_time'>start_time</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_start_time'>start_time</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+    <span class='comment'># sbatch only accepts a positive offset from now
+</span>    <span class='id identifier rubyid_now'>now</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span>
+    <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>--begin</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_relative_time'>relative_time</span><span class='lparen'>(</span><span class='lbracket'>[</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_start_time'>start_time</span><span class='comma'>,</span> <span class='id identifier rubyid_now'>now</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_max'>max</span><span class='comma'>,</span> <span class='label'>now:</span> <span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span><span class='rbracket'>]</span>
+  <span class='kw'>end</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-A</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_accounting_id'>accounting_id</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_accounting_id'>accounting_id</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-t</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_seconds_to_duration'>seconds_to_duration</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_wall_time'>wall_time</span><span class='rparen'>)</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_wall_time'>wall_time</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
   <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_concat'>concat</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-a</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_job_array_request'>job_array_request</span><span class='rbracket'>]</span> <span class='kw'>unless</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_job_array_request'>job_array_request</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -2390,12 +2535,12 @@ job</p></div>
       <pre class="lines">
 
 
-925
-926
-927</pre>
+969
+970
+971</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 925</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 969</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_dependencies?'>supports_job_dependencies?</span>
   <span class='kw'>true</span>
@@ -2410,7 +2555,7 @@ job</p></div>
 </div>
 
       <div id="footer">
-  Generated on Thu Oct  1 19:49:40 2026 by
+  Generated on Fri Oct  2 19:52:58 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
