@@ -288,6 +288,20 @@ class TestSlurm < Minitest::Test
     slurm_instance(submit_host: 'owens.osc.edu').info_historic
   end
 
+  def test_time_format_can_be_overridden_by_env
+    batch = slurm_instance.instance_variable_get(:@slurm)
+    Open3.expects(:capture3).with { |env, cmd, *| env == { 'SLURM_TIME_FORMAT' => '%s' } && cmd == 'squeue' }.returns(['', '', exit_success])
+
+    batch.send(:call, 'squeue', env: { 'SLURM_TIME_FORMAT' => '%s' })
+  end
+
+  def test_time_format_override_is_exported_on_the_submit_host
+    batch = slurm_instance(submit_host: 'owens.osc.edu').instance_variable_get(:@slurm)
+    Open3.expects(:capture3).with { |_env, *args| args.include?('export SLURM_TIME_FORMAT=%s;') }.returns(['', '', exit_success])
+
+    batch.send(:call, 'squeue', env: { 'SLURM_TIME_FORMAT' => '%s' })
+  end
+
   def test_time_format_is_not_set_for_sbatch
     Open3.expects(:capture3).with { |env, cmd, *| cmd == 'sbatch' && !env.key?('SLURM_TIME_FORMAT') }.returns(['job.123', '', exit_success])
 
