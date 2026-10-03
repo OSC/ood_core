@@ -82,6 +82,7 @@ module OodCore
         # @raise [JobAdapterError] if something goes wrong submitting a job
         # @return [String] the job id returned after successfully submitting a job
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
+          validate_native(script, Array, String)
           # SGE supports jod dependencies on job completion
           args = @helper.batch_submit_args(script, after: after, afterok: afterok, afternotok: afternotok, afterany: afterany)
 

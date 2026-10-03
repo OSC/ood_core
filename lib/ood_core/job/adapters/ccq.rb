@@ -50,6 +50,7 @@ module OodCore
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
           script_file = make_script_file(script.content)
+          validate_native(script, Array)
           args = []
 
           # cluster configuration args
