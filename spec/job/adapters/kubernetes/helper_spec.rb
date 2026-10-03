@@ -37,6 +37,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1587060509,
     submission_time: 1587060496,
     wallclock_time: 154407,
+    wallclock_limit: nil,
     ood_connection_info: { host: "10.20.0.40" },
     procs: "1"
   }}
@@ -49,6 +50,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1626897251,
     wallclock_time: nil,
+    wallclock_limit: 3600,
     ood_connection_info: { host: "192.148.247.170" },
     procs: "1"
   }}
@@ -61,6 +63,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1587069112,
     wallclock_time: nil,
+    wallclock_limit: nil,
     ood_connection_info: { host: "10.20.0.40" },
     procs: nil
   }}
@@ -73,6 +76,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1626112960,
     wallclock_time: nil,
+    wallclock_limit: 3600,
     ood_connection_info: { host: "192.148.247.170" },
     procs: 1
   }}
@@ -85,6 +89,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1626113242,
     wallclock_time: nil,
+    wallclock_limit: 3600,
     ood_connection_info: { host: "192.148.247.170" },
     procs: 1
   }}
@@ -97,6 +102,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1587506633,
     submission_time: 1587506632,
     wallclock_time: 300,
+    wallclock_limit: nil,
     ood_connection_info: { host: "10.20.0.40" },
     procs: nil
   }}
@@ -109,6 +115,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1587580037,
     wallclock_time: nil,
+    wallclock_limit: nil,
     ood_connection_info: { host: "10.20.0.40" },
     procs: nil
   }}
@@ -121,6 +128,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: nil,
     submission_time: 1587580582,
     wallclock_time: nil,
+    wallclock_limit: nil,
     ood_connection_info: { host: nil },
     procs: "1"
   }}
@@ -133,6 +141,7 @@ describe OodCore::Job::Adapters::Kubernetes::Helper do
     dispatch_time: 1607638123,
     submission_time: 1607637118,
     wallclock_time: 76885,
+    wallclock_limit: 10800,
     ood_connection_info: { host: "192.148.247.227" },
     procs: "1"
   }}
