@@ -297,12 +297,12 @@ e.g. => '/usr/local/slurm/bin/squeue'</p></div>
       <pre class="lines">
 
 
-12
-13
-14</pre>
+14
+15
+16</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/helper.rb', line 12</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/helper.rb', line 14</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_bin_path'>bin_path</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='id identifier rubyid_bin_default'>bin_default</span><span class='comma'>,</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='const'>Pathname</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='id identifier rubyid_bin_default'>bin_default</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='id identifier rubyid_cmd'>cmd</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span> <span class='rbrace'>}</span>
@@ -341,12 +341,12 @@ To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/n
       <pre class="lines">
 
 
-39
-40
-41</pre>
+43
+44
+45</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/helper.rb', line 39</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/helper.rb', line 43</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ssh_port'>ssh_port</span>
   <span class='kw'>return</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>OOD_SSH_PORT</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>22</span><span class='tstring_end'>&quot;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>OOD_SSH_PORT</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
@@ -462,8 +462,6 @@ To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/n
       <pre class="lines">
 
 
-25
-26
 27
 28
 29
@@ -472,10 +470,14 @@ To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/n
 32
 33
 34
-35</pre>
+35
+36
+37
+38
+39</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/helper.rb', line 25</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/helper.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_ssh_wrap'>ssh_wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_submit_host'>submit_host</span><span class='comma'>,</span> <span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='id identifier rubyid_cmd_args'>cmd_args</span><span class='comma'>,</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span> <span class='op'>=</span> <span class='kw'>true</span><span class='comma'>,</span> <span class='id identifier rubyid_env'>env</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_cmd'>cmd</span><span class='comma'>,</span> <span class='id identifier rubyid_cmd_args'>cmd_args</span> <span class='kw'>if</span> <span class='id identifier rubyid_submit_host'>submit_host</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span>
@@ -483,10 +485,12 @@ To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/n
   <span class='id identifier rubyid_check_host'>check_host</span> <span class='op'>=</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span> <span class='op'>?</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>yes</span><span class='tstring_end'>&quot;</span></span> <span class='op'>:</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>no</span><span class='tstring_end'>&quot;</span></span>
   
   <span class='comment'># Have to OodCore::Job::Adapters::Helper.ssh_port instead of self.ssh_port due to test failure
-</span>  <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-p</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="OodCore::Job::Adapters::Helper (class)">Helper</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ssh_port'><span class='object_link'><a href="#ssh_port-class_method" title="OodCore::Job::Adapters::Helper.ssh_port (method)">ssh_port</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BatchMode=yes</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>UserKnownHostsFile=/dev/null</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>StrictHostKeyChecking=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_check_host'>check_host</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_submit_host'>submit_host</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
-  <span class='id identifier rubyid_env'>env</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span><span class='lbrace'>{</span><span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>export </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_value'>value</span><span class='embexpr_end'>}</span><span class='tstring_content'>;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='rbrace'>}</span>
+</span>  <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-p</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='const'><span class='object_link'><a href="../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../../Job.html" title="OodCore::Job (module)">Job</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="" title="OodCore::Job::Adapters::Helper (class)">Helper</a></span></span><span class='period'>.</span><span class='id identifier rubyid_ssh_port'><span class='object_link'><a href="#ssh_port-class_method" title="OodCore::Job::Adapters::Helper.ssh_port (method)">ssh_port</a></span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>BatchMode=yes</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> 
+          <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>UserKnownHostsFile=/dev/null</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>-o</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>StrictHostKeyChecking=</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_check_host'>check_host</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> 
+          <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_submit_host'>submit_host</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rbracket'>]</span>
+  <span class='id identifier rubyid_env'>env</span><span class='period'>.</span><span class='id identifier rubyid_each'>each</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_value'>value</span><span class='op'>|</span> <span class='id identifier rubyid_args'>args</span><span class='period'>.</span><span class='id identifier rubyid_push'>push</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>export </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_key'>key</span><span class='embexpr_end'>}</span><span class='tstring_content'>=</span><span class='embexpr_beg'>#{</span><span class='const'>Shellwords</span><span class='period'>.</span><span class='id identifier rubyid_escape'>escape</span><span class='lparen'>(</span><span class='id identifier rubyid_value'>value</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_content'>;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 
-  <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ssh</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span> <span class='op'>+</span> <span class='lbracket'>[</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_cmd_args'>cmd_args</span>
+  <span class='kw'>return</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>ssh</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='id identifier rubyid_args'>args</span> <span class='op'>+</span> <span class='lbracket'>[</span><span class='id identifier rubyid_cmd'>cmd</span><span class='rbracket'>]</span> <span class='op'>+</span> <span class='id identifier rubyid_cmd_args'>cmd_args</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_arg'>arg</span><span class='op'>|</span> <span class='const'>Shellwords</span><span class='period'>.</span><span class='id identifier rubyid_escape'>escape</span><span class='lparen'>(</span><span class='id identifier rubyid_arg'>arg</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span> <span class='rbrace'>}</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -498,7 +502,7 @@ To set <a href="%22OOD_SSH_PORT%22">ENV</a>, add assignment in /etc/ood/config/n
 </div>
 
       <div id="footer">
-  Generated on Fri Oct  2 19:52:59 2026 by
+  Generated on Mon Oct  5 21:20:43 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>

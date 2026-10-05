@@ -469,13 +469,13 @@
       <pre class="lines">
 
 
-49
 50
 51
-52</pre>
+52
+53</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 49</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 50</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='label'>ssh_hosts:</span><span class='comma'>,</span> <span class='label'>launcher:</span><span class='rparen'>)</span>
   <span class='ivar'>@launcher</span> <span class='op'>=</span> <span class='id identifier rubyid_launcher'>launcher</span>
@@ -555,15 +555,15 @@
       <pre class="lines">
 
 
-184
 185
 186
 187
 188
-189</pre>
+189
+190</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 184</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 185</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_session_name'>session_name</span><span class='comma'>,</span> <span class='id identifier rubyid_destination_host'>destination_host</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_job_id'>parse_job_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -591,12 +591,12 @@
       <pre class="lines">
 
 
-191
 192
-193</pre>
+193
+194</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 191</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 192</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_directive_prefix'>directive_prefix</span>
   <span class='kw'>nil</span>
@@ -668,13 +668,13 @@
       <pre class="lines">
 
 
-164
 165
 166
-167</pre>
+167
+168</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 164</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 165</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='comment'># Consider sending SIGSTOP?
@@ -766,16 +766,16 @@
       <pre class="lines">
 
 
-136
 137
 138
 139
 140
 141
-142</pre>
+142
+143</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 136</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 137</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='id identifier rubyid_host'>host</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_job_id'>parse_job_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -852,7 +852,6 @@
       <pre class="lines">
 
 
-79
 80
 81
 82
@@ -860,10 +859,11 @@
 84
 85
 86
-87</pre>
+87
+88</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 79</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 80</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='comma'>,</span> <span class='label'>host:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_host_permitted?'>host_permitted?</span><span class='lparen'>(</span><span class='id identifier rubyid_host'>host</span><span class='rparen'>)</span> <span class='kw'>if</span> <span class='id identifier rubyid_host'>host</span>
@@ -955,16 +955,16 @@
       <pre class="lines">
 
 
-104
 105
 106
 107
 108
 109
-110</pre>
+110
+111</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 104</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 105</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all_each'>info_all_each</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_to_enum'>to_enum</span><span class='lparen'>(</span><span class='symbol'>:info_all_each</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1055,12 +1055,12 @@ Note: since this API is used in production no errors or warnings are thrown / is
       <pre class="lines">
 
 
-96
 97
-98</pre>
+98
+99</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 96</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 97</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_info_all'>info_all</span>
@@ -1160,16 +1160,16 @@ Note: since this API is used in production no errors or warnings are thrown / is
       <pre class="lines">
 
 
-117
 118
 119
 120
 121
 122
-123</pre>
+123
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 118</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner_each'>info_where_owner_each</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='id identifier rubyid_to_enum'>to_enum</span><span class='lparen'>(</span><span class='symbol'>:info_where_owner_each</span><span class='comma'>,</span> <span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span> <span class='kw'>unless</span> <span class='id identifier rubyid_block_given?'>block_given?</span>
@@ -1245,13 +1245,13 @@ Note: since this API is used in production no errors or warnings are thrown / is
       <pre class="lines">
 
 
-174
 175
 176
-177</pre>
+177
+178</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 174</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 175</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='comment'># Consider sending SIGCONT
@@ -1346,17 +1346,17 @@ Note: since this API is used in production no errors or warnings are thrown / is
       <pre class="lines">
 
 
-150
 151
 152
 153
 154
 155
 156
-157</pre>
+157
+158</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 150</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 151</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid__'>_</span><span class='comma'>,</span> <span class='id identifier rubyid_host'>host</span> <span class='op'>=</span> <span class='id identifier rubyid_parse_job_id'>parse_job_id</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -1518,7 +1518,6 @@ job</p></div>
       <pre class="lines">
 
 
-65
 66
 67
 68
@@ -1526,10 +1525,11 @@ job</p></div>
 70
 71
 72
-73</pre>
+73
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 65</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 66</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='kw'>unless</span> <span class='lparen'>(</span><span class='id identifier rubyid_after'>after</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_afterok'>afterok</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_afternotok'>afternotok</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_afterany'>afterany</span><span class='period'>.</span><span class='id identifier rubyid_empty?'>empty?</span><span class='rparen'>)</span>
@@ -1587,12 +1587,12 @@ job</p></div>
       <pre class="lines">
 
 
-127
 128
-129</pre>
+129
+130</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/systemd.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_arrays?'>supports_job_arrays?</span>
   <span class='kw'>false</span>
@@ -1607,7 +1607,7 @@ job</p></div>
 </div>
 
       <div id="footer">
-  Generated on Fri Oct  2 19:52:59 2026 by
+  Generated on Mon Oct  5 21:20:44 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
