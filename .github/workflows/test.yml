@@ -38,5 +38,16 @@ jobs:
       - name: rspec test
         run: bundle exec rake spec
 
+      # A spec file that only passes because another file was loaded first
+      # (like the leak fixed in #1003) passes in the full run in any order,
+      # so run each file on its own too.
+      - name: rspec test each file alone
+        run: |
+          failed=0
+          for spec in $(find spec -name '*_spec.rb' | sort); do
+            bundle exec rspec "$spec" --format failures || { echo "fails on its own: $spec"; failed=1; }
+          done
+          exit $failed
+
       - name: mini test
         run: bundle exec rake test
