@@ -48,6 +48,10 @@ module TestHelper
     OpenStruct.new(:success? => true, :exitstatus => 0)
   end
 
+  def exit_failure
+    OpenStruct.new(:success? => false, :exitstatus => 1)
+  end
+
   def stub_etc
     Etc.stubs(:getlogin).returns('me')
   end

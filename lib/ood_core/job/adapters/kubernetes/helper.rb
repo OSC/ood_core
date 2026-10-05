@@ -6,6 +6,7 @@ class OodCore::Job::Adapters::Kubernetes::Helper
   require_relative 'k8s_job_info'
   require 'resolv'
   require 'base64'
+  require 'shellwords'
   require 'ood_core/refinements/hash_extensions'
 
   using OodCore::Refinements::HashExtensions
