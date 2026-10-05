@@ -298,7 +298,7 @@ class TestSlurm < Minitest::Test
 
   def test_time_format_is_exported_on_the_submit_host
     ssh_args = ['ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes',
-                'owens.osc.edu', 'export SLURM_TIME_FORMAT=%Y-%m-%dT%H:%M:%S%z;', 'sacct']
+      'owens.osc.edu', 'export SLURM_TIME_FORMAT=\%Y-\%m-\%dT\%H:\%M:\%S\%z;', 'sacct']
     Open3.expects(:capture3).with { |_env, *args| args.first(ssh_args.size) == ssh_args }.returns(['', '', exit_success])
 
     slurm_instance(submit_host: 'owens.osc.edu').info_historic
@@ -313,7 +313,7 @@ class TestSlurm < Minitest::Test
 
   def test_time_format_override_is_exported_on_the_submit_host
     batch = slurm_instance(submit_host: 'owens.osc.edu').instance_variable_get(:@slurm)
-    Open3.expects(:capture3).with { |_env, *args| args.include?('export SLURM_TIME_FORMAT=%s;') }.returns(['', '', exit_success])
+    Open3.expects(:capture3).with { |_env, *args| args.include?('export SLURM_TIME_FORMAT=\%s;') }.returns(['', '', exit_success])
 
     batch.send(:call, 'squeue', env: { 'SLURM_TIME_FORMAT' => '%s' })
   end
