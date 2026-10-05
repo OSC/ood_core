@@ -261,24 +261,24 @@ module OodCore
         if native.nil?
           return unless required
 
-          raise JobAdapterError, "The #{adapter} adapter needs script.native to be #{expected}, but it isn't set. Check native: in the app's submit.yml.erb."
+          raise JobAdapterError, "The #{adapter} adapter needs script.native to be a #{expected}, but it is not set. Check native: in the app's submit.yml.erb."
         end
 
         return if types.any? { |type| native.is_a?(type) }
 
-        raise JobAdapterError, "The #{adapter} adapter needs script.native to be #{expected}, but it's #{native_type_name(native.class)}. Check native: in the app's submit.yml.erb."
+        raise JobAdapterError, "The #{adapter} adapter needs script.native to be a #{expected}, but it is a #{native_type_name(native.class)}. Check native: in the app's submit.yml.erb."
       end
 
       # How a native type looks in an app's submit.yml.erb
       def native_type_name(type)
         if type <= Array
-          'a list (YAML "- item" lines)'
+          'list (YAML "- item" lines)'
         elsif type <= Hash
-          'a hash (YAML "key: value" lines)'
+          'hash (YAML "key: value" lines)'
         elsif type <= String
-          'a string'
+          'string'
         else
-          "a #{type}"
+          "#{type}"
         end
       end
     end

@@ -51,7 +51,7 @@ class NativeValidationTest < Minitest::Test
       script = OodCore::Job::Script.new(content: 'hostname')
 
       error = assert_raises(OodCore::JobAdapterError) { build_adapter(name).submit(script) }
-      assert_match(/needs script.native to be a hash .*, but it isn't set/, error.message)
+      assert_match(/needs script.native to be a hash .*, but it is not set/, error.message)
     end
   end
 
@@ -61,7 +61,7 @@ class NativeValidationTest < Minitest::Test
     error = assert_raises(OodCore::JobAdapterError) { build_adapter('kubernetes').submit(script) }
     assert_equal(
       'The Kubernetes adapter needs script.native to be a hash (YAML "key: value" lines), ' \
-      'but it\'s a list (YAML "- item" lines). Check native: in the app\'s submit.yml.erb.',
+      'but it is a list (YAML "- item" lines). Check native: in the app\'s submit.yml.erb.',
       error.message
     )
   end
@@ -70,8 +70,7 @@ class NativeValidationTest < Minitest::Test
     script = OodCore::Job::Script.new(content: 'hostname', native: 'a string')
 
     error = assert_raises(OodCore::JobAdapterError) { build_adapter('torque').submit(script) }
-    assert_match(/to be a list \(YAML "- item" lines\) or a hash \(YAML "key: value" lines\), but it's a string/, error.message)
-  end
+    assert_match(/to be a list \(YAML "- item" lines\) or hash \(YAML "key: value" lines\), but it is a string/, error.message)  end
 
   def test_accepted_types_pass
     adapter = build_adapter('torque')
