@@ -247,6 +247,22 @@ class TestSlurm < Minitest::Test
     assert_nil(OodCore::Job::Adapters::Slurm.memory_from_tres('billing=1,cpu=1,node=1'))
   end
 
+  def test_duration_in_seconds_with_days
+    assert_equal(131_400, OodCore::Job::Adapters::Slurm.duration_in_seconds('1-12:30:00'))
+  end
+
+  def test_duration_in_seconds_hours_minutes_seconds
+    assert_equal(45_000, OodCore::Job::Adapters::Slurm.duration_in_seconds('12:30:00'))
+  end
+
+  def test_duration_in_seconds_minutes_seconds
+    assert_equal(1800, OodCore::Job::Adapters::Slurm.duration_in_seconds('30:00'))
+  end
+
+  def test_duration_in_seconds_with_nil
+    assert_equal(0, OodCore::Job::Adapters::Slurm.duration_in_seconds(nil))
+  end
+
   def test_relative_time
     now = Time.utc(2026, 2, 11, 12, 0, 0)
 
@@ -282,7 +298,7 @@ class TestSlurm < Minitest::Test
 
   def test_time_format_is_exported_on_the_submit_host
     ssh_args = ['ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes',
-                'owens.osc.edu', 'export SLURM_TIME_FORMAT=%Y-%m-%dT%H:%M:%S%z;', 'sacct']
+      'owens.osc.edu', 'export SLURM_TIME_FORMAT=\%Y-\%m-\%dT\%H:\%M:\%S\%z;', 'sacct']
     Open3.expects(:capture3).with { |_env, *args| args.first(ssh_args.size) == ssh_args }.returns(['', '', exit_success])
 
     slurm_instance(submit_host: 'owens.osc.edu').info_historic
@@ -297,7 +313,7 @@ class TestSlurm < Minitest::Test
 
   def test_time_format_override_is_exported_on_the_submit_host
     batch = slurm_instance(submit_host: 'owens.osc.edu').instance_variable_get(:@slurm)
-    Open3.expects(:capture3).with { |_env, *args| args.include?('export SLURM_TIME_FORMAT=%s;') }.returns(['', '', exit_success])
+    Open3.expects(:capture3).with { |_env, *args| args.include?('export SLURM_TIME_FORMAT=\%s;') }.returns(['', '', exit_success])
 
     batch.send(:call, 'squeue', env: { 'SLURM_TIME_FORMAT' => '%s' })
   end
