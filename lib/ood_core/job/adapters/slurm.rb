@@ -43,59 +43,45 @@ module OodCore
         using Refinements::HashExtensions
         using Refinements::ArrayExtensions
 
-        UNIT_FACTORS = {
-          'K' =>                 1_024, 
-          'M' =>             1_048_576, 
-          'G' =>         1_073_741_824, 
-          'T' =>     1_099_511_627_776, 
-          'P' => 1_125_899_906_842_624
-        }
+        require "ood_core/job/adapters/slurm/parsing"
+        include Parsing
+        extend Parsing
 
-        # Get integer representing the number of gpus used by a node or job,
-        # calculated from gres string
-        # @return [Integer] the number of gpus in gres
-        def self.gpus_from_gres(gres)
-          gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
-        end
-
-        # Get a hash of gpu types to allocated count, computed from a tres string.
-        # TRES may report GPUs as an untyped rollup ('gres/gpu=2'), as typed
-        # entries ('gres/gpu:a100=2'), or both. Only typed entries carry a type,
-        # so untyped ones are excluded.
-        # @return [Hash] gpu types and counts, e.g. { 'a100' => 2 }
-        def self.gpu_types_from_tres(tres)
-          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?=,|$)})
-              .map { |type, count| [type, count.to_i] }.to_h
-        end
-
-        # Get integer representing memory in bytes, computed from tres-alloc string
-        # @return [Integer] the number of bytes of allocated memory
-        def self.memory_from_tres(tres)
-          match = tres.to_s.match(/(?:^|,)mem=([\d.]+)([KMGTP]?)(?:,|$)/)
-          return unless match
-
-          memory = (UNIT_FACTORS.fetch(match[2], 1) * match[1].to_f).to_i 
-          memory unless memory == 0
-        end
-
-        # Get integer representing the number of gpus, computed from a tres string.
-        # TRES may report GPUs twice - a typed entry and an untyped rollup, e.g.
-        # 'gres/gpu:a100=16,gres/gpu=16' - so summing every match double counts.
-        # The rollup is authoritative; typed entries are a fallback for the case
-        # where no rollup is present.
-        # @return [Integer] the number of gpus in tres
-        def self.gpus_from_tres(tres)
-          rollup = tres.to_s.match(%r{(?:^|,)(?:gres/)?gpu=(\d+)(?:,|$)})
-          return rollup[1].to_i if rollup
-
-          tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)}).flatten.map(&:to_i).sum
+        # Slurm interprets absolute timestamps in the cluster's timezone, so
+        # express a time relative to "now" to stay correct when OnDemand runs
+        # in a different timezone than the cluster.
+        # @example
+        #   relative_time(Time.now + 3600) #=> "now+3600"
+        # @param time [#to_time] the time to convert
+        # @param now [Time] the current time
+        # @return [String] the time in Slurm's relative time format
+        def self.relative_time(time, now: Time.now)
+          offset = (time.to_time - now).round
+          if offset.zero?
+            "now"
+          elsif offset.positive?
+            "now+#{offset}"
+          else
+            "now#{offset}"
+          end
         end
 
         # Object used for simplified communication with a Slurm batch server
         # @api private
         class Batch
+          include Parsing
+
           UNIT_SEPARATOR = "\x1F"
           RECORD_SEPARATOR = "\x1E"
+
+          # Format Slurm uses to print timestamps (set through SLURM_TIME_FORMAT).
+          # Includes the UTC offset so times are unambiguous when the cluster and
+          # the OnDemand host run in different timezones.
+          TIME_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
+
+          # Commands that don't get SLURM_TIME_FORMAT because their environment
+          # is propagated to the job (e.g. sbatch --export=ALL)
+          NO_TIME_FORMAT_COMMANDS = ["sbatch", "salloc", "srun"].freeze
 
           # The cluster of the Slurm batch server
           # @example CHPC's kingspeak cluster
@@ -171,8 +157,8 @@ module OodCore
                             total_nodes: node_info['nodes_total'],
                             active_processors: node_info['cpus_allocated'],
                             total_processors: node_info['cpus_total'],
-                            active_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[2]) },
-                            total_gpus: gres_lines.sum { |line| Slurm.gpus_from_gres(line[1]) }
+                            active_gpus: gres_lines.sum { |line| gpus_from_gres(line[2]) },
+                            total_gpus: gres_lines.sum { |line| gpus_from_gres(line[1]) }
             )
           end
 
@@ -480,8 +466,8 @@ module OodCore
             args.concat ['-o', fields.values.join(',')] # Required data
             args.concat ['--state', states.join(',')] unless states.empty? # Filter by these states
             args.concat ['-j', job_ids.join(',')] unless job_ids.empty? # Filter by these job ids
-            args.concat ['-S', from] if from # Filter from This date
-            args.concat ['-E', to] if to # Filter until this date
+            args.concat ['-S', sacct_time(from)] if from # Filter from This date
+            args.concat ['-E', sacct_time(to)] if to # Filter until this date
 
             jobs_info = []
             StringIO.open(call('sacct', *args)) do |output|
@@ -495,6 +481,13 @@ module OodCore
           end
 
           private
+            # Times are converted to a relative time so they are timezone
+            # independent. Strings are passed through as is and are interpreted
+            # by Slurm in the cluster's timezone.
+            def sacct_time(time)
+              time.is_a?(Time) || time.is_a?(DateTime) ? Slurm.relative_time(time) : time.to_s
+            end
+
             def str_to_queue_info(line)
               hsh = line.split(' ').map do |token|
                 m = token.match(/^(?<key>\w+)=(?<value>.+)$/)
@@ -558,15 +551,18 @@ module OodCore
 
             # Call a forked Slurm command for a given cluster
             def call(cmd, *args, env: {}, stdin: "")
+              # Don't set the time format for job submission commands, so it doesn't leak into job environments.
+              time_env = NO_TIME_FORMAT_COMMANDS.include?(cmd.to_s) ? {} : { "SLURM_TIME_FORMAT" => TIME_FORMAT }
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
 
               args  = args.map(&:to_s)
               args.concat ["-M", cluster] if cluster && !cmd.to_s.end_with?('sacctmgr')
 
-              env = env.to_h
+              env = time_env.merge(env.to_h)
               env["SLURM_CONF"] = conf.to_s if conf
 
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
+              remote_env = env.slice(*time_env.keys)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, remote_env)
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? interpret_and_raise(o, e) : raise(Error, e)
             end
@@ -602,14 +598,6 @@ module OodCore
                 }.fetch(a, a)
               }.flatten
             end
-
-          # FIXME: duplicate of the outer class
-          def duration_in_seconds(time)
-            return 0 if time.nil?
-            time, days = time.split("-").reverse
-            days.to_i * 24 * 3600 +
-              time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
-          end
 
           def parse_max(max)
             return nil if max.nil? || max.to_s == 'UNLIMITED'
@@ -708,7 +696,11 @@ module OodCore
           args.concat ["--reservation", script.reservation_id] unless script.reservation_id.nil?
           args.concat ["-p", script.queue_name] unless script.queue_name.nil?
           args.concat ["--priority", script.priority] unless script.priority.nil?
-          args.concat ["--begin", script.start_time.localtime.strftime("%C%y-%m-%dT%H:%M:%S")] unless script.start_time.nil?
+          unless script.start_time.nil?
+            # sbatch only accepts a positive offset from now
+            now = Time.now
+            args.concat ["--begin", self.class.relative_time([script.start_time, now].max, now: now)]
+          end
           args.concat ["-A", script.accounting_id] unless script.accounting_id.nil?
           args.concat ["-t", seconds_to_duration(script.wall_time)] unless script.wall_time.nil?
           args.concat ['-a', script.job_array_request] unless script.job_array_request.nil?
@@ -777,9 +769,11 @@ module OodCore
         # job_ids [Array<#to_s>] optional list of job ids to filter the results.
         # states [Array<#to_s>] optional list of job state codes.
         # Selects jobs based on their state during the time period given.
-        # from [#to_s] optional date string to filter jobs in any state after the specified time.
+        # from [Time, DateTime, #to_s] optional time to filter jobs in any state after the specified time.
         # If states are provided, filter jobs in these states after this period
-        # to [#to_s] optional date string to filter jobs in any state before the specified time.
+        # to [Time, DateTime, #to_s] optional time to filter jobs in any state before the specified time.
+        # Pass Time or DateTime objects to be timezone independent; strings are
+        # passed to sacct as is and interpreted in the cluster's timezone.
         # If states are provided, filter jobs in these states before this period.
         # show_steps [#Boolean] optional boolean to filter job steps from the results.
         #
@@ -805,8 +799,8 @@ module OodCore
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
-              gpus: self.class.gpus_from_tres(v[:tres_alloc]),
-              total_memory: self.class.memory_from_tres(v[:tres_alloc])
+              gpus: gpus_from_tres(v[:tres_alloc]),
+              total_memory: memory_from_tres(v[:tres_alloc])
             )
           end
         end
@@ -936,14 +930,6 @@ module OodCore
         end
 
         private
-          # Convert duration to seconds
-          def duration_in_seconds(time)
-            return 0 if time.nil?
-            time, days = time.split("-").reverse
-            days.to_i * 24 * 3600 +
-              time.split(':').map { |v| v.to_i }.inject(0) { |total, v| total * 60 + v }
-          end
-
           # Convert seconds to duration
           def seconds_to_duration(time)
             "%02d:%02d:%02d" % [time/3600, time/60%60, time%60]
@@ -1010,9 +996,9 @@ module OodCore
               submission_time: parse_time(v[:submit_time]),
               dispatch_time: parse_time(v[:start_time]),
               native: v,
-              total_memory: self.class.memory_from_tres(v[:tres_alloc]),
-              gpu_types: self.class.gpu_types_from_tres(v[:tres_alloc]),
-              gpus: self.class.gpus_from_tres(v[:tres_alloc])
+              total_memory: memory_from_tres(v[:tres_alloc]),
+              gpu_types: gpu_types_from_tres(v[:tres_alloc]),
+              gpus: gpus_from_tres(v[:tres_alloc])
             )
           end
 

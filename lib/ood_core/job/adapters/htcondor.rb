@@ -330,18 +330,21 @@ module OodCore
                     args.concat ["-a", "deferral_time=#{script.start_time.tv_sec}"] unless script.start_time.nil?
 
                     args.concat ["-a", "request_cpus=#{script.cores}"] unless script.cores.nil?
+                    # native is optional, so treat a missing one as empty
+                    native = script.native || {}
+
                     # requesting 1GB of memory per core seems reasonable
-                    args.concat ["-a", "request_memory=#{script.cores * 1024}"] unless script.native.include?(:request_memory) && !script.native[:request_memory].nil?
+                    args.concat ["-a", "request_memory=#{script.cores * 1024}"] unless script.cores.nil? || (native.include?(:request_memory) && !native[:request_memory].nil?)
                     args.concat ["-a", "request_gpus=#{script.gpus_per_node}"] unless script.gpus_per_node.nil?
 
-                    universe = script.native[:universe] || @htcondor.default_universe
+                    universe = native[:universe] || @htcondor.default_universe
                     args.concat ["-a", "universe=#{universe}"]
-                    container_image = script.native[:docker_image] || @htcondor.default_docker_image
+                    container_image = native[:docker_image] || @htcondor.default_docker_image
                     if universe == "docker" then
-                        args.concat ["-a", "docker_image=#{@htcondor.default_docker_image}"] unless script.native.include?(:docker_image) && !script.native[:docker_image].nil?
+                        args.concat ["-a", "docker_image=#{@htcondor.default_docker_image}"] unless native.include?(:docker_image) && !native[:docker_image].nil?
                     elsif universe == "container" then
-                        script.native.delete(:docker_image) unless !script.native.include?(:docker_image)
-                        script.native[:container_image] = container_image
+                        native.delete(:docker_image) unless !native.include?(:docker_image)
+                        native[:container_image] = container_image
                     end
 
                     args.concat ["-a", "input=#{script.input_path}"] unless script.input_path.nil?
@@ -374,7 +377,7 @@ module OodCore
                     args.concat ["-a", "notify_user=#{script.email}"] unless script.email.nil?
 
                     args.concat @htcondor.additional_attributes.to_a.map { |k, v| "-a #{k}=#{v}" } unless @htcondor.additional_attributes.nil? || @htcondor.additional_attributes.empty?
-                    args.concat script.native.to_a.map { |k, v| "-a #{k}=#{v}" } unless script.native.nil? || script.native.empty?
+                    args.concat native.to_a.map { |k, v| "-a #{k}=#{v}" } unless native.empty?
 
                     content = script.content
 
