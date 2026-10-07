@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Module: OodCore::Job::Adapters::Slurm::Parsing
+  
+    &mdash; Documentation by YARD 0.9.45
+  
+</title>
+
+  <link rel="stylesheet" href="../../../../css/style.css" type="text/css">
+
+  <link rel="stylesheet" href="../../../../css/common.css" type="text/css">
+
+<script type="text/javascript">
+  pathId = "OodCore::Job::Adapters::Slurm::Parsing";
+  relpath = '../../../../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../../../../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="main_progress" aria-hidden="true"></div>
+
+    <div class="nav_wrap">
+      <iframe id="nav" src="../../../../class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../../../../_index.html">Index (P)</a> &raquo;
+    <span class='title'><span class='object_link'><a href="../../../../OodCore.html" title="OodCore (module)">OodCore</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../../Job.html" title="OodCore::Job (module)">Job</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../../Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../Slurm.html" title="OodCore::Job::Adapters::Slurm (class)">Slurm</a></span></span>
+     &raquo; 
+    <span class="title">Parsing</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="../../../../class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Module: OodCore::Job::Adapters::Slurm::Parsing
+  
+  
+  
+</h1>
+<div class="box_info">
+  
+
+  
+  
+  
+  
+  
+
+  
+  <dl>
+    <dt>Included in:</dt>
+    <dd><span class='object_link'><a href="../Slurm.html" title="OodCore::Job::Adapters::Slurm (class)">OodCore::Job::Adapters::Slurm</a></span>, <span class='object_link'><a href="../Slurm.html" title="OodCore::Job::Adapters::Slurm (class)">OodCore::Job::Adapters::Slurm</a></span>, <span class='object_link'><a href="Batch.html" title="OodCore::Job::Adapters::Slurm::Batch (class)">Batch</a></span></dd>
+  </dl>
+  
+
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>lib/ood_core/job/adapters/slurm/parsing.rb
+</dd>
+  </dl>
+  
+</div>
+
+<h2>Overview</h2><div class="docstring">
+  <div class="discussion">
+    <p>Helpers for parsing Slurm's output formats: GRES and TRES strings, memory
+sizes, and durations.</p>
+<p>Both Slurm and Slurm::Batch need these, so each includes this module.
+Slurm also extends it, which keeps the Slurm.gpus_from_gres(...) form
+working for existing callers.</p>
+<p>Written in the compact form so this file never reopens class Slurm. It is
+required from inside the Slurm class body, after the class exists.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+
+</div>
+  
+    <h2>
+      Constant Summary
+      <small><a href="#" class="constants_summary_toggle">collapse</a></small>
+    </h2>
+
+    <dl class="constants">
+      
+        <dt id="UNIT_FACTORS-constant" class="">UNIT_FACTORS =
+          
+        </dt>
+        <dd><pre class="code"><span class='lbrace'>{</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>K</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>                 <span class='int'>1_024</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>M</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>             <span class='int'>1_048_576</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>G</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>         <span class='int'>1_073_741_824</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>T</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>     <span class='int'>1_099_511_627_776</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>P</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='int'>1_125_899_906_842_624</span>
+<span class='rbrace'>}</span></pre></dd>
+      
+    </dl>
+  
+
+
+
+
+
+
+
+  
+    <h2>
+      Instance Method Summary
+      <small><a href="#" class="summary_toggle">collapse</a></small>
+    </h2>
+
+    <ul class="summary">
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#duration_in_seconds-instance_method" title="#duration_in_seconds (instance method)">#<strong>duration_in_seconds</strong>(time)  &#x21d2; Integer </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Convert a Slurm duration string to seconds.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#gpu_types_from_tres-instance_method" title="#gpu_types_from_tres (instance method)">#<strong>gpu_types_from_tres</strong>(tres)  &#x21d2; Hash </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Get a hash of gpu types to allocated count, computed from a tres string.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#gpus_from_gres-instance_method" title="#gpus_from_gres (instance method)">#<strong>gpus_from_gres</strong>(gres)  &#x21d2; Integer </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Get integer representing the number of gpus used by a node or job, calculated from gres string.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#gpus_from_tres-instance_method" title="#gpus_from_tres (instance method)">#<strong>gpus_from_tres</strong>(tres)  &#x21d2; Integer </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Get integer representing the number of gpus, computed from a tres string.</p></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#memory_from_tres-instance_method" title="#memory_from_tres (instance method)">#<strong>memory_from_tres</strong>(tres)  &#x21d2; Integer </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Get integer representing memory in bytes, computed from tres-alloc string.</p></div></span>
+  
+</li>
+
+      
+    </ul>
+    
+  
+
+
+
+  <div id="instance_method_details" class="method_details_list">
+    <h2>Instance Method Details</h2>
+
+    
+      <div class="method_details first">
+  <h3 class="signature first" id="duration_in_seconds-instance_method">
+  
+    #<strong>duration_in_seconds</strong>(time)  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Convert a Slurm duration string to seconds.
+Handles both &quot;HH:MM:SS&quot; and &quot;D-HH:MM:SS&quot; forms.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the duration in seconds</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+62
+63
+64
+65
+66
+67</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm/parsing.rb', line 62</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_duration_in_seconds'>duration_in_seconds</span><span class='lparen'>(</span><span class='id identifier rubyid_time'>time</span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='int'>0</span> <span class='kw'>if</span> <span class='id identifier rubyid_time'>time</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
+  <span class='id identifier rubyid_time'>time</span><span class='comma'>,</span> <span class='id identifier rubyid_days'>days</span> <span class='op'>=</span> <span class='id identifier rubyid_time'>time</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>-</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_reverse'>reverse</span>
+  <span class='id identifier rubyid_days'>days</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='op'>*</span> <span class='int'>24</span> <span class='op'>*</span> <span class='int'>3600</span> <span class='op'>+</span>
+    <span class='id identifier rubyid_time'>time</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_v'>v</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_inject'>inject</span><span class='lparen'>(</span><span class='int'>0</span><span class='rparen'>)</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_total'>total</span><span class='comma'>,</span> <span class='id identifier rubyid_v'>v</span><span class='op'>|</span> <span class='id identifier rubyid_total'>total</span> <span class='op'>*</span> <span class='int'>60</span> <span class='op'>+</span> <span class='id identifier rubyid_v'>v</span> <span class='rbrace'>}</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="gpu_types_from_tres-instance_method">
+  
+    #<strong>gpu_types_from_tres</strong>(tres)  &#x21d2; <tt>Hash</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Get a hash of gpu types to allocated count, computed from a tres string.
+TRES may report GPUs as an untyped rollup ('gres/gpu=2'), as typed
+entries ('gres/gpu:a100=2'), or both. Only typed entries carry a type,
+so untyped ones are excluded.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Hash</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>gpu types and counts, e.g. { 'a100' =&gt; 2 }</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+31
+32
+33
+34</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm/parsing.rb', line 31</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_gpu_types_from_tres'>gpu_types_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_tres'>tres</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?=,|$)</span><span class='regexp_end'>}</span></span><span class='rparen'>)</span>
+      <span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_count'>count</span><span class='op'>|</span> <span class='lbracket'>[</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_count'>count</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="gpus_from_gres-instance_method">
+  
+    #<strong>gpus_from_gres</strong>(gres)  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Get integer representing the number of gpus used by a node or job,
+calculated from gres string</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the number of gpus in gres</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+22
+23
+24</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm/parsing.rb', line 22</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_gpus_from_gres'>gpus_from_gres</span><span class='lparen'>(</span><span class='id identifier rubyid_gres'>gres</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_gres'>gres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="gpus_from_tres-instance_method">
+  
+    #<strong>gpus_from_tres</strong>(tres)  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Get integer representing the number of gpus, computed from a tres string.
+TRES may report GPUs twice - a typed entry and an untyped rollup, e.g.
+'gres/gpu:a100=16,gres/gpu=16' - so summing every match double counts.
+The rollup is authoritative; typed entries are a fallback for the case
+where no rollup is present.</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the number of gpus in tres</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+52
+53
+54
+55
+56
+57</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm/parsing.rb', line 52</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_gpus_from_tres'>gpus_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_tres'>tres</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_rollup'>rollup</span> <span class='op'>=</span> <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>(?:^|,)(?:gres/)?gpu=(\d+)(?:,|$)</span><span class='regexp_end'>}</span></span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='id identifier rubyid_rollup'>rollup</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='kw'>if</span> <span class='id identifier rubyid_rollup'>rollup</span>
+
+  <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)</span><span class='regexp_end'>}</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="memory_from_tres-instance_method">
+  
+    #<strong>memory_from_tres</strong>(tres)  &#x21d2; <tt>Integer</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Get integer representing memory in bytes, computed from tres-alloc string</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+<p class="tag_title">Returns:</p>
+<ul class="return">
+  
+    <li>
+      
+      
+        <span class='type'>(<tt>Integer</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the number of bytes of allocated memory</p></div>
+      
+    </li>
+  
+</ul>
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+38
+39
+40
+41
+42
+43
+44</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm/parsing.rb', line 38</span>
+
+<span class='kw'>def</span> <span class='id identifier rubyid_memory_from_tres'>memory_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_tres'>tres</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(?:^|,)mem=([\d.]+)([KMGTP]?)(?:,|$)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
+  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_match'>match</span>
+
+  <span class='id identifier rubyid_memory'>memory</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UNIT_FACTORS-constant" title="OodCore::Job::Adapters::Slurm::Parsing::UNIT_FACTORS (constant)">UNIT_FACTORS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
+  <span class='id identifier rubyid_memory'>memory</span> <span class='kw'>unless</span> <span class='id identifier rubyid_memory'>memory</span> <span class='op'>==</span> <span class='int'>0</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+  </div>
+
+</div>
+
+      <div id="footer">
+  Generated on Wed Oct  7 19:58:22 2026 by
+  <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.45 (ruby-3.0.7).
+</div>
+
+    </div>
+  </body>
+</html>

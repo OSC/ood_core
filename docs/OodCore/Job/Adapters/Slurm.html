@@ -89,7 +89,17 @@
 
   
   
+  <dl>
+      <dt>Extended by:</dt>
+      <dd><span class='object_link'><a href="Slurm/Parsing.html" title="OodCore::Job::Adapters::Slurm::Parsing (module)">Parsing</a></span></dd>
+  </dl>
   
+  
+  
+  <dl>
+      <dt>Includes:</dt>
+      <dd><span class='object_link'><a href="Slurm/Parsing.html" title="OodCore::Job::Adapters::Slurm::Parsing (module)">Parsing</a></span></dd>
+  </dl>
   
   
 
@@ -118,6 +128,8 @@ resource manager for job management.</p>
 <p class="children">
   
     
+      <strong class="modules">Modules:</strong> <span class='object_link'><a href="Slurm/Parsing.html" title="OodCore::Job::Adapters::Slurm::Parsing (module)">Parsing</a></span>
+    
   
     
       <strong class="classes">Classes:</strong> <span class='object_link'><a href="Slurm/Batch.html" title="OodCore::Job::Adapters::Slurm::Batch (class)">Batch</a></span>
@@ -132,17 +144,6 @@ resource manager for job management.</p>
     </h2>
 
     <dl class="constants">
-      
-        <dt id="UNIT_FACTORS-constant" class="">UNIT_FACTORS =
-          
-        </dt>
-        <dd><pre class="code"><span class='lbrace'>{</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>K</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>                 <span class='int'>1_024</span><span class='comma'>,</span> 
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>M</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>             <span class='int'>1_048_576</span><span class='comma'>,</span> 
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>G</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>         <span class='int'>1_073_741_824</span><span class='comma'>,</span> 
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>T</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span>     <span class='int'>1_099_511_627_776</span><span class='comma'>,</span> 
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>P</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='int'>1_125_899_906_842_624</span>
-<span class='rbrace'>}</span></pre></dd>
       
         <dt id="STATE_MAP-constant" class="">STATE_MAP =
           <div class="docstring">
@@ -195,6 +196,12 @@ resource manager for job management.</p>
 
 
 
+  
+  
+  <h3 class="inherited">Constants included
+     from <span class='object_link'><a href="Slurm/Parsing.html" title="OodCore::Job::Adapters::Slurm::Parsing (module)">Parsing</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Slurm/Parsing.html#UNIT_FACTORS-constant" title="OodCore::Job::Adapters::Slurm::Parsing::UNIT_FACTORS (constant)">Parsing::UNIT_FACTORS</a></span></p>
+
 
 
 
@@ -206,94 +213,6 @@ resource manager for job management.</p>
     </h2>
 
     <ul class="summary">
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#gpu_types_from_tres-class_method" title="gpu_types_from_tres (class method)">.<strong>gpu_types_from_tres</strong>(tres)  &#x21d2; Hash </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>Get a hash of gpu types to allocated count, computed from a tres string.</p></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#gpus_from_gres-class_method" title="gpus_from_gres (class method)">.<strong>gpus_from_gres</strong>(gres)  &#x21d2; Integer </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>Get integer representing the number of gpus used by a node or job, calculated from gres string.</p></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#gpus_from_tres-class_method" title="gpus_from_tres (class method)">.<strong>gpus_from_tres</strong>(tres)  &#x21d2; Integer </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>Get integer representing the number of gpus, computed from a tres string.</p></div></span>
-  
-</li>
-
-      
-        <li class="public ">
-  <span class="summary_signature">
-    
-      <a href="#memory_from_tres-class_method" title="memory_from_tres (class method)">.<strong>memory_from_tres</strong>(tres)  &#x21d2; Integer </a>
-    
-
-    
-  </span>
-  
-  
-  
-  
-  
-  
-  
-
-  
-    <span class="summary_desc"><div class='inline'><p>Get integer representing memory in bytes, computed from tres-alloc string.</p></div></span>
-  
-</li>
-
       
         <li class="public ">
   <span class="summary_signature">
@@ -695,6 +614,18 @@ resource manager for job management.</p>
   
   
   
+  <h3 class="inherited">Methods included from <span class='object_link'><a href="Slurm/Parsing.html" title="OodCore::Job::Adapters::Slurm::Parsing (module)">Parsing</a></span></h3>
+  <p class="inherited"><span class='object_link'><a href="Slurm/Parsing.html#duration_in_seconds-instance_method" title="OodCore::Job::Adapters::Slurm::Parsing#duration_in_seconds (method)">duration_in_seconds</a></span>, <span class='object_link'><a href="Slurm/Parsing.html#gpu_types_from_tres-instance_method" title="OodCore::Job::Adapters::Slurm::Parsing#gpu_types_from_tres (method)">gpu_types_from_tres</a></span>, <span class='object_link'><a href="Slurm/Parsing.html#gpus_from_gres-instance_method" title="OodCore::Job::Adapters::Slurm::Parsing#gpus_from_gres (method)">gpus_from_gres</a></span>, <span class='object_link'><a href="Slurm/Parsing.html#gpus_from_tres-instance_method" title="OodCore::Job::Adapters::Slurm::Parsing#gpus_from_tres (method)">gpus_from_tres</a></span>, <span class='object_link'><a href="Slurm/Parsing.html#memory_from_tres-instance_method" title="OodCore::Job::Adapters::Slurm::Parsing#memory_from_tres (method)">memory_from_tres</a></span></p>
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
   <h3 class="inherited">Methods inherited from <span class='object_link'><a href="../Adapter.html" title="OodCore::Job::Adapter (class)">OodCore::Job::Adapter</a></span></h3>
   <p class="inherited"><span class='object_link'><a href="../Adapter.html#info_all_each-instance_method" title="OodCore::Job::Adapter#info_all_each (method)">#info_all_each</a></span>, <span class='object_link'><a href="../Adapter.html#info_where_owner_each-instance_method" title="OodCore::Job::Adapter#info_where_owner_each (method)">#info_where_owner_each</a></span>, <span class='object_link'><a href="../Adapter.html#job_name_illegal_chars-instance_method" title="OodCore::Job::Adapter#job_name_illegal_chars (method)">#job_name_illegal_chars</a></span>, <span class='object_link'><a href="../Adapter.html#sanitize_job_name-instance_method" title="OodCore::Job::Adapter#sanitize_job_name (method)">#sanitize_job_name</a></span>, <span class='object_link'><a href="../Adapter.html#supports_job_arrays%3F-instance_method" title="OodCore::Job::Adapter#supports_job_arrays? (method)">#supports_job_arrays?</a></span></p>
 <div id="constructor_details" class="method_details_list">
@@ -775,14 +706,14 @@ resource manager for job management.</p>
       <pre class="lines">
 
 
-698
-699
-700
-701
-702</pre>
+648
+649
+650
+651
+652</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 698</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 648</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_opts'>opts</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_o'>o</span> <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
@@ -802,251 +733,7 @@ resource manager for job management.</p>
 
     
       <div class="method_details first">
-  <h3 class="signature first" id="gpu_types_from_tres-class_method">
-  
-    .<strong>gpu_types_from_tres</strong>(tres)  &#x21d2; <tt>Hash</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p>Get a hash of gpu types to allocated count, computed from a tres string.
-TRES may report GPUs as an untyped rollup ('gres/gpu=2'), as typed
-entries ('gres/gpu:a100=2'), or both. Only typed entries carry a type,
-so untyped ones are excluded.</p>
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Hash</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>gpu types and counts, e.g. { 'a100' =&gt; 2 }</p></div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-66
-67
-68
-69</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 66</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gpu_types_from_tres'>gpu_types_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_tres'>tres</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?=,|$)</span><span class='regexp_end'>}</span></span><span class='rparen'>)</span>
-      <span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='lbrace'>{</span> <span class='op'>|</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_count'>count</span><span class='op'>|</span> <span class='lbracket'>[</span><span class='id identifier rubyid_type'>type</span><span class='comma'>,</span> <span class='id identifier rubyid_count'>count</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span><span class='rbracket'>]</span> <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="gpus_from_gres-class_method">
-  
-    .<strong>gpus_from_gres</strong>(gres)  &#x21d2; <tt>Integer</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p>Get integer representing the number of gpus used by a node or job,
-calculated from gres string</p>
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>the number of gpus in gres</p></div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-57
-58
-59</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 57</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gpus_from_gres'>gpus_from_gres</span><span class='lparen'>(</span><span class='id identifier rubyid_gres'>gres</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_gres'>gres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="gpus_from_tres-class_method">
-  
-    .<strong>gpus_from_tres</strong>(tres)  &#x21d2; <tt>Integer</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p>Get integer representing the number of gpus, computed from a tres string.
-TRES may report GPUs twice - a typed entry and an untyped rollup, e.g.
-'gres/gpu:a100=16,gres/gpu=16' - so summing every match double counts.
-The rollup is authoritative; typed entries are a fallback for the case
-where no rollup is present.</p>
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>the number of gpus in tres</p></div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-87
-88
-89
-90
-91
-92</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 87</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_gpus_from_tres'>gpus_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_tres'>tres</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_rollup'>rollup</span> <span class='op'>=</span> <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>(?:^|,)(?:gres/)?gpu=(\d+)(?:,|$)</span><span class='regexp_end'>}</span></span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='id identifier rubyid_rollup'>rollup</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> <span class='kw'>if</span> <span class='id identifier rubyid_rollup'>rollup</span>
-
-  <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_scan'>scan</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)</span><span class='regexp_end'>}</span></span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_flatten'>flatten</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_i</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_sum'>sum</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="memory_from_tres-class_method">
-  
-    .<strong>memory_from_tres</strong>(tres)  &#x21d2; <tt>Integer</tt> 
-  
-
-  
-
-  
-</h3><div class="docstring">
-  <div class="discussion">
-    <p>Get integer representing memory in bytes, computed from tres-alloc string</p>
-
-  </div>
-</div>
-<div class="tags">
-  
-<p class="tag_title">Returns:</p>
-<ul class="return">
-  
-    <li>
-      
-      
-        <span class='type'>(<tt>Integer</tt>)</span>
-      
-      
-      
-        &mdash;
-        <div class='inline'><p>the number of bytes of allocated memory</p></div>
-      
-    </li>
-  
-</ul>
-
-</div><table class="source_code">
-  <tr>
-    <td>
-      <pre class="lines">
-
-
-73
-74
-75
-76
-77
-78
-79</pre>
-    </td>
-    <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 73</span>
-
-<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_memory_from_tres'>memory_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_tres'>tres</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_match'>match</span> <span class='op'>=</span> <span class='id identifier rubyid_tres'>tres</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_match'>match</span><span class='lparen'>(</span><span class='tstring'><span class='regexp_beg'>/</span><span class='tstring_content'>(?:^|,)mem=([\d.]+)([KMGTP]?)(?:,|$)</span><span class='regexp_end'>/</span></span><span class='rparen'>)</span>
-  <span class='kw'>return</span> <span class='kw'>unless</span> <span class='id identifier rubyid_match'>match</span>
-
-  <span class='id identifier rubyid_memory'>memory</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='const'><span class='object_link'><a href="#UNIT_FACTORS-constant" title="OodCore::Job::Adapters::Slurm::UNIT_FACTORS (constant)">UNIT_FACTORS</a></span></span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='int'>2</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='int'>1</span><span class='rparen'>)</span> <span class='op'>*</span> <span class='id identifier rubyid_match'>match</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span> 
-  <span class='id identifier rubyid_memory'>memory</span> <span class='kw'>unless</span> <span class='id identifier rubyid_memory'>memory</span> <span class='op'>==</span> <span class='int'>0</span>
-<span class='kw'>end</span></pre>
-    </td>
-  </tr>
-</table>
-</div>
-    
-      <div class="method_details ">
-  <h3 class="signature " id="relative_time-class_method">
+  <h3 class="signature first" id="relative_time-class_method">
   
     .<strong>relative_time</strong>(time, now: Time.now)  &#x21d2; <tt>String</tt> 
   
@@ -1129,19 +816,19 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-102
-103
-104
-105
-106
-107
-108
-109
-110
-111</pre>
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 102</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 58</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_relative_time'>relative_time</span><span class='lparen'>(</span><span class='id identifier rubyid_time'>time</span><span class='comma'>,</span> <span class='label'>now:</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_offset'>offset</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_time'>time</span><span class='period'>.</span><span class='id identifier rubyid_to_time'>to_time</span> <span class='op'>-</span> <span class='id identifier rubyid_now'>now</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_round'>round</span>
@@ -1204,12 +891,12 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-799
-800
-801</pre>
+749
+750
+751</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 799</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 749</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_accounts'>accounts</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_accounts'>accounts</span>
@@ -1259,12 +946,12 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-792
-793
-794</pre>
+742
+743
+744</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 792</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 742</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cluster_info'>cluster_info</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_get_cluster_info'>get_cluster_info</span>
@@ -1339,15 +1026,15 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-956
-957
-958
-959
-960
-961</pre>
+906
+907
+908
+909
+910
+911</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 956</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 906</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1375,12 +1062,12 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-963
-964
-965</pre>
+913
+914
+915</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 963</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 913</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_directive_prefix'>directive_prefix</span>
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#SBATCH</span><span class='tstring_end'>&#39;</span></span>
@@ -1455,15 +1142,15 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-932
-933
-934
-935
-936
-937</pre>
+882
+883
+884
+885
+886
+887</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 932</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 882</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1557,28 +1244,28 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-862
-863
-864
-865
-866
-867
-868
-869
-870
-871
-872
-873
-874
-875
-876
-877
-878
-879
-880</pre>
+812
+813
+814
+815
+816
+817
+818
+819
+820
+821
+822
+823
+824
+825
+826
+827
+828
+829
+830</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 862</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 812</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1667,16 +1354,16 @@ in a different timezone than the cluster.</p>
       <pre class="lines">
 
 
-807
-808
-809
-810
-811
-812
-813</pre>
+757
+758
+759
+760
+761
+762
+763</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 807</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 757</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='id identifier rubyid_attrs'>attrs</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -1748,34 +1435,34 @@ show_steps [#Boolean] optional boolean to filter job steps from the results.</p>
       <pre class="lines">
 
 
-831
-832
-833
-834
-835
-836
-837
-838
-839
-840
-841
-842
-843
-844
-845
-846
-847
-848
-849
-850
-851
-852
-853
-854
-855</pre>
+781
+782
+783
+784
+785
+786
+787
+788
+789
+790
+791
+792
+793
+794
+795
+796
+797
+798
+799
+800
+801
+802
+803
+804
+805</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 831</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 781</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_historic'>info_historic</span><span class='lparen'>(</span><span class='label'>opts:</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_job_ids'>job_ids</span>    <span class='op'>=</span> <span class='id identifier rubyid_opts'>opts</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:job_ids</span><span class='comma'>,</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
@@ -1797,8 +1484,8 @@ show_steps [#Boolean] optional boolean to filter job steps from the results.</p>
       <span class='label'>submission_time:</span> <span class='id identifier rubyid_parse_time'>parse_time</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='symbol'>:submit_time</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='comma'>,</span>
       <span class='label'>dispatch_time:</span> <span class='id identifier rubyid_parse_time'>parse_time</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='symbol'>:start_time</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='comma'>,</span>
       <span class='label'>native:</span> <span class='id identifier rubyid_v'>v</span><span class='comma'>,</span>
-      <span class='label'>gpus:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_gpus_from_tres'>gpus_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='symbol'>:tres_alloc</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='comma'>,</span>
-      <span class='label'>total_memory:</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_class'>class</span><span class='period'>.</span><span class='id identifier rubyid_memory_from_tres'>memory_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='symbol'>:tres_alloc</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+      <span class='label'>gpus:</span> <span class='id identifier rubyid_gpus_from_tres'>gpus_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='symbol'>:tres_alloc</span><span class='rbracket'>]</span><span class='rparen'>)</span><span class='comma'>,</span>
+      <span class='label'>total_memory:</span> <span class='id identifier rubyid_memory_from_tres'>memory_from_tres</span><span class='lparen'>(</span><span class='id identifier rubyid_v'>v</span><span class='lbracket'>[</span><span class='symbol'>:tres_alloc</span><span class='rbracket'>]</span><span class='rparen'>)</span>
     <span class='rparen'>)</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -1882,17 +1569,17 @@ resource manager</p>
       <pre class="lines">
 
 
-887
-888
-889
-890
-891
-892
-893
-894</pre>
+837
+838
+839
+840
+841
+842
+843
+844</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 887</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 837</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_owner'>owner</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1922,12 +1609,12 @@ resource manager</p>
       <pre class="lines">
 
 
-977
-978
-979</pre>
+927
+928
+929</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 977</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 927</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_nodes'>nodes</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_nodes'>nodes</span>
@@ -1952,12 +1639,12 @@ resource manager</p>
       <pre class="lines">
 
 
-973
-974
-975</pre>
+923
+924
+925</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 973</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 923</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_queues'>queues</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_queues'>queues</span>
@@ -2032,15 +1719,15 @@ resource manager</p>
       <pre class="lines">
 
 
-944
-945
-946
-947
-948
-949</pre>
+894
+895
+896
+897
+898
+899</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 944</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 894</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@slurm</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -2134,34 +1821,34 @@ resource manager</p>
       <pre class="lines">
 
 
-901
-902
-903
-904
-905
-906
-907
-908
-909
-910
-911
-912
-913
-914
-915
-916
-917
-918
-919
-920
-921
-922
-923
-924
-925</pre>
+851
+852
+853
+854
+855
+856
+857
+858
+859
+860
+861
+862
+863
+864
+865
+866
+867
+868
+869
+870
+871
+872
+873
+874
+875</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 901</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 851</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -2344,6 +2031,56 @@ job</p></div>
       <pre class="lines">
 
 
+669
+670
+671
+672
+673
+674
+675
+676
+677
+678
+679
+680
+681
+682
+683
+684
+685
+686
+687
+688
+689
+690
+691
+692
+693
+694
+695
+696
+697
+698
+699
+700
+701
+702
+703
+704
+705
+706
+707
+708
+709
+710
+711
+712
+713
+714
+715
+716
+717
+718
 719
 720
 721
@@ -2363,60 +2100,10 @@ job</p></div>
 735
 736
 737
-738
-739
-740
-741
-742
-743
-744
-745
-746
-747
-748
-749
-750
-751
-752
-753
-754
-755
-756
-757
-758
-759
-760
-761
-762
-763
-764
-765
-766
-767
-768
-769
-770
-771
-772
-773
-774
-775
-776
-777
-778
-779
-780
-781
-782
-783
-784
-785
-786
-787
-788</pre>
+738</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 719</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 669</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_after'>after</span>      <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_after'>after</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
@@ -2535,12 +2222,12 @@ job</p></div>
       <pre class="lines">
 
 
-969
-970
-971</pre>
+919
+920
+921</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 969</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/slurm.rb', line 919</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_dependencies?'>supports_job_dependencies?</span>
   <span class='kw'>true</span>
@@ -2555,7 +2242,7 @@ job</p></div>
 </div>
 
       <div id="footer">
-  Generated on Tue Oct  6 21:09:16 2026 by
+  Generated on Wed Oct  7 19:58:23 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
