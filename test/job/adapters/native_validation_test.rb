@@ -18,6 +18,7 @@ class NativeValidationTest < Minitest::Test
     'ccq'         => [[Array], { a: 1 }, false],
     'fujitsu_tcs' => [[Array], { a: 1 }, false],
     'psij'        => [[Array], { a: 1 }, false],
+    'flux'        => [[Array], { a: 1 }, false],
     'torque'      => [[Array, Hash], 'a string', false],
     'sge'         => [[Array, String], { a: 1 }, false],
     'linux_host'  => [[Hash], ['--nodes', '1'], false],
