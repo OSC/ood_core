@@ -667,6 +667,7 @@ module OodCore
         #   job
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
+          validate_native(script, Array)
           after      = Array(after).map(&:to_s)
           afterok    = Array(afterok).map(&:to_s)
           afternotok = Array(afternotok).map(&:to_s)

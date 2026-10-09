@@ -129,6 +129,7 @@ module OodCore
         # The `submit` method saves a job script as a file and prepares a command to submit the job.
         # Each optional argument specifies job dependencies (after, afterok, afternotok, afterany).
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
+          validate_native(script, Array)
           # convert OOD interfaces to PSI/J interfaces.
           # Conterted variables are shown as follows:
           #       OOD           |   PSI/J(JobSpec)
