@@ -814,14 +814,14 @@
       <pre class="lines">
 
 
-157
 158
 159
 160
-161</pre>
+161
+162</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 157</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 158</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@batch</span><span class='period'>.</span><span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -848,12 +848,12 @@
       <pre class="lines">
 
 
-163
 164
-165</pre>
+165
+166</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 163</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 164</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_directive_prefix'>directive_prefix</span>
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#$</span><span class='tstring_end'>&#39;</span></span>
@@ -921,14 +921,14 @@
       <pre class="lines">
 
 
-137
 138
 139
 140
-141</pre>
+141
+142</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 137</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 138</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@batch</span><span class='period'>.</span><span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1014,14 +1014,14 @@
       <pre class="lines">
 
 
-117
 118
 119
 120
-121</pre>
+121
+122</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 117</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 118</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@batch</span><span class='period'>.</span><span class='id identifier rubyid_get_info_enqueued_job'>get_info_enqueued_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
@@ -1073,14 +1073,14 @@
       <pre class="lines">
 
 
-95
 96
 97
 98
-99</pre>
+99
+100</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 95</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 96</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='ivar'>@batch</span><span class='period'>.</span><span class='id identifier rubyid_get_all'>get_all</span><span class='lparen'>(</span><span class='label'>owner:</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>*</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1167,15 +1167,15 @@ resource manager</p>
       <pre class="lines">
 
 
-106
 107
 108
 109
 110
-111</pre>
+111
+112</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 106</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 107</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_owner'>owner</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_join'>join</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>,</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
@@ -1246,14 +1246,14 @@ resource manager</p>
       <pre class="lines">
 
 
-147
 148
 149
 150
-151</pre>
+151
+152</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 147</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 148</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@batch</span><span class='period'>.</span><span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1339,14 +1339,14 @@ resource manager</p>
       <pre class="lines">
 
 
-127
 128
 129
 130
-131</pre>
+131
+132</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 128</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span>
@@ -1528,12 +1528,14 @@ execution after dependent jobs have terminated</p></div>
 88
 89
 90
-91</pre>
+91
+92</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 84</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_native'>validate_native</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='const'>Array</span><span class='comma'>,</span> <span class='const'>String</span><span class='rparen'>)</span>
   <span class='comment'># SGE supports jod dependencies on job completion
 </span>  <span class='id identifier rubyid_args'>args</span> <span class='op'>=</span> <span class='ivar'>@helper</span><span class='period'>.</span><span class='id identifier rubyid_batch_submit_args'>batch_submit_args</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='id identifier rubyid_after'>after</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='id identifier rubyid_afterok'>afterok</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='id identifier rubyid_afternotok'>afternotok</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='id identifier rubyid_afterany'>afterany</span><span class='rparen'>)</span>
 
@@ -1588,12 +1590,12 @@ execution after dependent jobs have terminated</p></div>
       <pre class="lines">
 
 
-169
 170
-171</pre>
+171
+172</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 169</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/sge.rb', line 170</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_dependencies?'>supports_job_dependencies?</span>
   <span class='kw'>true</span>
@@ -1608,7 +1610,7 @@ execution after dependent jobs have terminated</p></div>
 </div>
 
       <div id="footer">
-  Generated on Wed Oct  7 19:58:23 2026 by
+  Generated on Fri Oct  9 16:04:09 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>

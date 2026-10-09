@@ -737,12 +737,12 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
       <pre class="lines">
 
 
-354
 355
-356</pre>
+356
+357</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 354</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 355</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_cluster_info'>cluster_info</span>
   <span class='ivar'>@pbspro</span><span class='period'>.</span><span class='id identifier rubyid_get_cluster_info'>get_cluster_info</span>
@@ -817,15 +817,15 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
       <pre class="lines">
 
 
-471
 472
 473
 474
 475
-476</pre>
+476
+477</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 471</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 472</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_delete'>delete</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@pbspro</span><span class='period'>.</span><span class='id identifier rubyid_delete_job'>delete_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -853,12 +853,12 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
       <pre class="lines">
 
 
-478
 479
-480</pre>
+480
+481</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 478</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 479</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_directive_prefix'>directive_prefix</span>
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>#PBS</span><span class='tstring_end'>&#39;</span></span>
@@ -933,15 +933,15 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
       <pre class="lines">
 
 
-447
 448
 449
 450
 451
-452</pre>
+452
+453</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 447</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 448</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hold'>hold</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@pbspro</span><span class='period'>.</span><span class='id identifier rubyid_hold_job'>hold_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1035,7 +1035,6 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
       <pre class="lines">
 
 
-407
 408
 409
 410
@@ -1059,10 +1058,11 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
 428
 429
 430
-431</pre>
+431
+432</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 407</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 408</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_id'>id</span> <span class='op'>=</span> <span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span>
@@ -1157,16 +1157,16 @@ whether we filter the owner's jobs from a <code>qstat</code> of all jobs or call
       <pre class="lines">
 
 
-362
 363
 364
 365
 366
 367
-368</pre>
+368
+369</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 362</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 363</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_all'>info_all</span><span class='lparen'>(</span><span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='ivar'>@pbspro</span><span class='period'>.</span><span class='id identifier rubyid_get_jobs'>get_jobs</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_v'>v</span><span class='op'>|</span>
@@ -1255,7 +1255,6 @@ resource manager</p>
       <pre class="lines">
 
 
-375
 376
 377
 378
@@ -1280,10 +1279,11 @@ resource manager</p>
 397
 398
 399
-400</pre>
+400
+401</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 375</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 376</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_info_where_owner'>info_where_owner</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='comma'>,</span> <span class='label'>attrs:</span> <span class='kw'>nil</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_owner'>owner</span> <span class='op'>=</span> <span class='const'>Array</span><span class='period'>.</span><span class='id identifier rubyid_wrap'>wrap</span><span class='lparen'>(</span><span class='id identifier rubyid_owner'>owner</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
@@ -1340,14 +1340,14 @@ resource manager</p>
       <pre class="lines">
 
 
-489
 490
 491
 492
-493</pre>
+493
+494</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 489</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 490</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_ppn'>ppn</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='rparen'>)</span>
   <span class='kw'>return</span> <span class='lbracket'>[</span><span class='rbracket'>]</span> <span class='kw'>if</span> <span class='id identifier rubyid_script'>script</span><span class='period'>.</span><span class='id identifier rubyid_cores'>cores</span><span class='period'>.</span><span class='id identifier rubyid_nil?'>nil?</span>
@@ -1424,15 +1424,15 @@ resource manager</p>
       <pre class="lines">
 
 
-459
 460
 461
 462
 463
-464</pre>
+464
+465</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 459</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 460</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_release'>release</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='ivar'>@pbspro</span><span class='period'>.</span><span class='id identifier rubyid_release_job'>release_job</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span>
@@ -1526,12 +1526,12 @@ resource manager</p>
       <pre class="lines">
 
 
-438
 439
-440</pre>
+440
+441</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 438</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 439</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_status'>status</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='id identifier rubyid_id'>id</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_status'>status</span>
@@ -1752,12 +1752,14 @@ job</p></div>
 347
 348
 349
-350</pre>
+350
+351</pre>
     </td>
     <td>
       <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 290</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_submit'>submit</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='label'>after:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afternotok:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='label'>afterany:</span> <span class='lbracket'>[</span><span class='rbracket'>]</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_validate_native'>validate_native</span><span class='lparen'>(</span><span class='id identifier rubyid_script'>script</span><span class='comma'>,</span> <span class='const'>Array</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_after'>after</span>      <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_after'>after</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_afterok'>afterok</span>    <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_afterok'>afterok</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_afternotok'>afternotok</span> <span class='op'>=</span> <span class='const'>Array</span><span class='lparen'>(</span><span class='id identifier rubyid_afternotok'>afternotok</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_map'>map</span><span class='lparen'>(</span><span class='op'>&amp;</span><span class='symbol'>:to_s</span><span class='rparen'>)</span>
@@ -1865,12 +1867,12 @@ job</p></div>
       <pre class="lines">
 
 
-484
 485
-486</pre>
+486
+487</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 484</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/pbspro.rb', line 485</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_supports_job_dependencies?'>supports_job_dependencies?</span>
   <span class='kw'>true</span>
@@ -1885,7 +1887,7 @@ job</p></div>
 </div>
 
       <div id="footer">
-  Generated on Wed Oct  7 19:58:24 2026 by
+  Generated on Fri Oct  9 16:04:10 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
