@@ -234,6 +234,7 @@ module OodCore
         # @return [String] the job id, in decimal
         # @see Adapter#submit
         def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
+          validate_native(script, Array)
           unless script.job_array_request.nil?
             raise JobAdapterError, "Flux does not support job arrays"
           end
