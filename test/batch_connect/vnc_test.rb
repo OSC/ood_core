@@ -27,9 +27,9 @@ class BatchConnectVNCTest < Minitest::Test
       vncpasswd_cmd: '/opt/TurboVNC/bin/vncpasswd'
     ).to_s
 
-    # The stale-session cleanup (list + kill) runs in two places, the startup
-    # loop and clean_up, so: 2 x 2, plus --help, start and the final kill.
-    assert_equal(7, script.scan('/opt/TurboVNC/bin/vncserver').length)
+    # vnc_clean runs in the startup loop and in clean_up, plus --help and
+    # the start itself.
+    assert_equal(4, script.scan('/opt/TurboVNC/bin/vncserver').length)
     assert_equal(1, script.scan('/opt/TurboVNC/bin/vncpasswd').length)
   end
 
@@ -41,10 +41,8 @@ class BatchConnectVNCTest < Minitest::Test
     refute_match(/\bvncpasswd\b/, code)
   end
 
-  # The stale-session cleanup kills sessions from inside awk's system(),
-  # which starts a new shell. A $VNCSERVER_CMD that was set but not exported
-  # must still be the command that runs there, not whatever `vncserver` is
-  # first on the PATH.
+  # $VNCSERVER_CMD set but not exported must still be the command that
+  # runs, not whatever `vncserver` is first on the PATH.
   def test_cleanup_uses_the_configured_command_even_when_not_exported
     Dir.mktmpdir do |dir|
       configured = fake_vncserver(dir, 'configured')
@@ -54,26 +52,48 @@ class BatchConnectVNCTest < Minitest::Test
       script = <<~BASH
         PATH="#{File.dirname(on_path)}:$PATH"
         VNCSERVER_CMD="#{configured}"
+        display=2
         #{cleanup}
       BASH
       _out, status = Open3.capture2('bash', '-c', script)
 
       assert(status.success?)
-      assert_equal(":1\n", read_kills(configured))
+      assert_equal(":2\n", read_kills(configured))
       assert_equal('', read_kills(on_path))
     end
   end
 
-  def test_cleanup_only_kills_dead_sessions
+  # The user can have other sessions on the same node (other jobs, or ones
+  # vncserver -list still reports). Only this job's display gets killed.
+  def test_cleanup_kills_only_this_jobs_display
     Dir.mktmpdir do |dir|
       vncserver = fake_vncserver(dir, 'plain')
       cleanup = build_template(vncserver_cmd: vncserver).send(:vnc_clean)
 
-      _out, status = Open3.capture2('bash', '-c', cleanup)
+      _out, status = Open3.capture2('bash', '-c', "display=2\n#{cleanup}")
 
       assert(status.success?)
-      assert_equal(":1\n", read_kills(vncserver))
+      assert_equal(":2\n", read_kills(vncserver))
     end
+  end
+
+  # display is only set once the server has started, so cleanup in the
+  # startup loop or after a failed start must not kill anything.
+  def test_cleanup_does_nothing_before_the_server_starts
+    Dir.mktmpdir do |dir|
+      vncserver = fake_vncserver(dir, 'plain')
+      cleanup = build_template(vncserver_cmd: vncserver).send(:vnc_clean)
+
+      Open3.capture2('bash', '-c', cleanup)
+
+      assert_equal('', read_kills(vncserver))
+    end
+  end
+
+  def test_clean_script_kills_once
+    script = build_template.send(:clean_script)
+
+    assert_equal(1, script.scan('vncserver} -kill').length)
   end
 
   private

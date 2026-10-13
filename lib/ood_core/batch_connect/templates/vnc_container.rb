@@ -56,8 +56,8 @@ module OodCore
         # @option context [#to_s] :extra_args ("") any extra arguments used
         #   when initializing the vnc server process (not set if blank or
         #   `:vnc_args` is set) (assumes you don't modify `:before_script`)
-        # @option context [#to_s] :vnc_clean ("...") script used to clean up
-        #   any active vnc sessions (assumes you don't modify `:before_script`
+        # @option context [#to_s] :vnc_clean ("...") script used to stop
+        #   this job's vnc session (assumes you don't modify `:before_script`
         #   or `:clean_script`)
         # @option context [#to_s] :container_path ("vnc_container.sif") the path
         #   to the container with VNC
@@ -191,14 +191,13 @@ module OodCore
             EOT
           end
 
-          # Clean up the running VNC server and any other stale VNC servers
+          # Stop the VNC server this job started, then its container
           def clean_script
             <<-EOT.gsub(/^ {14}/, "")
               #{super}
               module load #{container_module}
 
               #{vnc_clean}
-              [[ -n ${display} ]] && #{container_command} exec instance://#{@instance_name} vncserver -kill :${display}
               #{container_command} instance stop #{@instance_name}
             EOT
           end
@@ -247,10 +246,15 @@ module OodCore
             end.to_s
           end
 
-          # Clean up any stale VNC sessions
+          # Stop this job's VNC server. Kill by display rather than walking
+          # `vncserver -list`: the PIDs it reports are from inside the
+          # instance's PID namespace, so `kill -0` against them on the host
+          # can't tell live sessions from dead ones. `display` is unset until
+          # the server has started, so this does nothing in the startup loop
+          # or after a failed start.
           def vnc_clean
             context.fetch(:vnc_clean) do
-              %(#{container_command} exec instance://#{@instance_name} vncserver -list | awk '/^:/{system("kill -0 "$2" 2>/dev/null || #{container_command} exec instance://#{@instance_name} vncserver -kill "$1)}')
+              %([[ -n ${display} ]] && #{container_command} exec instance://#{@instance_name} vncserver -kill :${display})
             end.to_s
           end
       end
