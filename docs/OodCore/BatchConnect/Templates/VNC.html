@@ -252,6 +252,37 @@ websockify script (assumes you don't modify <code>:after_script</code>)</p></div
         </li>
       
         <li>
+          <span class="name">:vncserver_cmd</span>
+          <span class="type">(<tt>#<span class='object_link'><a href="../Template.html#to_s-instance_method" title="OodCore::BatchConnect::Template#to_s (method)">to_s</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>&quot;${VNCSERVER_CMD:-vncserver}&quot;</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>the vncserver command, e.g. a full
+path like /opt/TurboVNC/bin/vncserver so a user's PATH can't swap
+in a different one</p></div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:vncpasswd_cmd</span>
+          <span class="type">(<tt>#<span class='object_link'><a href="../Template.html#to_s-instance_method" title="OodCore::BatchConnect::Template#to_s (method)">to_s</a></span></tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>&quot;${VNCPASSWD_CMD:-vncpasswd}&quot;</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>the vncpasswd command, e.g.
+/opt/TurboVNC/bin/vncpasswd</p></div>
+          
+        </li>
+      
+        <li>
           <span class="name">:websockify_heartbeat_seconds</span>
           <span class="type">(<tt>#<span class='object_link'><a href="../Template.html#to_s-instance_method" title="OodCore::BatchConnect::Template#to_s (method)">to_s</a></span></tt>)</span>
           <span class="default">
@@ -439,12 +470,12 @@ or <code>:clean_script</code>)</p></div>
       <pre class="lines">
 
 
-60
-61
-62</pre>
+67
+68
+69</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/vnc.rb', line 60</span>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/batch_connect/templates/vnc.rb', line 67</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_initialize'>initialize</span><span class='lparen'>(</span><span class='id identifier rubyid_context'>context</span> <span class='op'>=</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
   <span class='kw'>super</span>
@@ -460,7 +491,7 @@ or <code>:clean_script</code>)</p></div>
 </div>
 
       <div id="footer">
-  Generated on Tue Oct 13 18:32:32 2026 by
+  Generated on Tue Oct 13 19:05:04 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
