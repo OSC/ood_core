@@ -28,10 +28,11 @@ class BatchConnectVNCCleanupTest < Minitest::Test
   end
 
   def teardown
-    # Stop any fake Xvnc a failing test left behind
-    Dir[File.join(@state, '*.pid')].each do |f|
-      Process.kill('KILL', File.read(f).to_i) rescue nil
-    end
+    # Stop any fake Xvnc a failing test left behind, and fake websockify
+    pids = Dir[File.join(@state, '*.pid')].map { |f| File.read(f).to_i }
+    procs = File.join(@state, 'procs')
+    pids += File.read(procs).split.map(&:to_i) if File.exist?(procs)
+    pids.each { |pid| Process.kill('KILL', pid) rescue nil }
     FileUtils.rm_rf(@dir)
   end
 
@@ -133,7 +134,13 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     script = "module () { :; }\n#{script}"
     env = {
       'PATH' => "#{@bin}/container-path:#{@bin}:#{ENV['PATH']}",
-      'FAKE_STATE' => @state
+      'FAKE_STATE' => @state,
+      # Lmod sets BASH_ENV so `module` works in scripts, which makes every
+      # bash here (the job and each fake) source its init first. That's
+      # most of the run time on a cluster login node, and none of it is
+      # needed: `module` is stubbed above.
+      'BASH_ENV' => nil,
+      'ENV' => nil
     }
     # Each batch job runs in its own session, and the template relies on that
     # (`pgrep -s 0 Xvnc`), so give the job one here too.
@@ -227,6 +234,9 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     fake(:websockify, <<~BASH)
       [[ "$1" == -D ]] && exit 0
       echo "WebSocket server settings: proxying from :$1 to $3"
+      # The template starts this inside $(...), so clean_up's pkill -P $$
+      # can't reach it; teardown kills it instead.
+      echo $$ >> "$FAKE_STATE/procs"
       exec sleep 300
     BASH
 
