@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency "fog-openstack", "~> 1.1.5"
   spec.add_runtime_dependency "rexml", "~> 3.2"
   spec.add_runtime_dependency "ostruct"
+  spec.add_runtime_dependency "logger"
   spec.add_runtime_dependency "base64"
 
   spec.add_development_dependency "rake", "~> 13.4.1"
