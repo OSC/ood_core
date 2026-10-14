@@ -186,6 +186,14 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     sleep = ENV['PATH'].split(':').map { |d| File.join(d, 'sleep') }.find { |f| File.executable?(f) }
     FileUtils.ln_s(sleep, File.join(@bin, 'Xvnc'))
 
+    # The template's own waits (up to 0.9s between start retries, 1s while
+    # polling for websockify) are most of this file's run time. Shorten
+    # just those; any other sleep runs as normal.
+    fake(:sleep, <<~BASH)
+      [[ $# -eq 1 && ( $1 == 1 || $1 =~ ^0\.[0-9]+s?$ ) ]] && exec #{sleep} 0.01
+      exec #{sleep} "$@"
+    BASH
+
     fake(:vncserver, <<~BASH)
       state="$FAKE_STATE"
       case "$1" in
