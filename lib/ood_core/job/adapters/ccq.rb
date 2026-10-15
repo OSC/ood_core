@@ -104,24 +104,6 @@ module OodCore
           info(id).status
         end
 
-        # This adapter does not implement hold and will always raise
-        #   an exception.
-        # @param id [#to_s] the id of the job
-        # @raise [JobAdapterError] always
-        # @return [void]
-        def hold(_)
-          raise NotImplementedError, "subclass did not define #hold"
-        end
-
-        # This adapter does not implement release and will always raise
-        #   an exception.
-        # @param id [#to_s] the id of the job
-        # @raise [JobAdapterError] always
-        # @return [void]
-        def release(_)
-          raise NotImplementedError, "subclass did not define #release"
-        end
-
         # Delete the submitted job
         # @param id [#to_s] the id of the job
         # @return [void]
