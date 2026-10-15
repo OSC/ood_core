@@ -26,10 +26,10 @@ class AdapterTest < Minitest::Test
       base_methods.each do |name|
         impl = adapter.instance_method(name)
 
-        # Case 2: not overridden, so the base class method runs
+        # If the method is not overridden, the base class method runs
         next if impl.owner == BASE
 
-        # Case 1: overridden, so the signature must match the base exactly
+        # If it is overridden, the signature must match the base exactly
         expected = BASE.instance_method(name).parameters
         actual   = impl.parameters
 
