@@ -432,7 +432,7 @@ module OodCore
                 # Retrieve information for all jobs
                 # @raise [JobAdapterError] if something goes wrong retrieving job info
                 # @return [Array<Info>] list of information describing submitted jobs
-                def info_all(attrs: nil)
+                def info_all(attrs: nil, host: nil)
                     jobs = @htcondor.get_jobs
                     jobs.map { |job| parse_job_info(job) }
                 rescue Batch::Error => e

@@ -72,7 +72,7 @@ module OodCore
 
         # Retrieve info for all jobs from the resource manager
         # @return [Array<Info>] information describing submitted jobs
-        def info_all(attrs: nil)
+        def info_all(attrs: nil, host: nil)
           args = []
           args.concat ["-s", scheduler] unless scheduler.nil?
 

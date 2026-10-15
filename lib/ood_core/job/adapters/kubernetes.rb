@@ -72,7 +72,7 @@ module OodCore
         #   For certain adapters this may speed up the response since
         #   adapters can get by without populating the entire Info object
         # @return [Array<Info>] information describing submitted jobs
-        def info_all(attrs: nil)
+        def info_all(attrs: nil, host: nil)
           batch.info_all(attrs: attrs)
         rescue Batch::Error => e
           raise JobAdapterError, e.message

@@ -345,7 +345,7 @@ module OodCore
           end
         end
 
-        def info_all(attrs: nil)
+        def info_all(attrs: nil, host: nil)
           @psij.get_jobs.map do |v|
             parse_job_info(v)
           end
