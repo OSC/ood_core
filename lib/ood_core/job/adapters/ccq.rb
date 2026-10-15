@@ -72,7 +72,7 @@ module OodCore
 
         # Retrieve info for all jobs from the resource manager
         # @return [Array<Info>] information describing submitted jobs
-        def info_all(attrs: nil)
+        def info_all(attrs: nil, host: nil)
           args = []
           args.concat ["-s", scheduler] unless scheduler.nil?
 
@@ -102,24 +102,6 @@ module OodCore
         # @see Adapter#status
         def status(id)
           info(id).status
-        end
-
-        # This adapter does not implement hold and will always raise
-        #   an exception.
-        # @param id [#to_s] the id of the job
-        # @raise [JobAdapterError] always
-        # @return [void]
-        def hold(_)
-          raise NotImplementedError, "subclass did not define #hold"
-        end
-
-        # This adapter does not implement release and will always raise
-        #   an exception.
-        # @param id [#to_s] the id of the job
-        # @raise [JobAdapterError] always
-        # @return [void]
-        def release(_)
-          raise NotImplementedError, "subclass did not define #release"
         end
 
         # Delete the submitted job

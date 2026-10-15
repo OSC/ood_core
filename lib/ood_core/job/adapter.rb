@@ -52,8 +52,15 @@ module OodCore
       #
       #   For certain adapters this may speed up the response since
       #   adapters can get by without populating the entire Info object
+      #
+      # @param host [#to_s, nil] defaults to nil (and all hosts are queried)
+      #   Restricts the listing to the specified host. Only meaningful for adapters
+      #   that manage jobs across multiple hosts, like LinuxHost or Systemd. Adapters
+      #   that talk to a single scheduler will accept and ignore it. Adapters
+      #   that honor it will raise unless the specified host is included in
+      #   the ssh_hosts adapter configuration.
       # @return [Array<Info>] information describing submitted jobs
-      def info_all(attrs: nil)
+      def info_all(attrs: nil, host: nil)
         raise NotImplementedError, "subclass did not define #info_all"
       end
 

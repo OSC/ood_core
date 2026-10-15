@@ -314,7 +314,7 @@ module OodCore
                 # @raise [JobAdapterError] if something goes wrong submitting a job
                 # @return [String] the job id returned after successfully submitting a
                 #   job
-                def submit(script)
+                def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
                     validate_native(script, Hash)
                     args = []
                     args.concat ["-batch-name", "#{script.job_name}"] unless script.job_name.nil?
@@ -432,7 +432,7 @@ module OodCore
                 # Retrieve information for all jobs
                 # @raise [JobAdapterError] if something goes wrong retrieving job info
                 # @return [Array<Info>] list of information describing submitted jobs
-                def info_all(attrs: nil)
+                def info_all(attrs: nil, host: nil)
                     jobs = @htcondor.get_jobs
                     jobs.map { |job| parse_job_info(job) }
                 rescue Batch::Error => e
