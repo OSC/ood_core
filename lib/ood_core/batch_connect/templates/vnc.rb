@@ -60,8 +60,8 @@ module OodCore
         # @option context [#to_s] :extra_args ("") any extra arguments used
         #   when initializing the vnc server process (not set if blank or
         #   `:vnc_args` is set) (assumes you don't modify `:before_script`)
-        # @option context [#to_s] :vnc_clean ("...") script used to clean up
-        #   any active vnc sessions (assumes you don't modify `:before_script`
+        # @option context [#to_s] :vnc_clean ("...") script used to stop
+        #   this job's vnc session (assumes you don't modify `:before_script`
         #   or `:clean_script`)
         # @see Template
         def initialize(context = {})
@@ -200,13 +200,12 @@ module OodCore
             EOT
           end
 
-          # Clean up the running VNC server and any other stale VNC servers
+          # Stop the VNC server this job started
           def clean_script
             <<-EOT.gsub(/^ {14}/, "")
               #{super}
 
               #{vnc_clean}
-              [[ -n ${display} ]] && #{vncserver_cmd} -kill :${display}
             EOT
           end
 
@@ -252,13 +251,13 @@ module OodCore
             end.to_s
           end
 
-          # Clean up any stale VNC sessions
+          # Stop this job's VNC server. Kill by display rather than walking
+          # `vncserver -list`, which also lists the user's other sessions on
+          # this node. `display` is unset until the server has started, so
+          # this does nothing in the startup loop or after a failed start.
           def vnc_clean
             context.fetch(:vnc_clean) do
-              # awk's system() runs a new shell, so expand the command here
-              # and hand it to awk; an unexported $VNCSERVER_CMD would
-              # otherwise be lost in that shell.
-              %(#{vncserver_cmd} -list | awk -v vncserver_cmd="#{vncserver_cmd}" '/^:/{system("kill -0 "$2" 2>/dev/null || " vncserver_cmd " -kill "$1)}')
+              %([[ -n ${display} ]] && #{vncserver_cmd} -kill :${display})
             end.to_s
           end
       end
