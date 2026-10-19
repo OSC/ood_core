@@ -58,7 +58,7 @@ class SelkiesTest < Minitest::Test
     assert_includes(script, <<~'BASH'.chomp)
       local args=(--public --port="${port}" --enable-basic-auth=false --enable-https=false --allowed-origins='*')
     BASH
-    assert_includes(script, 'exec selkies-session "${args[@]}"' + "\n")
+    assert_includes(script, 'exec selkies session "${args[@]}"' + "\n")
   end
 
   def test_runs_app_script_as_desktop_and_ends_session_when_it_returns
@@ -126,13 +126,13 @@ class SelkiesTest < Minitest::Test
 
   def test_uses_custom_options_in_generated_script
     script = rendered(
-      selkies_cmd: 'apptainer exec --nv /opt/selkies.sif selkies-session',
+      selkies_cmd: 'apptainer exec --nv /opt/selkies.sif selkies session',
       selkies_args: '--wayland',
       selkies_timeout_seconds: '300',
       password_size: 48
     )
 
-    assert_includes(script, 'exec apptainer exec --nv /opt/selkies.sif selkies-session "${args[@]}" --wayland')
+    assert_includes(script, 'exec apptainer exec --nv /opt/selkies.sif selkies session "${args[@]}" --wayland')
     assert_includes(script, 'selkies_deadline=$((SECONDS + 300))')
     assert_includes(script, 'password=$(create_passwd "48")')
   end
