@@ -33,11 +33,11 @@ module OodCore
         # @option context [#to_sym, Array<#to_sym>] :conn_params ([]) A list of
         #   connection parameters added to the connection file (`:host`,
         #   `:port` and `:password`, the session token, will always exist)
-        # @option context [#to_s] :selkies_cmd ("selkies-session") the command
-        #   that starts Selkies' session launcher: a native install or module
-        #   (`selkies-session`), an AppImage (`/path/selkies.AppImage
-        #   selkies-session`), or a container (`apptainer exec --nv
-        #   /path/selkies.sif selkies-session`)
+        # @option context [#to_s] :selkies_cmd ("selkies session") the command
+        #   that starts Selkies' session launcher (Selkies 2.1.0 or later): a
+        #   native install or module (`selkies session`), an AppImage
+        #   (`/path/selkies.AppImage session`), or a container (`apptainer exec
+        #   --nv /path/selkies.sif selkies session`)
         # @option context [#to_s] :selkies_session a desktop installed on the
         #   node or in the container, by name (`xfce`, `kde`) or as a command,
         #   started in place of the app's script; empty starts the default
@@ -171,7 +171,7 @@ module OodCore
           end
 
           def selkies_cmd
-            context.fetch(:selkies_cmd, "selkies-session").to_s
+            context.fetch(:selkies_cmd, "selkies session").to_s
           end
 
           def selkies_args
