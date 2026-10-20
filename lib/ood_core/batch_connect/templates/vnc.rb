@@ -79,9 +79,11 @@ module OodCore
           def before_script
             <<-EOT.gsub(/^ {14}/, "")
               # This template needs TurboVNC; say so plainly when it isn't there
-              if ! command -v vncserver >/dev/null 2>&1; then
-                echo "ERROR: vncserver isn't in PATH. VNC apps need TurboVNC (https://www.turbovnc.org)."
-                echo "Install it on this node and put its bin directory (usually /opt/TurboVNC/bin) in PATH."
+              # (checks vncserver_cmd, so a command pinned outside PATH still counts)
+              if ! command -v #{vncserver_cmd} >/dev/null 2>&1; then
+                echo "ERROR: VNC server command not found: #{vncserver_cmd}"
+                echo "VNC apps need TurboVNC (https://www.turbovnc.org). Install it on this node and either"
+                echo "put its bin directory (usually /opt/TurboVNC/bin) in PATH or set vncserver_cmd to its full path."
                 clean_up 1
               fi
 
@@ -94,9 +96,9 @@ module OodCore
               vnc_start_failed () {
                 echo "ERROR: Could not start the VNC server."
                 if vnc_is_tigervnc; then
-                  echo "The vncserver in PATH ($(command -v vncserver)) is TigerVNC, but VNC apps need"
-                  echo "TurboVNC (https://www.turbovnc.org). Install it on this node and put its bin"
-                  echo "directory (usually /opt/TurboVNC/bin) first in PATH."
+                  echo "The VNC server in use ($(command -v #{vncserver_cmd})) is TigerVNC, but VNC apps need"
+                  echo "TurboVNC (https://www.turbovnc.org). Install it on this node and either put its bin"
+                  echo "directory (usually /opt/TurboVNC/bin) first in PATH or set vncserver_cmd to its full path."
                 fi
                 clean_up 1
               }
