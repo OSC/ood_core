@@ -1,5 +1,6 @@
 require "ood_core/version"
 require "ood_core/errors"
+require "ood_core/logger"
 require "ood_core/cluster"
 require "ood_core/clusters"
 require "ood_core/invalid_cluster"
