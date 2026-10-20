@@ -75,8 +75,8 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   end
 
   def submit_host(script = nil)
-    if script && script.native && script.native['submit_host_override']
-      script.native['submit_host_override']
+    if script && script.native && script.native[:submit_host_override]
+      script.native[:submit_host_override]
     else
       @submit_host
     end
