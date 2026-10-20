@@ -21,7 +21,7 @@ class LinuxHostLauncherTest < Minitest::Test
 
   def test_submit_host_override_works
     launcher = launcher_instance
-    script = OodCore::Job::Script.new(content: '', native: { submit_host_override: 'oakley.osc.edu' })
+    script = build_script(native: { submit_host_override: 'oakley.osc.edu' })
 
     refute_nil(launcher)
     assert_equal('oakley.osc.edu', launcher.submit_host(script))
@@ -29,7 +29,7 @@ class LinuxHostLauncherTest < Minitest::Test
 
   def test_submit_host_override_defaults_submit_host
     launcher = launcher_instance
-    script = OodCore::Job::Script.new(content: '', native: {})
+    script = build_script
 
     refute_nil(launcher)
     assert_equal('example.edu', launcher.submit_host(script))
