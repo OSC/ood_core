@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+- VNC templates now stop only the job's own VNC server, by display, in [1000](https://github.com/OSC/ood_core/pull/1000).
+  This fixes the `vnc_container` clean up error in [931](https://github.com/OSC/ood_core/issues/931).
+  The default `vnc_clean` no longer clears other stale sessions found by `vncserver -list`, and sites
+  that override `vnc_clean` are now responsible for stopping the VNC server.
+
+- `vncserver` and `vncpasswd` can be pinned to full paths with `vncserver_cmd`/`vncpasswd_cmd` or `$VNCSERVER_CMD`/`$VNCPASSWD_CMD` in [1006](https://github.com/OSC/ood_core/pull/1006).
+
 - Add `cluster_info` support to the PBS Pro adapter, reporting active/total processors, gpus, and nodes.
 
 # [0.26.1] - 07-31-2024
