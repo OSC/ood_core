@@ -8,6 +8,7 @@ module OodCore
     # the resources this batch job will require of the resource manager.
     class Script
       using Refinements::ArrayExtensions
+      using Refinements::HashExtensions
 
       # Content of the script to be executed on the remote host
       # @return [String] the script content
@@ -186,7 +187,7 @@ module OodCore
         @job_array_request  = job_array_request && job_array_request.to_s
         @qos                = qos               && qos.to_s
         @gpus_per_node      = gpus_per_node     && gpus_per_node.to_i
-        @native             = native
+        @native             = native.is_a?(Hash) ? native.symbolize_keys : native
         @copy_environment   = (copy_environment.nil?) ? nil : !! copy_environment
         @cores              = cores&.to_i
         @memory             = memory&.to_i
