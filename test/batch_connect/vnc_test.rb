@@ -28,8 +28,9 @@ class BatchConnectVNCTest < Minitest::Test
     ).to_s
 
     # vnc_clean runs in the startup loop and in clean_up, plus --help and
-    # the start itself.
-    assert_equal(4, script.scan('/opt/TurboVNC/bin/vncserver').length)
+    # the start itself, plus the up-front check, its error message and the
+    # TigerVNC error message.
+    assert_equal(7, script.scan('/opt/TurboVNC/bin/vncserver').length)
     assert_equal(1, script.scan('/opt/TurboVNC/bin/vncpasswd').length)
   end
 

@@ -78,6 +78,31 @@ module OodCore
           # the connection information
           def before_script
             <<-EOT.gsub(/^ {14}/, "")
+              # This template needs TurboVNC; say so plainly when it isn't there
+              # (checks vncserver_cmd, so a command pinned outside PATH still counts)
+              if ! command -v #{vncserver_cmd} >/dev/null 2>&1; then
+                echo "ERROR: VNC server command not found: #{vncserver_cmd}"
+                echo "VNC apps need TurboVNC (https://www.turbovnc.org). Install it on this node and either"
+                echo "put its bin directory (usually /opt/TurboVNC/bin) in PATH or set vncserver_cmd to its full path."
+                clean_up 1
+              fi
+
+              # TigerVNC's vncserver takes different options and prints different
+              # output, so it can't stand in for TurboVNC
+              vnc_is_tigervnc () {
+                echo "${VNC_OUT}" | grep -qiE 'tigervnc|replaced by a systemd unit'
+              }
+
+              vnc_start_failed () {
+                echo "ERROR: Could not start the VNC server."
+                if vnc_is_tigervnc; then
+                  echo "The VNC server in use ($(command -v #{vncserver_cmd})) is TigerVNC, but VNC apps need"
+                  echo "TurboVNC (https://www.turbovnc.org). Install it on this node and either put its bin"
+                  echo "directory (usually /opt/TurboVNC/bin) first in PATH or set vncserver_cmd to its full path."
+                fi
+                clean_up 1
+              }
+
               # Setup one-time use passwords and initialize the VNC password
               function change_passwd () {
                 echo "Setting VNC password..."
@@ -110,6 +135,11 @@ module OodCore
                 # should kill it and try again
                 kill -0 ${VNC_PID} 2>/dev/null && [[ "${VNC_OUT}" =~ "Fatal server error" ]] && kill -TERM ${VNC_PID}
 
+                # Trying again won't help if this is TigerVNC
+                if ! kill -0 ${VNC_PID} 2>/dev/null && vnc_is_tigervnc; then
+                  break
+                fi
+
                 # Check that Xvnc process is running, if not assume it died and
                 # wait some random period of time before restarting
                 kill -0 ${VNC_PID} 2>/dev/null || sleep 0.$(random_number 1 9)s
@@ -119,7 +149,7 @@ module OodCore
               done
 
               # If we fail to start it after so many tries, then just give up
-              kill -0 ${VNC_PID} 2>/dev/null || clean_up 1
+              kill -0 ${VNC_PID} 2>/dev/null || vnc_start_failed
 
               # Parse output for ports used
               display=$(echo "${VNC_OUT}" | awk -F':' '/^Desktop/{print $NF}')
