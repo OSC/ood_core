@@ -392,7 +392,7 @@ class SshTest < Minitest::Test
     end
   end
 
-  # editable?, read
+  # editable?, read, touch, mkdir, write
 
   def test_editable?
     adapter.expects(:call).with('test', '-f', '/a\\ b', '-a', '-r', '/a\\ b', '-a', '-w', '/a\\ b').returns(ok)
@@ -439,6 +439,46 @@ class SshTest < Minitest::Test
     assert_equal("Could not read file /a: cat: '/caf� x': No such file or directory", error.message)
   end
 
+  def test_write_copies_stdin_to_escaped_path_with_dd
+    adapter.expects(:call)
+           .with('dd', "of=/a\\ b/it\\'s", 'bs=128K', 'status=none', stdin: 'content', binmode: true)
+           .returns(ok)
+
+    adapter.write("/a b/it's", 'content')
+  end
+
+  {
+    touch: [['/a b'], ['touch', '/a\\ b']],
+    mkdir: [['/a b'], ['mkdir', '-p', '/a\\ b']]
+  }.each do |method, (args, command)|
+    define_method("test_#{method}") do
+      adapter.expects(:call).with(*command).returns(ok)
+
+      adapter.send(method, *args)
+    end
+
+    define_method("test_#{method}_failure_raises_stderr") do
+      adapter.stubs(:call).returns(failed(1, "#{method}: Permission denied"))
+
+      error = assert_raises(StandardError) { adapter.send(method, *args) }
+      assert_match(/#{method}: Permission denied/, error.message)
+    end
+
+    define_method("test_#{method}_not_installed") do
+      adapter.stubs(:call).returns(failed(127, "bash: line 1: #{command.first}: command not found"))
+
+      error = assert_raises(StandardError) { adapter.send(method, *args) }
+      assert_match(/: #{command.first} is not installed on cluster test\z/, error.message)
+    end
+  end
+
+  def test_write_failure
+    adapter.stubs(:call).returns(failed(1, "dd: failed to open '/a': Permission denied"))
+
+    error = assert_raises(StandardError) { adapter.write('/a', 'x') }
+    assert_equal("Could not write /a: dd: failed to open '/a': Permission denied", error.message)
+  end
+
   # mime_type
 
   def test_mime_type
@@ -454,6 +494,7 @@ class SshTest < Minitest::Test
       'ls'   => -> { adapter.ls('/a') },
       'find' => -> { adapter.ls_recursive('/a') },
       'cat'  => -> { adapter.read('/a') },
+      'dd'   => -> { adapter.write('/a', 'x') },
       'du'   => -> { adapter.directory_size('/a', timeout: 5) }
     }.each do |cmd, operation|
       adapter.stubs(:call).returns(failed(127, "bash: line 1: #{cmd}: command not found"))

@@ -70,6 +70,12 @@ class SshIntegrationTest < Minitest::Test
     File.delete(probe) if File.exist?(probe)
   end
 
+  # Whether dd on the cluster is from uutils coreutils, as on Ubuntu 26.04.
+  def uutils_dd?
+    stdout, = @adapter.call('dd', '--version')
+    stdout.include?('uutils')
+  end
+
   def test_dataroot
     ClimateControl.modify(HOME: path('home dir'), OOD_PORTAL: nil, APP_TOKEN: nil) do
       assert_equal(Pathname.new(path('home dir', 'ondemand', 'data', 'sys', 'dashboard')), @adapter.dataroot)
@@ -88,13 +94,31 @@ class SshIntegrationTest < Minitest::Test
     assert_equal('Could not access cluster test: timed out after 1s (will retry in 300s)', error.message)
   end
 
-  def test_read_awkward_file_names
+  def test_write_and_read_back_awkward_file_names
     FILE_NAMES.each do |name|
       file = path(name)
       content = "content of #{name}"
-      File.write(file, content)
+      @adapter.write(file, content)
 
+      assert_equal(content.b, File.binread(file), "write #{name.inspect}")
       assert_equal(content.b, @adapter.read(file).b, "read #{name.inspect}")
+      assert_equal(content.bytesize, @adapter.size(file), "size #{name.inspect}")
+      assert(@adapter.exist?(file), "exist? #{name.inspect}")
+      refute(@adapter.directory?(file), "directory? #{name.inspect}")
+      assert(@adapter.editable?(file), "editable? #{name.inspect}")
+    end
+  end
+
+  def test_write_and_read_back_invalid_utf8_file_names
+    skip('known limitation: uutils dd refuses paths that are not valid UTF-8') if uutils_dd?
+
+    INVALID_UTF8_NAMES.each do |name|
+      file = path(name)
+      content = "content of #{name}".b
+      @adapter.write(file, content)
+
+      assert_equal(content, File.binread(file), "write #{name.inspect}")
+      assert_equal(content, @adapter.read(file).b, "read #{name.inspect}")
       assert_equal(content.bytesize, @adapter.size(file), "size #{name.inspect}")
       assert(@adapter.exist?(file), "exist? #{name.inspect}")
       refute(@adapter.directory?(file), "directory? #{name.inspect}")
@@ -240,11 +264,61 @@ class SshIntegrationTest < Minitest::Test
     assert_empty(err)
   end
 
+  def test_write_binary_and_empty_content
+    content = Random.new(2).bytes(100_000)
+    @adapter.write(path('binary'), content)
+    @adapter.write(path('empty'), '')
+
+    assert_equal(content, File.binread(path('binary')))
+    assert_equal('', File.read(path('empty')))
+  end
+
+  # Rails sets Encoding.default_internal, which makes Ruby convert strings written to pipes.
+  def test_write_binary_content_with_rails_encoding_defaults
+    content = "\xFF\xFE binary".b
+    default_internal = Encoding.default_internal
+    Encoding.default_internal = Encoding::UTF_8
+
+    @adapter.write(path('binary'), content)
+
+    assert_equal(content, File.binread(path('binary')))
+  ensure
+    Encoding.default_internal = default_internal
+  end
+
+  def test_write_overwrites
+    File.write(path('file'), 'a much longer original content')
+    @adapter.write(path('file'), 'new')
+
+    assert_equal('new', File.read(path('file')))
+  end
+
+  # A shell redirect would fail for existing files if the user's shell startup files set noclobber.
+  def test_write_overwrites_with_noclobber
+    File.write(path('bashrc'), "set -o noclobber\n")
+    File.write(path('file'), 'old')
+
+    # The fake ssh's bash -c reads BASH_ENV, like bash started by sshd reads ~/.bashrc.
+    ClimateControl.modify(BASH_ENV: path('bashrc')) { @adapter.write(path('file'), 'new') }
+
+    assert_equal('new', File.read(path('file')))
+  end
+
+  def test_touch_and_mkdir
+    @adapter.mkdir(path('a b', '$c', 'd'))
+    @adapter.touch(path('a b', '$c', 'd', 'new file'))
+
+    assert(File.directory?(path('a b', '$c', 'd')))
+    assert(@adapter.directory?(path('a b', '$c', 'd')))
+    assert_equal('', File.read(path('a b', '$c', 'd', 'new file')))
+  end
+
   def test_missing_paths
     refute(@adapter.exist?(path('missing')))
     assert_raises(StandardError) { @adapter.directory?(path('missing')) }
     assert_raises(StandardError) { @adapter.size(path('missing')) }
     assert_raises(StandardError) { @adapter.read(path('missing')) }
+    assert_raises(StandardError) { @adapter.write(path('missing', 'file'), 'x') }
     assert_raises(StandardError) { @adapter.ls_recursive(path('missing')) }
     refute(@adapter.editable?(path('missing')))
   end

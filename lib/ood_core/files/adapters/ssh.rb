@@ -207,6 +207,31 @@ module OodCore
           end
         end
 
+        def touch(path)
+          stdout, stderr, status = call('touch', Shellwords.escape(path))
+          return if status.success?
+
+          err = failure_reason('touch', status, stdout, stderr)
+          raise StandardError, "Could not touch #{path}: #{err}"
+        end
+
+        def mkdir(path)
+          stdout, stderr, status = call('mkdir', '-p', Shellwords.escape(path))
+          return if status.success?
+
+          err = failure_reason('mkdir', status, stdout, stderr)
+          raise StandardError, "Could not create directory #{path}: #{err}"
+        end
+
+        def write(path, content)
+          stdout, stderr, status = call('dd', "of=#{Shellwords.escape(path)}", 'bs=128K', 'status=none',
+                                        stdin: content, binmode: true)
+          return if status.success?
+
+          err = failure_reason('dd', status, stdout, stderr)
+          raise StandardError, "Could not write #{path}: #{err}"
+        end
+
         def size(path)
           stdout, stderr, status = call('stat', '--dereference', '--format', '%s', Shellwords.escape(path))
           raise StandardError, "Could not stat #{path}: #{failure_reason('stat', status, stderr)}" unless status.success?
