@@ -392,7 +392,7 @@ class SshTest < Minitest::Test
     end
   end
 
-  # editable?, read, touch, mkdir, write
+  # editable?, read, touch, mkdir, write, mv, rm
 
   def test_editable?
     adapter.expects(:call).with('test', '-f', '/a\\ b', '-a', '-r', '/a\\ b', '-a', '-w', '/a\\ b').returns(ok)
@@ -439,9 +439,10 @@ class SshTest < Minitest::Test
     assert_equal("Could not read file /a: cat: '/caf� x': No such file or directory", error.message)
   end
 
-  def test_write_copies_stdin_to_escaped_path_with_dd
+  def test_write_creates_parent_directories_and_copies_stdin_to_escaped_path_with_dd
     adapter.expects(:call)
-           .with('dd', "of=/a\\ b/it\\'s", 'bs=128K', 'status=none', stdin: 'content', binmode: true)
+           .with('mkdir', '-p', '/a\\ b', '&&', 'dd', "of=/a\\ b/it\\'s", 'bs=128K', 'status=none',
+                 stdin: 'content', binmode: true)
            .returns(ok)
 
     adapter.write("/a b/it's", 'content')
@@ -449,7 +450,9 @@ class SshTest < Minitest::Test
 
   {
     touch: [['/a b'], ['touch', '/a\\ b']],
-    mkdir: [['/a b'], ['mkdir', '-p', '/a\\ b']]
+    mkdir: [['/a b'], ['mkdir', '-p', '/a\\ b']],
+    mv:    [['/a b', '/c d'], ['mv', '-T', '/a\\ b', '/c\\ d']],
+    rm:    [['/a b'], ['rm', '-r', '/a\\ b']]
   }.each do |method, (args, command)|
     define_method("test_#{method}") do
       adapter.expects(:call).with(*command).returns(ok)
@@ -477,6 +480,101 @@ class SshTest < Minitest::Test
 
     error = assert_raises(StandardError) { adapter.write('/a', 'x') }
     assert_equal("Could not write /a: dd: failed to open '/a': Permission denied", error.message)
+  end
+
+  def test_write_streams_io_to_escaped_path_with_dd
+    io = StringIO.new('x' * 200)
+    adapter.expects(:call).never
+    adapter.expects(:call_popen_write)
+           .with('mkdir', '-p', '/a\\ b', '&&', 'dd', "of=/a\\ b/it\\'s", 'bs=128K', 'status=none', stdin: io,
+                 name: 'dd')
+           .multiple_yields([1], [50], [100], [101], [200])
+
+    progress = []
+    adapter.write("/a b/it's", io) { |percent| progress << percent }
+
+    assert_equal([25, 50, 100], progress)
+  end
+
+  def test_write_io_without_a_size_yields_no_progress
+    reader, writer = IO.pipe
+    writer.close
+    adapter.stubs(:call_popen_write).multiple_yields([100], [200])
+
+    progress = []
+    adapter.write('/a', reader) { |percent| progress << percent }
+
+    assert_empty(progress)
+  ensure
+    reader&.close
+  end
+
+  def test_write_io_failure
+    adapter.stubs(:call_popen_write).raises(StandardError, "dd: failed to open '/a': Permission denied")
+
+    error = assert_raises(StandardError) { adapter.write('/a', StringIO.new('x')) }
+    assert_equal("Could not write /a: dd: failed to open '/a': Permission denied", error.message)
+  end
+
+  # cp copies with rsync on the cluster
+
+  def rsync_copy_args(*args)
+    ['-rlD', '--info=all0,progress2', *args].map { |arg| Shellwords.escape(arg) }
+  end
+
+  def test_cp_with_the_same_name_copies_into_the_parent_directory
+    adapter.expects(:call).never
+    adapter.expects(:call_popen).with('rsync', *rsync_copy_args('/a b/x', '/c d/')).yields(StringIO.new(RSYNC_PROGRESS))
+
+    progress = []
+    adapter.send(:cp, '/a b/x', '/c d/x') { |p| progress << p }
+
+    assert_equal([0, 50, 100], progress)
+  end
+
+  # A trailing slash on the source would make rsync copy the contents of the directory instead.
+  def test_cp_cleans_paths
+    adapter.expects(:call_popen).with('rsync', *rsync_copy_args('/a/b/x', '/c/')).yields(StringIO.new(''))
+
+    adapter.send(:cp, '/a//b/x/', '/c/./x')
+  end
+
+  def test_cp_with_a_new_name
+    # The contents of directories are copied to the new name, symlinks are copied as they are.
+    { "41ed\n" => '/a/', "a1ff\n" => '/a' }.each do |mode, from|
+      adapter.expects(:call).with('stat', '--format', '%f', '/a').returns(ok(mode))
+      adapter.expects(:call_popen).with('rsync', *rsync_copy_args(from, '/b')).yields(StringIO.new(''))
+
+      adapter.send(:cp, '/a', '/b')
+    end
+  end
+
+  def test_cp_into_itself_leaves_out_the_destination
+    {
+      ['/a/out', '/a/out/out']       => ['--exclude=/out/out', '/a/out', '/a/out/'],
+      ['/a/out', '/a/out/sub/out']   => ['--exclude=/out/sub/out', '/a/out', '/a/out/sub/'],
+      ['/a/x*', '/a/x*/x*']          => ['--exclude=/x\\*/x\\*', '/a/x*', '/a/x*/'],
+      ['/a/x?[y]', '/a/x?[y]/x?[y]'] => ['--exclude=/x\\?\\[y]/x\\?\\[y]', '/a/x?[y]', '/a/x?[y]/'],
+      ['/a/..x', '/a/..x/..x']       => ['--exclude=/..x/..x', '/a/..x', '/a/..x/'],
+      ['/a/back\\slash', '/a/back\\slash/back\\slash'] =>
+        ['--exclude=/back\\slash/back\\slash', '/a/back\\slash', '/a/back\\slash/']
+    }.each do |(src, dst), args|
+      adapter.expects(:call_popen).with('rsync', *rsync_copy_args(*args)).yields(StringIO.new(''))
+
+      adapter.send(:cp, src, dst)
+    end
+
+    adapter.expects(:call).with('stat', '--format', '%f', '/a/out').returns(ok("41ed\n"))
+    adapter.expects(:call_popen).with('rsync', *rsync_copy_args('--exclude=/copy', '/a/out/', '/a/out/copy'))
+           .yields(StringIO.new(''))
+    adapter.send(:cp, '/a/out', '/a/out/copy')
+  end
+
+  def test_cp_failure
+    adapter.stubs(:call_popen).raises(StandardError, "Command exited with status 23\nrsync: link_stat failed")
+
+    error = assert_raises(StandardError) { adapter.send(:cp, '/a', '/b/a') }
+    assert_equal("Could not copy /a to /b/a: Command exited with status 23\nrsync: link_stat failed", error.message)
   end
 
   # mime_type
@@ -542,6 +640,203 @@ class SshTest < Minitest::Test
       error = assert_raises(OodCore::FilesAdapterError) { adapter.directory_size('/a b', timeout: 5) }
       assert_equal("du exited with status #{result.last.exitstatus}: #{err}", error.message)
     end
+  end
+
+  # Transfers
+
+  RSYNC_PROGRESS = "        32,768   0%    0.00kB/s    0:00:00\r" \
+                   "    10,485,760  50%   10.00MB/s    0:00:01\r" \
+                   "    20,971,520 100%   10.00MB/s    0:00:02 (xfr#1, to-chk=0/1)\n"
+
+  RSYNC_ARGS = ['-a', '--ignore-times', '--info=all0,progress2'].freeze
+
+  def test_rsync_with_progress_parses_progress
+    adapter.expects(:rsync_popen)
+           .with(*RSYNC_ARGS, '--rsync-path=mkdir -p /remote && rsync', '/local/file', 'fakehost:/remote/file')
+           .yields(StringIO.new(RSYNC_PROGRESS))
+
+    progress = []
+    File.stubs(:directory?).with('/local/file').returns(false)
+    adapter.send(:rsync_with_progress, '/local/file', '/remote/file', dest_fs: 'fakehost') { |p| progress << p }
+
+    assert_equal([0, 50, 100], progress)
+  end
+
+  def test_rsync_with_progress_moves_remote_directory
+    adapter.stubs(:directory?).with('/remote/dir').returns(true)
+    FileUtils.expects(:mkdir_p).with('/local')
+    adapter.expects(:rsync_popen)
+           .with(*RSYNC_ARGS, '--remove-source-files', 'fakehost:/remote/dir/', '/local/dir')
+           .yields(StringIO.new(''))
+    adapter.expects(:call).with('find', '/remote/dir', '-type', 'd', '-empty', '-delete').returns(ok)
+
+    adapter.send(:rsync_with_progress, '/remote/dir', '/local/dir', src_fs: 'fakehost', move: true)
+  end
+
+  def test_rsync_with_progress_does_not_remove_directories_when_rsync_fails
+    File.stubs(:directory?).with('/local/dir').returns(true)
+    adapter.stubs(:rsync_popen).raises(StandardError, 'rsync exited with status 23')
+    Open3.expects(:capture3).never
+
+    assert_raises(StandardError) do
+      adapter.send(:rsync_with_progress, '/local/dir', '/remote/dir', dest_fs: 'fakehost', move: true)
+    end
+  end
+
+  # rsync does not create missing parent directories of the destination.
+
+  def test_rsync_with_progress_creates_remote_parent_in_the_same_connection
+    File.stubs(:directory?).with('/local/a').returns(false)
+    adapter.expects(:mkdir).never
+    FileUtils.expects(:mkdir_p).never
+    adapter.expects(:rsync_popen)
+           .with(*RSYNC_ARGS, "--rsync-path=mkdir -p /remote/it\\'s\\ new && rsync", '/local/a',
+                 "fakehost:/remote/it\\'s\\ new/a")
+           .yields(StringIO.new(''))
+
+    adapter.send(:rsync_with_progress, '/local/a', "/remote/it's new/a", dest_fs: 'fakehost')
+  end
+
+  def test_rsync_with_progress_creates_local_parent
+    adapter.stubs(:directory?).with('/remote/a').returns(false)
+    FileUtils.expects(:mkdir_p).with('/local')
+    adapter.expects(:rsync_popen).with(*RSYNC_ARGS, 'fakehost:/remote/a', '/local/a').yields(StringIO.new(''))
+
+    adapter.send(:rsync_with_progress, '/remote/a', '/local/a', src_fs: 'fakehost')
+  end
+
+  # Paths on the cluster go through the shell there, so wildcards must not be expanded either.
+  def test_rsync_with_progress_escapes_cluster_paths
+    adapter.stubs(:directory?).with('/remote/a b[1]*').returns(true)
+    FileUtils.stubs(:mkdir_p)
+    adapter.expects(:rsync_popen).with(*RSYNC_ARGS, 'fakehost:/remote/a\\ b\\[1\\]\\*/', '/local/a b[1]*')
+           .yields(StringIO.new(''))
+
+    adapter.send(:rsync_with_progress, '/remote/a b[1]*', '/local/a b[1]*', src_fs: 'fakehost')
+  end
+
+  def test_rsync_popen_passes_paths_through_the_remote_shell
+    adapter.expects(:popen)
+           .with('rsync', 'rsync', ['-e', 'ssh -o BatchMode=yes -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=yes',
+                                    '/a', 'fakehost:/b'],
+                 label: 'rsync', env: { 'RSYNC_OLD_ARGS' => '1', 'RSYNC_PROTECT_ARGS' => '0' })
+
+    adapter.send(:rsync_popen, '/a', 'fakehost:/b')
+  end
+
+  def test_remove_empty_directories
+    adapter.expects(:call).with('find', '/a\\ b', '-type', 'd', '-empty', '-delete').returns(ok)
+    adapter.send(:remove_empty_directories, '/a b', remote: true)
+
+    Open3.expects(:capture3).with('find', '/a b', '-type', 'd', '-empty', '-delete').returns(ok)
+    adapter.send(:remove_empty_directories, '/a b')
+  end
+
+  def test_remove_empty_directories_failure
+    adapter.stubs(:call).returns(failed(1, "find: '/a': Permission denied"))
+
+    error = assert_raises(StandardError) { adapter.send(:remove_empty_directories, '/a', remote: true) }
+    assert_match(/Permission denied/, error.message)
+  end
+
+  def cluster
+    @cluster ||= OpenStruct.new(id: 'test', file_adapter: adapter)
+  end
+
+  def test_move_within_cluster_uses_mv
+    adapter.expects(:mv).with('/a', '/b')
+    adapter.expects(:rsync_with_progress).never
+
+    adapter.move_with_progress(cluster, cluster, '/a', '/b')
+  end
+
+  def test_copy_within_cluster_uses_cp
+    adapter.expects(:cp).with('/a', '/b')
+    adapter.expects(:rsync_with_progress).never
+
+    adapter.copy_with_progress(cluster, cluster, '/a', '/b')
+  end
+
+  def test_move_local_to_cluster_uses_rsync
+    adapter.expects(:rsync_with_progress).with('/local/a', '/remote/a', src_fs: false, dest_fs: 'fakehost', move: true)
+
+    adapter.move_with_progress('fs', cluster, '/local/a', '/remote/a')
+  end
+
+  def test_copy_cluster_to_local_uses_rsync
+    adapter.expects(:rsync_with_progress).with('/remote/a', '/local/a', src_fs: 'fakehost', dest_fs: false, move: false)
+
+    adapter.copy_with_progress(cluster, nil, '/remote/a', '/local/a')
+  end
+
+  def test_move_cluster_to_local_uses_rsync
+    adapter.expects(:rsync_with_progress).with('/remote/a', '/local/a', src_fs: 'fakehost', dest_fs: false, move: true)
+
+    adapter.move_with_progress(cluster, 'fs', '/remote/a', '/local/a')
+  end
+
+  def test_copy_local_to_cluster_uses_rsync
+    adapter.expects(:rsync_with_progress).with('/local/a', '/remote/a', src_fs: false, dest_fs: 'fakehost', move: false)
+
+    adapter.copy_with_progress('fs', cluster, '/local/a', '/remote/a')
+  end
+
+  def test_transfers_between_different_clusters_raise
+    other = OpenStruct.new(id: 'other', file_adapter: ssh_adapter(cluster_id: 'other'))
+    adapter.expects(:mv).never
+    adapter.expects(:cp).never
+    adapter.expects(:rsync_with_progress).never
+
+    [[cluster, other], [other, cluster], [other, other], ['fs', other]].each do |src_fs, dest_fs|
+      [:move_with_progress, :copy_with_progress].each do |method|
+        error = assert_raises(StandardError) { adapter.send(method, src_fs, dest_fs, '/a', '/b') }
+        assert_equal('Transfers between different clusters are not supported (other and test)', error.message)
+      end
+    end
+  end
+
+  def test_remove_with_progress
+    # find prints the number of files and directories first, then rm prints a line for each one it removes.
+    adapter.expects(:call_popen).with('find', '/a\\ b', '-printf', '.', '|', 'wc', '-c', ';', 'rm', '-rv', '/a\\ b')
+           .yields(StringIO.new("4\nremoved '/a b/x'\nremoved '/a b/y'\nremoved directory '/a b/sub'\n" \
+                                "removed directory '/a b'\n"))
+
+    progress = []
+    adapter.remove_with_progress('/a b') { |p| progress << p }
+
+    assert_equal([25, 50, 75, 100], progress)
+  end
+
+  # Each percentage is reported once, and at most 100 when files were added after they were counted.
+  def test_remove_with_progress_reports_each_percentage_once
+    {
+      "200\nremoved 'a'\nremoved 'b'\nremoved 'c'\n" => [1],
+      "2\nremoved 'a'\nremoved 'b'\nremoved 'c'\n"   => [50, 100]
+    }.each do |output, expected|
+      adapter.stubs(:call_popen).yields(StringIO.new(output))
+
+      progress = []
+      adapter.remove_with_progress('/a') { |p| progress << p }
+
+      assert_equal(expected, progress, "count #{output.to_i}")
+    end
+  end
+
+  def test_remove_with_progress_without_count
+    adapter.stubs(:call_popen).yields(StringIO.new("0\nremoved '/a'\n"))
+
+    progress = []
+    adapter.remove_with_progress('/a') { |p| progress << p }
+
+    assert_empty(progress)
+  end
+
+  def test_remove_with_progress_failure
+    adapter.stubs(:call_popen).raises(StandardError, "Command exited with status 1\nrm: cannot remove '/a/x': Permission denied")
+
+    error = assert_raises(StandardError) { adapter.remove_with_progress('/a') }
+    assert_equal("Could not remove /a: Command exited with status 1\nrm: cannot remove '/a/x': Permission denied",
+                 error.message)
   end
 
   # dataroot
