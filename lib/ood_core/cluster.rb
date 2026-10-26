@@ -28,6 +28,8 @@ module OodCore
     # @return [Hash] the acls configuration
     attr_reader :acls_config
 
+    attr_reader :file_config
+
     # The errors encountered with configuring this cluster
     # @return Array<String> the errors
     attr_reader :errors
@@ -55,6 +57,7 @@ module OodCore
       @metadata_config = c.fetch(:metadata, {}).to_h.symbolize_keys
       @login_config    = c.fetch(:login, {})   .to_h.symbolize_keys
       @job_config      = c.fetch(:job, {})     .to_h.symbolize_keys
+      @file_config     = c.fetch(:file, {})    .to_h.symbolize_keys
       @custom_config   = c.fetch(:custom, {})  .to_h.symbolize_keys
       @acls_config     = c.fetch(:acls, [])    .map(&:to_h)
       @batch_connect_config = c.fetch(:batch_connect, {}).to_h.symbolize_keys
@@ -111,6 +114,14 @@ module OodCore
     # @return [Job::Adapter] the job adapter
     def job_adapter
       Job::Factory.build(job_config.merge({ id: id }))
+    end
+
+    def file_adapter
+      Files::Factory.build(file_config.merge({ cluster_id: id }))
+    end
+
+    def file_adapter?
+      !file_config.fetch(:adapter, '').empty?
     end
 
     # Whether the job feature is allowed based on the ACLs
