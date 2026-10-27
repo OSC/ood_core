@@ -32,10 +32,53 @@ class AdapterTest < Minitest::Test
         # If it is overridden, the signature must match the base exactly
         expected = BASE.instance_method(name).parameters
         actual   = impl.parameters
+        msg = "was not found or is incompatible in the method signature of #{adapter}##{name}, but #{BASE}##{name} defines #{expected.inspect}"
+        hasrest = actual.any? { |arg| arg[0] == :rest }
+        haskwrest = actual.any? { |arg| arg[0] == :keyrest }
 
-        assert_equal expected, actual,
-          "#{adapter}##{name} (defined in #{impl.owner}) has parameters " \
-          "#{actual.inspect}, but #{BASE}##{name} defines #{expected.inspect}"
+        # Extract sub-arrays to safely look up actual arguments without index mixing
+        actual_positionals = actual.select { |t, _| [:req, :opt].include?(t) }
+        actual_keywords    = actual.select { |t, _| [:keyreq, :key].include?(t) }.to_h { |t, n| [n, t] }
+
+        positional_index = 0
+
+        expected.each do |type, argname|
+          case type
+          when :req
+            # required args can become optional, or be included in a rest param
+            unless hasrest
+              actual_param = actual_positionals[positional_index]
+              assert actual_param && [:req, :opt].include?(actual_param[0]), "required positional arg :#{argname} #{msg}"
+            end
+            positional_index += 1
+
+          when :opt
+            # optional args must stay optional or be included in a rest param
+            unless hasrest
+              actual_param = actual_positionals[positional_index]
+              assert actual_param && actual_param[0] == :opt, "optional positional arg :#{argname} #{msg}"
+            end
+            positional_index += 1
+
+          when :rest
+            assert hasrest, "rest param :#{argname} #{msg}"
+
+          when :keyreq
+            unless haskwrest
+              actual_type = actual_keywords[argname]
+              assert [:keyreq, :key].include?(actual_type), "required keyword arg :#{argname} #{msg}"
+            end
+
+          when :key
+            unless haskwrest
+              actual_type = actual_keywords[argname]
+              assert actual_type == :key, "optional keyword arg :#{argname} #{msg}"
+            end
+
+          when :keyrest
+            assert haskwrest, "keyword rest param :#{argname} #{msg}"
+          end
+        end
       end
     end
   end
