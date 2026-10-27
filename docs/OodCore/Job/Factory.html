@@ -97,7 +97,7 @@
   <dl>
     <dt>Defined in:</dt>
     <dd>lib/ood_core/job/factory.rb<span class="defines">,<br>
-  lib/ood_core/job/adapters/ccq.rb,<br> lib/ood_core/job/adapters/lsf.rb,<br> lib/ood_core/job/adapters/sge.rb,<br> lib/ood_core/job/adapters/psij.rb,<br> lib/ood_core/job/adapters/coder.rb,<br> lib/ood_core/job/adapters/slurm.rb,<br> lib/ood_core/job/adapters/pbspro.rb,<br> lib/ood_core/job/adapters/torque.rb,<br> lib/ood_core/job/adapters/systemd.rb,<br> lib/ood_core/job/adapters/htcondor.rb,<br> lib/ood_core/job/adapters/kubernetes.rb,<br> lib/ood_core/job/adapters/linux_host.rb,<br> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
+  lib/ood_core/job/adapters/ccq.rb,<br> lib/ood_core/job/adapters/lsf.rb,<br> lib/ood_core/job/adapters/sge.rb,<br> lib/ood_core/job/adapters/flux.rb,<br> lib/ood_core/job/adapters/psij.rb,<br> lib/ood_core/job/adapters/coder.rb,<br> lib/ood_core/job/adapters/slurm.rb,<br> lib/ood_core/job/adapters/pbspro.rb,<br> lib/ood_core/job/adapters/torque.rb,<br> lib/ood_core/job/adapters/systemd.rb,<br> lib/ood_core/job/adapters/htcondor.rb,<br> lib/ood_core/job/adapters/kubernetes.rb,<br> lib/ood_core/job/adapters/linux_host.rb,<br> lib/ood_core/job/adapters/fujitsu_tcs.rb</span>
 
 </dd>
   </dl>
@@ -212,6 +212,28 @@
 
   
     <span class="summary_desc"><div class='inline'></div></span>
+  
+</li>
+
+      
+        <li class="public ">
+  <span class="summary_signature">
+    
+      <a href="#build_flux-class_method" title="build_flux (class method)">.<strong>build_flux</strong>(config)  &#x21d2; Object </a>
+    
+
+    
+  </span>
+  
+  
+  
+  
+  
+  
+  
+
+  
+    <span class="summary_desc"><div class='inline'><p>Build the Flux adapter from a configuration.</p></div></span>
   
 </li>
 
@@ -855,6 +877,165 @@
   <span class='kw'>rescue</span> <span class='const'>NameError</span>
     <span class='id identifier rubyid_raise'>raise</span><span class='lparen'>(</span><span class='const'>ArgumentError</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Unsupported credentials for cloud type: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_auth_type'>auth_type</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
   <span class='kw'>end</span>
+<span class='kw'>end</span></pre>
+    </td>
+  </tr>
+</table>
+</div>
+    
+      <div class="method_details ">
+  <h3 class="signature " id="build_flux-class_method">
+  
+    .<strong>build_flux</strong>(config)  &#x21d2; <tt>Object</tt> 
+  
+
+  
+
+  
+</h3><div class="docstring">
+  <div class="discussion">
+    <p>Build the Flux adapter from a configuration</p>
+
+  </div>
+</div>
+<div class="tags">
+  <p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>config</span>
+      
+      
+        <span class='type'>(<tt>#to_h</tt>)</span>
+      
+      
+      
+        &mdash;
+        <div class='inline'><p>the configuration for job adapter</p></div>
+      
+    </li>
+  
+</ul>
+
+  
+    
+    
+    <p class="tag_title">Options Hash (<tt>config</tt>):</p>
+    <ul class="option">
+      
+        <li>
+          <span class="name">:bin</span>
+          <span class="type">(<tt>Object</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>nil</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Path to the Flux client binaries</p></div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:bin_overrides</span>
+          <span class="type">(<tt>#to_h</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>{}</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Optional overrides to Flux client executables</p></div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:submit_host</span>
+          <span class="type">(<tt>Object</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>&quot;&quot;</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Submit job on login node via ssh</p></div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:strict_host_checking</span>
+          <span class="type">(<tt>Object</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>true</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>Whether to use strict host checking when ssh to submit_host</p></div>
+          
+        </li>
+      
+        <li>
+          <span class="name">:flux_uri</span>
+          <span class="type">(<tt>Object</tt>)</span>
+          <span class="default">
+            
+              &mdash; default:
+              <tt>nil</tt>
+            
+          </span>
+          
+            &mdash; <div class='inline'><p>URI of the Flux instance to talk to;
+leave unset to use the system instance</p></div>
+          
+        </li>
+      
+    </ul>
+  
+
+
+</div><table class="source_code">
+  <tr>
+    <td>
+      <pre class="lines">
+
+
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31</pre>
+    </td>
+    <td>
+      <pre class="code"><span class="info file"># File 'lib/ood_core/job/adapters/flux.rb', line 18</span>
+
+<span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_build_flux'>build_flux</span><span class='lparen'>(</span><span class='id identifier rubyid_config'>config</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_c'>c</span> <span class='op'>=</span> <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_to_h'>to_h</span><span class='period'>.</span><span class='id identifier rubyid_symbolize_keys'>symbolize_keys</span>
+  <span class='id identifier rubyid_bin'>bin</span>                  <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_bin_overrides'>bin_overrides</span>        <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:bin_overrides</span><span class='comma'>,</span> <span class='lbrace'>{</span><span class='rbrace'>}</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_submit_host'>submit_host</span>          <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:submit_host</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span> <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:strict_host_checking</span><span class='comma'>,</span> <span class='kw'>true</span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_flux_uri'>flux_uri</span>             <span class='op'>=</span> <span class='id identifier rubyid_c'>c</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:flux_uri</span><span class='comma'>,</span> <span class='kw'>nil</span><span class='rparen'>)</span>
+
+  <span class='id identifier rubyid_flux'>flux</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Flux.html" title="OodCore::Job::Adapters::Flux (class)">Flux</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Flux/Batch.html" title="OodCore::Job::Adapters::Flux::Batch (class)">Batch</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Flux/Batch.html#initialize-instance_method" title="OodCore::Job::Adapters::Flux::Batch#initialize (method)">new</a></span></span><span class='lparen'>(</span>
+    <span class='label'>bin:</span> <span class='id identifier rubyid_bin'>bin</span><span class='comma'>,</span> <span class='label'>bin_overrides:</span> <span class='id identifier rubyid_bin_overrides'>bin_overrides</span><span class='comma'>,</span> <span class='label'>submit_host:</span> <span class='id identifier rubyid_submit_host'>submit_host</span><span class='comma'>,</span>
+    <span class='label'>strict_host_checking:</span> <span class='id identifier rubyid_strict_host_checking'>strict_host_checking</span><span class='comma'>,</span> <span class='label'>flux_uri:</span> <span class='id identifier rubyid_flux_uri'>flux_uri</span>
+  <span class='rparen'>)</span>
+  <span class='const'><span class='object_link'><a href="Adapters.html" title="OodCore::Job::Adapters (module)">Adapters</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Adapters/Flux.html" title="OodCore::Job::Adapters::Flux (class)">Flux</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Adapters/Flux.html#initialize-instance_method" title="OodCore::Job::Adapters::Flux#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='label'>flux:</span> <span class='id identifier rubyid_flux'>flux</span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
   </tr>
@@ -2515,7 +2696,7 @@ severe performance penalty calling Sge#info without using DRMAA.</p></div>
 </div>
 
       <div id="footer">
-  Generated on Fri Oct 23 17:42:02 2026 by
+  Generated on Tue Oct 27 19:27:55 2026 by
   <a href="https://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.45 (ruby-3.0.7).
 </div>
