@@ -312,7 +312,7 @@ module OodCore
                 # @raise [JobAdapterError] if something goes wrong submitting a job
                 # @return [String] the job id returned after successfully submitting a
                 #   job
-                def submit(script)
+                def submit(script, after: [], afterok: [], afternotok: [], afterany: [])
                     args = []
                     args.concat ["-batch-name", "#{script.job_name}"] unless script.job_name.nil?
                     args.concat ["-name", "#{script.queue_name}"] unless script.queue_name.nil?
