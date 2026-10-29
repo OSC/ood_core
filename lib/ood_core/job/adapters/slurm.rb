@@ -229,9 +229,10 @@ module OodCore
 
           def accounts
             user = Etc.getlogin
+            cluster_defaulted = cluster || id
             args = [ 
                     '-nP', 'show', 'users', 'withassoc', 'format=account,qos', 
-                    'where', "user=#{user}", "cluster=#{id}"
+                    'where', "user=#{user}", "cluster=#{cluster_defaulted}"
                    ]
 
             [].tap do |associations|
@@ -242,7 +243,7 @@ module OodCore
                 associations << {
                   name: acct,
                   qos: qos.to_s.chomp.split(','),
-                  cluster: id
+                  cluster: cluster_defaulted
                 }
               end
             end.group_by do |x|
