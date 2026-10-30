@@ -562,7 +562,7 @@ module OodCore
               env["SLURM_CONF"] = conf.to_s if conf
 
               remote_env = env.slice(*time_env.keys)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, remote_env)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, remote_env, bin_overrides)
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
               s.success? ? interpret_and_raise(o, e) : raise(Error, e)
             end
