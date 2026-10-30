@@ -11,8 +11,12 @@ module OodCore
     end
 
     # Label lives in the message so any logger the host app swaps in still works
-    def log(level, message)
-      logger.public_send(level, "[ood_core] #{message}")
+    def log(level, message = nil, &block)
+      if block_given?
+        logger.public_send(level, 'ood_core') { yield }
+      else
+        logger.public_send(level, 'ood_core') { "#{message}" }
+      end
     end
   end
 end
