@@ -13,6 +13,7 @@ module OodCore
       # @option config [#to_h] :bin_overrides ({}) Optional overrides to Flux client executables
       # @option config [Object] :submit_host ("") Submit job on login node via ssh
       # @option config [Object] :strict_host_checking (true) Whether to use strict host checking when ssh to submit_host
+      # @option config [Object] :ssh_port (nil) The SSH port of submit_host, defaults to OOD_SSH_PORT or ssh_config
       # @option config [Object] :flux_uri (nil) URI of the Flux instance to talk to;
       #   leave unset to use the system instance
       def self.build_flux(config)
@@ -21,11 +22,12 @@ module OodCore
         bin_overrides        = c.fetch(:bin_overrides, {})
         submit_host          = c.fetch(:submit_host, "")
         strict_host_checking = c.fetch(:strict_host_checking, true)
+        ssh_port             = c.fetch(:ssh_port, nil)
         flux_uri             = c.fetch(:flux_uri, nil)
 
         flux = Adapters::Flux::Batch.new(
           bin: bin, bin_overrides: bin_overrides, submit_host: submit_host,
-          strict_host_checking: strict_host_checking, flux_uri: flux_uri
+          strict_host_checking: strict_host_checking, ssh_port: ssh_port, flux_uri: flux_uri
         )
         Adapters::Flux.new(flux: flux)
       end

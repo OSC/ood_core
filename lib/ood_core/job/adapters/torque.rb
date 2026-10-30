@@ -11,6 +11,7 @@ module OodCore
       # @param config [#to_h] the configuration for job adapter
       # @option config [#to_s] :host The batch server host
       # @option config [#to_s] :submit_host The login node to submit the job via ssh
+      # @option config [#to_s] :ssh_port (nil) The SSH port of submit_host, defaults to OOD_SSH_PORT or ssh_config
       # @option config [#to_s] :lib ('') Path to torque client libraries
       # @option config [#to_s] :bin ('') Path to torque client binaries
       # @option config [#to_h] :custom_bin ({}) Optional overrides to Torque client executables
@@ -18,10 +19,11 @@ module OodCore
         c = config.to_h.symbolize_keys
         host = c.fetch(:host) { raise ArgumentError, "No host specified. Missing argument: host" }.to_s
         submit_host = c.fetch(:submit_host, "").to_s
+        ssh_port = c.fetch(:ssh_port, nil)
         lib  = c.fetch(:lib, "").to_s
         bin  = c.fetch(:bin, "").to_s
         custom_bin = c.fetch(:custom_bin, {})
-        pbs  = Adapters::Torque::Batch.new(host: host, submit_host: submit_host, lib: lib, bin: bin, custom_bin: custom_bin)
+        pbs  = Adapters::Torque::Batch.new(host: host, submit_host: submit_host, ssh_port: ssh_port, lib: lib, bin: bin, custom_bin: custom_bin)
         Adapters::Torque.new(pbs: pbs)
       end
     end

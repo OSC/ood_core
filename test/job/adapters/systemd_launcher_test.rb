@@ -22,7 +22,7 @@ class SystemdLauncherTest < Minitest::Test
 
   def test_ssh_cmd_default
     launcher = launcher_instance
-    expected = [  'ssh', '-t', '-p', '22', '-o',
+    expected = [  'ssh', '-t', '-o',
                   'Batchmode=yes', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null',
                   'testuser@localhost', '/bin/bash'
                 ]
@@ -32,7 +32,7 @@ class SystemdLauncherTest < Minitest::Test
 
   def test_ssh_cmd_with_host_checking
     launcher = launcher_instance({ strict_host_checking: true })
-    expected = [  'ssh', '-t', '-p', '22', '-o',
+    expected = [  'ssh', '-t', '-o',
                   'Batchmode=yes', 'testuser@localhost', '/bin/bash'
                 ]
 
@@ -41,10 +41,17 @@ class SystemdLauncherTest < Minitest::Test
 
   def test_ssh_cmd_with_keyfile
     launcher = launcher_instance({ ssh_keyfile: "~/.ssh/my_key" })
-    expected = [  'ssh', '-t', '-p', '22', '-o',
+    expected = [  'ssh', '-t', '-o',
                   'Batchmode=yes', '-o', 'StrictHostKeyChecking=no', '-o', 'UserKnownHostsFile=/dev/null',
                   '-i', '~/.ssh/my_key', 'testuser@localhost', '/bin/bash'
                 ]
+
+    assert_equal(expected, launcher.send(:ssh_cmd, 'localhost', ['/bin/bash']))
+  end
+
+  def test_ssh_cmd_with_ssh_port
+    launcher = launcher_instance({ strict_host_checking: true, ssh_port: 2222 })
+    expected = ['ssh', '-t', '-p', '2222', '-o', 'Batchmode=yes', 'testuser@localhost', '/bin/bash']
 
     assert_equal(expected, launcher.send(:ssh_cmd, 'localhost', ['/bin/bash']))
   end

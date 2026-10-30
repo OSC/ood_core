@@ -316,6 +316,14 @@ class TestFlux < Minitest::Test
     assert_equal("ƒiFkbMhFM", info.native[:jobid])
   end
 
+  def test_ssh_port_is_passed_to_ssh
+    ssh_args = ['ssh', '-p', '2222', '-o', 'BatchMode=yes']
+    Open3.expects(:capture3).with { |_env, *args| args.first(ssh_args.size) == ssh_args }
+         .returns([fixture('jobs_running.json'), '', exit_success])
+
+    flux_instance(submit_host: 'owens.osc.edu', ssh_port: 2222).info('91088924704768')
+  end
+
   def test_info_held_job
     expect_flux('jobs', '--json', '91093387444224', stdout: fixture('jobs_held.json'))
 
