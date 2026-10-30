@@ -11,7 +11,7 @@ require 'time'
 class OodCore::Job::Adapters::LinuxHost::Launcher
   attr_reader :contain, :debug, :site_timeout, :session_name_label, :singularity_bin,
     :site_singularity_bindpath, :default_singularity_image, :ssh_hosts,
-    :strict_host_checking, :tmux_bin, :username
+    :strict_host_checking, :ssh_port, :tmux_bin, :username
   # The root exception class that all LinuxHost adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
@@ -25,6 +25,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
   # @param singularity_image [#to_s] Path to the Singularity image
   # @param ssh_hosts List of hosts to check when scanning for running jobs
   # @param strict_host_checking Allow SSH to perform strict host checking
+  # @param ssh_port The SSH port of the hosts
   # @param submit_host The SSH-able host
   # @param tmux_bin [#to_s] Path to the tmux executable
   def initialize(
@@ -36,6 +37,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     singularity_image:,
     ssh_hosts:,
     strict_host_checking: false,
+    ssh_port: nil,
     submit_host:,
     tmux_bin:,
     **_
@@ -49,6 +51,7 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     @default_singularity_image = Pathname.new(singularity_image)
     @ssh_hosts = ssh_hosts
     @strict_host_checking = strict_host_checking
+    @ssh_port = ssh_port
     @submit_host = submit_host
     @tmux_bin = tmux_bin
     @username = Etc.getpwuid.name
@@ -125,14 +128,14 @@ class OodCore::Job::Adapters::LinuxHost::Launcher
     if strict_host_checking
       [
         'ssh', '-t',
-        '-p', OodCore::Job::Adapters::Helper.ssh_port,
+        *OodCore::Job::Adapters::Helper.ssh_port_args(ssh_port),
         '-o', 'BatchMode=yes',
         "#{username}@#{destination_host}"
       ].concat(cmd)
     else
       [
         'ssh', '-t',
-        '-p', OodCore::Job::Adapters::Helper.ssh_port,
+        *OodCore::Job::Adapters::Helper.ssh_port_args(ssh_port),
         '-o', 'BatchMode=yes',
         '-o', 'UserKnownHostsFile=/dev/null',
         '-o', 'StrictHostKeyChecking=no',

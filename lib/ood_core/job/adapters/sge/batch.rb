@@ -15,7 +15,7 @@ end
 class OodCore::Job::Adapters::Sge::Batch
   using OodCore::Refinements::HashExtensions
 
-  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper, :submit_host, :strict_host_checking
+  attr_reader :bin, :bin_overrides, :conf, :cluster, :helper, :submit_host, :strict_host_checking, :ssh_port
   
   require "ood_core/job/adapters/sge/qstat_xml_j_r_listener"
   require "ood_core/job/adapters/sge/qstat_xml_r_listener"
@@ -38,6 +38,7 @@ class OodCore::Job::Adapters::Sge::Batch
     @bin_overrides    = config.fetch(:bin_overrides, {})
     @submit_host      = config.fetch(:submit_host, "")
     @strict_host_checking = config.fetch(:strict_host_checking, true)
+    @ssh_port         = config.fetch(:ssh_port, nil)
 
     # FIXME: hack as this affects env of the process!
     ENV['SGE_ROOT'] = @sge_root.to_s
@@ -172,7 +173,7 @@ class OodCore::Job::Adapters::Sge::Batch
   def call(cmd, *args, env: {}, stdin: "", chdir: nil)
     cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
     env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
-    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
+    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env, ssh_port: ssh_port)
     chdir ||= "."
     o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s, chdir: chdir.to_s)
     s.success? ? o : raise(Error, e)

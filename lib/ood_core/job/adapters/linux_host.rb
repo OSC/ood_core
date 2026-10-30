@@ -18,6 +18,7 @@ module OodCore
       # @option config [Object] :singularity_image The path to the Singularity image to use
       # @option config [Object] :ssh_hosts (nil) The list of permissable hosts, defaults to :submit_host
       # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking and updating the known_hosts file
+      # @option config [Object] :ssh_port (nil) The SSH port of the hosts, defaults to OOD_SSH_PORT or ssh_config
       # @option config [Object] :submit_host The SSH target to connect to, may be the head of a round-robin
       # @option config [Object] :tmux_bin ('/usr/bin/tmux') The path to the Tmux executable
       def self.build_linux_host(config)
@@ -30,6 +31,7 @@ module OodCore
         singularity_image = c[:singularity_image]
         ssh_hosts = c.fetch(:ssh_hosts, [c[:submit_host]])
         strict_host_checking = c.fetch(:strict_host_checking, true)
+        ssh_port = c.fetch(:ssh_port, nil)
         submit_host = c[:submit_host]
         tmux_bin = c.fetch(:tmux_bin, '/usr/bin/tmux')
 
@@ -44,6 +46,7 @@ module OodCore
             singularity_image: singularity_image,
             ssh_hosts: ssh_hosts,
             strict_host_checking: strict_host_checking,
+            ssh_port: ssh_port,
             submit_host: submit_host,
             tmux_bin: tmux_bin,
           )
