@@ -19,8 +19,7 @@ class OodCore::Job::Adapters::Lsf::Helper
   rescue ArgumentError => e
     raise e unless ignore_errors
 
-    #TODO: warn via logger
-
+    OodCore.log(:error) { "Time parsing failed due to error: #{e.full_message}" }
     nil
   end
 

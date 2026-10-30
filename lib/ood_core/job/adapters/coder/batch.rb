@@ -85,9 +85,9 @@ class OodCore::Job::Adapters::Coder::Batch
     delete_coder_workspace(id)
 
     credentials = @credentials.load_credentials(id)
-    puts "credentials loaded #{credentials["id"]}" 
+    OodCore.log(:info) { "credentials loaded #{credentials["id"]}" }
     wait_for_workspace_deletion(id) do |attempt|
-      puts "#{Time.now.inspect} Deleting workspace (attempt #{attempt}/#{5})"
+      OodCore.log(:warn, "#{Time.now.inspect} Deleting workspace (attempt #{attempt}/#{5})")
     end
     workspace_info = get_workspace_info(id)
     @credentials.destroy_credentials(credentials, workspace_status(workspace_info), id)
