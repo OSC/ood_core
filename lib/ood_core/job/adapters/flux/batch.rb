@@ -104,7 +104,7 @@ class OodCore::Job::Adapters::Flux::Batch
     env = {}
     env["FLUX_URI"] = flux_uri if flux_uri
 
-    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
+    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env, bin_overrides)
     o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
 
     # Flux writes UTF-8 whatever the locale is. F58 ids start with

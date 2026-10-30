@@ -21,10 +21,12 @@ module OodCore
         # @param cmd_args [Array] arguments to the command specified above
         # @param strict_host_checking [Bool] whether to use strict_host_checking
         # @param env [Hash] env variables to be set w/ssh
+        # @param bin_overrides [Hash<String, String>] an 'ssh' entry replaces the ssh executable
+        #   e.g. {'ssh' => '/usr/local/bin/ssh'}
         #
         # @return cmd [String] command wrapped in ssh if submit_host is present
         # @return args [Array] command arguments including ssh_flags and original command
-        def self.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking = true, env = {})
+        def self.ssh_wrap(submit_host, cmd, cmd_args, strict_host_checking = true, env = {}, bin_overrides = {})
           return cmd, cmd_args if submit_host.to_s.empty?
 
           check_host = strict_host_checking ? "yes" : "no"
@@ -35,7 +37,9 @@ module OodCore
                   "#{submit_host}"]
           env.each { |key, value| args.push("export #{key}=#{Shellwords.escape(value.to_s)};") }
 
-          return 'ssh', args + [cmd] + cmd_args.map { |arg| Shellwords.escape(arg.to_s) }
+          ssh = bin_overrides.fetch('ssh', 'ssh')
+
+          return ssh, args + [cmd] + cmd_args.map { |arg| Shellwords.escape(arg.to_s) }
         end
 
         # Allows for Non-Standard Port usage in ssh commands

@@ -36,4 +36,24 @@ class HelperTest < Minitest::Test
     assert_equal('bsub', cmd)
     assert_equal(['-R', 'select[mem>4000]'], args)
   end
+
+  def test_ssh_wrap_uses_ssh_from_bin_overrides
+    cmd, args = helper.ssh_wrap('owens.osc.edu', 'sbatch', ['-J', 'job'], true, {}, { 'ssh' => '/opt/ssh/bin/ssh' })
+
+    assert_equal('/opt/ssh/bin/ssh', cmd)
+    assert_equal(ssh_prefix + ['sbatch', '-J', 'job'], args)
+  end
+
+  def test_ssh_wrap_ignores_bin_overrides_for_other_commands
+    cmd, _args = helper.ssh_wrap('owens.osc.edu', 'sbatch', [], true, {}, { 'sbatch' => '/opt/slurm/bin/sbatch' })
+
+    assert_equal('ssh', cmd)
+  end
+
+  def test_ssh_wrap_ignores_ssh_override_without_submit_host
+    cmd, args = helper.ssh_wrap('', 'sbatch', ['-J', 'job'], true, {}, { 'ssh' => '/opt/ssh/bin/ssh' })
+
+    assert_equal('sbatch', cmd)
+    assert_equal(['-J', 'job'], args)
+  end
 end

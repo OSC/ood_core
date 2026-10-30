@@ -102,7 +102,7 @@ module OodCore
             # Call a forked psij script for a given cluster
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, {}, bin_overrides)
               chdir ||= "."
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)

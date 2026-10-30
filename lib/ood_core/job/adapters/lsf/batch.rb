@@ -144,7 +144,7 @@ class OodCore::Job::Adapters::Lsf::Batch
       cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bindir, bin_overrides)
       args = cluster_args + args
       env = default_env.merge(env.to_h)
-      cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
+      cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env, bin_overrides)
       o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
       s.success? ? o : raise(Error, e)
     end

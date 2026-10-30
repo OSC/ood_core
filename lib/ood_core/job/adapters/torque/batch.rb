@@ -466,7 +466,7 @@ class OodCore::Job::Adapters::Torque
           "LD_LIBRARY_PATH" => "#{lib}:#{ENV['LD_LIBRARY_PATH']}"
         }
         cmd = OodCore::Job::Adapters::Helper.bin_path('qsub', bin, bin_overrides)
-        cmd, params = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, params, strict_host_checking, env)
+        cmd, params = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, params, strict_host_checking, env, bin_overrides)
         o, e, s = Open3.capture3(env, cmd, *params)
         raise Error, e unless s.success?
         o.chomp
@@ -479,7 +479,7 @@ class OodCore::Job::Adapters::Torque
           "PBS_DEFAULT"     => host,
           "LD_LIBRARY_PATH" => %{#{lib}:#{ENV["LD_LIBRARY_PATH"]}}
         })
-        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
+        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env, bin_overrides)
         stdin = stdin.to_s
         chdir ||= "."
         o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin, chdir: chdir.to_s)
