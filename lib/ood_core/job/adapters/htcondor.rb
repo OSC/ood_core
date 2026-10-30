@@ -15,19 +15,21 @@ module OodCore
             # @option config [Object] :bin (nil) Path to HTCondor client binaries
             # @option config [Object] :submit_host ("") Submit job on login node via ssh
             # @option config [Object] :strict_host_checking (true) Whether to use strict host checking when ssh to submit_host
+            # @option config [Object] :ssh_port (nil) The SSH port of submit_host, defaults to OOD_SSH_PORT or ssh_config
             def self.build_htcondor(config)
                 c = config.to_h.symbolize_keys
                 bin                  = c.fetch(:bin, nil)
                 bin_overrides        = c.fetch(:bin_overrides, {})
                 submit_host          = c.fetch(:submit_host, "")
                 strict_host_checking = c.fetch(:strict_host_checking, true)
+                ssh_port             = c.fetch(:ssh_port, nil)
                 default_universe = c.fetch(:default_universe, "vanilla")
                 default_docker_image = c.fetch(:default_docker_image, "ubuntu:latest")
                 user_group_map = c.fetch(:user_group_map, nil)
                 cluster = c.fetch(:cluster, "")
                 additional_attributes = c.fetch(:additional_attributes, {})
                 htcondor = Adapters::HTCondor::Batch.new(bin: bin, bin_overrides: bin_overrides,
-                    submit_host: submit_host, strict_host_checking: strict_host_checking,
+                    submit_host: submit_host, strict_host_checking: strict_host_checking, ssh_port: ssh_port,
                     default_universe: default_universe,
                     default_docker_image: default_docker_image,
                     user_group_map: user_group_map,
@@ -65,6 +67,10 @@ module OodCore
                     # @return [Bool]; true if empty
                     attr_reader :strict_host_checking
 
+                    # The SSH port of the submit_host
+                    # @return [String, nil]
+                    attr_reader :ssh_port
+
                     # Default universe for jobs submitted to HTCondor
                     # @return [String] the default universe for jobs
                     attr_reader :default_universe
@@ -97,11 +103,13 @@ module OodCore
                     # @param bin [#to_s] path to HTCondor installation binaries
                     # @param submit_host [#to_s] Submits the job on a login node via ssh
                     # @param strict_host_checking [Bool] Whether to use strict host checking when ssh to submit_host
-                    def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: false, default_universe: "vanilla", default_docker_image: "ubuntu:latest", user_group_map: nil, cluster: "", additional_attributes: {})
+                    # @param ssh_port [#to_s, nil] The SSH port of submit_host
+                    def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: false, ssh_port: nil, default_universe: "vanilla", default_docker_image: "ubuntu:latest", user_group_map: nil, cluster: "", additional_attributes: {})
                         @bin                  = Pathname.new(bin.to_s)
                         @bin_overrides        = bin_overrides
                         @submit_host          = submit_host.to_s
                         @strict_host_checking = strict_host_checking
+                        @ssh_port             = ssh_port
                         @default_universe     = default_universe.to_s
                         @default_docker_image = default_docker_image.to_s
                         @user_group_map       = user_group_map.to_s unless user_group_map.nil?
@@ -274,7 +282,7 @@ module OodCore
                         cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
                         args = args.map(&:to_s)
 
-                        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
+                        cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, ssh_port: ssh_port)
                         o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
                         s.success? ? o : raise(Error, e)
                     end

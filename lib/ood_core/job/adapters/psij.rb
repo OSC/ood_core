@@ -16,6 +16,7 @@ module OodCore
       # @param config [#to_h] the configuration for job adapter
       # @option config [Object] :bin (nil) Path to PSIJ binaries
       # @option config [#to_h]  :bin_overrides ({}) Optional overrides to PSIJ executables
+      # @option config [Object] :ssh_port (nil) The SSH port of submit_host, defaults to OOD_SSH_PORT or ssh_config
 			def self.build_psij(config)
         c = config.to_h.symbolize_keys
         cluster              = c.fetch(:cluster, nil)
@@ -24,9 +25,10 @@ module OodCore
         bin_overrides        = c.fetch(:bin_overrides, {})
         submit_host          = c.fetch(:submit_host, "")
         strict_host_checking = c.fetch(:strict_host_checking, true)
+        ssh_port             = c.fetch(:ssh_port, nil)
         executor             = c.fetch(:executor, nil)
         queue_name           = c.fetch(:queue_name, nil)
-        psij = Adapters::PSIJ::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides, submit_host: submit_host, strict_host_checking: strict_host_checking, executor: executor, queue_name: queue_name)
+        psij = Adapters::PSIJ::Batch.new(cluster: cluster, conf: conf, bin: bin, bin_overrides: bin_overrides, submit_host: submit_host, strict_host_checking: strict_host_checking, ssh_port: ssh_port, executor: executor, queue_name: queue_name)
         Adapters::PSIJ.new(psij: psij)
       end
 		end
@@ -43,18 +45,20 @@ module OodCore
           attr_reader :bin_overrides
           attr_reader :submit_host
           attr_reader :strict_host_checking
+          attr_reader :ssh_port
           attr_reader :executor
           attr_reader :queue_name
 
           class Error < StandardError; end
 
-          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, executor: nil, queue_name: nil)
+          def initialize(cluster: nil, bin: nil, conf: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, ssh_port: nil, executor: nil, queue_name: nil)
             @cluster              = cluster && cluster.to_s
             @conf                 = conf    && Pathname.new(conf.to_s)
             @bin                  = Pathname.new(bin.to_s)
             @bin_overrides        = bin_overrides
             @submit_host          = submit_host.to_s
             @strict_host_checking = strict_host_checking
+            @ssh_port             = ssh_port
             @executor             = executor
             @queue_name           = queue_name
           end
@@ -102,7 +106,7 @@ module OodCore
             # Call a forked psij script for a given cluster
             def call(cmd, *args, env: {}, stdin: "", chdir: nil)
               cmd = OodCore::Job::Adapters::Helper.bin_path(cmd, bin, bin_overrides)
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, ssh_port: ssh_port)
               chdir ||= "."
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)

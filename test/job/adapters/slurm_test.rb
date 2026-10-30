@@ -297,11 +297,18 @@ class TestSlurm < Minitest::Test
   end
 
   def test_time_format_is_exported_on_the_submit_host
-    ssh_args = ['ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes',
+    ssh_args = ['ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes',
       'owens.osc.edu', 'export SLURM_TIME_FORMAT=\%Y-\%m-\%dT\%H:\%M:\%S\%z;', 'sacct']
     Open3.expects(:capture3).with { |_env, *args| args.first(ssh_args.size) == ssh_args }.returns(['', '', exit_success])
 
     slurm_instance(submit_host: 'owens.osc.edu').info_historic
+  end
+
+  def test_ssh_port_is_passed_to_ssh
+    ssh_args = ['ssh', '-p', '2222', '-o', 'BatchMode=yes']
+    Open3.expects(:capture3).with { |_env, *args| args.first(ssh_args.size) == ssh_args }.returns(['', '', exit_success])
+
+    slurm_instance(submit_host: 'owens.osc.edu', ssh_port: 2222).info_historic
   end
 
   def test_time_format_can_be_overridden_by_env

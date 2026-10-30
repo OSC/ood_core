@@ -10,7 +10,7 @@ require 'time'
 # @api private
 class OodCore::Job::Adapters::LinuxSystemd::Launcher
   attr_reader :debug, :site_timeout, :session_name_label, :ssh_hosts,
-    :strict_host_checking, :username, :ssh_keyfile
+    :strict_host_checking, :ssh_port, :username, :ssh_keyfile
   # The root exception class that all LinuxSystemd adapter-specific exceptions inherit
   # from
   class Error < StandardError; end
@@ -19,12 +19,14 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
   # @param site_timeout [#to_i] A period after which the job should be killed or nil
   # @param ssh_hosts List of hosts to check when scanning for running jobs
   # @param strict_host_checking Allow SSH to perform strict host checking
+  # @param ssh_port The SSH port of the hosts
   # @param submit_host The SSH-able host
   def initialize(
     debug: false,
     site_timeout: nil,
     ssh_hosts:,
     strict_host_checking: false,
+    ssh_port: nil,
     submit_host:,
     ssh_keyfile: "",
     **_
@@ -34,6 +36,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
     @session_name_label = 'ondemand'
     @ssh_hosts = ssh_hosts
     @strict_host_checking = strict_host_checking
+    @ssh_port = ssh_port
     @submit_host = submit_host
     @username = Etc.getlogin
     @ssh_keyfile = ssh_keyfile
@@ -108,7 +111,7 @@ class OodCore::Job::Adapters::LinuxSystemd::Launcher
 
     sshcmd = [
       'ssh', '-t',
-      '-p', OodCore::Job::Adapters::Helper.ssh_port,
+      *OodCore::Job::Adapters::Helper.ssh_port_args(ssh_port),
       '-o', 'Batchmode=yes',
     ]
 

@@ -29,6 +29,10 @@ class OodCore::Job::Adapters::Flux::Batch
   # @return [Bool]
   attr_reader :strict_host_checking
 
+  # The SSH port of the submit_host
+  # @return [String, nil]
+  attr_reader :ssh_port
+
   # URI of the Flux instance, or nil for the system instance
   # @return [String, nil]
   attr_reader :flux_uri
@@ -37,11 +41,12 @@ class OodCore::Job::Adapters::Flux::Batch
   # from
   class Error < StandardError; end
 
-  def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, flux_uri: nil)
+  def initialize(bin: nil, bin_overrides: {}, submit_host: "", strict_host_checking: true, ssh_port: nil, flux_uri: nil)
     @bin                  = Pathname.new(bin.to_s)
     @bin_overrides        = bin_overrides
     @submit_host          = submit_host.to_s
     @strict_host_checking = strict_host_checking
+    @ssh_port             = ssh_port
     @flux_uri             = flux_uri && flux_uri.to_s
   end
 
@@ -104,7 +109,7 @@ class OodCore::Job::Adapters::Flux::Batch
     env = {}
     env["FLUX_URI"] = flux_uri if flux_uri
 
-    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env)
+    cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, env, ssh_port: ssh_port)
     o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s)
 
     # Flux writes UTF-8 whatever the locale is. F58 ids start with

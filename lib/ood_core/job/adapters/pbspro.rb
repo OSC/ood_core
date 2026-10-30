@@ -18,15 +18,17 @@ module OodCore
       # @option config [Object] :qstat_factor (nil) Deciding factor on how to
       #   call qstat for a user
       # @option config [#to_h] :bin_overrides ({}) Optional overrides to PBS Pro client executables
+      # @option config [Object] :ssh_port (nil) The SSH port of submit_host, defaults to OOD_SSH_PORT or ssh_config
       def self.build_pbspro(config)
         c = config.to_h.compact.symbolize_keys
         host                 = c.fetch(:host, nil)
         submit_host          = c.fetch(:submit_host, "")
         strict_host_checking = c.fetch(:strict_host_checking, true)
+        ssh_port             = c.fetch(:ssh_port, nil)
         pbs_exec             = c.fetch(:exec, nil)
         qstat_factor         = c.fetch(:qstat_factor, nil)
         bin_overrides         = c.fetch(:bin_overrides, {})
-        pbspro = Adapters::PBSPro::Batch.new(host: host, submit_host: submit_host, strict_host_checking: strict_host_checking, pbs_exec: pbs_exec, bin_overrides: bin_overrides)
+        pbspro = Adapters::PBSPro::Batch.new(host: host, submit_host: submit_host, strict_host_checking: strict_host_checking, ssh_port: ssh_port, pbs_exec: pbs_exec, bin_overrides: bin_overrides)
         Adapters::PBSPro.new(pbspro: pbspro, qstat_factor: qstat_factor)
       end
     end
@@ -66,6 +68,10 @@ module OodCore
           # @return [Bool, true] the login node; true if not present
           attr_reader :strict_host_checking
 
+          # The SSH port of the submit_host
+          # @return [String, nil]
+          attr_reader :ssh_port
+
           # The path containing the PBS executables
           # @example
           #   my_batch.pbs_exec.to_s #=> "/usr/local/pbspro/10.0.0
@@ -85,11 +91,13 @@ module OodCore
           # @param host [#to_s, nil] the batch server host
           # @param submit_host [#to_s, nil] the login node to ssh to
           # @param strict_host_checking [bool, true] wheter to use strict host checking when ssh to submit_host
+          # @param ssh_port [#to_s, nil] the SSH port of submit_host
           # @param exec [#to_s, nil] path to pbs executables
-          def initialize(host: nil, submit_host: "", strict_host_checking: true, pbs_exec: nil, bin_overrides: {})
+          def initialize(host: nil, submit_host: "", strict_host_checking: true, ssh_port: nil, pbs_exec: nil, bin_overrides: {})
             @host                 = host && host.to_s
             @submit_host          = submit_host && submit_host.to_s
             @strict_host_checking = strict_host_checking
+            @ssh_port             = ssh_port
             @pbs_exec             = pbs_exec && Pathname.new(pbs_exec.to_s)
             @bin_overrides        = bin_overrides
           end
@@ -231,7 +239,7 @@ module OodCore
               env = env.to_h.each_with_object({}) { |(k, v), h| h[k.to_s] = v.to_s }
               env["PBS_DEFAULT"] = host.to_s if host
               env["PBS_EXEC"]    = pbs_exec.to_s if pbs_exec
-              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking)
+              cmd, args = OodCore::Job::Adapters::Helper.ssh_wrap(submit_host, cmd, args, strict_host_checking, ssh_port: ssh_port)
               chdir ||= "."
               o, e, s = Open3.capture3(env, cmd, *(args.map(&:to_s)), stdin_data: stdin.to_s, chdir: chdir.to_s)
               s.success? ? o : raise(Error, e)
