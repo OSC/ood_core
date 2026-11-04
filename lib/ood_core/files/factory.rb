@@ -8,10 +8,12 @@ module OodCore
     class Factory
       using Refinements::HashExtensions
 
+      require 'ood_core/files/adapters/ssh'
+
       class << self
         # Build a files adapter from a configuration
         # @param config [#to_h] configuration describing files adapter
-        # @option config [#to_s] :adapter The files adapter to use
+        # @option config [#to_s] :adapter The files adapter to use, e.g. ssh for {Adapters::Ssh}
         # @raise [AdapterNotSpecified] if no adapter is specified
         # @raise [AdapterNotFound] if the specified adapter does not exist
         # @return [Adapter] the files adapter object
@@ -20,22 +22,19 @@ module OodCore
 
           adapter = c.fetch(:adapter) { raise AdapterNotSpecified, 'files configuration does not specify adapter' }.to_s
 
-          path_to_adapter = "ood_core/files/adapters/#{adapter}"
-          begin
-            require path_to_adapter
-          rescue Gem::LoadError
-            raise Gem::LoadError, "Specified '#{adapter}' for files adapter, but the gem is not loaded."
-          rescue LoadError
-            raise LoadError,
-                  "Could not load '#{adapter}'. Make sure that the files adapter in the configuration file is valid."
-          end
+          adapter_class(adapter).new(**c.except(:adapter))
+        end
 
-          adapter_method = "build_#{adapter}"
+        private
 
-          unless respond_to?(adapter_method)
-            raise AdapterNotFound, "files configuration specifies nonexistent #{adapter} adapter"
-          end
-          send(adapter_method, c)
+        def adapter_class(adapter)
+          class_name = adapter.split(/[_-]/).map { |s| s.gsub(/\b\w/, &:upcase) }.join
+          klass = Adapters.const_get(class_name, false)
+          raise NameError unless klass.is_a?(Class) && klass < Adapter
+
+          klass
+        rescue NameError
+          raise AdapterNotFound, "files configuration specifies nonexistent #{adapter} adapter"
         end
       end
     end

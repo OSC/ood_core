@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'ood_core/refinements/hash_extensions'
 require 'ood_core/job/adapters/helper'
 require 'fileutils'
 require 'open3'
@@ -9,31 +8,6 @@ require 'date'
 
 module OodCore
   module Files
-    class Factory
-      using Refinements::HashExtensions
-
-      # Build the SSH files adapter from a configuration.
-      # @param config [#to_h] the configuration for the files adapter
-      # @option config [Object] :host The SSH host to connect to (required)
-      # @option config [Object] :bin_overrides ({}) Overrides for binaries such as ssh and rsync
-      # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking
-      # @option config [Object] :ssh_port (nil) The SSH port of the host, defaults to OOD_SSH_PORT or ssh_config
-      # @option config [Object] :dataroot_timeout (20) Seconds to wait for the cluster when looking up the dataroot
-      # @option config [Object] :dataroot_retry_after (300) Seconds to wait before retrying a failed dataroot lookup
-      def self.build_ssh(config)
-        c = config.to_h.symbolize_keys
-        host = c.fetch(:host, nil)
-        bin_overrides = c.fetch(:bin_overrides, {})
-        strict_host_checking = c.fetch(:strict_host_checking, true)
-        ssh_port = c.fetch(:ssh_port, nil)
-        dataroot_timeout = c.fetch(:dataroot_timeout, 20)
-        dataroot_retry_after = c.fetch(:dataroot_retry_after, 300)
-        Adapters::Ssh.new(host: host, bin_overrides: bin_overrides, strict_host_checking: strict_host_checking,
-                          ssh_port: ssh_port, dataroot_timeout: dataroot_timeout,
-                          dataroot_retry_after: dataroot_retry_after, cluster_id: c.fetch(:cluster_id))
-      end
-    end
-
     module Adapters
       # An adapter that provides access to files over SSH.
       class Ssh < Adapter
@@ -59,6 +33,13 @@ module OodCore
         attr_reader :host, :bin_overrides, :strict_host_checking, :ssh_port, :dataroot_timeout, :dataroot_retry_after,
                     :cluster_id
 
+        # @param host [#to_s] The SSH host to connect to (required)
+        # @param bin_overrides [Hash] Overrides for binaries such as ssh and rsync
+        # @param strict_host_checking [Boolean] Set to false to disable strict host checking
+        # @param ssh_port [Integer, nil] The SSH port of the host, defaults to OOD_SSH_PORT or ssh_config
+        # @param dataroot_timeout [#to_i] Seconds to wait for the cluster when looking up the dataroot
+        # @param dataroot_retry_after [#to_i] Seconds to wait before retrying a failed dataroot lookup
+        # @param cluster_id [#to_s] The cluster this adapter is for
         def initialize(host: nil, bin_overrides: {}, strict_host_checking: true, ssh_port: nil,
                        dataroot_timeout: 20, dataroot_retry_after: 300, cluster_id: nil)
           raise ArgumentError, "No host specified for the files adapter of cluster #{cluster_id}" if host.to_s.empty?

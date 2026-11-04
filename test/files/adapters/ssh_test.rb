@@ -65,9 +65,23 @@ class SshTest < Minitest::Test
   end
 
   def test_factory_unknown_adapter
-    error = assert_raises(LoadError) { OodCore::Files::Factory.build({ adapter: 'nope', cluster_id: 'owens' }) }
-    assert_equal("Could not load 'nope'. Make sure that the files adapter in the configuration file is valid.",
-                 error.message)
+    ['nope', 'adapter', 'Ssh::Foo', '../ssh'].each do |adapter|
+      error = assert_raises(OodCore::AdapterNotFound, adapter) do
+        OodCore::Files::Factory.build({ adapter: adapter, cluster_id: 'owens' })
+      end
+      assert_equal("files configuration specifies nonexistent #{adapter} adapter", error.message)
+    end
+  end
+
+  def test_factory_requires_adapter
+    assert_raises(OodCore::AdapterNotSpecified) { OodCore::Files::Factory.build({ host: 'login.example' }) }
+  end
+
+  def test_factory_rejects_unknown_options
+    error = assert_raises(ArgumentError) do
+      OodCore::Files::Factory.build({ adapter: 'ssh', host: 'login.example', cluster_id: 'owens', hots: 'x' })
+    end
+    assert_match(/unknown keyword: :hots/, error.message)
   end
 
   def test_factory_requires_host
