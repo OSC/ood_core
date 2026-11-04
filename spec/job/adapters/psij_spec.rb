@@ -870,7 +870,7 @@ describe OodCore::Job::Adapters::PSIJ do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::PSIJ.new(psij: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'python3', any_args)
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=yes', 'owens.osc.edu', 'python3', any_args)
       end
     end
 
@@ -880,7 +880,7 @@ describe OodCore::Job::Adapters::PSIJ do
         allow(Open3).to receive(:capture3).and_return(["job.123", "", double("success?" => true)])
 
         OodCore::Job::Adapters::PSIJ.new(psij: batch).submit script
-        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-p', '22', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'python3', any_args)
+        expect(Open3).to have_received(:capture3).with(anything,'ssh', '-o', 'BatchMode=yes', '-o', 'UserKnownHostsFile=/dev/null', '-o', 'StrictHostKeyChecking=no', 'owens.osc.edu', 'python3', any_args)
       end
     end
   end

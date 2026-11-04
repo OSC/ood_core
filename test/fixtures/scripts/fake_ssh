@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Stand-in for ssh in tests. Skips ssh options and the host, then runs the remote command through a
+# local shell, the same way sshd hands it to the user's login shell. rsync -e also works through this.
+#
+# Set FAKE_SSH_WARN=1 to also print the known-hosts warning real ssh prints to stderr when using
+# UserKnownHostsFile=/dev/null and StrictHostKeyChecking=no, FAKE_SSH_DELAY=<seconds> to simulate a slow
+# connection, and FAKE_SSH_PATH=<dirs> to run the remote command with that PATH (e.g. to leave out rsync).
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -[bcDEeFIiJLlmOopQRSWw]) shift 2 ;;
+    -*) shift ;;
+    *) shift; break ;;
+  esac
+done
+
+if [[ -n "$FAKE_SSH_DELAY" ]]; then
+  sleep "$FAKE_SSH_DELAY"
+fi
+
+if [[ -n "$FAKE_SSH_WARN" ]]; then
+  echo "Warning: Permanently added 'fakehost' (ED25519) to the list of known hosts." >&2
+fi
+
+if [[ -n "$FAKE_SSH_PATH" ]]; then
+  exec env PATH="$FAKE_SSH_PATH" "$BASH" -c "$*"
+fi
+
+exec bash -c "$*"

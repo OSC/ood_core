@@ -14,6 +14,9 @@ module OodCore
   # Raised when job adapter encounters an error with resource manager
   class JobAdapterError < Error; end
 
+  # Raised when files adapter encounters an error
+  class FilesAdapterError < Error; end
+
   # Raised when a job state is set to an invalid option
   class UnknownStateAttribute < Error; end
 

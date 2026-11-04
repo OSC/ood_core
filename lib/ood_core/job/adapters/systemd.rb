@@ -15,6 +15,7 @@ module OodCore
       # @option config [Object] :max_timeout (nil) Deprecated alias for :site_timeout
       # @option config [Object] :ssh_hosts (nil) The list of permissable hosts, defaults to :submit_host
       # @option config [Object] :strict_host_checking (true) Set to false to disable strict host checking and updating the known_hosts file
+      # @option config [Object] :ssh_port (nil) The SSH port of the hosts, defaults to OOD_SSH_PORT or ssh_config
       # @option config [Object] :submit_host The SSH target to connect to, may be the head of a round-robin
       # @option config [Object] :ssh_keyfile The SSH Key file to use as identity.
       def self.build_systemd(config)
@@ -23,6 +24,7 @@ module OodCore
         site_timeout = c.fetch(:site_timeout, c.fetch(:max_timeout, nil))
         ssh_hosts = c.fetch(:ssh_hosts, [c[:submit_host]])
         strict_host_checking = c.fetch(:strict_host_checking, true)
+        ssh_port = c.fetch(:ssh_port, nil)
         submit_host = c[:submit_host]
         ssh_keyfile = c.fetch(:ssh_keyfile, "")
 
@@ -33,6 +35,7 @@ module OodCore
             site_timeout: site_timeout,
             ssh_hosts: ssh_hosts,
             strict_host_checking: strict_host_checking,
+            ssh_port: ssh_port,
             submit_host: submit_host,
             ssh_keyfile: ssh_keyfile,
           )

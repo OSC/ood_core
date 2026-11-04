@@ -27,6 +27,14 @@ module OodCore
     end
   end
 
+  module Files
+    require "ood_core/files/adapter"
+    require "ood_core/files/factory"
+
+    module Adapters
+    end
+  end
+
   # A namespace for acl code
   module Acl
     require "ood_core/acl/adapter"
