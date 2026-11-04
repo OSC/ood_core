@@ -738,6 +738,32 @@ class SshTest < Minitest::Test
     adapter.send(:rsync_popen, '/a', 'fakehost:/b')
   end
 
+  def test_rsync_popen_reports_rsync_missing_on_the_cluster_after_protocol_error
+    adapter.stubs(:popen).raises(StandardError, "rsync exited with status 12\nbash: line 1: rsync: command not found")
+    adapter.expects(:call).with('rsync', '--version').returns(failed(127, 'bash: line 1: rsync: command not found'))
+
+    error = assert_raises(StandardError) { adapter.send(:rsync_popen, '/a', 'fakehost:/b') }
+    assert_equal('rsync is not installed on cluster test', error.message)
+  end
+
+  def test_rsync_popen_keeps_protocol_error_if_rsync_is_on_the_cluster
+    message = "rsync exited with status 12\nrsync: connection unexpectedly closed"
+    adapter.stubs(:popen).raises(StandardError, message)
+    adapter.expects(:call).with('rsync', '--version').returns(ok)
+
+    error = assert_raises(StandardError) { adapter.send(:rsync_popen, '/a', 'fakehost:/b') }
+    assert_equal(message, error.message)
+  end
+
+  def test_rsync_popen_does_not_check_the_cluster_after_other_errors
+    message = "rsync exited with status 23\nrsync: link_stat failed"
+    adapter.stubs(:popen).raises(StandardError, message)
+    adapter.expects(:call).never
+
+    error = assert_raises(StandardError) { adapter.send(:rsync_popen, '/a', 'fakehost:/b') }
+    assert_equal(message, error.message)
+  end
+
   def test_remove_empty_directories
     adapter.expects(:call).with('find', '/a\\ b', '-type', 'd', '-empty', '-delete').returns(ok)
     adapter.send(:remove_empty_directories, '/a b', remote: true)

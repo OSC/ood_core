@@ -351,8 +351,17 @@ module OodCore
           # RSYNC_PROTECT_ARGS=0 keeps older versions from sending the paths without the remote shell (-s) if that is
           # enabled in the environment, as the rsync on the cluster would then expand wildcards in them.
           env = { 'RSYNC_OLD_ARGS' => '1', 'RSYNC_PROTECT_ARGS' => '0' }
-          # rsync exits with the same status as the shell if rsync is not installed on the cluster.
           popen('rsync', rsync, args, label: 'rsync', env: env, &block)
+        rescue StandardError => e
+          # If rsync is not installed on the cluster, rsync exits with the status of the shell there only if ssh has
+          # already exited when rsync checks it, and otherwise with 12 (error in the protocol data stream). Check if
+          # cluster has rsync.
+          raise unless e.message.start_with?("rsync exited with status 12\n")
+
+          _, _, status = call('rsync', '--version')
+          raise StandardError, failure_reason('rsync', status) if status.exitstatus == COMMAND_NOT_FOUND
+
+          raise
         end
 
         # Transfers src to dst with rsync, where either side can be on the cluster, yielding the percentage done so far.
