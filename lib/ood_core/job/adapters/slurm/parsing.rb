@@ -20,7 +20,7 @@ module OodCore::Job::Adapters::Slurm::Parsing
   # calculated from gres string
   # @return [Integer] the number of gpus in gres
   def gpus_from_gres(gres)
-    gres.to_s.scan(/gpu[s:]*[\w()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
+    gres.to_s.scan(/gpu[s:]*[\w.()-]*[=:]?(\d+)(?:[(,]|$)/).flatten.map(&:to_i).sum
   end
 
   # Get a hash of gpu types to allocated count, computed from a tres string.
@@ -29,7 +29,7 @@ module OodCore::Job::Adapters::Slurm::Parsing
   # so untyped ones are excluded.
   # @return [Hash] gpu types and counts, e.g. { 'a100' => 2 }
   def gpu_types_from_tres(tres)
-    tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:([\w()-]+)=(\d+)(?=,|$)})
+    tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:([\w.()-]+)=(\d+)(?=,|$)})
         .map { |type, count| [type, count.to_i] }.to_h
   end
 
@@ -53,7 +53,7 @@ module OodCore::Job::Adapters::Slurm::Parsing
     rollup = tres.to_s.match(%r{(?:^|,)(?:gres/)?gpu=(\d+)(?:,|$)})
     return rollup[1].to_i if rollup
 
-    tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w()-]+=(\d+)(?=,|$)}).flatten.map(&:to_i).sum
+    tres.to_s.scan(%r{(?:^|,)(?:gres/)?gpu:[\w.()-]+=(\d+)(?=,|$)}).flatten.map(&:to_i).sum
   end
 
   # Convert a Slurm duration string to seconds.
