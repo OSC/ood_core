@@ -191,7 +191,10 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     # The template finds the server with `pgrep -s 0 Xvnc`, which matches the
     # process name, so the fake server is `sleep` under the name Xvnc.
     sleep = ENV['PATH'].split(':').map { |d| File.join(d, 'sleep') }.find { |f| File.executable?(f) }
-    FileUtils.ln_s(sleep, File.join(@bin, 'Xvnc'))
+
+    fake(:Xvnc, <<~BASH)
+      exec #{sleep} "$@"
+    BASH
 
     # The template's own waits (up to 0.9s between start retries, 1s while
     # polling for websockify) are most of this file's run time. Shorten
