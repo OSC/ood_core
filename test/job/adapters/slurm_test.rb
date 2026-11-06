@@ -155,6 +155,23 @@ class TestSlurm < Minitest::Test
     assert_equal({}, OodCore::Job::Adapters::Slurm.gpu_types_from_tres(''))
   end
 
+  def test_gpu_types_from_tres_mig_with_dots
+    tres = 'cpu=8,gres/gpu=3,gres/gpu:a100=2,gres/gpu:7g.79gb=3,node=1'
+    expected = { 'a100' => 2, '7g.79gb' => 3 }
+
+    assert_equal(expected, OodCore::Job::Adapters::Slurm.gpu_types_from_tres(tres))
+  end
+
+  def test_gpu_from_gres_with_mig_dots
+    gres = 'gpu:a100:4(IDX:0-3),gpu:a100_1g.10gb:28(IDX:0-27),nsight:no_consume:1,pfsdir:scratch:no_consume:1'
+    used = 'gpu:a100:1(IDX:0-3),gpu:a100_1g.10gb:4(IDX:0-3),nsight:0,pfsdir:scratch:0'
+
+    # 4 regular a100s and 28 a100s in MIG configuration
+    assert_equal(32, OodCore::Job::Adapters::Slurm.gpus_from_gres(gres))
+    # 1 regular a100s and 4 a100s in MIG configuration
+    assert_equal(5, OodCore::Job::Adapters::Slurm.gpus_from_gres(used))
+  end
+
   # integration test through the squeue path
 
   def test_info_all_populates_gpu_types
