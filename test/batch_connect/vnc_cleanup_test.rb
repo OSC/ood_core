@@ -191,7 +191,10 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     # The template finds the server with `pgrep -s 0 Xvnc`, which matches the
     # process name, so the fake server is `sleep` under the name Xvnc.
     sleep = ENV['PATH'].split(':').map { |d| File.join(d, 'sleep') }.find { |f| File.executable?(f) }
-    FileUtils.ln_s(sleep, File.join(@bin, 'Xvnc'))
+
+    fake(:Xvnc, <<~BASH)
+      exec #{sleep} "$@"
+    BASH
 
     # The template's own waits (up to 0.9s between start retries, 1s while
     # polling for websockify) are most of this file's run time. Shorten
@@ -217,8 +220,10 @@ class BatchConnectVNCCleanupTest < Minitest::Test
           kill "$(cat "$state/$d.pid")" 2>/dev/null; rm -f "$state/$d.pid"; exit 0 ;;
       esac
       d=1; while [[ -e "$state/$d.pid" ]]; do d=$((d+1)); done
-      nohup "$(dirname "$(readlink -f "$0")")/Xvnc" 300 >/dev/null 2>&1 &
+      nohup "$(dirname "$(readlink -f "$0")")/Xvnc" 300 &
       xvnc=$!
+      ps -lf $xvnc
+      which sleep
       echo $xvnc > "$state/$d.pid"
       # Real vncserver doesn't return until Xvnc is up. Without this wait
       # the template's `pgrep -s 0 Xvnc` can run first on a busy machine,
