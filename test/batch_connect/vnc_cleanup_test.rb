@@ -219,6 +219,8 @@ class BatchConnectVNCCleanupTest < Minitest::Test
       d=1; while [[ -e "$state/$d.pid" ]]; do d=$((d+1)); done
       nohup "$(dirname "$(readlink -f "$0")")/Xvnc" 300 >/dev/null 2>&1 &
       xvnc=$!
+      ps -lf $xvnc
+      which sleep
       echo $xvnc > "$state/$d.pid"
       # Real vncserver doesn't return until Xvnc is up. Without this wait
       # the template's `pgrep -s 0 Xvnc` can run first on a busy machine,
