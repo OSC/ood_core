@@ -217,7 +217,7 @@ class BatchConnectVNCCleanupTest < Minitest::Test
           kill "$(cat "$state/$d.pid")" 2>/dev/null; rm -f "$state/$d.pid"; exit 0 ;;
       esac
       d=1; while [[ -e "$state/$d.pid" ]]; do d=$((d+1)); done
-      nohup "$(dirname "$(readlink -f "$0")")/Xvnc" 300 >/dev/null 2>&1 &
+      nohup "$(dirname "$(readlink -f "$0")")/Xvnc" 300 &
       xvnc=$!
       ps -lf $xvnc
       which sleep
