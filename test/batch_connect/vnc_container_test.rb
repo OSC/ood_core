@@ -69,6 +69,12 @@ class BatchConnectVNCContainerTest < Minitest::Test
     end
   end
 
+  def test_websockify_runs_with_a_heartbeat
+    script = template.send(:after_script)
+
+    assert_match(/run\} -D --heartbeat=\$\{WEBSOCKIFY_HEARTBEAT_SECONDS:-30\} \$\{websocket\}/, script)
+  end
+
   private
 
   # A stand-in container command that records how it was called.
