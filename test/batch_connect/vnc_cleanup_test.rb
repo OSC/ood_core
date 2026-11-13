@@ -131,7 +131,7 @@ class BatchConnectVNCCleanupTest < Minitest::Test
       end
 
     # The container template calls `module load`; sites provide it via Lmod
-    script = "module () { :; }\n#{script}"
+    script = "module () { :; }\nset -x\n#{script}"
     env = {
       'PATH' => "#{@bin}/container-path:#{@bin}:#{ENV['PATH']}",
       'FAKE_STATE' => @state,
@@ -144,7 +144,9 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     }
     # Each batch job runs in its own session, and the template relies on that
     # (`pgrep -s 0 Xvnc`), so give the job one here too.
-    @output, status = Open3.capture2e(env, 'timeout', '60', 'setsid', '-w', 'bash', '-c', script, chdir: @work)
+    script_path = "#{@work}/wrapper.sh"
+    File.write(script_path, script)
+    @output, status = Open3.capture2e(env, 'timeout', '10', 'setsid', '-w', 'bash', script_path, chdir: @work)
     status
   end
 
@@ -191,7 +193,9 @@ class BatchConnectVNCCleanupTest < Minitest::Test
     # The template finds the server with `pgrep -s 0 Xvnc`, which matches the
     # process name, so the fake server is `sleep` under the name Xvnc.
     sleep = ENV['PATH'].split(':').map { |d| File.join(d, 'sleep') }.find { |f| File.executable?(f) }
-    FileUtils.ln_s(sleep, File.join(@bin, 'Xvnc'))
+    fake(:Xvnc, <<~BASH)
+      sleep $@
+    BASH
 
     # The template's own waits (up to 0.9s between start retries, 1s while
     # polling for websockify) are most of this file's run time. Shorten
