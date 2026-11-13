@@ -4,8 +4,6 @@
 ![GitHub Release](https://img.shields.io/github/release/osc/ood_core.svg)
 ![GitHub License](https://img.shields.io/github/license/osc/ood_core.svg)
 
-
-
 - Website: http://openondemand.org/
 - Website repo with JOSS publication: https://github.com/OSC/Open-OnDemand
 - Documentation: https://osc.github.io/ood-documentation/latest/
