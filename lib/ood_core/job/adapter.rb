@@ -243,6 +243,14 @@ module OodCore
         []
       end
 
+      # Return the list of reservations for this scheduler.
+      #
+      # Subclasses that do not implement this will return empty arrays.
+      # @return [Array<ReservationInfo>]
+      def reservations
+        []
+      end
+
       private
 
       # Raise a JobAdapterError if script.native isn't a type this adapter can

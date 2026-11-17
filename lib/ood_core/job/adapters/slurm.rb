@@ -431,6 +431,14 @@ module OodCore
             end
           end
 
+          def reservations
+            info_raw = call('scontrol', 'show', 'reservation', '-o')
+
+            info_raw.each_line.map do |line|
+              str_to_reservation_info(line)
+            end.compact
+          end
+
           def all_sinfo_node_fields
             {
               procs: '%c',
@@ -530,6 +538,55 @@ module OodCore
               hsh[:max_time] = duration_in_seconds(hsh[:MaxTime])
 
               OodCore::Job::QueueInfo.new(**hsh)
+            end
+
+            def str_to_reservation_info(line)
+              hsh = line.split(' ').map { |token| token.split('=', 2) }.select { |pair| pair.size == 2 }.to_h
+
+              # 'No reservations in the system' is printed when there are none.
+              return nil if hsh['ReservationName'].to_s.empty?
+
+              allow_users, deny_users = reservation_access_list(hsh['Users'])
+              allow_accounts, deny_accounts = reservation_access_list(hsh['Accounts'])
+
+              OodCore::Job::ReservationInfo.new(
+                name:           hsh['ReservationName'],
+                cluster:        id,
+                state:          hsh['State'],
+                start_time:     parse_reservation_time(hsh['StartTime']),
+                end_time:       parse_reservation_time(hsh['EndTime']),
+                partition:      null_to_nil(hsh['PartitionName']),
+                flags:          null_to_nil(hsh['Flags']).to_s.split(','),
+                allow_users:    allow_users,
+                deny_users:     deny_users,
+                allow_groups:   null_to_nil(hsh['Groups'])&.split(','),
+                allow_accounts: allow_accounts,
+                deny_accounts:  deny_accounts
+              )
+            end
+
+            # Slurm denies users and accounts by prefixing every name with '-'.
+            # @return [Array(Array<String>, Array<String>)] the allowed names (nil if
+            #   not restricted) and the denied names
+            def reservation_access_list(value)
+              names = null_to_nil(value).to_s.split(',')
+              return [nil, []] if names.empty?
+
+              if names.first.start_with?('-')
+                [nil, names.map { |name| name.delete_prefix('-') }]
+              else
+                [names, []]
+              end
+            end
+
+            def parse_reservation_time(time)
+              Time.parse(time.to_s)
+            rescue ArgumentError
+              nil
+            end
+
+            def null_to_nil(value)
+              value.nil? || value.empty? || value == '(null)' ? nil : value
             end
 
             # Modify the StringIO instance by advancing past the squeue header
@@ -923,6 +980,10 @@ module OodCore
 
         def queues
           @slurm.queues
+        end
+
+        def reservations
+          @slurm.reservations
         end
 
         def nodes
