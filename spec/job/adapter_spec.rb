@@ -228,6 +228,12 @@ describe OodCore::Job::Adapter do
     end
   end
 
+  describe '#reservations' do
+    it 'returns an empty array by default' do
+      expect(adapter.reservations).to eq([])
+    end
+  end
+
   describe '#supports_job_dependencies?' do
     it 'returns false by default' do
       expect(subject.supports_job_dependencies?).to be false

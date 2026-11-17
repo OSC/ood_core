@@ -1469,6 +1469,86 @@ describe OodCore::Job::Adapters::Slurm do
     end
   end
 
+  describe '#reservations' do
+    let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new(id: 'owens') }
+
+    def stub_scontrol(stdout, stderr = '', success: true)
+      allow(Open3).to receive(:capture3)
+                        .with({ "SLURM_TIME_FORMAT" => "%Y-%m-%dT%H:%M:%S%z" }, 'scontrol', 'show', 'reservation', '-o', {stdin_data: ''})
+                        .and_return([stdout, stderr, double("success?" => success)])
+    end
+
+    def reservation(name)
+      subject.reservations.find { |r| r.name == name }
+    end
+
+    context 'when scontrol returns successfully' do
+      before { stub_scontrol(File.read('spec/fixtures/output/slurm/owens_reservations.txt')) }
+
+      it 'returns the reservation info objects' do
+        expect(subject.reservations.map(&:to_s)).to eq(['workshop', 'maintenance', 'not_alice', 'chem_group', 'no_pas1604'])
+        expect(subject.reservations.map(&:cluster).uniq).to eq(['owens'])
+      end
+
+      it 'parses the reservation details' do
+        workshop = reservation('workshop')
+        expect(workshop.state).to eq('ACTIVE')
+        expect(workshop.start_time).to eq(Time.new(2026, 11, 17, 9, 0, 0, '-05:00'))
+        expect(workshop.end_time).to eq(Time.new(2026, 11, 18, 17, 0, 0, '-05:00'))
+        expect(workshop.partition).to eq('batch')
+        expect(workshop.flags).to eq(['SPEC_NODES'])
+
+        maintenance = reservation('maintenance')
+        expect(maintenance.partition).to be_nil
+        expect(maintenance.flags).to eq(['MAINT', 'IGNORE_JOBS', 'SPEC_NODES', 'ALL_NODES'])
+      end
+
+      it 'parses allowed users, groups and accounts' do
+        workshop = reservation('workshop')
+        expect(workshop.allow_users).to be_nil
+        expect(workshop.allow_groups).to be_nil
+        expect(workshop.allow_accounts).to eq(['pzs1124', 'pzs1118'])
+        expect(workshop.deny_accounts).to eq([])
+
+        expect(reservation('maintenance').allow_users).to eq(['root'])
+        expect(reservation('chem_group').allow_groups).to eq(['chem', 'bio'])
+      end
+
+      it 'parses denied users and accounts' do
+        not_alice = reservation('not_alice')
+        expect(not_alice.allow_users).to be_nil
+        expect(not_alice.deny_users).to eq(['alice', 'bob'])
+
+        no_pas1604 = reservation('no_pas1604')
+        expect(no_pas1604.allow_accounts).to be_nil
+        expect(no_pas1604.deny_accounts).to eq(['pas1604'])
+      end
+
+      it 'returns uppercase account names when OOD_UPCASE_ACCOUNTS is set' do
+        with_modified_env({ OOD_UPCASE_ACCOUNTS: 'true' }) do
+          expect(reservation('workshop').allow_accounts).to eq(['PZS1124', 'PZS1118'])
+          expect(reservation('no_pas1604').deny_accounts).to eq(['PAS1604'])
+        end
+      end
+    end
+
+    context 'when there are no reservations' do
+      before { stub_scontrol("No reservations in the system\n") }
+
+      it 'returns an empty array' do
+        expect(subject.reservations).to eq([])
+      end
+    end
+
+    context 'when scontrol fails' do
+      before { stub_scontrol('', 'the error message', success: false) }
+
+      it 'raises the error' do
+        expect { subject.reservations }.to raise_error(OodCore::Job::Adapters::Slurm::Batch::Error, 'the error message')
+      end
+    end
+  end
+
   describe '#nodes' do
     context 'when sinfo returns successfully' do
       let(:slurm) { OodCore::Job::Adapters::Slurm::Batch.new }
