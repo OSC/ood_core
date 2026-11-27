@@ -13,6 +13,24 @@ describe OodCore::Job::Adapters::Torque::Batch do
   it { is_expected.to respond_to(:lib) }
   it { is_expected.to respond_to(:submit) }
 
+  describe ".new" do
+    context "when host is empty" do
+      it "raises ArgumentError" do
+        expect {
+          described_class.new(host: "")
+        }.to raise_error(ArgumentError, "No host specified. Missing argument: host")
+      end
+    end
+
+    context "when host is nil" do
+      it "raises ArgumentError" do
+        expect {
+          described_class.new(host: nil)
+        }.to raise_error(ArgumentError, "No host specified. Missing argument: host")
+      end
+    end
+  end
+  
   describe "#host" do
     it { expect(subject.host).to eq("HOST") }
   end
