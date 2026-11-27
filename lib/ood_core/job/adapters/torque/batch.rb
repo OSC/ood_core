@@ -50,8 +50,11 @@ class OodCore::Job::Adapters::Torque
     # @param strict_host_checking [bool] use strict host checking when ssh to submit_host
     # @param lib [#to_s] path to FFI installation libraries
     # @param bin [#to_s] path to FFI installation binaries
+    # @raise [ArgumentError] if host is nil or empty
     def initialize(host:, submit_host: "", strict_host_checking: true, lib: "", bin: "", bin_overrides: {}, **_)
       @host                 = host.to_s
+      raise ArgumentError, "No host specified. Missing argument: host" if @host.empty?
+
       @submit_host          = submit_host.to_s
       @strict_host_checking = strict_host_checking
       @lib                  = Pathname.new(lib.to_s)
